@@ -1,0 +1,1 @@
+(package| spacemacs-theme)
