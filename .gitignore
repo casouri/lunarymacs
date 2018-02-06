@@ -1,3 +1,4 @@
 plan.org
 .local/
+.cache/
 */**/.DS_Store
