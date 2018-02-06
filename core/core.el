@@ -25,10 +25,8 @@
 ;; Init
 ;;
 
-(eval-and-compile
 
   (load (concat moon-core-dir "core-package"))
-  (add-hook 'moon-init-hook #'moon-initialize-star)
 
   ;; optimization on startup
   ;; https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast
@@ -38,6 +36,10 @@
         gc-cons-percentage 0.6)
 
   (defun moon-finalize ()
+    (moon-initialize)
+    (moon-initialize-load-path)
+    (moon-initialize-star)
+
     (dolist (hook '(moon-init-hook moon-post-init-hook))
       (run-hook-with-args hook))
 
@@ -48,19 +50,9 @@
           file-name-handler-alist tmp-file-name-handler-alist)
     )
 
+  (add-hook 'emacs-startup-hook #'moon-finalize t)
 
   ;; load other core files
   (load| core-ui)
-
-
-  ;; init
-  (moon-initialize)
-  ;; since I use `pakage-initialize',
-  ;; there is no need for this,
-  ;; but I might come back to it later
-  ;; (moon-initialize-load-path)
-
-  (add-hook 'emacs-startup-hook #'moon-finalize t)
-)
 
 (provide 'core)
