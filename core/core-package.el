@@ -65,12 +65,6 @@
     )
   )
 
-(defun moon-eval-package-config ()
-  "Evaluate all the (use-package)s collected from config file from stars."
-  (message "evaluating")
-  (run-hook-with-args 'moon-use-package-list)
-  )
-
 (defun moon-load-autoload ()
   (load moon-autoload-file))
 
@@ -158,24 +152,6 @@ If called multiple times, the stars declared first will be in the front of moon-
     )
   )
 
-;; (defmacro use-package| (package &rest rest-list)
-;;   "Thin wrapper around `use-package', just add some hooks.
-
-;; Basically (use-package| evil :something something) adds
-;; (lambda () (use-package :something something :init (pre-init-evil) :config (post-config-evil)))
-;; to `moon-use-package-list' to be evaluated at the end of `moon-initialize-star'"
-;;   `(add-to-list
-;;     'moon-use-package-list
-;;     (lambda () (use-package
-;;                 ,package
-;;                 ,@rest-list
-;;                 :init
-;;                 (list (intern (format "pre-init-%s" (symbol-name ,package))))
-;;                 :config
-;;                 (list (intern (format "post-config-%s" (symbol-name ,package))))
-;;                 ))
-;;     )
-;;   )
 
 (defmacro use-package| (package &rest rest-list)
   "Thin wrapper around `use-package', just add some hooks.
@@ -185,20 +161,19 @@ Basically (use-package| evil :something something) adds
 to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-star'"
   `(fset
     'moon-grand-use-package-call
-    (append (symbol-function 'moon-grand-use-package-call)
-    '((use-package
-                 ,package
-                 ,@rest-list
-                 :init
-                 (list (intern (format "pre-init-%s" (symbol-name ',package))))
-                 :config
-                 (list (intern (format "post-config-%s" (symbol-name ',package))))
-                 ))
-    )
+    (append
+     (symbol-function 'moon-grand-use-package-call)
+     '((use-package
+         ,package
+         ,@rest-list
+         :init
+         (eval (list (intern (format "pre-init-%s" (symbol-name ',package)))))
+         :config
+         (eval (list (intern (format "post-config-%s" (symbol-name ',package)))))
+         ))
+     )
     )
   )
-(defvar moon-use-package-list ())
-(use-package| evil :config (evil-mode 1))
 
 ;; (defun post-config-evil () (message "it works!"))
 ;; (defun pre-init-evil () (message "it works!"))

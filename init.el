@@ -6,8 +6,10 @@
 
 (moon|
       :basic
-      general
+      key
       evil
       basic-ui
+      :autocomplete
+      ivy
       )
 
