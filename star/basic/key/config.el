@@ -7,8 +7,9 @@
               :config
               (setq moon-leader "SPC")
               (setq moon-non-normal-leader "M-SPC")
-              (general-define-key :states '(normal)
+              (general-define-key :states '(normal insert emacs)
                                   :prefix moon-leader
+                                  :non-normal-prefix moon-non-normal-leader
                                   "f" '(:ignore t :which-key "file")
                                   "i" '(:ignore t :which-key "insert")
                                   "h" '(:ignore t :which-key "help")
