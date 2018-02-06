@@ -14,5 +14,7 @@
       edit
       :autocomplete
       ivy
+      :casouri
+      casouri
       )
 

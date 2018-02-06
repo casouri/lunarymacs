@@ -156,6 +156,9 @@ If called multiple times, the stars declared first will be in the front of moon-
 (defmacro use-package| (package &rest rest-list)
   "Thin wrapper around `use-package', just add some hooks.
 
+It seems that this macro slows down init. Don't use it when you don't need
+pre-init and post-config hooks.
+
 Basically (use-package| evil :something something) adds
 (use-package :something something :init (pre-init-evil) :config (post-config-evil))
 to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-star'"
