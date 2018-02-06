@@ -21,7 +21,7 @@
                                   "b" '(:ignore t :which-key "buffer")
                                   "w" '(:ignore t :which-key "window")
                                   ;; file
-                                  "bs" #'save-buffer
+                                  "fs" #'save-buffer
                                   )
               )
 
