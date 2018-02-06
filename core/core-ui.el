@@ -11,3 +11,5 @@
 
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice (lambda () (get-buffer moon-homepage-buffer)))
+
+(provide 'core-ui)

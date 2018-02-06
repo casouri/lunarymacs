@@ -16,5 +16,7 @@
       ivy
       :casouri
       casouri
+      :os
+      mac
       )
 

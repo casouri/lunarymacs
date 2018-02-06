@@ -4,11 +4,13 @@
 (defvar moon-core-dir (concat moon-emacs-d-dir "core/")
   "Where core is located.")
 
+
 (defvar moon-star-dir (concat moon-emacs-d-dir "star/")
   "Where stars shine.")
 
 (defvar moon-local-dir (concat moon-emacs-d-dir ".local/"))
 
+(defvar moon-cache-dir (concat moon-emacs-d-dir ".cache/"))
 
 ;; DEBUG
 ;; (setq moon-core-dir "/Users/yuan/.emacs.second/core")
@@ -20,47 +22,51 @@
   "A list of hooks run after Emacs initialization is complete, and after
 `moon-init-hook'.")
 
+;;
+;; Config
+;;
+
+(setq package-enable-at-startup nil)
+
 
 ;;
 ;; Init
 ;;
 
-(eval-and-compile
-
-  (load (concat moon-core-dir "core-package"))
-  (add-hook 'moon-init-hook #'moon-initialize-star)
-
-  ;; optimization on startup
-  ;; https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast
-  (defvar tmp-file-name-handler-alist file-name-handler-alist)
-  (setq file-name-handler-alist nil)
-  (setq gc-cons-threshold 402653184
-        gc-cons-percentage 0.6)
-
-  (defun moon-finalize ()
-    (dolist (hook '(moon-init-hook moon-post-init-hook))
-      (run-hook-with-args hook))
+(load (concat moon-core-dir "core-package"))
+;; optimization on startup
+;; https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast
+(defvar tmp-file-name-handler-alist file-name-handler-alist)
+(setq file-name-handler-alist nil)
+(setq gc-cons-threshold 402653184
+      gc-cons-percentage 0.6)
 
 
-    ;; If you forget to reset this, you'll get stuttering and random freezes!
-    (setq gc-cons-threshold 800000
-          gc-cons-percentage 0.1
-          file-name-handler-alist tmp-file-name-handler-alist)
-    )
+(load| core-ui)
 
-
-  ;; load other core files
-  (load| core-ui)
-
-
-  ;; init
+(defun moon-finalize ()
   (moon-initialize)
-  ;; since I use `pakage-initialize',
-  ;; there is no need for this,
-  ;; but I might come back to it later
-  ;; (moon-initialize-load-path)
+  (moon-initialize-load-path)
+  (moon-initialize-star)
+  (dolist (hook '(moon-init-hook moon-post-init-hook))
+    (run-hook-with-args hook))
 
-  (add-hook 'emacs-startup-hook #'moon-finalize t)
-)
+  ;; If you forget to reset this, you'll get stuttering and random freezes!
+  (setq gc-cons-threshold 800000
+        gc-cons-percentage 0.1
+        file-name-handler-alist tmp-file-name-handler-alist
+        )
+  )
+
+(add-hook 'emacs-startup-hook #'moon-finalize t)
+
+;; load other core files
+
+;; (add-hook 'moon-init-hook #'moon-initialize t)
+;; (add-hook 'moon-init-hook #'moon-initialize-star t)
+;; (moon-initialize)
+;; (moon-initialize-load-path)
+;; (moon-initialize-star)
 
 (provide 'core)
+

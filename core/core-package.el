@@ -2,7 +2,7 @@
 ;; Var
 ;;
 
-(defvar moon--base-load-path
+(defvar moon-base-load-path
   (append (list moon-core-dir moon-star-dir)
           load-path)
   "A backup of `load-path' before it was altered by `doom-initialize'.
@@ -21,7 +21,7 @@
 ;; DEBUG
 ;; (setq moon-package-dir "/Users/yuan/.emacs.second/.local/package")
 
-(defvar moon--package-load-path ()
+(defvar moon-package-load-path ()
   "The load path of package libraries installed via ELPA and QUELPA.")
 
 (defvar moon-star-path-list ()
@@ -39,26 +39,28 @@
 ;; TODO change (package-initialize) to (package-initialize t)
 (defun moon-initialize ()
   "Initialize installed packages (using package.el)."
-  (setq package-activated-list nil
-        package--init-file-ensured t) ;; no `custom-set-variables' block in init.el
-    (condition-case _ (package-initialize)
-      ('error (package-refresh-contents)
-              (setq moon--refreshed-p t)
-              (package-initialize)))
+  ;; (setq package-activated-list nil
+  ;;       package--init-file-ensured) ;; no `custom-set-variables' block in init.el
+  ;;   (condition-case _ (package-initialize t)
+  ;;     ('error (package-refresh-contents)
+  ;;             (setq moon--refreshed-p t)
+  ;;             (package-initialize)))
+  (package-initialize)
   )
 
 (defun moon-initialize-load-path ()
   "add each package to load path"
-    (setq moon--package-load-path (directory-files package-user-dir t nil t) ;; get all sub-dir
-          load-path (append moon--base-load-path moon--package-load-path)))
+    ;; (setq moon-package-load-path (directory-files package-user-dir t nil t) ;; get all sub-dir
+    ;;       load-path (append moon-base-load-path moon-package-load-path))
+  (add-to-list 'load-path moon-local-dir)
+    )
 
 (defun moon-initialize-star ()
   "Load each star in `moon-star-list'."
-  ;; (moon-generate-star-path moon-star-list)
-  (moon-load-package moon-star-path-list)
-  ;; (require 'use-package)
   (unless noninteractive
-    (moon-load-autoload)
+    (moon-load-autoload))
+  (moon-load-package moon-star-path-list)
+  (unless noninteractive
     (moon-load-config moon-star-path-list)
     (require 'use-package)
     (moon-grand-use-package-call)
@@ -66,6 +68,16 @@
   )
 
 (defun moon-load-autoload ()
+  ;; (dolist (package-path moon-package-load-path)
+  ;;   (when (file-directory-p package-path)
+  ;;     (let (
+  ;; 	        (file-list (directory-files package-path t ".+-autoloads.el$"))
+  ;; 	        )
+  ;;       (dolist (file file-list)
+  ;; 	      (load file))
+  ;;       )
+  ;;     )
+  ;;   )
   (load moon-autoload-file))
 
 ;; TEST
@@ -205,6 +217,7 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
 
 (defun moon/install-package ()
   (interactive)
+  (moon-initialize)
   (moon-initialize-star)
   (package-refresh-contents)
   (dolist (package moon-package-list)
@@ -216,7 +229,14 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
   (moon-initialize-star)
   (let ((autoload-file-list
          (file-expand-wildcards
+	  ;; core autoload
           (expand-file-name "autoload/*.el" moon-core-dir))))
+    ;; package autoload
+    ;; (dolist (file (directory-files-recursively
+		;;    (concat moon-package-dir "elpa/")
+		;;    "\\.el$"))
+    ;;   (push (expand-file-name file) autoload-file-list))
+    ;; star autoload
     (dolist (star-path moon-star-path-list)
       (let ((auto-dir (expand-file-name "autoload" star-path))
             (auto-file (expand-file-name "autoload.el" star-path)))
@@ -238,7 +258,6 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
              (t "Scanned %s"))
        (file-relative-name file moon-emacs-d-dir))
       )
-
     )
   )
 

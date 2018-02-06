@@ -24,12 +24,12 @@
 		;; register/ring
 		"ry"  #'counsel-yank-pop
 		"rm"  #'counsel-mark-ring
-		;; jumping
-		"sj"  #'counsel-imenu
+		;; search
+		"si"  #'counsel-imenu
+		"ss"  #'swiper
+		"sr"  #'counsel-rg
 		;; themes
 		"Ts"  #'counsel-load-theme
-		;; external tool
-		"sr"  #'counsel-rg
 		;; buffer
 		"bb"  #'counsel-switch-buffer
 		)
