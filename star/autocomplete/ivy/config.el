@@ -37,4 +37,6 @@
 
 (use-package| swiper :commands (ivy-mode))
 (use-package| counsel :commands (ivy-mode))
-(use-package| smex :commands (ivy-mode))
+(use-package| smex
+	      :commands (ivy-mode)
+	      :config (setq smex-save-file (concat moon-local-dir "smex-items")))

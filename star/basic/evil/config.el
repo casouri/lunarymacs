@@ -4,10 +4,12 @@
   ;; fix paste issue in evil visual mode
   ;; http://emacs.stackexchange.com/questions/14940/emacs-doesnt-paste-in-evils-visual-mode-with-every-os-clipboard/15054#15054
   (fset 'evil-visual-update-x-selection 'ignore)
+  (default-leader "ij" #'evil-insert-line-below
+                  "ik" #'evil-insert-line-above)
   )
 
 (use-package| evil-matchit
-              :commands (evil-mode)
+              :hook prog-mode
               :config (global-evil-matchit-mode)
               )
 
@@ -15,19 +17,22 @@
               :commands (evil-search swiper))
 
 (use-package| evil-surround
-              :commands (evil-surround-region evil-substitute))
-
-(post-config| general
-              (general-define-key :keymaps 'normal
+	      :hook evil-viual-state-hook
+	      :config
+              (general-define-key :keymaps 'visual
                                   "s" #'evil-surround-region
                                   "S" #'evil-substitute
                                   )
-              (general-define-key :keymaps 'normal
-                                  :prefix "g"
-                                  "c" #'evilnc-comment-operator))
+              )
+
 
 (use-package| evil-nerd-commenter
-              :commands evilnc-comment-operator)
+              :commands evilnc-comment-operator
+	      :config
+	      (general-define-key :keymaps 'visual
+				  :prefix "g"
+                                  "c" #'evilnc-comment-operator)
+	      )
 
 (use-package| evil-mc
               :commands (evil-mc-find-next-cursor

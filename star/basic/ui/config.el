@@ -6,7 +6,8 @@
 
 (use-package| rainbow-delimiters
 	      :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-(use-package| highlight-parentheses
-	      :hook prog-mode
-	      :config (global-highlight-parentheses-mode t))
+
+;; (use-package| highlight-parentheses
+;; 	      :hook prog-mode
+;; 	      :config (global-highlight-parentheses-mode t))
 
