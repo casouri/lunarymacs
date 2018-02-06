@@ -45,15 +45,15 @@
   ;;     ('error (package-refresh-contents)
   ;;             (setq moon--refreshed-p t)
   ;;             (package-initialize)))
-  (setq package-activated-list nil
-        package--init-file-ensured t) ;; no `custom-set-variables' block in init.el
-  (package-initialize t)
+  (package-initialize)
   )
 
 (defun moon-initialize-load-path ()
   "add each package to load path"
-    (setq moon-package-load-path (directory-files package-user-dir t nil t) ;; get all sub-dir
-          load-path (append moon-base-load-path moon-package-load-path)))
+    ;; (setq moon-package-load-path (directory-files package-user-dir t nil t) ;; get all sub-dir
+    ;;       load-path (append moon-base-load-path moon-package-load-path))
+  (add-to-list 'load-path moon-local-dir)
+    )
 
 (defun moon-initialize-star ()
   "Load each star in `moon-star-list'."
@@ -68,16 +68,16 @@
   )
 
 (defun moon-load-autoload ()
-  (dolist (package-path moon-package-load-path)
-    (when (file-directory-p package-path)
-      (let (
-	          (file-list (directory-files package-path t ".+-autoloads.el$"))
-	          )
-        (dolist (file file-list)
-	        (load file))
-        )
-      )
-    )
+  ;; (dolist (package-path moon-package-load-path)
+  ;;   (when (file-directory-p package-path)
+  ;;     (let (
+  ;; 	        (file-list (directory-files package-path t ".+-autoloads.el$"))
+  ;; 	        )
+  ;;       (dolist (file file-list)
+  ;; 	      (load file))
+  ;;       )
+  ;;     )
+  ;;   )
   (load moon-autoload-file))
 
 ;; TEST
@@ -217,6 +217,7 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
 
 (defun moon/install-package ()
   (interactive)
+  (moon-initialize)
   (moon-initialize-star)
   (package-refresh-contents)
   (dolist (package moon-package-list)

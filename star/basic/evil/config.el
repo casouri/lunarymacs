@@ -17,9 +17,9 @@
               :commands (evil-search swiper))
 
 (use-package evil-surround
-	      :hook evil-viual-state-hook
+	      :hook evil-visual-state
 	      :config
-              (general-define-key :keymaps 'visual
+              (general-define-key :states 'visual
                                   "s" #'evil-surround-region
                                   "S" #'evil-substitute
                                   )

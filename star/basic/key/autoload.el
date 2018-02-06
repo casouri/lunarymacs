@@ -5,8 +5,15 @@
   (keyboard-quit))
 
 ;;;###autoload
-(defun switch-to-prev-buffer ()
-"Switch to previously open buffer.
+(defun moon/switch-between-buffer ()
+  "Switch to previously open buffer.
 Repeated invocations toggle between the two most recently open buffers."
-(interactive)
-(switch-to-buffer (other-buffer (current-buffer) 1)))
+  (interactive)
+  (if moon-jumped
+      (progn
+	(next-buffer)
+	(setq moon-jumped nil)
+      )
+    (previous-buffer)
+    (setq moon-jumped t))
+  )
