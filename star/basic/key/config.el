@@ -7,7 +7,7 @@
               :config
               (setq moon-leader "SPC")
               (setq moon-non-normal-leader "M-SPC")
-              (general-define-key :states '(normal insert emacs)
+              (general-define-key :states '(normal)
                                   :prefix moon-leader
                                   "f" '(:ignore t :which-key "file")
                                   "i" '(:ignore t :which-key "insert")
@@ -20,8 +20,15 @@
                                   "w" '(:ignore t :which-key "window")
                                   "b" '(:ignore t :which-key "buffer")
                                   "w" '(:ignore t :which-key "window")
+                                  ;; file
+                                  "bs" #'save-buffer
                                   )
               )
 
 (use-package| which-key
               :config (which-key-mode 1))
+
+(use-package| key-chord
+              :config
+              (key-chord-mode 1)
+              (key-chord-define-global "fd" #'moon-quit-everything))

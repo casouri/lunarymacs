@@ -1,3 +1,4 @@
 (package| general
-          which-key)
+          which-key
+          key-chord)
 
