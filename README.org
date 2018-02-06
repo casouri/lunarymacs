@@ -7,6 +7,7 @@ Since that's what I'm doing and therefore there is no complicated code.
 
 #+BEGIN_QUOTE
 开局一条狗，装备全靠抢   
+
                      ——鲁迅
 #+END_QUOTE
 
