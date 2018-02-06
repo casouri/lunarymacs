@@ -5,10 +5,9 @@
 
 
 (moon|
-      :feature
+      :basic
       general
       evil
-      :ui
       basic-ui
       )
 

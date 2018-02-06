@@ -12,7 +12,7 @@
 (defvar moon-package-dir (concat user-emacs-directory ".local/package/")
   "Where melpa and elpa packages are installed.")
 
-(defvar moon-package-list ()
+(defvar moon-package-list '("use-package")
   "A list of packages to install. Packages are represented by strings not symbols.")
 
 (defvar moon--refreshed-p nil
@@ -30,7 +30,7 @@
 (defvar moon-autoload-file (concat moon-local-dir "autoloads.el")
   "The path of autoload file which has all the autoload functions.")
 
-
+(fset 'moon-grand-use-package-call '(lambda () "A bunch of (use-package blah blah blah) collected by use-package| macro from each config file of stars."))
 
 ;;
 ;; Func
@@ -56,11 +56,19 @@
   "Load each star in `moon-star-list'."
   ;; (moon-generate-star-path moon-star-list)
   (moon-load-package moon-star-path-list)
-  (require 'use-package)
+  ;; (require 'use-package)
   (unless noninteractive
     (moon-load-autoload)
     (moon-load-config moon-star-path-list)
+    (require 'use-package)
+    (moon-grand-use-package-call)
     )
+  )
+
+(defun moon-eval-package-config ()
+  "Evaluate all the (use-package)s collected from config file from stars."
+  (message "evaluating")
+  (run-hook-with-args 'moon-use-package-list)
   )
 
 (defun moon-load-autoload ()
@@ -133,9 +141,7 @@ If called multiple times, the stars declared first will be in the front of moon-
   )
 
 (defmacro post-config| (package &rest to-do-list)
-  "Add expression to a function that will be called in (use-package PACKAAGE :config)
-
-"
+  "Expressions to be called after (use-package PACKAGE :config)"
   (let (
         (hook-symbol (intern (format "post-config-%s" package)))
         )
@@ -144,12 +150,60 @@ If called multiple times, the stars declared first will be in the front of moon-
   )
 
 (defmacro pre-init (package &rest to-do-list)
+  "Expressions to be called after (use-package PACKAGE :init)"
   (let (
         (hook-symbol (intern (format "pre-init-%s" package)))
         )
     (fset hook-symbol (append (symbol-function hook-symbol) to-do-list))
     )
   )
+
+;; (defmacro use-package| (package &rest rest-list)
+;;   "Thin wrapper around `use-package', just add some hooks.
+
+;; Basically (use-package| evil :something something) adds
+;; (lambda () (use-package :something something :init (pre-init-evil) :config (post-config-evil)))
+;; to `moon-use-package-list' to be evaluated at the end of `moon-initialize-star'"
+;;   `(add-to-list
+;;     'moon-use-package-list
+;;     (lambda () (use-package
+;;                 ,package
+;;                 ,@rest-list
+;;                 :init
+;;                 (list (intern (format "pre-init-%s" (symbol-name ,package))))
+;;                 :config
+;;                 (list (intern (format "post-config-%s" (symbol-name ,package))))
+;;                 ))
+;;     )
+;;   )
+
+(defmacro use-package| (package &rest rest-list)
+  "Thin wrapper around `use-package', just add some hooks.
+
+Basically (use-package| evil :something something) adds
+(use-package :something something :init (pre-init-evil) :config (post-config-evil))
+to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-star'"
+  `(fset
+    'moon-grand-use-package-call
+    (append (symbol-function 'moon-grand-use-package-call)
+    '((use-package
+                 ,package
+                 ,@rest-list
+                 :init
+                 (list (intern (format "pre-init-%s" (symbol-name ',package))))
+                 :config
+                 (list (intern (format "post-config-%s" (symbol-name ',package))))
+                 ))
+    )
+    )
+  )
+(defvar moon-use-package-list ())
+(use-package| evil :config (evil-mode 1))
+
+;; (defun post-config-evil () (message "it works!"))
+;; (defun pre-init-evil () (message "it works!"))
+
+;; (use-package| evil :config (message "post config!"))
 
 ;; (defun post-config-gerneral () (message "evaluate general"))
 ;; (post-config| general (message "it works!"))
@@ -173,6 +227,7 @@ If called multiple times, the stars declared first will be in the front of moon-
 
 (defun moon/install-package ()
   (interactive)
+  (moon-initialize-star)
   (package-refresh-contents)
   (dolist (package moon-package-list)
     (package-install (intern package))
@@ -180,6 +235,7 @@ If called multiple times, the stars declared first will be in the front of moon-
 
 (defun moon/generate-autoload-file ()
   (interactive)
+  (moon-initialize-star)
   (let ((autoload-file-list
          (file-expand-wildcards
           (expand-file-name "autoload/*.el" moon-core-dir))))

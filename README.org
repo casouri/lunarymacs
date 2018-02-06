@@ -1,19 +1,19 @@
-#+BEGIN_QUOTE
-Space is too complicated, mars is not simple, I chose to be lunary. --a lunary astronaut
-#+END_QUOTE
+#+TITLE: Lunarymacs
 
-This is a stripped down version of doom-emacs. It's extremely basic, but it works.
-Might be a starting point for anyone who wants to start his/her own config.
+This is a stripped down version of doom-emacs. It's extremely basic, but works.
+
+It might used as a starting point for anyone who wants to start his/her own config. 
+Since that's what I'm doing and therefore there is no complicated code.
 
 #+BEGIN_QUOTE
 开局一条狗，装备全靠抢 ————鲁迅
 #+END_QUOTE
 
-In summary:
-- basic
+*In summary:*
 - code is easy to understand
 - not opinionated (no default settings by default, everything is up to you)
-- beginner friendly
+- absolutely minimum core files
+- no default package, not even use-package!
 
   
 P.S. I don't know what is lunary, don't ask me.
