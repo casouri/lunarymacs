@@ -21,6 +21,19 @@
 ;; 	      (spaceline-compile)))
 ;;   )
 
+(use-package powerline
+  :defer t
+  :init
+  (add-hook
+   'moon-post-init-hook
+   (lambda ()
+     (require 'powerline)
+     (setq powerline-default-separator 'utf-8)
+     (powerline-default-theme)
+     )
+   )
+  )
+
 (use-package hlinum
   :hook linum-mode
   :config
