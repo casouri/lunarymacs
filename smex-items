@@ -1,0 +1,20 @@
+
+;; ----- smex-history -----
+(
+ indent-region
+ indent-rigidly-left
+ indent-to
+ er/expand-region
+ linum-mode
+ cd
+ 5x5
+)
+
+;; ----- smex-data -----
+(
+ (linum-mode . 1)
+ (er/expand-region . 1)
+ (indent-region . 5)
+ (indent-to . 1)
+ (indent-rigidly-left . 1)
+)

@@ -9,6 +9,9 @@
       key
       evil
       basic-ui
+      ui
+      other
+      edit
       :autocomplete
       ivy
       )

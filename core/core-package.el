@@ -206,7 +206,7 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
   (package-refresh-contents)
   (dolist (package moon-package-list)
     (package-install (intern package))
-    (message (format "Installed %s" package))))
+    ))
 
 (defun moon/generate-autoload-file ()
   (interactive)

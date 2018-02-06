@@ -18,11 +18,11 @@
               :commands (evil-surround-region evil-substitute))
 
 (post-config| general
-              (general-define-key :states '(normal visual)
+              (general-define-key :keymaps 'normal
                                   "s" #'evil-surround-region
                                   "S" #'evil-substitute
                                   )
-              (general-define-key :states '(normal visual)
+              (general-define-key :keymaps 'normal
                                   :prefix "g"
                                   "c" #'evilnc-comment-operator))
 
