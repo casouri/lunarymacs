@@ -28,10 +28,10 @@
 
 (use-package evil-nerd-commenter
               :commands evilnc-comment-operator
-	      :config
-	      (general-define-key :keymaps 'visual
-				  :prefix "g"
-                                  "c" #'evilnc-comment-operator)
+	      :general
+	      (:keymaps 'visual
+			:prefix "g"
+                        "c" #'evilnc-comment-operator)
 	      )
 
 (use-package evil-mc
