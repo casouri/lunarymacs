@@ -2,8 +2,6 @@
 
 This is a stripped down version of doom-emacs. It's extremely basic, but working.
 
-It might used as a starting point for anyone who wants to start his/her own config. 
-Since that's what I'm doing and therefore there is no complicated code.
 
 #+BEGIN_QUOTE
 开局一条狗，装备全靠抢   
@@ -11,11 +9,22 @@ Since that's what I'm doing and therefore there is no complicated code.
                      ——鲁迅
 #+END_QUOTE
 
-*In summary:*
-- code is easy to understand
-- not opinionated (no default settings by default, everything is up to you)
-- absolutely minimum core files
-- no default package, except use-package!
 
+*Warning*: There is no seatbelt.
+
+- code is easy to understand (because I don't really know much elisp)
+- not opinionated: no default settings by default, everything is up to you,
+no more forking for customization
+- absolutely minimum core files
+- no default package, except use-package
+
+  
+* Install
+#+BEGIN_SRC shell
+git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
+cd ~/.emacs.d
+make
+emacs
+#+END_SRC
   
 P.S. I don't know what is lunary, don't ask me.

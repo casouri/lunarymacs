@@ -4,7 +4,7 @@
 
 (global-hl-line-mode 1)
 
-(use-package| rainbow-delimiters
+(use-package rainbow-delimiters
 	      :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 ;; (use-package| highlight-parentheses

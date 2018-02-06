@@ -2,7 +2,7 @@
 ;; Package
 ;;
 
-(use-package| general
+(use-package general
               :after which-key
               :init
               (defvar moon-leader "SPC")
@@ -41,11 +41,7 @@
 				                          "TAB" #'indent-region)
               )
 
-(use-package| which-key
+(use-package which-key
               :config (which-key-mode 1))
 
 
-(use-package| key-chord
-              :config
-              (key-chord-mode 1)
-              (key-chord-define-global "fd" #'moon/quit-everything))

@@ -6,4 +6,5 @@
           evil-matchit
           vi-tilde-fringe
           evil-mc
+	  evil-escape
           )
