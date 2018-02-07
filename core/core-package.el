@@ -130,8 +130,8 @@ Can take multiple packages.
 e.g. (package| evil evil-surround)"
   (dolist (package package-list)
     (add-to-list 'moon-package-list (symbol-name package))
-    (fset (intern (format "post-config-%s" (symbol-name package))) '(lambda () ()))
-    (fset (intern (format "pre-init-%s" (symbol-name package))) '(lambda () ()))
+    ;; (fset (intern (format "post-config-%s" (symbol-name package))) '(lambda () ()))
+    ;; (fset (intern (format "pre-init-%s" (symbol-name package))) '(lambda () ()))
     ))
 
 (defmacro moon| (&rest star-list)
@@ -151,18 +151,24 @@ If called multiple times, the stars declared first will be in the front of moon-
 (defmacro post-config| (package &rest to-do-list)
   "Expressions to be called after (use-package PACKAGE :config)"
   (let (
-        (hook-symbol (intern (format "post-config-%s" package)))
+        (func-symbol (intern (format "post-config-%s" package)))
         )
-    (fset hook-symbol (append (symbol-function hook-symbol) to-do-list))
+    (unless (fboundp func-symbol)
+      (fset func-symbol '(lambda () ()))
+      )
+    (fset func-symbol (append (symbol-function func-symbol) to-do-list))
     )
   )
 
 (defmacro pre-init| (package &rest to-do-list)
   "Expressions to be called after (use-package PACKAGE :init)"
   (let (
-        (hook-symbol (intern (format "pre-init-%s" package)))
+        (func-symbol (intern (format "pre-init-%s" package)))
         )
-    (fset hook-symbol (append (symbol-function hook-symbol) to-do-list))
+    (unless (fboundp func-symbol)
+      (fset func-symbol '(lambda () ()))
+      )
+    (fset func-symbol (append (symbol-function func-symbol) to-do-list))
     )
   )
 

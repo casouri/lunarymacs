@@ -1,4 +1,4 @@
-(use-package company
+(use-package| company
   :diminish ('company-mode . "Ⓒ")
   :hook (prog-mode . company-mode)
   :defer t
