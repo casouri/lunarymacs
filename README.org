@@ -19,6 +19,7 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 
   
 * Install
+
 #+BEGIN_SRC shell
 git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
 cd ~/.emacs.d
@@ -26,8 +27,14 @@ make
 emacs
 #+END_SRC
   
-P.S. I don't know what is lunary, don't ask me.
 
 * Screenshot
 
 [[./screen-shot.png]]
+
+* etc
+
+I don't know what is lunary, don't ask me.
+
+I know it says lunarymacs but homepage is moon emacs.
+It's just the word "lunarymacs" doesn't go well with the art font
