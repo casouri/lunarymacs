@@ -17,6 +17,10 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 - absolute minimum core files
 - no default package, except use-package
 
+
+* Starup time
+As much as I wish it to be, the starup time is not as fast as light.
+Overall it's about 1-2 seconds. If you use space-line it would be around 2 seconds.
   
 * Install
 

@@ -2,6 +2,9 @@
   :diminish ('ivy-mode . "ⓘ")
   :config
   (ivy-mode 1)
+  (setq
+   ivy-fixed-height-minibuffer t
+   )
   (default-leader
     ;; other
     "SPC" #'counsel-M-x

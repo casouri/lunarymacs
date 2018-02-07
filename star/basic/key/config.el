@@ -8,7 +8,7 @@
 ;; Package
 ;;
 
-(use-package general
+(use-package| general
   :after which-key
   :init
   (defvar moon-leader "SPC")

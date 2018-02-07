@@ -19,13 +19,14 @@
   :commands (evil-search swiper))
 
 (use-package| evil-surround
-  :hook evil-visual-state
-  :config
-  (general-define-key :states 'visual
-                      "s" #'evil-surround-region
-                      "S" #'evil-substitute
-                      )
-  )
+              :hook (evil-visual-state . (lambda () (setq global-evil-surround-mode)))
+              :config
+              (general-define-key
+               :states 'visual
+               "s" #'evil-surround-region
+               "S" #'evil-substitute
+               )
+              )
 
 
 (use-package| evil-nerd-commenter

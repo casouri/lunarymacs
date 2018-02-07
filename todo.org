@@ -1,0 +1,16 @@
+#+TITLE: Things need to do
+
+
+* Core
+- autoremove is not working now
+- doc on everything
+
+* Star
+- spacemacs-like lighters
+- add lsp star
+- add windows management
+- consider repave spaeline
+- org mode star
+- insert lin below function
+- cursor color
+- -evil-surround fix-
