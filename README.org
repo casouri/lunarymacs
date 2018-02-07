@@ -31,12 +31,17 @@ make
 emacs
 #+END_SRC
   
-
+* Getting started
+At [[./doc/getting-started.org][here]]
 * Screenshot
 
 [[./screen-shot.png]]
 
 * etc
+  
+If you have soem interesting ideas, send me an email!
+
+[[casouri@gmail.com]]
 
 I don't know what is lunary, don't ask me.
 

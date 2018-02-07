@@ -1,0 +1,68 @@
+#+TITLE: Getting started
+
+The overall structure is very similar to doom-emacs, 
+since I basically modeled after hlisnner.
+
+* Packages
+Directory star is bassically modules in doom-emacs and layers in spacemacs.
+It contains your configurations.
+Each sub-dir in star is grouping dirs. 
+Under them are the indivisual stars.
+
+** About you private stars
+You can just put them under star dir.
+Git ignores any star that are not marked "!" in =.gitignore=
+
+** Inside a star
+   
+*** package.el
+
+Similar to doom-emacs, you just use =package|= macro to declare packages
+so they will be installed.
+
+Example:
+#+BEGIN_SRC lisp
+(package| evil
+          evil-surround
+          evil-matchit)
+#+END_SRC
+
+*** config.el
+    
+Here you define variables, and declare =use-package=, =post-config= and =pre-init=.
+
+Example:
+#+BEGIN_SRC lisp
+(use-package| evil
+ :config (evil-mode 1))
+ 
+(use-package evil-surround
+:hook (evil-visual-state . (lambda () (global-evil-surround-mode))))
+
+(post-config| some-package
+ (evil-match-mode)
+ (message "it works!"))
+
+(pre-init| some-package
+ (message "some package initing"))
+#+END_SRC
+    
+*** autoload.el or autoload/xxx.el
+
+Here you define you autoload functions.
+
+** After you made any change
+
+#+BEGIN_SRC shell
+# to install package and reload autoload
+make 
+
+# all avaliable functions
+make install
+make update
+make autoremove
+make autoload
+#+END_SRC
+
+* If anything broke
+Report a issue, duh. 
