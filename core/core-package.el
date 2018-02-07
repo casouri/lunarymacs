@@ -150,6 +150,7 @@ If called multiple times, the stars declared first will be in the front of moon-
 
 (defmacro post-config| (package &rest to-do-list)
   "Expressions to be called after (use-package PACKAGE :config)"
+  (declare (indent defun))
   (let (
         (func-symbol (intern (format "post-config-%s" package)))
         )
@@ -162,6 +163,7 @@ If called multiple times, the stars declared first will be in the front of moon-
 
 (defmacro pre-init| (package &rest to-do-list)
   "Expressions to be called after (use-package PACKAGE :init)"
+  (declare (indent defun))
   (let (
         (func-symbol (intern (format "pre-init-%s" package)))
         )
@@ -182,6 +184,7 @@ pre-init and post-config hooks.
 Basically (use-package| evil :something something) adds
 (use-package :something something :init (pre-init-evil) :config (post-config-evil))
 to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-star'"
+  (declare (indent defun))
   `(fset
     'moon-grand-use-package-call
     (append

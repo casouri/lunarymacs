@@ -3,3 +3,8 @@ plan.org
 .cache/
 */**/.DS_Store
 init.el
+star/
+!star/basic
+!star/autocompletion
+!star/os
+!star/casouri

@@ -4,6 +4,7 @@
 * Core
 - autoremove is not working now
 - doc on everything
+- *GO TO BED BEFORE 12:00!*
 
 * Star
 - spacemacs-like lighters
