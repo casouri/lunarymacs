@@ -1,4 +1,4 @@
-(use-package evil
+(use-package| evil
   :config
   (evil-mode 1)
   ;; fix paste issue in evil visual mode
@@ -8,14 +8,17 @@
     "ik" #'evil-insert-line-above)
   )
 
-(use-package evil-matchit
+(post-config| evil
+              (message "it works!"))
+
+(use-package| evil-matchit
   :hook (prog-mode . evil-matchit-mode)
   )
 
-(use-package evil-search-highlight-persist
+(use-package| evil-search-highlight-persist
   :commands (evil-search swiper))
 
-(use-package evil-surround
+(use-package| evil-surround
   :hook evil-visual-state
   :config
   (general-define-key :states 'visual
@@ -25,7 +28,7 @@
   )
 
 
-(use-package evil-nerd-commenter
+(use-package| evil-nerd-commenter
   :commands evilnc-comment-operator
   :general
   (:keymaps 'visual
@@ -33,10 +36,10 @@
             "c" #'evilnc-comment-operator)
   )
 
-(use-package evil-mc
+(use-package| evil-mc
   :commands (evil-mc-find-next-cursor
              evil-mc-find-prev-cursor))
 
-(use-package evil-escape
+(use-package| evil-escape
   :diminish evil-escap-mode
   :config (evil-escape-mode 1))

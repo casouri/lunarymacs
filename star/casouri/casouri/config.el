@@ -1,4 +1,4 @@
-(use-package nyan-mode
+(use-package| nyan-mode
   :init(setq nyan-wavy-trail t)
   :config
   (nyan-mode 1)

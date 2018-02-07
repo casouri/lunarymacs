@@ -1,4 +1,4 @@
-(use-package ivy
+(use-package| ivy
   :diminish ('ivy-mode . "ⓘ")
   :config
   (ivy-mode 1)
@@ -36,8 +36,8 @@
     )
   )
 
-(use-package swiper :commands (ivy-mode))
-(use-package counsel :commands (ivy-mode))
-(use-package smex
+(use-package| swiper :commands (ivy-mode))
+(use-package| counsel :commands (ivy-mode))
+(use-package| smex
 	      :commands (ivy-mode)
 	      :config (setq smex-save-file (concat moon-local-dir "smex-items")))

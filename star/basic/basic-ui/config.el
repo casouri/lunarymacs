@@ -64,7 +64,7 @@
 ;; Package
 ;;
 
-(use-package spacemacs-theme
+(use-package| spacemacs-theme
   :defer t
   :init (load-theme 'spacemacs-dark t))
 

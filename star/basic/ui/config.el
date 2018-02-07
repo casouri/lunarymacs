@@ -1,4 +1,11 @@
 ;;
+;; Var
+;;
+
+;; https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/
+
+
+;;
 ;; Config
 ;;
 
@@ -12,13 +19,13 @@
 ;; Package
 ;;
 
-(use-package rainbow-delimiters
+(use-package| rainbow-delimiters
   :defer t
   :hook (prog-mode . rainbow-delimiters-mode)
   )
 
 
-;; (use-package powerline
+;; (use-package| powerline
 ;;   :config
 ;;   (require 'powerline)
 ;;   (setq powerline-default-separator 'slant)
@@ -27,7 +34,7 @@
 ;;   (powerline-default-theme)
 ;;   )
 
-(use-package spaceline
+(use-package| spaceline
   :defer t
   :init (add-hook
          'moon-post-init-hook
@@ -48,12 +55,14 @@
 
 
 
-(use-package nlinum
+(use-package| nlinum
   :hook (prog-mode . nlinum-mode)
-  :defer t
+  :config
+  (moon/match-number-line-backgroud-color)
+  (add-hook 'moon-post-load-theme-hook #'moon/match-number-line-backgroud-color)
   )
 
-;; (use-package hlinum
+;; (use-package| hlinum
 ;;   :hook linum-mode
 ;;   :config
 ;;   (hlinum-activate)
@@ -61,5 +70,5 @@
 ;;   (add-hook 'spacemacs-post-theme-change-hook #'sync-hlinum-face)
 ;;   )
 
-(use-package diminish
+(use-package| diminish
   :config (diminish 'eldoc-mode))

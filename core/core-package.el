@@ -130,8 +130,8 @@ Can take multiple packages.
 e.g. (package| evil evil-surround)"
   (dolist (package package-list)
     (add-to-list 'moon-package-list (symbol-name package))
-    (fset (intern (format "post-config-%s" (symbol-name package))) '(lambda () ()))
-    (fset (intern (format "pre-init-%s" (symbol-name package))) '(lambda () ()))
+    ;; (fset (intern (format "post-config-%s" (symbol-name package))) '(lambda () ()))
+    ;; (fset (intern (format "pre-init-%s" (symbol-name package))) '(lambda () ()))
     ))
 
 (defmacro moon| (&rest star-list)
@@ -151,18 +151,24 @@ If called multiple times, the stars declared first will be in the front of moon-
 (defmacro post-config| (package &rest to-do-list)
   "Expressions to be called after (use-package PACKAGE :config)"
   (let (
-        (hook-symbol (intern (format "post-config-%s" package)))
+        (func-symbol (intern (format "post-config-%s" package)))
         )
-    (fset hook-symbol (append (symbol-function hook-symbol) to-do-list))
+    (unless (fboundp func-symbol)
+      (fset func-symbol '(lambda () ()))
+      )
+    (fset func-symbol (append (symbol-function func-symbol) to-do-list))
     )
   )
 
-(defmacro pre-init (package &rest to-do-list)
+(defmacro pre-init| (package &rest to-do-list)
   "Expressions to be called after (use-package PACKAGE :init)"
   (let (
-        (hook-symbol (intern (format "pre-init-%s" package)))
+        (func-symbol (intern (format "pre-init-%s" package)))
         )
-    (fset hook-symbol (append (symbol-function hook-symbol) to-do-list))
+    (unless (fboundp func-symbol)
+      (fset func-symbol '(lambda () ()))
+      )
+    (fset func-symbol (append (symbol-function func-symbol) to-do-list))
     )
   )
 
@@ -184,13 +190,26 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
          ,package
          ,@rest-list
          :init
-         (eval (list (intern (format "pre-init-%s" (symbol-name ',package)))))
+         (let (
+               (symb (intern (format "pre-init-%s" (symbol-name ',package))))
+               )
+           (when (fboundp symb)
+             (eval (list symb)))
+           )
+         ;; (eval (list (intern (format "pre-init-%s" (symbol-name ',package)))))
          :config
-         (eval (list (intern (format "post-config-%s" (symbol-name ',package)))))
+         (let (
+               (symb (intern (format "post-config-%s" (symbol-name ',package))))
+               )
+           (when (fboundp symb)
+             (eval (list symb)))
+           )
+         ;; (eval (list (intern (format "post-config-%s" (symbol-name ',package)))))
          ))
      )
     )
   )
+
 
 ;; (defun post-config-evil () (message "it works!"))
 ;; (defun pre-init-evil () (message "it works!"))
@@ -223,8 +242,31 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
   (moon-initialize-star)
   (package-refresh-contents)
   (dolist (package moon-package-list)
-    (package-install (intern package))
+    (unless
+        (package-installed-p (intern package))
+        (package-install (intern package))
+        )
     ))
+
+(defun moon/update-package ()
+  (interactive)
+  (moon-initialize)
+  (moon-initialize-star)
+  ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
+  (save-window-excursion
+    (package-list-packages t)
+    (package-menu-mark-upgrades)
+    (package-menu-execute t)))
+
+(defun moon/remove-unused-package ()
+  (interactive)
+  (moon-initialize)
+  (moon-initialize-star)
+  (dolist (package package-activated-list)
+    (when (member (symbol-name package) moon-package-list)
+      (package-delete '(:name package)))
+    )
+  )
 
 (defun moon/generate-autoload-file ()
   (interactive)
