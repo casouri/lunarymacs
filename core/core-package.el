@@ -157,7 +157,7 @@ If called multiple times, the stars declared first will be in the front of moon-
     )
   )
 
-(defmacro pre-init (package &rest to-do-list)
+(defmacro pre-init| (package &rest to-do-list)
   "Expressions to be called after (use-package PACKAGE :init)"
   (let (
         (hook-symbol (intern (format "pre-init-%s" package)))
@@ -192,6 +192,7 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
     )
   )
 
+
 ;; (defun post-config-evil () (message "it works!"))
 ;; (defun pre-init-evil () (message "it works!"))
 
@@ -223,8 +224,31 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
   (moon-initialize-star)
   (package-refresh-contents)
   (dolist (package moon-package-list)
-    (package-install (intern package))
+    (unless
+        (package-installed-p (intern package))
+        (package-install (intern package))
+        )
     ))
+
+(defun moon/update-package ()
+  (interactive)
+  (moon-initialize)
+  (moon-initialize-star)
+  ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
+  (save-window-excursion
+    (package-list-packages t)
+    (package-menu-mark-upgrades)
+    (package-menu-execute t)))
+
+(defun moon/remove-unused-package ()
+  (interactive)
+  (moon-initialize)
+  (moon-initialize-star)
+  (dolist (package package-activated-list)
+    (when (member (symbol-name package) moon-package-list)
+      (package-delete '(:name package)))
+    )
+  )
 
 (defun moon/generate-autoload-file ()
   (interactive)

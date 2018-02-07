@@ -1,4 +1,11 @@
 ;;
+;; Var
+;;
+
+;; https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/
+
+
+;;
 ;; Config
 ;;
 
@@ -50,7 +57,9 @@
 
 (use-package nlinum
   :hook (prog-mode . nlinum-mode)
-  :defer t
+  :config
+  (moon/match-number-line-backgroud-color)
+  (add-hook 'moon-post-load-theme-hook #'moon/match-number-line-backgroud-color)
   )
 
 ;; (use-package hlinum
