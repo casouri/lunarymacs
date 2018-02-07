@@ -1,4 +1,4 @@
-(use-package evil
+(use-package| evil
   :config
   (evil-mode 1)
   ;; fix paste issue in evil visual mode
@@ -7,6 +7,9 @@
   (default-leader "ij" #'evil-insert-line-below
     "ik" #'evil-insert-line-above)
   )
+
+(post-config| evil
+              (message "it works!"))
 
 (use-package evil-matchit
   :hook (prog-mode . evil-matchit-mode)

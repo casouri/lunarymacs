@@ -184,9 +184,21 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
          ,package
          ,@rest-list
          :init
-         (eval (list (intern (format "pre-init-%s" (symbol-name ',package)))))
+         (let (
+               (symb (intern (format "pre-init-%s" (symbol-name ',package))))
+               )
+           (when (fboundp symb)
+             (eval (list symb)))
+           )
+         ;; (eval (list (intern (format "pre-init-%s" (symbol-name ',package)))))
          :config
-         (eval (list (intern (format "post-config-%s" (symbol-name ',package)))))
+         (let (
+               (symb (intern (format "post-config-%s" (symbol-name ',package))))
+               )
+           (when (fboundp symb)
+             (eval (list symb)))
+           )
+         ;; (eval (list (intern (format "post-config-%s" (symbol-name ',package)))))
          ))
      )
     )
