@@ -2,24 +2,20 @@
 ;; Config
 ;;
 
+(require 'paren)
+(setq show-paren-style 'parenthesis)
+(show-paren-mode 1)
+
 (global-hl-line-mode 1)
 
+;;
+;; Package
+;;
+
 (use-package rainbow-delimiters
-	      :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :hook prog-mode
+  :config (rainbow-delimiters-mode 1))
 
-;; (use-package| highlight-parentheses
-;; 	      :hook prog-mode
-;; 	      :config (global-highlight-parentheses-mode t))
-
-;; (use-package spaceline
-;;   :config
-;;   (add-hook 'moon-post-init-hook
-;; 	    (lambda ()
-;; 	      (require 'spaceline-config)
-;; 	      (spaceline-spacemacs-theme)
-;; 	      (setq powerline-default-separator 'utf-8)
-;; 	      (spaceline-compile)))
-;;   )
 
 (use-package powerline
   :defer t
@@ -34,10 +30,14 @@
    )
   )
 
-(use-package hlinum
-  :hook linum-mode
+(use-package nlinum
   :config
-  (hlinum-activate)
-  (sync-hlinum-face)
-  (add-hook 'spacemacs-post-theme-change-hook #'sync-hlinum-face)
-  )
+  (global-nlinum-mode 1))
+
+;; (use-package hlinum
+;;   :hook linum-mode
+;;   :config
+;;   (hlinum-activate)
+;;   (moon/sync-hlinum-face)
+;;   (add-hook 'spacemacs-post-theme-change-hook #'sync-hlinum-face)
+;;   )

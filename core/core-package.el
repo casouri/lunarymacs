@@ -9,6 +9,7 @@
    Contains only core dir ,star dir and load path for built in libraries"
   )
 
+
 (defvar moon-package-dir (concat user-emacs-directory ".local/package/")
   "Where melpa and elpa packages are installed.")
 

@@ -1,6 +1,5 @@
 ;;(package-initialize t)
 
-
 (load (concat (expand-file-name user-emacs-directory) "core/core"))
 
 
@@ -8,12 +7,13 @@
       :basic
       key
       evil
-      basic-ui
       ui
       other
       edit
+      basic-ui
       :autocomplete
       ivy
+      company
       :casouri
       casouri
       :os

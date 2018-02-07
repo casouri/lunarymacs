@@ -4,11 +4,9 @@
 
 (setq auto-save-list-file-prefix nil) ;; no auto-save-list, thank you
 (setq recentf-save-file (concat moon-local-dir "recentf"))
-
 (setq backup-inhibited t)
 (setq auto-save-default nil)
 (setq make-backup-files nil)
-
 
 (setq-default
  ad-redefinition-action 'accept   ; silence advised function warnings
@@ -28,4 +26,6 @@
  ;; files
  abbrev-file-name             (concat moon-local-dir "abbrev.el")
  auto-save-list-file-name     (concat moon-cache-dir "autosave")
+ ;; edit
+ indent-tabs-mode nil
  )

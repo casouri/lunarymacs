@@ -35,6 +35,7 @@
     "w" '(:ignore t :which-key "window")
     "q" '(:ignore t :which-key "quit")
     "m" '(:ignore t :which-key "major-mode")
+    "e" '(:ignore t :which-key "eval")
     ;; file
     "fs" #'save-buffer
     ;; quit
@@ -43,13 +44,15 @@
     "TAB" #'moon/switch-between-buffer
     ;; buffer
     "bm" (lambda () (interactive) (switch-to-buffer "*Messages*"))
+    "bk" #'kill-buffer-and-window
+    ;; window
+    "w2" #'split-window-right
+    ;; eval
+    "er" #'eval-region
+    "ef" #'eval-function
+    "eb" #'eval-buffer
   )
 
-  (default-leader :keymaps 'lisp-mode-map
-    "me" '(:ignore t :which-key "eval")
-    "mer" #'eval-region
-    "mef" #'eval-function
-    )
 
   (general-define-key :states '(normal insert emacs)
 		      "TAB" #'indent-for-tab-command)
