@@ -27,3 +27,7 @@ emacs
 #+END_SRC
   
 P.S. I don't know what is lunary, don't ask me.
+
+* Screenshot
+
+[[./screen-shot.png]]
