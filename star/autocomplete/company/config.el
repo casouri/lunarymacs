@@ -1,8 +1,8 @@
-(use-package
-  company
-  :hook prog-mode
+(use-package company
+  :diminish ('company-mode . "Ⓒ")
+  :hook (prog-mode . company-mode)
+  :defer t
   :config
-  (global-company-mode)
   (setq company-idle-delay 0.2
         company-minimum-prefix-length 2
         company-require-match nil

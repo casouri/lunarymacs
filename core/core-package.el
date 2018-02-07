@@ -31,6 +31,7 @@
 (defvar moon-autoload-file (concat moon-local-dir "autoloads.el")
   "The path of autoload file which has all the autoload functions.")
 
+
 (fset 'moon-grand-use-package-call '(lambda () "A bunch of (use-package blah blah blah) collected by use-package| macro from each config file of stars."))
 
 ;;

@@ -2,11 +2,7 @@
 ;; Config
 ;;
 
-(setq auto-save-list-file-prefix nil) ;; no auto-save-list, thank you
-(setq recentf-save-file (concat moon-local-dir "recentf"))
-(setq backup-inhibited t)
-(setq auto-save-default nil)
-(setq make-backup-files nil)
+(fset #'yes-or-no-p #'y-or-n-p) ; y/n instead of yes/no
 
 (setq-default
  ad-redefinition-action 'accept   ; silence advised function warnings
@@ -26,6 +22,11 @@
  ;; files
  abbrev-file-name             (concat moon-local-dir "abbrev.el")
  auto-save-list-file-name     (concat moon-cache-dir "autosave")
+ recentf-save-file (concat moon-local-dir "recentf")
  ;; edit
  indent-tabs-mode nil
+ backup-inhibited t
+ auto-save-default nil
+ make-backup-files nil
  )
+

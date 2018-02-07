@@ -13,26 +13,45 @@
 ;;
 
 (use-package rainbow-delimiters
-  :hook prog-mode
-  :config (rainbow-delimiters-mode 1))
-
-
-(use-package powerline
   :defer t
-  :init
-  (add-hook
-   'moon-post-init-hook
-   (lambda ()
-     (require 'powerline)
-     (setq powerline-default-separator 'utf-8)
-     (powerline-default-theme)
-     )
-   )
+  :hook (prog-mode . rainbow-delimiters-mode)
   )
 
+
+;; (use-package powerline
+;;   :config
+;;   (require 'powerline)
+;;   (setq powerline-default-separator 'slant)
+;;   (setq powerline-image-apple-rgb t)
+;;   (setq powerline-height 26)
+;;   (powerline-default-theme)
+;;   )
+
+(use-package spaceline
+  :defer t
+  :init (add-hook
+         'moon-post-init-hook
+         (lambda ()
+           (require 'spaceline-config)
+           (setq powerline-default-separator 'slant)
+           (setq powerline-image-apple-rgb t)
+           (setq powerline-height 26)
+           (spaceline-spacemacs-theme)
+           (kill-buffer)
+           (get-buffer-create moon-homepage-buffer)
+           (switch-to-buffer moon-homepage-buffer)
+           (moon-draw-homepage)
+           )
+         t
+         )
+  )
+
+
+
 (use-package nlinum
-  :config
-  (global-nlinum-mode 1))
+  :hook (prog-mode . nlinum-mode)
+  :defer t
+  )
 
 ;; (use-package hlinum
 ;;   :hook linum-mode
@@ -41,3 +60,6 @@
 ;;   (moon/sync-hlinum-face)
 ;;   (add-hook 'spacemacs-post-theme-change-hook #'sync-hlinum-face)
 ;;   )
+
+(use-package diminish
+  :config (diminish 'eldoc-mode))

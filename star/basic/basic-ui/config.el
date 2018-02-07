@@ -1,15 +1,5 @@
 ;;
-;; Init
-;;
-
-(menu-bar-mode -1)
-(tooltip-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(blink-cursor-mode -1)
-
-;;
-;; Func
+;; Var
 ;;
 
 (defvar moon-banner "
@@ -20,6 +10,11 @@
 ██║ ╚═╝ ██║╚██████╔╝╚██████╔╝██║ ╚████║    ███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║
 ╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝    ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
                                                                                       ")
+
+;;
+;; Func
+;;
+
 
 (defun moon-draw-homepage ()
   (let (
@@ -41,6 +36,7 @@
       )
     )
   )
+
 ;;
 ;; Config
 ;;
@@ -54,10 +50,13 @@
  frame-title-format '("%f") ;; current file name
  )
 
+(setq moon-font (font-spec :family "Source Code Pro" :weight 'light :size 14))
+(set-frame-font moon-font nil t)
+(set-face-attribute 'fixed-pitch nil :font moon-font)
+
 ;; max screen on startup
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(fset #'yes-or-no-p #'y-or-n-p) ; y/n instead of yes/no
 
 (add-hook 'moon-post-init-hook #'moon-draw-homepage)
 
@@ -69,6 +68,3 @@
   :defer t
   :init (load-theme 'spacemacs-dark t))
 
-(setq moon-font (font-spec :family "Source Code Pro" :weight 'light :size 14))
-(set-frame-font moon-font nil t)
-(set-face-attribute 'fixed-pitch nil :font moon-font)

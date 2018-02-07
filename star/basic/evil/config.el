@@ -5,37 +5,38 @@
   ;; http://emacs.stackexchange.com/questions/14940/emacs-doesnt-paste-in-evils-visual-mode-with-every-os-clipboard/15054#15054
   (fset 'evil-visual-update-x-selection 'ignore)
   (default-leader "ij" #'evil-insert-line-below
-                  "ik" #'evil-insert-line-above)
+    "ik" #'evil-insert-line-above)
   )
 
 (use-package evil-matchit
-              :hook prog-mode
-              :config (global-evil-matchit-mode)
-              )
+  :hook (prog-mode . evil-matchit-mode)
+  )
 
 (use-package evil-search-highlight-persist
-              :commands (evil-search swiper))
+  :commands (evil-search swiper))
 
 (use-package evil-surround
-	      :hook evil-visual-state
-	      :config
-              (general-define-key :states 'visual
-                                  "s" #'evil-surround-region
-                                  "S" #'evil-substitute
-                                  )
-              )
+  :hook evil-visual-state
+  :config
+  (general-define-key :states 'visual
+                      "s" #'evil-surround-region
+                      "S" #'evil-substitute
+                      )
+  )
 
 
 (use-package evil-nerd-commenter
-              :commands evilnc-comment-operator
-	      :general
-	      (:keymaps 'visual
-			:prefix "g"
-                        "c" #'evilnc-comment-operator)
-	      )
+  :commands evilnc-comment-operator
+  :general
+  (:keymaps 'visual
+	    :prefix "g"
+            "c" #'evilnc-comment-operator)
+  )
 
 (use-package evil-mc
-              :commands (evil-mc-find-next-cursor
-                         evil-mc-find-prev-cursor))
+  :commands (evil-mc-find-next-cursor
+             evil-mc-find-prev-cursor))
 
-(use-package evil-escape :config (evil-escape-mode 1))
+(use-package evil-escape
+  :diminish evil-escap-mode
+  :config (evil-escape-mode 1))

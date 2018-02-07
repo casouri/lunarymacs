@@ -4,13 +4,15 @@
 (defvar moon-core-dir (concat moon-emacs-d-dir "core/")
   "Where core is located.")
 
-
 (defvar moon-star-dir (concat moon-emacs-d-dir "star/")
   "Where stars shine.")
 
-(defvar moon-local-dir (concat moon-emacs-d-dir ".local/"))
+(defvar moon-local-dir (concat moon-emacs-d-dir ".local/")
+  "Where package and other stuff goes. For files that are useful across sessions.")
 
-(defvar moon-cache-dir (concat moon-emacs-d-dir ".cache/"))
+(defvar moon-cache-dir (concat moon-emacs-d-dir ".cache/")
+  "Where tmp files rest. For files that are dedicated to each session.")
+
 
 ;; DEBUG
 ;; (setq moon-core-dir "/Users/yuan/.emacs.second/core")
@@ -27,7 +29,8 @@
 ;;
 
 (setq package-enable-at-startup nil)
-
+(setq custom-file (concat moon-local-dir "custom.el"))
+(add-hook 'post-init-hook (lambda () (load custom-file)))
 
 ;;
 ;; Init

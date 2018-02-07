@@ -7,10 +7,10 @@
       :basic
       key
       evil
+      basic-ui
       ui
       other
       edit
-      basic-ui
       :autocomplete
       ivy
       company
@@ -19,4 +19,3 @@
       :os
       mac
       )
-

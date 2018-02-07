@@ -2,3 +2,4 @@ plan.org
 .local/
 .cache/
 */**/.DS_Store
+init.el

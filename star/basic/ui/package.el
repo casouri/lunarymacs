@@ -1,4 +1,7 @@
-(package| rainbow-delimiters
-	  hlinum
-          nlinum
-	  powerline)
+(package|
+ rainbow-delimiters
+ hlinum
+ nlinum
+ spaceline
+ diminish
+ )
