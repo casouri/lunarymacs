@@ -4,11 +4,4 @@ plan.org
 */**/.DS_Store
 init.el
 star/
-!star/basic/
-!star/autocompletion/
-!star/os/
-!star/casouri/
-!star/checker/
-!star/utility/
-!star/lang/
 wiki/
