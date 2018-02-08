@@ -39,5 +39,15 @@
  ;; edit
  indent-tabs-mode                    nil
  backup-inhibited                    t
+
+ ;;ui
+ use-dialog-box                      nil
+ visible-cursor                      nil
+ use-dialog-box                      nil
+ ring-bell-function                  #'ignore
+ visible-bell                        nil
+ frame-title-format                  '("%f")                                          ;; current file name
+ display-line-numbers-width          3
  )
+
 

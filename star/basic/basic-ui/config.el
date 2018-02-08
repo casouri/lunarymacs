@@ -97,25 +97,19 @@
   (let (
 	(banner-list (if (>= (window-width) 86)
                          (split-string moon-banner "\n")
-                       (split-string moon-short-banner "\n")
-                       )
-                     )
+                       (split-string moon-short-banner "\n")))
 	)
     (let (
 	  (space-to-insert
 	   (make-string
-	    (/ (- (window-width) (length (car banner-list))) 2) ?\s
-	    )
-	   )
+	    (/ (- (window-width) (length (car banner-list))) 2) ?\s))
 	  )
       (insert (make-string 10 ?\n))
       (dolist (line banner-list)
 	(insert space-to-insert)
 	(insert line)
-	(insert "\n")
-	)
-      )
-    )
+	(insert "\n"))
+      ))
   )
 
 ;;
@@ -132,20 +126,10 @@
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 
-(setq-default
- use-dialog-box nil
- visible-cursor nil
- use-dialog-box nil
- ring-bell-function #'ignore
- visible-bell nil
- frame-title-format '("%f") ;; current file name
- display-line-numbers-width 3
- )
-
 ;; font
 (setq moon-font (font-spec :family "Source Code Pro" :weight 'light :size 14))
 (set-frame-font moon-font nil t)
-(set-face-attribute 'fixed-pitch nil :font moon-font)
+;; (set-face-attribute 'fixed-pitch nil :font moon-font)
 
 ;; cursor
 (add-hook 'evil-normal-state-entry-hook
