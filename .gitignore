@@ -11,5 +11,4 @@ star/*
 !star/os/
 !star/lang/
 !star/utility/
-!star/.gitignore
 wiki/
