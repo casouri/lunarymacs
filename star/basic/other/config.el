@@ -3,7 +3,6 @@
 ;;
 
 (fset #'yes-or-no-p #'y-or-n-p) ; y/n instead of yes/no
-(electric-indent-mode -1)
 
 (setq-default
  ad-redefinition-action 'accept   ; silence advised function warnings
