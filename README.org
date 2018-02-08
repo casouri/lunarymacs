@@ -21,12 +21,14 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 
 \\
 
-#+NAME: May be it will look cooler withou nyan cat? I dont' care, emacs without nyn cat is not emacs. It's emacs without nyan cat.
+#+CAPTION: May be it will look cooler withou nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
 [[./screenshot/screen-shot.png]]
 
 #+HTML:<div align=center>
 [[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
 #+HTML:</div>
+
+//
 
 * Quick start
 
