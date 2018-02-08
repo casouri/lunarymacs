@@ -1,0 +1,27 @@
+#+TITLE: Customization
+
+You can set some customizations using =customize= macro.
+
+For example in =init.example.el=:
+#+BEGIN_SRC lisp
+(customize| 
+ (setq moon-maximize-on-startup t)
+ (setq moon-normal-state-cursor-color lunary-white)
+ (setq moon-insert-state-cursor-color spacemacs-yellow)
+)
+#+END_SRC
+
+I set cursor color for normal state to white, 
+and yellow for insert state. There is also =doom-blue= that you can use.
+
+These colors are all defined in =basci-ui= star
+
+*When does customize evaluate?*
+
+All the expressions declared by =customize|= are evaluated in =moon-post-init-hook=.
+So it's after every =config.el= and =package.el= are loaded 
+and all =use-package= are evaluated (in =moon-grand-use-package-call=).
+
+But I don't see any use of it outside =init.el=, if you want to set seom variables,
+set them in =config.el=. If you want some setting to evaluate after some package
+has loaded, set them in =:config= flag in =use-package=.
