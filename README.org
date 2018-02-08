@@ -17,12 +17,11 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 - absolute minimum core files
 - no default package, except use-package
 
-
-* Starup time
-As much as I wish it to be, the starup time is not as fast as light.
-Overall it's about 1-2 seconds. If you use space-line it would be around 2 seconds.
   
-* Install
+
+* Quick start
+
+*backup you .emacs.d first!*
 
 #+BEGIN_SRC shell
 git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
@@ -32,19 +31,24 @@ emacs
 #+END_SRC
   
 * Getting started
-At [[./doc/getting-started.org][here]]
+
+[[./doc/getting-started.org][Getting started]]
+
 * Screenshot
 
-Startup: I set a timer for spaceline to load 0.3 sec after init.
+[[./screenshot/screen-shot.png]]
+
+* Starup time
+
+As much as I wish it to be, the starup time is not as fast as light.
+Overall it's about 1-2 seconds. If you use space-line it would be around 2 seconds.
+I set a timer for spaceline to load 0.3 sec after init.
 So technically init finishes when "MOON" show up on screen. 
 [[./screenshot/starup.gif]]
-[[./screenshot/screen-shot.png]]
 
 * etc
   
 If you have soem interesting ideas, send me an email!
-
-[[casouri@gmail.com]]
 
 I don't know what is lunary, don't ask me.
 
