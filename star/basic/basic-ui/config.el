@@ -26,7 +26,10 @@
 (defvar spacemacs-yellow "#ECAC2C"
   "Yellow color of spacemacs")
 
-(defvar moon-normal-state-cursor-color doom-blue
+(defvar lunary-white "#FFFFFF"
+  "White color of moon. （壮哉我大FFF团）")
+
+(defvar moon-normal-state-cursor-color lunary-white
   "Cursor color in normal state")
 
 (defvar moon-insert-state-cursor-color spacemacs-yellow
