@@ -36,6 +36,7 @@
     "q" '(:ignore t :which-key "quit")
     "m" '(:ignore t :which-key "major-mode")
     "e" '(:ignore t :which-key "eval")
+    "t" '(:ignore t :which-key "toggle")
     ;; file
     "fs" #'save-buffer
     ;; quit
@@ -46,7 +47,9 @@
     "bm" (lambda () (interactive) (switch-to-buffer "*Messages*"))
     "bk" #'kill-buffer-and-window
     ;; window
+    "w1" #'delete-other-windows
     "w2" #'split-window-right
+    "o"  #'other-window
     ;; eval
     "er" #'eval-region
     "ef" #'eval-function

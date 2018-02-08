@@ -66,7 +66,7 @@
 (set-face-attribute 'fixed-pitch nil :font moon-font)
 
 ;; max screen on startup
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (add-hook 'moon-post-init-hook #'moon/draw-homepage t)
 

@@ -38,6 +38,11 @@ emacs
 
 [[./screenshot/screen-shot.png]]
 
+May be it will look cooler withou nyan cat?
+
+I dont' care, emacs without nyn cat is not emacs.
+It's emacs without nyan cat.
+
 * Starup time
 
 As much as I wish it to be, the starup time is not as fast as light.
