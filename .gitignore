@@ -3,6 +3,13 @@ plan.org
 .cache/
 */**/.DS_Store
 init.el
-star/
+star/*
+star/autocomplete/
+star/basic/
+star/casouri/
+star/checker/
+star/os/
+star/lang/
+star/utility/
 !star/.gitignore
 wiki/
