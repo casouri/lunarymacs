@@ -2,13 +2,11 @@
 
 This is a stripped down version of doom-emacs. It's extremely basic, but working.
 
-
 #+BEGIN_QUOTE
 开局一条狗，装备全靠抢   
 
                      ——鲁迅
 #+END_QUOTE
-
 
 *Warning*: There is no seatbelt.
 
@@ -41,11 +39,6 @@ make
 emacs
 #+END_SRC
   
-* Getting started
-
-[[./doc/getting-started.org][Getting started]]
-
-
 * Starup time
 
 As much as I wish it to be, the starup time is not as fast as light.
