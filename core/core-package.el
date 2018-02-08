@@ -247,8 +247,18 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
   )
 
 (defmacro customize| (&rest exp-list)
+  "Set some customization in init.el.
+
+Accepts expressions, they will be run in `moon-post-init-hook'.
+Expressions will be appended."
   `(add-hook 'moon-post-init-hook
-             (lambda () ,@exp-list)))
+             (lambda () ,@exp-list) t))
+
+(defmacro moon-set-font| (&rest config-list)
+  "Set font. Accepts font-spec arguments.
+e.g. :family :weight :size etc."
+  `(set-frame-font (font-spec ,@config-list) nil t)
+  )
 
 
 ;; (defun post-config-evil () (message "it works!"))
