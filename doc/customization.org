@@ -14,7 +14,17 @@ For example in =init.example.el=:
 I set cursor color for normal state to white, 
 and yellow for insert state. There is also =doom-blue= that you can use.
 
-These colors are all defined in =basci-ui= star
+These colors are all in =moon-color-book=.
+There are: 
+
+#+BEGIN_SRC lisp
+(doom-blue spacemacs-yellow 
+lunary-white spacemacs-gray 
+spacemacs-green spacemacs-light-purple 
+spacemacs-dark-purple powerline-blue 
+poweline-green poweline-yellow mac-red 
+mac-green mac-yellow)
+#+END_SRC
 
 *When does customize evaluate?*
 
