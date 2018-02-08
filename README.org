@@ -18,6 +18,7 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 - no default package, except use-package
 
 \\
+
 \\
 
 [[./screenshot/screen-shot.png]]
