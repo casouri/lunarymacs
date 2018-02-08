@@ -17,7 +17,9 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 - absolute minimum core files
 - no default package, except use-package
 
+#+BEGIN_CENTER
 [[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
+#+END_CENTER
 
 * Quick start
 
