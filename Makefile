@@ -3,6 +3,8 @@
 EMACS_FLAGS=--eval '(load "~/.emacs.d/init.el")'
 EMACS=emacs --quick --batch $(EMACS_FLAGS)
 
+.PHONY: install autoload autoremove update clean export-doc
+
 all: install autoload
 
 install: init.el .local/autoloads.el
@@ -19,3 +21,6 @@ update: init.el .local/autoloads.el
 
 clean:
 >rm -f .*/**/*.elc;rm -f */**/*.elc
+
+export-doc:
+>@$(EMACS) -f moon/export-doc-to-wiki; cd wiki; git stage .;git commit -m "update";git push
