@@ -94,12 +94,22 @@
 (defun moon-load-config (path-list)
   "load config.el in each star"
   (dolist (star-path path-list)
-    (load (concat star-path "config.el"))))
+    (let ((path (concat star-path "config.el")))
+      (when (file-exists-p path)
+        (load path))
+      )
+    )
+  )
 
 (defun moon-load-package (path-list)
   "load package.el in each star"
   (dolist (star-path path-list)
-    (load (concat star-path "package.el"))))
+    (let ((path (concat star-path "package.el")))
+      (when (file-exists-p path)
+        (load path))
+      )
+    )
+  )
 
 ;; TEST
 ;; (setq test-star-list '(:ui basic-ui))
