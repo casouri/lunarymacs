@@ -48,6 +48,7 @@
     ;; buffer
     "bm" (lambda () (interactive) (switch-to-buffer "*Messages*"))
     "bk" #'kill-buffer-and-window
+    "bh" #'moon/close-help
     ;; window
     "w1" #'delete-other-windows
     "w2" #'split-window-right

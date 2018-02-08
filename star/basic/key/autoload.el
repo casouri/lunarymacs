@@ -19,3 +19,9 @@ Repeated invocations toggle between the two most recently open buffers."
     (previous-buffer)
     (setq moon-jumped t))
   )
+
+;;;###autoload
+(defun moon/close-help ()
+  "Close help buffer"
+  (interactive)
+  (kill-buffer "*Help*"))
