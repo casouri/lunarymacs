@@ -18,7 +18,13 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 - no default package, except use-package
 
 
+
 [[./screenshot/screen-shot.png]]
+
+May be it will look cooler withou nyan cat?
+
+I dont' care, emacs without nyn cat is not emacs.
+It's emacs without nyan cat.
 
 #+HTML:<div align=center>
 [[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
@@ -39,11 +45,6 @@ emacs
 
 [[./doc/getting-started.org][Getting started]]
 
-
-May be it will look cooler withou nyan cat?
-
-I dont' care, emacs without nyn cat is not emacs.
-It's emacs without nyan cat.
 
 * Starup time
 
