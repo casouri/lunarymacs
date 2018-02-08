@@ -1,3 +1,4 @@
 ;;; -*- lexical-binding: t -*-
 
-(package| spacemacs-theme)
+(package| spacemacs-theme
+          delight)

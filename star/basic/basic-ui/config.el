@@ -19,6 +19,22 @@
 ██║ ╚═╝ ██║╚██████╔╝╚██████╔╝██║ ╚████║
 ╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝
                                        ")
+
+(defvar doom-blue "#56B0EC"
+  "Blue color of doom-emacs")
+
+(defvar spacemacs-yellow "#ECAC2C"
+  "Yellow color of spacemacs")
+
+(defvar moon-normal-state-cursor-color doom-blue
+  "Cursor color in normal state")
+
+(defvar moon-insert-state-cursor-color spacemacs-yellow
+  "Cursor color in insert state")
+
+(defvar moon-maximize-on-startup nil
+  "Whether to maximize screen on startup.")
+
 ;;
 ;; Func
 ;;
@@ -77,8 +93,15 @@
 (set-face-attribute 'fixed-pitch nil :font moon-font)
 
 ;; cursor
+(add-hook 'evil-normal-state-entry-hook
+          (lambda ()
+            (set-face-attribute 'cursor nil :background moon-normal-state-cursor-color)
+            ))
 
-(set-face-attribute 'cursor nil :background "#ECAC2C")
+(add-hook 'evil-insert-state-entry-hook
+          (lambda ()
+            (set-face-attribute 'cursor nil :background moon-insert-state-cursor-color)
+            ))
 
 
 ;; max screen on startup (or not)
@@ -96,3 +119,8 @@
   :defer t
   :init (load-theme 'spacemacs-dark t))
 
+
+(use-package| delight
+  :defer t
+  :config
+  (delight 'eldoc-mode nil "eldoc"))

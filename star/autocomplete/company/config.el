@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 (use-package| company
-  :diminish ('company-mode . "Ⓒ")
+  :delight (company-mode " Ⓒ")
   :hook (prog-mode . company-mode)
   :defer t
   :config

@@ -5,7 +5,7 @@
 ;;
 
 ;; I have these in basic-ui star,
-;; but copy them here makes startup looks a bit nicer
+;; but copy them here makes starup looks a bit nicer
 (menu-bar-mode -1)
 (tooltip-mode -1)
 (tool-bar-mode -1)
@@ -19,6 +19,10 @@
 ;;
 
 (load (concat (expand-file-name user-emacs-directory) "core/core"))
+
+;;
+;; Config
+;;
 
 (moon| :basic
        basic-ui
@@ -43,6 +47,10 @@
        lsp
        python
        )
+
+;;
+;; Other Config
+;;
 
 (customize| 
  (setq moon-maximize-on-startup t)

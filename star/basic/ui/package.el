@@ -5,5 +5,4 @@
  hlinum
  nlinum
  spaceline
- diminish
  )

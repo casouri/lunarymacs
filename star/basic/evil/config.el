@@ -44,5 +44,5 @@
              evil-mc-find-prev-cursor))
 
 (use-package| evil-escape
-  :diminish evil-escap-mode
+  :delight (evil-escape-mode)
   :config (evil-escape-mode 1))

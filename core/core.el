@@ -18,16 +18,22 @@
 (defvar moon-init-time nil
   "How long it took for emacs to start")
 
+(defvar moon-delay-init-delay 0.5
+  "In float, how many seconds after startup will `moon-delay-init-hook' run")
+
 
 ;; DEBUG
 ;; (setq moon-core-dir "/Users/yuan/.emacs.second/core")
 
-(defvar moon-init-hook nil
+(defvar moon-init-hook ()
   "A list of hooks run when Emacs is initialized, before `moon-post-init-hook'.")
 
-(defvar moon-post-init-hook nil
+(defvar moon-post-init-hook ()
   "A list of hooks run after Emacs initialization is complete, and after
 `moon-init-hook'.")
+
+(defvar moon-delay-init-hook ()
+  "The hook will be run `moon-delay-hook-delay' second after starup")
 
 ;;
 ;; Config
@@ -67,6 +73,12 @@
   )
 
 (add-hook 'emacs-startup-hook #'moon-finalize t)
+(add-hook 'emacs-startup-hook
+          (lambda () (run-at-time
+                      (concat (number-to-string moon-delay-init-delay) " sec")
+                      nil
+                      (lambda () (run-hook-with-args #'moon-delay-init-hook))))
+          t)
 
 ;; load other core files
 

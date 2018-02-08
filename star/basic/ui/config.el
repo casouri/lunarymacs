@@ -31,10 +31,10 @@
 (use-package| spaceline
   :defer t
   :init (add-hook
-         'moon-post-init-hook
-         (lambda ()
-           (run-at-time
-            "0.3 sec" nil
+         'moon-delay-init-hook
+         ;; (lambda ()
+         ;;   (run-at-time
+         ;;    "0.3 sec" nil
             (lambda ()
               (require 'spaceline-config)
               (setq powerline-default-separator 'slant)
@@ -46,8 +46,8 @@
               (switch-to-buffer moon-homepage-buffer)
               (moon/draw-homepage)
               )
-            )
-           )
+           ;;  )
+           ;; )
          t
          )
   )
@@ -69,13 +69,9 @@
   (add-hook 'moon-post-load-theme-hook #'moon/match-number-line-backgroud-color)
   )
 
-;; (use-package| hlinum
-;;   :hook linum-mode
-;;   :config
-;;   (hlinum-activate)
-;;   (moon/sync-hlinum-face)
-;;   (add-hook 'spacemacs-post-theme-change-hook #'sync-hlinum-face)
-;;   )
-
-(use-package| diminish
-  :config (diminish 'eldoc-mode))
+(use-package| hlinum
+  :hook (nlinum-mode . hlinum-activate)
+  :config
+  (moon/sync-hlinum-face)
+  (add-hook 'spacemacs-post-theme-change-hook #'sync-hlinum-face)
+  )

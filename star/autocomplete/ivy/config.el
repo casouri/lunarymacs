@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 (use-package| ivy
-  :diminish ('ivy-mode . "ⓘ")
+  :delight (ivy-mode " ⓘ")
   :config
   (ivy-mode 1)
   (setq

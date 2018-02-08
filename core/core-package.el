@@ -233,6 +233,10 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
     )
   )
 
+(defmacro customize| (&rest exp-list)
+  `(add-hook 'moon-post-init-hook
+             (lambda () ,@exp-list)))
+
 
 ;; (defun post-config-evil () (message "it works!"))
 ;; (defun pre-init-evil () (message "it works!"))

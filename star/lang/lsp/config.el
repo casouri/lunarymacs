@@ -16,6 +16,8 @@
   "whether include signature")
 
 (use-package| lsp-mode
+  :delight (lsp-mode " Ⓛ")
+  :init (add-hook 'moon-delay-init-hook (lambda () (require 'lsp-mode)))
   :config
   (require 'lsp-imenu)
   (add-hook 'lsp-after-open-hook #'lsp-enable-imenu)
