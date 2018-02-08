@@ -116,6 +116,12 @@
 ;; (moon-generate-star-path test-star-list)
 
 
+(defun moon-display-benchmark ()
+  (message "loaded %s packages across %d stars in %.03fs"
+           (length moon-package-list)
+           (length moon-star-path-list)
+           (setq moon-init-time (float-time (time-subtract after-init-time before-init-time)))))
+
 ;;
 ;; Macro
 ;;

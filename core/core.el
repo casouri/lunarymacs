@@ -13,6 +13,9 @@
 (defvar moon-cache-dir (concat moon-emacs-d-dir ".cache/")
   "Where tmp files rest. For files that are dedicated to each session.")
 
+(defvar moon-init-time nil
+  "How long it took for emacs to start")
+
 
 ;; DEBUG
 ;; (setq moon-core-dir "/Users/yuan/.emacs.second/core")

@@ -44,6 +44,7 @@
 	(insert line)
 	(insert "\n")
 	)
+      (moon-display-benchmark)
       )
     )
   )
@@ -51,6 +52,12 @@
 ;;
 ;; Config
 ;;
+
+(menu-bar-mode -1)
+(tooltip-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(blink-cursor-mode -1)
 
 (setq-default
  use-dialog-box nil
@@ -61,12 +68,20 @@
  frame-title-format '("%f") ;; current file name
  )
 
+;; font
 (setq moon-font (font-spec :family "Source Code Pro" :weight 'light :size 14))
 (set-frame-font moon-font nil t)
 (set-face-attribute 'fixed-pitch nil :font moon-font)
 
-;; max screen on startup
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; cursor
+
+(set-face-attribute 'cursor nil :background "#ECAC2C")
+
+
+;; max screen on startup (or not)
+(when moon-maximize-on-startup
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  )
 
 (add-hook 'moon-post-init-hook #'moon/draw-homepage t)
 

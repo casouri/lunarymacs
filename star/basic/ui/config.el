@@ -25,14 +25,6 @@
   )
 
 
-;; (use-package| powerline
-;;   :config
-;;   (require 'powerline)
-;;   (setq powerline-default-separator 'slant)
-;;   (setq powerline-image-apple-rgb t)
-;;   (setq powerline-height 26)
-;;   (powerline-default-theme)
-;;   )
 
 (use-package| spaceline
   :defer t
@@ -58,6 +50,14 @@
          )
   )
 
+;; (use-package| spaceline
+;;   :config
+;;   (require 'spaceline-config)
+;;   (setq powerline-default-separator 'slant)
+;;   (setq powerline-image-apple-rgb t)
+;;   (setq powerline-height 26)
+;;   (spaceline-spacemacs-theme)
+;;   )
 
 
 (use-package| nlinum
