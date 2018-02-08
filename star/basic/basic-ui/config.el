@@ -114,7 +114,6 @@
 	(insert line)
 	(insert "\n")
 	)
-      (moon-display-benchmark)
       )
     )
   )
@@ -122,6 +121,10 @@
 ;;
 ;; Config
 ;;
+
+;; Homepage
+(add-hook 'moon-post-init-hook #'moon/draw-homepage t)
+(add-hook 'moon-post-init-hook #'moon-display-benchmark)
 
 (menu-bar-mode -1)
 (tooltip-mode -1)
@@ -161,7 +164,7 @@
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
   )
 
-(add-hook 'moon-post-init-hook #'moon/draw-homepage t)
+
 
 ;;
 ;; Package

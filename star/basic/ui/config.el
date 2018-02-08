@@ -4,8 +4,13 @@
 ;; Var
 ;;
 
-;; https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/
+(defvar moon-spaceline-on-homepage nil
+  "Whether to refresh homepage to see spaceline.
 
+I create a separate thred to load spaceline, 
+so homepage will use vanilla modeline.
+If you want spaceline on homepage, set this to t 
+and emacs will refresh homepage to update modeline.")
 
 ;;
 ;; Config
@@ -30,36 +35,25 @@
 
 (use-package| spaceline
   :defer t
-  :init (add-hook
-         'moon-delay-init-hook
-         ;; (lambda ()
-         ;;   (run-at-time
-         ;;    "0.3 sec" nil
-            (lambda ()
-              (require 'spaceline-config)
-              (setq powerline-default-separator 'slant)
-              (setq powerline-image-apple-rgb t)
-              (setq powerline-height 26)
-              (spaceline-spacemacs-theme)
-              (kill-buffer moon-homepage-buffer)
-              (get-buffer-create moon-homepage-buffer)
-              (switch-to-buffer moon-homepage-buffer)
-              (moon/draw-homepage)
-              )
-           ;;  )
-           ;; )
-         t
-         )
+  :init
+  (make-thread
+   (lambda ()
+     (require 'spaceline-config)
+     (setq powerline-default-separator 'slant)
+     (setq powerline-image-apple-rgb t)
+     (setq powerline-height 26)
+     (spaceline-spacemacs-theme)
+     (when moon-spaceline-on-homepage
+       (run-at-time "0.3 sec" nil
+                    (lambda ()
+                      (moon/redraw-homepage)
+                      )
+                    )
+       )
+     )
+   "spaceline-init"
+   )
   )
-
-;; (use-package| spaceline
-;;   :config
-;;   (require 'spaceline-config)
-;;   (setq powerline-default-separator 'slant)
-;;   (setq powerline-image-apple-rgb t)
-;;   (setq powerline-height 26)
-;;   (spaceline-spacemacs-theme)
-;;   )
 
 
 (use-package| nlinum
