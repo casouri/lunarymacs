@@ -20,17 +20,66 @@
 ╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝
                                        ")
 
-(defvar doom-blue "#56B0EC"
-  "Blue color of doom-emacs")
+;;
+;; Color
+;;
 
-(defvar spacemacs-yellow "#ECAC2C"
-  "Yellow color of spacemacs")
+(defvar moon-color-book
+  '(doom-blue spacemacs-yellow lunary-white
+              spacemacs-gray spacemacs-green
+              spacemacs-light-purple
+              spacemacs-dark-purple
+              powerline-blue poweline-green
+              poweline-yellow mac-red mac-green
+              mac-yellow
+              ))
+
+(defvar doom-blue "#56B0EC"
+  "Blue color of doom-emacs.")
+
+(defvar spacemacs-yellow "DarkGoldenrod2"
+  "Yellow color of spacemacs.")
+
+(defvar spacemacs-light-purple "plum3"
+  "A light purple used in spacemacs.")
+
+(defvar spacemacs-dark-purple "#5D4E79"
+  "Spacemacs purple.")
+
+(defvar spacemacs-gray "#3E3D31"
+  "A dark gray.")
+
+(defvar spacemacs-green "chartreuse3"
+  "A bright green.")
 
 (defvar lunary-white "#FFFFFF"
   "White color of moon. （壮哉我大FFF团）")
 
+(defvar powerline-blue "#289BEC"
+  "Bright blue.")
+
+(defvar powerline-green "#AAC306"
+  "Bright green.")
+
+(defvar powerline-yellow "#DCA809"
+  "Brigh yellow/orange.")
+
+(defvar mac-red "#FA5754"
+  "Red color on mac titlebar.")
+
+(defvar mac-green "#36CF4C"
+  "Green color on mac titlebar.")
+
+(defvar mac-yellow "#FEC041"
+  "Yellow color on mac titlebar.")
+
+;;
+;; Cursor Color
+;;
+
+
 (defvar moon-normal-state-cursor-color lunary-white
-  "Cursor color in normal state")
+  "Cursor color in normal state.")
 
 (defvar moon-insert-state-cursor-color spacemacs-yellow
   "Cursor color in insert state")
