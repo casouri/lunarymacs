@@ -44,6 +44,7 @@ As much as I wish it to be, the starup time is not as fast as light.
 Overall it's about 1-2 seconds. If you use space-line it would be around 2 seconds.
 I set a timer for spaceline to load 0.3 sec after init.
 So technically init finishes when "MOON" show up on screen. 
+
 [[./screenshot/starup.gif]]
 
 * etc
