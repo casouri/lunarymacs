@@ -24,3 +24,9 @@ clean:
 
 export-doc:
 >@$(EMACS) -f moon/export-doc-to-wiki; cd wiki; git stage .;git commit -m "update";git push
+
+install-emacs25:
+>brew install emacs-plus --without-spacemacs-icon --with-natural-title-bar
+
+install-emacs26:
+>brew install emacs-plus --without-spacemacs-icon --devel
