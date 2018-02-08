@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (use-package| ivy
   :diminish ('ivy-mode . "ⓘ")
   :config

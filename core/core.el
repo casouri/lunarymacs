@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (defvar moon-emacs-d-dir (expand-file-name user-emacs-directory)
   "Basically ~/.emacs.d but a full path.")
 

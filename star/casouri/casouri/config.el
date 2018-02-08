@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (use-package| nyan-mode
   :init(setq nyan-wavy-trail t)
   :config

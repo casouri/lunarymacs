@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 ;;;###autoload
 (defun moon/open-log () (interactive) (find-file "~/log.org"))
 

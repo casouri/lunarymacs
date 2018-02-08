@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 ;;
 ;; Var
 ;;
@@ -66,6 +68,7 @@
  ring-bell-function #'ignore
  visible-bell nil
  frame-title-format '("%f") ;; current file name
+ display-line-numbers-width 3
  )
 
 ;; font

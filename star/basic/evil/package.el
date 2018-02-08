@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (package| evil
           evil-surround
           evil-nerd-commenter
