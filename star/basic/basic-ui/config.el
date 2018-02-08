@@ -127,9 +127,7 @@
 (blink-cursor-mode -1)
 
 ;; font
-(setq moon-font (font-spec :family "Source Code Pro" :weight 'light :size 14))
-(set-frame-font moon-font nil t)
-;; (set-face-attribute 'fixed-pitch nil :font moon-font)
+(moon-set-font| :family "Source Code Pro" :weight 'light :size 14)
 
 ;; cursor
 (add-hook 'evil-normal-state-entry-hook
