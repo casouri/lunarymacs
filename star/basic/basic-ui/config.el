@@ -2,8 +2,7 @@
 ;; Var
 ;;
 
-(defvar moon-banner "
-███╗   ███╗ ██████╗  ██████╗ ███╗   ██╗    ███████╗███╗   ███╗ █████╗  ██████╗███████╗
+(defvar moon-banner "███╗   ███╗ ██████╗  ██████╗ ███╗   ██╗    ███████╗███╗   ███╗ █████╗  ██████╗███████╗
 ████╗ ████║██╔═══██╗██╔═══██╗████╗  ██║    ██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝
 ██╔████╔██║██║   ██║██║   ██║██╔██╗ ██║    █████╗  ██╔████╔██║███████║██║     ███████╗
 ██║╚██╔╝██║██║   ██║██║   ██║██║╚██╗██║    ██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║
@@ -11,14 +10,26 @@
 ╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝    ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
                                                                                       ")
 
+(defvar moon-short-banner "███╗   ███╗ ██████╗  ██████╗ ███╗   ██╗
+████╗ ████║██╔═══██╗██╔═══██╗████╗  ██║
+██╔████╔██║██║   ██║██║   ██║██╔██╗ ██║
+██║╚██╔╝██║██║   ██║██║   ██║██║╚██╗██║
+██║ ╚═╝ ██║╚██████╔╝╚██████╔╝██║ ╚████║
+╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝
+                                       ")
 ;;
 ;; Func
 ;;
 
 
-(defun moon-draw-homepage ()
+(defun moon/draw-homepage ()
+  (interactive)
   (let (
-	(banner-list (split-string moon-banner "\n"))
+	(banner-list (if (>= (window-width) 86)
+                         (split-string moon-banner "\n")
+                       (split-string moon-short-banner "\n")
+                       )
+                     )
 	)
     (let (
 	  (space-to-insert
@@ -55,10 +66,9 @@
 (set-face-attribute 'fixed-pitch nil :font moon-font)
 
 ;; max screen on startup
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-
-(add-hook 'moon-post-init-hook #'moon-draw-homepage)
+(add-hook 'moon-post-init-hook #'moon/draw-homepage t)
 
 ;;
 ;; Package

@@ -35,7 +35,10 @@ emacs
 At [[./doc/getting-started.org][here]]
 * Screenshot
 
-[[./screen-shot.png]]
+Startup: I set a timer for spaceline to load 0.3 sec after init.
+So technically init finishes when "MOON" show up on screen. 
+[[./screenshot/starup.gif]]
+[[./screenshot/screen-shot.png]]
 
 * etc
   

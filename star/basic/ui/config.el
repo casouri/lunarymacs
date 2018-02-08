@@ -39,15 +39,20 @@
   :init (add-hook
          'moon-post-init-hook
          (lambda ()
-           (require 'spaceline-config)
-           (setq powerline-default-separator 'slant)
-           (setq powerline-image-apple-rgb t)
-           (setq powerline-height 26)
-           (spaceline-spacemacs-theme)
-           (kill-buffer)
-           (get-buffer-create moon-homepage-buffer)
-           (switch-to-buffer moon-homepage-buffer)
-           (moon-draw-homepage)
+           (run-at-time
+            "0.3 sec" nil
+            (lambda ()
+              (require 'spaceline-config)
+              (setq powerline-default-separator 'slant)
+              (setq powerline-image-apple-rgb t)
+              (setq powerline-height 26)
+              (spaceline-spacemacs-theme)
+              (kill-buffer moon-homepage-buffer)
+              (get-buffer-create moon-homepage-buffer)
+              (switch-to-buffer moon-homepage-buffer)
+              (moon/draw-homepage)
+              )
+            )
            )
          t
          )
