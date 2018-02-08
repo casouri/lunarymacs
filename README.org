@@ -28,7 +28,7 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 [[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
 #+HTML:</div>
 
-//
+\\
 
 * Quick start
 
