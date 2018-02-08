@@ -37,6 +37,19 @@
 (fset 'moon-grand-use-package-call '(lambda () "A bunch of (use-package blah blah blah) collected by use-package| macro from each config file of stars."))
 
 ;;
+;; Config
+;;
+
+(setq package--init-file-ensured t
+      package-enable-at-startup nil
+      package-user-dir (expand-file-name "elpa" moon-package-dir)
+      package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+        ("gnu"   . "https://elpa.gnu.org/packages/"))
+      )
+
+
+;;
 ;; Func
 ;;
 
@@ -245,18 +258,6 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
 
 ;; (defun post-config-gerneral () (message "evaluate general"))
 ;; (post-config| general (message "it works!"))
-
-;;
-;; Config
-;;
-
-(setq package--init-file-ensured t
-      package-enable-at-startup nil
-      package-user-dir (expand-file-name "elpa" moon-package-dir)
-      package-archives
-      '(("melpa" . "https://melpa.org/packages/")
-        ("gnu"   . "https://elpa.gnu.org/packages/"))
-      )
 
 ;;
 ;; Interactive

@@ -1,6 +1,5 @@
 ;;; -*- lexical-binding: t -*-
 
-
 (defvar moon-emacs-d-dir (expand-file-name user-emacs-directory)
   "Basically ~/.emacs.d but a full path.")
 
@@ -30,6 +29,7 @@
   "A list of hooks run after Emacs initialization is complete, and after
 `moon-init-hook'.")
 
+
 ;;
 ;; Config
 ;;
@@ -38,12 +38,11 @@
 (setq custom-file (concat moon-local-dir "custom.el"))
 (add-hook 'post-init-hook (lambda () (load custom-file)))
 
+
 ;;
 ;; Init
 ;;
 
-
-(load (concat moon-core-dir "core-package"))
 ;; optimization on startup
 ;; https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast
 (defvar tmp-file-name-handler-alist file-name-handler-alist)
@@ -51,9 +50,9 @@
 (setq gc-cons-threshold 402653184
       gc-cons-percentage 0.6)
 
+(load (concat moon-core-dir "core-package"))
 
-
-  (load| core-ui)
+(load| core-ui)
 
 (defun moon-finalize ()
   (moon-initialize)
@@ -70,6 +69,7 @@
   )
 
 (add-hook 'emacs-startup-hook #'moon-finalize t)
+
 
 (provide 'core)
 
