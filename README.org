@@ -22,11 +22,10 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 [[./screenshot/screen-shot.png]]
 
 #+HTML:<div align=center>
-[[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
+[[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]][[https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square]
+[[https://github.com/casouri/lunarymacs/blob/master/LICENSE][https://img.shields.io/github/license/mashape/apistatus.svg]]
+
 #+HTML:</div>
-
-[[https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square][https://github.com/casouri/lunarymacs/blob/master/LICENSE]]
-
 \\
 
 * Quick start
