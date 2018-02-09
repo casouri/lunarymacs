@@ -58,7 +58,7 @@
   (moon-initialize)
   (moon-initialize-load-path)
   (moon-initialize-star)
-  (dolist (hook '(moon-init-hook moon-post-init-hook))
+  (dolist (hook '(moon-init-hook moon-post-init-hook moon-delay-init-hook))
     (run-hook-with-args hook))
 
   ;; If you forget to reset this, you'll get stuttering and random freezes!

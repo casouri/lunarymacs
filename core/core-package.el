@@ -34,6 +34,12 @@ Contains only core dir ,star dir and load path for built in libraries"
 (defvar moon-autoload-file (concat moon-local-dir "autoloads.el")
   "The path of autoload file which has all the autoload functions.")
 
+(defvar moon-delay-init-delay 0.3
+  "Time in seconds. How long after init
+will `moon-delay-init-hook' will be called.")
+
+(defvar moon-delay-init-hook ()
+  "Hook that will be called after `moon-delay-init-delay' seconds after init.")
 
 (fset 'moon-grand-use-package-call '(lambda () "A bunch of (use-package blah blah blah) collected by use-package| macro from each config file of stars."))
 
@@ -103,7 +109,7 @@ Contains only core dir ,star dir and load path for built in libraries"
 ;; (setq moon-star-path-list ())
 
 (defun keyword-to-name-str (keyword)
-  ":something - : = something "
+  "Remove the colon in keyword symbol and turn it into string."
   (replace-regexp-in-string "^:" "" (symbol-name keyword)))
 
 
