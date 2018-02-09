@@ -4,5 +4,5 @@
 
 Affect both ranger and neotree."
   (interactive)
-  (setq ranger-show-hidden t)
-  (setq neo-show-hidden-files t))
+  (setq ranger-show-hidden (not ranger-show-hidden))
+  (setq neo-show-hidden-files (not neo-show-hidden-files)))
