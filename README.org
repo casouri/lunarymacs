@@ -24,7 +24,7 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 #+HTML:<div align=center>
 [[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
 #+HTML:</div>
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)]()
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://github.com/casouri/lunarymacs/blob/master/LICENSE)
 
 \\
 
