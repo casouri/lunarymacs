@@ -1,2 +1,1 @@
-(package| flycheck
-          exec-path-from-shell)
+(package| flycheck)
