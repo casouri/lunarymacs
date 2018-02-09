@@ -3,7 +3,7 @@ plan.org
 .cache/
 **/.DS_Store
 init.el
-*.elc
+**/*.elc
 star/*
 !star/autocomplete/
 !star/basic/
