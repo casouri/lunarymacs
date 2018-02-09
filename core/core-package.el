@@ -8,7 +8,8 @@
   (append (list moon-core-dir moon-star-dir)
           load-path)
   "A backup of `load-path' before it was altered by `doom-initialize'.
-   Contains only core dir ,star dir and load path for built in libraries"
+
+Contains only core dir ,star dir and load path for built in libraries"
   )
 
 
@@ -258,6 +259,12 @@ Expressions will be appended."
   "Set font. Accepts font-spec arguments.
 e.g. :family :weight :size etc."
   `(set-frame-font (font-spec ,@config-list) nil t)
+  )
+
+(defmacro change-cursor-on-hook| (hook color)
+  `(add-hook ',hook (lambda ()
+                      (set-face-attribute 'cursor nil :background ,color)
+                      ))
   )
 
 
