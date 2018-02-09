@@ -17,8 +17,7 @@ This is a stripped down version of doom-emacs. It's extremely basic, but working
 
 \\
 
-
-[[https://github.com/casouri/lunarymacs/blob/master/LICENSE][https://img.shields.io/github/license/mashape/apistatus.svg]]
+[[https://github.com/casouri/lunarymacs/blob/master/LICENSE][https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square]]
 
 #+CAPTION: May be it will look cooler withou nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
 [[./screenshot/screen-shot.png]]
