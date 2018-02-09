@@ -1,5 +1,10 @@
 ;;; -*- lexical-binding: t -*-
 
+;;
+;; Func
+;;
+
+
 (use-package| neotree
   :commands neotree-toggle
   :init
@@ -21,3 +26,7 @@
    "q" #'neotree-hide
    "RET" #'neotree-enter
    ))
+
+(use-package| ranger
+  :commands ranger
+  )
