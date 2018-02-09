@@ -1,9 +1,9 @@
 plan.org
 .local/
 .cache/
-*/**/.DS_Store
+.DS_Store
 init.el
-/**/*.elc
+*.elc
 star/*
 !star/autocomplete/
 !star/basic/
