@@ -1,0 +1,19 @@
+#+TITLE: Helper functions and macros
+
+You have seen =moon=, =use-package=, =package|=, =pre-init=, and =post-config= macro.
+
+However, there are some other macro and functions that can aid you when configuring.
+
+Use C-h f to find documentation about them.
+
+* customize|
+
+It is explained in customize tab.
+
+* moon-set-font|
+
+* change-cursor-on-hook|
+
+* add-hook-for-once|
+
+* load|
