@@ -1,4 +1,11 @@
+;;; config.el --- This file contains configurations for basic ui appearance, including homepage, theme, font, cursor, etc.
 ;;; -*- lexical-binding: t -*-
+
+
+;;; Commentary:
+;;
+
+;;; Code:
 
 ;;
 ;; Var
@@ -52,8 +59,8 @@
 (defvar spacemacs-green "chartreuse3"
   "A bright green.")
 
-(defvar lunary-white "#FFFFFF"
-  "White color of moon. （壮哉我大FFF团）")
+(defvar lunary-white "#DEDDE3"
+  "White color of moon.")
 
 (defvar powerline-blue "#289BEC"
   "Bright blue.")
@@ -82,7 +89,7 @@
   "Cursor color in normal state.")
 
 (defvar moon-insert-state-cursor-color spacemacs-yellow
-  "Cursor color in insert state")
+  "Cursor color in insert state.")
 
 (defvar moon-maximize-on-startup nil
   "Whether to maximize screen on startup.")
@@ -93,6 +100,9 @@
 
 
 (defun moon/draw-homepage ()
+  "Draw MOON EMACS or MOON on the middle of current buffer.
+
+MOON is used when buffer's width is less than 86."
   (interactive)
   (let (
 	(banner-list (if (>= (window-width) 86)
@@ -129,16 +139,8 @@
 ;; font
 (moon-set-font| :family "Source Code Pro" :weight 'light :size 14)
 
-;; cursor
-(add-hook 'evil-normal-state-entry-hook
-          (lambda ()
-            (set-face-attribute 'cursor nil :background moon-normal-state-cursor-color)
-            ))
-
-(add-hook 'evil-insert-state-entry-hook
-          (lambda ()
-            (set-face-attribute 'cursor nil :background moon-insert-state-cursor-color)
-            ))
+(change-cursor-on-hook| evil-normal-state-entry-hook lunary-white)
+(change-cursor-on-hook| evil-insert-state-entry-hook spacemacs-yellow)
 
 
 ;; max screen on startup (or not)
@@ -161,3 +163,7 @@
   :defer t
   :config
   (delight 'eldoc-mode nil "eldoc"))
+
+(provide 'config)
+
+;;; config.el ends here
