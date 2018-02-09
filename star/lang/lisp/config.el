@@ -1,2 +1,2 @@
 (use-package| lispyville
-  :hook (lisp-mode . lispyville-mode))
+  :hook (emacs-lisp-mode . lispyville-mode))
