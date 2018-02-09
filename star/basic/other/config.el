@@ -39,6 +39,7 @@
  ;; edit
  indent-tabs-mode                    nil
  backup-inhibited                    t
+ sentence-end-double-space           nil
 
  ;;ui
  use-dialog-box                      nil
@@ -46,7 +47,7 @@
  use-dialog-box                      nil
  ring-bell-function                  #'ignore
  visible-bell                        nil
- frame-title-format                  '("%f")                                          ;; current file name
+ frame-title-format                  '("%f")                                          ; current file name
  display-line-numbers-width          3
  )
 
