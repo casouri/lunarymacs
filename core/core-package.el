@@ -291,8 +291,13 @@ as APPEND and LOCAL. Similarly REMOVELOCAL is passed to `remove-hook' as LOCAL."
 (defmacro async-load| (package &optional name)
   "Expand to a expression.
 
-(make-thread (lambda () (require PACKAGE)) NAME)"
-  `(make-thread (lambda () (require ,package)) ,name))
+(make-thread (lambda () (require 'PACKAGE)) NAME)
+
+Use example:
+
+(use-package| PACKAGE :init (async-load| PACKAGE))
+"
+  `(make-thread (lambda () (require ',package)) ,name))
 
 ;; (defun post-config-evil () (message "it works!"))
 ;; (defun pre-init-evil () (message "it works!"))
