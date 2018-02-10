@@ -18,7 +18,7 @@
 (use-package| lsp-mode
   :delight (lsp-mode " Ⓛ")
   ;; :init (add-hook 'moon-delay-init-hook (lambda () (require 'lsp-mode)))
-  :init (make-thread (lambda () requir 'lsp-mode) "lsp-mode")
+  :init (make-thread (lambda () (require 'lsp-mode)) "lsp-mode")
   :config
   (require 'lsp-imenu)
   (add-hook 'lsp-after-open-hook #'lsp-enable-imenu)
