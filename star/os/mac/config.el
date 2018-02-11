@@ -17,3 +17,8 @@
 (use-package| exec-path-from-shell
   :config (exec-path-from-shell-initialize)
   )
+
+
+(setq explicit-shell-file-name "/bin/zsh")
+(setq explicit-zsh-args '("--login"))
+(setenv "SHELL" "zsh")
