@@ -10,4 +10,8 @@
         company-require-match nil
         company-dabbrev-ignore-case t
         company-dabbrev-downcase nil)
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous)
   )
