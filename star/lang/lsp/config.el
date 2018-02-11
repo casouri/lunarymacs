@@ -24,6 +24,7 @@
   (add-hook 'lsp-after-open-hook #'lsp-enable-imenu)
   (with-eval-after-load 'lsp-mode
     (require 'lsp-flycheck))
+  (setq lsp-enable-eldoc nil)
   )
 
 (use-package| lsp-ui
