@@ -158,7 +158,6 @@ MOON is used when buffer's width is less than 86."
   :defer t
   :init (load-theme 'spacemacs-dark t))
 
-
 (use-package| delight
   :defer t
   :config
