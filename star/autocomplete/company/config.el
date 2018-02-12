@@ -17,3 +17,13 @@
   )
 
 (load| short-finger)
+
+(add-hook 'org-mode-hook #'short-finger-mode)
+(add-hook 'markdown-mode-hook #'short-finger-mode)
+
+(use-package| yasnippet
+  :delight (yas-minor-mode " Ⓨ")
+  :init
+  (add-to-list 'load-path (concat moon-emacs-d-dir "snippet/"))
+  (add-hook-for-once| prog-mode-hook #'yas-global-mode)
+  )

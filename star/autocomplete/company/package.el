@@ -1,3 +1,4 @@
 ;;; -*- lexical-binding: t -*-
 
-(package| company)
+(package| company
+          yasnippet)
