@@ -13,3 +13,4 @@ star/*
 !star/lang/
 !star/utility/
 wiki/
+!snippet
