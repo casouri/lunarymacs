@@ -16,15 +16,18 @@
   (defvar moon-leader "SPC")
   (defvar moon-non-normal-leader "M-SPC")
   :config
+  (general-override-mode)
   (general-create-definer default-leader
     :states '(normal visual insert emacs)
+    :keymaps 'override
     :prefix moon-leader
     :non-normal-prefix moon-non-normal-leader)
 
   (global-set-key (kbd "<escape>") #'keyboard-escape-quit)
 
+  
   (default-leader
-    "f" '(:ignore t :which-key "file")
+   "f" '(:ignore t :which-key "file")
     "i" '(:ignore t :which-key "insert")
     "h" '(:ignore t :which-key "help")
     "j" '(:ignore t :which-key "jump")
