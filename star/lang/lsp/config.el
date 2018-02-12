@@ -18,7 +18,7 @@
 (use-package| lsp-mode
   :delight (lsp-mode " Ⓛ")
   ;; :init (add-hook 'moon-delay-init-hook (lambda () (require 'lsp-mode)))
-  :init (make-thread (lambda () (require 'lsp-mode)) "lsp-mode")
+  :init (make-thread (lambda () (require 'lsp-mode) (lsp-mode)) "lsp-mode")
   :config
   (require 'lsp-imenu)
   (add-hook 'lsp-after-open-hook #'lsp-enable-imenu)
@@ -32,6 +32,7 @@
   :config
   (add-hook 'lsp-mode-hook #'lsp-ui-mode)
   (moon/sync-peek-face)
+  (setq lsp-ui-doc-position 'top)
   (default-leader
     "jr" #'lsp-ui-peek-find-references
     "jd" #'lsp-ui-peek-find-definitions
