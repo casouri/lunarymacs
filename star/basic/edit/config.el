@@ -32,8 +32,7 @@
   :delight (undo-tree-mode)
   :config (global-undo-tree-mode)
   (setq undo-tree-visualizer-timestamps t
-        undo-tree-visualizer-diff t
-        undo-tree-auto-save-history t))
+        undo-tree-visualizer-diff t))
 
 (use-package| recentf-ext
   :commands (recentf counsel-recentf)
