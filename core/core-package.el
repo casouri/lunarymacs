@@ -88,7 +88,8 @@ will `moon-delay-init-hook' will be called.")
     (moon-load-config moon-star-path-list)
     (require 'use-package)
     (moon-grand-use-package-call)
-    (make-thread #'moon-delay-grand-use-package-call "delay-use-package")
+    ;; (make-thread #'moon-delay-grand-use-package-call "delay-use-package")
+    (add-hook 'moon-delay-init-hook #'moon-delay-grand-use-package-call)
     )
   )
 
@@ -267,7 +268,7 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
   `(fset
     'moon-delay-grand-use-package-call
     (append
-     (symbol-function 'moon-grand-use-package-call)
+     (symbol-function 'moon-delay-grand-use-package-call)
      '((use-package
          ,package
          ,@rest-list
