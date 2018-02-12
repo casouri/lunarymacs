@@ -280,10 +280,10 @@ e.g. :family :weight :size etc."
 
 If APPEND or ADDLOCAL is set, APPEND or ADDLOCAL is passed to `add-hook'
 as APPEND and LOCAL. Similarly REMOVELOCAL is passed to `remove-hook' as LOCAL."
-  `(add-hook ,hook
+  `(add-hook ',hook
              (lambda ()
                (list ,func)
-               (remove-hook ,hook #',func ,removelocal))
+               (remove-hook ',hook #',func ,removelocal))
              ,append
              ,addlocal)
   )
