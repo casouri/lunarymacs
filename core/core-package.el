@@ -88,6 +88,7 @@ will `moon-delay-init-hook' will be called.")
     (moon-load-config moon-star-path-list)
     (require 'use-package)
     (moon-grand-use-package-call)
+    (make-thread #'moon-delay-grand-use-package-call "delay-use-package")
     )
   )
 
@@ -227,6 +228,44 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
   (declare (indent defun))
   `(fset
     'moon-grand-use-package-call
+    (append
+     (symbol-function 'moon-grand-use-package-call)
+     '((use-package
+         ,package
+         ,@rest-list
+         :init
+         (let (
+               (symb (intern (format "pre-init-%s" (symbol-name ',package))))
+               )
+           (when (fboundp symb)
+             (eval (list symb)))
+           )
+         ;; (eval (list (intern (format "pre-init-%s" (symbol-name ',package)))))
+         :config
+         (let (
+               (symb (intern (format "post-config-%s" (symbol-name ',package))))
+               )
+           (when (fboundp symb)
+             (eval (list symb)))
+           )
+         ;; (eval (list (intern (format "post-config-%s" (symbol-name ',package)))))
+         ))
+     )
+    )
+  )
+
+(defmacro delay-use-package| (package &rest rest-list)
+  "Thin wrapper around `use-package', just add some hooks.
+
+It seems that this macro slows down init. Don't use it when you don't need
+pre-init and post-config hooks.
+
+Basically (use-package| evil :something something) adds
+(use-package :something something :init (pre-init-evil) :config (post-config-evil))
+to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-star'"
+  (declare (indent defun))
+  `(fset
+    'moon-delay-grand-use-package-call
     (append
      (symbol-function 'moon-grand-use-package-call)
      '((use-package
