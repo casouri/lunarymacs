@@ -38,6 +38,9 @@
   :commands (recentf counsel-recentf)
   )
 
+(use-package| smooth-scrolling
+  :hook (prog-mode . smooth-scrolling-mode))
+
 ;;
 ;; Config
 ;;

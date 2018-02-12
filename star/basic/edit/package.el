@@ -4,4 +4,5 @@
           winum
           undo-tree
           avy
-	  recentf-ext)
+	  recentf-ext
+          smooth-scrolling)
