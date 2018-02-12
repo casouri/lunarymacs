@@ -64,7 +64,7 @@ and emacs will refresh homepage to update modeline.")
   )
 
 (use-package| hlinum
-  :hook (nlinum-mode . hlinum-activate)
+  :hook (linum-mode . hlinum-activate)
   :config
   (moon/sync-hlinum-face)
   )
