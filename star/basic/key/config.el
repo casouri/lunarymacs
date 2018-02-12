@@ -39,6 +39,7 @@
     "m" '(:ignore t :which-key "major-mode")
     "e" '(:ignore t :which-key "eval")
     "t" '(:ignore t :which-key "toggle")
+    "g" '(:ignore t :which-key "git")
     ;; file
     "fs" #'save-buffer
     ;; quit
