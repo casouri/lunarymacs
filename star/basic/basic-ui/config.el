@@ -1,12 +1,3 @@
-;;; config.el --- This file contains configurations for basic ui appearance, including homepage, theme, font, cursor, etc.
-;;; -*- lexical-binding: t -*-
-
-
-;;; Commentary:
-;;
-
-;;; Code:
-
 ;;
 ;; Var
 ;;
@@ -95,6 +86,14 @@
   "Whether to maximize screen on startup.")
 
 ;;
+;; Config
+;;
+
+;; popup window to right!
+(setq split-height-threshold nil
+      split-width-threshold 80)
+
+;;
 ;; Func
 ;;
 
@@ -164,6 +163,8 @@ MOON is used when buffer's width is less than 86."
   :config
   (delight 'eldoc-mode nil "eldoc"))
 
-(provide 'config)
-
-;;; config.el ends here
+;; (use-package| shackle
+;;   :defer t
+;;   :init
+;;   (setq shackle-default-rule '(:align 'right :select nil :popup t))
+;;   (make-thread (lambda () (require 'shackle)) "shackle"))
