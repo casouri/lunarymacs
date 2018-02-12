@@ -34,11 +34,6 @@
 ;; "test test sl something sl test test" => "test test[somthing]test test"
 ;; The reason of this decision is I don't want to make the function too "clever"
 ;; so it gets in the way. This way you can have more controll in what to replace.
-;;
-;; Another note: Besure to set `replace-book' befor enabling `short-finger-mode',
-;; If you want to modify `replace-book' after enabling `short-finger-mode',
-;; modify `short-finger-active-book'. Or restart `short-finger-mode'.
-
 
 
 ;;; Code:
@@ -61,9 +56,6 @@ as substitute.
 For example (\"sc\" . \"```%s```\") replace
 \" sc some code sc\" into \"```some code```\".")
 
-(defvar short-finger-active-book ()
-  "Current used short-finger-replace-book.")
-
 (defun short-finger-format-line (key-replace-con)
   "Format current line based on KEY-REPLACE-CON."
   (interactive)
@@ -81,7 +73,7 @@ For example (\"sc\" . \"```%s```\") replace
           (nth 2 key-replace-con))
          nil t)))))
 
-(defun short-finger-auto-format ()
+(defun short-finger-auto-format (short-finger-active-book)
   "If char before point is space(just typped space)
 and word before space match to ‘key-replace-con’,
 call `short-finger-format-line'.
@@ -91,7 +83,7 @@ Supposed to be added to post-`self-insert-hook'"
       (dolist (key-replace-con short-finger-active-book)
         (if (char-equal (string-to-char
                          (substring-no-properties
-                          (nth 1 '("sl" "sl" " [[%s][%s]]"))
+                          (nth 1 key-replace-con)
                           -1))
                         (char-before (- (point) 1)))
             (short-finger-format-line key-replace-con)))))
@@ -106,19 +98,14 @@ i.e. `short-finger-replace-book-for-org-mode' for `org-mode'.
 Note: name have to exactily match( org-mode -> org-mode)."
   nil ; default disabled
   :lighter " SF"
-  (defvar short-finger-active-book ()
-    "Current used short-finger-replace-book.")
-  ;; (let (replace-book (intern-soft (format
-  ;;                   "short-finger-replace-book-for-%s"
-  ;;                   (symbol-name major-mode))))
-  ;;   (when replace-book
-  ;;     (setq short-finger-active-book replace-book)
-  ;;     (add-hook 'post-self-insert-hook #'short-finger-auto-format)))
-  (setq short-finger-active-book
-        (eval (intern-soft (format
-                      "short-finger-replace-book-for-%s"
-                      (symbol-name major-mode)))))
-  (add-hook 'post-self-insert-hook #'short-finger-auto-format))
+  (add-hook 'post-self-insert-hook
+            (lambda ()
+              (short-finger-auto-format
+               (eval (intern-soft (format
+                             "short-finger-replace-book-for-%s"
+                             (symbol-name major-mode))))))
+            t t)
+  )
 
 (provide 'short-finger)
 
