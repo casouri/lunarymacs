@@ -1,10 +1,5 @@
 ;;; -*- lexical-binding: t -*-
 
-;;
-;; Config
-;;
-
-(defvar moon-jumped nil)
 
 ;;
 ;; Package
@@ -28,39 +23,43 @@
   
   (default-leader
    "f" '(:ignore t :which-key "file")
-    "i" '(:ignore t :which-key "insert")
-    "h" '(:ignore t :which-key "help")
-    "j" '(:ignore t :which-key "jump")
-    "r" '(:ignore t :which-key "register")
-    "s" '(:ignore t :which-key "search")
-    "T" '(:ignore t :which-key "Theme")
-    "p" '(:ignore t :which-key "project")
-    "w" '(:ignore t :which-key "window")
-    "b" '(:ignore t :which-key "buffer")
-    "w" '(:ignore t :which-key "window")
-    "q" '(:ignore t :which-key "quit")
-    "m" '(:ignore t :which-key "major-mode")
-    "e" '(:ignore t :which-key "eval")
-    "t" '(:ignore t :which-key "toggle")
-    "g" '(:ignore t :which-key "git")
-    ;; file
-    "fs" #'save-buffer
-    ;; quit
-    "qq" #'save-buffers-kill-emacs
-    ;; other
-    "TAB" #'moon/switch-between-buffer
-    ;; buffer
-    "bm" (lambda () (interactive) (switch-to-buffer "*Messages*"))
-    "bk" #'kill-buffer-and-window
-    "bh" #'moon/close-help
-    ;; window
-    "w1" #'delete-other-windows
-    "w2" #'split-window-right
-    "o"  #'other-window
-    ;; eval
-    "er" #'eval-region
-    "ef" #'eval-function
-    "eb" #'eval-buffer
+   "i" '(:ignore t :which-key "insert")
+   "h" '(:ignore t :which-key "help")
+   "j" '(:ignore t :which-key "jump")
+   "r" '(:ignore t :which-key "register")
+   "s" '(:ignore t :which-key "search")
+   "T" '(:ignore t :which-key "Theme")
+   "p" '(:ignore t :which-key "project")
+   "w" '(:ignore t :which-key "window")
+   "b" '(:ignore t :which-key "buffer")
+   "w" '(:ignore t :which-key "window")
+   "q" '(:ignore t :which-key "quit")
+   "m" '(:ignore t :which-key "major-mode")
+   "e" '(:ignore t :which-key "eval")
+   "t" '(:ignore t :which-key "toggle")
+   "g" '(:ignore t :which-key "git")
+   ;; file
+   "fs" #'save-buffer
+   ;; quit
+   "qq" #'save-buffers-kill-emacs
+   ;; other
+   "TAB" #'moon/switch-between-buffer
+   ;; buffer
+   "bm" (lambda () (interactive) (switch-to-buffer "*Messages*"))
+   "bk" #'kill-buffer-and-window
+   "bh" #'moon/close-help
+   "bo" #'moon/kill-other-buffer
+   "bh" #'moon/kill-helper
+   ;; window
+   "w1" #'delete-other-windows
+   "w2" #'split-window-right
+   "o"  #'other-window
+   ;; eval
+   "er" #'eval-region
+   "ef" #'eval-function
+   "eb" #'eval-buffer
+   ;; toggle
+   "tt" #'moon/switch-theme
   )
 
 
