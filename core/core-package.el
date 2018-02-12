@@ -142,7 +142,7 @@ will `moon-delay-init-hook' will be called.")
   (message "loaded %s packages across %d stars in %.03fs"
            (length moon-package-list)
            (length moon-star-path-list)
-           (setq doom-init-time (float-time (time-subtract (current-time) before-init-time)))
+           (setq moon-init-time (float-time (time-subtract (current-time) before-init-time)))
            )
   )
 
