@@ -20,3 +20,13 @@
 (use-package| pyenv
   :hook (python-mode . pyenv-mode)
   )
+
+(use-package| quickrun
+  :commands (quickrun
+             quickrun-region
+             quickrun-with-arg
+             quickrun-shell
+             quickrun-compile-only
+             quickrun-replace-region
+             quickrun-autorun-mode
+             ))
