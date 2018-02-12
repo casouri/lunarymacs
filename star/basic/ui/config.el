@@ -56,8 +56,8 @@ and emacs will refresh homepage to update modeline.")
   )
 
 
-(use-package| nlinum
-  :hook (prog-mode . nlinum-mode)
+(use-package| linum
+  :hook (prog-mode . linum-mode)
   :config
   (moon/match-number-line-backgroud-color)
   (add-hook 'moon-post-load-theme-hook #'moon/match-number-line-backgroud-color)
@@ -67,5 +67,4 @@ and emacs will refresh homepage to update modeline.")
   :hook (nlinum-mode . hlinum-activate)
   :config
   (moon/sync-hlinum-face)
-  (add-hook 'spacemacs-post-theme-change-hook #'sync-hlinum-face)
   )

@@ -3,6 +3,6 @@
 (package|
  rainbow-delimiters
  hlinum
- nlinum
+ linum
  spaceline
  )
