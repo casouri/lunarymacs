@@ -8,3 +8,6 @@
   (default-leader
     "gs" #'magit-status)
   )
+
+(use-package| evil-magit
+  :hook (magit-mode . (lambda () (require 'evil-magit))))

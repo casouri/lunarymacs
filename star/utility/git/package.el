@@ -1,3 +1,4 @@
 ;;; -*- lexical-binding: t -*-
 
-(package| magit)
+(package| magit
+          evil-magit)
