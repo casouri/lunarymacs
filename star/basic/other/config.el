@@ -24,15 +24,16 @@
                                        minibuffer-prompt)
 
  ;; History & backup settings (save nothing, that's what git is for)
- auto-save-default                   nil
  create-lockfiles                    nil
  history-length                      500
- make-backup-files                   nil
- auto-save-default                   nil
+ make-backup-files                   t
+ auto-save-default                   t
+ backup-directory-alist              `((".*" . ,moon-cache-dir))
+ auto-save-file-name-transforms      `((".*" ,moon-cache-dir t))
+ auto-save-list-file-name            (concat moon-cache-dir "autosave")
 
  ;; files
  abbrev-file-name                    (concat moon-local-dir "abbrev.el")
- auto-save-list-file-name            (concat moon-cache-dir "autosave")
  recentf-save-file                   (concat moon-local-dir "recentf")
  recentf-max-saved-items             300
 
