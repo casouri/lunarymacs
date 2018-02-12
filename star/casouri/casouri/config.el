@@ -2,8 +2,8 @@
 
 (use-package| nyan-mode
   :init(setq nyan-wavy-trail t)
+  :hook (prog-mode . nyan-mode)
   :config
-  (nyan-mode 1)
   (nyan-start-animation)
   )
 
