@@ -11,6 +11,9 @@
   "Switch to previously open buffer.
 Repeated invocations toggle between the two most recently open buffers."
   (interactive)
+  (defvar moon-jumped nil
+    "Have you jumped yet?
+Used to jump back and forth between two buffers.")
   (if moon-jumped
       (progn
 	(next-buffer)
