@@ -40,8 +40,11 @@ emacs
   
 * Thank you
 Thanks to all the contributors of spacemacs and doom-emacs. I copyied a lot of code from them.
+
 Thanks to everyone in emacs-china.org, you answered many questions of mine.
+
 And of course a big thank-you to all the package contributors and emacs contributors. I can't enjoy such a great editor without your effort.
+
 Emacs community is the best! :smile: :heart: (just rhetorical, not comparing :P)
 * Starup time
 
