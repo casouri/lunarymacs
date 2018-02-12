@@ -137,7 +137,8 @@ MOON is used when buffer's width is less than 86."
 (blink-cursor-mode -1)
 
 ;; font
-(moon-set-font| :family "Source Code Pro" :weight 'light :size 14)
+;; (moon-set-font| :family "Source Code Pro" :weight 'light :size 14)
+(moon-set-font| :family "SF Mono" :weight 'light :size 14)
 
 (change-cursor-on-hook| evil-normal-state-entry-hook lunary-white)
 (change-cursor-on-hook| evil-insert-state-entry-hook spacemacs-yellow)
