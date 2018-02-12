@@ -6,6 +6,7 @@
   (ivy-mode 1)
   (setq
    ivy-fixed-height-minibuffer t
+   ivy-use-selectable-prompt t ; so I can chose what I actually typed
    )
   (default-leader
     ;; other
