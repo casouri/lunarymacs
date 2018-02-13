@@ -55,6 +55,9 @@
 (defvar lunary-white "#DEDDE3"
   "White color of moon.")
 
+(defvar lunary-yellow "#F3B700"
+  "Yellow color of moon.")
+
 (defvar powerline-blue "#289BEC"
   "Bright blue.")
 
@@ -153,8 +156,8 @@ MOON is used when buffer's width is less than 86."
 ;; Cursor
 ;;
 
-(change-cursor-on-hook| evil-normal-state-entry-hook lunary-white)
-(change-cursor-on-hook| evil-insert-state-entry-hook spacemacs-yellow)
+(change-cursor-on-hook| evil-normal-state-entry-hook moon-normal-state-cursor-color)
+(change-cursor-on-hook| evil-insert-state-entry-hook moon-insert-state-cursor-color)
 
 
 ;; max screen on startup (or not)
