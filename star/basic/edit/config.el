@@ -42,7 +42,7 @@
   :hook (prog-mode . smooth-scrolling-mode))
 
 (use-package| avy
-  :hook (prog-mode . (require 'avy))
+  :hook (prog-mode . (lambda () (require 'avy)))
   )
 
 (post-config| general
