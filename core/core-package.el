@@ -41,7 +41,14 @@ will `moon-delay-init-hook' will be called.")
 (defvar moon-delay-init-hook ()
   "Hook that will be called after `moon-delay-init-delay' seconds after init.")
 
-(fset 'moon-grand-use-package-call '(lambda () "A bunch of (use-package blah blah blah) collected by use-package| macro from each config file of stars."))
+(fset 'moon-grand-use-package-call
+      '(lambda ()
+         "A bunch of (use-package blah blah blah) collected by use-package| macro from each config file of stars."))
+
+(fset 'moon-delay-grand-use-package-call
+      '(lambda ()
+         "Same ad `moon-grand-use-package-call' but called in a delay.
+Current implementation is to call it in `moon-delay-init-hook'."))
 
 ;;
 ;; Config
