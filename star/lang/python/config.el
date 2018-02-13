@@ -10,18 +10,18 @@
 ;; Config
 ;;
 
-(use-package| lsp-python
+(delay-use-package| lsp-python
   :hook (python-mode . lsp-python-enable)
   :config
   (when python-enable-format-on-save
     (add-hook 'python-mode-hook (lambda () (add-hook 'before-save-hook 'lsp-format-buffer))))
   )
 
-(use-package| pyenv
+(delay-use-package| pyenv
   :hook (python-mode . pyenv-mode)
   )
 
-(use-package| quickrun
+(delay-use-package| quickrun
   :commands (quickrun
              quickrun-region
              quickrun-with-arg

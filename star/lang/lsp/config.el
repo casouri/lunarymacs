@@ -15,7 +15,7 @@
 (defvar lsp-ui-doc-include-signature t
   "whether include signature")
 
-(use-package| lsp-mode
+(delay-use-package| lsp-mode
   :delight (lsp-mode " Ⓛ")
   ;; :init (add-hook 'moon-delay-init-hook (lambda () (require 'lsp-mode)))
   :init (make-thread (lambda () (require 'lsp-mode) (lsp-mode)) "lsp-mode")
@@ -27,7 +27,7 @@
   (setq lsp-enable-eldoc nil)
   )
 
-(use-package| lsp-ui
+(delay-use-package| lsp-ui
   :after lsp-mode
   :config
   (add-hook 'lsp-mode-hook #'lsp-ui-mode)
@@ -39,7 +39,7 @@
     )
   )
 
-(use-package| company-lsp
+(delay-use-package| company-lsp
   :after (company lsp-mode)
   :init  
   (setq company-transformers nil

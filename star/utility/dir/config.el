@@ -5,7 +5,7 @@
 ;;
 
 
-(use-package| neotree
+(delay-use-package| neotree
   :commands neotree-toggle
   :init
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
@@ -30,11 +30,11 @@
    "RET" #'neotree-enter
    ))
 
-(use-package| ranger
+(delay-use-package| ranger
   :init (setq ranger-show-hidden t)
   :commands ranger
   )
 
-(use-package| dired-narrow
+(delay-use-package| dired-narrow
   :commands dired-narrow
   :config (define-key 'dired-mode-map "F" #'dired-narrow))
