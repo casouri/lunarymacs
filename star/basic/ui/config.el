@@ -40,7 +40,7 @@ and emacs will refresh homepage to update modeline.")
      (require 'spaceline-config)
      (setq powerline-default-separator 'slant)
      (setq powerline-image-apple-rgb t)
-     (setq powerline-height 26)
+     (setq powerline-height 28)
      (spaceline-spacemacs-theme)
      (when moon-spaceline-on-homepage
        (run-at-time "0.3 sec" nil
