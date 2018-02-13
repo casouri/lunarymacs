@@ -308,19 +308,7 @@ Expressions will be appended."
   `(add-hook 'moon-post-init-hook
              (lambda () ,@exp-list) t))
 
-(defmacro moon-set-font| (&rest config-list)
-  "Set font. Accepts `font-spec' arguments.
 
-e.g. :family :weight :size etc."
-  `(set-frame-font (font-spec ,@config-list) nil t)
-  )
-
-(defmacro change-cursor-on-hook| (hook color)
-  "Change cursor color to COLOR when HOOK is activated."
-  `(add-hook ',hook (lambda ()
-                      (set-face-attribute 'cursor nil :background ,color)
-                      ))
-  )
 
 (defmacro add-hook-for-once| (hook func &optional append addlocal removelocal)
 "Add FUNC to HOOK. And remove FUNC from HOOK at first call of FUNC.
