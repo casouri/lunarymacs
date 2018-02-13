@@ -1,20 +1,5 @@
 ;;; -*- lexical-binding: t -*-
 
-;;
-;; Var
-;;
-
-(defvar lsp-ui-sideline-enable t
-  "whether enable sideline")
-(defvar lsp-enable-completion-at-point t
-  "whether enable complition at point")
-(defvar lsp-ui-doc-position 'at-point
-  "specify doc position")
-(defvar lsp-ui-doc-header t
-  "whether enable doc header")
-(defvar lsp-ui-doc-include-signature t
-  "whether include signature")
-
 (delay-use-package| lsp-mode
   :delight (lsp-mode " Ⓛ")
   ;; :init (add-hook 'moon-delay-init-hook (lambda () (require 'lsp-mode)))
@@ -32,11 +17,16 @@
   :config
   (add-hook 'lsp-mode-hook #'lsp-ui-mode)
   (moon/sync-peek-face)
-  (setq lsp-ui-doc-position 'top)
   (default-leader
     "jr" #'lsp-ui-peek-find-references
     "jd" #'lsp-ui-peek-find-definitions
     )
+  (setq lsp-ui-sideline-enable t)
+  (setq lsp-enable-completion-at-point t)
+  (setq lsp-ui-doc-position 'top)
+  (setq lsp-ui-doc-header t)
+  (setq lsp-ui-doc-include-signature t)
+  (setq lsp-ui-doc-enable t)
   )
 
 (delay-use-package| company-lsp
