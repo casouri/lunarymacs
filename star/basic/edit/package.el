@@ -5,4 +5,5 @@
           undo-tree
           avy
 	  recentf-ext
-          smooth-scrolling)
+          smooth-scrolling
+          avy)

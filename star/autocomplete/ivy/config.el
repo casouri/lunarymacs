@@ -10,7 +10,7 @@
    )
   (default-leader
     ;; other
-    "SPC" #'counsel-M-x
+    ":" #'counsel-M-x
     ;; files
     "ff"  #'counsel-find-file
     "fr"  #'counsel-recentf

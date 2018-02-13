@@ -41,6 +41,14 @@
 (use-package| smooth-scrolling
   :hook (prog-mode . smooth-scrolling-mode))
 
+(use-package| avy
+  :hook (prog-mode . (require 'avy))
+  )
+
+(post-config| general
+  (default-leader
+    "SPC" #'avy-goto-char-2))
+
 ;;
 ;; Config
 ;;
