@@ -58,6 +58,7 @@
    "er" #'eval-region
    "ef" #'eval-function
    "eb" #'eval-buffer
+   "`"  #'eval-expression
    ;; toggle
    "tt" #'moon/switch-theme
   )
