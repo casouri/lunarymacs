@@ -20,6 +20,8 @@
   (default-leader
     "jr" #'lsp-ui-peek-find-references
     "jd" #'lsp-ui-peek-find-definitions
+    "jD" #'xref-find-definition
+    "jR" #'xref-find-references
     )
   (setq lsp-ui-sideline-enable t)
   (setq lsp-enable-completion-at-point t)
