@@ -34,12 +34,10 @@ Contains only core dir ,star dir and load path for built in libraries"
 (defvar moon-autoload-file (concat moon-local-dir "autoloads.el")
   "The path of autoload file which has all the autoload functions.")
 
-(defvar moon-delay-init-delay 0.3
+(defvar moon-delay-init-delay 1
   "Time in seconds. How long after init
 will `moon-delay-init-hook' will be called.")
 
-(defvar moon-delay-init-hook ()
-  "Hook that will be called after `moon-delay-init-delay' seconds after init.")
 
 (fset 'moon-grand-use-package-call
       '(lambda ()
@@ -90,13 +88,17 @@ Current implementation is to call it in `moon-delay-init-hook'."))
   "Load each star in `moon-star-list'."
   (unless noninteractive
     (moon-load-autoload))
+  (setq moon-before-package-time (current-time))
   (moon-load-package moon-star-path-list)
   (unless noninteractive
     (moon-load-config moon-star-path-list)
+    (message (format "load package and config time: %.03f" (float-time (time-subtract (current-time) moon-before-package-time))))
     (require 'use-package)
+    (setq moon-before-grand-time (current-time))
     (moon-grand-use-package-call)
     ;; (make-thread #'moon-delay-grand-use-package-call "delay-use-package")
-    (add-hook 'moon-delay-init-hook #'moon-delay-grand-use-package-call)
+    (message (format "use-package-time: %.03f" (float-time (time-subtract (current-time) moon-before-grand-time))))
+    (run-at-time (format "%f sec"moon-delay-init-delay) nil #'moon-delay-grand-use-package-call)
     )
   )
 

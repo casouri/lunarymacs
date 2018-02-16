@@ -36,7 +36,7 @@
 
 (setq package-enable-at-startup nil)
 (setq custom-file (concat moon-local-dir "custom.el"))
-(add-hook 'post-init-hook (lambda () (load custom-file)))
+(load custom-file)
 
 
 ;;
@@ -55,12 +55,14 @@
 (load| core-ui)
 
 (defun moon-finalize ()
+  (setq moon-before-init-time (current-time))
   (moon-initialize)
   (moon-initialize-load-path)
+  (message (format "(package-initialize) time: %.03f" (float-time (time-subtract (current-time) moon-before-init-time))))
   (moon-initialize-star)
   (dolist (hook '(moon-init-hook moon-post-init-hook moon-delay-init-hook))
     (run-hook-with-args hook))
-
+  
   ;; If you forget to reset this, you'll get stuttering and random freezes!
   (setq gc-cons-threshold 800000
         gc-cons-percentage 0.1
