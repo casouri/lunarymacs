@@ -1,4 +1,4 @@
-(delay-use-package| ob-ipython
+(use-package| ob-ipython
                     :hook (org-mode
                            .
          (lambda ()

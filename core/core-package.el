@@ -34,19 +34,11 @@ Contains only core dir ,star dir and load path for built in libraries"
 (defvar moon-autoload-file (concat moon-local-dir "autoloads.el")
   "The path of autoload file which has all the autoload functions.")
 
-(defvar moon-delay-init-delay 1
-  "Time in seconds. How long after init
-will `moon-delay-init-hook' will be called.")
-
 
 (fset 'moon-grand-use-package-call
       '(lambda ()
          "A bunch of (use-package blah blah blah) collected by use-package| macro from each config file of stars."))
 
-(fset 'moon-delay-grand-use-package-call
-      '(lambda ()
-         "Same ad `moon-grand-use-package-call' but called in a delay.
-Current implementation is to call it in `moon-delay-init-hook'."))
 
 ;;
 ;; Config
@@ -96,9 +88,7 @@ Current implementation is to call it in `moon-delay-init-hook'."))
     (require 'use-package)
     (setq moon-before-grand-time (current-time))
     (moon-grand-use-package-call)
-    ;; (make-thread #'moon-delay-grand-use-package-call "delay-use-package")
     (message (format "use-package-time: %.03f" (float-time (time-subtract (current-time) moon-before-grand-time))))
-    (run-at-time (format "%f sec"moon-delay-init-delay) nil #'moon-delay-grand-use-package-call)
     )
   )
 
@@ -264,43 +254,6 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
     )
   )
 
-(defmacro delay-use-package| (package &rest rest-list)
-  "Thin wrapper around `use-package', just add some hooks.
-
-It seems that this macro slows down init. Don't use it when you don't need
-pre-init and post-config hooks.
-
-Basically (use-package| evil :something something) adds
-(use-package :something something :init (pre-init-evil) :config (post-config-evil))
-to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-star'"
-  (declare (indent defun))
-  `(fset
-    'moon-delay-grand-use-package-call
-    (append
-     (symbol-function 'moon-delay-grand-use-package-call)
-     '((use-package
-         ,package
-         ,@rest-list
-         :init
-         (let (
-               (symb (intern (format "pre-init-%s" (symbol-name ',package))))
-               )
-           (when (fboundp symb)
-             (eval (list symb)))
-           )
-         ;; (eval (list (intern (format "pre-init-%s" (symbol-name ',package)))))
-         :config
-         (let (
-               (symb (intern (format "post-config-%s" (symbol-name ',package))))
-               )
-           (when (fboundp symb)
-             (eval (list symb)))
-           )
-         ;; (eval (list (intern (format "post-config-%s" (symbol-name ',package)))))
-         ))
-     )
-    )
-  )
 
 (defmacro customize| (&rest exp-list)
   "Set some customization in init.el.

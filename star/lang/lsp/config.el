@@ -1,9 +1,8 @@
 ;;; -*- lexical-binding: t -*-
 
-(delay-use-package| lsp-mode
+(use-package| lsp-mode
   :delight (lsp-mode " Ⓛ")
-  ;; :init (add-hook 'moon-delay-init-hook (lambda () (require 'lsp-mode)))
-  :init (make-thread (lambda () (require 'lsp-mode) (lsp-mode)) "lsp-mode")
+  :defer 2.5
   :config
   (require 'lsp-imenu)
   (add-hook 'lsp-after-open-hook #'lsp-enable-imenu)
@@ -12,7 +11,7 @@
   (setq lsp-enable-eldoc nil)
   )
 
-(delay-use-package| lsp-ui
+(use-package| lsp-ui
   :after lsp-mode
   :config
   (add-hook 'lsp-mode-hook #'lsp-ui-mode)
@@ -31,7 +30,7 @@
   (setq lsp-ui-doc-enable t)
   )
 
-(delay-use-package| company-lsp
+(use-package| company-lsp
   :after (company lsp-mode)
   :init  
   (setq company-transformers nil

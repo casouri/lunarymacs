@@ -60,7 +60,7 @@
   (moon-initialize-load-path)
   (message (format "(package-initialize) time: %.03f" (float-time (time-subtract (current-time) moon-before-init-time))))
   (moon-initialize-star)
-  (dolist (hook '(moon-init-hook moon-post-init-hook moon-delay-init-hook))
+  (dolist (hook '(moon-init-hook moon-post-init-hook))
     (run-hook-with-args hook))
   
   ;; If you forget to reset this, you'll get stuttering and random freezes!

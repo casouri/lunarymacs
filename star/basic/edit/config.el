@@ -49,7 +49,7 @@
   (default-leader
     "SPC" #'avy-goto-char-2))
 
-(delay-use-package| minimap
+(use-package| minimap
   :init
   (setq
    minimap-width-fraction 0.1
