@@ -55,7 +55,10 @@
 (defvar lunary-white "#DEDDE3"
   "White color of moon.")
 
-(defvar lunary-yellow "#F3B700"
+(defvar lunary-dark-yellow "#F3B700"
+  "Dark yellow color of moon.")
+
+(defvar lunary-yellow "#FFD256"
   "Yellow color of moon.")
 
 (defvar powerline-blue "#289BEC"
