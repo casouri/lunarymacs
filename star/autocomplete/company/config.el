@@ -25,7 +25,7 @@
   :delight (yas-minor-mode " Ⓨ")
   ;; :hook (prog-mode . yas-minor-mode)
   :init
-  (add-to-list 'load-path (concat moon-emacs-d-dir "snippet/"))
+  (setq yas-snippet-dirs (concat moon-emacs-d-dir "snippet/"))
   (add-hook-for-once| prog-mode-hook #'yas-global-mode)
   :config
   (yas-minor-mode)
