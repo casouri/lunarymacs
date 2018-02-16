@@ -10,7 +10,7 @@
    )
   (default-leader
     ;; other
-    ":" #'counsel-M-x
+    "TAB" #'counsel-M-x
     ;; files
     "ff"  #'counsel-find-file
     "fr"  #'counsel-recentf

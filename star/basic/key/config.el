@@ -39,17 +39,17 @@
    "t" '(:ignore t :which-key "toggle")
    "g" '(:ignore t :which-key "git")
    ;; file
+   "fR" #'moon/rename-file
    "fs" #'save-buffer
    ;; quit
    "qq" #'save-buffers-kill-emacs
-   ;; other
-   "TAB" #'moon/switch-between-buffer
    ;; buffer
    "bm" (lambda () (interactive) (switch-to-buffer "*Messages*"))
    "bk" #'kill-buffer-and-window
    "bh" #'moon/close-help
    "bo" #'moon/kill-other-buffer
    "bh" #'moon/kill-helper
+   "bb" #'list-buffers
    ;; window
    "w1" #'delete-other-windows
    "w2" #'split-window-right
@@ -68,6 +68,8 @@
 		      "TAB" #'indent-for-tab-command)
   (general-define-key :states 'visual
 		      "TAB" #'indent-region)
+  (general-define-key :states 'normal
+                      "RET" #'ivy-switch-buffer)
   )
 
 (use-package| which-key
