@@ -17,8 +17,8 @@
     (add-hook 'python-mode-hook (lambda () (add-hook 'before-save-hook 'lsp-format-buffer))))
   )
 
-(delay-use-package| pyenv
-  :hook (python-mode . pyenv-mode)
+(delay-use-package| pyvenv
+  :commands pyvenv-activate
   )
 
 (delay-use-package| quickrun
@@ -30,3 +30,5 @@
              quickrun-replace-region
              quickrun-autorun-mode
              ))
+
+(setq python-shell-interpreter "/usr/local/bin/python3")
