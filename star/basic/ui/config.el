@@ -30,6 +30,8 @@ and emacs will refresh homepage to update modeline.")
   :hook (prog-mode . rainbow-delimiters-mode)
   )
 
+(use-package| rainbow-mode
+  :commands rainbow-mode)
 
 
 (use-package| spaceline

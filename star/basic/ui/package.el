@@ -5,4 +5,5 @@
  hlinum
  linum
  spaceline
+ rainbow-mode
  )
