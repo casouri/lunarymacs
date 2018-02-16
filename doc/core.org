@@ -27,7 +27,6 @@ are processed.
 2. everything in =moon-init-hook= and =moon-post-init= hook are
 run after stars are loaded.
   
-
 * core-package.el
   
 Declares all the core functions and macros used in star configs,
@@ -89,6 +88,12 @@ so they will be called in =use-package='s =:init= flag
 *** use-pacakge|
 It create a =(use-package blah blah :init pre-init-xxx :config post-config-xxx)=
 and add that to ==moon-grand-use-package-call=
+
+*** after|
+A smart wrapper around `with-eval-after-load'.
+
+Expressions inside will be called right after the library is loaded,
+before `post-config|' but after `pro-init'.
 
 ** commands
 

@@ -29,7 +29,7 @@ Example:
 
 *** config.el
     
-Here you define variables, and declare =use-package=, =post-config= and =pre-init=.
+Here you define variables, and declare =use-package=, =post-config=, =after= and =pre-init=.
 
 Example:
 #+BEGIN_SRC lisp
@@ -45,6 +45,9 @@ Example:
 
 (pre-init| some-package
  (message "some package initing"))
+ 
+(after| ivy
+ (something))
 #+END_SRC
     
 *** autoload.el or autoload/xxx.el

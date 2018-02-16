@@ -215,6 +215,14 @@ If called multiple times, the stars declared first will be in the front of moon-
     )
   )
 
+(defmacro after| (feature &rest rest-list)
+  "A smart wrapper around `with-eval-after-load'.
+
+Expressions inside will be called right after the library is loaded,
+before `post-config|' but after `pro-init'."
+  (declare (indent defun) (debug t))
+  `(with-eval-after-load ',feature ,@rest-list)
+   )
 
 (defmacro use-package| (package &rest rest-list)
   "Thin wrapper around `use-package', just add some hooks.
