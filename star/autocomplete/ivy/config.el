@@ -10,22 +10,23 @@
    )
   (default-leader
     ;; other
-    "RET" #'counsel-M-x
+    "SPC" #'counsel-M-x
     ;; files
     "ff"  #'counsel-find-file
     "fr"  #'counsel-recentf
-    "fel" #'counsel-find-library
     "fL"  #'counsel-locate
     ;; help
     "hb"  #'counsel-descbinds
     "hf"  #'counsel-describe-function
     "hF"  #'counsel-describe-face
+    "hl"  #'counsel-find-library
     "hm"  #'spacemacs/describe-mode
+    "hk"  #'describe-key
     "hv"  #'counsel-describe-variable
     "hd"  #'apropos
     "hi"  #'counsel-info-lookup-symbol
     "hR"  #'spacemacs/counsel-search-docs
-    "?"  #'counsel-apropos
+    "?"   #'counsel-apropos
     ;; insert
     "iu"  #'counsel-unicode-char
     ;; register/ring

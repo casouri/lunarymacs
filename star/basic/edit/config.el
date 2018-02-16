@@ -43,11 +43,12 @@
 
 (use-package| avy
   :hook (prog-mode . (lambda () (require 'avy)))
+  :config (setq avy-background t)
   )
 
 (post-config| general
   (default-leader
-    "SPC" #'avy-goto-char-2))
+    "k" #'avy-goto-char-2))
 
 (use-package| minimap
   :init

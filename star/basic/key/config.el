@@ -45,7 +45,7 @@
    "qq" #'save-buffers-kill-emacs
    ;; buffer
    "bm" (lambda () (interactive) (switch-to-buffer "*Messages*"))
-   "bk" #'kill-buffer-and-window
+   "bd" #'kill-buffer-and-window
    "bh" #'moon/close-help
    "bo" #'moon/kill-other-buffer
    "bh" #'moon/kill-helper
