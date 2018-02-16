@@ -6,4 +6,5 @@
           avy
 	  recentf-ext
           smooth-scrolling
+          minimap
           avy)
