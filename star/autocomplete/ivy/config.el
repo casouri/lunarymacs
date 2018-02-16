@@ -2,8 +2,8 @@
 
 (use-package| ivy
   :delight (ivy-mode " ⓘ")
+  :defer 0.5
   :config
-  (ivy-mode 1)
   (setq
    ivy-fixed-height-minibuffer t
    ivy-use-selectable-prompt t ; so I can chose what I actually typed
@@ -42,8 +42,8 @@
     )
   )
 
-(use-package| swiper :commands (ivy-mode))
-(use-package| counsel :commands (ivy-mode))
+(use-package| swiper :commands (swiper swiper-all))
+(use-package| counsel :requires ivy)
 (use-package| smex
-	      :commands (ivy-mode)
-	      :config (setq smex-save-file (concat moon-local-dir "smex-items")))
+  :commands (smex smex-major-mode-commands)
+  :config (setq smex-save-file (concat moon-local-dir "smex-items")))

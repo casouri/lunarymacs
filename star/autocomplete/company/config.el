@@ -3,6 +3,7 @@
 (use-package| company
   :delight (company-mode " Ⓒ")
   ;; :hook (prog-mode . company-mode)
+  :defer 2.5
   :config
   (global-company-mode 1)
   (setq company-idle-delay 0.1
@@ -21,6 +22,7 @@
 (add-hook 'markdown-mode-hook #'short-finger-mode)
 
 (use-package| yasnippet
+  :defer 2.5
   :delight (yas-minor-mode " Ⓨ")
   ;; :hook (prog-mode . yas-minor-mode)
   :init
