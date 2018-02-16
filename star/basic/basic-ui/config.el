@@ -136,8 +136,8 @@ MOON is used when buffer's width is less than 86."
 ;;
 
 ;; Homepage
-(add-hook 'moon-post-init-hook #'moon/draw-homepage t)
-(add-hook 'moon-post-init-hook #'moon-display-benchmark)
+(add-hook 'moon-init-hook #'moon/draw-homepage t)
+(add-hook 'moon-post-init-hook #'moon-display-benchmark t)
 
 (menu-bar-mode -1)
 (tooltip-mode -1)
