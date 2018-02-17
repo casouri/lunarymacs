@@ -34,11 +34,11 @@ Here you define variables, and declare
 =use-package=, =post-config=, =after= and =pre-init=.
 
 - =use-package|= :: use it as if you are using =use-package=
-- =pre-init= :: expressions will be injected into corresponding packages
+- =pre-init|= :: expressions will be injected into corresponding packages
 =use-package :init= flag.
-- =after= :: a thin wrapper around =with-eval-after-load=, expressions will
+- =after|= :: a thin wrapper around =with-eval-after-load=, expressions will
 run right after the library is loaded, that's before =:config=
-- =post-config= :: expressions will be injected into corresponding packages
+- =post-config|= :: expressions will be injected into corresponding packages
 =use-package :config= flag.
 
 Example:
