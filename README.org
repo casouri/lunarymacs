@@ -1,6 +1,6 @@
 #+TITLE: Lunarymacs
 
-This is a stripped down version of doom-emacs. It's extremely basic, but working.
+This is a stripped down frame work modeling after doom-emacs. It's extremely basic, but working.
 
 #+BEGIN_QUOTE
 开局一条狗，装备全靠抢   
