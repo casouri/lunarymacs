@@ -8,6 +8,7 @@
    ivy-fixed-height-minibuffer t
    ivy-use-selectable-prompt t ; so I can chose what I actually typed
    ivy-initial-inputs-alist nil ; don't use ^ as initial input
+   ivy-mode 1
    )
   (default-leader
     ;; other
