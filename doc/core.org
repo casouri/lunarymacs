@@ -44,7 +44,7 @@ extracted from star autoloads to work.
 
 *** moon-initialize-star
 This function loads all the stars, i.e. all the packages.
-It calls [[moon-load-autoload][moon-autoload]], [[moon-load-package][moon-load-package]], [[moon-load-config][moon-load-config]], and [[moon-grand-use-package-call][moon-grand-use-package-call]].
+It calls [[moon-load-autoload][moon-load-autoload]], [[moon-load-package][moon-load-package]], [[moon-load-config][moon-load-config]], and [[moon-grand-use-package-call][moon-grand-use-package-call]].
 then require =use-package=, finally call a function =moon-grand-use-package-call=.
 The function got it name becaue all the =use-package= declared in =config.el= in stars
 are added to it and executed together when =moon-grand-use-package-call= is evaluated.
@@ -107,3 +107,6 @@ update all installed packages
 extract all the autoload files from stars to =~/.emacs.d/.local/autoloads.el=
 
 * core-ui.el
+set come basic variables and system-wise functions and hooks.
+
+It contains tools of font, theme, corlor and homepage.

@@ -68,4 +68,4 @@ make autoload
 #+END_SRC
 
 * If anything broke
-Report a issue, duh. 
+Report an issue. 
