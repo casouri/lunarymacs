@@ -4,9 +4,10 @@ The overall structure is very similar to doom-emacs,
 since I basically modeled after hlisnner.
 
 * Packages
-Directory star is bassically modules in doom-emacs and layers in spacemacs.
+Stars are bassically modules in doom-emacs and layers in spacemacs.
 It contains your configurations.
-Each sub-dir in star is grouping dirs. 
+Each sub-dir in =.emacs.d/star= is grouping dirs. 
+e.g. =star/completion=
 Under them are the indivisual stars.
 
 ** About you private stars
@@ -29,7 +30,16 @@ Example:
 
 *** config.el
     
-Here you define variables, and declare =use-package=, =post-config=, =after= and =pre-init=.
+Here you define variables, and declare
+=use-package=, =post-config=, =after= and =pre-init=.
+
+- =use-package|= :: use it as if you are using =use-package=
+- =pre-init= :: expressions will be injected into corresponding packages
+=use-package :init= flag.
+- =after= :: a thin wrapper around =with-eval-after-load=, expressions will
+run right after the library is loaded, that's before =:config=
+- =post-config= :: expressions will be injected into corresponding packages
+=use-package :config= flag.
 
 Example:
 #+BEGIN_SRC lisp
@@ -37,7 +47,7 @@ Example:
  :config (evil-mode 1))
  
 (use-package evil-surround
-:hook (evil-visual-state . (lambda () (global-evil-surround-mode))))
+ :hook (evil-visual-state . (lambda () (global-evil-surround-mode))))
 
 (post-config| some-package
  (evil-match-mode)
