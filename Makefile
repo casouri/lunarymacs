@@ -23,7 +23,7 @@ clean:
 >rm -f .*/**/*.elc;rm -f */**/*.elc
 
 export-doc:
->@$(EMACS) -f moon/export-doc-to-wiki; cd wiki; git stage .;git commit -m "update";git push
+>@$(EMACS) --eval "(progn (moon-initialize-load-path) (moon-load-autoload) (moon/export-doc-to-wiki))"; cd wiki; git stage .;git commit -m "update";git push
 
 install-emacs25:
 >brew install emacs-plus --without-spacemacs-icon --with-natural-title-bar
