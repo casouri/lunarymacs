@@ -6,9 +6,9 @@ Most of the settings should be in =config.el= in stars.
 However, for some settings that you want to change by your mood,
 such as theme and font, you can expose an api and set them in =init.el=.
 
-- Before loading =package.el= and =config.el=
+- Before loading =package.el= and =config.el= ::
   Set them in init.el.
-- After loading =package.e= and =config.el= and all package loaded.
+- After loading =package.e= and =config.el= and all package loaded ::
   Use =customize= macro.
 
 For example in =init.el=:
