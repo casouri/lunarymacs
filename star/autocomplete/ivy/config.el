@@ -8,8 +8,11 @@
    ivy-fixed-height-minibuffer t
    ivy-use-selectable-prompt t ; so I can chose what I actually typed
    ivy-initial-inputs-alist nil ; don't use ^ as initial input
-   ivy-mode 1
    )
+  ;; don't use setq, that method have some bug
+  ;; e.g completing-read will not use ivy version
+  (ivy-mode)
+  
   (default-leader
     ;; other
     "SPC" #'counsel-M-x
