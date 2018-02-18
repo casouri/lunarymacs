@@ -38,6 +38,7 @@
    "e" '(:ignore t :which-key "eval")
    "t" '(:ignore t :which-key "toggle")
    "g" '(:ignore t :which-key "git")
+   "E" '(:ignore t :which-key "Error")
    ;; file
    "fR" #'moon/rename-file
    "fs" #'save-buffer
