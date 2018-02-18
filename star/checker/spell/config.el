@@ -15,6 +15,7 @@
 
 (use-package| flyspell-correct
   :hook (flyspell-mode . (lambda () (require 'flyspell-correct)))
+  :defer t
   :config
   (require 'flyspell-correct-ivy)
   (default-leader
