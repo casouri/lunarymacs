@@ -10,7 +10,7 @@ This is a stripped down frame work modeling after doom-emacs. It's extremely bas
 
 *Warning*: There is no seatbelt.
 
-- code is easy to understand (because I don't really know much elisp)
+- code is easy to understand (since I don't really know too much elisp)
 - not opinionated: no default settings by default, everything is up to you, no more forking for customization
 - absolute minimum core files
 - no default package, except use-package
