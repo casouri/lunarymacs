@@ -23,6 +23,9 @@ This is a stripped down frame work modeling after doom-emacs. It's extremely bas
 [[./screenshot/screenshot0.png]]
 
 #+CAPTION: May be it will look cooler withou nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
+[[./screenshot/screenshot2.png]]
+
+#+CAPTION: May be it will look cooler withou nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
 [[./screenshot/screenshot1.png]]
 
 #+HTML:<div align=center>
