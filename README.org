@@ -19,18 +19,19 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
 
 [[https://github.com/casouri/lunarymacs/blob/master/LICENSE][https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square]]
 
-#+CAPTION: May be it will look cooler withou nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
+#+CAPTION: May be it will look cooler without nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
 [[./screenshot/screenshot0.png]]
-
-#+CAPTION: May be it will look cooler withou nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
-[[./screenshot/screenshot1.png]]
-
-[[./screenshot/screenshot3.png]]
 
 #+HTML:<div align=center>
 [[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
 #+HTML:</div>
 \\
+
+#+CAPTION: May be it will look cooler without nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
+[[./screenshot/screenshot1.png]]
+
+[[./screenshot/screenshot3.png]]
+
 
 * Quick start
 
