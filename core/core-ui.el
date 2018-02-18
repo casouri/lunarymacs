@@ -15,7 +15,9 @@
     ("Source Code Pro" . (moon-set-font| :family "Source Code Pro"
                                   :weight 'light
                                   :size 14))
-    ("SF Mono" . (moon-set-font| :family "SF Mono" :weight 'light :size 14)))
+    ("SF Mono" . (moon-set-font| :family "SF Mono" :weight 'light :size 14))
+    ("Source Code Pro for Powerline" . (moon-set-font| :family "Source Code Pro for Powerline" :weight 'light :size 14))
+    )
 
   "All the fonts you can switch between by `moon/load-font'
 It is an alist with the form
