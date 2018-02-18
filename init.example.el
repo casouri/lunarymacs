@@ -10,9 +10,9 @@
 (tooltip-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+
 (blink-cursor-mode -1)
 (toggle-frame-maximized)
-
 
 ;;
 ;; Not hacks
@@ -27,25 +27,46 @@
        ui
        other
        edit
-       :autocomplete
+       :completion
        ivy
        company
+       snippet
        :casouri
        casouri
        :os
        mac
        :utility
        dir
+       git
+       org
        :checker
        syntax
        spell
        :lang
        lsp
        python
+       lisp
        )
 
+
+
 (customize| 
- (setq moon-maximize-on-startup t)
- (setq moon-normal-state-cursor-color doom-blue)
- (setq moon-insert-state-cursor-color spacemacs-yellow)
-)
+ ;; I have my hack
+ ;; (setq moon-maximize-on-startup t)
+
+ ;;cursor color
+ (setq moon-normal-state-cursor-color lunary-yellow)
+ (setq moon-insert-state-cursor-color lunary-pink)
+
+ ;; (setq moon-spaceline-on-homepage t)
+
+ ;; theme toggle
+ (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
+ )
+
+;;
+;; Settings evaluate befor loading anything
+;;
+
+
+
