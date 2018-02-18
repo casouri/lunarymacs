@@ -20,16 +20,3 @@
 
 (add-hook 'org-mode-hook #'short-finger-mode)
 (add-hook 'markdown-mode-hook #'short-finger-mode)
-
-(use-package| yasnippet
-  :defer 2.5
-  :delight (yas-minor-mode " Ⓨ")
-  ;; :hook (prog-mode . yas-minor-mode)
-  :init
-  (setq yas-snippet-dirs (list (concat moon-emacs-d-dir "snippet/")))
-  (setq yas-verbosity 0) ; don't message anything
-  (add-hook-for-once| prog-mode-hook #'yas-global-mode)
-  :config
-  (yas-minor-mode)
-  (yas-reload-all)
-  )
