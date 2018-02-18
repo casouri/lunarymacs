@@ -109,6 +109,9 @@ MOON is used when buffer's width is less than 86."
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 
+;; visual line mode
+(global-visual-line-mode 1)
+
 
 ;;
 ;; Package
