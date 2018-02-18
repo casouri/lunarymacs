@@ -20,10 +20,10 @@ This is a stripped down frame work modeling after doom-emacs. It's extremely bas
 [[https://github.com/casouri/lunarymacs/blob/master/LICENSE][https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square]]
 
 #+CAPTION: May be it will look cooler withou nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
-[[./screenshot/screenshot.png]]
+[[./screenshot/screenshot0.png]]
 
 #+CAPTION: May be it will look cooler withou nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
-[[./screenshot/screenshot2.png]]
+[[./screenshot/screenshot1.png]]
 
 #+HTML:<div align=center>
 [[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
