@@ -1,9 +1,12 @@
-plan.org
 .local/
 .cache/
 **/.DS_Store
 init.el
-**/*.elc
+
+# ignore compiles files
+*.elc
+
+# ignore private stars
 star/*
 !star/completion/
 !star/basic/
@@ -12,6 +15,9 @@ star/*
 !star/os/
 !star/lang/
 !star/utility/
+
+# wiki is in another git repository
 wiki/
 
+# ignore private snippets
 /snippet

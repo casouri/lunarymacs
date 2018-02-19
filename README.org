@@ -40,6 +40,7 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
 #+BEGIN_SRC shell
 git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
 cd ~/.emacs.d
+cp init.example.el init.el
 make
 emacs
 #+END_SRC

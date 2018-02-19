@@ -31,20 +31,18 @@
        ivy
        company
        snippet
-       :casouri
-       casouri
        :os
-       mac
+       ;; mac
        :utility
-       dir
-       git
-       org
+       ;; dir
+       ;; git
+       ;; org
        :checker
        syntax
        spell
        :lang
-       lsp
-       python
+       ;; lsp
+       ;; python
        lisp
        )
 
