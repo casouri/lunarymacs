@@ -63,3 +63,16 @@
 ;;
 
 (electric-pair-mode 1)
+
+(post-config| general
+  (general-define-key
+   :states 'insert
+   "<C-ret>" #'moon/jump-newline-below
+   "<C-S-ret>" #'moon/jump-newline-above
+   "C-;" #'moon/insert-semi-at-eol
+   "<C-ret>" #'moon/jump-newline-below
+   )
+  (general-define-key
+   :states 'normal
+   "J" #'moon/scroll-down-reserve-point
+   "K" #'moon/scroll-up-reserve-point)) 

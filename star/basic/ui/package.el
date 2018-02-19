@@ -6,4 +6,5 @@
  linum
  spaceline
  rainbow-mode
+ nyan-mode
  )

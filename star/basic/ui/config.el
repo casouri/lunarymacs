@@ -67,3 +67,10 @@ and emacs will refresh homepage to update modeline.")
   (moon/sync-hlinum-face)
   (add-hook 'moon-load-theme-hook #'moon/sync-hlinum-face)
   )
+
+(use-package| nyan-mode
+  :init(setq nyan-wavy-trail t)
+  :hook (prog-mode . nyan-mode)
+  :config
+  (nyan-start-animation)
+  )
