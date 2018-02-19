@@ -5,7 +5,7 @@ plan.org
 init.el
 **/*.elc
 star/*
-!star/autocomplete/
+!star/completion/
 !star/basic/
 !star/casouri/
 !star/checker/
