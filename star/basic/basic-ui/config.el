@@ -125,4 +125,6 @@ MOON is used when buffer's width is less than 86."
   :defer t
   :config
   (delight 'eldoc-mode nil "eldoc")
-  (delight 'auto-revert-mode nil "ARev"))
+  (delight 'auto-revert-mode nil "autorevert")
+  (delight 'visual-line-mode nil "simple"))
+
