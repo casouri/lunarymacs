@@ -56,8 +56,6 @@
  (setq moon-normal-state-cursor-color lunary-yellow)
  (setq moon-insert-state-cursor-color lunary-pink)
 
- ;; (setq moon-spaceline-on-homepage t)
-
  ;; theme toggle
  (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
  )
