@@ -118,8 +118,9 @@ Contains only core dir ,star dir and load path for built in libraries"
   "load config.el in each star"
   (dolist (star-path path-list)
     (let ((path (concat star-path "config.el")))
-      (when (file-exists-p path)
-        (load path))
+      (if (file-exists-p path)
+          (load path)
+        (message (format "%s does not exist!" path)))
       )
     )
   )
@@ -128,8 +129,9 @@ Contains only core dir ,star dir and load path for built in libraries"
   "load package.el in each star"
   (dolist (star-path path-list)
     (let ((path (concat star-path "package.el")))
-      (when (file-exists-p path)
-        (load path))
+      (if (file-exists-p path)
+          (load path)
+        (message (format "%s does not exist!" path)))
       )
     )
   )
@@ -276,11 +278,13 @@ Expressions will be appended."
 (defmacro add-hook-for-once| (hook func &optional append addlocal removelocal)
 "Add FUNC to HOOK. And remove FUNC from HOOK at first call of FUNC.
 
+FUNC is a named function
+
 If APPEND or ADDLOCAL is set, APPEND or ADDLOCAL is passed to `add-hook'
 as APPEND and LOCAL. Similarly REMOVELOCAL is passed to `remove-hook' as LOCAL."
   `(add-hook ',hook
              (lambda ()
-               (list ,func)
+               (,func)
                (remove-hook ',hook #',func ,removelocal))
              ,append
              ,addlocal)
