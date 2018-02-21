@@ -11,7 +11,7 @@
    ))
 
 ;;;###autoload
-(defun moon/sync-number-line-face ()
+(defun moon/sync-linum-face ()
   (interactive)
   (set-face-background 'linum (face-attribute 'default :background) nil)
   )

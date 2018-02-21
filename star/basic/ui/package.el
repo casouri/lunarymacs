@@ -3,7 +3,7 @@
 (package|
  rainbow-delimiters
  hlinum
- linum
+ nlinum
  spaceline
  rainbow-mode
  nyan-mode

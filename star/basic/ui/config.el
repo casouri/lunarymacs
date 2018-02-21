@@ -37,28 +37,22 @@ and emacs will refresh homepage to update modeline.")
 (use-package| spaceline
   :defer t
   :init
-  (make-thread
-   (lambda ()
-     (require 'spaceline-config)
-     (setq powerline-default-separator 'slant)
-     (setq powerline-image-apple-rgb t)
-     (setq powerline-height 28)
-     (spaceline-spacemacs-theme)
-     (when moon-spaceline-on-homepage
-       (run-at-time "0.3 sec" nil
-                    (lambda ()
-                      (moon/redraw-homepage))))
-     ;; fix different separator color problem after changing theme
-     (add-hook 'moon-load-theme-hook #'powerline-reset))
-   "spaceline-init")
-  )
+  (defun moon-load-spaceline ()
+    (require 'spaceline-config)
+    (setq powerline-default-separator 'slant)
+    (setq powerline-image-apple-rgb t)
+    (setq powerline-height 28)
+    (spaceline-spacemacs-theme)
+    ;; fix different separator color problem after changing theme
+    (add-hook 'moon-load-theme-hook #'powerline-reset))
+  (add-hook-for-once| prog-mode-hook moon-load-spaceline))
 
 
-(use-package| linum
+(use-package| nlinum
   :hook (prog-mode . linum-mode)
   :config
-  (moon/sync-number-line-face)
-  (add-hook 'moon-load-theme-hook #'moon/sync-number-line-face)
+  (moon/sync-linum-face)
+  (add-hook 'moon-load-theme-hook #'moon/sync-linum-face)
   )
 
 (use-package| hlinum
