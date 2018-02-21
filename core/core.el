@@ -38,14 +38,6 @@
 (setq custom-file (concat moon-local-dir "custom.el"))
 (load custom-file)
 
-;; itf-8
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(setq-default buffer-file-coding-system 'utf-8)
-(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
 ;;
 ;; Init
@@ -76,6 +68,7 @@
         gc-cons-percentage 0.1
         file-name-handler-alist tmp-file-name-handler-alist
         )
+  (message (format "(moon-finalize) time: %.03f" (float-time (time-subtract (current-time) moon-before-init-time))))
   )
 
 (add-hook 'emacs-startup-hook #'moon-finalize t)

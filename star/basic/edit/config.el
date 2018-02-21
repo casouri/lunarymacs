@@ -38,8 +38,12 @@
   :commands (recentf counsel-recentf)
   )
 
-(use-package| smooth-scrolling
-  :hook (prog-mode . smooth-scrolling-mode))
+;; (use-package| smooth-scrolling
+;;   :init
+;;   (defun setup-smooth-scrolling ()
+;;     (require 'smooth-scrolling)
+;;     (smooth-scrolling-mode 1))
+;;   (delay-load| setup-smooth-scrolling))
 
 (use-package| avy
   :hook (prog-mode . (lambda () (require 'avy)))
@@ -58,21 +62,35 @@
    minimap-update-delay 0)
   :commands minimap-mode)
 
+
 ;;
 ;; Config
 ;;
 
 (electric-pair-mode 1)
 
+;; scrolling
+(setq scroll-conservatively 101)
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+
 (post-config| general
   (general-define-key
    :states 'insert
-   "<C-ret>" #'moon/jump-newline-below
-   "<C-S-ret>" #'moon/jump-newline-above
+   "<C-return>" #'moon/jump-newline-below
+   "<C-S-return>" #'moon/jump-newline-above
    "C-;" #'moon/insert-semi-at-eol
-   "<C-ret>" #'moon/jump-newline-below
    )
   (general-define-key
    :states 'normal
    "J" #'moon/scroll-down-reserve-point
    "K" #'moon/scroll-up-reserve-point)) 
+
+;; utf-8
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(setq-default buffer-file-coding-system 'utf-8)
+(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))

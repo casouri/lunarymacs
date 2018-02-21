@@ -2,7 +2,6 @@
 
 (use-package| company
   :delight (company-mode " Ⓒ")
-  ;; :hook (prog-mode . company-mode)
   :defer 2.5
   :config
   (global-company-mode 1)

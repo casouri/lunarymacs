@@ -290,6 +290,13 @@ as APPEND and LOCAL. Similarly REMOVELOCAL is passed to `remove-hook' as LOCAL."
              ,addlocal)
   )
 
+(defmacro delay-load| (func)
+  "Add FUNC to `after-change-major-mode-hook' 
+and remove FUNC from the hook at first call."
+  `(add-hook 'after-change-major-mode-hook
+             (lambda () (,func) (remove-hook 'after-change-major-mode-hook #',func))))
+
+
 (defmacro async-load| (package &optional name)
   "Expand to a expression.
 
@@ -300,6 +307,7 @@ Use example:
 (use-package| PACKAGE :init (async-load| PACKAGE))
 "
   `(make-thread (lambda () (require ',package)) ,name))
+
 
 ;; (defun post-config-evil () (message "it works!"))
 ;; (defun pre-init-evil () (message "it works!"))

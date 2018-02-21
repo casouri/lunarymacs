@@ -70,3 +70,13 @@ and emacs will refresh homepage to update modeline.")
   :config
   (nyan-start-animation)
   )
+
+(use-package| hl-todo
+  :defer t
+  :init
+  (defun setup-hl-todo ()
+    (require 'hl-todo)
+    (global-hl-todo-mode))
+  (add-hook-for-once|
+   after-change-major-mode-hook
+   setup-hl-todo))

@@ -11,6 +11,7 @@
    )
   ;; don't use setq, that method have some bug
   ;; e.g completing-read will not use ivy version
+  ;; :init (add-hook 'moon-post-init-hook #'ivy-mode)
   (ivy-mode)
   
   (default-leader
