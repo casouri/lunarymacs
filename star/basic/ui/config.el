@@ -50,9 +50,11 @@ and emacs will refresh homepage to update modeline.")
 
 (use-package| nlinum
   :hook (prog-mode . linum-mode)
+  :init 
+  (add-hook 'moon-load-theme-hook #'moon/sync-linum-face)
+  (add-hook 'prog-mode-hook #'moon/sync-linum-face t)
   :config
   (moon/sync-linum-face)
-  (add-hook 'moon-load-theme-hook #'moon/sync-linum-face)
   )
 
 (use-package| hlinum
