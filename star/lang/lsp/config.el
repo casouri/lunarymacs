@@ -2,7 +2,7 @@
 
 (use-package| lsp-mode
   :delight (lsp-mode " Ⓛ")
-  :defer 2.5
+  :defer 3
   :config
   (require 'lsp-imenu)
   (add-hook 'lsp-after-open-hook #'lsp-enable-imenu)
@@ -10,6 +10,9 @@
     (require 'lsp-flycheck))
   (setq lsp-enable-eldoc nil)
   )
+
+(after| lsp-mode
+  (require 'lsp-flycheck))
 
 (use-package| lsp-ui
   :after lsp-mode
