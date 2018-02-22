@@ -1,7 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 
 (use-package| yasnippet
-  :defer 2.5
   :delight (yas-minor-mode " Ⓨ")
   :init
   (setq yas-snippet-dirs (list (concat moon-emacs-d-dir "snippet/")))

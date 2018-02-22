@@ -2,18 +2,16 @@
 
 (use-package| ivy
   :delight (ivy-mode " ⓘ")
-  :defer 0.5
   :config
   (setq
    ivy-fixed-height-minibuffer t
    ivy-use-selectable-prompt t ; so I can chose what I actually typed
    ivy-initial-inputs-alist nil ; don't use ^ as initial input
    )
-  ;; don't use setq, that method have some bug
-  ;; e.g completing-read will not use ivy version
-  ;; :init (add-hook 'moon-post-init-hook #'ivy-mode)
   (ivy-mode)
-  
+  )
+
+(post-config| general
   (default-leader
     ;; other
     "SPC" #'counsel-M-x
