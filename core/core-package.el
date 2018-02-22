@@ -16,6 +16,7 @@ Contains only core dir ,star dir and load path for built in libraries"
 (defvar moon-package-dir (concat user-emacs-directory ".local/package/")
   "Where melpa and elpa packages are installed.")
 
+
 (defvar moon-package-list '("use-package")
   "A list of packages to install. Packages are represented by strings not symbols.")
 
@@ -66,13 +67,13 @@ Contains only core dir ,star dir and load path for built in libraries"
   ;;     ('error (package-refresh-contents)
   ;;             (setq moon--refreshed-p t)
   ;;             (package-initialize)))
-  (package-initialize)
+  ;; (package-initialize)
   )
 
 (defun moon-initialize-load-path ()
   "add each package to load path"
-    ;; (setq moon-package-load-path (directory-files package-user-dir t nil t) ;; get all sub-dir
-    ;;       load-path (append moon-base-load-path moon-package-load-path))
+    (setq moon-package-load-path (directory-files package-user-dir t nil t) ;; get all sub-dir
+          load-path (append moon-base-load-path moon-package-load-path))
   (add-to-list 'load-path moon-local-dir)
     )
 
