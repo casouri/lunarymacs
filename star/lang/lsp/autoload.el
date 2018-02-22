@@ -12,12 +12,11 @@
 )
 
 ;;;###autoload
-;;TODO
 (defun moon/smart-toggle-lsp-ui ()
   "Decide if turn on lsp-ui-doc and sideline
 depend on the width of the current window.
 Should be added to window adjust hook and lsp-ui-mode hook"
   (let ((onoff (>= (window-width) 120)))
-    (setq lsp-ui-sideline-enable onoff)
-    (setq lsp-ui-doc-enable onoff)
+    (lsp-ui-sideline-enable onoff)
+    (lsp-ui-doc-enable onoff)
     ))
