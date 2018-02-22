@@ -119,7 +119,9 @@ MOON is used when buffer's width is less than 86."
 
 (use-package| spacemacs-theme
   :defer t
-  :init (load-theme 'spacemacs-dark t))
+  :init
+  (add-to-list 'custom-theme-load-path (car (directory-files (concat moon-package-dir "elpa/") t "spacemacs-theme.+")) t)
+  (load-theme 'spacemacs-dark t))
 
 (use-package| delight
   :defer t
