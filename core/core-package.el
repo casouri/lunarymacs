@@ -67,7 +67,7 @@ Contains only core dir ,star dir and load path for built in libraries"
   ;;     ('error (package-refresh-contents)
   ;;             (setq moon--refreshed-p t)
   ;;             (package-initialize)))
-  ;; (package-initialize)
+  (package-initialize t)
   )
 
 (defun moon-initialize-load-path ()

@@ -14,7 +14,7 @@
               (message "it works!"))
 
 (use-package| evil-matchit
-  :hook (prog-mode . evil-matchit-mode)
+  :config (evil-matchit-mode)
   )
 
 (use-package| evil-search-highlight-persist

@@ -46,7 +46,6 @@
 ;;   (delay-load| setup-smooth-scrolling))
 
 (use-package| avy
-  :hook (prog-mode . (lambda () (require 'avy)))
   :config (setq avy-background t)
   )
 

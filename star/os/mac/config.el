@@ -15,7 +15,7 @@
 	 (add-to-list 'exec-path (expand-file-name "~/bin")))))
 
 (use-package| exec-path-from-shell
-  :hook (prog-mode . exec-path-from-shell-initialize)
+  :config (exec-path-from-shell-initialize)
   )
 
 

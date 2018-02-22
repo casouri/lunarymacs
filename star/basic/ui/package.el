@@ -6,6 +6,7 @@
  nlinum
  hl-todo
  spaceline
+ powerline
  rainbow-mode
  nyan-mode
  )
