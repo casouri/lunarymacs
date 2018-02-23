@@ -62,18 +62,14 @@ and emacs will refresh homepage to update modeline.")
 (use-package| nlinum
   :config (global-nlinum-mode)
   :init 
-  (add-hook 'moon-load-theme-hook #'moon/sync-linum-face)
+  (add-hook 'moon-load-theme-hook #'moon/sync-nlinum-face)
+  (add-hook 'moon-load-theme-hook #'moon/sync-nlinum-highlight-face)
   (setq nlinum-highlight-current-line t)
   :config
-  (moon/sync-linum-face)
+  (moon/sync-nlinum-face)
+  (moon/sync-nlinum-highlight-face)
   )
 
-(use-package| hlinum
-  :hook (nlinum-mode . hlinum-activate)
-  :config
-  (moon/sync-hlinum-face)
-  (add-hook 'moon-load-theme-hook #'moon/sync-hlinum-face)
-  )
 
 (use-package| nyan-mode
   :init(setq nyan-wavy-trail t)
