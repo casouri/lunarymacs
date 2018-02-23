@@ -1,7 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 
 (use-package| lsp-mode
-  :delight (lsp-mode " Ⓛ")
   :defer 3
   :config
   (require 'lsp-imenu)
@@ -47,3 +46,4 @@
   (setq company-lsp-async t)
   (add-to-list 'company-backends 'company-lsp)
   )
+

@@ -1,7 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 
 (use-package| company
-  :delight (company-mode " Ⓒ")
   :config
   (setq company-idle-delay 0.1
         company-minimum-prefix-length 2
@@ -15,9 +14,6 @@
   )
 
 (load| short-finger)
-
-(post-config| delight
-  (delight 'short-finger-mode " ⓢ" "short-finger"))
 
 (add-hook 'org-mode-hook #'short-finger-mode)
 (add-hook 'markdown-mode-hook #'short-finger-mode)

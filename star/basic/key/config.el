@@ -74,7 +74,7 @@
   )
 
 (use-package| which-key
-  :delight (which-key-mode)
   :config (which-key-mode 1))
+
 
 

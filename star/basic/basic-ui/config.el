@@ -123,10 +123,3 @@ MOON is used when buffer's width is less than 86."
   (add-to-list 'custom-theme-load-path (car (directory-files (concat moon-package-dir "elpa/") t "spacemacs-theme.+")) t)
   (load-theme 'spacemacs-dark t))
 
-(use-package| delight
-  :defer t
-  :config
-  (delight 'eldoc-mode nil "eldoc")
-  (delight 'auto-revert-mode nil "autorevert")
-  (delight 'visual-line-mode nil "simple"))
-

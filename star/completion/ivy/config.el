@@ -1,7 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 
 (use-package| ivy
-  :delight (ivy-mode " ⓘ")
   :config
   (setq
    ivy-fixed-height-minibuffer t

@@ -84,3 +84,21 @@ and emacs will refresh homepage to update modeline.")
   (add-hook-for-once|
    after-change-major-mode-hook
    setup-hl-todo))
+
+(use-package| dim
+  :after spaceline
+  :config
+  (dim-minor-names
+   '((eldoc-mode "" eldoc)
+     (auto-revert-mode "" autorevert)
+     (visual-line-mode "" simple)
+     (evil-escape-mode "" evil-escape)
+     (undo-tree-mode "" undo-tree)
+     (which-key-mode "" which-key)
+     (company-mode " Ⓒ" company)
+     (flycheck-mode " ⓕ" flycheck)
+     (ivy-mode " ⓘ" ivy)
+     (lsp-mode " Ⓛ" lsp)
+     (lispyville-mode " ⓟ" lispyville)
+     ))
+  )
