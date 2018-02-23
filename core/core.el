@@ -68,7 +68,7 @@
         gc-cons-percentage 0.1
         file-name-handler-alist tmp-file-name-handler-alist
         )
-  (message (format "(moon-finalize) time: %.03f" (float-time (time-subtract (current-time) moon-before-init-time))))
+  ;; (message (format "(moon-finalize) time: %.03f" (float-time (time-subtract (current-time) moon-before-init-time))))
   )
 
 (add-hook 'emacs-startup-hook #'moon-finalize t)
