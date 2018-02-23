@@ -1,5 +1,10 @@
 ;;; -*- lexical-binding: t -*-
 
+(defvar moon-smart-toggle-lsp-ui t
+  "Whether to toggle lsp-ui doc and sideline automatically
+depending on window width.")
+
+
 (use-package| lsp-mode
   :defer 3
   :config
@@ -31,10 +36,13 @@
   (setq lsp-ui-doc-position 'top)
   (setq lsp-ui-doc-header t)
   (setq lsp-ui-doc-include-signature t)
+  ;; smart toggle lsp-ui doc & sideline
   (add-hook 'window-configuration-change-hook
             #'moon/smart-toggle-lsp-ui)
   (add-hook 'lsp-ui-mode-hook
             #'moon/smart-toggle-lsp-ui)
+  (advice-add 'lsp-ui-doc-enable :after (lambda () (moon/smart-toggle-lsp-ui nil)))
+  (advice-add 'lsp-ui-sideline-enable :after (lambda () (moon/smart-toggle-lsp-ui nil)))
   ;; peek color
   (moon/sync-peek-face)
   (add-hook 'moon-load-theme-hook #'moon/sync-peek-face)
