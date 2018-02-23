@@ -4,6 +4,7 @@
  rainbow-delimiters
  hlinum
  nlinum
+ highlight-parentheses
  hl-todo
  spaceline
  powerline

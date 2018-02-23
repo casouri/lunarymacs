@@ -16,9 +16,7 @@ and emacs will refresh homepage to update modeline.")
 ;; Config
 ;;
 
-(require 'paren)
-(setq show-paren-style 'parenthesis)
-(show-paren-mode 1)
+
 (global-hl-line-mode 1)
 
 ;;
@@ -31,6 +29,14 @@ and emacs will refresh homepage to update modeline.")
 
 (use-package| rainbow-mode
   :commands rainbow-mode)
+
+(use-package| highlight-parentheses
+  :init
+  ;; show only the most inner pair
+  (setq hl-paren-colors '("green"))
+  :config
+  (set-face-attribute 'hl-paren-face nil :weight 'bold)
+  (global-highlight-parentheses-mode 1))
 
 
 (use-package| spaceline
@@ -54,15 +60,16 @@ and emacs will refresh homepage to update modeline.")
 ;;     (powerline-default-theme))
 
 (use-package| nlinum
-  :config (linum-mode)
+  :config (global-nlinum-mode)
   :init 
   (add-hook 'moon-load-theme-hook #'moon/sync-linum-face)
+  (setq nlinum-highlight-current-line t)
   :config
   (moon/sync-linum-face)
   )
 
 (use-package| hlinum
-  :hook (linum-mode . hlinum-activate)
+  :hook (nlinum-mode . hlinum-activate)
   :config
   (moon/sync-hlinum-face)
   (add-hook 'moon-load-theme-hook #'moon/sync-hlinum-face)
