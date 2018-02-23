@@ -1,14 +1,55 @@
 ;;; -*- lexical-binding: t -*-
 
 ;;
-;; Var
+;; Homepage
 ;;
+
+;;
+;; Var
 
 (defvar moon-homepage-buffer "HOME"
   "The buffer name of the homepage")
 
+;;
+;; Config
+
+(setq inhibit-startup-screen t)
+(setq initial-buffer-choice (lambda () (get-buffer-create moon-homepage-buffer)))
+
+;;
+;; Theme
+;;
+
+;;
+;; Var
+
 (defvar moon-load-theme-hook ()
   "Hook ran after `load-theme'")
+
+(defvar moon-current-theme ""
+  "The last loaded theme name in string.")
+
+(defvar moon-toggle-theme-list
+  '(spacemacs-dark spacemacs-light)
+  "Themes that you can toggle bwtween by `moon/switch-theme'")
+
+;;
+;; Func
+(defun moon-set-current-theme (&rest form)
+  "Adveiced before `load-theme', set `moon-current-theme'."
+  (setq moon-current-theme (symbol-name (car form))))
+
+;;
+;; Config
+
+(defadvice load-theme (after run-load-theme-hook activate)
+  (run-hook-with-args 'moon-load-theme-hook))
+
+(advice-add #'load-theme :before #'moon-set-current-theme)
+
+;;
+;; Font
+;;
 
 (defvar moon-magic-font-book
   '(
@@ -29,19 +70,7 @@ So '(:family \"SF Mono\" :weight 'light) will become
 (:family \"SF Mono\" :weight quote light).
 And such list cannot be passed into a `font-spec'.")
 
-(defvar moon-toggle-theme-list
-  '(spacemacs-dark spacemacs-light)
-  "Themes that you can toggle bwtween by `moon/switch-theme'")
 
-;;
-;; Config
-;;
-
-(setq inhibit-startup-screen t)
-(setq initial-buffer-choice (lambda () (get-buffer-create moon-homepage-buffer)))
-
-(defadvice load-theme (after run-load-theme-hook activate)
-  (run-hook-with-args 'moon-load-theme-hook))
 
 ;;
 ;; Color

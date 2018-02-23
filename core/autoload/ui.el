@@ -24,8 +24,10 @@ e.g. :family :weight :size etc."
 
 ;;;###autoload
 (defmacro change-cursor-on-hook| (hook color)
-  "Change cursor color to COLOR when HOOK is activated."
+  "Change cursor color to COLOR when HOOK is activated.
+
+COLOR is a function that returns a string that specify a color."
   `(add-hook ',hook
              (lambda ()
                (set-face-attribute
-                'cursor nil :background ,color))))
+                'cursor nil :background (,color)))))

@@ -55,13 +55,22 @@ MOON is used when buffer's width is less than 86."
 ;;
 
 
-(defvar moon-normal-state-cursor-color lunary-yellow
-  "Cursor color in normal state.")
+(defun moon-normal-state-cursor-color ()
+  "Cursor color in normal state."
+  (cond
+   ((equal moon-current-theme "spacemacs-dark")
+    lunary-yellow)
+   ((equal moon-current-theme "spacemacs-light")
+    spacemacs-light-purple)
+   ))
 
-(defvar moon-insert-state-cursor-color lunary-pink
-  "Cursor color in insert state.")
+(defun moon-insert-state-cursor-color ()
+  "Cursor color in insert state."
+  lunary-pink)
 
 (change-cursor-on-hook| evil-normal-state-entry-hook moon-normal-state-cursor-color)
+;; secure cursor color after changing theme
+(change-cursor-on-hook| moon-load-theme-hook moon-normal-state-cursor-color)
 (change-cursor-on-hook| evil-insert-state-entry-hook moon-insert-state-cursor-color)
 
 
