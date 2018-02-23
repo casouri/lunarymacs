@@ -10,7 +10,7 @@
   (setq lsp-enable-eldoc nil)
   )
 
-(after| lsp-mode
+(post-load| lsp-mode
   (require 'lsp-flycheck))
 
 (use-package| lsp-ui

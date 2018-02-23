@@ -218,7 +218,7 @@ If called multiple times, the stars declared first will be in the front of moon-
     )
   )
 
-(defmacro after| (feature &rest rest-list)
+(defmacro post-load| (feature &rest rest-list)
   "A smart wrapper around `with-eval-after-load'.
 
 Expressions inside will be called right after the library is loaded,
