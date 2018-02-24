@@ -56,7 +56,7 @@ Example:
 (pre-init| some-package
  (message "some package initing"))
  
-(after| ivy
+(after-load| ivy
  (something))
 #+END_SRC
     
