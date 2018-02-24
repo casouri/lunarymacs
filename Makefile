@@ -33,9 +33,9 @@ rm -f *.elc
 export-doc:
 >@$(EMACS) --eval "(progn (moon-initialize-load-path) (moon-load-autoload) (moon/export-doc-to-wiki))" ;\
 cd wiki ;\
-git pull --rebase ;\
 git stage . ;\
 git commit -m "update" ;\
+git pull --rebase ;\
 git push
 
 install-emacs25:
