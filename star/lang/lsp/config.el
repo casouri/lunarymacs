@@ -4,6 +4,9 @@
   "Whether to toggle lsp-ui doc and sideline automatically
 depending on window width.")
 
+(defvar moon-smart-toggle-threshold 120
+  "If window width is above threshold, keep lsp-ui-doc/sideline on,
+if under, turn them off.")
 
 (use-package| lsp-mode
   :defer 3
@@ -41,8 +44,9 @@ depending on window width.")
             #'moon/smart-toggle-lsp-ui)
   (add-hook 'lsp-ui-mode-hook
             #'moon/smart-toggle-lsp-ui)
-  (advice-add 'lsp-ui-doc-enable :after (lambda () (moon/smart-toggle-lsp-ui nil)))
-  (advice-add 'lsp-ui-sideline-enable :after (lambda () (moon/smart-toggle-lsp-ui nil)))
+  ;; if manually toggled doc or sideline, disable smart-toggle
+  (advice-add 'lsp-ui-doc-mode :after #'moon-force-lsp-ui)
+  (advice-add 'lsp-ui-sideline-mode :after #'moon-force-lsp-ui)
   ;; peek color
   (moon/sync-peek-face)
   (add-hook 'moon-load-theme-hook #'moon/sync-peek-face)

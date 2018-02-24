@@ -12,18 +12,27 @@
 )
 
 ;;;###autoload
-(defun moon/smart-toggle-lsp-ui (&optional enable)
+(defun moon/smart-toggle-lsp-ui ()
   "Decide if turn on lsp-ui-doc and sideline
 depending on the width of the current window.
 Should be added to window adjust hook and lsp-ui-mode hook.
 
 If `moon-smart-toggle-lsp-ui' is nil, don't do anything.
 
-If ENABLE exists, set `moon-mart-toggle-lsp-ui' to ENABLE
-before toggling."
-  (when (boundp enable)
-    (setq moon-smart-toggle-lsp-ui enable))
+If called interactively, `moon-smart-toggle-lsp-ui'
+will be set to t."
+  (interactive)
+  (when (called-interactively-p 'any)
+    (setq moon-smart-toggle-lsp-ui t))
   (when moon-smart-toggle-lsp-ui
-    (let ((onoff (>= (window-width) 120)))
+    (let ((onoff (>= (window-width) moon-smart-toggle-threshold)))
       (lsp-ui-sideline-enable onoff)
       (lsp-ui-doc-enable onoff))))
+
+;;;###autoload
+(defun moon-force-lsp-ui (&rest rest)
+  "Disable smart-toggle-lsp-ui."
+  (interactive)
+  (when (called-interactively-p 'any)
+    (setq moon-smart-toggle-lsp-ui nil)))
+
