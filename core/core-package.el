@@ -16,7 +16,7 @@ Contains only core dir ,star dir and load path for built in libraries")
   "Where melpa and elpa packages are installed.")
 
 
-(defvar moon-package-list '("use-package" "quelpa")
+(defvar moon-package-list '("use-package")
   "A list of packages to install. Packages are represented by strings not symbols.")
 
 (defvar moon--refreshed-p nil
