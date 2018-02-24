@@ -12,7 +12,7 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
 
 - code is easy to understand (since I don't really know too much elisp)
 - not opinionated: no default settings by default, everything is up to you, no more forking for customization
-- absolute minimum core files
+- minimum core files
 - no default package, except use-package
 
 \\
