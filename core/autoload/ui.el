@@ -9,7 +9,11 @@
 
 ;;;###autoload
 (defun moon/load-font ()
-  "Prompt for a font and set it."
+  "Prompt for a font and set it.
+Fonts are specified in =moon-magic-font-book=.
+Each element is an alist with the form
+(name . (moon-set-font| configuration))
+ (name . (moon-set-font| :family \"family\" :weight ’weight))"
   (interactive)
   (let ((font-name (completing-read "Font to use: " moon-magic-font-book)))
     (eval (cdr (assoc font-name moon-magic-font-book))) nil t
@@ -26,7 +30,9 @@ e.g. :family :weight :size etc."
 (defmacro change-cursor-on-hook| (hook color)
   "Change cursor color to COLOR when HOOK is activated.
 
-COLOR is a function that returns a string that specify a color."
+COLOR is a function that returns a string that specify a color.
+This way to change change cursor color depend on current theme
+or something else"
   `(add-hook ',hook
              (lambda ()
                (set-face-attribute

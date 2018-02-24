@@ -284,7 +284,7 @@ and remove FUNC from the hook at first call."
 
 Use example:
 
-(use-package| PACKAGE :init (async-load| PACKAGE))
+(use-package| PACKAGE :init (async-load| PACKAGE)
 "
   `(make-thread (lambda () (require ',package)) ,name))
 
