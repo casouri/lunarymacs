@@ -96,3 +96,9 @@ Use example:
 #+HTML:<div align=right>
 [[https://github.com/casouri/lunarymacs/wiki/core][>>> Next page (￣▽￣)ノ >>>]]
 #+HTML:</div>
+
+# #+ATTR_HTML: :style float:left;
+# [[https://github.com/casouri/lunarymacs/wiki/customization][<<< Previous page ( ﾟДﾟ)ﾉ <<<]]
+
+# #+ATTR_HTML: :style float:right;
+# [[https://github.com/casouri/lunarymacs/wiki/core][>>> Next page (￣▽￣)ノ >>>]]
