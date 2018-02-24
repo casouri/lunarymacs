@@ -1,10 +1,10 @@
 #+TITLE: Helper functions, macros, and commands
 
-You have seen =moon=, =use-package=, 
-=package|=, =pre-init=,
-=after-load= and =post-config= macro.
+You have seen =moon|=, =use-package|=, 
+=package|=, =pre-init|=,
+=after-load|= and =post-config|= macro.
 
-However, there are some other helpers that can aid you
+Besides them, there are some other helpers that can aid you
 when configuring Emacs.
 
 Use C-h f to find documentation about them.
