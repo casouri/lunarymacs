@@ -303,21 +303,26 @@ Use example:
 
 
 (defun moon/install-package ()
+  "Install packages specified in `package.el'
+files in each star"
   (interactive)
   (moon-initialize)
-  (moon-initialize-star)
+  ;; moon-star-path-list is created by `moon|' macro
+  ;; moon-load-package loads `moon-package-list'
+  (moon-load-package moon-star-path-list)
   (package-refresh-contents)
   (dolist (package moon-package-list)
-    (unless
-        (package-installed-p (intern package))
-        (package-install (intern package))
-        )
-    ))
+    (unless (package-installed-p (intern package))
+      (package-install (intern package))
+      )))
 
 (defun moon/update-package ()
+  "Update packages to the latest version."
   (interactive)
   (moon-initialize)
-  (moon-initialize-star)
+  ;; moon-star-path-list is created by `moon|' macro
+  ;; moon-load-package loads `moon-package-list'
+  (moon-load-package moon-star-path-list)
   ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
   (save-window-excursion
     (package-list-packages t)
@@ -325,15 +330,21 @@ Use example:
     (package-menu-execute t)))
 
 (defun moon/remove-unused-package ()
+  "Remove packages that are not declared in any star
+with `package|' macro."
   (interactive)
   (moon-initialize)
-  (moon-initialize-star)
-  (dolist (package package-activated-list)
-    (when (member (symbol-name package) moon-package-list)
-      (package-delete '(:name package)))
-    ))
+  (dolist (package package-alist)
+    (let ((package-name (car package))
+          (package-description (car (cdr package))))
+      (unless (member (symbol-name package-name) moon-package-list)
+        ;; if the package is a dependency of other,
+        ;; it will be be deleted, but rather throw an error.
+        (ignore-errors (package-delete package-description)))
+      )))
 
 (defun moon/generate-autoload-file ()
+  "Extract autload file from each star to `moon-autoload-file'."
   (interactive)
   (moon-initialize-star)
   (let ((autoload-file-list
