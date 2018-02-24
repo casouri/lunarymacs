@@ -1,5 +1,8 @@
 ;;;###autoload
 (defun moon/export-doc-to-wiki ()
+  "Convert org files in doc/ to markdown and copy to wiki/
+
+Deprecated."
   (interactive)
   (require 'ox-md)
   (dolist (file (directory-files (concat moon-emacs-d-dir "doc") t "org$"))

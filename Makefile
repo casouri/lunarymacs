@@ -3,7 +3,7 @@
 EMACS_FLAGS=--eval '(load "~/.emacs.d/init.el")'
 EMACS=emacs --quick --batch $(EMACS_FLAGS)
 
-.PHONY: install autoload autoremove update clean export-doc help
+.PHONY: install autoload autoremove update clean doc help
 
 all: install autoload autoremove
 
@@ -30,11 +30,13 @@ clean:
 >@echo "Removing compiled files" ;\
 rm -f *.elc
 
-export-doc:
->@$(EMACS) --eval "(progn (moon-initialize-load-path) (moon-load-autoload) (moon/export-doc-to-wiki))" ;\
+doc:
+# >@$(EMACS) --eval "(progn (moon-initialize-load-path) (moon-load-autoload) (moon/export-doc-to-wiki))" ;\
+
+>@cp doc/*.org wiki/ ;\
 cd wiki ;\
 git stage . ;\
-git commit -m "update" ;\
+git commit -m "Update" ;\
 git pull --rebase ;\
 git push
 
