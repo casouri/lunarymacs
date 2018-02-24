@@ -81,8 +81,18 @@ Expand to a expression like:
 Use example:
 
 #+BEGIN_SRC lisp
-(use-package| PACKAGE :init (async-load| PACKAGE)
+(use-package| PACKAGE :init (async-load| PACKAGE))
 #+END_SRC
 
 ** Functions
 
+
+-----
+
+#+HTML:<div align=left>
+[[https://github.com/casouri/lunarymacs/wiki/customization][<<< Previous page ( ﾟДﾟ)ﾉ <<<]]
+#+HTML:</div>
+
+#+HTML:<div align=right>
+[[https://github.com/casouri/lunarymacs/wiki/core][>>> Next page (￣▽￣)ノ >>>]]
+#+HTML:</div>

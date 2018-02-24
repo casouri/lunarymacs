@@ -79,3 +79,9 @@ make autoload
 
 * If anything broke
 Report an issue. 
+
+-----
+
+#+HTML:<div align=right>
+[[https://github.com/casouri/lunarymacs/wiki/customization][>>> Next page (￣▽￣)ノ >>>]]
+#+HTML:</div>

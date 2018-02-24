@@ -9,3 +9,9 @@ If you have a better convention, please tell me! :smile:
    I just don't want to confuse myself. 
 4. macros are represented by =macro|=.
 5. represent commands with =moon/xxx=.
+
+-----
+
+#+HTML:<div align=left>
+[[https://github.com/casouri/lunarymacs/wiki/core][<<< Previous page ( ﾟДﾟ)ﾉ <<<]]
+#+HTML:</div>

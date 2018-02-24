@@ -110,3 +110,13 @@ extract all the autoload files from stars to =~/.emacs.d/.local/autoloads.el=
 set come basic variables and system-wise functions and hooks.
 
 It contains tools of font, theme, corlor and homepage.
+
+-----
+
+#+HTML:<div align=left>
+[[https://github.com/casouri/lunarymacs/wiki/helper][<<< Previous page ( ﾟДﾟ)ﾉ <<<]]
+#+HTML:</div>
+
+#+HTML:<div align=right>
+[[https://github.com/casouri/lunarymacs/wiki/convention][>>> Next page (￣▽￣)ノ >>>]]
+#+HTML:</div>

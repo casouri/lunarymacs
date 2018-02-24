@@ -33,3 +33,14 @@ These colors are all in =moon-color-book=. Check them out.
 There are some helpers for changing ans setting theme and font.
 
 Check them out in the [[https://github.com/casouri/lunarymacs/wiki/helper][next page]].
+
+
+-----
+
+#+HTML:<div align=left>
+[[https://github.com/casouri/lunarymacs/wiki/getting-started][<<< Previous page ( ﾟДﾟ)ﾉ <<<]]
+#+HTML:</div>
+
+#+HTML:<div align=right>
+[[https://github.com/casouri/lunarymacs/wiki/helper][>>> Next page (￣▽￣)ノ >>>]]
+#+HTML:</div>
