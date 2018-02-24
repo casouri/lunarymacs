@@ -334,6 +334,9 @@ files in each star"
 with `package|' macro."
   (interactive)
   (moon-initialize)
+  ;; moon-star-path-list is created by `moon|' macro
+  ;; moon-load-package loads `moon-package-list'
+  (moon-load-package moon-star-path-list)
   (dolist (package package-alist)
     (let ((package-name (car package))
           (package-description (car (cdr package))))
