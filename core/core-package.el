@@ -9,15 +9,14 @@
           load-path)
   "A backup of `load-path' before it was altered by `doom-initialize'.
 
-Contains only core dir ,star dir and load path for built in libraries"
-  )
+Contains only core dir ,star dir and load path for built in libraries")
 
 
 (defvar moon-package-dir (concat user-emacs-directory ".local/package/")
   "Where melpa and elpa packages are installed.")
 
 
-(defvar moon-package-list '("use-package")
+(defvar moon-package-list '("use-package" "quelpa")
   "A list of packages to install. Packages are represented by strings not symbols.")
 
 (defvar moon--refreshed-p nil
@@ -50,8 +49,7 @@ Contains only core dir ,star dir and load path for built in libraries"
       package-user-dir (expand-file-name "elpa" moon-package-dir)
       package-archives
       '(("melpa" . "https://melpa.org/packages/")
-        ("gnu"   . "https://elpa.gnu.org/packages/"))
-      )
+        ("gnu"   . "https://elpa.gnu.org/packages/")))
 
 
 ;;
@@ -67,15 +65,13 @@ Contains only core dir ,star dir and load path for built in libraries"
   ;;     ('error (package-refresh-contents)
   ;;             (setq moon--refreshed-p t)
   ;;             (package-initialize)))
-  (package-initialize t)
-  )
+  (package-initialize t))
 
 (defun moon-initialize-load-path ()
   "add each package to load path"
     (setq moon-package-load-path (directory-files package-user-dir t nil t) ;; get all sub-dir
           load-path (append moon-base-load-path moon-package-load-path))
-  (add-to-list 'load-path moon-local-dir)
-    )
+  (add-to-list 'load-path moon-local-dir))
 
 (defun moon-initialize-star ()
   "Load each star in `moon-star-list'."
@@ -90,8 +86,7 @@ Contains only core dir ,star dir and load path for built in libraries"
     (setq moon-before-grand-time (current-time))
     (moon-grand-use-package-call)
     (message (format "use-package-time: %.03f" (float-time (time-subtract (current-time) moon-before-grand-time))))
-    )
-  )
+    ))
 
 (defun moon-load-autoload ()
   ;; (dolist (package-path moon-package-load-path)
@@ -122,9 +117,7 @@ Contains only core dir ,star dir and load path for built in libraries"
       (if (file-exists-p path)
           (load path)
         (message (format "%s does not exist!" path)))
-      )
-    )
-  )
+      )))
 
 (defun moon-load-package (path-list)
   "load package.el in each star"
@@ -133,9 +126,7 @@ Contains only core dir ,star dir and load path for built in libraries"
       (if (file-exists-p path)
           (load path)
         (message (format "%s does not exist!" path)))
-      )
-    )
-  )
+      )))
 
 ;; TEST
 ;; (setq test-star-list '(:ui basic-ui))
@@ -147,8 +138,7 @@ Contains only core dir ,star dir and load path for built in libraries"
            (length moon-package-list)
            (length moon-star-path-list)
            (setq moon-init-time (float-time (time-subtract (current-time) before-init-time)))
-           )
-  )
+           ))
 
 ;;
 ;; Macro
@@ -162,9 +152,7 @@ Contains only core dir ,star dir and load path for built in libraries"
                   (and buffer-file-name (file-name-directory buffer-file-name))
                   (error "Could not detect path to look for '%s' in" filesym)))
         (filename (symbol-name filesym)))
-    (load (concat path filename))
-    )
-  )
+    (load (concat path filename))))
 
 (defmacro package| (&rest package-list)
   "Add package to moon-package-list so it will be installed by make.
@@ -188,9 +176,7 @@ If called multiple times, the stars declared first will be in the front of moon-
           ((not      mode) (error "No sub-folder specified in `moon|' for %s" star))
           (t               (let ((star-path (format "%s%s/%s/" moon-star-dir (keyword-to-name-str mode) star)))
                              (add-to-list 'moon-star-path-list star-path t)))
-          )
-    )
-  )
+          )))
 
 (defmacro post-config| (package &rest to-do-list)
   "Expressions to be called after (use-package PACKAGE :config)"
@@ -202,8 +188,7 @@ If called multiple times, the stars declared first will be in the front of moon-
       (fset func-symbol '(lambda () ()))
       )
     (fset func-symbol (append (symbol-function func-symbol) to-do-list))
-    )
-  )
+    ))
 
 (defmacro pre-init| (package &rest to-do-list)
   "Expressions to be called after (use-package PACKAGE :init)"
@@ -215,8 +200,7 @@ If called multiple times, the stars declared first will be in the front of moon-
       (fset func-symbol '(lambda () ()))
       )
     (fset func-symbol (append (symbol-function func-symbol) to-do-list))
-    )
-  )
+    ))
 
 (defmacro after-load| (feature &rest rest-list)
   "A smart wrapper around `with-eval-after-load'.
@@ -224,8 +208,7 @@ If called multiple times, the stars declared first will be in the front of moon-
 Expressions inside will be called right after the library is loaded,
 before `post-config|' but after `pro-init'."
   (declare (indent defun) (debug t))
-  `(with-eval-after-load ',feature ,@rest-list)
-   )
+  `(with-eval-after-load ',feature ,@rest-list))
 
 (defmacro use-package| (package &rest rest-list)
   "Thin wrapper around `use-package', just add some hooks.
@@ -260,10 +243,7 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
              (eval (list symb)))
            )
          ;; (eval (list (intern (format "post-config-%s" (symbol-name ',package)))))
-         ))
-     )
-    )
-  )
+         )))))
 
 
 (defmacro customize| (&rest exp-list)
@@ -288,8 +268,7 @@ as APPEND and LOCAL. Similarly REMOVELOCAL is passed to `remove-hook' as LOCAL."
                (,func)
                (remove-hook ',hook #',func ,removelocal))
              ,append
-             ,addlocal)
-  )
+             ,addlocal))
 
 (defmacro delay-load| (func)
   "Add FUNC to `after-change-major-mode-hook' 
@@ -352,8 +331,7 @@ Use example:
   (dolist (package package-activated-list)
     (when (member (symbol-name package) moon-package-list)
       (package-delete '(:name package)))
-    )
-  )
+    ))
 
 (defun moon/generate-autoload-file ()
   (interactive)
@@ -388,8 +366,6 @@ Use example:
               "Nothing in %s")
              (t "Scanned %s"))
        (file-relative-name file moon-emacs-d-dir))
-      )
-    )
-  )
+      )))
 
 (provide 'core-package)
