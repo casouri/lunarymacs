@@ -8,26 +8,26 @@ EMACS=emacs --quick --batch $(EMACS_FLAGS)
 all: install autoload autoremove
 
 help:
-> echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean"
+>@echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean"
 
 install: init.el .local/autoloads.el
->echo "Installing packages" ;\
-@$(EMACS) -f moon/install-package
+>@echo "Installing packages" ;\
+$(EMACS) -f moon/install-package
 
 autoload: init.el
->echo "Generating autoload files" ;\
-@$(EMACS) -f moon/generate-autoload-file
+>@echo "Generating autoload files" ;\
+$(EMACS) -f moon/generate-autoload-file
 
 autoremove: init.el .local/autoloads.el
->echo "Removing unused packages" ;\
-@$(EMACS) -f moon/remove-unused-package
+>@echo "Removing unused packages" ;\
+$(EMACS) -f moon/remove-unused-package
 
 update: init.el .local/autoloads.el
->echo "Updating packages" ;\
-@$(EMACS) -f moon/update-package
+>@echo "Updating packages" ;\
+$(EMACS) -f moon/update-package
 
 clean:
->echo "Removing compiled files" ;\
+>@echo "Removing compiled files" ;\
 rm -f *.elc
 
 export-doc:
