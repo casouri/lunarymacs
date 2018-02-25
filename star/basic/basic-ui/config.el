@@ -97,21 +97,7 @@ MOON is used when buffer's width is less than 86."
 ;; Config
 ;;
 
-
-
 ;; visual line mode
 ;; visual line mode makes swiper very slow
 ;; so I'll disable it for now
 ;; (global-visual-line-mode 1)
-
-
-;;
-;; Package
-;;
-
-(use-package| spacemacs-theme
-  :defer t
-  :init
-  (add-to-list 'custom-theme-load-path (car (directory-files (concat moon-package-dir "elpa/") t "spacemacs-theme.+")) t)
-  (load-theme 'spacemacs-dark t))
-

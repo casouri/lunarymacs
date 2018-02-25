@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 (package|
+ spacemacs-theme
  rainbow-delimiters
  hlinum
  nlinum
