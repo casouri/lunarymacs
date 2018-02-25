@@ -50,7 +50,7 @@
 
 (post-config| general
   (default-leader
-    "k" #'avy-goto-char-2))
+    "k" #'avy-goto-char-timer))
 
 (use-package| minimap
   :init
