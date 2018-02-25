@@ -43,8 +43,13 @@ cd ~/.emacs.d
 cp init.example.el init.el
 make
 emacs
+
+
+# to update lunarymacs
+git pull --rebase
 #+END_SRC
-  
+
+ 
 * Thank you
 Thanks to all the contributors of spacemacs and doom-emacs. I copyied a lot of code from them.
 
