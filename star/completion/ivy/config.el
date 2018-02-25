@@ -39,7 +39,7 @@
     "rm"  #'counsel-mark-ring
     ;; search
     "si"  #'counsel-imenu
-    "ss"  #'swiper
+    "ss"  #'counsel-grep-or-swiper
     "sr"  #'counsel-rg
     ;; themes
     "Ts"  #'counsel-load-theme
