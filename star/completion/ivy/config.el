@@ -61,7 +61,8 @@
                         counsel-info-lookup-symbol
                         counsel-imenu counsel-recentf
                         counsel-yank-pop
-                        counsel-descbinds counsel-org-capture))
+                        counsel-descbinds counsel-org-capture
+                        counsel-grep-or-swiper))
 (use-package| smex
   :commands (smex smex-major-mode-commands)
   :config (setq smex-save-file (concat moon-local-dir "smex-items")))
