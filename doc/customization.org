@@ -30,9 +30,9 @@ There is also =doom-blue= and a bunch of colors that you can use.
 
 These colors are all in =moon-color-book=. Check them out.
 
-* Customize theme
+* Customize theme and font
 
-You need to load your own theme in star.
+You need to load your own theme in some star.
 
 An example is in my star [[https://github.com/casouri/lunarymacs/blob/028d86d1d4550c10f47129b3e221b5b809fba86b/star/basic/ui/config.el#L26][ui]]
 
