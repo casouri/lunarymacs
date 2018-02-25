@@ -9,7 +9,9 @@
   :after which-key
   :init
   (defvar moon-leader "SPC")
+  (defvar moon-local-leader ",")
   (defvar moon-non-normal-leader "M-SPC")
+  (defvar moon-local-non-normal-leader "C-,")
   :config
   (general-override-mode)
   (general-create-definer default-leader
@@ -17,7 +19,12 @@
     :keymaps 'override
     :prefix moon-leader
     :non-normal-prefix moon-non-normal-leader)
+  (general-create-definer local-leader
+    :states '(normal visual insert emacs)
+    :prefix moon-local-leader
+    :non-normal-prefix moon-local-non-normal-leader)
 
+  ;; One escape to escape them all.
   (global-set-key (kbd "<escape>") #'keyboard-escape-quit)
 
   
@@ -35,7 +42,7 @@
    "w" '(:ignore t :which-key "window")
    "q" '(:ignore t :which-key "quit")
    "m" '(:ignore t :which-key "major-mode")
-   "e" '(:ignore t :which-key "eval")
+   "e" '(:ignore t :which-key "error")
    "t" '(:ignore t :which-key "toggle")
    "g" '(:ignore t :which-key "git")
    "E" '(:ignore t :which-key "Error")
@@ -56,9 +63,6 @@
    "w2" #'split-window-right
    "o"  #'other-window
    ;; eval
-   "er" #'eval-region
-   "ef" #'eval-function
-   "eb" #'eval-buffer
    "`"  #'eval-expression
    ;; toggle
    "tt" #'moon/switch-theme
