@@ -56,7 +56,7 @@
 
 (defun moon-finalize ()
   (setq moon-before-init-time (current-time))
-  (moon-initialize)
+  ;; (moon-initialize)
   (moon-initialize-load-path)
   (message (format "(package-initialize) time: %.03f" (float-time (time-subtract (current-time) moon-before-init-time))))
   (moon-initialize-star)

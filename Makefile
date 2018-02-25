@@ -27,7 +27,7 @@ $(EMACS) -f moon/remove-unused-package
 
 update: init.el .local/autoloads.el
 >@echo "Updating packages" ;\
-$(EMACS) -f moon/update-package
+$(EMACS) -f moon/update-package -f moon/generate-autoload-file
 
 clean:
 >@echo "Removing compiled files" ;\

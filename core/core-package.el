@@ -59,13 +59,8 @@ Contains only core dir ,star dir and load path for built in libraries")
 ;; TODO change (package-initialize) to (package-initialize t)
 (defun moon-initialize ()
   "Initialize installed packages (using package.el)."
-  ;; (setq package-activated-list nil
-  ;;       package--init-file-ensured) ;; no `custom-set-variables' block in init.el
-  ;;   (condition-case _ (package-initialize t)
-  ;;     ('error (package-refresh-contents)
-  ;;             (setq moon--refreshed-p t)
-  ;;             (package-initialize)))
-  (package-initialize t))
+  (package-initialize t)
+  )
 
 (defun moon-initialize-load-path ()
   "add each package to load path"
@@ -324,10 +319,18 @@ files in each star"
   ;; moon-load-package loads `moon-package-list'
   (moon-load-package moon-star-path-list)
   ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
-  (save-window-excursion
-    (package-list-packages t)
-    (package-menu-mark-upgrades)
-    (package-menu-execute t)))
+  
+  ;; If there is no package to update,
+  ;; package.el will throw "No operation specified"
+  ;; but I didn't find any codd throwing error
+  ;; in package.el...
+  ;; TODO find out a better implementation
+  (condition-case nil
+   (save-window-excursion
+     (package-list-packages t)
+     (package-menu-mark-upgrades)
+     (package-menu-execute t))
+      (error nil)))
 
 (defun moon/remove-unused-package ()
   "Remove packages that are not declared in any star
