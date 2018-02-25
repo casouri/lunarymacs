@@ -119,7 +119,9 @@ MOON is used when buffer's width is less than 86."
 (blink-cursor-mode -1)
 
 ;; visual line mode
-(global-visual-line-mode 1)
+;; visual line mode makes swiper very slow
+;; so I'll disable it for now
+;; (global-visual-line-mode 1)
 
 
 ;;
