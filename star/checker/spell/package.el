@@ -1,3 +1,3 @@
 ;;; -*- lexical-binding: t -*-
 
-(package| flyspell-correct)
+(package| flyspell-correct-ivy)

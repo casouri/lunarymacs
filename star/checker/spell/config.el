@@ -13,10 +13,9 @@
     "ts" #'moon/toggle-spell-check))
 
 
-(use-package| flyspell-correct
-  :hook (flyspell-mode . (lambda () (require 'flyspell-correct)))
+(use-package| flyspell-correct-ivy
+  :after flyspell
   :defer t
   :config
-  (require 'flyspell-correct-ivy)
   (default-leader
-    "Ef" #'flyspell-correct-previous-word-generic))
+    "ef" #'flyspell-correct-previous-word-generic))
