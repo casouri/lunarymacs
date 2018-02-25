@@ -74,16 +74,6 @@ MOON is used when buffer's width is less than 86."
 (change-cursor-on-hook| evil-insert-state-entry-hook moon-insert-state-cursor-color)
 
 
-;;
-;; Maximize
-;;
-
-(defvar moon-maximize-on-startup nil
-  "Whether to maximize screen on startup.")
-
-;; Max screen on startup (or not)
-(when moon-maximize-on-startup
-  (add-to-list 'default-frame-alist '(fullscreen . maximized)))
 
 
 ;;
@@ -108,12 +98,6 @@ MOON is used when buffer's width is less than 86."
 ;;
 
 
-;; Cleanup
-;; (menu-bar-mode -1)
-(tooltip-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(blink-cursor-mode -1)
 
 ;; visual line mode
 ;; visual line mode makes swiper very slow

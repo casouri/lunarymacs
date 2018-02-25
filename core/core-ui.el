@@ -71,6 +71,15 @@ So '(:family \"SF Mono\" :weight 'light) will become
 And such list cannot be passed into a `font-spec'.")
 
 
+;;
+;; Rmove GUI elements
+;;
+
+(when window-system
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1))
+(unless (eq window-system 'ns)
+  (menu-bar-mode -1))
 
 ;;
 ;; Color
