@@ -33,16 +33,6 @@ clean:
 >@echo "Removing compiled files" ;\
 rm -f *.elc
 
-doc:
-# >@$(EMACS) --eval "(progn (moon-initialize-load-path) (moon-load-autoload) (moon/export-doc-to-wiki))" ;\
-
->@cp doc/*.org wiki/ ;\
-cd wiki ;\
-git stage . ;\
-git commit -m "Update" ;\
-git pull --rebase ;\
-git push
-
 install-emacs25:
 >brew install emacs-plus --without-spacemacs-icon --with-natural-title-bar
 
