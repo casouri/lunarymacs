@@ -355,10 +355,10 @@ with `package|' macro."
 	  ;; core autoload
           (expand-file-name "autoload/*.el" moon-core-dir))))
     ;; package autoload
-    ;; (dolist (file (directory-files-recursively
-		;;    (concat moon-package-dir "elpa/")
-		;;    "\\.el$"))
-    ;;   (push (expand-file-name file) autoload-file-list))
+    (dolist (file (directory-files-recursively
+		   (concat moon-package-dir "elpa/")
+		   "\\.el$"))
+      (push (expand-file-name file) autoload-file-list))
     ;; star autoload
     (dolist (star-path moon-star-path-list)
       (let ((auto-dir (expand-file-name "autoload" star-path))
