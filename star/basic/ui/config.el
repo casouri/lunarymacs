@@ -70,12 +70,16 @@ and emacs will refresh homepage to update modeline.")
   (moon/sync-nlinum-highlight-face)
   )
 
+(defvar enable-nyan nil
+  "Whether to enable nyan cat")
 
 (use-package| nyan-mode
   :init(setq nyan-wavy-trail t)
   :config
-  (nyan-mode)
-  (nyan-start-animation)
+  (when enable-nyan
+    (nyan-mode)
+    (nyan-start-animation)
+    )
   )
 
 (use-package| hl-todo
