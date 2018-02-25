@@ -26,6 +26,7 @@
     "hl"  #'counsel-find-library
     "hm"  #'spacemacs/describe-mode
     "hk"  #'describe-key
+    "ho"  #'describe-symbol
     "hv"  #'counsel-describe-variable
     "hd"  #'apropos
     "hi"  #'counsel-info-lookup-symbol
@@ -48,7 +49,19 @@
   )
 
 (use-package| swiper :commands (swiper swiper-all))
-(use-package| counsel :requires ivy)
+(use-package| counsel
+  :config (counsel-mode 1)
+  :commands (counsel-ag counsel-rg counsel-pt
+                        counsel-apropos counsel-bookmark
+                        counsel-describe-function
+                        counsel-describe-variable
+                        counsel-describe-face
+                        counsel-M-x counsel-file-jump
+                        counsel-find-file counsel-find-library
+                        counsel-info-lookup-symbol
+                        counsel-imenu counsel-recentf
+                        counsel-yank-pop
+                        counsel-descbinds counsel-org-capture))
 (use-package| smex
   :commands (smex smex-major-mode-commands)
   :config (setq smex-save-file (concat moon-local-dir "smex-items")))
