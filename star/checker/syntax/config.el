@@ -9,7 +9,5 @@
 
 (post-config| general
   (default-leader
-    "en" #'flycheck-next-error
-    "ep" #'flycheck-previous-error
     "el" #'flycheck-list-errors))
 

@@ -93,6 +93,3 @@
     ("k" previous-error "prev")
     ("v" recenter-top-bottom "recenter")
     ("q" nil "quit")))
-
-
-
