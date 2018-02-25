@@ -43,7 +43,7 @@
        :lang
        ;; lsp
        ;; python
-       lisp
+       elisp
        )
 
 
@@ -52,16 +52,12 @@
  ;; I have my hack
  ;; (setq moon-maximize-on-startup t)
 
- ;;cursor color
- (setq moon-normal-state-cursor-color lunary-yellow)
- (setq moon-insert-state-cursor-color lunary-pink)
-
  ;; theme toggle
  (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
  )
 
 ;;
-;; Settings evaluate befor loading anything
+;; Below are settings that evaluate befor loading any stars
 ;;
 
 

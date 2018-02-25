@@ -107,12 +107,9 @@ MOON is used when buffer's width is less than 86."
 ;; Config
 ;;
 
-;; Popup window to right!
-(setq split-height-threshold nil
-      split-width-threshold 80)
 
 ;; Cleanup
-(menu-bar-mode -1)
+;; (menu-bar-mode -1)
 (tooltip-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)

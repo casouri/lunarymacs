@@ -48,8 +48,11 @@
  use-dialog-box                      nil
  ring-bell-function                  #'ignore
  visible-bell                        nil
- frame-title-format                  '("%f")                                          ; current file name
+ frame-title-format                  '("%f")                                 ; current file name
  display-line-numbers-width          3
- )
+ ;; Popup window to right!
+ split-height-threshold              nil
+ split-width-threshold               80
+)
 
 
