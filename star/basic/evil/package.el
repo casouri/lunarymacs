@@ -9,4 +9,5 @@
           vi-tilde-fringe
           evil-mc
 	  evil-escape
+          evil-multiedit
           )
