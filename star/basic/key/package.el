@@ -2,5 +2,6 @@
 
 (package| general
           which-key
+          hydra
           )
 

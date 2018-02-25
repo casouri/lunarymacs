@@ -45,7 +45,6 @@
    "e" '(:ignore t :which-key "error")
    "t" '(:ignore t :which-key "toggle")
    "g" '(:ignore t :which-key "git")
-   "E" '(:ignore t :which-key "Error")
    ;; file
    "fR" #'moon/rename-file
    "fs" #'save-buffer
@@ -66,6 +65,10 @@
    "`"  #'eval-expression
    ;; toggle
    "tt" #'moon/switch-theme
+   ;; error
+   "ej" #'hydra-error/next-error
+   "ek" #'hydra-error/previous-error
+   "eh" #'hydra-error/first-error
   )
 
 
@@ -79,6 +82,17 @@
 
 (use-package| which-key
   :config (which-key-mode 1))
+
+(use-package hydra
+  :after general
+  :config
+  (defhydra hydra-error ()
+    "goto-error"
+    ("h" first-error "first")
+    ("j" next-error "next")
+    ("k" previous-error "prev")
+    ("v" recenter-top-bottom "recenter")
+    ("q" nil "quit")))
 
 
 
