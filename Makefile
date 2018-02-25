@@ -10,6 +10,9 @@ all: install autoload autoremove
 help:
 >@echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean"
 
+.local/autoloads.el:
+>touch .local/autoloads.el
+
 install: init.el .local/autoloads.el
 >@echo "Installing packages" ;\
 $(EMACS) -f moon/install-package
