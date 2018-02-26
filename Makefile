@@ -5,13 +5,16 @@ EMACS=emacs --quick --batch $(EMACS_FLAGS)
 
 .PHONY: install autoload autoremove update clean doc help update-moon
 
-all: install autoload autoremove
+# install have to be in the front
+# otherwise use-package will not be find
+# on fresh install
+all: | install autoload autoremove
 
 help:
 >@echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean update-moon"
 
 .local:
->mkdir .local/package/elpa
+>mkdir .local .local/package .local/package/elpa
 
 custom.el: .local
 >touch .local/custom.el
