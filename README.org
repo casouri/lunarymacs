@@ -44,11 +44,11 @@ cp init.example.el init.el
 make
 emacs
 
-
 # to update lunarymacs
 git pull --rebase
+# or
+make update-moon # it's the same
 #+END_SRC
-
  
 * Thank you
 Thanks to all the contributors of spacemacs and doom-emacs. I copyied a lot of code from them.
