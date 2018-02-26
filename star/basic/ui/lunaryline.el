@@ -113,6 +113,11 @@ the number of errors.")
   ;; have to use a form, variable won't work
   (format "%s" buffer-file-coding-system))
 
+(defpowerline lynaryline-encoding-abbv
+  (let ((buf-coding (format "%s" buffer-file-coding-system)))
+    (if (string-match "\\(dos\\|unix\\|mac\\)" buf-coding)
+        (match-string 1 buf-coding)
+      buf-coding)))
 ;;
 ;; Version control
 ;;
