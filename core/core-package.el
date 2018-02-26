@@ -72,16 +72,14 @@ Contains only core dir ,star dir and load path for built in libraries")
   "Load each star in `moon-star-list'."
   (unless noninteractive
     (moon-load-autoload))
-  (setq moon-before-package-time (current-time))
-  (moon-load-package moon-star-path-list)
-  (unless noninteractive
-    (moon-load-config moon-star-path-list)
-    (message (format "load package and config time: %.03f" (float-time (time-subtract (current-time) moon-before-package-time))))
-    (require 'use-package)
-    (setq moon-before-grand-time (current-time))
-    (moon-grand-use-package-call)
-    (message (format "use-package-time: %.03f" (float-time (time-subtract (current-time) moon-before-grand-time))))
-    ))
+  (timeit| "load package and config"
+   (moon-load-package moon-star-path-list)
+   (unless noninteractive
+     (moon-load-config moon-star-path-list)))
+  (timeit| "use-package"
+   (require 'use-package)
+   (moon-grand-use-package-call))
+  )
 
 (defun moon-load-autoload ()
   ;; (dolist (package-path moon-package-load-path)
