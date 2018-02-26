@@ -3,12 +3,12 @@
 EMACS_FLAGS=--eval '(load "~/.emacs.d/init.el")'
 EMACS=emacs --quick --batch $(EMACS_FLAGS)
 
-.PHONY: install autoload autoremove update clean doc help
+.PHONY: install autoload autoremove update clean doc help update-moon
 
 all: install autoload autoremove
 
 help:
->@echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean"
+>@echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean update-moon"
 
 .local:
 >mkdir .local/package/elpa
