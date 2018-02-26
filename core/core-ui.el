@@ -100,6 +100,9 @@ And such list cannot be passed into a `font-spec'.")
 (defvar doom-blue "#56B0EC"
   "Blue color of doom-emacs.")
 
+(defvar doom-purple "#D86FD9"
+  "Blue color of doom-emacs.")
+
 (defvar spacemacs-yellow "DarkGoldenrod2"
   "Yellow color of spacemacs.")
 
@@ -117,6 +120,11 @@ And such list cannot be passed into a `font-spec'.")
 
 (defvar lunary-white "#DEDDE3"
   "White color of moon.")
+
+(defvar lunary-light-purple "#61526E"
+  "Light purple color of moon.
+
+Can be uesed for hightlight region.")
 
 (defvar lunary-dark-yellow "#F3B700"
   "Dark yellow color of moon.")
