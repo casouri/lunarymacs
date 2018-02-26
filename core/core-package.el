@@ -142,6 +142,11 @@ Contains only core dir ,star dir and load path for built in libraries")
 ;;
 
 (defmacro load| (filesym &optional path)
+  "Load a file relative to current file path.
+
+Note: don't use this macro in `use-package|'
+because forms in `use-package' are not evaluated 
+in the file in where they are wriiten."
   (let ((path (or path
                   (and load-file-name (file-name-directory load-file-name))
                   (and (bound-and-true-p byte-compile-current-file)
