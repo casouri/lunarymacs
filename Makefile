@@ -11,9 +11,7 @@ help:
 >@echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean"
 
 .local:
->mkdir .local \
-.local/package \
-.local/package/elpa
+>mkdir .local/package/elpa
 
 custom.el: .local
 >touch .local/custom.el
@@ -21,7 +19,8 @@ custom.el: .local
 autoloads.el: .local
 >touch .local/autoloads.el
 
-install: init.el autoloads.el .local
+# commands
+install: init.el autoloads.el .local custom.el
 >@echo "Installing packages" ;\
 $(EMACS) -f moon/install-package
 
@@ -36,6 +35,9 @@ $(EMACS) -f moon/remove-unused-package
 update: init.el .local/autoloads.el
 >@echo "Updating packages" ;\
 $(EMACS) -f moon/update-package -f moon/generate-autoload-file
+
+update-moon:
+>git pull --rebase
 
 clean:
 >@echo "Removing compiled files" ;\
