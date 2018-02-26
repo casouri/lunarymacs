@@ -48,10 +48,14 @@
 
 
 (use-package| evil-multiedit
-  :config (moon-evil-multiedit-default-keybinds))
+  :config
+  (moon-evil-multiedit-default-keybinds)
+  ;; set iedit face so it can be differed from select region face
+  (set-face-attribute 'iedit-occurrence nil :background doom-purple))
 
 (defun moon-evil-multiedit-default-keybinds ()
   "Sets up the default keybindings for `evil-multiedit'."
+  ;; <s> is <command> on Mac
   (define-key evil-visual-state-map "R" #'evil-multiedit-match-all)
   (define-key evil-normal-state-map (kbd "s-d") #'evil-multiedit-match-symbol-and-next)
   (define-key evil-visual-state-map (kbd "s-d") #'evil-multiedit-match-and-next)
