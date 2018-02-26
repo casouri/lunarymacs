@@ -40,8 +40,9 @@ you cannot use one `disappear-when-narrow' for multiple segment."
      ,@rest))
 
 (defmacro only-in-prog-mode| (&rest rest)
-  "Only enable segment when in prog-mode."
-  `(when (derived-mode-p 'prog-mode)
+  "Only enable segment when in modes derived from prog-mode or text-mode."
+  `(when (or (derived-mode-p 'prog-mode)
+             (derived-mode-p 'text-mode))
      ,@rest))
 
 

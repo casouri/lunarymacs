@@ -74,6 +74,7 @@ and emacs will refresh homepage to update modeline.")
     )
   ;; (add-hook 'moon-init-hook #'moon-load-powerline)
   (add-hook-for-once| prog-mode-hook moon-load-powerline)
+  (add-hook-for-once| text-mode-hook moon-load-powerline)
   ;; (moon-load-powerline)
   )
 
