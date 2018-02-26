@@ -67,11 +67,14 @@ and emacs will refresh homepage to update modeline.")
     (setq powerline-image-apple-rgb t)
     (setq powerline-height 28)
     ;; fix different separator color problem after changing theme
-    (add-hook 'moon-load-theme-hook #'powerline-reset)
-    (load| lunaryline)
+    ;; (load| lunaryline)
+    (load (concat moon-star-dir "basic/ui/lunaryline"))
     (lunaryline-default-theme)
+    (add-hook 'moon-load-theme-hook #'powerline-reset)
     )
+  ;; (add-hook 'moon-init-hook #'moon-load-powerline)
   (add-hook-for-once| prog-mode-hook moon-load-powerline)
+  ;; (moon-load-powerline)
   )
 
 ;; not working
