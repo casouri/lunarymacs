@@ -211,7 +211,7 @@ the number of errors.")
                                 (lunaryline-encoding face0 'l)
                                 ;; separator >> face 1
                                 ;; line:colomn number
-                                (funcall separator-right face0 face1)
+                                (funcall separator-left face0 face1)
                                 (powerline-raw "%3l" face1 'l) ; line number, reserve 3 digit
                                 (powerline-raw ":" face1 'l)
                                 (powerline-raw "%2c" face1 'r) ; colomn number, reserve 2 digit
