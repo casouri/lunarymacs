@@ -118,3 +118,13 @@ and emacs will refresh homepage to update modeline.")
      (flyspell-mode " Ⓢ" flyspell)
      ))
   )
+
+;; (setq company-mode-name
+;;       (propertize
+;;        "company" 'display
+;;        (create-image
+;;         (concat
+;;          (file-name-directory buffer-file-name)
+;;          "font/circled-ha.xpm"))))
+;; (put 'company-mode-name 'risky-local-variable t) ; needed to make images work
+;; (dim-minor-name 'company-mode 'company-mode-name)
