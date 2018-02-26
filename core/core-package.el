@@ -250,18 +250,18 @@ Expressions will be appended."
 
 
 (defmacro add-hook-for-once| (hook func &optional append addlocal removelocal)
-"Add FUNC to HOOK. And remove FUNC from HOOK at first call of FUNC.
+  "Add FUNC to HOOK. And remove FUNC from HOOK at first call of FUNC.
 
 FUNC is a named function
 
 If APPEND or ADDLOCAL is set, APPEND or ADDLOCAL is passed to `add-hook'
 as APPEND and LOCAL. Similarly REMOVELOCAL is passed to `remove-hook' as LOCAL."
-  `(add-hook ',hook
-             (lambda ()
-               (,func)
-               (remove-hook ',hook #',func ,removelocal))
-             ,append
-             ,addlocal))
+  `(fset (symbol-name ,func)
+         (append
+          (symbol-function ,func)
+          '((remove-hook ',hook #',func ,removelocal))))
+  `(add-hook ',hook #',func ,append ,addlocal)
+  )
 
 (defmacro delay-load| (func)
   "Add FUNC to `after-change-major-mode-hook' 
