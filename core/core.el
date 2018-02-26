@@ -40,6 +40,20 @@
 
 
 ;;
+;; Func
+;;
+
+(defmacro timeit| (message &rest rest)
+  "Time the execution of forms and print a message."
+  (declare (indent 1))
+  `(let ((start-time (current-time)))
+     ,@rest
+     (message (format "%s time: %.03f" ,message (float-time (time-subtract (current-time) start-time))))
+    ))
+
+
+
+;;
 ;; Init
 ;;
 
@@ -51,14 +65,15 @@
       gc-cons-percentage 0.6)
 
 (load (concat moon-core-dir "core-package"))
-
 (load| core-ui)
 
 (defun moon-finalize ()
-  (setq moon-before-init-time (current-time))
+  ;; (setq moon-before-init-time (current-time))
   ;; (moon-initialize)
-  (moon-initialize-load-path)
-  (message (format "(package-initialize) time: %.03f" (float-time (time-subtract (current-time) moon-before-init-time))))
+  (timeit| "package-init"
+    (moon-initialize-load-path)
+   )
+  ;; (message (format "(package-initialize) time: %.03f" (float-time (time-subtract (current-time) moon-before-init-time))))
   (moon-initialize-star)
   (dolist (hook '(moon-init-hook moon-post-init-hook))
     (run-hook-with-args hook))
