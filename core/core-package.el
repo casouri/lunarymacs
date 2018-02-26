@@ -51,9 +51,6 @@ Contains only core dir ,star dir and load path for built in libraries")
       '(("melpa" . "https://melpa.org/packages/")
         ("gnu"   . "https://elpa.gnu.org/packages/")))
 
-;; make sure use-package and bind-key are in load path on the very first install
-(add-to-list 'load-path (car (directory-files (concat moon-package-dir "elpa/") t "use-package.+")) t)
-(add-to-list 'load-path (car (directory-files (concat moon-package-dir "elpa/") t "bind-key.+")) t)
 
 ;;
 ;; Func
@@ -69,7 +66,11 @@ Contains only core dir ,star dir and load path for built in libraries")
   "add each package to load path"
     (setq moon-package-load-path (directory-files package-user-dir t nil t) ;; get all sub-dir
           load-path (append moon-base-load-path moon-package-load-path))
-  (add-to-list 'load-path moon-local-dir))
+    (add-to-list 'load-path moon-local-dir)
+    ;; make sure use-package and bind-key are in load path on the very first install
+    (add-to-list 'load-path (car (directory-files (concat moon-package-dir "elpa/") t "use-package.+")) t)
+    (add-to-list 'load-path (car (directory-files (concat moon-package-dir "elpa/") t "bind-key.+")) t)
+    )
 
 (defun moon-initialize-star ()
   "Load each star in `moon-star-list'."
@@ -337,6 +338,7 @@ files in each star"
   "Remove packages that are not declared in any star
 with `package|' macro."
   (interactive)
+  (moon-initialize-load-path)
   (moon-initialize)
   ;; moon-star-path-list is created by `moon|' macro
   ;; moon-load-package loads `moon-package-list'
@@ -353,6 +355,7 @@ with `package|' macro."
 (defun moon/generate-autoload-file ()
   "Extract autload file from each star to `moon-autoload-file'."
   (interactive)
+  (moon-initialize-load-path)
   (moon-initialize-star)
   (let ((autoload-file-list
          (file-expand-wildcards
