@@ -16,7 +16,7 @@ Contains only core dir ,star dir and load path for built in libraries")
   "Where melpa and elpa packages are installed.")
 
 
-(defvar moon-package-list '("use-package")
+(defvar moon-package-list '("use-package" "bind-key")
   "A list of packages to install. Packages are represented by strings not symbols.")
 
 (defvar moon--refreshed-p nil
@@ -51,6 +51,9 @@ Contains only core dir ,star dir and load path for built in libraries")
       '(("melpa" . "https://melpa.org/packages/")
         ("gnu"   . "https://elpa.gnu.org/packages/")))
 
+;; make sure use-package and bind-key are in load path on the very first install
+(add-to-list 'load-path (car (directory-files (concat moon-package-dir "elpa/") t "use-package.+")) t)
+(add-to-list 'load-path (car (directory-files (concat moon-package-dir "elpa/") t "bind-key.+")) t)
 
 ;;
 ;; Func
@@ -77,7 +80,7 @@ Contains only core dir ,star dir and load path for built in libraries")
    (unless noninteractive
      (moon-load-config moon-star-path-list)))
   (timeit| "use-package"
-   (require 'use-package)
+    (require 'use-package)
    (moon-grand-use-package-call))
   )
 
