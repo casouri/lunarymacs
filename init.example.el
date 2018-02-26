@@ -31,12 +31,15 @@
 
 
 (customize| 
+ ;; load after stars
+
  ;; theme toggle
- (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
+ ;; (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
+ ;; (moon-set-font| :family "SF Mono" :weight 'light :size 14)
  )
 
 ;;
-;; Below are settings that evaluate befor loading any stars
+;; Settings evaluate befor loading any stars
 ;;
 
 
