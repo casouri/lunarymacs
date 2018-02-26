@@ -2,12 +2,21 @@
 
 (require 'powerline)
 
+
+;;
+;; Color
+;;
+
+(setq error-red (if (bound-and-true-p mac-red) mac-red "#FA5754"))
+(setq warning-yellow (if (bound-and-true-p spacemacs-yellow) spacemacs-yellow "DarkGoldenrod2"))
+(setq info-blue (if (bound-and-true-p doom-blue) doom-blue "#56B0EC"))
+
 ;;
 ;; Face
 ;;
 
 (defface lunaryline-yellow
-  `((t (:background "DarkGoldenrod2"
+  `((t (:background ,warning-yellow
         :foreground "#3E3D31"
         :weight bold
         :inherit 'mode-line)))
@@ -15,7 +24,7 @@
   :group 'lunaryline)
 
 (defface lunaryline-blue
-  `((t (:background ,doom-blue
+  `((t (:background ,info-blue
         :foreground "#3E3D31"
         :weight bold
         :inherit 'mode-line)))
@@ -51,18 +60,19 @@ you cannot use one `disappear-when-narrow' for multiple segment."
 ;; Flycheck
 ;;
 
+
 (defface lunaryline-flycheck-error
-  '((t (:foreground "#FC5C94" :distant-foreground "#A20C41")))
+  `((t (:foreground ,error-red :distant-foreground "#A20C41")))
   "Face for flycheck error feedback in the modeline."
   :group 'lunaryline)
 
 (defface lunaryline-flycheck-warning
-  '((t (:foreground "#F3EA98" :distant-foreground "#968B26")))
+  `((t (:foreground ,warning-yellow :distant-foreground "#968B26")))
   "Face for flycheck warning feedback in the modeline."
   :group 'lunaryline)
 
 (defface lunaryline-flycheck-info
-  '((t (:foreground "#8DE6F7" :distant-foreground "#21889B")))
+  `((t (:foreground ,info-blue :distant-foreground "#21889B")))
   "Face for flycheck info feedback in the modeline."
   :group 'lunaryline)
 
