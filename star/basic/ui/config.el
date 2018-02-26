@@ -45,25 +45,40 @@ and emacs will refresh homepage to update modeline.")
   (global-highlight-parentheses-mode 1))
 
 
-(use-package| spaceline
-  :defer t
-  :init
-  (defun moon-load-spaceline ()
-    (require 'spaceline-config)
-    (setq powerline-default-separator 'slant)
-    (setq powerline-image-apple-rgb t)
-    (setq powerline-height 28)
-    (spaceline-spacemacs-theme)
-    ;; fix different separator color problem after changing theme
-    (add-hook 'moon-load-theme-hook #'powerline-reset))
-  (add-hook-for-once| prog-mode-hook moon-load-spaceline))
-
-;; (use-package| powerline
-;;   :config
+;; (use-package| spaceline
+;;   :defer t
+;;   :init
+;;   (defun moon-load-spaceline ()
+;;     (require 'spaceline-config)
 ;;     (setq powerline-default-separator 'slant)
 ;;     (setq powerline-image-apple-rgb t)
 ;;     (setq powerline-height 28)
-;;     (powerline-default-theme))
+;;     (spaceline-spacemacs-theme)
+;;     ;; fix different separator color problem after changing theme
+;;     (add-hook 'moon-load-theme-hook #'powerline-reset))
+;;   (add-hook-for-once| prog-mode-hook moon-load-spaceline)
+;;   )
+
+(use-package| powerline
+  :defer t
+  :init
+  (defun moon-load-powerline ()
+    (setq powerline-default-separator 'slant)
+    (setq powerline-image-apple-rgb t)
+    (setq powerline-height 28)
+    ;; fix different separator color problem after changing theme
+    (add-hook 'moon-load-theme-hook #'powerline-reset)
+    (load| lunaryline)
+    (lunaryline-default-theme)
+    )
+  (add-hook-for-once| prog-mode-hook moon-load-powerline)
+  )
+
+;; not working
+;; (after-load| spacemacs-theme
+;;   (set-face-attribute 'powerline-active1 nil :foreground "black")
+;;   )
+
 
 (use-package| nlinum
   :config (global-nlinum-mode)
@@ -99,7 +114,7 @@ and emacs will refresh homepage to update modeline.")
    setup-hl-todo))
 
 (use-package| dim
-  :after spaceline
+  :after powerline
   :config
   (dim-minor-names
    '((eldoc-mode "" eldoc)
