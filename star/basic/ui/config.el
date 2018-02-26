@@ -38,7 +38,7 @@ and emacs will refresh homepage to update modeline.")
 
 (use-package| highlight-parentheses
   :init
-  ;; show only the most inner pair
+  ;;highlight only the most inner pair
   (setq hl-paren-colors '("green"))
   :config
   (set-face-attribute 'hl-paren-face nil :weight 'bold)
@@ -66,10 +66,9 @@ and emacs will refresh homepage to update modeline.")
     (setq powerline-default-separator 'slant)
     (setq powerline-image-apple-rgb t)
     (setq powerline-height 28)
-    ;; fix different separator color problem after changing theme
-    ;; (load| lunaryline)
     (load (concat moon-star-dir "basic/ui/lunaryline"))
     (lunaryline-default-theme)
+    ;; fix different separator color after changing theme
     (add-hook 'moon-load-theme-hook #'powerline-reset)
     )
   ;; (add-hook 'moon-init-hook #'moon-load-powerline)
