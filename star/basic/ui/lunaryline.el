@@ -39,6 +39,12 @@ you cannot use one `disappear-when-narrow' for multiple segment."
   `(when (> (window-width) lunaryline-narrow-window-threshold)
      ,@rest))
 
+(defmacro only-in-prog-mode| (&rest rest)
+  "Only enable segment when in prog-mode."
+  `(when (derived-mode-p 'prog-mode)
+     ,@rest))
+
+
 
 ;;
 ;; Flycheck
@@ -167,18 +173,16 @@ the number of errors.")
                                 (powerline-raw " " face1)
                                 ;; separator >> face0
                                 ;; flycheck
-                                (funcall separator-left face1 face0)
-                                (flycheck-error 'lunaryline-flycheck-error 'l)
-                                (flycheck-warning 'lunaryline-flycheck-warning 'l)
-                                (flycheck-info 'lunaryline-flycheck-info 'l)
-                                ;; (powerline-minor-modes face0 'l)
-                                (powerline-narrow face0 'l)
-                                (powerline-raw " " face0)
+                                (only-in-prog-mode| (funcall separator-left face1 face0))
+                                (only-in-prog-mode| (flycheck-error 'lunaryline-flycheck-error 'l))
+                                (only-in-prog-mode| (flycheck-warning 'lunaryline-flycheck-warning 'l))
+                                (only-in-prog-mode| (flycheck-info 'lunaryline-flycheck-info 'l))
+                                (only-in-prog-mode| (powerline-raw " " face0))
                                 ;; separator >> face1
                                 ;; git
-                                (funcall separator-right face0 face1)
-                                (lunaryline-vc face1 'l)
-                                (powerline-raw " " face1)
+                                (only-in-prog-mode| (funcall separator-right face0 face1))
+                                (only-in-prog-mode| (lunaryline-vc face1 'l))
+                                (only-in-prog-mode| (powerline-raw " " face1))
                                 ;; separator >> face0
                                 ;; nyan
                                 (disappear-when-narrow|
