@@ -15,6 +15,7 @@
 ;; Face
 ;;
 
+
 (defface lunaryline-yellow
   `((t (:background ,warning-yellow
         :foreground "#3E3D31"
@@ -202,13 +203,15 @@ the number of errors.")
                                 ;; separator >> face0
                                 ;; nyan
                                 (disappear-when-narrow|
-                                 (funcall separator-left face1 face0))
+                                 (when (bound-and-true-p nyan-mode)
+                                   (funcall separator-left face1 face0)))
                                 (disappear-when-narrow|
                                  (when (bound-and-true-p nyan-mode)
                                    (powerline-raw (list (nyan-create)) face0 'l)))
                                 ;; separator >> face1
                                 (disappear-when-narrow|
-                                 (funcall separator-left face0 face1))
+                                 (when (bound-and-true-p nyan-mode) 
+                                   (funcall separator-left face0 face1)))
                                 ))
                           ;; right
                           ;; use face1 instead of face2
