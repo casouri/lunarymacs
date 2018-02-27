@@ -2,36 +2,37 @@
 
 This star configures most of the ui features of lunarymacs.
 
-* hl-line
-Highlight current line
+* Package list
+- spacemacs-theme
+- rainbow-delimiters
+- hlinum
+- nlinum
+- highlight-parentheses
+- hl-todo
+- spaceline
+- powerline
+- rainbow-mode
+- nyan-mode
+- eyebrowse
+- winum
 
+  
+* eyebrowse & winum
+| key       | command                                    |
+|-----------+--------------------------------------------|
+| SPC w 1-9 | switch to workspace 1-9                    |
+| SPC w `   | kill-other-window                          |
+| SPC 1-9   | switch to window 1-9 (create if not exist) |
 
-* spacemacs-theme
-Default theme of Spacemacs.
+In the very left on lunaryline:
 
-* rainbow-delimiters
-Colorful parentheses
+#+BEGIN_SRC
+window number
+      v
+[1 2] 1
+  ^
+workspace indicator
+#+END_SRC
 
-* highlight-parentheses
-Highlight most inner pair of parentheses.
-
-* powerline
-I use lunaryline as the default modeline.
-It loads =lunaryline.el= in the same dir.
-
-Modeline is not loaded until you enter a file
-that have major mode derived from prog-mode or 
-text-mode.
-
-* nlinum
-Fast line number with hignlight.
-
-* nyan-mode
-nyan-cat in modeline
-
-** config
-- enable-nyan :: Whether to enable nyan cat
-
-
-* hl-todo
-Highlight all the TODOs.
+In workspace indicator, number with light weight
+is current workspace
