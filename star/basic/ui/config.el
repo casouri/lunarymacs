@@ -1,21 +1,8 @@
 ;;; -*- lexical-binding: t -*-
 
 ;;
-;; Var
-;;
-
-(defvar moon-spaceline-on-homepage nil
-  "Whether to refresh homepage to see spaceline.
-
-I create a separate thred to load spaceline, 
-so homepage will use vanilla modeline.
-If you want spaceline on homepage, set this to t 
-and emacs will refresh homepage to update modeline.")
-
-;;
 ;; Config
 ;;
-
 
 (global-hl-line-mode 1)
 
@@ -116,26 +103,29 @@ and emacs will refresh homepage to update modeline.")
    after-change-major-mode-hook
    setup-hl-todo))
 
-(use-package| dim
-  :after powerline
-  :config
-  (dim-minor-names
-   '((eldoc-mode "" eldoc)
-     (auto-revert-mode "" autorevert)
-     (visual-line-mode "" simple)
-     (evil-escape-mode "" evil-escape)
-     (undo-tree-mode "" undo-tree)
-     (which-key-mode "" which-key)
-     (company-mode " Ⓒ" company)
-     (flycheck-mode " ⓕ" flycheck)
-     (ivy-mode " ⓘ" ivy)
-     (lsp-mode " Ⓛ" lsp)
-     (lispyville-mode " ⓟ" lispyville)
-     (highlight-parentheses-mode "")
-     (counsel-mode "" counsel)
-     (flyspell-mode " Ⓢ" flyspell)
-     ))
-  )
+;; I don't show minor mode
+;; in modeline anymore
+
+;; (use-package| dim
+;;   :after powerline
+;;   :config
+;;   (dim-minor-names
+;;    '((eldoc-mode "" eldoc)
+;;      (auto-revert-mode "" autorevert)
+;;      (visual-line-mode "" simple)
+;;      (evil-escape-mode "" evil-escape)
+;;      (undo-tree-mode "" undo-tree)
+;;      (which-key-mode "" which-key)
+;;      (company-mode " Ⓒ" company)
+;;      (flycheck-mode " ⓕ" flycheck)
+;;      (ivy-mode " ⓘ" ivy)
+;;      (lsp-mode " Ⓛ" lsp)
+;;      (lispyville-mode " ⓟ" lispyville)
+;;      (highlight-parentheses-mode "")
+;;      (counsel-mode "" counsel)
+;;      (flyspell-mode " Ⓢ" flyspell)
+;;      ))
+;;   )
 
 ;; (setq company-mode-name
 ;;       (propertize

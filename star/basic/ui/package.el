@@ -11,5 +11,5 @@
  powerline
  rainbow-mode
  nyan-mode
- dim
+ ;; dim
  )
