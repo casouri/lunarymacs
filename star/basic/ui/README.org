@@ -39,3 +39,10 @@ workspace indicator
 
 In workspace indicator, number with light weight
 is current workspace
+
+
+* Save desktop across sessions
+
+#+BEGIN_SRC lisp
+(setq moon-save-desktop t)
+#+END_SRC

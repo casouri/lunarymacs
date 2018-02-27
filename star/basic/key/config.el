@@ -39,13 +39,12 @@
    "p" '(:ignore t :which-key "project")
    "w" '(:ignore t :which-key "window")
    "b" '(:ignore t :which-key "buffer")
-   "w" '(:ignore t :which-key "window")
+   "w" '(:ignore t :which-key "workspace")
    "q" '(:ignore t :which-key "quit")
    "m" '(:ignore t :which-key "major-mode")
    "e" '(:ignore t :which-key "error")
    "t" '(:ignore t :which-key "toggle")
    "g" '(:ignore t :which-key "git")
-   "W" '(:ignore t :which-key "eyebrowse")
    ;; file
    "fR" #'moon/rename-file
    "fs" #'save-buffer
@@ -62,6 +61,8 @@
    "`"  #'eval-expression
    ;; toggle
    "tt" #'moon/switch-theme
+   ;; workspace
+   "wr" #'desktop-read
    ;; error
    "ej" #'hydra-error/next-error
    "ek" #'hydra-error/previous-error
