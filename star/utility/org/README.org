@@ -1,5 +1,8 @@
 #+TITLE: org
 
 
-* configuration of IPython
+* IPython support
 It enables ipython-like operations in org-mode.
+
+* Org-bullets
+Adds fancy utf-8 bullets for headlines.

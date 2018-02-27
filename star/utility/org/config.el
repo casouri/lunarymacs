@@ -9,9 +9,13 @@
       '((ipython . t)))
      )))
 
+(defvar moon-enable-org-bullets nil
+  "Whether to enable org-bullet")
+
 (use-package| org-bullets
   :defer t
   :init (add-hook
          'org-mode-hook
          (lambda ()
-           (org-bullets-mode 1))))
+           (when moon-enable-org-bullets
+             (org-bullets-mode 1)))))
