@@ -127,12 +127,18 @@
 ;;      ))
 ;;   )
 
-;; (setq company-mode-name
-;;       (propertize
-;;        "company" 'display
-;;        (create-image
-;;         (concat
-;;          (file-name-directory buffer-file-name)
-;;          "font/circled-ha.xpm"))))
-;; (put 'company-mode-name 'risky-local-variable t) ; needed to make images work
-;; (dim-minor-name 'company-mode 'company-mode-name)
+(use-package| eyebrowse
+  :config
+  (eyebrowse-mode 1))
+
+(post-config| general
+  (default-leader
+    "w`" #'delete-other-windows
+    "w1" #'eyebrowse-switch-to-window-config-1
+    "w2" #'eyebrowse-switch-to-window-config-2
+    "w3" #'eyebrowse-switch-to-window-config-3
+    "w4" #'eyebrowse-switch-to-window-config-4
+    "w5" #'eyebrowse-switch-to-window-config-5
+    "w6" #'eyebrowse-switch-to-window-config-6
+    "wd" #'eyebrowse-close-window-config))
+

@@ -12,4 +12,5 @@
  rainbow-mode
  nyan-mode
  ;; dim
+ eyebrowse
  )

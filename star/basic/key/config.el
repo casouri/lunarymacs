@@ -45,6 +45,7 @@
    "e" '(:ignore t :which-key "error")
    "t" '(:ignore t :which-key "toggle")
    "g" '(:ignore t :which-key "git")
+   "W" '(:ignore t :which-key "eyebrowse")
    ;; file
    "fR" #'moon/rename-file
    "fs" #'save-buffer
@@ -57,10 +58,6 @@
    "bo" #'moon/kill-other-buffer
    "bh" #'moon/kill-helper
    "bb" #'list-buffers
-   ;; window
-   "w1" #'delete-other-windows
-   "w2" #'split-window-right
-   "o"  #'other-window
    ;; eval
    "`"  #'eval-expression
    ;; toggle
