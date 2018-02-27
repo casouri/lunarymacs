@@ -3,7 +3,7 @@
 (load (concat (expand-file-name user-emacs-directory) "core/core"))
 
 (moon| :basic
-       basic-ui
+       homepage
        key
        evil
        ui

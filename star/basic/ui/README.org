@@ -4,7 +4,7 @@ This star configures most of the ui features of lunarymacs.
 
 * Package list
 - spacemacs-theme
-  - default themes: (switch with =moon/switch-theme=)
+  - default themes: (switch with =moon/switch-theme=, see more in wiki)
     - spacemacs-dark
     - spacemacs-light
 - rainbow-delimiters
@@ -20,6 +20,18 @@ This star configures most of the ui features of lunarymacs.
 - winum
 
   
+
+* Default font and cursor settings
+
+- font (switch with =moon/load-font=, see more in wiki):
+  - SF Mono
+  - Source Code Pro
+- cursor:
+| theme           | normal | insert |
+|-----------------+--------+--------|
+| spacemacs-dark  | yellow | pink   |
+| spacemacs-light | purple | pink   |
+
 * eyebrowse & winum
 | key       | command                                    |
 |-----------+--------------------------------------------|
