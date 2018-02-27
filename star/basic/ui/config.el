@@ -115,9 +115,9 @@
   "Whether to enable nyan cat")
 
 (use-package| nyan-mode
-  :init(setq nyan-wavy-trail t)
+  :init (setq nyan-wavy-trail t)
   :config
-  (when enable-nyan
+  (when moon-enable-nyan
     (nyan-mode)
     (nyan-start-animation)
     )
