@@ -36,6 +36,9 @@
  ;; theme toggle
  ;; (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
  ;; (moon-set-font| :family "SF Mono" :weight 'light :size 14)
+
+ ;;
+ ;;customize ends here
  )
 
 ;;
@@ -44,4 +47,10 @@
 
 
 ;; max
- (toggle-frame-maximized)
+(toggle-frame-maximized)
+
+;;nyan-cat
+;; (setq moon-enable-nyan t)
+
+;; default was ", "
+(setq eyebrowse-mode-line-separator " ")
