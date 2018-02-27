@@ -47,7 +47,7 @@
   :group 'lunaryline)
 
 (defvar lunaryline-narrow-window-threshold
-  90
+  120
   "If window width is lower than this number,
 
 modeline segments that are inside `disappear-when-narrow'
