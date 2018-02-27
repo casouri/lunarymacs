@@ -1,0 +1,5 @@
+#+TITLE: org
+
+
+* configuration of IPython
+It enables ipython-like operations in org-mode.
