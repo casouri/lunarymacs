@@ -111,7 +111,7 @@
   (moon/sync-nlinum-highlight-face)
   )
 
-(defvar enable-nyan nil
+(defvar moon-enable-nyan nil
   "Whether to enable nyan cat")
 
 (use-package| nyan-mode

@@ -20,7 +20,6 @@ This star configures most of the ui features of lunarymacs.
 - winum
 
   
-
 * Default font and cursor settings
 
 - font (switch with =moon/load-font=, see more in wiki):
@@ -52,9 +51,12 @@ workspace indicator
 In workspace indicator, number with light weight
 is current workspace
 
-
 * Save desktop across sessions
 
 #+BEGIN_SRC lisp
 (setq moon-save-desktop t)
+#+END_SRC
+* nyan-cat
+#+BEGIN_SRC lisp
+(setq moon-enable-nyan t)
 #+END_SRC
