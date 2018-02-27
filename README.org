@@ -19,11 +19,11 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
 - no default package required by core except use-package
   
 
-In summary this project is great for a starting point of your own config!
-You can
-1. Use the core as a framework and manage use your own configuration.
-2. Use some of my configurations and add your own config (submit pull request if you think it's good!)
-3. Just read the core and wiki and build your own config from scratch.
+*In summary* this project is a good starting point of your own config!
+You can:
+1. Use my configuration and add your own config (submit pull request if you think yours is good!)
+2. *OR* Only use the core as a framework and manage your own configurations within it.
+3. *OR* Just read the core and wiki as reference and build your own config from scratch.
 
 \\
 
