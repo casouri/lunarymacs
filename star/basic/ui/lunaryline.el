@@ -24,6 +24,13 @@
   "Yellow highlight face for lunaryline."
   :group 'lunaryline)
 
+(defface lunaryline-yellow-light
+  `((t (:background ,warning-yellow
+        :foreground "#3E3D31"
+        :inherit 'mode-line)))
+  "Yellow highlight face for lunaryline."
+  :group 'lunaryline)
+
 (defface lunaryline-blue
   `((t (:background ,info-blue
         :foreground "#3E3D31"
@@ -32,6 +39,12 @@
   "Blue highlight face for lunaryline."
   :group 'lunaryline)
 
+(defface lunaryline-blue-light
+  `((t (:background ,info-blue
+        :foreground "#3E3D31"
+        :inherit 'mode-line)))
+  "Blue highlight face for lunaryline."
+  :group 'lunaryline)
 
 (defvar lunaryline-narrow-window-threshold
   90
@@ -129,6 +142,7 @@ the number of errors.")
     (if (string-match "\\(dos\\|unix\\|mac\\)" buf-coding)
         (match-string 1 buf-coding)
       buf-coding)))
+
 ;;
 ;; Version control
 ;;
@@ -140,6 +154,52 @@ the number of errors.")
                 "Git") ; magit is autoloaded
               (vc-state (buffer-file-name)))
     "N/A"))
+
+;;
+;; Eyebrowse
+;;
+
+(defun lunaryline-eyebrowse-mode-line-indicator (active-face inactive-face)
+  "Return a string representation of the window configurations."
+  (let* ((left-delimiter (propertize eyebrowse-mode-line-left-delimiter
+                                     'face inactive-face)) ; edit mark
+         (right-delimiter (propertize eyebrowse-mode-line-right-delimiter
+                                      'face inactive-face)) ; edit mark
+         (separator (propertize eyebrowse-mode-line-separator
+                                'face inactive-face)) ; edit mark
+         (current-slot (eyebrowse--get 'current-slot))
+         (window-configs (eyebrowse--get 'window-configs)))
+    (if (and eyebrowse-mode-line-style
+             (not (eq eyebrowse-mode-line-style 'hide))
+             (or (and (not (eq eyebrowse-mode-line-style 'smart))
+                      eyebrowse-mode-line-style)
+                 (and (eq eyebrowse-mode-line-style 'smart)
+                      (> (length window-configs) 1))))
+        (concat
+         left-delimiter
+         (mapconcat
+          (lambda (window-config)
+            (let* ((slot (car window-config))
+                   (face (if (= slot current-slot)
+                             active-face ; edit mark
+                           inactive-face)) ; edit mark
+                   (keymap
+                    (let ((map (make-sparse-keymap)))
+                      (define-key map (kbd "<mode-line><mouse-1>")
+                        (lambda (e)
+                          (interactive "e")
+                          (eyebrowse-switch-to-window-config slot)))
+                      map))
+                   (help-echo "mouse-1: Switch to indicated workspace")
+                   (caption (eyebrowse-format-slot window-config)))
+              (propertize caption 'face face 'slot slot
+                          'mouse-face 'mode-line-highlight
+                          'local-map keymap
+                          'help-echo help-echo)))
+          window-configs separator)
+         right-delimiter)
+      "")))
+
 
 ;;
 ;; Theme
@@ -154,11 +214,13 @@ the number of errors.")
                    (let* ((active (powerline-selected-window-active))
                           (mode-line-buffer-id (if active 'mode-line-buffer-id 'mode-line-buffer-id-inactive))
                           (mode-line (if active 'mode-line 'mode-line-inactive))
-                          (face0 (if active 'powerline-active0 'powerline-inactive0))
-                          (face1 (if active 'powerline-active1 'powerline-inactive1))
-                          (face2 (if active 'powerline-active2 'powerline-inactive2))
-                          (facey (if active 'lunaryline-yellow 'powerline-inactive1))
-                          (faceb (if active 'lunaryline-blue 'powerline-inactive1))
+                          (face0  (if active 'powerline-active0       'powerline-inactive0))
+                          (face1  (if active 'powerline-active1       'powerline-inactive1))
+                          (face2  (if active 'powerline-active2       'powerline-inactive2))
+                          (facey  (if active 'lunaryline-yellow       'powerline-inactive1))
+                          (faceyl (if active 'lunaryline-yellow-light 'powerline-inactive1))
+                          (faceb  (if active 'lunaryline-blue         'powerline-inactive1))
+                          (facebl (if active 'lunaryline-blue-light   'powerline-inactive1))
                           (separator-left (intern (format "powerline-%s-%s"
                                                           (powerline-current-separator)
                                                           (car powerline-default-separator-dir))))
@@ -167,16 +229,23 @@ the number of errors.")
                                                            (cdr powerline-default-separator-dir))))
                           ;; left
                           (lhs (list
-                                (if (buffer-modified-p)
-                                    (powerline-raw (lunaryline-winum) facey 'l)
-                                  (powerline-raw (lunaryline-winum) faceb 'l)
-                                    )
+                                (when (bound-and-true-p eyebrowse-mode)
+                                  (if (buffer-modified-p)
+                                      (lunaryline-eyebrowse-mode-line-indicator faceyl facey)
+                                    (lunaryline-eyebrowse-mode-line-indicator facebl faceb)
+                                    ))
+                                (when (bound-and-true-p winum-mode)
+                                  (if (buffer-modified-p)
+                                      (powerline-raw (lunaryline-winum) facey 'l)
+                                    (powerline-raw (lunaryline-winum) faceb 'l)
+                                    ))
                                 ;; separator >> face0
                                 ;; buffer info
-                                (if (buffer-modified-p)
-                                    (funcall separator-left facey face0)
-                                  (funcall separator-left faceb face0)
-                                    )
+                                (when (bound-and-true-p winum-mode)
+                                  (if (buffer-modified-p)
+                                      (funcall separator-left facey face0)
+                                    (funcall separator-left faceb face0)
+                                    ))
                                 (when powerline-display-buffer-size
                                   (powerline-buffer-size face0 'l))
                                 (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
