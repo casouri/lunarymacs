@@ -30,9 +30,6 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
 #+CAPTION: May be it will look cooler without nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
 [[./screenshot/screenshot1.png]]
 
-[[./screenshot/screenshot3.png]]
-
-
 * Quick start
 
 *backup you .emacs.d first!*
