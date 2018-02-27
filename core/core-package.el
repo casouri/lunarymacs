@@ -63,7 +63,7 @@ Contains only core dir ,star dir and load path for built in libraries")
   )
 
 (defun moon-initialize-load-path ()
-  "add each package to load path"
+  "Add each package to load path."
     (setq moon-package-load-path (directory-files package-user-dir t nil t) ;; get all sub-dir
           load-path (append moon-base-load-path moon-package-load-path))
     (add-to-list 'load-path moon-local-dir)
@@ -86,6 +86,7 @@ Contains only core dir ,star dir and load path for built in libraries")
   )
 
 (defun moon-load-autoload ()
+  "Load `moon-autoload-file'."
   ;; (dolist (package-path moon-package-load-path)
   ;;   (when (file-directory-p package-path)
   ;;     (let (
@@ -103,12 +104,14 @@ Contains only core dir ,star dir and load path for built in libraries")
 ;; (setq moon-star-path-list ())
 
 (defun keyword-to-name-str (keyword)
-  "Remove the colon in keyword symbol and turn it into string."
+  "Remove the colon in KEYWORD symbol and turn it into string.
+
+i.e. :keyword to \"keyword\"."
   (replace-regexp-in-string "^:" "" (symbol-name keyword)))
 
 
 (defun moon-load-config (path-list)
-  "load config.el in each star"
+  "Load config.el in each star in PATH-LIST."
   (dolist (star-path path-list)
     (let ((path (concat star-path "config.el")))
       (if (file-exists-p path)
@@ -117,7 +120,7 @@ Contains only core dir ,star dir and load path for built in libraries")
       )))
 
 (defun moon-load-package (path-list)
-  "load package.el in each star"
+  "Load package.el in each star in PATH-LIST."
   (dolist (star-path path-list)
     (let ((path (concat star-path "package.el")))
       (if (file-exists-p path)
@@ -131,6 +134,7 @@ Contains only core dir ,star dir and load path for built in libraries")
 
 
 (defun moon-display-benchmark ()
+  "Display the total time of loading lunarymacs."
   (message "loaded %s packages across %d stars in %.03fs"
            (length moon-package-list)
            (length moon-star-path-list)
@@ -142,10 +146,14 @@ Contains only core dir ,star dir and load path for built in libraries")
 ;;
 
 (defmacro load| (filesym &optional path)
-  "Load a file relative to current file path.
+  "Load FILESYM relative to current file path.
+
+FILESYM is a symbol.
+
+If PATH is given, load FILESYM relative to PATH.
 
 Note: don't use this macro in `use-package|'
-because forms in `use-package' are not evaluated 
+because forms in `use-package' are not evaluated
 in the file in where they are wriiten."
   (let ((path (or path
                   (and load-file-name (file-name-directory load-file-name))
@@ -157,8 +165,10 @@ in the file in where they are wriiten."
     (load (concat path filename))))
 
 (defmacro package| (&rest package-list)
-  "Add package to moon-package-list so it will be installed by make.
-Create `pre-init-xxx' and `post-config-xxx' functions. Modify them with `pre-init|' and `post-config|' macro.
+  "Add packages in PACKAGE-LIST to ‘moon-package-list’.
+so it will be installed by make.
+Create `pre-init-xxx' and `post-config-xxx' functions.
+Modify them with `pre-init|' and `post-config|' macro.
 
 Can take multiple packages.
 e.g. (package| evil evil-surround)"
@@ -169,10 +179,13 @@ e.g. (package| evil evil-surround)"
     ))
 
 (defmacro moon| (&rest star-list)
-  "Declare stars. Separate stars with sub-directories' name. Basically adding path to star to `moon-star-path-list'.
+  "Declare stars in STAR-LIST. Separate stars with sub-directories' name.
+Basically adding path to star to `moon-star-path-list'.
 
-Example: (moon| :feature evil :ui custom) for star/feature/evil and star/ui/custom.
-If called multiple times, the stars declared first will be in the front of moon-star-list"
+Example: (moon| :feature evil :ui custom) for star/feature/evil
+and star/ui/custom.
+If called multiple times, the stars declared first will be
+in the front of moon-star-list"
   (dolist (star star-list)
     (cond ((keywordp star) (setq mode star))
           ((not      mode) (error "No sub-folder specified in `moon|' for %s" star))
@@ -181,7 +194,7 @@ If called multiple times, the stars declared first will be in the front of moon-
           )))
 
 (defmacro post-config| (package &rest to-do-list)
-  "Expressions to be called after (use-package PACKAGE :config)"
+  "Add expressions in TO-DO-LIST to be called after (use-package PACKAGE :config)."
   (declare (indent defun))
   (let (
         (func-symbol (intern (format "post-config-%s" package)))
@@ -193,7 +206,7 @@ If called multiple times, the stars declared first will be in the front of moon-
     ))
 
 (defmacro pre-init| (package &rest to-do-list)
-  "Expressions to be called after (use-package PACKAGE :init)"
+  "Add expressions in TO-DO-LIST to be called after (use-package PACKAGE :init)."
   (declare (indent defun))
   (let (
         (func-symbol (intern (format "pre-init-%s" package)))
@@ -207,6 +220,9 @@ If called multiple times, the stars declared first will be in the front of moon-
 (defmacro after-load| (feature &rest rest-list)
   "A smart wrapper around `with-eval-after-load'.
 
+FEATURE is a library declared with `provide'.
+REST-LIST is a list of expressions to evaluate.
+
 Expressions inside will be called right after the library is loaded,
 before `post-config|' but after `pro-init'."
   (declare (indent defun) (debug t))
@@ -215,12 +231,12 @@ before `post-config|' but after `pro-init'."
 (defmacro use-package| (package &rest rest-list)
   "Thin wrapper around `use-package', just add some hooks.
 
-It seems that this macro slows down init. Don't use it when you don't need
-pre-init and post-config hooks.
-
 Basically (use-package| evil :something something) adds
-(use-package :something something :init (pre-init-evil) :config (post-config-evil))
-to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-star'"
+\(use-package :something something
+:init (pre-init-evil)
+:config (post-config-evil))
+to `moon-grand-use-pacage-call'
+to be evaluated at the end of `moon-initialize-star'"
   (declare (indent defun))
   `(fset
     'moon-grand-use-package-call
@@ -251,7 +267,7 @@ to `moon-grand-use-pacage-call' to be evaluated at the end of `moon-initialize-s
 (defmacro customize| (&rest exp-list)
   "Set some customization in init.el.
 
-Accepts expressions, they will be run in `moon-post-init-hook'.
+Accepts expressions EXP-LIST, they will be run in `moon-post-init-hook'.
 Expressions will be appended."
   `(add-hook 'moon-post-init-hook
              (lambda () ,@exp-list) t))
@@ -273,8 +289,8 @@ as APPEND and LOCAL. Similarly REMOVELOCAL is passed to `remove-hook' as LOCAL."
   )
 
 (defmacro delay-load| (func)
-  "Add FUNC to `after-change-major-mode-hook' 
-and remove FUNC from the hook at first call."
+  "Add FUNC to `after-change-major-mode-hook'.
+And remove FUNC from the hook at first call."
   `(add-hook 'after-change-major-mode-hook
              (lambda () (,func) (remove-hook 'after-change-major-mode-hook #',func))))
 
@@ -282,12 +298,11 @@ and remove FUNC from the hook at first call."
 (defmacro async-load| (package &optional name)
   "Expand to a expression.
 
-(make-thread (lambda () (require 'PACKAGE)) NAME)
+\(make-thread (lambda () (require 'PACKAGE)) NAME)
 
 Use example:
 
-(use-package| PACKAGE :init (async-load| PACKAGE)
-"
+\(use-package| PACKAGE :init (async-load| PACKAGE)"
   `(make-thread (lambda () (require ',package)) ,name))
 
 
@@ -305,8 +320,7 @@ Use example:
 
 
 (defun moon/install-package ()
-  "Install packages specified in `package.el'
-files in each star"
+  "Install packages specified in `package.el' files in each star."
   (interactive)
   (moon-initialize)
   ;; moon-star-path-list is created by `moon|' macro
@@ -340,8 +354,7 @@ files in each star"
       (error nil)))
 
 (defun moon/remove-unused-package ()
-  "Remove packages that are not declared in any star
-with `package|' macro."
+  "Remove packages that are not declared in any star with `package|' macro."
   (interactive)
   (moon-initialize-load-path)
   (moon-initialize)
@@ -395,3 +408,7 @@ with `package|' macro."
       )))
 
 (provide 'core-package)
+
+(provide 'core-package)
+
+;;; core-package.el ends here
