@@ -14,7 +14,7 @@
   :hook (python-mode . lsp-python-enable)
   :config
   (when python-enable-format-on-save
-    (add-hook 'python-mode-hook (lambda () (add-hook 'before-save-hook 'lsp-format-buffer))))
+    (add-hook 'python-mode-hook (lambda () (add-hook 'before-save-hook 'lsp-format-buffer t t))))
   )
 
 (use-package| pyvenv
@@ -31,4 +31,3 @@
              quickrun-autorun-mode
              ))
 
-(setq python-shell-interpreter "/usr/local/bin/python3")
