@@ -60,4 +60,3 @@ Emacs community is the best! :smile: :heart: (just rhetorical, not comparing :P)
 I don't know what is lunary, don't ask me.
 
 I know it says lunarymacs but homepage is moon emacs.
-It's just the word "lunarymacs" doesn't look cool in that ascii art font.
