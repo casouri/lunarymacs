@@ -13,4 +13,5 @@
  nyan-mode
  ;; dim
  eyebrowse
+ winum
  )

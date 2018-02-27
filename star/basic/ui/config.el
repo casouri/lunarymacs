@@ -142,3 +142,31 @@
     "w6" #'eyebrowse-switch-to-window-config-6
     "wd" #'eyebrowse-close-window-config))
 
+
+(use-package| winum
+  :config (winum-mode 1))
+
+(post-config| general
+  (default-leader
+    "1" #'moon/switch-to-window-1
+    "2" #'moon/switch-to-window-2
+    "3" #'moon/switch-to-window-3
+    "4" #'moon/switch-to-window-4
+    "5" #'moon/switch-to-window-5
+    "6" #'moon/switch-to-window-6
+    "7" #'moon/switch-to-window-7
+    "8" #'moon/switch-to-window-8
+    "9" #'moon/switch-to-window-9
+    ))
+
+
+(post-config| which-key
+  ;; create a fake key to represent all ten winum function
+  (push '(("\\(.*\\) 1" . "moon/switch-to-window-1") . ("\\1 1..9" . "window 1..9")) which-key-replacement-alist)
+  ;; hide other keys
+  (push '((nil . "moon/switch-to-window-[2-9]") . t) which-key-replacement-alist)
+  ;; create a fake key to represent all ten eyebrowse function
+  (push '(("\\(.*\\) 1" . "eyebrowse-switch-to-window-config-1") . ("\\1 1..9" . "workspace 1..9")) which-key-replacement-alist)
+  ;; hide other keys
+  (push '((nil . "eyebrowse-switch-to-window-config-[2-9]") . t) which-key-replacement-alist)
+  )
