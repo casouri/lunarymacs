@@ -31,7 +31,7 @@ Accept one character for DIRECTION.
 h   l <   >
   j     v
 "
-  (interactive "cswitch to window: h j k l")
+  (interactive "cswitch to window: h/j/k/l")
   (pcase direction
     (?k (split-window-below))                 ; up
     (?j (select-window (split-window-below))) ; down
