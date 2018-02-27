@@ -8,7 +8,7 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
                      ——鲁迅
 #+END_QUOTE
 
-*Warning*: There is no seatbelt.
+*Warning:* There is no seatbelt.
 
 - *code is easy* to understand (since I don't really know too much elisp)
 - *not opinionated*: no default settings set in core. 
@@ -19,7 +19,8 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
 - *no default package* required by core except use-package
   
 
-**** In summary 
+*In summary:* 
+
 This project is a good starting point of your own config!
 You can:
 1. Use my configuration and add your own config (submit pull request if you think yours is good!)
