@@ -51,51 +51,13 @@ MOON is used when buffer's width is less than 86."
   )
 
 ;;
-;; Cursor Color
-;;
-
-
-(defun moon-normal-state-cursor-color ()
-  "Cursor color in normal state."
-  (cond
-   ((equal moon-current-theme "spacemacs-dark")
-    lunary-yellow)
-   ((equal moon-current-theme "spacemacs-light")
-    spacemacs-light-purple)
-   ))
-
-(defun moon-insert-state-cursor-color ()
-  "Cursor color in insert state."
-  lunary-pink)
-
-(change-cursor-on-hook| evil-normal-state-entry-hook moon-normal-state-cursor-color)
-;; secure cursor color after changing theme
-(change-cursor-on-hook| moon-load-theme-hook moon-normal-state-cursor-color)
-(change-cursor-on-hook| evil-insert-state-entry-hook moon-insert-state-cursor-color)
-
-
-
-
-;;
-;; Font
-;;
-
-;; (moon-set-font| :family "Source Code Pro" :weight 'light :size 14)
-(moon-set-font| :family "SF Mono" :weight 'light :size 14)
-
-
-;;
-;; Homepage
+;; Config
 ;;
 
 ;; Homepage
 (add-hook 'moon-init-hook #'moon/draw-homepage t)
 (add-hook 'moon-post-init-hook #'moon-display-benchmark t)
 
-
-;;
-;; Config
-;;
 
 ;; visual line mode
 ;; visual line mode makes swiper very slow

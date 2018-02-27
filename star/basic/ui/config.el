@@ -7,6 +7,36 @@
 (global-hl-line-mode 1)
 
 ;;
+;; Cursor Color
+;;
+
+
+(defun moon-normal-state-cursor-color ()
+  "Cursor color in normal state."
+  (cond
+   ((equal moon-current-theme "spacemacs-dark")
+    lunary-yellow)
+   ((equal moon-current-theme "spacemacs-light")
+    spacemacs-light-purple)
+   ))
+
+(defun moon-insert-state-cursor-color ()
+  "Cursor color in insert state."
+  lunary-pink)
+
+(change-cursor-on-hook| evil-normal-state-entry-hook moon-normal-state-cursor-color)
+;; secure cursor color after changing theme
+(change-cursor-on-hook| moon-load-theme-hook moon-normal-state-cursor-color)
+(change-cursor-on-hook| evil-insert-state-entry-hook moon-insert-state-cursor-color)
+
+;;
+;; Font
+;;
+
+;; (moon-set-font| :family "Source Code Pro" :weight 'light :size 14)
+(moon-set-font| :family "SF Mono" :weight 'light :size 14)
+
+;;
 ;; Package
 ;;
 
@@ -170,3 +200,16 @@
   ;; hide other keys
   (push '((nil . "eyebrowse-switch-to-window-config-[2-9]") . t) which-key-replacement-alist)
   )
+
+
+;;
+;; Desktop
+;;
+
+(defvar moon-save-desktop nil
+  "Whether to save desktop across session.")
+
+(add-hook 'kill-emacs-hook
+             (lambda ()
+               (when moon-save-desktop
+                 (desktop-save moon-local-dir))))
