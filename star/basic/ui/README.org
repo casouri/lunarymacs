@@ -1,0 +1,37 @@
+#+TITLE: ui
+
+This star configures most of the ui features of lunarymacs.
+
+* hl-line
+Highlight current line
+
+
+* spacemacs-theme
+Default theme of Spacemacs.
+
+* rainbow-delimiters
+Colorful parentheses
+
+* highlight-parentheses
+Highlight most inner pair of parentheses.
+
+* powerline
+I use lunaryline as the default modeline.
+It loads =lunaryline.el= in the same dir.
+
+Modeline is not loaded until you enter a file
+that have major mode derived from prog-mode or 
+text-mode.
+
+* nlinum
+Fast line number with hignlight.
+
+* nyan-mode
+nyan-cat in modeline
+
+** config
+- enable-nyan :: Whether to enable nyan cat
+
+
+* hl-todo
+Highlight all the TODOs.

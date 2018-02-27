@@ -1,0 +1,25 @@
+#+TITLE: basic-ui
+
+This start configures essential ui elements like 
+font, cursor color, homescreen.
+
+In contrast, ui star configures package
+more on the "feature" side.
+
+To be honest most of the stuff in here could be in =init.el= and =core-ui.el=.
+I just don't want to put homepage settings in =core-ui.el=
+
+
+- default themes
+  - spacemacs-dark
+  - spacemacs-light
+  
+- default font :: SF Mono
+                  
+- default cursor color:
+
+| theme           | normal | insert |
+|-----------------+--------+--------|
+| spacemacs-dark  | yellow | pink   |
+| spacemacs-light | purple | pink   |
+
