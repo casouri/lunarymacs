@@ -1,1 +1,2 @@
-(package| org-bullets)
+(package| org-bullets
+          ob-ipython)
