@@ -19,7 +19,6 @@ This star configures most of the ui features of lunarymacs.
 - eyebrowse
 - winum
 
-  
 * Default font and cursor settings
 
 - font (switch with =moon/load-font=, see more in wiki):
@@ -35,7 +34,7 @@ This star configures most of the ui features of lunarymacs.
 | key       | command                                    |
 |-----------+--------------------------------------------|
 | SPC w 1-9 | switch to workspace 1-9                    |
-| SPC w `   | kill-other-window                          |
+| SPC w w   | kill-other-window                          |
 | SPC 1-9   | switch to window 1-9 (create if not exist) |
 
 In the very left on lunaryline:

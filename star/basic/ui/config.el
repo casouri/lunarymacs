@@ -163,7 +163,7 @@
 
 (post-config| general
   (default-leader
-    "w`" #'delete-other-windows
+    "ww" #'delete-other-windows
     "w1" #'eyebrowse-switch-to-window-config-1
     "w2" #'eyebrowse-switch-to-window-config-2
     "w3" #'eyebrowse-switch-to-window-config-3
