@@ -25,7 +25,7 @@ This project is a good starting point of your own config!
 You can:
 1. Use my configuration and add your own config (submit pull request if you think yours is good!)
 2. *OR* Only use the core as a framework and manage your own configurations within it.
-3. *OR* Just read the core and wiki as reference and build your own config from scratch.
+3. *OR* Just read the core and wiki as a reference and build your own config from scratch.
 
 \\
 
