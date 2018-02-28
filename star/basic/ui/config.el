@@ -86,7 +86,7 @@
     (lunaryline-default-theme)
     ;; fix different separator color after changing theme
     (add-hook 'moon-load-theme-hook #'powerline-reset))
-  (delay-load| moon-load-powerline))
+  (add-hook 'moon-post-init-hook #'moon-load-powerline))
 
 ;; not working
 ;; (after-load| spacemacs-theme
@@ -102,8 +102,7 @@
   (setq nlinum-highlight-current-line t)
   :config
   (moon/sync-nlinum-face)
-  (moon/sync-nlinum-highlight-face)
-  )
+  (moon/sync-nlinum-highlight-face))
 
 (defvar moon-enable-nyan nil
   "Whether to enable nyan cat")
@@ -113,19 +112,10 @@
   :config
   (when moon-enable-nyan
     (nyan-mode)
-    (nyan-start-animation)
-    )
-  )
+    (nyan-start-animation)))
 
 (use-package| hl-todo
-  :defer t
-  :init
-  (defun setup-hl-todo ()
-    (require 'hl-todo)
-    (global-hl-todo-mode))
-  (add-hook-for-once|
-   after-change-major-mode-hook
-   setup-hl-todo))
+  :init (global-hl-todo-mode))
 
 ;; I don't show minor mode
 ;; in modeline anymore
