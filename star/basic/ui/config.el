@@ -68,7 +68,7 @@
     (setq powerline-default-separator 'slant)
     (setq powerline-image-apple-rgb t)
     (setq powerline-height 28)
-    (load (concat moon-star-dir "basic/ui/lunaryline"))
+    (load (concat moon-star-dir "basic/ui/lunaryline/lunaryline"))
     (lunaryline-default-theme)
     ;; fix different separator color after changing theme
     (add-hook 'moon-load-theme-hook #'powerline-reset))
