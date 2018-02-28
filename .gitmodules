@@ -1,0 +1,3 @@
+[submodule "star/basic/ui/lunaryline"]
+	path = star/basic/ui/lunaryline
+	url = https://github.com/casouri/lunaryline.git
