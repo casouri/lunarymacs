@@ -255,20 +255,19 @@ INACTIVE-FACE is for others."
                                 (when-exist| eyebrowse-mode
                                   (if (buffer-modified-p)
                                       (lunaryline-eyebrowse-mode-line-indicator faceyl facey)
-                                    (lunaryline-eyebrowse-mode-line-indicator facebl faceb)
-                                    ))
-                                (when-exist| winum-mode
+                                    (lunaryline-eyebrowse-mode-line-indicator facebl faceb)))
+                                (if-exist| winum-mode
                                   (if (buffer-modified-p)
                                       (powerline-raw (lunaryline-winum) facey 'l)
-                                    (powerline-raw (lunaryline-winum) faceb 'l)
-                                    ))
+                                    (powerline-raw (lunaryline-winum) faceb 'l))
+                                  (if (buffer-modified-p)
+                                      (powerline-raw " " facey 'l)
+                                    (powerline-raw " " faceb 'l)))
                                 ;; separator >> face0
                                 ;; buffer info
-                                (when-exist| winum-mode
-                                             (if (buffer-modified-p)
-                                                 (funcall separator-left facey face0)
-                                               (funcall separator-left faceb face0)
-                                               ))
+                                (if (buffer-modified-p)
+                                    (funcall separator-left facey face0)
+                                  (funcall separator-left faceb face0))
                                 (when powerline-display-buffer-size
                                   (powerline-buffer-size face0 'l))
                                 (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
@@ -308,7 +307,10 @@ INACTIVE-FACE is for others."
                           ;; right
                           ;; use face1 instead of face2
                           (rhs (list
-                                ;; whatever junk you append to it
+                                ;; whatever you append to it
+                                ;; it's hard to explain what it does
+                                ;; and I don't really know
+                                ;; does anyone even use it?
                                 (powerline-raw global-mode-string face1 'r)
                                 ;; separator >> face0
                                 ;; encoding
