@@ -107,7 +107,7 @@ the number of errors.")
 ;; (format lunaryline-flycheck-bullet (or (cdr (assq 'warning (flycheck-count-errors flycheck-current-errors))) "?"))
 
 (dolist (state '(error warning info))
-  (let ((segment-name (intern (format "flycheck-%S" state)))
+  (let ((segment-name (intern (format "lunaryline-flycheck-%S" state)))
         ;; (face (intern (format "lunaryline-flycheck-%S" state)))
         )
     (eval
@@ -120,9 +120,14 @@ the number of errors.")
                 (s-trim lighter)
               "")))))))
 
+
 ;;
 ;; Winum
 ;;
+
+;; don't display winum in modeline
+;; because lunaryline will do that
+(setq winum-auto-setup-mode-line nil)
 
 (defpowerline lunaryline-winum
   (when (bound-and-true-p winum-mode)
@@ -261,9 +266,9 @@ the number of errors.")
                                 ;; separator >> face0
                                 ;; flycheck
                                 (only-in-prog-mode| (funcall separator-left face1 face0))
-                                (only-in-prog-mode| (flycheck-error 'lunaryline-flycheck-error 'l))
-                                (only-in-prog-mode| (flycheck-warning 'lunaryline-flycheck-warning 'l))
-                                (only-in-prog-mode| (flycheck-info 'lunaryline-flycheck-info 'l))
+                                (only-in-prog-mode| (lunaryline-flycheck-error 'lunaryline-flycheck-error 'l))
+                                (only-in-prog-mode| (lunaryline-flycheck-warning 'lunaryline-flycheck-warning 'l))
+                                (only-in-prog-mode| (lunaryline-flycheck-info 'lunaryline-flycheck-info 'l))
                                 (only-in-prog-mode| (powerline-raw " " face0))
                                 ;; separator >> face1
                                 ;; git
