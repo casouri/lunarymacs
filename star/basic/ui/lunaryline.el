@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 (require 'powerline)
-(require 's)
+;; (require 's)
 
 
 ;;
@@ -69,7 +69,18 @@ you cannot use one `disappear-when-narrow' for multiple segment."
              (derived-mode-p 'text-mode))
      ,@rest))
 
+(defmacro when-exist| (test form)
+  "When TEST is bounded and true (`bound-and-true-p'), evaluate FORM."
+  (declare (indent defun))
+  `(when (bound-and-true-p ,test)
+       ,form))
 
+(defmacro if-exist| (test form-exist form-not-exist)
+  "If `bound-and-true-p' TEST, evaluate FORM-EXIST, otherwise evaluate FORM-NOT-EXIST."
+  (declare (indent defun))
+  `(if (bound-and-true-p ,test)
+       ,form-exist
+     ,form-not-exist))
 
 ;;
 ;; Flycheck
@@ -117,7 +128,8 @@ the number of errors.")
                        (eq 'running flycheck-last-status-change)))
           (let ((lighter (lunaryline-flycheck-lighter ,state)))
             (if lighter
-                (s-trim lighter)
+                ;; (s-trim lighter)
+                lighter
               "")))))))
 
 
@@ -166,7 +178,9 @@ the number of errors.")
 ;;
 
 (defun lunaryline-eyebrowse-mode-line-indicator (active-face inactive-face)
-  "Return a string representation of the window configurations."
+  "Return a string representation of the window configurations.
+ACTIVE-FACE is for the number representing current workspace, 
+INACTIVE-FACE is for others."
   (let* ((left-delimiter (propertize eyebrowse-mode-line-left-delimiter
                                      'face inactive-face)) ; edit mark
          (right-delimiter (propertize eyebrowse-mode-line-right-delimiter
@@ -235,23 +249,26 @@ the number of errors.")
                                                            (cdr powerline-default-separator-dir))))
                           ;; left
                           (lhs (list
-                                (when (bound-and-true-p eyebrowse-mode)
+                                ;; window number & workspace number
+                                ;; faceb when not edited
+                                ;; facey when edited
+                                (when-exist| eyebrowse-mode
                                   (if (buffer-modified-p)
                                       (lunaryline-eyebrowse-mode-line-indicator faceyl facey)
                                     (lunaryline-eyebrowse-mode-line-indicator facebl faceb)
                                     ))
-                                (when (bound-and-true-p winum-mode)
+                                (when-exist| winum-mode
                                   (if (buffer-modified-p)
                                       (powerline-raw (lunaryline-winum) facey 'l)
                                     (powerline-raw (lunaryline-winum) faceb 'l)
                                     ))
                                 ;; separator >> face0
                                 ;; buffer info
-                                (when (bound-and-true-p winum-mode)
-                                  (if (buffer-modified-p)
-                                      (funcall separator-left facey face0)
-                                    (funcall separator-left faceb face0)
-                                    ))
+                                (when-exist| winum-mode
+                                             (if (buffer-modified-p)
+                                                 (funcall separator-left facey face0)
+                                               (funcall separator-left faceb face0)
+                                               ))
                                 (when powerline-display-buffer-size
                                   (powerline-buffer-size face0 'l))
                                 (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
@@ -278,14 +295,14 @@ the number of errors.")
                                 ;; separator >> face0
                                 ;; nyan
                                 (disappear-when-narrow|
-                                 (when (bound-and-true-p nyan-mode)
-                                   (funcall separator-left face1 face0)))
+                                 (when-exist| nyan-mode
+                                              (funcall separator-left face1 face0)))
                                 (disappear-when-narrow|
-                                 (when (bound-and-true-p nyan-mode)
+                                 (when-exist| nyan-mode
                                    (powerline-raw (list (nyan-create)) face0 'l)))
                                 ;; separator >> face1
                                 (disappear-when-narrow|
-                                 (when (bound-and-true-p nyan-mode) 
+                                 (when-exist| nyan-mode 
                                    (funcall separator-left face0 face1)))
                                 ))
                           ;; right
