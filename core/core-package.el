@@ -291,8 +291,8 @@ as APPEND and LOCAL. Similarly REMOVELOCAL is passed to `remove-hook' as LOCAL."
 (defmacro delay-load| (func)
   "Add FUNC to `after-change-major-mode-hook'.
 And remove FUNC from the hook at first call."
-  `(add-hook 'after-change-major-mode-hook
-             (lambda () (,func) (remove-hook 'after-change-major-mode-hook #',func))))
+  `(add-hook-for-once| after-change-major-mode-hook ,func)
+  )
 
 
 (defmacro async-load| (package &optional name)
