@@ -62,20 +62,6 @@
   (global-highlight-parentheses-mode 1))
 
 
-;; (use-package| spaceline
-;;   :defer t
-;;   :init
-;;   (defun moon-load-spaceline ()
-;;     (require 'spaceline-config)
-;;     (setq powerline-default-separator 'slant)
-;;     (setq powerline-image-apple-rgb t)
-;;     (setq powerline-height 28)
-;;     (spaceline-spacemacs-theme)
-;;     ;; fix different separator color problem after changing theme
-;;     (add-hook 'moon-load-theme-hook #'powerline-reset))
-;;   (add-hook-for-once| prog-mode-hook moon-load-spaceline)
-;;   )
-
 (use-package| powerline
   :config
   (defun moon-load-powerline ()
