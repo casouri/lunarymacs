@@ -408,7 +408,4 @@ Use example:
       )))
 
 (provide 'core-package)
-
-(provide 'core-package)
-
 ;;; core-package.el ends here
