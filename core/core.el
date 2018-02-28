@@ -68,12 +68,11 @@
 (load| core-ui)
 
 (defun moon-finalize ()
-  ;; (setq moon-before-init-time (current-time))
+  "The main starup function."
   ;; (moon-initialize)
   (timeit| "package-init"
     (moon-initialize-load-path)
    )
-  ;; (message (format "(package-initialize) time: %.03f" (float-time (time-subtract (current-time) moon-before-init-time))))
   (moon-initialize-star)
   (dolist (hook '(moon-init-hook moon-post-init-hook))
     (run-hook-with-args hook))
@@ -82,9 +81,7 @@
   (setq gc-cons-threshold 800000
         gc-cons-percentage 0.1
         file-name-handler-alist tmp-file-name-handler-alist
-        )
-  ;; (message (format "(moon-finalize) time: %.03f" (float-time (time-subtract (current-time) moon-before-init-time))))
-  )
+        ))
 
 (add-hook 'emacs-startup-hook #'moon-finalize t)
 
