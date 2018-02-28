@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 (require 'powerline)
+(require 's)
 
 
 ;;
