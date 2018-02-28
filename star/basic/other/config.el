@@ -37,8 +37,7 @@
  abbrev-file-name                    (concat moon-local-dir "abbrev.el")
  recentf-save-file                   (concat moon-local-dir "recentf")
  recentf-max-saved-items             300
- desktop-dirname                     moon-local-dir
-
+ 
  ;; edit
  indent-tabs-mode                    nil
  backup-inhibited                    t
@@ -56,9 +55,6 @@
  split-height-threshold              nil
  split-width-threshold               80
  blink-cursor-mode                   -1
-
- ;; save session
- desktop-save                       t                                        ; always save
  )
 
 
