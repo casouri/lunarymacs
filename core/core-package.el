@@ -305,6 +305,11 @@ Use example:
 \(use-package| PACKAGE :init (async-load| PACKAGE)"
   `(make-thread (lambda () (require ',package)) ,name))
 
+(defmacro silent| (&rest form)
+  "Run expressions in form without displaying message."
+  `(let ((inhibit-message t))
+    ,@form))
+
 
 ;; (defun post-config-evil () (message "it works!"))
 ;; (defun pre-init-evil () (message "it works!"))
@@ -320,7 +325,10 @@ Use example:
 
 
 (defun moon/install-package ()
-  "Install packages specified in `package.el' files in each star."
+  "Install packages specified in `package.el' files in each star.
+
+It will not print messages printed by `package-install'
+because it's too verbose."
   (interactive)
   (moon-initialize)
   ;; moon-star-path-list is created by `moon|' macro
@@ -329,11 +337,16 @@ Use example:
   (package-refresh-contents)
   (dolist (package moon-package-list)
     (unless (package-installed-p (intern package))
-      (package-install (intern package))
+      (message (format "Installing %s" package))
+      ;; installing packages prints lot too many messages
+      (silent| (package-install (intern package)))
       )))
 
 (defun moon/update-package ()
-  "Update packages to the latest version."
+  "Update packages to the latest version.
+
+It will not print messages printed by updating packages
+because it's too verbose."
   (interactive)
   (moon-initialize)
   ;; moon-star-path-list is created by `moon|' macro
@@ -346,12 +359,14 @@ Use example:
   ;; but I didn't find any codd throwing error
   ;; in package.el...
   ;; TODO find out a better implementation
-  (condition-case nil
-   (save-window-excursion
-     (package-list-packages t)
-     (package-menu-mark-upgrades)
-     (package-menu-execute t))
-      (error nil)))
+  (silent| ; don't print message
+   (condition-case nil
+       (save-window-excursion
+         (package-list-packages t)
+         (package-menu-mark-upgrades)
+         (package-menu-execute t))
+     (error nil)))
+  )
 
 (defun moon/remove-unused-package ()
   "Remove packages that are not declared in any star with `package|' macro."
@@ -371,8 +386,9 @@ Use example:
       )))
 
 (defun moon/generate-autoload-file ()
-  "Extract autload file from each star to `moon-autoload-file'."
-  (interactive)
+  "Extract autload file from each star to `moon-autoload-file'.
+"  (interactive)
+
   (moon-initialize-load-path)
   (moon-initialize-star)
   (let ((autoload-file-list
