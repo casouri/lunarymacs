@@ -92,3 +92,9 @@ h   l <   >
   "Switch to window 9, split window if not exist."
   (interactive)
   (moon-switch-to-window 9))
+
+;;;###autoload
+(defun moon/desktop-read ()
+  "Recover desktop, i.e. recover last session."
+  (interactive)
+  (desktop-read moon-local-dir))

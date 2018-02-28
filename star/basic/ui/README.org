@@ -31,11 +31,11 @@ This star configures most of the ui features of lunarymacs.
 | spacemacs-light | purple | pink   |
 
 * eyebrowse & winum
-| key       | command                                    |
-|-----------+--------------------------------------------|
-| SPC w 1-9 | switch to workspace 1-9                    |
-| SPC w w   | kill-other-window                          |
-| SPC 1-9   | switch to window 1-9 (create if not exist) |
+| key       | command                                                       |
+|-----------+---------------------------------------------------------------|
+| SPC w 1-9 | switch to workspace 1-9                                       |
+| SPC w w   | kill-other-window                                             |
+| SPC 1-9   | switch to window 1-9 (split screen with h/j/k/l if not exist) |
 
 In the very left on lunaryline:
 
@@ -50,11 +50,12 @@ workspace indicator
 In workspace indicator, number with light weight
 is current workspace
 
-* Save desktop across sessions
+* Other commands
 
-#+BEGIN_SRC lisp
-(setq moon-save-desktop t)
-#+END_SRC
+| key     | command                                    |
+|---------+--------------------------------------------|
+| SPC w r | recover last session                       |
+
 * nyan-cat
 #+BEGIN_SRC lisp
 (setq moon-enable-nyan t)

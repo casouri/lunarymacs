@@ -61,8 +61,6 @@
    "`"  #'eval-expression
    ;; toggle
    "tt" #'moon/switch-theme
-   ;; workspace
-   "wr" #'desktop-read
    ;; error
    "ej" #'hydra-error/next-error
    "ek" #'hydra-error/previous-error

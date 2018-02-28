@@ -190,10 +190,8 @@
 ;; Desktop
 ;;
 
-(defvar moon-save-desktop nil
-  "Whether to save desktop across session.")
+(add-hook 'moon-post-init-hook #'desktop-save-mode)
 
-(add-hook 'kill-emacs-hook
-             (lambda ()
-               (when moon-save-desktop
-                 (desktop-save moon-local-dir))))
+(post-config| general
+  (default-leader
+    "wr" #'moon/desktop-read))
