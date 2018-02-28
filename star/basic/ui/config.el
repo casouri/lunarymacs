@@ -77,8 +77,7 @@
 ;;   )
 
 (use-package| powerline
-  :defer t
-  :init
+  :config
   (defun moon-load-powerline ()
     (setq powerline-default-separator 'slant)
     (setq powerline-image-apple-rgb t)
@@ -86,13 +85,8 @@
     (load (concat moon-star-dir "basic/ui/lunaryline"))
     (lunaryline-default-theme)
     ;; fix different separator color after changing theme
-    (add-hook 'moon-load-theme-hook #'powerline-reset)
-    )
-  ;; (add-hook 'moon-init-hook #'moon-load-powerline)
-  (add-hook-for-once| prog-mode-hook moon-load-powerline)
-  (add-hook-for-once| text-mode-hook moon-load-powerline)
-  ;; (moon-load-powerline)
-  )
+    (add-hook 'moon-load-theme-hook #'powerline-reset))
+  (delay-load| moon-load-powerline))
 
 ;; not working
 ;; (after-load| spacemacs-theme
