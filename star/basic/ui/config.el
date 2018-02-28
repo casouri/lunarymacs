@@ -55,11 +55,14 @@
 
 (use-package| highlight-parentheses
   :init
-  ;;highlight only the most inner pair
-  (setq hl-paren-colors '("green"))
   :config
   (set-face-attribute 'hl-paren-face nil :weight 'bold)
-  (global-highlight-parentheses-mode 1))
+  (global-highlight-parentheses-mode 1)
+  ;;highlight only the most inner pair
+  (setq hl-paren-colors '("green"))
+  ;; red in light theme, green in dark
+  (change-by-theme '((spacemacs-dark . (progn (setq hl-paren-colors '("green")) (hl-paren-color-update)))
+                     (spacemacs-light . (progn (setq hl-paren-colors '("red")) (hl-paren-color-update))))))
 
 
 (use-package| powerline
