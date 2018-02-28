@@ -269,7 +269,7 @@ to be evaluated at the end of `moon-initialize-star'"
 
 Accepts expressions EXP-LIST, they will be run in `moon-post-init-hook'.
 Expressions will be appended."
-  `(add-hook 'moon-post-init-hook
+  `(add-hook 'moon-init-hook
              (lambda () ,@exp-list) t))
 
 (defmacro async-load| (package &optional name)
@@ -371,12 +371,13 @@ because it's too verbose."
   (let ((autoload-file-list
          (file-expand-wildcards
 	  ;; core autoload
-          (expand-file-name "autoload/*.el" moon-core-dir))))
+          (expand-file-name "autoload/*.el" moon-core-dir)))
+        (package-autoload-file-list ()))
     ;; package autoload
     (dolist (file (directory-files-recursively
 		   (concat moon-package-dir "elpa/")
 		   "\\.el$"))
-      (push (expand-file-name file) autoload-file-list))
+      (push (expand-file-name file) package-autoload-file-list))
     ;; star autoload
     (dolist (star-path moon-star-path-list)
       (let ((auto-dir (expand-file-name "autoload" star-path))
@@ -392,13 +393,19 @@ because it's too verbose."
         (message "Delete old autoload file")
         )
       )
+    ;; autoload file in stars
     (dolist (file (reverse autoload-file-list))
       (message
        (cond ((update-file-autoloads file t moon-autoload-file)
               "Nothing in %s")
              (t "Scanned %s"))
-       (file-relative-name file moon-emacs-d-dir))
-      )))
+       (file-relative-name file moon-emacs-d-dir)))
+    ;; autoload files in packages
+    (message "Loading autoload file from packages...")
+    (dolist (file (reverse package-autoload-file-list))
+      (update-file-autoloads file t moon-autoload-file))
+    ))
+
 
 (provide 'core-package)
 ;;; core-package.el ends here
