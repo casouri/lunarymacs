@@ -1,4 +1,36 @@
-;;; -*- lexical-binding: t -*-
+;;; lunaryline.el --- fast and minimum alternative of spaceline  -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2018  Yuan Fu
+
+;; Author: Yuan Fu <yuan@missSilver>
+;; URL: https://github.com/casouri/lunaryline
+;; Version: 0.0.9
+;; Keywords: convenience, extensions, powerline, spaceline, spacemacs
+;; Package-Requires: ((emacs "24.4") (powerline "2.3"))
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; This is a fast and minimum alternative to beautiful but slow spaceline.
+;; Like spaceline, lunaryline is based on powerline.
+;; Unlike spaceline, there is no customization functionality.
+;; In another word, lunaryline is a powerline theme that looks like spaceline.
+
+;;; Code:
 
 (require 'powerline)
 ;; (require 's)
@@ -64,7 +96,7 @@ you cannot use one `disappear-when-narrow' for multiple segment."
      ,@rest))
 
 (defmacro only-in-prog-mode| (&rest rest)
-  "Only enable segment when in modes derived from prog-mode or text-mode."
+  "Only evaluate expressions in REST when in modes derived from ‘prog-mode’ or ‘text-mode’."
   `(when (or (derived-mode-p 'prog-mode)
              (derived-mode-p 'text-mode))
      ,@rest))
@@ -179,7 +211,7 @@ the number of errors.")
 
 (defun lunaryline-eyebrowse-mode-line-indicator (active-face inactive-face)
   "Return a string representation of the window configurations.
-ACTIVE-FACE is for the number representing current workspace, 
+ACTIVE-FACE is for the number representing current workspace,
 INACTIVE-FACE is for others."
   (let* ((left-delimiter (propertize eyebrowse-mode-line-left-delimiter
                                      'face inactive-face)) ; edit mark
@@ -301,7 +333,7 @@ INACTIVE-FACE is for others."
                                    (powerline-raw (list (nyan-create)) face0 'l)))
                                 ;; separator >> face1
                                 (disappear-when-narrow|
-                                 (when-exist| nyan-mode 
+                                 (when-exist| nyan-mode
                                    (funcall separator-left face0 face1)))
                                 ))
                           ;; right
@@ -334,3 +366,7 @@ INACTIVE-FACE is for others."
                      (concat (powerline-render lhs)
                              (powerline-fill face1 (powerline-width rhs))
                              (powerline-render rhs)))))))
+
+(provide 'lunaryline)
+
+;;; lunaryline.el ends here
