@@ -98,3 +98,69 @@ h   l <   >
   "Recover desktop, i.e. recover last session."
   (interactive)
   (desktop-read moon-local-dir))
+
+
+
+;;;###autoload
+(defun moon-kill-buffer-in-window (num)
+  "Kill the buffer in window NUM."
+  (let ((window (winum-get-window-by-number num)))
+    (when window
+      (let ((buffer (window-buffer window)))
+        (when buffer
+          (kill-buffer buffer))))))
+
+;;;###autoload
+(defun moon/kill-buffer-in-window-1 ()
+  "Kill the buffer in window 1."
+  (interactive)
+  (moon-kill-buffer-in-window 1))
+
+;;;###autoload
+(defun moon/kill-buffer-in-window-2 ()
+  "Kill the buffer in window 2."
+  (interactive)
+  (moon-kill-buffer-in-window 2))
+
+;;;###autoload
+(defun moon/kill-buffer-in-window-3 ()
+  "Kill the buffer in window 3."
+  (interactive)
+  (moon-kill-buffer-in-window 3))
+
+;;;###autoload
+(defun moon/kill-buffer-in-window-4 ()
+  "Kill the buffer in window 4."
+  (interactive)
+  (moon-kill-buffer-in-window 4))
+
+;;;###autoload
+(defun moon/kill-buffer-in-window-5 ()
+  "Kill the buffer in window 5."
+  (interactive)
+  (moon-kill-buffer-in-window 15)
+
+;;;###autoload
+(defun moon/kill-buffer-in-window-6 ()
+  "Kill the buffer in window 6."
+  (interactive)
+  (moon-kill-buffer-in-window 6))
+
+;;;###autoload
+(defun moon/kill-buffer-in-window-7 ()
+  "Kill the buffer in window 7."
+  (interactive)
+  (moon-kill-buffer-in-window 7))
+
+;;;###autoload
+(defun moon/kill-buffer-in-window-8 ()
+  "Kill the buffer in window 8."
+  (interactive)
+  (moon-kill-buffer-in-window 8))
+
+;;;###autoload
+(defun moon/kill-buffer-in-window-9 ()
+  "Kill the buffer in window 9."
+  (interactive)
+  (moon-kill-buffer-in-window 9))
+
