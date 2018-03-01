@@ -1,0 +1,2 @@
+(package| projectile
+          counsel-projectile)

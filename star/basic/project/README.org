@@ -1,0 +1,20 @@
+#+TITLE: project
+
+This star adds project awarness to lunarymacs.
+
+* Package list
+- projectile
+- counsel-projectile
+  
+* Commands
+
+| key       | command                             |
+|-----------+-------------------------------------|
+| SPC p SPC | counsel-projectile-find-file        |
+| SPC p f   | counsel-projectile-find-file        |
+| SPC p d   | counsel-projectile-find-dir         |
+| SPC p b   | counsel-projectile-switch-to-buffer |
+| SPC p s   | counsel-projectile-rg               |
+| SPC p r   | projectile-recentf                  |
+| SPC p p   | counsel-projectile-switch-project   |
+
