@@ -88,6 +88,9 @@
  ;; hide bad title when using natural title bar in Emacs 26
  (setq  frame-title-format '(""))
 
+ (nyan-mode)
+ (nyan-start-animation)
+
  ;;
  ;;customize ends here
  )
