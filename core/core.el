@@ -18,7 +18,8 @@
 (defvar moon-init-time nil
   "How long it took for emacs to start")
 
-(defvar lunary-version "0.9.0")
+(defvar lunary-version "0.9.0"
+  "Current version of lunarymacs.")
 
 
 ;; DEBUG
