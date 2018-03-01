@@ -91,6 +91,10 @@
  (nyan-mode)
  (nyan-start-animation)
 
+  ;; company-childframe
+  (load (concat moon-emacs-d-dir "star/completion/company/posframe/posframe"))
+  (load (concat moon-emacs-d-dir "star/completion/company/company-childframe/company-childframe"))
+  (company-childframe-mode 1)
  ;;
  ;;customize ends here
  )

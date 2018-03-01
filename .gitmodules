@@ -1,3 +1,9 @@
 [submodule "star/basic/ui/lunaryline"]
 	path = star/basic/ui/lunaryline
 	url = https://github.com/casouri/lunaryline.git
+[submodule "star/completion/company/company-childframe"]
+	path = star/completion/company/company-childframe
+	url = https://github.com/tumashu/company-childframe.git
+[submodule "star/completion/company/posframe"]
+	path = star/completion/company/posframe
+	url = https://github.com/tumashu/posframe.git
