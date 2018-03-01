@@ -49,6 +49,8 @@
    ;; file
    "fR" #'moon/rename-file
    "fs" #'save-buffer
+   "fed" #'moon/open-init-file
+   "feD" #'moon/compare-init-to-example
    ;; quit
    "qq" #'save-buffers-kill-emacs
    ;; buffer

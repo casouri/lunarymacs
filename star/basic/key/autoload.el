@@ -28,3 +28,16 @@ Used to jump back and forth between two buffers.")
   "Close help buffer"
   (interactive)
   (kill-buffer "*Help*"))
+
+;;;###autoload
+(defun moon/open-init-file ()
+  "Open init.el."
+  (interactive)
+  (find-file (concat moon-emacs-d-dir "init.el")))
+
+;;;###autoload
+(defun moon/compare-init-to-example ()
+  "Compare init.el to init.example.el to get the latest update."
+  (interactive)
+  (ediff (concat moon-emacs-d-dir "init.el")
+         (concat moon-emacs-d-dir "init.example.el")))

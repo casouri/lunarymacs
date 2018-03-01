@@ -10,4 +10,5 @@
           evil-mc
 	  evil-escape
           evil-multiedit
+          evil-ediff
           )

@@ -71,3 +71,6 @@
   (define-key evil-multiedit-insert-state-map (kbd "C-p") #'evil-multiedit-prev)
   (evil-ex-define-cmd "ie[dit]" #'evil-multiedit-ex-match))
 
+
+(use-package| evil-ediff
+  :hook (ediff-mode . (lambda () (require 'evil-ediff))))
