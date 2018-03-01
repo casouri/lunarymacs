@@ -93,15 +93,8 @@
   (moon/sync-nlinum-face)
   (moon/sync-nlinum-highlight-face))
 
-(defvar moon-enable-nyan nil
-  "Whether to enable nyan cat")
-
 (use-package| nyan-mode
-  :init (setq nyan-wavy-trail t)
-  :config
-  (when moon-enable-nyan
-    (nyan-mode)
-    (nyan-start-animation)))
+  :init (setq nyan-wavy-trail t))
 
 (use-package| hl-todo
   :init (global-hl-todo-mode))
