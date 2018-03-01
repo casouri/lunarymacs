@@ -1,0 +1,22 @@
+#+TITLE: dir
+
+* Package list
+  
+- ranger
+- neotree
+- all-the-icons
+- dired-narrow
+
+* Commands
+| key     | command                 |
+|---------+-------------------------|
+| SPC t n | neotree-toggle          |
+| SPC t r | ranger                  |
+| SPC t h | moon/toggle-hidden-file |
+
+
+In dired-mode:
+
+| key | command      |
+|-----+--------------|
+| F   | dired-narrow |
