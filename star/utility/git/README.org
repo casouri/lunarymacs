@@ -1,0 +1,13 @@
+#+TITLE: git
+
+This star provides Git related functionality.
+
+* Package list
+- magit
+- evil-magit
+  
+* Commands
+
+| key     | command      |
+|---------+--------------|
+| SPC g s | magit-status |
