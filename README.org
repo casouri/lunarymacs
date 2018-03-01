@@ -58,6 +58,9 @@ git pull --rebase
 # or
 make update-moon # it's the same
 #+END_SRC
+
+After every update,
+hit SPC f e D and check for update from example init file.
  
 * Thank you
 Thanks to all the contributors of spacemacs and doom-emacs. I copyied a lot of code from them.
