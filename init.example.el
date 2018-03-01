@@ -9,6 +9,7 @@
        ui
        other
        edit
+       project
        :completion
        ivy
        company
