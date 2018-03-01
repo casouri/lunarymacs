@@ -30,28 +30,30 @@
        )
 
 
-
-(customize| 
- ;; load after stars
-
- ;; theme toggle
- ;; (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
- ;; (moon-set-font| :family "SF Mono" :weight 'light :size 14)
-
- ;;
- ;;customize ends here
- )
-
 ;;
-;; Settings evaluate befor loading any stars
+;; Settings evaluate befor loading any stars i.e. user-init
 ;;
 
 
 ;; max
 (toggle-frame-maximized)
 
-;;nyan-cat
-;; (setq moon-enable-nyan t)
-
 ;; default was ", "
 (setq eyebrowse-mode-line-separator " ")
+
+;;
+;; Settings to overwrite configs in stars i.e. user-config
+;;
+
+(customize| 
+
+ ;; theme toggle
+ ;; (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
+
+ ;; font
+ ;; (moon-set-font| :family "SF Mono" :weight 'light :size 14)
+
+ ;;
+ ;;customize ends here
+ )
+
