@@ -18,6 +18,8 @@
 (defvar moon-init-time nil
   "How long it took for emacs to start")
 
+(defvar lunary-version "0.9.0")
+
 
 ;; DEBUG
 ;; (setq moon-core-dir "/Users/yuan/.emacs.second/core")
