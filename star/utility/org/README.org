@@ -1,8 +1,20 @@
 #+TITLE: org
 
 
+* Package list
+
+- ob-ipython
+- org-bullets
+
 * IPython support
 It enables ipython-like operations in org-mode.
 
 * Org-bullets
 Adds fancy utf-8 bullets for headlines.
+
+Enable by
+#+BEGIN_SRC lisp
+(setq moon-enable-org-bullets t)
+;; OR
+(org-bullets-mode)
+#+END_SRC
