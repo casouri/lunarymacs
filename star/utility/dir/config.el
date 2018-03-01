@@ -37,4 +37,4 @@
 
 (use-package| dired-narrow
   :commands dired-narrow
-  :config (define-key 'dired-mode-map "F" #'dired-narrow))
+  :config (define-key dired-mode-map "F" #'dired-narrow))
