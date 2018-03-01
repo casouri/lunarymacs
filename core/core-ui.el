@@ -95,7 +95,8 @@ And such list cannot be passed into a `font-spec'.")
               powerline-blue poweline-green
               poweline-yellow mac-red mac-green
               mac-yellow
-              ))
+              )
+  "All prededined colors.")
 
 (defvar doom-blue "#56B0EC"
   "Blue color of doom-emacs.")
