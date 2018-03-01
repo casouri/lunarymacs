@@ -34,6 +34,17 @@ Contains only core dir ,star dir and load path for built in libraries")
 (defvar moon-autoload-file (concat moon-local-dir "autoloads.el")
   "The path of autoload file which has all the autoload functions.")
 
+(defvar moon-star-loaded nil
+  "Whether `moon-initialize-star' has benn called.")
+
+(defvar moon-package-loaded nil
+  "Whether `moon-load-package' has benn called.")
+
+(defvar moon-config-loaded nil
+  "Whether `moon-load-config' has benn called.")
+
+(defvar moon-load-path-loaded nil
+  "Whether `moon-initialize-load-path' has benn called.")
 
 (fset 'moon-grand-use-package-call
       '(lambda ()
@@ -70,6 +81,8 @@ Contains only core dir ,star dir and load path for built in libraries")
     ;; make sure use-package and bind-key are in load path on the very first install
     (add-to-list 'load-path (car (directory-files (concat moon-package-dir "elpa/") t "use-package.+")) t)
     (add-to-list 'load-path (car (directory-files (concat moon-package-dir "elpa/") t "bind-key.+")) t)
+
+    (setq moon-load-path-loaded t)
     )
 
 (defun moon-initialize-star ()
@@ -83,6 +96,7 @@ Contains only core dir ,star dir and load path for built in libraries")
   (timeit| "use-package"
     (require 'use-package)
    (moon-grand-use-package-call))
+  (setq moon-star-loaded t)
   )
 
 (defun moon-load-autoload ()
@@ -117,7 +131,8 @@ i.e. :keyword to \"keyword\"."
       (if (file-exists-p path)
           (load path)
         (message (format "%s does not exist!" path)))
-      )))
+      ))
+  (setq moon-config-loaded t))
 
 (defun moon-load-package (path-list)
   "Load package.el in each star in PATH-LIST."
@@ -126,7 +141,8 @@ i.e. :keyword to \"keyword\"."
       (if (file-exists-p path)
           (load path)
         (message (format "%s does not exist!" path)))
-      )))
+      ))
+  (setq moon-package-loaded t))
 
 ;; TEST
 ;; (setq test-star-list '(:ui basic-ui))
@@ -370,11 +386,15 @@ because it's too verbose."
 (defun moon/remove-unused-package ()
   "Remove packages that are not declared in any star with `package|' macro."
   (interactive)
-  (moon-initialize-load-path)
+
+  (unless moon-load-path-loaded
+    (moon-initialize-load-path))
   (moon-initialize)
+  
   ;; moon-star-path-list is created by `moon|' macro
   ;; moon-load-package loads `moon-package-list'
-  (moon-load-package moon-star-path-list)
+  (unless moon-package-loaded
+    (moon-load-package moon-star-path-list))
   (dolist (package package-alist)
     (let ((package-name (car package))
           (package-description (car (cdr package))))
@@ -385,11 +405,14 @@ because it's too verbose."
       )))
 
 (defun moon/generate-autoload-file ()
-  "Extract autload file from each star to `moon-autoload-file'.
-"  (interactive)
+  "Extract autload file from each star to `moon-autoload-file'."
+  (interactive)
+  
+  (unless moon-load-path-loaded
+    (moon-initialize-load-path))
+  ;; (unless moon-star-loaded
+  ;;   (moon-initialize-star))
 
-  (moon-initialize-load-path)
-  (moon-initialize-star)
   (let ((autoload-file-list
          (file-expand-wildcards
 	  ;; core autoload

@@ -1,14 +1,16 @@
 .RECIPEPREFIX = >
 
-EMACS_FLAGS=--eval '(load "~/.emacs.d/init.el")'
+EMACS_FLAGS=-l init.el
 EMACS=emacs --quick --batch $(EMACS_FLAGS)
 
 .PHONY: install autoload autoremove update clean doc help update-moon
 
 # install have to be in the front
-# otherwise use-package will not be find
+# otherwise use-package will not be avaliable
 # on fresh install
-all: | install autoload autoremove
+# all: | install autoload autoremove
+all:
+>@$(EMACS) --eval '(progn (message "Installing packages...") (moon/install-package) (message "Generating autoload file...") (moon/generate-autoload-file) (message "Removing unused packages...") (moon/remove-unused-package))'
 
 help:
 >@echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean update-moon"
