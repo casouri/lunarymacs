@@ -10,7 +10,9 @@ EMACS=emacs --quick --batch $(EMACS_FLAGS)
 # on fresh install
 # all: | install autoload autoremove
 all:
->@$(EMACS) --eval '(progn (message "Installing packages...") (moon/install-package) (message "Generating autoload file...") (moon/generate-autoload-file) (message "Removing unused packages...") (moon/remove-unused-package))'
+>@$(EMACS) --eval '(progn (message "Installing packages...") (moon/install-package) (message "Generating autoload file...") (moon/generate-autoload-file) (message "Removing unused packages...") (moon/remove-unused-package))' ;\
+rm -f .local/autoloads.el~
+
 
 help:
 >@echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean update-moon"
@@ -31,12 +33,12 @@ $(EMACS) -f moon/install-package
 
 autoload: init.el
 >@echo "Generating autoload files" ;\
-$(EMACS) -f moon/generate-autoload-file
+$(EMACS) -f moon/generate-autoload-file ;\
+rm -f .local/autoloads.el~
 
 autoremove: init.el .local/autoloads.el
 >@echo "Removing unused packages" ;\
-$(EMACS) -f moon/remove-unused-package ;\
-rm -f .local/autoloads.el~
+$(EMACS) -f moon/remove-unused-package
 
 update: init.el .local/autoloads.el
 >@echo "Updating packages" ;\
