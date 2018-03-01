@@ -138,7 +138,7 @@ h   l <   >
 (defun moon/kill-buffer-in-window-5 ()
   "Kill the buffer in window 5."
   (interactive)
-  (moon-kill-buffer-in-window 15)
+  (moon-kill-buffer-in-window 5))
 
 ;;;###autoload
 (defun moon/kill-buffer-in-window-6 ()

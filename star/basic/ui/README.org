@@ -31,11 +31,12 @@ This star configures most of the ui features of lunarymacs.
 | spacemacs-light | purple | pink   |
 
 * eyebrowse & winum
-| key       | command                                                       |
-|-----------+---------------------------------------------------------------|
-| SPC w 1-9 | switch to workspace 1-9                                       |
-| SPC w w   | kill-other-window                                             |
-| SPC 1-9   | switch to window 1-9 (split screen with h/j/k/l if not exist) |
+| key         | command                                                       |
+|-------------+---------------------------------------------------------------|
+| SPC w 1-9   | switch to workspace 1-9                                       |
+| SPC w w     | kill-other-window                                             |
+| SPC 1-9     | switch to window 1-9 (split screen with h/j/k/l if not exist) |
+| SPC w k 1-9 | kill buffer in window 1-9            |
 
 In the very left on lunaryline:
 

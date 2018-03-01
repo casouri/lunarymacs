@@ -153,6 +153,15 @@
     "7" #'moon/switch-to-window-7
     "8" #'moon/switch-to-window-8
     "9" #'moon/switch-to-window-9
+    "wk1" #'moon/kill-buffer-in-window-1
+    "wk2" #'moon/kill-buffer-in-window-2
+    "wk3" #'moon/kill-buffer-in-window-3
+    "wk4" #'moon/kill-buffer-in-window-4
+    "wk5" #'moon/kill-buffer-in-window-5
+    "wk6" #'moon/kill-buffer-in-window-6
+    "wk7" #'moon/kill-buffer-in-window-7
+    "wk8" #'moon/kill-buffer-in-window-8
+    "wk9" #'moon/kill-buffer-in-window-9
     ))
 
 
@@ -161,10 +170,16 @@
   (push '(("\\(.*\\) 1" . "moon/switch-to-window-1") . ("\\1 1..9" . "window 1..9")) which-key-replacement-alist)
   ;; hide other keys
   (push '((nil . "moon/switch-to-window-[2-9]") . t) which-key-replacement-alist)
+
   ;; create a fake key to represent all ten eyebrowse function
   (push '(("\\(.*\\) 1" . "eyebrowse-switch-to-window-config-1") . ("\\1 1..9" . "workspace 1..9")) which-key-replacement-alist)
   ;; hide other keys
   (push '((nil . "eyebrowse-switch-to-window-config-[2-9]") . t) which-key-replacement-alist)
+
+  ;; create a fake key to represent all ten eyebrowse function
+  (push '(("\\(.*\\) 1" . "moon/kill-buffer-in-window-[1-9]") . ("\\1 1..9" . "kill buffer in window 1..9")) which-key-replacement-alist)
+  ;; hide other keys
+  (push '((nil . "moon/kill-buffer-in-window-[2-9]") . t) which-key-replacement-alist)
   )
 
 
