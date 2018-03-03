@@ -7,3 +7,6 @@
 [submodule "star/completion/company/posframe"]
 	path = star/completion/company/posframe
 	url = https://github.com/tumashu/posframe.git
+[submodule "star/lang/python/jpnb-state"]
+	path = star/lang/python/jpnb-state
+	url = https://github.com/casouri/jpnb-state.git
