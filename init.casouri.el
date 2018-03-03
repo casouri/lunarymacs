@@ -73,6 +73,9 @@
 ;; relative line number
 (setq moon-enable-nlinum-relative t)
 
+;; company-yasnippet
+(setq moon-enable-company-yas t)
+
 ;;
 ;; Settings to overwrite configs in stars i.e. user-config
 ;;
