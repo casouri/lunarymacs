@@ -110,7 +110,9 @@
     (nlinum-relative-setup-evil)
     (global-nlinum-relative-mode 1)
     (moon/sync-nlinum-relative-current-line-face)
-    (setq nlinum-relative-redisplay-delay 0)))
+    ;; minimun delay makes sure
+    ;; line number doesn't update when scrolling
+    (setq nlinum-relative-redisplay-delay 0.1)))
 
 (post-config| general
   (default-leader
