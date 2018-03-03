@@ -67,7 +67,6 @@ Contains only core dir ,star dir and load path for built in libraries")
 ;; Func
 ;;
 
-;; TODO change (package-initialize) to (package-initialize t)
 (defun moon-initialize ()
   "Initialize installed packages (using package.el)."
   (package-initialize t)
@@ -262,21 +261,13 @@ to be evaluated at the end of `moon-initialize-star'"
          ,package
          ,@rest-list
          :init
-         (let (
-               (symb (intern (format "pre-init-%s" (symbol-name ',package))))
-               )
+         (let ((symb (intern (format "pre-init-%s" (symbol-name ',package)))))
            (when (fboundp symb)
-             (eval (list symb)))
-           )
-         ;; (eval (list (intern (format "pre-init-%s" (symbol-name ',package)))))
+             (eval (list symb))))
          :config
-         (let (
-               (symb (intern (format "post-config-%s" (symbol-name ',package))))
-               )
+         (let ((symb (intern (format "post-config-%s" (symbol-name ',package)))))
            (when (fboundp symb)
-             (eval (list symb)))
-           )
-         ;; (eval (list (intern (format "post-config-%s" (symbol-name ',package)))))
+             (eval (list symb))))
          )))))
 
 
