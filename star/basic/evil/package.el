@@ -7,7 +7,6 @@
           evil-terminal-cursor-changer
           evil-matchit
           vi-tilde-fringe
-          evil-mc
 	  evil-escape
           evil-multiedit
           evil-ediff

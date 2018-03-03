@@ -39,9 +39,6 @@
             "c" #'evilnc-comment-operator)
   )
 
-(use-package| evil-mc
-  :commands (evil-mc-find-next-cursor
-             evil-mc-find-prev-cursor))
 
 (use-package| evil-escape
   :config (evil-escape-mode 1))
