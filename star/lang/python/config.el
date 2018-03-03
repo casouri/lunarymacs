@@ -35,7 +35,7 @@
   (setq ein:worksheet-enable-undo 'yes)
   (load (concat
          moon-emacs-d-dir
-         "star/lang/python/jpnb-state.el")))
+         "star/lang/python/jpnb-state/jpnb-state.el")))
 
 (post-config| general
   (local-leader
@@ -46,5 +46,3 @@
               )
    "j" #'evil-jpnb-state
    ))
-
-;; (define-key ein:notebook-multilang-mode-map "gj" #'evil-jpnb-state)
