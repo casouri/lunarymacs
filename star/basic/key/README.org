@@ -11,7 +11,7 @@
 * General
 
 - Leader key: SPC
-- Local leader key: ,
+- Local leader key: S-SPC
 - non normal-mode leader: M-SPC
 - non normal local leader: C-,
 

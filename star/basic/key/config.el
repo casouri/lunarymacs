@@ -9,18 +9,18 @@
   :after which-key
   :init
   (defvar moon-leader "SPC")
-  (defvar moon-local-leader ",")
+  (defvar moon-local-leader "S-SPC")
   (defvar moon-non-normal-leader "M-SPC")
   (defvar moon-local-non-normal-leader "C-,")
   :config
   (general-override-mode)
   (general-create-definer default-leader
-    :states '(normal visual insert emacs)
+    :states '(normal visual insert emacs jpnb)
     :keymaps 'override
     :prefix moon-leader
     :non-normal-prefix moon-non-normal-leader)
   (general-create-definer local-leader
-    :states '(normal visual insert emacs)
+    :states '(normal visual insert emacs jpnb)
     :prefix moon-local-leader
     :non-normal-prefix moon-local-non-normal-leader)
 
