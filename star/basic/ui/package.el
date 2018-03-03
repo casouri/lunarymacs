@@ -3,10 +3,10 @@
 (package|
  spacemacs-theme
  rainbow-delimiters
- hlinum
- nlinum
  highlight-parentheses
  hl-todo
+ nlinum
+ nlinum-relative
  spaceline
  powerline
  rainbow-mode

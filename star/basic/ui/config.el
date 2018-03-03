@@ -99,6 +99,23 @@
 (use-package| hl-todo
   :init (global-hl-todo-mode))
 
+(defvar moon-enable-nlinum-relative nil
+  "Whether to enable relative line number.")
+
+(use-package| nlinum-relative
+  :config
+  (add-hook 'moon-load-theme-hook #'moon/sync-nlinum-relative-current-line-face)
+  (add-hook 'nlinum-relative-mode-hook #'moon/sync-nlinum-relative-current-line-face)
+  (when moon-enable-nlinum-relative
+    (nlinum-relative-setup-evil)
+    (global-nlinum-relative-mode 1)
+    (moon/sync-nlinum-relative-current-line-face)
+    (setq nlinum-relative-redisplay-delay 0)))
+
+(post-config| general
+  (default-leader
+    "tl" #'nlinum-relative-toggle))
+
 ;; I don't show minor mode
 ;; in modeline anymore
 
