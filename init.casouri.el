@@ -70,6 +70,9 @@
 ;; Don't blink
 (blink-cursor-mode -1)
 
+;; relative line number
+(setq moon-enable-nlinum-relative t)
+
 ;;
 ;; Settings to overwrite configs in stars i.e. user-config
 ;;
