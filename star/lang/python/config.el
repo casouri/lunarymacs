@@ -38,13 +38,13 @@
          "star/lang/python/jpnb-state.el")))
 
 (post-config| general
-  (general-define-key
-   :keymaps '(ein:notebook-mode-map
+  (local-leader
+    :keymaps '(ein:notebook-mode-map
               ein:notebook-multilang-mode-map
               ein:notebook-python-mode-map
               ein:notebook-plain-mode-map
-              override)
-   "gj" #'evil-jpnb-state
+              )
+   "j" #'evil-jpnb-state
    ))
 
 ;; (define-key ein:notebook-multilang-mode-map "gj" #'evil-jpnb-state)
