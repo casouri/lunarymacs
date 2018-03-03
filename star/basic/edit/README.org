@@ -1,0 +1,24 @@
+#+TITLE: edit
+
+
+* Package list
+
+- expand-region
+- undo-tree
+- avy
+- recentf-ext
+- smooth-scrolling
+- minimap
+- avy
+
+* Commands
+
+| key        | command                        |
+|------------+--------------------------------|
+| SPC v      | expand-region                  |
+| SPC k      | avy-goto-char                  |
+| C-return   | moon/jump-new-line-below       |
+| C-S-return | moon/jump-newline-above        |
+| C-;        | moon/insert-semi-at-eol        |
+| J          | moon/scroll-down-reserve-point |
+| K          | moon/scroll-up-reserve-point   |

@@ -1,0 +1,37 @@
+#+TITLE: evil
+
+
+* Package list
+
+- evil
+- evil-surround
+- evil-nerd-commenter
+- evil-search-highlight-persist
+- evil-terminal-cursor-changer
+- evil-matchit
+- vi-tilde-fringe
+- evil-mc
+- evil-escape
+- evil-multiedit
+- evil-ediff
+
+* Commands
+
+In visual-mode:
+
+| key   | command                              |
+|-------+--------------------------------------|
+| s     | evil-surround-region                 |
+| S     | evil-substitute                      |
+| R     | evil-multiedit-match-all             |
+| s-d   | evil-multiedit-match-symbol-and-next |
+| s-D   | evil-multiedit-match-symbol-and-prev |
+| C-s-D | evil-multiedit-restore               |
+|       |                                      |
+
+In evil-multiedit-state:
+
+| key | command             |
+|-----+---------------------|
+| C-n | evil-multiedit-next |
+| C-p | evil-multiedit-prev |

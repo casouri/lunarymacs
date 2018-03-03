@@ -1,0 +1,19 @@
+#+TITLE: key
+
+
+* Package list
+
+- general
+- which-key
+- hydra
+
+  
+* General
+
+- Leader key: SPC
+- Local leader key: ,
+- non normal-mode leader: M-SPC
+- non normal local leader: C-,
+
+* Commands
+
