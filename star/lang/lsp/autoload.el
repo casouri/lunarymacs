@@ -36,3 +36,8 @@ will be set to t."
   (when (called-interactively-p 'any)
     (setq moon-smart-toggle-lsp-ui nil)))
 
+
+;;;###autoload
+(define-minor-mode lsp-format-on-save-mode
+  "Calls `lsp-format-buffer' on save."
+  (add-hook 'before-save-hook #'lsp-format-buffer t))
