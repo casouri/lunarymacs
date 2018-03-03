@@ -33,8 +33,6 @@
 (define-key evil-jpnb-state-map "p" #'ein:worksheet-yank-cell)
 (define-key evil-jpnb-state-map "s" #'ein:worksheet-split-cell-at-point)
 (define-key evil-jpnb-state-map "m" #'ein:worksheet-merge-cell)
-(define-key evil-jpnb-state-map "j" #'ein:worksheet-goto-next-input)
-(define-key evil-jpnb-state-map "j" #'ein:worksheet-goto-next-input)
-(define-key evil-jpnb-state-map "j" #'ein:worksheet-goto-next-input)
-(define-key evil-jpnb-state-map "j" #'ein:worksheet-goto-next-input)
-(define-key evil-jpnb-state-map "j" #'ein:worksheet-goto-next-input)
+(define-key evil-jpnb-state-map "zz" #'evil-scroll-line-to-center)
+
+(provide 'jpnb-state)
