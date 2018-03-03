@@ -25,3 +25,10 @@
              quickrun-autorun-mode
              ))
 
+(use-package| ein
+  :commands (ein:notebooklist-open
+             ein:notebooklist-new-notebook
+             ein:notebooklist-open-notebook-global
+             ein:notebooklist-login
+             ein:junk-new))
+

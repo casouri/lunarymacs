@@ -2,4 +2,5 @@
 
 (package| lsp-python
           pyvenv
+          ein
           quickrun)
