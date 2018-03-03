@@ -16,4 +16,24 @@
 - non normal local leader: C-,
 
 * Commands
+  
+| key | command                      |
+|-----+------------------------------|
+| fR  | moon/rename-file             |
+| fs  | save-buffer                  |
+| fed | moon/open-init-file          |
+| feD | moon/compare-init-to-example |
+| qq  | save-buffers-kill-emacs      |
+| bm  | switch to messagee baffer    |
+| bd  | kill-buffer-and-window       |
+| bh  | moon/close-help              |
+| bo  | moon/kill-other-buffer       |
+| bh  | moon/kill-helper             |
+| bb  | list-buffers                 |
+| `   | eval-expression              |
+| tt  | moon/switch-theme            |
+| ej  | hydra-error/next-error       |
+| ek  | hydra-error/previous-error   |
+| eh  | hydra-error/first-error      |
+
 
