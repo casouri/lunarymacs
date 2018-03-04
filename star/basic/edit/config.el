@@ -24,8 +24,9 @@
 ;;   (delay-load| setup-smooth-scrolling))
 
 (use-package| avy
-  :config (setq avy-background t)
-  )
+  :config
+  (setq avy-background t)
+  (setq avy-all-windows nil))
 
 (post-config| general
   (default-leader
@@ -73,4 +74,4 @@
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
 ;; fold
-(add-hook 'prog-mode-hook (lambda () (outline-minor-mode 1)))
+;; (add-hook 'prog-mode-hook (lambda () (outline-minor-mode 1)))
