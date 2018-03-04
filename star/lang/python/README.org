@@ -1,0 +1,15 @@
+#+TITLE: python
+
+
+* Package list
+
+- lsp-python
+- pyvenv
+- ein
+- quickrun
+
+* Commands
+
+| key     | command         |
+|---------+-----------------|
+| S-SPC-j | evil-jpnb-state |

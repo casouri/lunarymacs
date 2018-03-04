@@ -58,6 +58,13 @@ is current workspace
 | SPC w r | recover last session                       |
 
 * nyan-cat
+
 #+BEGIN_SRC lisp
 (setq moon-enable-nyan t)
+#+END_SRC
+
+* relative line number
+
+#+BEGIN_SRC lisp
+(setq moon-enable-nlinum-relative t)
 #+END_SRC

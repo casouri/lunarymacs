@@ -1,0 +1,15 @@
+#+TITLE: elisp
+
+
+* Package list
+
+- lispyville
+
+* Commands
+
+| key       | command       |
+|-----------+---------------|
+|           |               |
+| S-SPC e r | eval-region   |
+| S-SPC e f | eval-function |
+| S-SPC e b | eval-buffer   |

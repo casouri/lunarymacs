@@ -1,0 +1,18 @@
+#+TITLE: lsp
+
+
+* Package list
+
+- lsp-mode
+- lsp-ui
+- company-lsp
+- markdown-mode
+
+* Commands
+
+| key     | command                      |
+|---------+------------------------------|
+| SPC j r | lsp-ui-peek-find-references  |
+| SPC j d | lsp-ui-peek-find-definitions |
+| SPC j D | xref-find-definition         |
+| SPC j R | xref-find-references         |

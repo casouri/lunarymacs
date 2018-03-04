@@ -17,23 +17,23 @@
 
 * Commands
   
-| key | command                      |
-|-----+------------------------------|
-| fR  | moon/rename-file             |
-| fs  | save-buffer                  |
-| fed | moon/open-init-file          |
-| feD | moon/compare-init-to-example |
-| qq  | save-buffers-kill-emacs      |
-| bm  | switch to messagee baffer    |
-| bd  | kill-buffer-and-window       |
-| bh  | moon/close-help              |
-| bo  | moon/kill-other-buffer       |
-| bh  | moon/kill-helper             |
-| bb  | list-buffers                 |
-| `   | eval-expression              |
-| tt  | moon/switch-theme            |
-| ej  | hydra-error/next-error       |
-| ek  | hydra-error/previous-error   |
-| eh  | hydra-error/first-error      |
+| key       | command                      |
+|-----------+------------------------------|
+| SPC f R   | moon/rename-file             |
+| SPC f s   | save-buffer                  |
+| SPC f e d | moon/open-init-file          |
+| SPC f e D | moon/compare-init-to-example |
+| SPC q q   | save-buffers-kill-emacs      |
+| SPC b m   | switch to messagee baffer    |
+| SPC b d   | kill-buffer-and-window       |
+| SPC b h   | moon/close-help              |
+| SPC b o   | moon/kill-other-buffer       |
+| SPC b h   | moon/kill-helper             |
+| SPC b b   | list-buffers                 |
+| SPC `     | eval-expression              |
+| SPC t t   | moon/switch-theme            |
+| SPC e j   | hydra-error/next-error       |
+| SPC e k   | hydra-error/previous-error   |
+| SPC e h   | hydra-error/first-error      |
 
 

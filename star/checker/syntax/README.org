@@ -1,0 +1,16 @@
+#+TITLE: syntax
+
+
+* Package list
+
+- flycheck
+
+* Commands
+
+| key | command                    |
+|-----+----------------------------|
+| ej  | hydra-error/next-error     |
+| ek  | hydra-error/previous-error |
+| eh  | hydra-error/first-error    |
+| el  | flycheck-list-errors       |
+
