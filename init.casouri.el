@@ -48,6 +48,8 @@
                           (bg2        . (if (eq variant 'dark) (if (true-color-p) "#17181B" "#1c1c1c") (if (true-color-p) "#efeae9" "#e4e4e4")))
                           (comment-bg . (if (eq variant 'dark) (if (true-color-p) "#23282A" "#262626") (if (true-color-p) "#ecf3ec" "#ffffff")))
                           (highlight  . (if (eq variant 'dark) (if (true-color-p) "#61526E" "#444444") (if (true-color-p) "#d3d3e7" "#d7d7ff")))
+                          (act2       . (if (eq variant 'dark) (if (true-color-p) "#643896" "#444444") (if (true-color-p) "#d3d3e7" "#d7d7ff")))
+                          (border     . (if (eq variant 'dark) (if (true-color-p) "#643896" "#444444") (if (true-color-p) "#d3d3e7" "#d7d7ff")))
                           )))
 
 ;; natural title bar
