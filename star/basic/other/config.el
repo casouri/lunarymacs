@@ -42,6 +42,7 @@
  indent-tabs-mode                    nil
  backup-inhibited                    t
  sentence-end-double-space           nil
+ kill-ring-max                       200
 
  ;;ui
  use-dialog-box                      nil
