@@ -10,4 +10,6 @@
 	  evil-escape
           evil-multiedit
           evil-ediff
+          vimish-fold
+          evil-vimish-fold
           )

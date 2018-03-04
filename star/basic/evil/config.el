@@ -71,3 +71,7 @@
 
 (use-package| evil-ediff
   :hook (ediff-mode . (lambda () (require 'evil-ediff))))
+
+(use-package| evil-vimish-fold
+  :after evil
+  :hook (prog-mode . evil-vimish-fold-mode))
