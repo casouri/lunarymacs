@@ -72,11 +72,9 @@
 
 (defun moon-finalize ()
   "The main starup function."
-  ;; (moon-initialize)
-
   ;; some package require variables from package.el
-  (require 'package)
-
+  (moon-initialize)
+  
   (timeit| "package-init"
     (moon-initialize-load-path)
    )
