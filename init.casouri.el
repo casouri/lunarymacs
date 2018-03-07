@@ -105,6 +105,8 @@
  ;; (load (concat moon-emacs-d-dir "star/completion/company/company-childframe/company-childframe"))
  ;; (company-childframe-mode 1)
 
+ (moon/override-vim-binding)
+
  ;;
  ;;customize ends here
  )
