@@ -35,5 +35,5 @@
 | SPC e j   | hydra-error/next-error       |
 | SPC e k   | hydra-error/previous-error   |
 | SPC e h   | hydra-error/first-error      |
-
+| SPC t m   | toggle-frame-maximized       |
 

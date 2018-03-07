@@ -64,6 +64,7 @@
    "`"  #'eval-expression
    ;; toggle
    "tt" #'moon/switch-theme
+   "tm" #'toggle-frame-maximized
    ;; error
    "ej" #'hydra-error/next-error
    "ek" #'hydra-error/previous-error
