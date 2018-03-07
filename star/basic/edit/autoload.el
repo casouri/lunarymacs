@@ -27,7 +27,7 @@
   (newline-and-indent))
 
 ;;;###autoload
-(defun moon/jump-newlin-above ()
+(defun moon/jump-newline-above ()
   (interactive)
   (move-beginning-of-line nil)
   (newline-and-indent)
