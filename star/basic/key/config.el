@@ -46,29 +46,31 @@
    "t" '(:ignore t :which-key "toggle")
    "g" '(:ignore t :which-key "git")
    "p" '(:ignore t :which-key "project")
+   ;; insert
+   "ia"  #'align-regexp
    ;; file
-   "fR" #'moon/rename-file
-   "fs" #'save-buffer
+   "fR"  #'moon/rename-file
+   "fs"  #'save-buffer
    "fed" #'moon/open-init-file
    "feD" #'moon/compare-init-to-example
    ;; quit
-   "qq" #'save-buffers-kill-emacs
+   "qq"  #'save-buffers-kill-emacs
    ;; buffer
    "bm" (lambda () (interactive) (switch-to-buffer "*Messages*"))
-   "bd" #'kill-buffer-and-window
-   "bh" #'moon/close-help
-   "bo" #'moon/kill-other-buffer
-   "bh" #'moon/kill-helper
-   "bb" #'list-buffers
+   "bd"  #'kill-buffer-and-window
+   "bh"  #'moon/close-help
+   "bo"  #'moon/kill-other-buffer
+   "bh"  #'moon/kill-helper
+   "bb"  #'list-buffers
    ;; eval
-   "`"  #'eval-expression
+   "`"   #'eval-expression
    ;; toggle
-   "tt" #'moon/switch-theme
-   "tm" #'toggle-frame-maximized
+   "tt"  #'moon/switch-theme
+   "tm"  #'toggle-frame-maximized
    ;; error
-   "ej" #'hydra-error/next-error
-   "ek" #'hydra-error/previous-error
-   "eh" #'hydra-error/first-error
+   "ej"  #'hydra-error/next-error
+   "ek"  #'hydra-error/previous-error
+   "eh"  #'hydra-error/first-error
   )
 
 
