@@ -66,16 +66,18 @@
 
 
 (use-package| powerline
-  :config
+  :init
   (defun moon-load-powerline ()
+    (require 'powerline)
     (setq powerline-default-separator 'slant)
     (setq powerline-image-apple-rgb t)
     (setq powerline-height 28)
     (load (concat moon-star-dir "basic/ui/lunaryline/lunaryline"))
     (lunaryline-default-theme)
     ;; fix different separator color after changing theme
-    (add-hook 'moon-load-theme-hook #'powerline-reset))
-  (add-hook 'moon-post-init-hook #'moon-load-powerline))
+    (add-hook 'moon-load-theme-hook #'powerline-reset)
+    (remove-hook 'after-change-major-mode-hook #'moon-load-powerline))
+  (add-hook 'after-change-major-mode-hook #'moon-load-powerline))
 
 ;; not working
 ;; (after-load| spacemacs-theme
@@ -84,12 +86,12 @@
 
 
 (use-package| nlinum
-  :config (global-nlinum-mode)
   :init 
   (add-hook 'moon-load-theme-hook #'moon/sync-nlinum-face)
   (add-hook 'moon-load-theme-hook #'moon/sync-nlinum-highlight-face)
   (setq nlinum-highlight-current-line t)
   :config
+  (global-nlinum-mode)
   (moon/sync-nlinum-face)
   (moon/sync-nlinum-highlight-face))
 
