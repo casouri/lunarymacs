@@ -40,11 +40,9 @@
 ;; Package
 ;;
 
-(use-package| spacemacs-theme
-  :defer t
-  :init
-  (add-to-list 'custom-theme-load-path (car (directory-files (concat moon-package-dir "elpa/") t "spacemacs-theme.+")) t)
-  (load-theme 'spacemacs-dark t))
+;; spacemacs-theme
+(add-to-list 'custom-theme-load-path (car (directory-files (concat moon-package-dir "elpa/") t "spacemacs-theme.+")) t)
+(load-theme 'spacemacs-dark t)
 
 (use-package| rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode)
