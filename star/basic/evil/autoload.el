@@ -24,7 +24,7 @@ Dependency:
 (defun moon/query-replace-region ()
   "Query replace selected region."
   (interactive)
-  (query-replace (buffer-substring-no-properties
+  (query-replace-regexp (buffer-substring-no-properties
                   (region-beginning)
                   (region-end))
                  (completing-read "Replace to: " ())
@@ -35,6 +35,6 @@ Dependency:
   "Query replace thing at point."
   (interactive)
   (let ((word (thing-at-point 'word t)))
-    (query-replace word
+    (query-replace-regexp word
                    (completing-read (format "Replace \"%s\" to: " word) ())
                    nil (beginning-of-line))))
