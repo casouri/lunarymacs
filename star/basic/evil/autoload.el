@@ -34,6 +34,7 @@ Dependency:
 (defun moon/query-relace-point ()
   "Query replace thing at point."
   (interactive)
-  (query-replace (thing-at-point 'word t)
-                 (completing-read "Replace to: " ())
-                 ))
+  (let ((word (thing-at-point 'word t)))
+    (query-replace word
+                   (completing-read (format "Replace \"%s\" to: " word) ())
+                   nil (beginning-of-line))))

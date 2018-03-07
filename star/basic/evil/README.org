@@ -2,7 +2,7 @@
 
 
 * Package list
-
+  
 - evil
 - evil-surround
 - evil-nerd-commenter
@@ -16,6 +16,12 @@
 - evil-ediff
 
 * Commands
+  
+In normal mode:
+
+| key | command                 |
+|-----+-------------------------|
+| Q   | moon/query-relace-point |
 
 In visual-mode:
 
@@ -27,7 +33,7 @@ In visual-mode:
 | s-d   | evil-multiedit-match-symbol-and-next |
 | s-D   | evil-multiedit-match-symbol-and-prev |
 | C-s-D | evil-multiedit-restore               |
-|       |                                      |
+| Q     | moon/query-replace-region            |
 
 In evil-multiedit-state:
 
@@ -35,3 +41,10 @@ In evil-multiedit-state:
 |-----+---------------------|
 | C-n | evil-multiedit-next |
 | C-p | evil-multiedit-prev |
+
+* Other avaliable options
+ 
+#+BEGIN_SRC lisp
+(moon/override-vim-binding)
+(moon/override-emacs-binding)
+#+END_SRC

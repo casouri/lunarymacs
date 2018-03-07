@@ -74,4 +74,13 @@
 
 (use-package| evil-vimish-fold
   :after evil
+  :init (setq vimish-fold-dir (concat moon-local-dir "vimish-fold"))
   :hook (prog-mode . evil-vimish-fold-mode))
+
+;;
+;; Config
+;;
+
+(post-config| evil
+  (define-key evil-normal-state-map "Q" #'moon/query-relace-point)
+  (define-key evil-visual-state-map "Q" #'moon/query-replace-region))
