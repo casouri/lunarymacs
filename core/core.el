@@ -72,7 +72,7 @@
 
 (defun moon-finalize ()
   "The main starup function."
-  ;; (moon-initialize)
+  (moon-initialize)
   (timeit| "package-init"
     (moon-initialize-load-path)
    )
