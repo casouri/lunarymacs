@@ -29,18 +29,7 @@ In visual-mode:
 |-------+--------------------------------------|
 | s     | evil-surround-region                 |
 | S     | evil-substitute                      |
-| R     | evil-multiedit-match-all             |
-| s-d   | evil-multiedit-match-symbol-and-next |
-| s-D   | evil-multiedit-match-symbol-and-prev |
-| C-s-D | evil-multiedit-restore               |
 | Q     | moon/query-replace-region            |
-
-In evil-multiedit-state:
-
-| key | command             |
-|-----+---------------------|
-| C-n | evil-multiedit-next |
-| C-p | evil-multiedit-prev |
 
 * Other avaliable options
  
