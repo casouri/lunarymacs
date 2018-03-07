@@ -65,19 +65,19 @@
                      (spacemacs-light . (progn (setq hl-paren-colors '("red")) (hl-paren-color-update))))))
 
 
-(use-package| powerline
-  :init
-  (defun moon-load-powerline ()
-    (require 'powerline)
-    (setq powerline-default-separator 'slant)
-    (setq powerline-image-apple-rgb t)
-    (setq powerline-height 28)
-    (load (concat moon-star-dir "basic/ui/lunaryline/lunaryline"))
-    (lunaryline-default-theme)
-    ;; fix different separator color after changing theme
-    (add-hook 'moon-load-theme-hook #'powerline-reset)
-    (remove-hook 'after-change-major-mode-hook #'moon-load-powerline))
-  (add-hook 'after-change-major-mode-hook #'moon-load-powerline))
+;; powerline
+(defun moon-load-powerline ()
+  (require 'powerline)
+  (setq powerline-default-separator 'slant)
+  (setq powerline-image-apple-rgb t)
+  (setq powerline-height 28)
+  (load (concat moon-star-dir "basic/ui/lunaryline/lunaryline"))
+  (lunaryline-default-theme)
+  ;; fix different separator color after changing theme
+  (add-hook 'moon-load-theme-hook #'powerline-reset)
+  (remove-hook 'after-change-major-mode-hook #'moon-load-powerline))
+
+(add-hook 'after-change-major-mode-hook #'moon-load-powerline)
 
 ;; not working
 ;; (after-load| spacemacs-theme
