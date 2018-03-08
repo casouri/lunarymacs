@@ -1,5 +1,17 @@
 #+TITLE: Lunarymacs
 
+[[https://github.com/casouri/lunarymacs/blob/master/LICENSE][https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square]]
+[[https://travis-ci.org/casouri/lunarymacs][https://img.shields.io/travis/casouri/lunarymacs/master.svg?style=flat-square]]
+
+[[./screenshot/screenshot0.png]]
+
+
+#+HTML:<div align=center>
+[[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
+#+HTML:</div>
+
+\\
+
 This is a stripped down framework modeling after doom-emacs. It's extremely basic, but working.
 
 #+BEGIN_QUOTE
@@ -27,20 +39,9 @@ You can:
 2. *OR* Only use the core as a framework and manage your own configurations within it.
 3. *OR* Just read the core and wiki as a reference and build your own config from scratch.
 
-\\
 
-[[https://github.com/casouri/lunarymacs/blob/master/LICENSE][https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square]]
-[[https://travis-ci.org/casouri/lunarymacs][https://img.shields.io/travis/casouri/lunarymacs/master.svg?style=flat-square]]
+* More screenshot
 
-#+CAPTION: May be it will look cooler without nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
-[[./screenshot/screenshot0.png]]
-
-#+HTML:<div align=center>
-[[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
-#+HTML:</div>
-\\
-
-#+CAPTION: May be it will look cooler without nyan cat? But emacs without nyn cat is not emacs. It's emacs without nyan cat.
 [[./screenshot/screenshot1.png]]
 
 * Quick start
@@ -48,7 +49,7 @@ You can:
 *backup you .emacs.d first!*
 
 #+BEGIN_SRC shell
-git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
+git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d --recurse-submodules
 cd ~/.emacs.d
 cp init.example.el init.el
 make
@@ -56,6 +57,8 @@ emacs
 
 # to update lunarymacs
 git pull --rebase
+git submodule update --init --recursive
+
 # or
 make update-moon # it's the same
 #+END_SRC
