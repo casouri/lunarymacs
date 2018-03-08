@@ -65,6 +65,8 @@ make update-moon # it's the same
 
 After every update,
 hit =SPC f e D= and check for update from example init file.
+
+Also remember to check [[./news.org][update news]] for significant changes.
  
 * Thank you
 Thanks to all the contributors of spacemacs and doom-emacs. I copyied a lot of code from them.
