@@ -2,9 +2,6 @@ os: osx
 language: emacs-lisp
 sudo: false
 
-before_install:
-  - brew update && brew bundle
-
 install:
   - git clone https://github.com/casouri/lunarymacs.git .emacs.d --recurse-submodules
   - make install-emacs25
