@@ -4,8 +4,8 @@ sudo: false
 
 install:
   - git clone https://github.com/casouri/lunarymacs.git .emacs.d --recurse-submodules
-  - make install-emacs25
   - cd .emacs.d
+  - make install-emacs25
   - cp init.example.el init.el
 
 script:
