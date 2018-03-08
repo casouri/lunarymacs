@@ -33,13 +33,20 @@
     "k" #'avy-goto-char-timer))
 
 (use-package| minimap
-  :init
+  :config
   (setq
    minimap-width-fraction 0.1
    minimap-window-location 'right
    minimap-update-delay 0)
+  ;; (overlay-put minimap-line-overlay 'face '(:background "blue" :foreground "blue"))
+  (custom-theme-set-faces 'user
+                          '(minimap-active-region-background
+                            ((((background dark)) (:background "#61526E"))
+                             (t (:background "#d3d3e7")))))
   :commands minimap-mode)
 
+(post-config| general
+  (default-leader "tm" #'minimap-mode))
 
 ;;
 ;; Config
