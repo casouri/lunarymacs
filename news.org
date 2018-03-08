@@ -1,0 +1,6 @@
+#+TITLE: Update news
+
+Here I post changes that you need to know
+
+6da4a57:
+ - commands for cloning and pulling are changed. Checkout corresponding section in README.

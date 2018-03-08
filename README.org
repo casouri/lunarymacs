@@ -7,7 +7,7 @@
 
 
 #+HTML:<div align=center>
-[[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
+[[./news.org][Update news]] | [[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
 #+HTML:</div>
 
 \\
