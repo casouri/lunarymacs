@@ -7,6 +7,9 @@ install:
   - cd .emacs.d
   - brew tap d12frosted/emacs-plus
   - brew install emacs-plus
+  - brew install make
+  - PATH="/usr/local/opt/make/libexec/gnubin:${PATH}"
+  - export PATH
   - cp init.example.el init.el
 
 script:
