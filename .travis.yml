@@ -5,7 +5,8 @@ sudo: false
 install:
   - git clone https://github.com/casouri/lunarymacs.git .emacs.d --recurse-submodules
   - cd .emacs.d
-  - make install-emacs25
+  - brew tap d12frosted/emacs-plus
+  - brew install emacs-plus
   - cp init.example.el init.el
 
 script:
