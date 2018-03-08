@@ -7,3 +7,7 @@ before_install:
   - evm install $EVM_EMACS --use
   - cp init.example.el init.el
   - make
+env:
+  - EVM_EMACS=emacs-25.1-travis
+  - EVM_EMACS=emacs-25.2-travis
+  - EVM_EMACS=emacs-25.3-travis
