@@ -1,4 +1,6 @@
+#+TITLE: Update news
+
 Significant changes that affects usage.
 
-6cb57b78a08eb2b48e8d76a4735f755cdcd2b768:
+[[https://github.com/casouri/lunarymacs/commit/e99150ac9d58d2c43890d8ee57454fe867a0a506][e99150a]]:
  * commands for cloning and pulling are changed. Checkout corresponding section in README.
