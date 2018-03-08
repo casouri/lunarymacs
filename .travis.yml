@@ -1,0 +1,9 @@
+language: emacs-lisp
+sudo: false
+before_install:
+  - git clone https://github.com/rejeep/evm.git /home/travis/.evm
+  - export PATH="/home/travis/.evm/bin:$PATH"
+  - evm config path /tmp
+  - evm install $EVM_EMACS --use
+  - cp init.example.el init.el
+  - make
