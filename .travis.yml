@@ -1,6 +1,10 @@
 os: osx
 language: emacs-lisp
 sudo: false
+branch:
+  only:
+    - master
+
 before_install:
   - brew update && brew bundle
 
