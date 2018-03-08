@@ -9,7 +9,7 @@ EMACS=emacs --quick --batch $(EMACS_FLAGS)
 # otherwise use-package will not be avaliable
 # on fresh install
 # all: | install autoload autoremove
-all: custom.el autoload.el
+all: custom.el autoloads.el
 >@$(EMACS) --eval '(progn (message "Installing packages...") (moon/install-package) (message "Generating autoload file...") (moon/generate-autoload-file) (message "Removing unused packages...") (moon/remove-unused-package))' ;\
 rm -f .local/autoloads.el~
 
