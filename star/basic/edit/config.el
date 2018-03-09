@@ -45,6 +45,10 @@
                              (t (:background "#d3d3e7")))))
   :commands minimap-mode)
 
+;; (custom-theme-set-faces 'user
+;;                         '(minimap-active-region-background
+;;                           ((((background dark)) (:background "#56B0EC" :foreground "#61526E"))
+;;                            (t (:background "#56B0EC" :foreground "#56B0EC")))))
 (post-config| general
   (default-leader "tm" #'minimap-mode))
 
