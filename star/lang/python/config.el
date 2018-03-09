@@ -23,7 +23,11 @@
              quickrun-compile-only
              quickrun-replace-region
              quickrun-autorun-mode
-             ))
+             )
+  ;; from evil-collection
+  :config (when (featurep 'evil)
+            (evil-define-key 'normal quickrun--mode-map
+              "q" 'quit-window)))
 
 (use-package| ein
   :commands (ein:notebooklist-open
