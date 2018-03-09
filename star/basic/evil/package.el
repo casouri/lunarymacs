@@ -11,4 +11,5 @@
           evil-ediff
           vimish-fold
           evil-vimish-fold
+          evil-collection
           )

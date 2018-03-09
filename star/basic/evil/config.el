@@ -51,6 +51,10 @@
   :init (setq vimish-fold-dir (concat moon-local-dir "vimish-fold"))
   :hook (prog-mode . evil-vimish-fold-mode))
 
+(after-load| term
+  (require 'evil-collection-term)
+  (evil-collection-term-setup))
+
 ;;
 ;; Config
 ;;
