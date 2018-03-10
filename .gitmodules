@@ -10,3 +10,6 @@
 [submodule "star/lang/python/jpnb-state"]
 	path = star/lang/python/jpnb-state
 	url = https://github.com/casouri/jpnb-state.git
+[submodule "star/basic/ui/emacs-mission-control"]
+	path = star/basic/ui/emacs-mission-control
+	url = https://github.com/casouri/emacs-mission-control.git

@@ -53,9 +53,10 @@ is current workspace
 
 * Other commands
 
-| key     | command                                    |
-|---------+--------------------------------------------|
-| SPC w r | recover last session                       |
+| key     | command              |
+|---------+----------------------|
+| SPC w r | recover last session |
+| SPC b m | mcon-switch          |
 
 * nyan-cat
 

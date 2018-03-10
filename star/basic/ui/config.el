@@ -249,3 +249,9 @@ and saveing desktop."
                 (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))))
     ;; )
 )
+
+;; mission control
+(load (concat moon-star-dir "basic/ui/emacs-mission-control/mission-control"))
+(post-config| general
+  (default-leader
+    "bm" #'mcon-switch))
