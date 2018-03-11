@@ -252,6 +252,7 @@ and saveing desktop."
 
 ;; mission control
 (load (concat moon-star-dir "basic/ui/emacs-mission-control/mission-control"))
+(c-tab-setup-c-tab-binding)
 (post-config| general
   (default-leader
     "bc" #'mcon-switch))
