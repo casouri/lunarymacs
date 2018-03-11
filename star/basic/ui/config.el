@@ -254,4 +254,4 @@ and saveing desktop."
 (load (concat moon-star-dir "basic/ui/emacs-mission-control/mission-control"))
 (post-config| general
   (default-leader
-    "bm" #'mcon-switch))
+    "bc" #'mcon-switch))

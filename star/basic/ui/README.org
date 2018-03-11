@@ -57,6 +57,8 @@ is current workspace
 |---------+----------------------|
 | SPC w r | recover last session |
 | SPC b m | mcon-switch          |
+| S-tab   | c-tab-graphic        |
+| C-tab   | c-tab-graphic        |
 
 * nyan-cat
 
