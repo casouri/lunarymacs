@@ -4,3 +4,6 @@ Significant changes that affects usage.
 
 [[https://github.com/casouri/lunarymacs/commit/6da4a57db3fd49209d56cc7bae66ba32cd9c4423][6da4a57]]:
  - commands for cloning and pulling are changed. Checkout corresponding section in README.
+   
+[[https://github.com/casouri/lunarymacs/commit/26cb42e4518f5ad61d1da1c42c6b563d0699b8c7][f1187c0]]:
+- lsp-python format-on-save now is optional, enable with =moon-enable-format-on-save-python=.
