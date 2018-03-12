@@ -5,10 +5,17 @@
 ;; Config
 ;;
 
+(defvar moon-enable-format-on-save-python nil
+  "Whether to enabel lsp-python format on save.")
+
 (use-package| lsp-python
-  :hook (python-mode . lsp-python-enable)
-  :config (add-hook 'python-mode-hook #'lsp-format-on-save-mode)
-  )
+  ;; :hook (python-mode . lsp-python-enable)
+  :init
+  (add-hook 'python-mode-hook #'lsp-python-enable)
+  (add-hook 'python-mode-hook #'setup-lsp)
+  :config
+  (when moon-enable-format-on-save-python
+    (add-hook 'python-mode-hook #'lsp-format-on-save-mode)))
 
 
 (use-package| pyvenv
