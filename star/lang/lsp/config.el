@@ -14,8 +14,6 @@ if under, turn them off.")
   (defun setup-lsp ()
     (require 'lsp-imenu)
     (add-hook 'lsp-after-open-hook #'lsp-enable-imenu)
-    (with-eval-after-load 'lsp-mode
-      (require 'lsp-flycheck))
     (setq lsp-enable-eldoc nil)))
 
 (after-load| lsp-mode
@@ -24,6 +22,8 @@ if under, turn them off.")
 (use-package| lsp-ui
   :after lsp-mode
   :config
+  (with-eval-after-load 'lsp-ui-mode
+    (require 'lsp-flycheck))
   (add-hook 'lsp-mode-hook #'lsp-ui-mode)
   (default-leader
     "jr" #'lsp-ui-peek-find-references
