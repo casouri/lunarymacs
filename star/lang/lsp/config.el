@@ -23,7 +23,7 @@ if under, turn them off.")
   :after lsp-mode
   :config
   (with-eval-after-load 'lsp-ui-mode
-    (require 'lsp-flycheck))
+    (require 'lsp-ui-flycheck))
   (add-hook 'lsp-mode-hook #'lsp-ui-mode)
   (default-leader
     "jr" #'lsp-ui-peek-find-references
