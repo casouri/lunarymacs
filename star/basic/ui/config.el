@@ -252,7 +252,8 @@ and saveing desktop."
 
 ;; mission control
 (load (concat moon-star-dir "basic/ui/emacs-mission-control/mission-control"))
-(setq c-tab-timeout 0.7)
+(setq mcon-c-tab-timeout 0.7
+      mcon-c-tab-initial-selection-offset 1)
 (mcon-c-tab-setup-binding)
 (post-config| general
   (default-leader
