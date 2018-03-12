@@ -9,14 +9,14 @@ depending on window width.")
 if under, turn them off.")
 
 (use-package| lsp-mode
-  :defer 3
-  :config
-  (require 'lsp-imenu)
-  (add-hook 'lsp-after-open-hook #'lsp-enable-imenu)
-  (with-eval-after-load 'lsp-mode
-    (require 'lsp-flycheck))
-  (setq lsp-enable-eldoc nil)
-  )
+  :defer t
+  :init
+  (defun setup-lsp ()
+    (require 'lsp-imenu)
+    (add-hook 'lsp-after-open-hook #'lsp-enable-imenu)
+    (with-eval-after-load 'lsp-mode
+      (require 'lsp-flycheck))
+    (setq lsp-enable-eldoc nil)))
 
 (after-load| lsp-mode
   (require 'lsp-flycheck))
