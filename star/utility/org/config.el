@@ -9,6 +9,14 @@
       '((ipython . t)))
      )))
 
+(add-hook
+ 'org-mode-hook
+ (lambda ()
+   (org-babel-do-load-languages
+    'org-babel-load-languages
+    '((shell . t)))
+   ))
+
 (defvar moon-enable-org-bullets nil
   "Whether to enable org-bullet")
 
