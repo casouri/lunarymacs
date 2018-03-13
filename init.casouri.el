@@ -106,6 +106,7 @@
  ;; (company-childframe-mode 1)
 
  (moon/override-vim-binding)
+ (moon/override-emacs-binding)
 
  ;;
  ;;customize ends here
