@@ -1,2 +1,3 @@
 (package| org-bullets
-          ob-ipython)
+          ob-ipython
+          ox-hugo)

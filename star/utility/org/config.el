@@ -27,3 +27,7 @@
          (lambda ()
            (when moon-enable-org-bullets
              (org-bullets-mode 1)))))
+
+
+(use-package| ox-hugo
+  :after ox)
