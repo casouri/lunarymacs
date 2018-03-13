@@ -14,10 +14,11 @@ Dependency:
   (define-key evil-insert-state-map (kbd "C-e") #'evil-end-of-line)
   )
 
+;;;###autoload
 (defun moon/override-emacs-binding ()
   "Replace some vanilla Emacs bindings."
   (interactive)
-  (define-key evil-normal-state-map (kbd "C-i") #'evil-scroll-up)
+  (define-key evil-normal-state-map (kbd "C-u") #'evil-scroll-up)
   )
 
 
