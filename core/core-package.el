@@ -60,7 +60,8 @@ Contains only core dir ,star dir and load path for built in libraries")
       package-user-dir (expand-file-name "elpa" moon-package-dir)
       package-archives
       '(("melpa" . "https://melpa.org/packages/")
-        ("gnu"   . "https://elpa.gnu.org/packages/")))
+        ("gnu"   . "https://elpa.gnu.org/packages/")
+        ("org" . "https://orgmode.org/elpa/")))
 
 
 ;;
