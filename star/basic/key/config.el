@@ -46,6 +46,7 @@
    "t" '(:ignore t :which-key "toggle")
    "g" '(:ignore t :which-key "git")
    "p" '(:ignore t :which-key "project")
+   "u" '(:ignore t :which-key "utility")
    ;; insert
    "ia"  #'align-regexp
    ;; file
@@ -71,6 +72,9 @@
    "ej"  #'hydra-error/next-error
    "ek"  #'hydra-error/previous-error
    "eh"  #'hydra-error/first-error
+   ;; utilities
+   "uhs" #'hlt-highlight
+   "uhu" #'hlt-highlight
   )
 
 
