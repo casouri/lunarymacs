@@ -8,6 +8,8 @@ Dependency:
 - avy"
   (interactive)
   (define-key evil-normal-state-map "s"         #'avy-goto-char-timer)
+  (define-key evil-normal-state-map "H"         #'evil-backward-word-begin)
+  (define-key evil-normal-state-map "L"         #'evil-forward-word-end)
   (define-key evil-insert-state-map (kbd "C-a") #'evil-beginning-of-line)
   (define-key evil-insert-state-map (kbd "C-e") #'evil-end-of-line)
   )
@@ -15,8 +17,7 @@ Dependency:
 (defun moon/override-emacs-binding ()
   "Replace some vanilla Emacs bindings."
   (interactive)
-  (define-key evil-normal-state-map (kbd "C-u") #'evil-scroll-up)
-  (define-key evil-insert-state-map (kbd "C-u") #'evil-shift-right-line)
+  (define-key evil-normal-state-map (kbd "C-i") #'evil-scroll-up)
   )
 
 
