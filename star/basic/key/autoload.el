@@ -41,3 +41,10 @@ Used to jump back and forth between two buffers.")
   (interactive)
   (ediff (concat moon-emacs-d-dir "init.el")
          (concat moon-emacs-d-dir "init.example.el")))
+
+;;;###autoload
+(defun moon/open-in-iterm ()
+  "Open current current dir in iTerm2."
+  (interactive)
+ (shell-command-to-string (format "open %s -a iterm" default-directory)))
+

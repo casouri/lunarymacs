@@ -47,6 +47,9 @@
    "g" '(:ignore t :which-key "git")
    "p" '(:ignore t :which-key "project")
    "u" '(:ignore t :which-key "utility")
+   "o" '(:ignore t :which-key "open")
+   ;; open
+   "ot"  #'moon/open-in-iterm
    ;; insert
    "ia"  #'align-regexp
    ;; file
