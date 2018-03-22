@@ -22,12 +22,13 @@ If `moon-smart-toggle-lsp-ui' is nil, don't do anything.
 If called interactively, `moon-smart-toggle-lsp-ui'
 will be set to t."
   (interactive)
-  (when (called-interactively-p 'any)
-    (setq moon-smart-toggle-lsp-ui t))
-  (when moon-smart-toggle-lsp-ui
-    (let ((onoff (>= (window-width) moon-smart-toggle-threshold)))
-      (lsp-ui-sideline-enable onoff)
-      (lsp-ui-doc-enable onoff))))
+  (when lsp-ui-mode
+   (when (called-interactively-p 'any)
+     (setq moon-smart-toggle-lsp-ui t))
+   (when moon-smart-toggle-lsp-ui
+     (let ((onoff (>= (window-width) moon-smart-toggle-threshold)))
+       (lsp-ui-sideline-enable onoff)
+       (lsp-ui-doc-enable onoff)))))
 
 ;;;###autoload
 (defun moon-force-lsp-ui (&rest rest)
