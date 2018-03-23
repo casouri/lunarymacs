@@ -57,6 +57,8 @@
    "fs"  #'save-buffer
    "fed" #'moon/open-init-file
    "feD" #'moon/compare-init-to-example
+   "fD"  '(:ignore t :which-key "delete file")
+   "fDD" #'moon/delete-file-and-buffer
    ;; quit
    "qq"  #'save-buffers-kill-emacs
    ;; buffer
