@@ -7,3 +7,7 @@ Significant changes that affects usage.
    
 [[https://github.com/casouri/lunarymacs/commit/26cb42e4518f5ad61d1da1c42c6b563d0699b8c7][f1187c0]]:
 - lsp-python format-on-save now is optional, enable with =moon-enable-format-on-save-python=.
+
+ 
+[[https://github.com/casouri/lunarymacs/commit/93cd2bde07ecbd8413c5b0291b5c80b8822d035f][fbf4295]]:
+- Command =SPC i a= now is assigned to auto-yasnippet functions. The old command =align-regex= is moved to =SPC u a=.
