@@ -25,3 +25,13 @@
                   (mapcar #'company-mode-backend-with-yas company-backends))) t)
 
 
+
+(use-package| auto-yasnippet
+  :commands (aya-create aya-expand aya-open-line)
+  :config (require 'yasnippet))
+
+
+(post-config| general
+  (default-leader
+    "iaa" #'aya-create
+    "iae" #'aya-expand))

@@ -1,3 +1,4 @@
 ;;; -*- lexical-binding: t -*-
 
-(package| yasnippet)
+(package| yasnippet
+          auto-yasnippet)
