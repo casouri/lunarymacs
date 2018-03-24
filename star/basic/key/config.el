@@ -51,7 +51,7 @@
    ;; open
    "ot"  #'moon/open-in-iterm
    ;; insert
-   "ia"  #'align-regexp
+   "ua"  #'align-regexp
    ;; file
    "fR"  #'moon/rename-file
    "fs"  #'save-buffer
@@ -80,6 +80,12 @@
    ;; utilities
    "uhs" #'hlt-highlight
    "uhu" #'hlt-highlight
+   ;; jump
+   "jmc" #'moon/jump-to-config
+   "jmp" #'moon/jump-to-package
+   "jma" #'moon/jump-to-autoload
+   "jmd" #'moon/jump-to-autoload-dir
+   "jmr" #'moon/jump-to-readme
   )
 
 
