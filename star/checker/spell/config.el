@@ -14,8 +14,12 @@
 
 
 (use-package| flyspell-correct-ivy
+  :defer t 
   :after flyspell
-  :defer t
   :config
+  ;; https://www.emacswiki.org/emacs/FlySpell
+  (setq flyspell-issue-message-flag nil))
+
+(post-config| general
   (default-leader
-    "ef" #'flyspell-correct-previous-word-generic))
+    "ef" #'flyspell-correct-previous))
