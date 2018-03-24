@@ -3,6 +3,7 @@ language: emacs-lisp
 sudo: false
 
 install:
+  - cd ~
   - git clone https://github.com/casouri/lunarymacs.git .emacs.d --recurse-submodules
   - cd .emacs.d
   - brew tap d12frosted/emacs-plus
