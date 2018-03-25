@@ -27,6 +27,8 @@
        lsp
        python
        elisp
+       rust
+       javascript
        )
 
 
