@@ -89,10 +89,6 @@
   )
 
 
-  (general-define-key :states '(normal insert emacs)
-		      "TAB" #'indent-for-tab-command)
-  (general-define-key :states 'visual
-		      "TAB" #'indent-region)
   (general-define-key :states 'normal
                       "RET" #'ivy-switch-buffer)
   )
