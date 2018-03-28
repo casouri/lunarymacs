@@ -53,7 +53,18 @@
 
 (after-load| term
   (require 'evil-collection-term)
-  (evil-collection-term-setup))
+  (evil-collection-term-setup)
+  (add-hook 'term-mode-hook (lambda ()
+                              (setq-local evil-insert-state-cursor 'box)))
+  )
+
+(post-config| general
+  (default-leader
+    :keymaps 'term-mode-map
+    "c" '((lambda ()
+          (interactive)
+          (term-char-mode)
+          (evil-insert-state)) :which-key "char-mode")))
 
 ;;
 ;; Config
