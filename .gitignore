@@ -1,6 +1,6 @@
 .local/
 .cache/
-**/.DS_Store
+.DS_Store
 init.el
 
 # ignore compiles files
@@ -10,7 +10,6 @@ init.el
 star/*
 !star/completion/
 !star/basic/
-!star/casouri/
 !star/checker/
 !star/os/
 !star/lang/
@@ -21,3 +20,6 @@ wiki/
 
 # ignore private snippets
 /snippet
+
+# auto-generated log
+gitlog.org
