@@ -1,7 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 
 (package|
- doom-themes
  spacemacs-theme
  rainbow-delimiters
  highlight-parentheses

@@ -3,7 +3,6 @@
 This star configures most of the ui features of lunarymacs.
 
 * Package list
-- doom-themes
 - spacemacs-theme
   - default themes: (switch with =moon/switch-theme=, see more in wiki)
     - spacemacs-dark
