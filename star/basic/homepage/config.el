@@ -53,6 +53,7 @@ MOON is used when buffer's width is less than 86."
       ))
   (insert "\n\n\n* Breaking chnges\n\n")
   (moon/log-news)
+  (goto-char (point-min))
   )
 
 (defun moon/log-news ()
