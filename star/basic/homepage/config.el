@@ -20,6 +20,9 @@
 ╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝
                                        ")
 
+(defvar moon-log-news nil
+  "Whether to show news on homepage.")
+
 ;;
 ;; Func
 ;;
@@ -48,7 +51,15 @@ MOON is used when buffer's width is less than 86."
 	(insert line)
 	(insert "\n"))
       ))
+  (insert "\n\n\n")
+  (moon/log-news)
   )
+
+(defun moon/log-news ()
+  "Log breaking changes after last pull."
+  (interactive)
+  (when moon-log-news
+    (insert (shell-command-to-string "cd ~/.emacs.d/ ; git log ORIG_HEAD..HEAD --pretty=format:'* %h - %s%n%n%b' --grep ':change-default:'"))))
 
 ;;
 ;; Config
