@@ -81,6 +81,9 @@
 ;; company-yasnippet
 (setq moon-enable-company-yas t)
 
+;; show breaking change
+;; (setq moon-log-news t)
+
 ;;
 ;; Settings to overwrite configs in stars i.e. user-config
 ;;
@@ -110,6 +113,8 @@
 
  (moon/override-vim-binding)
  (moon/override-emacs-binding)
+
+ ;; (org-mode)
 
  ;;
  ;;customize ends here
