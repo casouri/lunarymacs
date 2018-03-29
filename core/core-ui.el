@@ -33,6 +33,8 @@
   '(spacemacs-dark spacemacs-light)
   "Themes that you can toggle bwtween by `moon/switch-theme'")
 
+(defvar moon-theme-book '(spacemacs-dark spacemacs-light)
+  "A list of themes that you can load with `moon/load-theme'.")
 ;;
 ;; Func
 (defun moon-set-current-theme (&rest form)
