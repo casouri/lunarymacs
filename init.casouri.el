@@ -29,6 +29,7 @@
        elisp
        rust
        javascript
+       web
        )
 
 
