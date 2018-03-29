@@ -45,6 +45,14 @@
 (add-to-list 'custom-theme-load-path (car (directory-files (concat moon-package-dir "elpa/") t "spacemacs-theme.+")) t)
 (load-theme 'spacemacs-dark t)
 
+(use-package| doom-themes
+  :config
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (add-to-list 'moon-theme-book 'doom-one t)
+  (add-to-list 'moon-theme-book 'doom-one-light t)
+  )
+
 (use-package| rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode)
   )
