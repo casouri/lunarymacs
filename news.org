@@ -12,7 +12,7 @@ then you can filter commits by tag.
 
 Tags include:
 - feature :: new features
-- change-default :: changes that might affect default settings 
+- change_default :: changes that might affect default settings 
 - fix :: bug fix
 - config :: new configuration
 
