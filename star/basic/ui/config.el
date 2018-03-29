@@ -18,6 +18,7 @@
     lunary-yellow)
    ((equal moon-current-theme "spacemacs-light")
     spacemacs-light-purple)
+   (t doom-blue)
    ))
 
 (defun moon-insert-state-cursor-color ()
