@@ -59,7 +59,7 @@ MOON is used when buffer's width is less than 86."
   "Log breaking changes after last pull."
   (interactive)
   (when moon-log-news
-    (insert (shell-command-to-string "cd ~/.emacs.d/ ; git log ORIG_HEAD..HEAD --pretty=format:'* %h - %s%n%n%b' --grep ':change-default:'"))))
+    (insert (shell-command-to-string (concat "cd " moon-emacs-d-dir " ; git log ORIG_HEAD..HEAD --pretty=format:'* %h - %s%n%n%b' --grep ':change-default:'")))))
 
 ;;
 ;; Config
