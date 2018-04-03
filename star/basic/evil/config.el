@@ -64,7 +64,8 @@
     "c" '((lambda ()
           (interactive)
           (term-char-mode)
-          (evil-insert-state)) :which-key "char-mode")))
+          (evil-insert-state)) :which-key "char-mode")
+    "l" #'term-line-mode))
 
 ;;
 ;; Config
