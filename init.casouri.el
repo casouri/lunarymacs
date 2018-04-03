@@ -84,6 +84,14 @@
 ;; show breaking change
 ;; (setq moon-log-news t)
 
+(setq evil-insert-state-cursor 'box)
+
+;; (setq mac-command-modifier 'control)
+;; (setq mac-control-modifier 'super)
+;; (global-set-key (kbd "s-v") #'yank)
+;; (global-set-key (kbd "s-c") #'kill-ring-save)
+
+
 ;;
 ;; Settings to overwrite configs in stars i.e. user-config
 ;;
@@ -100,7 +108,7 @@
  (setq scroll-margin 8)
 
  ;; hide bad title when using natural title bar in Emacs 26
- (setq  frame-title-format '(""))
+ (setq  frame-title-format '(" "))
 
  (nyan-mode)
  (nyan-start-animation)
