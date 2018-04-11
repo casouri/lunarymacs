@@ -38,6 +38,7 @@ Dependency:
 (defun moon/query-relace-point ()
   "Query replace thing at point."
   (interactive)
+  (evil-visual-state -1)
   (let ((word (thing-at-point 'word t)))
     (query-replace-regexp word
                    (completing-read (format "Replace \"%s\" to: " word) ())
