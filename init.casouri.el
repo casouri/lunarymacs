@@ -30,6 +30,7 @@
        rust
        javascript
        web
+       lua
        )
 
 
