@@ -18,7 +18,7 @@
 (add-hook 'org-mode-hook #'short-finger-mode)
 (add-hook 'markdown-mode-hook #'short-finger-mode)
 
-(post-config| general
-  (general-define-key :states '(normal insert emacs visual)
-		      "TAB" #'company-indent-or-complete-common))
+;; (post-config| general
+;;   (general-define-key :states '(normal insert emacs visual)
+;; 		      "TAB" #'company-indent-or-complete-common))
 
