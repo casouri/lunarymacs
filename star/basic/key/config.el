@@ -8,10 +8,10 @@
 (use-package| general
   :after which-key
   :init
-  (defvar moon-leader "SPC")
-  (defvar moon-local-leader "S-SPC")
-  (defvar moon-non-normal-leader "M-SPC")
-  (defvar moon-local-non-normal-leader "C-,")
+  (setq moon-leader "SPC")
+  (setq moon-local-leader "S-SPC")
+  (setq moon-non-normal-leader "M-SPC")
+  (setq moon-local-non-normal-leader "C-,")
   :config
   (general-override-mode)
   (general-create-definer default-leader
