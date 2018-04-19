@@ -66,8 +66,16 @@ is current workspace
 (setq moon-enable-nyan t)
 #+END_SRC
 
-* relative line number
-
+* line number
+** relative line number
 #+BEGIN_SRC lisp
-(setq moon-enable-nlinum-relative t)
+(setq moon-relative-line-number t)
 #+END_SRC
+
+** abosolute line number
+   
+This is default to =t=.
+#+BEGIN_SRC lisp
+(setq moon-line-number t)
+#+END_SRC
+

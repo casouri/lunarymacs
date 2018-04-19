@@ -84,15 +84,20 @@
 ;;
 ;; Line number
 
+(defvar moon-enable-nlinum-relative nil
+  "Whether to enable relative line number.")
+
 (use-package| nlinum
   :init 
   (add-hook 'moon-load-theme-hook #'moon/sync-nlinum-face)
   (add-hook 'moon-load-theme-hook #'moon/sync-nlinum-highlight-face)
   (setq nlinum-highlight-current-line t)
   :config
-  (global-nlinum-mode)
-  (moon/sync-nlinum-face)
-  (moon/sync-nlinum-highlight-face))
+  (when moon-enable-nlinum-relative
+    (global-nlinum-mode)
+    (moon/sync-nlinum-face)
+    (moon/sync-nlinum-highlight-face))
+  )
 
 (use-package| nlinum-relative
   :config
@@ -115,14 +120,11 @@
 (use-package| hl-todo
   :init (global-hl-todo-mode))
 
-(defvar moon-enable-nlinum-relative t
-  "Whether to enable relative line number.")
-
-
 (post-config| general
   (default-leader
     "tl" #'nlinum-mode ; toggle relative linum
     "tL" #'display-line-numbers-mode))
+
 
 ;; I don't show minor mode
 ;; in modeline anymore
