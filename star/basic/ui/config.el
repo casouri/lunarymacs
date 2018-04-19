@@ -115,14 +115,14 @@
 (use-package| hl-todo
   :init (global-hl-todo-mode))
 
-(defvar moon-enable-nlinum-relative nil
+(defvar moon-enable-nlinum-relative t
   "Whether to enable relative line number.")
 
 
 (post-config| general
   (default-leader
-    "tr" #'nlinum-mode ; toggle relative linum
-    "tl" #'display-line-numbers-mode))
+    "tl" #'nlinum-mode ; toggle relative linum
+    "tL" #'display-line-numbers-mode))
 
 ;; I don't show minor mode
 ;; in modeline anymore
