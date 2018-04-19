@@ -49,11 +49,11 @@
          "star/lang/python/jpnb-state/jpnb-state.el")))
 
 (post-config| general
-  (local-leader
+  (default-leader
     :keymaps '(ein:notebook-mode-map
               ein:notebook-multilang-mode-map
               ein:notebook-python-mode-map
               ein:notebook-plain-mode-map
               )
-   "j" #'evil-jpnb-state
+   "jj" #'evil-jpnb-state
    ))

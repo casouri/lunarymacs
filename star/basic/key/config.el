@@ -9,9 +9,7 @@
   :after which-key
   :init
   (setq moon-leader "SPC")
-  (setq moon-local-leader "S-SPC")
-  (setq moon-non-normal-leader "M-SPC")
-  (setq moon-local-non-normal-leader "C-,")
+  (setq moon-non-normal-leader "S-SPC")
   :config
   (general-override-mode)
   (general-create-definer default-leader
@@ -19,11 +17,7 @@
     :keymaps 'override
     :prefix moon-leader
     :non-normal-prefix moon-non-normal-leader)
-  (general-create-definer local-leader
-    :states '(normal visual insert emacs jpnb)
-    :prefix moon-local-leader
-    :non-normal-prefix moon-local-non-normal-leader)
-
+  
   ;; One escape to escape them all.
   (global-set-key (kbd "<escape>") #'keyboard-escape-quit)
 
@@ -90,6 +84,7 @@
 
 
   (general-define-key :states 'normal
+                      "TAB" #'indent-for-tab-command
                       "RET" #'ivy-switch-buffer
                       "C-e" #'end-of-line)
   (general-define-key :states 'insert

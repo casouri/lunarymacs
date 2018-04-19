@@ -5,9 +5,10 @@
 
 
 (post-config| general
-  (local-leader
+  (default-leader
    :keymaps 'emacs-lisp-mode-map
    ;; eval
-   "er" #'eval-region
-   "ef" #'eval-function
-   "eb" #'eval-buffer))
+   "ee" '(:ignore t :which-key "eval")
+   "eer" #'eval-region
+   "eef" #'eval-function
+   "eeb" #'eval-buffer))
