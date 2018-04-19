@@ -90,7 +90,8 @@
 
 
   (general-define-key :states 'normal
-                      "RET" #'ivy-switch-buffer)
+                      "RET" #'ivy-switch-buffer
+                      "C-e" #'end-of-line)
   )
 
 (use-package| which-key
