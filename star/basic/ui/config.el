@@ -64,7 +64,9 @@
                      (spacemacs-light . (progn (setq hl-paren-colors '("red")) (hl-paren-color-update))))))
 
 
-;; powerline
+;;
+;; Mode-line
+
 (defun moon-load-powerline ()
   (require 'powerline)
   (setq powerline-default-separator 'slant)
@@ -78,11 +80,9 @@
 
 (add-hook 'after-change-major-mode-hook #'moon-load-powerline)
 
-;; not working
-;; (after-load| spacemacs-theme
-;;   (set-face-attribute 'powerline-active1 nil :foreground "black")
-;;   )
 
+;;
+;; Line number
 
 (use-package| nlinum
   :init 
@@ -93,15 +93,6 @@
   (global-nlinum-mode)
   (moon/sync-nlinum-face)
   (moon/sync-nlinum-highlight-face))
-
-(use-package| nyan-mode
-  :init (setq nyan-wavy-trail t))
-
-(use-package| hl-todo
-  :init (global-hl-todo-mode))
-
-(defvar moon-enable-nlinum-relative nil
-  "Whether to enable relative line number.")
 
 (use-package| nlinum-relative
   :config
@@ -115,9 +106,23 @@
     ;; line number doesn't update when scrolling
     (setq nlinum-relative-redisplay-delay 0.1)))
 
+;; absolute line number
+(global-display-line-numbers-mode)
+
+(use-package| nyan-mode
+  :init (setq nyan-wavy-trail t))
+
+(use-package| hl-todo
+  :init (global-hl-todo-mode))
+
+(defvar moon-enable-nlinum-relative nil
+  "Whether to enable relative line number.")
+
+
 (post-config| general
   (default-leader
-    "tl" #'nlinum-relative-toggle))
+    "tr" #'nlinum-mode ; toggle relative linum
+    "tl" #'display-line-numbers-mode))
 
 ;; I don't show minor mode
 ;; in modeline anymore
@@ -251,7 +256,10 @@ and saveing desktop."
     ;; )
 )
 
+;;
 ;; mission control
+;;
+
 (load (concat moon-star-dir "basic/ui/emacs-mission-control/mission-control"))
 (setq mcon-c-tab-initial-selection-offset 1
       mcon-frame-name "mcon")
@@ -259,3 +267,4 @@ and saveing desktop."
 (post-config| general
   (default-leader
     "bc" #'mcon-switch))
+
