@@ -83,16 +83,10 @@
   )
 
 
-  (general-define-key :states 'normal
+  (general-define-key :states '(normal visual)
                       "TAB" #'indent-for-tab-command
                       "RET" #'ivy-switch-buffer
                       "C-e" #'end-of-line)
-  (general-define-key :states 'insert
-                      "M-n" #'evil-complete-next
-                      "M-p" #'evil-complete-previous
-                      "C-n" #'next-line
-                      "C-p" #'previous-line
-                      )
   )
 
 (use-package| which-key

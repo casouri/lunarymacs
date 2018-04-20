@@ -75,6 +75,14 @@
   (define-key evil-normal-state-map "Q" #'moon/query-relace-point)
   (define-key evil-visual-state-map "Q" #'moon/query-replace-region))
 
+(post-config| general
+  (general-define-key :states 'insert
+                      "C-n" #'evil-complete-next
+                      "C-p" #'evil-complete-previous
+                      "M-n" #'next-line
+                      "M-p" #'previous-line
+                      ))
+
 ;; https://stackoverflow.com/questions/202803/searching-for-marked-selected-text-in-emacs
 (defun moon-isearch-with-region ()
   "Use region as the isearch text."
