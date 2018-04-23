@@ -28,7 +28,7 @@ Dependency:
 (defun moon/query-replace-region ()
   "Query replace selected region."
   (interactive)
-  (evil-visual-state -1)
+  (when (evil-visual-state-p) (evil-normal-state 1))
   (query-replace-regexp (buffer-substring-no-properties
                   (region-beginning)
                   (region-end))
