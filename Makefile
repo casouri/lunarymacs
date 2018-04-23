@@ -36,11 +36,11 @@ autoload: init.el
 $(EMACS) -f moon/generate-autoload-file ;\
 rm -f .local/autoloads.el~
 
-autoremove: init.el .local/autoloads.el
+autoremove: init.el
 >@echo "Removing unused packages" ;\
 $(EMACS) -f moon/remove-unused-package
 
-update: init.el .local/autoloads.el
+update: init.el
 >@echo "Updating packages" ;\
 $(EMACS) -f moon/update-package -f moon/generate-autoload-file
 
