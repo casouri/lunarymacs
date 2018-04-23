@@ -7,10 +7,11 @@
 - xref-js2
 - js2-refactor
 
-  
 * External dependency
 
 - ag :: used by xref-js2
+        
+- standard :: checker. https://github.com/standard/standard
 
 * Commands
 

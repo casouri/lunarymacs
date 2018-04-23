@@ -9,4 +9,6 @@
   "\\.erb\\'"
   "\\.mustache\\'"
   "\\.djhtml\\'"
-  "\\.html?\\'")
+  "\\.html?\\'"
+  :config (when (featurep 'flycheck )
+            (flycheck-add-mode 'html-tidy 'web-mode)))
