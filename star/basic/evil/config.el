@@ -21,14 +21,7 @@
   :commands (evil-search swiper))
 
 (use-package| evil-surround
-              :hook (evil-visual-state . (lambda () (setq global-evil-surround-mode)))
-              :config
-              (general-define-key
-               :states 'visual
-               "s" #'evil-surround-region
-               "S" #'evil-substitute
-               )
-              )
+  :hook (evil-mode . global-evil-surround-mode))
 
 
 (use-package| evil-nerd-commenter
@@ -41,7 +34,8 @@
 
 
 (use-package| evil-escape
-  :config (evil-escape-mode 1))
+  :config (evil-escape-mode 1)
+  (setq-default evil-escape-key-sequence "<escape>"))
 
 (use-package| evil-ediff
   :hook (ediff-mode . (lambda () (require 'evil-ediff))))
@@ -80,8 +74,6 @@
 
 (post-config| general
   (general-define-key :states 'insert
-                      "C-n" #'evil-complete-next
-                      "C-p" #'evil-complete-previous
                       "M-n" #'next-line
                       "M-p" #'previous-line
                       ))
