@@ -7,7 +7,6 @@
 Dependency:
 - avy"
   (interactive)
-  (define-key evil-normal-state-map "s"         #'avy-goto-char-timer)
   (define-key evil-normal-state-map "H"         #'evil-beginning-of-line)
   (define-key evil-normal-state-map "L"         #'evil-end-of-line)
   (define-key evil-normal-state-map "P"         #'evil-paste-from-register)
