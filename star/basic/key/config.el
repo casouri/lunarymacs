@@ -12,11 +12,16 @@
   (setq moon-non-normal-leader "S-SPC")
   :config
   (general-override-mode)
+
   (general-create-definer default-leader
     :states '(normal visual insert emacs jpnb)
     :keymaps 'override
     :prefix moon-leader
     :non-normal-prefix moon-non-normal-leader)
+
+  (general-create-definer default-no-leader
+    :states '(normal visual insert emacs jpnb)
+    :keymaps 'override)
   
   ;; One escape to escape them all.
   (global-set-key (kbd "<escape>") #'keyboard-escape-quit)
