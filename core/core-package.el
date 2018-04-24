@@ -240,10 +240,15 @@ in the front of moon-star-list"
 FEATURE is a library declared with `provide'.
 REST-LIST is a list of expressions to evaluate.
 
+If FEATURE loaded, rest-list is evaluated.
+If not, this macro will befave like `with-eval-after-load'.
+
 Expressions inside will be called right after the library is loaded,
 before `post-config|' but after `post-init'."
   (declare (indent defun) (debug t))
-  `(with-eval-after-load ',feature ,@rest-list))
+  `(if (featurep ',feature)
+        (progn ,@rest-list)
+      (with-eval-after-load ',feature ,@rest-list)))
 
 (defmacro use-package| (package &rest rest-list)
   "Thin wrapper around `use-package', just add some hooks.
