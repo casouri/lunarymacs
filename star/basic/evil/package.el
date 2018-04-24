@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 (package| evil
-          evil-surround
+          ;; evil-surround
           evil-nerd-commenter
           evil-search-highlight-persist
           evil-terminal-cursor-changer
@@ -10,6 +10,7 @@
 	  evil-escape
           evil-ediff
           vimish-fold
+          embrace
           evil-vimish-fold
           evil-collection
           )

@@ -27,10 +27,10 @@
                       nil
                       :background (face-attribute 'highlight :background)))
 
-(use-package| evil-surround
-  :after evil
-  :config (global-evil-surround-mode 1)
-  (evil-define-key 'visual 'global "s" 'evil-surround-region))
+;; (use-package| evil-surround
+;;   :after evil
+;;   :config (global-evil-surround-mode 1)
+;;   (evil-define-key 'visual 'global "s" 'evil-surround-region))
 
 
 (use-package| evil-nerd-commenter
@@ -41,10 +41,13 @@
             "c" #'evilnc-comment-operator)
   )
 
+(use-package| embrace
+  :after evil)
 
-(use-package| evil-escape
-  :config (evil-escape-mode 1)
-  (setq-default evil-escape-key-sequence "<escape>"))
+
+;; (use-package| evil-escape
+;;   :config (evil-escape-mode 1)
+;;   (setq-default evil-escape-key-sequence "<escape>"))
 
 (use-package| evil-ediff
   :hook (ediff-mode . (lambda () (require 'evil-ediff))))
@@ -73,12 +76,37 @@
   (define-key evil-normal-state-map "Q" #'moon/query-relace-point)
   (define-key evil-visual-state-map "Q" #'moon/query-replace-region))
 
+  (defun embrace-edit ()
+    (interactive)
+    (cond
+     ((eq evil-this-operator 'change)
+      (call-interactively #'embrace-change))
+     ((eq evil-this-operator 'delete)
+      (call-interactively #'embrace-delete))))
+
 (post-config| general
+  (general-define-key
+   :states 'normal
+   "c" (general-key-dispatch 'evil-change
+         "s" #'embrace-change)
+   "d" (general-key-dispatch 'evil-delete
+         "s" #'embrace-delete))
+  ;; `evil-change' is not bound in `evil-visual-state-map' by default but
+  ;; inherited from `evil-normal-state-map'
+  ;; if you don't want "c" to be affected in visual state, you should add this
+  (general-define-key
+   :states 'visual
+   "c" 'evil-change)
   (general-define-key :states 'insert
                       "M-n" #'next-line
-                      "M-p" #'previous-line
-                      )
-  (default-g-leader "s" #'save-buffer)
+                      "M-p" #'previous-line)
+  (default-g-leader "s" #'embrace-commander)
+  (general-define-key
+   :states 'visual
+   :keymaps 'override
+   "s" #'embrace-add
+   "x" #'exchange-point-and-mark ; for expand-region
+   )
   (default-leader
     "sc" #'moon/clear-evil-search)
   "ij" #'evil-insert-line-below
@@ -92,6 +120,7 @@
     "l" #'term-line-mode))
 
 ;; This way "/" respects the current region
+;; but not when you use 'evil-search as evil-search-module
 ;; https://stackoverflow.com/questions/202803/searching-for-marked-selected-text-in-emacs
 (defun moon-isearch-with-region ()
   "Use region as the isearch text."
@@ -101,3 +130,6 @@
       (isearch-push-state)
       (isearch-yank-string region))))
 (add-hook 'isearch-mode-hook #'moon-isearch-with-region)
+
+
+

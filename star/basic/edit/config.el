@@ -6,6 +6,10 @@
 	     "v" #'er/expand-region
              ))
 
+(use-package| embrace
+  :config
+  (global-set-key (kbd "C-,") #'embrace-commander))
+
 
 (use-package| undo-tree
   :config (global-undo-tree-mode)
