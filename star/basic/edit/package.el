@@ -6,4 +6,5 @@
 	  recentf-ext
           smooth-scrolling
           minimap
+          goto-last-change
           avy)
