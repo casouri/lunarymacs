@@ -29,7 +29,7 @@
     )
   
   ;; One escape to escape them all.
-  (global-set-key (kbd "<escape>") #'keyboard-escape-quit)
+  ;; (global-set-key (kbd "<escape>") #'keyboard-escape-quit)
 
   
   (default-leader
@@ -97,6 +97,11 @@
                       "TAB" #'indent-for-tab-command
                       "RET" #'ivy-switch-buffer
                       "C-e" #'end-of-line)
+  (general-define-key
+   :keymaps 'override
+   "<escape>" (lambda () (interactive)
+                (keyboard-escape-quit)
+                (evil-force-normal-state)))
   )
 
 (use-package| which-key
