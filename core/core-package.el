@@ -241,7 +241,7 @@ FEATURE is a library declared with `provide'.
 REST-LIST is a list of expressions to evaluate.
 
 Expressions inside will be called right after the library is loaded,
-before `post-config|' but after `pro-init'."
+before `post-config|' but after `post-init'."
   (declare (indent defun) (debug t))
   `(with-eval-after-load ',feature ,@rest-list))
 
