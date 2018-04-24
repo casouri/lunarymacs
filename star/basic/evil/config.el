@@ -58,11 +58,15 @@
   :hook (prog-mode . evil-vimish-fold-mode))
 
 (after-load| term
-  (require 'evil-collection-term)
-  (evil-collection-term-setup)
+ (require 'evil-collection-term)
+ (evil-collection-term-setup)
   (add-hook 'term-mode-hook (lambda ()
-                              (setq-local evil-insert-state-cursor 'box)))
-  )
+                             (setq-local evil-insert-state-cursor 'box)))
+ )
+
+(use-package| evil-embrace
+  :after embrace evil
+  :config (evil-embrace-enable-evil-surround-integration))
 
 
 ;;
@@ -85,39 +89,40 @@
       (call-interactively #'embrace-delete))))
 
 (post-config| general
-  (general-define-key
-   :states 'normal
-   "c" (general-key-dispatch 'evil-change
-         "s" #'embrace-change)
-   "d" (general-key-dispatch 'evil-delete
-         "s" #'embrace-delete))
-  ;; `evil-change' is not bound in `evil-visual-state-map' by default but
-  ;; inherited from `evil-normal-state-map'
-  ;; if you don't want "c" to be affected in visual state, you should add this
-  (general-define-key
-   :states 'visual
-   "c" 'evil-change)
-  (general-define-key :states 'insert
-                      "M-n" #'next-line
-                      "M-p" #'previous-line)
-  (default-g-leader "s" #'embrace-commander)
-  (general-define-key
-   :states 'visual
-   :keymaps 'override
-   "s" #'embrace-add
-   "x" #'exchange-point-and-mark ; for expand-region
-   )
-  (default-leader
-    "sc" #'moon/clear-evil-search)
-  "ij" #'evil-insert-line-below
-  "ik" #'evil-insert-line-above
-  (default-leader
-    :keymaps 'term-mode-map
-    "c" '((lambda ()
-            (interactive)
-            (term-char-mode)
-            (evil-insert-state)) :which-key "char-mode")
-    "l" #'term-line-mode))
+  (after-load| evil
+    (general-define-key
+     :states 'normal
+     "c" (general-key-dispatch 'evil-change
+           "s" #'embrace-change)
+     "d" (general-key-dispatch 'evil-delete
+           "s" #'embrace-delete))
+    ;; `evil-change' is not bound in `evil-visual-state-map' by default but
+    ;; inherited from `evil-normal-state-map'
+    ;; if you don't want "c" to be affected in visual state, you should add this
+    (general-define-key
+     :states 'visual
+     "c" 'evil-change)
+    (general-define-key :states 'insert
+                        "M-n" #'next-line
+                        "M-p" #'previous-line)
+    (default-g-leader "s" #'embrace-commander)
+    (general-define-key
+     :states 'visual
+     :keymaps 'override
+     "s" #'embrace-add
+     "x" #'exchange-point-and-mark ; for expand-region
+     )
+    (default-leader
+      "sc" #'moon/clear-evil-search)
+    "ij" #'evil-insert-line-below
+    "ik" #'evil-insert-line-above
+    (default-leader
+      :keymaps 'term-mode-map
+      "c" '((lambda ()
+              (interactive)
+              (term-char-mode)
+              (evil-insert-state)) :which-key "char-mode")
+      "l" #'term-line-mode)))
 
 ;; This way "/" respects the current region
 ;; but not when you use 'evil-search as evil-search-module
