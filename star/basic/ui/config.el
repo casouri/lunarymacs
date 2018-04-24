@@ -115,7 +115,8 @@
 (global-display-line-numbers-mode)
 
 (use-package| nyan-mode
-  :init (setq nyan-wavy-trail t))
+  :init (setq nyan-wavy-trail t
+              nyan-bar-length 12))
 
 (use-package| hl-todo
   :init (global-hl-todo-mode))
