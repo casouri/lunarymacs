@@ -6,8 +6,11 @@
   ;; fix paste issue in evil visual mode
   ;; http://emacs.stackexchange.com/questions/14940/emacs-doesnt-paste-in-evils-visual-mode-with-every-os-clipboard/15054#15054
   (fset 'evil-visual-update-x-selection 'ignore)
-  (default-leader "ij" #'evil-insert-line-below
-    "ik" #'evil-insert-line-above)
+  ;; https://github.com/syl20bnr/spacemacs/issues/6636
+  ;; setting this directly doesn't work
+  ;; you have to set it through customize
+  ;; (customize-set-variable evil-search-module 'evil-search)
+  (setq evil-ex-substitute-global t)
   )
 
 (post-config| evil
@@ -18,10 +21,16 @@
   )
 
 (use-package| evil-search-highlight-persist
-  :commands (evil-search swiper))
+  :after evil
+  :config (global-evil-search-highlight-persist)
+  (set-face-attribute 'evil-search-highlight-persist-highlight-face
+                      nil
+                      :background (face-attribute 'highlight :background)))
 
 (use-package| evil-surround
-  :hook (evil-mode . global-evil-surround-mode))
+  :after evil
+  :config (global-evil-surround-mode 1)
+  (evil-define-key 'visual 'global "s" 'evil-surround-region))
 
 
 (use-package| evil-nerd-commenter
@@ -52,14 +61,6 @@
                               (setq-local evil-insert-state-cursor 'box)))
   )
 
-(post-config| general
-  (default-leader
-    :keymaps 'term-mode-map
-    "c" '((lambda ()
-          (interactive)
-          (term-char-mode)
-          (evil-insert-state)) :which-key "char-mode")
-    "l" #'term-line-mode))
 
 ;;
 ;; Config
@@ -76,7 +77,19 @@
   (general-define-key :states 'insert
                       "M-n" #'next-line
                       "M-p" #'previous-line
-                      ))
+                      )
+  (default-g-leader "s" #'save-buffer)
+  (default-leader
+    "sc" #'moon/clear-evil-search)
+  "ij" #'evil-insert-line-below
+  "ik" #'evil-insert-line-above
+  (default-leader
+    :keymaps 'term-mode-map
+    "c" '((lambda ()
+            (interactive)
+            (term-char-mode)
+            (evil-insert-state)) :which-key "char-mode")
+    "l" #'term-line-mode))
 
 ;; This way "/" respects the current region
 ;; https://stackoverflow.com/questions/202803/searching-for-marked-selected-text-in-emacs

@@ -22,6 +22,11 @@
   (general-create-definer default-no-leader
     :states '(normal visual insert emacs jpnb)
     :keymaps 'override)
+  (general-create-definer default-g-leader
+    :states '(normal visual)
+    :keymaps 'override
+    :prefix "g"
+    )
   
   ;; One escape to escape them all.
   (global-set-key (kbd "<escape>") #'keyboard-escape-quit)

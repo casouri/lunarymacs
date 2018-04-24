@@ -42,3 +42,11 @@ Dependency:
     (query-replace-regexp word
                    (completing-read (format "Replace \"%s\" to: " word) ())
                    nil (beginning-of-line))))
+
+;;;###autoload
+(defun moon/clear-evil-search ()
+  "Clear highlights of matched patterns."
+  (interactive)
+  (pcase evil-search-module
+        ('isearch (evil-search-highlight-persist-remove-all))
+        ('evil-search (evil-ex-nohighlight))))

@@ -38,3 +38,6 @@ In visual-mode:
 (moon/override-vim-binding)
 (moon/override-emacs-binding)
 #+END_SRC
+* Note
+You need to set =evil-search-module= to ='evil-search= in customize for 
+=gn= to work.
