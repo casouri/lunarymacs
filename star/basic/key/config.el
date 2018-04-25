@@ -54,8 +54,11 @@
    "o" '(:ignore t :which-key "open")
    ;; open
    "ot"  #'moon/open-in-iterm
-   ;; insert
-   "ua"  #'align-regexp
+   ;; action/edit
+   "ah" '(:ignore t :which-key "highlight")
+   "ahs" #'hlt-highlight
+   "ahu" #'hlt-highlight
+   "aa"  #'align-regexp
    ;; file
    "fR"  #'moon/rename-file
    "fs"  #'save-buffer
@@ -82,8 +85,6 @@
    "ek"  #'hydra-error/previous-error
    "eh"  #'hydra-error/first-error
    ;; utilities
-   "uhs" #'hlt-highlight
-   "uhu" #'hlt-highlight
    ;; jump
    "jmc" #'moon/jump-to-config
    "jmp" #'moon/jump-to-package
