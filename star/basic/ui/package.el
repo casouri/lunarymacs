@@ -1,6 +1,8 @@
 ;;; -*- lexical-binding: t -*-
 
 (package|
+ moody
+ minions
  spacemacs-theme
  rainbow-delimiters
  highlight-parentheses
@@ -11,7 +13,6 @@
  powerline
  rainbow-mode
  nyan-mode
- ;; dim
  eyebrowse
  winum
  )

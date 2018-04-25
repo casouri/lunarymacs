@@ -174,3 +174,52 @@ h   l <   >
   (interactive)
   (moon-kill-buffer-in-window 9))
 
+;;;###autoload
+(defun flycheck-lighter (state bullet)
+  "Return flycheck information for the given error type STATE."
+  (let* ((counts (flycheck-count-errors flycheck-current-errors))
+          (errorp (flycheck-has-current-errors-p state))
+          (err (or (cdr (assq state counts)) "?"))
+          (running (eq 'running flycheck-last-status-change)))
+     (if (or errorp running) (format bullet err) "")))
+
+;;;###autoload
+(defun moon-edit-lighter ()
+  (if (buffer-modified-p)
+      "MOD "
+    ""))
+
+;;;###autoload
+(defun moon-root-lighter ()
+  (if (equal user-login-name "root")
+      "ROOT "
+    ""))
+
+;;;###autoload
+(defun moon/setup-moody ()
+  "Setup mode-line using moody."
+  (interactive)
+  (setq mode-line-format '(" "
+                           (:eval (winum-get-number-string))
+                           " "
+                           (:eval (eyebrowse-mode-line-indicator))
+                           " %I "
+                           (:eval (moon-edit-lighter))
+                           (:eval (moon-root-lighter))
+                           ;; moody-mode-line-buffer-identification
+                           (:eval (moody-tab "%b"))
+                           " "
+                           minions-mode-line-modes
+                           (:eval (moody-tab (concat (flycheck-lighter 'error "☠%s")
+                                                     (flycheck-lighter 'warning "⚠%s")
+                                                     (flycheck-lighter 'info "𝌆%s"))))
+                           " "
+                           (:eval (nyan-create))
+                           " "
+                           moody-vc-mode
+                           mode-line-misc-info
+                           mode-line-end-spaces))
+  (setq-default mode-line-format mode-line-format))
+
+
+

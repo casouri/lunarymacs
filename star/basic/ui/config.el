@@ -67,18 +67,30 @@
 ;;
 ;; Mode-line
 
-(defun moon-load-powerline ()
-  (require 'powerline)
-  (setq powerline-default-separator 'slant)
-  (setq powerline-image-apple-rgb t)
-  (setq powerline-height 28)
-  (load (concat moon-star-dir "basic/ui/lunaryline/lunaryline"))
-  (lunaryline-default-theme)
-  ;; fix different separator color after changing theme
-  (add-hook 'moon-load-theme-hook #'powerline-reset)
-  (remove-hook 'after-change-major-mode-hook #'moon-load-powerline))
+(use-package| minions
+  :config (minions-mode 1))
 
-(add-hook 'after-change-major-mode-hook #'moon-load-powerline)
+(use-package| moody
+  :config
+  (setq moody-slant-function #'moody-slant-apple-rgb)
+  (setq x-underline-at-descent-line t)
+  (defface powerline-active1 nil "fake powerline theme")
+  (set-face-attribute 'mode-line nil :box nil :background (face-attribute 'powerline-active1 :background))
+  (set-face-attribute 'mode-line-inactive nil :box nil)
+  (moon/setup-moody))
+
+;; (defun moon-load-powerline ()
+;;   (require 'powerline)
+;;   (setq powerline-default-separator 'slant)
+;;   (setq powerline-image-apple-rgb t)
+;;   (setq powerline-height 28)
+;;   (load (concat moon-star-dir "basic/ui/lunaryline/lunaryline"))
+;;   (lunaryline-default-theme)
+;;   ;; fix different separator color after changing theme
+;;   (add-hook 'moon-load-theme-hook #'powerline-reset)
+;;   (remove-hook 'after-change-major-mode-hook #'moon-load-powerline))
+
+;; (add-hook 'after-change-major-mode-hook #'moon-load-powerline)
 
 
 ;;
@@ -168,7 +180,9 @@
 
 
 (use-package| winum
-  :config (winum-mode 1))
+  :config
+  (winum-mode 1)
+  (setq winum-auto-setup-mode-line nil))
 
 (post-config| general
   (default-leader
