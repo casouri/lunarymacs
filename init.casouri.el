@@ -46,7 +46,7 @@
 (setq eyebrowse-mode-line-separator " ")
 
 ;;
-;;                                                                                      ~~dark~~~                               ~~light~~
+;;                                                                                     ~~dark~~~                               ~~light~~
 (custom-set-variables '(spacemacs-theme-custom-colors ;                              GUI       TER                           GUI       TER
                         '((bg1        . (if (eq variant 'dark) (if (true-color-p) "#222226" "#262626") (if (true-color-p) "#fbf8ef" "#ffffff")))
                           (bg2        . (if (eq variant 'dark) (if (true-color-p) "#17181B" "#1c1c1c") (if (true-color-p) "#efeae9" "#e4e4e4")))
