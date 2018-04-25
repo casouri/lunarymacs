@@ -10,5 +10,5 @@
    ;; eval
    "ee" '(:ignore t :which-key "eval")
    "eer" #'eval-region
-   "eef" #'eval-function
+   "eef" #'eval-defun
    "eeb" #'eval-buffer))
