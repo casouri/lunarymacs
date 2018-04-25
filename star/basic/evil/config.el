@@ -101,7 +101,8 @@
     ;; if you don't want "c" to be affected in visual state, you should add this
     (general-define-key
      :states 'visual
-     "c" 'evil-change)
+     "c" 'evil-change
+     "d" 'evil-delete)
     (general-define-key :states 'insert
                         "M-n" #'next-line
                         "M-p" #'previous-line)
