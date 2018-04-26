@@ -7,8 +7,7 @@
              ))
 
 (use-package| embrace
-  :config
-  (global-set-key (kbd "C-,") #'embrace-commander))
+  :commands (embrace-add embrace-delete embrace-change embrace-commander))
 
 
 (use-package| undo-tree
@@ -102,3 +101,10 @@
         (indent-according-to-mode)))
 
 (global-set-key (kbd "C-o") 'open-next-line)
+
+;; http://emacsredux.com/blog/2013/04/21/edit-files-as-root/
+(defadvice ivy-find-file (after find-file-sudo activate)
+  "Find file as root if necessary."
+  (unless (and buffer-file-name
+               (file-writable-p buffer-file-name))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
