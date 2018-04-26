@@ -23,12 +23,6 @@ if under, turn them off.")
   :after lsp-mode
   :config
   (add-hook 'lsp-mode-hook #'lsp-ui-mode)
-  (default-leader
-    "jr" #'lsp-ui-peek-find-references
-    "jd" #'lsp-ui-peek-find-definitions
-    "jD" #'xref-find-definition
-    "jR" #'xref-find-references
-    )
   ;; completion
   (setq lsp-enable-completion-at-point t)
   ;; ui
@@ -57,3 +51,13 @@ if under, turn them off.")
   (add-to-list 'company-backends 'company-lsp)
   )
 
+
+(post-config| general
+  (after-load| lsp-mode
+    (after-load| lsp-ui
+      (default-leader
+        "lr" #'lsp-ui-peek-find-references
+        "ld" #'lsp-ui-peek-find-definitions
+        "lR" #'lsp-rename
+        "lf" #'lsp-format-buffer
+        ))))
