@@ -12,4 +12,15 @@
 
 | key     | command         |
 |---------+-----------------|
-| S-SPC-j | evil-jpnb-state |
+|         |                 |
+
+
+* External dependency
+
+** Required by lsp-python
+- python-language-server :: https://github.com/palantir/python-language-server
+- some other extra libraries python-language-server can take advantage of:
+  - Rope 
+  - yapf
+  - pyls-isort
+  - more on python-language-server github page

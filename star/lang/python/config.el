@@ -5,17 +5,10 @@
 ;; Config
 ;;
 
-(defvar moon-enable-format-on-save-python nil
-  "Whether to enabel lsp-python format on save.")
-
 (use-package| lsp-python
-  ;; :hook (python-mode . lsp-python-enable)
   :init
   (add-hook 'python-mode-hook #'lsp-python-enable)
-  (add-hook 'python-mode-hook #'setup-lsp)
-  :config
-  (when moon-enable-format-on-save-python
-    (add-hook 'python-mode-hook #'lsp-format-on-save-mode)))
+  (add-hook 'python-mode-hook #'setup-lsp))
 
 
 (use-package| pyvenv
@@ -49,11 +42,13 @@
          "star/lang/python/jpnb-state/jpnb-state.el")))
 
 (post-config| general
-  (default-leader
-    :keymaps '(ein:notebook-mode-map
-              ein:notebook-multilang-mode-map
-              ein:notebook-python-mode-map
-              ein:notebook-plain-mode-map
-              )
-   "jj" #'evil-jpnb-state
-   ))
+  (after-load| ein
+    (default-leader
+      :keymaps '(ein:notebook-mode-map
+                 ein:notebook-multilang-mode-map
+                 ein:notebook-python-mode-map
+                 ein:notebook-plain-mode-map
+                 )
+      "jj" #'evil-jpnb-state
+      ))
+  )

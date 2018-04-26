@@ -34,3 +34,9 @@
        (plist-get notebook ':name)
        path-list))))
 
+
+;;;###autoload
+(defun lsp-format-on-save-mode ()
+  "Toggle format-on-save."
+  (interactive)
+  (lsp-format-on-save-mode moon-format-on-save))
