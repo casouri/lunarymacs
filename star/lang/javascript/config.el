@@ -18,9 +18,6 @@
 ;;
 ;; format
 
-(defvar moon-javascript-format-on-save nil
-  "Auto format on save.")
-
 
 (use-package| js-format
   :config
@@ -28,7 +25,7 @@
             (lambda()
               (js-format-setup "standard")
               (add-hook 'after-save-hook (lambda ()
-                                           (when moon-javascript-format-on-save
+                                           (when moon-format-on-save
                                              (js-format-buffer)))))))
 ;; indent
 (setq js-indent-level 2)
