@@ -76,14 +76,6 @@
 ;;
 ;; Replace some keys
 
-(defun embrace-edit ()
-    (interactive)
-    (cond
-     ((eq evil-this-operator 'change)
-      (call-interactively #'embrace-change))
-     ((eq evil-this-operator 'delete)
-      (call-interactively #'embrace-delete))))
-
 (post-config| general
   (after-load| evil
     (general-define-key
