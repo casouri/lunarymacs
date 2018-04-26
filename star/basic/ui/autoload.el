@@ -195,6 +195,16 @@ h   l <   >
       "ROOT "
     ""))
 
+(defmacro make-lighter| (form empty-value empty-return)
+  "Make a ligher for mode-line.
+
+If FORM return EMPTY-VALUE(nil, \"\"), return EMPTY-RETURN,
+else just return the form's return."
+  `(let ((result ,form))
+     (if (equal result ,empty-value)
+         ,empty-return
+       result)))
+
 ;;;###autoload
 (defun moon/setup-moody ()
   "Setup mode-line using moody."
@@ -210,13 +220,14 @@ h   l <   >
                            (:eval (moody-tab "%b"))
                            " "
                            minions-mode-line-modes
-                           (:eval (moody-tab (concat (flycheck-lighter 'error "☠%s")
-                                                     (flycheck-lighter 'warning "⚠%s")
-                                                     (flycheck-lighter 'info "𝌆%s"))))
+                           (:eval (moody-tab (make-lighter| (concat (flycheck-lighter 'error "☠%s")
+                                                                    (flycheck-lighter 'warning "⚠%s")
+                                                                    (flycheck-lighter 'info "𝌆%s")) "" "OK") nil 'up))
                            " "
                            (:eval (nyan-create))
                            " "
-                           moody-vc-mode
+                           ;; moody-vc-mode
+                           (:eval (moody-tab (if vc-mode (substring-no-properties vc-mode 1) "NO VC")))
                            mode-line-misc-info
                            mode-line-end-spaces))
   (setq-default mode-line-format mode-line-format))
