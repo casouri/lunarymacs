@@ -45,6 +45,7 @@
 ;; default was ", "
 (setq eyebrowse-mode-line-separator " ")
 
+;; custom spacemacs-theme colors
 ;;
 ;;                                                                                     ~~dark~~~                               ~~light~~
 (custom-set-variables '(spacemacs-theme-custom-colors ;                              GUI       TER                           GUI       TER
@@ -87,6 +88,8 @@
 
 (setq evil-insert-state-cursor 'box)
 
+(setq moon-format-on-save t)
+
 ;; (setq mac-command-modifier 'control)
 ;; (setq mac-control-modifier 'super)
 ;; (global-set-key (kbd "s-v") #'yank)
@@ -119,9 +122,6 @@
  ;; (load (concat moon-emacs-d-dir "star/completion/company/posframe/posframe"))
  ;; (load (concat moon-emacs-d-dir "star/completion/company/company-childframe/company-childframe"))
  ;; (company-childframe-mode 1)
-
- (moon/override-vim-binding)
- (moon/override-emacs-binding)
 
  ;; (org-mode)
 

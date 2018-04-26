@@ -76,11 +76,7 @@
 ;;
 ;; Replace some keys
 
-(post-config| evil
-  (define-key evil-normal-state-map "Q" #'moon/query-relace-point)
-  (define-key evil-visual-state-map "Q" #'moon/query-replace-region))
-
-  (defun embrace-edit ()
+(defun embrace-edit ()
     (interactive)
     (cond
      ((eq evil-this-operator 'change)
@@ -92,31 +88,42 @@
   (after-load| evil
     (general-define-key
      :states 'normal
-     "c" (general-key-dispatch 'evil-change
-           "s" #'embrace-change)
-     "d" (general-key-dispatch 'evil-delete
-           "s" #'embrace-delete))
-    ;; `evil-change' is not bound in `evil-visual-state-map' by default but
-    ;; inherited from `evil-normal-state-map'
-    ;; if you don't want "c" to be affected in visual state, you should add this
+     "c" (general-key-dispatch 'evil-change "s" #'embrace-change)
+     "d" (general-key-dispatch 'evil-delete "s" #'embrace-delete))
+    
     (general-define-key
      :states 'visual
-     "c" 'evil-change
-     "d" 'evil-delete)
-    (general-define-key :states 'insert
-                        "M-n" #'next-line
-                        "M-p" #'previous-line)
-    (default-g-leader "s" #'embrace-commander)
-    (general-define-key
-     :states 'visual
-     :keymaps 'override
+     ;; `evil-change' is not bound in `evil-visual-state-map' by default but
+     ;; inherited from `evil-normal-state-map'
+     ;; if you don't want "c" to be affected in visual state, you should add this
+     "c" #'evil-change
+     "d" #'evil-delete
      "s" #'embrace-add
      "x" #'exchange-point-and-mark ; for expand-region
      )
+
+    (general-define-key
+     :states 'insert
+     "M-n" #'next-line
+     "M-p" #'previous-line
+     "C-a" #'evil-beginning-of-line
+     "C-e" #'evil-end-of-line)
+
+    (general-define-key
+     :states 'normal
+     "H"   #'evil-beginning-of-line
+     "L"   #'evil-end-of-line
+     "P"   #'evil-paste-from-register
+     "U"   #'undo-tree-redo
+     "C-u" #'evil-scroll-up)
+    
+    (default-g-leader "s" #'embrace-commander)
+
     (default-leader
-      "sc" #'moon/clear-evil-search)
-    "ij" #'evil-insert-line-below
-    "ik" #'evil-insert-line-above
+      "sc" #'moon/clear-evil-search
+      "ij" #'evil-insert-line-below
+      "ik" #'evil-insert-line-above)
+
     (default-leader
       :keymaps 'term-mode-map
       "c" '((lambda ()
@@ -136,6 +143,4 @@
       (isearch-push-state)
       (isearch-yank-string region))))
 (add-hook 'isearch-mode-hook #'moon-isearch-with-region)
-
-
 

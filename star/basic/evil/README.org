@@ -17,20 +17,9 @@
 - evil-collection
 
 * Commands
-  
-In normal mode:
-
-| key | command                 |
-|-----+-------------------------|
-| Q   | moon/query-relace-point |
-
-In visual-mode:
 
 | key   | command                              |
 |-------+--------------------------------------|
-| s     | evil-surround-region                 |
-| S     | evil-substitute                      |
-| Q     | moon/query-replace-region            |
 
 * Other avaliable options
  
