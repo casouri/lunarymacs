@@ -80,6 +80,7 @@
    ;; toggle
    "tt"  #'moon/switch-theme
    "tM"  #'toggle-frame-maximized
+   "tf"  #'moon/toggle-format-on-save
    ;; error
    "ej"  #'hydra-error/next-error
    "ek"  #'hydra-error/previous-error
