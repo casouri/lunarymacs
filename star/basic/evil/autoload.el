@@ -2,6 +2,7 @@
 
 
 
+;; not used anymore
 ;;;###autoload
 (defun moon/query-replace-region ()
   "Query replace selected region."
@@ -13,6 +14,7 @@
                  (completing-read "Replace to: " ())
                  ))
 
+;; not used anymore
 ;;;###autoload
 (defun moon/query-relace-point ()
   "Query replace thing at point."
