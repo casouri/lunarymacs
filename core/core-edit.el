@@ -1,3 +1,8 @@
 ;;; -*- lexical-binding: t -*-
 
-(defvar moon-format-on-save-var-book '(js2-mode moon-javascript-format-on-save))
+(defvar moon-format-on-save-func-book '(python-mode moon/toggle-python-format-on-save javascript-mode moon/toggle-js-format-on-save)
+  "Function to toggle format on save for each major mode.
+Each function should toggle format-on-save base on `moon-format-on-save'.")
+
+(defvar moon-format-on-save nil
+  "Whether to format on save.")

@@ -69,6 +69,7 @@
 
 (load (concat moon-core-dir "core-package"))
 (load| core-ui)
+(load| core-edit)
 
 (defun moon-finalize ()
   "The main starup function."
