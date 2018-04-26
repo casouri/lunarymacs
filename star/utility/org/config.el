@@ -57,6 +57,7 @@
                   ("lp" "programming related links." item (file+olp "~/note/index.org" "Links" "Programming links") "- %^L :: ")
                   ("lw" "Web related links." item (file+olp "~/note/index.org" "Links" "Web links") "- %^L :: ")
                   ("lb" "Blog links." item (file+olp "~/note/index.org" "Links" "Blog links") "- %^L :: ")
+                  ("lu" "Utility links." item (file+olp "~/note/index.org" "Links" "Utility links") "- %^L :: ")
                   ("n" "Notes")
                   ("nr" "Random notes" entry (file+olp "~/note/index.org" "Notes" "Random notes") "*** %?")
                   ("nv" "Vim notes" entry (file+olp "~/note/index.org" "Notes" "Vim notes") "*** %? ")
