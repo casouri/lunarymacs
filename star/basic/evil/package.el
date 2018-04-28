@@ -10,7 +10,6 @@
 	  evil-escape
           evil-ediff
           vimish-fold
-          embrace
           evil-embrace
           evil-vimish-fold
           evil-collection
