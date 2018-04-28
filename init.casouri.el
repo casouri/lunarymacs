@@ -20,6 +20,7 @@
        dir
        git
        org
+       imagemagick
        :checker
        syntax
        spell
@@ -95,6 +96,9 @@
 ;; (global-set-key (kbd "s-v") #'yank)
 ;; (global-set-key (kbd "s-c") #'kill-ring-save)
 
+;; don't open new frame
+(setq ns-pop-up-frames nil)
+
 
 ;;
 ;; Settings to overwrite configs in stars i.e. user-config
@@ -128,3 +132,6 @@
  ;;
  ;;customize ends here
  )
+
+;; esup
+;; (moon-finalize)
