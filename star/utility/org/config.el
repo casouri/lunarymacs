@@ -63,4 +63,6 @@
                   ("nv" "Vim notes" entry (file+olp "~/note/index.org" "Notes" "Vim notes") "*** %? ")
                   ("ne" "Emacs notes" entry (file+olp "~/note/index.org" "Notes" "Emacs notes") "*** %?")
                   ("nt" "Tutorial notes" entry (file+olp "~/note/index.org" "Notes" "Tutorial notes") "*** %?")
+                  ("t" "Tasks")
+                  ("ti" "Ideas" entry (file+olp "~/note/index.org" "Tasks" "Ideas") "*** %?")
                   ))))
