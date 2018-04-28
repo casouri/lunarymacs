@@ -41,8 +41,6 @@
             "c" #'evilnc-comment-operator)
   )
 
-(use-package| embrace
-  :after evil)
 
 
 ;; (use-package| evil-escape
