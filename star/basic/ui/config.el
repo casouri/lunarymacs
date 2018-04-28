@@ -180,9 +180,8 @@
 
 
 (use-package| winum
-  :config
-  (winum-mode 1)
-  (setq winum-auto-setup-mode-line nil))
+  :init (setq winum-auto-setup-mode-line nil)
+  :config (winum-mode 1))
 
 (post-config| general
   (default-leader
