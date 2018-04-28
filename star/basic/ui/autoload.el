@@ -224,7 +224,7 @@ else just return the form's return."
                                                                     (flycheck-lighter 'warning "⚠%s")
                                                                     (flycheck-lighter 'info "𝌆%s")) "" "OK") nil 'up))
                            " "
-                           (:eval (nyan-create))
+                           (:eval (when nyan-mode (nyan-create)))
                            " "
                            ;; moody-vc-mode
                            (:eval (moody-tab (if vc-mode (substring-no-properties vc-mode 1) "NO VC")))
