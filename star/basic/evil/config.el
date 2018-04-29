@@ -14,6 +14,7 @@
   )
 
 (after-load| evil-search
+  ;; . in visual mode
   (defun moon/make-region-search-history ()
     "Make region a histroy so I can use cgn."
     (interactive)
@@ -24,7 +25,9 @@
       ;; this way cgn jumps to current match,
       ;; rather than the next
       (backward-char)))
-  (defun moon-put-region-in-search-history (count)
+
+  ;; / in visual mode
+  (defun moon-put-region-in-search-history (&rest arg-list)
     "Put region into evil-search history.
 COUNT is passed to evil-search command."
     (when (evil-visual-state-p)
@@ -36,10 +39,34 @@ COUNT is passed to evil-search command."
         (push region evil-ex-search-history)
         (setq evil-ex-search-pattern (evil-ex-make-search-pattern region))
         ;; (push region evil-ex-s)
-        (deactivate-mark)
-        )))
-  (advice-add 'evil-ex-search-forward :before #'moon-put-region-in-search-history)
+        (deactivate-mark))))
+
+  (advice-add 'evil-ex-start-search :before #'moon-put-region-in-search-history)
+
+  ;; # in visual mode
+  (defun moon-evil-ex-search-word-backward-advice (old-func count &optional symbol)
+    (if (evil-visual-state-p)
+        (let ((region (buffer-substring-no-properties
+                       (region-beginning) (1+ (region-end)))))
+          (setq evil-ex-search-pattern region)
+          (deactivate-mark)
+          (evil-ex-search-full-pattern region count 'backward))
+      (apply old-func count symbol)))
+
+  ;; * in visual mode
+  (defun moon-evil-ex-search-word-forward-advice (old-func count &optional symbol)
+    (if (evil-visual-state-p)
+        (let ((region (buffer-substring-no-properties
+                       (region-beginning) (1+ (region-end)))))
+          (setq evil-ex-search-pattern region)
+          (deactivate-mark)
+          (evil-ex-search-full-pattern region count 'forward))
+      (apply old-func count symbol)))
+
+  (advice-add #'evil-ex-search-word-backward :around #'moon-evil-ex-search-word-backward-advice)
+  (advice-add #'evil-ex-search-word-forward :around #'moon-evil-ex-search-word-forward-advice)
   )
+
 (post-config| evil
               (message "it works!"))
 
