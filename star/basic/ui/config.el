@@ -164,8 +164,20 @@
 ;;   )
 
 (use-package| eyebrowse
+  :commands
+  (
+   eyebrowse-switch-to-window-config-1
+   eyebrowse-switch-to-window-config-2
+   eyebrowse-switch-to-window-config-3
+   eyebrowse-switch-to-window-config-4
+   eyebrowse-switch-to-window-config-5
+   eyebrowse-switch-to-window-config-6
+   )
   :config
-  (eyebrowse-mode 1))
+  (eyebrowse-mode 1)
+  ;; default was ", "
+  (setq eyebrowse-mode-line-separator " ")
+  )
 
 (post-config| general
   (default-leader
