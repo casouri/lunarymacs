@@ -21,11 +21,7 @@
     (let ((region (strip-text-properties (funcall region-extract-function nil))))
       (push region evil-ex-search-history)
       (setq evil-ex-search-pattern (evil-ex-make-search-pattern region))
-      (deactivate-mark)
-      ;; this way cgn jumps to current match,
-      ;; rather than the next
-      (backward-char)))
-
+      (deactivate-mark)))
   ;; / in visual mode
   (defun moon-put-region-in-search-history (&rest arg-list)
     "Put region into evil-search history.
