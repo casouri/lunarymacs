@@ -210,9 +210,9 @@ else just return the form's return."
   "Setup mode-line using moody."
   (interactive)
   (setq mode-line-format '(" "
-                           (:eval (winum-get-number-string))
+                           (:eval (if winum-mode (winum-get-number-string) ""))
                            " "
-                           (:eval (eyebrowse-mode-line-indicator))
+                           (:eval (if eyebrowse-mode (eyebrowse-mode-line-indicator) ""))
                            " %I "
                            (:eval (moon-edit-lighter))
                            (:eval (moon-root-lighter))
