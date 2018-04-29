@@ -197,15 +197,16 @@
 
 (post-config| general
   (default-leader
-    "1" #'moon/switch-to-window-1
-    "2" #'moon/switch-to-window-2
-    "3" #'moon/switch-to-window-3
-    "4" #'moon/switch-to-window-4
-    "5" #'moon/switch-to-window-5
-    "6" #'moon/switch-to-window-6
-    "7" #'moon/switch-to-window-7
-    "8" #'moon/switch-to-window-8
-    "9" #'moon/switch-to-window-9
+    "0"   #'delete-window
+    "1"   #'moon/switch-to-window-1
+    "2"   #'moon/switch-to-window-2
+    "3"   #'moon/switch-to-window-3
+    "4"   #'moon/switch-to-window-4
+    "5"   #'moon/switch-to-window-5
+    "6"   #'moon/switch-to-window-6
+    "7"   #'moon/switch-to-window-7
+    "8"   #'moon/switch-to-window-8
+    "9"   #'moon/switch-to-window-9
     "wk1" #'moon/kill-buffer-in-window-1
     "wk2" #'moon/kill-buffer-in-window-2
     "wk3" #'moon/kill-buffer-in-window-3
