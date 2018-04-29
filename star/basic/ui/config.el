@@ -179,17 +179,6 @@
   (setq eyebrowse-mode-line-separator " ")
   )
 
-(post-config| general
-  (default-leader
-    "ww" #'delete-other-windows
-    "w1" #'eyebrowse-switch-to-window-config-1
-    "w2" #'eyebrowse-switch-to-window-config-2
-    "w3" #'eyebrowse-switch-to-window-config-3
-    "w4" #'eyebrowse-switch-to-window-config-4
-    "w5" #'eyebrowse-switch-to-window-config-5
-    "w6" #'eyebrowse-switch-to-window-config-6
-    "wd" #'eyebrowse-close-window-config))
-
 
 (use-package| winum
   :init (setq winum-auto-setup-mode-line nil)
@@ -197,6 +186,16 @@
 
 (post-config| general
   (default-leader
+    ;; eyebrowse
+    "ww"  #'delete-other-windows
+    "w1"  #'eyebrowse-switch-to-window-config-1
+    "w2"  #'eyebrowse-switch-to-window-config-2
+    "w3"  #'eyebrowse-switch-to-window-config-3
+    "w4"  #'eyebrowse-switch-to-window-config-4
+    "w5"  #'eyebrowse-switch-to-window-config-5
+    "w6"  #'eyebrowse-switch-to-window-config-6
+    "wd"  #'eyebrowse-close-window-config
+    ;; winum
     "0"   #'delete-window
     "1"   #'moon/switch-to-window-1
     "2"   #'moon/switch-to-window-2
