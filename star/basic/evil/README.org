@@ -18,8 +18,12 @@
 
 * Commands
 
-| key   | command                              |
-|-------+--------------------------------------|
+  
+In visual-mode
+
+| key | command                        |
+|-----+--------------------------------|
+| .   | put region into search history |
 
 * Other avaliable options
  
