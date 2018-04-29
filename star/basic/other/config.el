@@ -55,7 +55,7 @@
  ;; Popup window to right!
  split-height-threshold              nil
  split-width-threshold               80
- blink-cursor-mode                   -1
  )
 
+(blink-cursor-mode                   -1)
 
