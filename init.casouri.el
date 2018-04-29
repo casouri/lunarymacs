@@ -20,7 +20,7 @@
        dir
        git
        org
-       imagemagick
+       ;; imagemagick
        :checker
        syntax
        spell
@@ -39,12 +39,12 @@
 ;; Settings evaluate befor loading any stars i.e. user-init
 ;;
 
+;; here are all the settings that I might change depends on mood.
+;; I put them here so I can change them easily
+
 
 ;; max
 (toggle-frame-maximized)
-
-;; default was ", "
-(setq eyebrowse-mode-line-separator " ")
 
 ;; custom spacemacs-theme colors
 ;;
@@ -64,19 +64,13 @@
 ;; Python interpreter
 (setq python-shell-interpreter "/usr/local/bin/python3")
 
- ;; shell
- (setq explicit-shell-file-name "/bin/zsh")
- (setq explicit-zsh-args '("--login"))
- (setenv "SHELL" "zsh")
+;; shell
+(setq explicit-shell-file-name "/bin/zsh")
+(setq explicit-zsh-args '("--login"))
+(setenv "SHELL" "zsh")
 
 ;; split screen vertically in ediff
 (setq ediff-split-window-function #'split-window-horizontally)
-
-;; default was ", "
-(setq eyebrowse-mode-line-separator " ")
-
-;; Don't blink
-(blink-cursor-mode -1)
 
 ;; relative line number
 (setq moon-enable-nlinum-relative t)
@@ -98,6 +92,9 @@
 
 ;; don't open new frame
 (setq ns-pop-up-frames nil)
+
+;; server
+(server-start)
 
 
 ;;
