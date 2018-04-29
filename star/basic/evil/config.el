@@ -13,6 +13,33 @@
   (setq evil-ex-substitute-global t)
   )
 
+(after-load| evil-search
+  (defun moon/make-region-search-history ()
+    "Make region a histroy so I can use cgn."
+    (interactive)
+    (let ((region (strip-text-properties (funcall region-extract-function nil))))
+      (push region evil-ex-search-history)
+      (setq evil-ex-search-pattern (evil-ex-make-search-pattern region))
+      (deactivate-mark)
+      ;; this way cgn jumps to current match,
+      ;; rather than the next
+      (backward-char)))
+  (defun moon-put-region-in-search-history (count)
+    "Put region into evil-search history.
+COUNT is passed to evil-search command."
+    (when (evil-visual-state-p)
+      ;; in evil-mode region-end is one less than actuall point
+      ;; (strip-text-properties (funcall region-extract-function nil))
+      (let ((region (buffer-substring-no-properties
+                     ;; therefore I add 1 to region-end
+                     (region-beginning) (1+ (region-end)))))
+        (push region evil-ex-search-history)
+        (setq evil-ex-search-pattern (evil-ex-make-search-pattern region))
+        ;; (push region evil-ex-s)
+        (deactivate-mark)
+        )))
+  (advice-add 'evil-ex-search-forward :before #'moon-put-region-in-search-history)
+  )
 (post-config| evil
               (message "it works!"))
 
@@ -90,6 +117,7 @@
      "d" #'evil-delete
      "s" #'embrace-add
      "x" #'exchange-point-and-mark ; for expand-region
+     "." #'moon/make-region-search-history
      )
 
     (general-define-key
