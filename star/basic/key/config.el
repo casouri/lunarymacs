@@ -34,6 +34,7 @@
   
   (default-leader
    "f" '(:ignore t :which-key "file")
+   "F" '(:ignore t :which-key "Frame")
    "i" '(:ignore t :which-key "insert")
    "h" '(:ignore t :which-key "help")
    "j" '(:ignore t :which-key "jump")
@@ -52,6 +53,8 @@
    "p" '(:ignore t :which-key "project")
    "u" '(:ignore t :which-key "utility")
    "o" '(:ignore t :which-key "open")
+   ;; Frame
+   "Fd" #'delete-frame
    ;; open
    "ot"  #'moon/open-in-iterm
    ;; action/edit
