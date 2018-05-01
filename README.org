@@ -25,8 +25,6 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
 - *code is easy* to understand (since I don't really know too much elisp)
 - *not opinionated*: no default settings set in core. 
   everything is up to you, no more forking for customization
-- Addon features like nyan-cat and org-bullets are *disabled by default*,
-  so you configure by enabling stuff instead of disabling stuff.
 - *minimum* core files
 - *no default package* required by core except use-package
   
@@ -35,7 +33,7 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
 
 This project is a good starting point of your own config!
 You can:
-1. Use my configuration and add your own config (submit pull request if you think yours is good!)
+1. Use my configuration(opinionated) and add your own config (submit PR if you think yours is good!)
 2. *OR* Only use the core as a framework and manage your own configurations within it.
 3. *OR* Just read the core and wiki as a reference and build your own config from scratch.
 
@@ -81,3 +79,5 @@ Emacs community is the best! :smile: :heart: (just rhetorical, not comparing :P)
 I don't know what is lunary, don't ask me.
 
 I know it says lunarymacs but homepage is moon emacs.
+
+Stay fresh!
