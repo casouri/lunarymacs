@@ -43,9 +43,6 @@
 ;; max
 (toggle-frame-maximized)
 
-;; default was ", "
-(setq eyebrowse-mode-line-separator " ")
-
 ;;
 ;; Settings to overwrite configs in stars i.e. user-config
 ;;
