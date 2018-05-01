@@ -18,15 +18,20 @@
        ;; mac
        :utility
        ;; dir
-       ;; git
-       ;; org
+       git
+       org
+       ;; imagemagick
        :checker
        syntax
-       spell
+       ;; spell
        :lang
        ;; lsp
        ;; python
-       elisp
+       ;; elisp
+       ;; rust
+       ;; javascript
+       ;; web
+       ;; lua
        )
 
 
