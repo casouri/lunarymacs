@@ -70,13 +70,6 @@ COUNT is passed to evil-search command."
   :config (evil-matchit-mode)
   )
 
-(use-package| evil-search-highlight-persist
-  :after evil
-  :config (global-evil-search-highlight-persist)
-  (set-face-attribute 'evil-search-highlight-persist-highlight-face
-                      nil
-                      :background (face-attribute 'highlight :background)))
-
 ;; (use-package| evil-surround
 ;;   :after evil
 ;;   :config (global-evil-surround-mode 1)
