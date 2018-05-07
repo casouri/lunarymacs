@@ -88,6 +88,8 @@
               (message "it works!"))
 
 (use-package| evil-matchit
+  :after evil
+  :defer 2
   :config (evil-matchit-mode)
   )
 
@@ -112,21 +114,25 @@
 ;;   (setq-default evil-escape-key-sequence "<escape>"))
 
 (use-package| evil-ediff
+  :after evil
+  :defer 2
   :hook (ediff-mode . (lambda () (require 'evil-ediff))))
 
 (use-package| evil-vimish-fold
   :after evil
-  :init (setq vimish-fold-dir (concat moon-local-dir "vimish-fold"))
-  :hook (prog-mode . evil-vimish-fold-mode))
+  :defer 2
+  :init (setq vimish-fold-dir (concat moon-local-dir "vimish-fold")))
 
-(after-load| term
- (require 'evil-collection-term)
- (evil-collection-term-setup)
-  (add-hook 'term-mode-hook (lambda ()
-                             (setq-local evil-insert-state-cursor 'box)))
- )
+;; I gave up using term in Emacs
+;; (after-load| term
+;;  (require 'evil-collection-term)
+;;  (evil-collection-term-setup)
+;;   (add-hook 'term-mode-hook (lambda ()
+;;                              (setq-local evil-insert-state-cursor 'box)))
+;;  )
 
 (use-package| evil-embrace
+  ;; doesn't need defer, embrace is autoloaded
   :after embrace evil
   :config (evil-embrace-enable-evil-surround-integration))
 

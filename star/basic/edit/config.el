@@ -27,6 +27,7 @@
 ;;   (delay-load| setup-smooth-scrolling))
 
 (use-package| avy
+  :defer 2
   :config
   (setq avy-background t)
   (setq avy-all-windows nil))
@@ -102,6 +103,7 @@
 
 (global-set-key (kbd "C-o") 'open-next-line)
 
+;; never tested
 ;; http://emacsredux.com/blog/2013/04/21/edit-files-as-root/
 (defadvice ivy-find-file (after find-file-sudo activate)
   "Find file as root if necessary."
