@@ -159,4 +159,32 @@ Can be uesed for hightlight region.")
 (defvar mac-yellow "#FEC041"
   "Yellow color on mac titlebar.")
 
+;;
+;; Function
+;;
+
+(defun change-by-theme (config-list)
+  "Evaluate diffrent form based on what is the current theme.
+
+CONFIG-LIST is a list of (theme . form).
+
+For example:
+  (change-by-theme 
+    '((spacemacs-dark . (progn 
+                         (setq hl-paren-colors '(\"green\")) 
+                         (hl-paren-color-update)))
+      (spacemacs-light . (progn 
+                         (setq hl-paren-colors '(\"red\")) 
+                         (hl-paren-color-update)))))"
+  (add-hook
+    'moon-load-theme-hook
+    (lambda ()
+      (dolist (config config-list)
+        (let ((theme (symbol-name (car config)))
+              (form (cdr config)))
+          (when (equal moon-current-theme theme)
+            (eval form)))))))
+
+
 (provide 'core-ui)
+

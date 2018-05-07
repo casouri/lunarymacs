@@ -301,28 +301,6 @@ Use example:
   `(let ((inhibit-message t))
     ,@form))
 
-(defun change-by-theme (config-list)
-  "Evaluate diffrent form based on what is the current theme.
-
-CONFIG-LIST is a list of (theme . form).
-
-For example:
-  (change-by-theme 
-    '((spacemacs-dark . (progn 
-                         (setq hl-paren-colors '(\"green\")) 
-                         (hl-paren-color-update)))
-      (spacemacs-light . (progn 
-                         (setq hl-paren-colors '(\"red\")) 
-                         (hl-paren-color-update)))))"
-  (add-hook
-    'moon-load-theme-hook
-    (lambda ()
-      (dolist (config config-list)
-        (let ((theme (symbol-name (car config)))
-              (form (cdr config)))
-          (when (equal moon-current-theme theme)
-            (eval form)))))))
-
 
 ;; (defun post-config-evil () (message "it works!"))
 ;; (defun pre-init-evil () (message "it works!"))
