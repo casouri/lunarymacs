@@ -67,8 +67,12 @@
 ;;
 ;; Mode-line
 
-(use-package| minions
-  :config (minions-mode 1))
+(post-config| moody
+  (use-package minions
+    ;; minions need to override mode-line-format
+    ;; setted by moon/setup-moody
+    :config (minions-mode 1))
+  )
 
 (use-package| moody
   :config
