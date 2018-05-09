@@ -96,7 +96,7 @@
 (setq ns-pop-up-frames nil)
 
 ;; server
-(server-start)
+(run-with-idle-timer 2 nil #'server-start)
 
 
 ;;
