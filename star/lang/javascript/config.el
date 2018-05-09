@@ -2,6 +2,7 @@
 ;;   :mode "\\.js\\'")
 
 (use-package| xref-js2
+  :mode "\\.js$"
   :config
   (define-key js-mode-map (kbd "M-.") nil)
   (add-hook 'js2-mode-hook (lambda ()
@@ -20,6 +21,7 @@
 
 
 (use-package| js-format
+  :mode "\\.js$"
   :config
   (add-hook 'js2-mode-hook
             (lambda()
