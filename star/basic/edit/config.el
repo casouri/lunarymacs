@@ -56,6 +56,9 @@
 (post-config| general
   (default-leader "tm" #'minimap-mode))
 
+;; used for chinese editiing on macOS
+(load| switch-input-mode)
+
 ;;
 ;; Config
 ;;
@@ -110,3 +113,4 @@
   (unless (and buffer-file-name
                (file-writable-p buffer-file-name))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
