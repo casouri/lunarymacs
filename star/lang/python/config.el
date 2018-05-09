@@ -6,6 +6,7 @@
 ;;
 
 (use-package| lsp-python
+  :mode "\\.py$"
   :init
   (add-hook 'python-mode-hook #'lsp-python-enable)
   (add-hook 'python-mode-hook #'setup-lsp))
