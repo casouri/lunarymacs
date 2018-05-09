@@ -17,6 +17,7 @@
        :os
        mac
        :utility
+       tex
        dir
        git
        org
@@ -25,6 +26,7 @@
        syntax
        spell
        :lang
+       cc
        lsp
        python
        elisp
