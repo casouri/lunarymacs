@@ -71,7 +71,36 @@
   (use-package minions
     ;; minions need to override mode-line-format
     ;; setted by moon/setup-moody
-    :config (minions-mode 1))
+    :config
+    ;; patch minions-mode
+    ;; so it applyies change to opended buffers too
+    (define-minor-mode minions-mode
+      "Display a minor-mode menu in the mode line.
+
+This replaces the likely incomplete and possibly cut off list of
+minor-modes that is usually displayed directly in the mode line."
+      :group 'minions
+      :global t
+      (if minions-mode
+          (let ((banana (cl-subst 'minions-mode-line-modes
+                                  'mode-line-modes
+                                  (default-value 'mode-line-format)
+                                  :test #'equal)))
+            (if (eq banana (default-value 'mode-line-format))
+                (progn (setq minions-mode nil)
+                       (error "Cannot turn on Minions mode"))
+              (setq-default mode-line-format banana)
+              ;; apply change to opended buffers
+              (save-excursion
+                (mapc (lambda (buffer)
+                        (with-current-buffer buffer
+                          (setq mode-line-format banana)))
+                      (buffer-list)))))
+        (cl-nsubst 'mode-line-modes
+                   'minions-mode-line-modes
+                   mode-line-format)))
+
+    (minions-mode 1))
   )
 
 (use-package| moody
