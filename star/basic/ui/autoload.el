@@ -209,7 +209,7 @@ else just return the form's return."
 (defun moon/setup-moody ()
   "Setup mode-line using moody."
   (interactive)
-  (setq mode-line-format '(" "
+  (let ((my-mode-line-format '(" "
                            (:eval (if winum-mode (winum-get-number-string) ""))
                            " "
                            (:eval (if eyebrowse-mode (eyebrowse-mode-line-indicator) ""))
@@ -229,8 +229,16 @@ else just return the form's return."
                            ;; moody-vc-mode
                            (:eval (moody-tab (if vc-mode (substring-no-properties vc-mode 1) "NO VC")))
                            mode-line-misc-info
-                           mode-line-end-spaces))
-  (setq-default mode-line-format mode-line-format))
+                           mode-line-end-spaces)))
+    ;; change all current buffer's mode-line-format
+    (save-excursion
+      (mapc (lambda (buffer)
+              (with-current-buffer buffer
+                (setq mode-line-format my-mode-line-format)))
+            (buffer-list)))
+    ;; change default value of mode-line-format
+    (setq-default mode-line-format my-mode-line-format)
+    ))
 
 
 
