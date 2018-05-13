@@ -36,7 +36,6 @@
    "f" '(:ignore t :which-key "file")
    "F" '(:ignore t :which-key "Frame")
    "i" '(:ignore t :which-key "insert")
-   "h" '(:ignore t :which-key "help")
    "j" '(:ignore t :which-key "jump")
    "r" '(:ignore t :which-key "register")
    "s" '(:ignore t :which-key "search")
@@ -54,6 +53,8 @@
    "u" '(:ignore t :which-key "utility")
    "o" '(:ignore t :which-key "open")
    "v" '(:ignore t :which-key "visual")
+   ;; help
+   "h" 'help-command
    ;; Frame
    "Fd" #'delete-frame
    ;; open

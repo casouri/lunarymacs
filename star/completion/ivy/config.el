@@ -20,17 +20,6 @@
     "fr"  #'counsel-recentf
     "fL"  #'counsel-locate
     ;; help
-    "hb"  #'counsel-descbinds
-    "hf"  #'counsel-describe-function
-    "hF"  #'counsel-describe-face
-    "hl"  #'counsel-find-library
-    "hm"  #'spacemacs/describe-mode
-    "hk"  #'describe-key
-    "ho"  #'describe-symbol
-    "hv"  #'counsel-describe-variable
-    "hd"  #'apropos
-    "hi"  #'counsel-info-lookup-symbol
-    "hR"  #'spacemacs/counsel-search-docs
     "?"   #'counsel-apropos
     ;; insert
     "iu"  #'counsel-unicode-char
