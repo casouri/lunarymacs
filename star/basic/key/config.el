@@ -51,16 +51,15 @@
    "g" '(:ignore t :which-key "git")
    "p" '(:ignore t :which-key "project")
    "u" '(:ignore t :which-key "utility")
-   "o" '(:ignore t :which-key "open")
+   "o" '(:ignore t :which-key "misc")
    "v" '(:ignore t :which-key "visual")
    ;; help
    "h" 'help-command
    ;; Frame
    "Fd" #'delete-frame
-   ;; open
-   "ot"  #'moon/open-in-iterm
    ;; action/edit
    "aa"  #'align-regexp
+   "aot"  #'moon/open-in-iterm
    ;; visual
    "vh" '(:ignore t :which-key "highlight")
    "vhs" #'hlt-highlight
