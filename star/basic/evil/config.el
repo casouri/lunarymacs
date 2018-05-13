@@ -176,7 +176,7 @@
      "L"   #'evil-end-of-line
      "P"   #'evil-paste-from-register
      "U"   #'undo-tree-redo
-     "C-u" #'evil-scroll-up)
+     "M-d" #'evil-scroll-up)
     
     (default-g-leader "s" #'embrace-commander)
 
