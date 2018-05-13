@@ -53,15 +53,17 @@
    "p" '(:ignore t :which-key "project")
    "u" '(:ignore t :which-key "utility")
    "o" '(:ignore t :which-key "open")
+   "v" '(:ignore t :which-key "visual")
    ;; Frame
    "Fd" #'delete-frame
    ;; open
    "ot"  #'moon/open-in-iterm
    ;; action/edit
-   "ah" '(:ignore t :which-key "highlight")
-   "ahs" #'hlt-highlight
-   "ahu" #'hlt-highlight
    "aa"  #'align-regexp
+   ;; visual
+   "vh" '(:ignore t :which-key "highlight")
+   "vhs" #'hlt-highlight
+   "vhu" #'hlt-highlight
    ;; file
    "fR"  #'moon/rename-file
    "fs"  #'save-buffer
