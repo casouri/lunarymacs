@@ -227,9 +227,9 @@ minor-modes that is usually displayed directly in the mode line."
     "w4"  #'eyebrowse-switch-to-window-config-4
     "w5"  #'eyebrowse-switch-to-window-config-5
     "w6"  #'eyebrowse-switch-to-window-config-6
-    "wd"  #'eyebrowse-close-window-config
+    "wD"  #'eyebrowse-close-window-config
     ;; winum
-    "0"   #'delete-window
+    "w0"   #'delete-window
     "1"   #'moon/switch-to-window-1
     "2"   #'moon/switch-to-window-2
     "3"   #'moon/switch-to-window-3
@@ -248,6 +248,15 @@ minor-modes that is usually displayed directly in the mode line."
     "wk7" #'moon/kill-buffer-in-window-7
     "wk8" #'moon/kill-buffer-in-window-8
     "wk9" #'moon/kill-buffer-in-window-9
+    "wd1" (lambda () winum-select-window-1 -1)
+    "wd2" (lambda () winum-select-window-2 -1)
+    "wd3" (lambda () winum-select-window-3 -1)
+    "wd4" (lambda () winum-select-window-4 -1)
+    "wd5" (lambda () winum-select-window-5 -1)
+    "wd6" (lambda () winum-select-window-6 -1)
+    "wd7" (lambda () winum-select-window-7 -1)
+    "wd8" (lambda () winum-select-window-8 -1)
+    "wd9" (lambda () winum-select-window-9 -1)
     ))
 
 
@@ -329,3 +338,24 @@ and saveing desktop."
   (default-leader
     "bc" #'mcon-switch))
 
+
+
+;; form feed
+(use-package| form-feed
+  :defer 3
+  :config
+  (defface form-feed-line
+    `((((type graphic)
+        (background light)) :strike-through ,spacemacs-light-purple)
+      (((type graphic)
+        (background dark)) :strike-through ,doom-blue)
+      (((type tty)) :inherit font-lock-comment-face :underline t))
+    "Face for form-feed-mode lines."
+    :group 'form-feed))
+
+
+;; nerdtab
+(load (concat moon-star-dir "basic/ui/nerdtab/nerdtab"))
+(setq nerdtab-window-position 'top)
+(dolist (index (number-sequence 0 9))
+  (global-set-key (kbd (format "s-%d" index)) (intern (format "nerdtab-jump-%d" index))))
