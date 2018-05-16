@@ -9,10 +9,9 @@
  hl-todo
  nlinum
  nlinum-relative
- spaceline
- powerline
  rainbow-mode
  nyan-mode
  eyebrowse
  winum
+ form-feed
  )
