@@ -32,6 +32,7 @@
  backup-directory-alist              `((".*" . ,moon-cache-dir))
  auto-save-file-name-transforms      `((".*" ,moon-cache-dir t))
  auto-save-list-file-name            (concat moon-cache-dir "autosave")
+ auto-save-timeout                   5
 
  ;; files
  abbrev-file-name                    (concat moon-local-dir "abbrev.el")
