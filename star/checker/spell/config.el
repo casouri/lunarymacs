@@ -14,7 +14,6 @@
 
 
 (use-package| flyspell-correct-ivy
-  :defer t 
   :after flyspell
   :config
   ;; https://www.emacswiki.org/emacs/FlySpell
