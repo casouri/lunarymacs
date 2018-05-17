@@ -46,8 +46,7 @@
 (load-theme 'spacemacs-dark t)
 
 (use-package| rainbow-delimiters
-  :defer 1
-  :config (rainbow-delimiters-mode)
+  :hook (prog-mode . rainbow-delimiters-mode)
   )
 
 (use-package| rainbow-mode
