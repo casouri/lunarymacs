@@ -46,7 +46,8 @@
 (load-theme 'spacemacs-dark t)
 
 (use-package| rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode)
+  :defer 1
+  :config (rainbow-delimiters-mode)
   )
 
 (use-package| rainbow-mode
@@ -357,5 +358,8 @@ and saveing desktop."
 ;; nerdtab
 (load (concat moon-star-dir "basic/ui/nerdtab/nerdtab"))
 (setq nerdtab-window-position 'top)
+(set-face-attribute 'nerdtab-tab-face nil :inherit 'hl-line)
 (dolist (index (number-sequence 0 9))
   (global-set-key (kbd (format "s-%d" index)) (intern (format "nerdtab-jump-%d" index))))
+(dolist (index (number-sequence 0 9))
+  (global-set-key (kbd (format "C-s-%d" index)) (intern (format "nerdtab-kill-%d" index))))
