@@ -13,3 +13,6 @@
 [submodule "star/basic/ui/emacs-mission-control"]
 	path = star/basic/ui/emacs-mission-control
 	url = https://github.com/casouri/emacs-mission-control.git
+[submodule "star/basic/ui/nerdtab"]
+	path = star/basic/ui/nerdtab
+	url = https://github.com/casouri/nerdtab.git
