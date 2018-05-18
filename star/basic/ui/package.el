@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 (package|
+ evil
  moody
  minions
  spacemacs-theme

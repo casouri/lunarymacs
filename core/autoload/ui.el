@@ -38,14 +38,3 @@ Each element is an alist with the form
 e.g. :family :weight :size etc."
   `(set-frame-font (font-spec ,@config-list) nil t))
 
-;;;###autoload
-(defmacro change-cursor-on-hook| (hook color)
-  "Change cursor color to COLOR when HOOK is activated.
-
-COLOR is a function that returns a string that specify a color.
-This way to change change cursor color depend on current theme
-or something else"
-  `(add-hook ',hook
-             (lambda ()
-               (set-face-attribute
-                'cursor nil :background (,color)))))
