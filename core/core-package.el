@@ -326,7 +326,7 @@ because it's too verbose."
   ;; moon-load-package loads `moon-package-list'
   (moon-load-package moon-star-path-list)
   (package-refresh-contents)
-  (dolist (package moon-package-list)
+  (dolist (package (delete-dups moon-package-list))
     (unless (package-installed-p (intern package))
       (message (format "Installing %s" package))
       ;; installing packages prints lot too many messages
