@@ -37,3 +37,8 @@
 | SPC s r | counsel-rg                    |
 | SPC T s | counsel-load-theme            |
 | SPC b b | ivy-switch-buffer             |
+
+* Tip
+- In ivy, hit =M-o= to open a set of commands.
+  
+- In counsel, hit =C-r= to search history
