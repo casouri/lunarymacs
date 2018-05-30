@@ -65,7 +65,7 @@
 
 (electric-pair-mode 1)
 
-;; scrolling
+;; smooth scrolling
 (setq scroll-conservatively 101)
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
