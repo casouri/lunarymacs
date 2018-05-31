@@ -125,3 +125,8 @@
     ("k" previous-error "prev")
     ("v" recenter-top-bottom "recenter")
     ("q" nil "quit")))
+
+(global-set-key (kbd "s-h") #'windmove-left)
+(global-set-key (kbd "s-j") #'windmove-down)
+(global-set-key (kbd "s-k") #'windmove-up)
+(global-set-key (kbd "s-l") #'windmove-right)
