@@ -352,6 +352,7 @@ and saveing desktop."
 (post-config| general
   (default-leader
     "tb" #'nerdtab-mode
+    "bj" #'nerdtab-jump
     "bM" '(:ignore t :which-key "move tab to ")
     "bM0" #'nerdtab-move-to-0
     "bM1" #'nerdtab-move-to-1
