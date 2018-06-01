@@ -174,6 +174,11 @@ h   l <   >
   (interactive)
   (moon-kill-buffer-in-window 9))
 
+
+;;
+;; Moody
+;;
+
 ;;;###autoload
 (defun flycheck-lighter (state bullet)
   "Return flycheck information for the given error type STATE."
