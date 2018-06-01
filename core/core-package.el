@@ -91,6 +91,12 @@ Contains only core dir ,star dir and load path for built in libraries")
   (unless noninteractive
     (moon-load-autoload))
   (timeit| "load package and config"
+    ;; load twice, first time for `moon|',
+    ;; second time for `package|'.
+    ;; if there is a star which is some star's
+    ;; dependencies' dependenciy,
+    ;; if will not load.
+   (moon-load-package moon-star-path-list)
    (moon-load-package moon-star-path-list)
    (unless noninteractive
      (moon-load-config moon-star-path-list)))
@@ -196,13 +202,24 @@ e.g. (package| evil evil-surround)"
     ))
 
 (defmacro moon| (&rest star-list)
-  "Declare stars in STAR-LIST. Separate stars with sub-directories' name.
+  "Declare stars in STAR-LIST.
+Separate stars with sub-directories' name.
 Basically adding path to star to `moon-star-path-list'.
 
 Example: (moon| :feature evil :ui custom) for star/feature/evil
 and star/ui/custom.
 If called multiple times, the stars declared first will be
-in the front of moon-star-list"
+in the front of moon-star-list.
+
+`moon|' can be used in star's `package.el',
+but try to only depend on stars in `:basic' sub directory.
+
+Because a star's dependencies' dependency will not be added automatically.
+If your star's dependency star denpend of some other star,
+that star will not be included by lunarymacs framework
+when loading and installing packages.
+
+In a word, denpend of stars that don't depend on other stars!"
   (dolist (star star-list)
     (cond ((keywordp star) (setq mode star))
           ((not      mode) (error "No sub-folder specified in `moon|' for %s" star))
@@ -326,7 +343,7 @@ because it's too verbose."
   ;; moon-load-package loads `moon-package-list'
   (moon-load-package moon-star-path-list)
   (package-refresh-contents)
-  (dolist (package (delete-dups moon-package-list))
+  (dolist (package moon-package-list)
     (unless (package-installed-p (intern package))
       (message (format "Installing %s" package))
       ;; installing packages prints lot too many messages
