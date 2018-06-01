@@ -6,10 +6,10 @@
 ;;
 
 (use-package| lsp-python
-  :mode "\\.py$"
+  :defer t
   :init
   (add-hook 'python-mode-hook #'lsp-python-enable)
-  (add-hook 'python-mode-hook #'setup-lsp))
+  (add-hook 'python-mode-hook (lambda () (require 'lsp-mode) (require 'lsp-python))))
 
 
 (use-package| pyvenv
