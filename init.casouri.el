@@ -61,7 +61,8 @@
                           )))
 
 ;; natural title bar
-(setq default-frame-alist '((ns-transparent-titlebar . t) (ns-appearance . 'nil)))
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+(add-to-list 'default-frame-alist '(ns-appearance . dark))
 
 ;; Python interpreter
 (setq python-shell-interpreter "/usr/local/bin/python3")
@@ -99,10 +100,6 @@
 ;; server
 (run-with-idle-timer 2 nil #'server-start)
 
-;; Font
-;; (moon-set-font| :family "Source Code Pro" :weight 'light :size 14)
-(moon-set-font| :family "SF Mono" :weight 'light :size 14)
-
 ;;
 ;; Settings to overwrite configs in stars i.e. user-config
 ;;
@@ -116,7 +113,12 @@
  (setq scroll-margin 8)
 
  ;; hide bad title when using natural title bar in Emacs 26
- (setq  frame-title-format '(" "))
+ ;; (setq  frame-title-format '(" "))
+
+
+ ;; Font
+ ;; (moon-set-font| :family "Source Code Pro" :weight 'light :size 14)
+ (moon-set-font| :family "SF Mono" :weight 'light :size 13)
 
  (nyan-mode)
  (nyan-start-animation)
