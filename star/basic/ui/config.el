@@ -225,6 +225,7 @@ minor-modes that is usually displayed directly in the mode line."
     "7"   #'moon/switch-to-window-7
     "8"   #'moon/switch-to-window-8
     "9"   #'moon/switch-to-window-9
+    "wk"  '(:ignore t :which-key "kill buffer in window")
     "wk1" #'moon/kill-buffer-in-window-1
     "wk2" #'moon/kill-buffer-in-window-2
     "wk3" #'moon/kill-buffer-in-window-3
@@ -234,15 +235,16 @@ minor-modes that is usually displayed directly in the mode line."
     "wk7" #'moon/kill-buffer-in-window-7
     "wk8" #'moon/kill-buffer-in-window-8
     "wk9" #'moon/kill-buffer-in-window-9
-    "wd1" (lambda () winum-select-window-1 -1)
-    "wd2" (lambda () winum-select-window-2 -1)
-    "wd3" (lambda () winum-select-window-3 -1)
-    "wd4" (lambda () winum-select-window-4 -1)
-    "wd5" (lambda () winum-select-window-5 -1)
-    "wd6" (lambda () winum-select-window-6 -1)
-    "wd7" (lambda () winum-select-window-7 -1)
-    "wd8" (lambda () winum-select-window-8 -1)
-    "wd9" (lambda () winum-select-window-9 -1)
+    "wd"  '(:ignore t :which-key "delete window")
+    "wd1" (lambda () (interactive) (winum-select-window-1 -1))
+    "wd2" (lambda () (interactive) (winum-select-window-2 -1))
+    "wd3" (lambda () (interactive) (winum-select-window-3 -1))
+    "wd4" (lambda () (interactive) (winum-select-window-4 -1))
+    "wd5" (lambda () (interactive) (winum-select-window-5 -1))
+    "wd6" (lambda () (interactive) (winum-select-window-6 -1))
+    "wd7" (lambda () (interactive) (winum-select-window-7 -1))
+    "wd8" (lambda () (interactive) (winum-select-window-8 -1))
+    "wd9" (lambda () (interactive) (winum-select-window-9 -1))
     ))
 
 
