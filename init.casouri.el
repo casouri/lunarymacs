@@ -75,7 +75,7 @@
 (setq ediff-split-window-function #'split-window-horizontally)
 
 ;; relative line number
-(setq moon-enable-nlinum-relative t)
+;; (setq moon-enable-nlinum-relative t)
 
 ;; company-yasnippet
 (setq moon-enable-company-yas t)
@@ -83,7 +83,8 @@
 ;; show breaking change
 ;; (setq moon-log-news t)
 
-(setq evil-insert-state-cursor 'box)
+(when window-system
+  (setq evil-insert-state-cursor 'box))
 
 (setq moon-format-on-save t)
 
@@ -98,6 +99,9 @@
 ;; server
 (run-with-idle-timer 2 nil #'server-start)
 
+;; Font
+;; (moon-set-font| :family "Source Code Pro" :weight 'light :size 14)
+(moon-set-font| :family "SF Mono" :weight 'light :size 14)
 
 ;;
 ;; Settings to overwrite configs in stars i.e. user-config
@@ -107,9 +111,6 @@
 
  ;; theme toggle
  ;; (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
-
- ;; font
- ;; (moon-set-font| :family "SF Mono" :weight 'light :size 14)
 
  ;; scroll margin
  (setq scroll-margin 8)

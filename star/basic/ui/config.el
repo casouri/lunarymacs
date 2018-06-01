@@ -16,18 +16,12 @@
   (pcase evil-state
     ('normal (face-spec-set 'cursor `((((background dark)) :background ,lunary-yellow)
                                       (((background light)) :background ,spacemacs-light-purple))))
-    ('insert (face-spec-set 'cursor `((t :background ,spacemacs-green))))))
+    ('insert (face-spec-set 'cursor `((t :background ,lunary-white))))))
 
 (post-config| evil
   (add-hook 'evil-normal-state-entry-hook #'smart-cursor-color)
   (add-hook 'evil-insert-state-entry-hook #'smart-cursor-color)
   (add-hook 'moon-load-theme-hook #'smart-cursor-color))
-;;
-;; Font
-;;
-
-;; (moon-set-font| :family "Source Code Pro" :weight 'light :size 14)
-(moon-set-font| :family "SF Mono" :weight 'light :size 14)
 
 ;;
 ;; Package
@@ -354,3 +348,18 @@ and saveing desktop."
   (global-set-key (kbd (format "s-%d" index)) (intern (format "nerdtab-jump-%d" index))))
 (dolist (index (number-sequence 0 9))
   (global-set-key (kbd (format "C-s-%d" index)) (intern (format "nerdtab-kill-%d" index))))
+
+(post-config| general
+  (default-leader
+    "tb" #'nerdtab-mode
+    "bM" '(:ignore t :which-key "move tab to ")
+    "bM0" #'nerdtab-move-to-0
+    "bM1" #'nerdtab-move-to-1
+    "bM2" #'nerdtab-move-to-2
+    "bM3" #'nerdtab-move-to-3
+    "bM4" #'nerdtab-move-to-4
+    "bM5" #'nerdtab-move-to-5
+    "bM6" #'nerdtab-move-to-6
+    "bM7" #'nerdtab-move-to-7
+    "bM8" #'nerdtab-move-to-8
+    "bM9" #'nerdtab-move-to-9))

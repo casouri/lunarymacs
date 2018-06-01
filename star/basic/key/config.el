@@ -80,7 +80,7 @@
    "bo"  #'moon/kill-other-buffer
    "bh"  #'moon/kill-helper
    "bb"  #'list-buffers
-   "bs"  (lambda () (switch-to-buffer "*scratch*"))
+   "bs"  (lambda () (interactive) (switch-to-buffer "*scratch*"))
    ;; eval
    "`"   #'eval-expression
    ;; toggle
