@@ -1,10 +1,11 @@
 ;;; -*- lexical-binding: t -*-
 
 (use-package| expand-region
-  :commands er/expand-region
-  :general (default-leader
-	     "v" #'er/expand-region
-             ))
+  :commands er/expand-region)
+
+(post-config| general
+  (default-leader
+    "v" #'er/expand-region))
 
 (use-package| embrace
   :commands (embrace-add embrace-delete embrace-change embrace-commander))

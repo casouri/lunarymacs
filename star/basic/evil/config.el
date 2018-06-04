@@ -100,12 +100,13 @@
 
 
 (use-package| evil-nerd-commenter
-  :commands evilnc-comment-operator
-  :general
-  (:keymaps 'visual
-	    :prefix "g"
-            "c" #'evilnc-comment-operator)
-  )
+  :commands evilnc-comment-operator)
+
+(post-config| general
+  (general-define-key
+   :keymaps 'visual
+   :prefix "g"
+   "c" #'evilnc-comment-operator))
 
 
 
