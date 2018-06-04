@@ -53,16 +53,16 @@
    "p" '(:ignore t :which-key "project")
    "u" '(:ignore t :which-key "utility")
    "o" '(:ignore t :which-key "misc")
-   "v" '(:ignore t :which-key "visual")
+   "c" '(:ignore t :which-key "change visual")
    ;; Frame
    "Fd" #'delete-frame
    ;; action/edit
    "aa"  #'align-regexp
    "aot"  #'moon/open-in-iterm
    ;; visual
-   "vh" '(:ignore t :which-key "highlight")
-   "vhs" #'hlt-highlight
-   "vhu" #'hlt-highlight
+   "ch" '(:ignore t :which-key "highlight")
+   "chs" #'hlt-highlight
+   "chu" #'hlt-highlight
    ;; file
    "fR"  #'moon/rename-file
    "fs"  #'save-buffer
@@ -114,7 +114,7 @@
 (use-package| which-key
   :config (which-key-mode 1))
 
-(use-package hydra
+(use-package| hydra
   :after general
   :config
   (defhydra hydra-error ()
