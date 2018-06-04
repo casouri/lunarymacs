@@ -79,7 +79,7 @@
   (timeit| "package-init"
     (moon-initialize-load-path)
    )
-  (moon-initialize-star)
+  (moon-load-star)
   (dolist (hook '(moon-init-hook moon-post-init-hook))
     (run-hook-with-args hook))
   

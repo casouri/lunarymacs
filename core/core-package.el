@@ -35,16 +35,19 @@ Contains only core dir ,star dir and load path for built in libraries")
   "The path of autoload file which has all the autoload functions.")
 
 (defvar moon-star-loaded nil
-  "Whether `moon-initialize-star' has benn called.")
+  "Whether `moon-load-star' has been called.")
 
 (defvar moon-package-loaded nil
-  "Whether `moon-load-package' has benn called.")
+  "Whether `moon-load-package' has been called.")
 
 (defvar moon-config-loaded nil
-  "Whether `moon-load-config' has benn called.")
+  "Whether `moon-load-config' has been called.")
 
 (defvar moon-load-path-loaded nil
-  "Whether `moon-initialize-load-path' has benn called.")
+  "Whether `moon-initialize-load-path' has been called.")
+
+(defvar moon-star-prepared nil
+  "Whether `moon-initialize-star' has been called.")
 
 (fset 'moon-grand-use-package-call
       '(lambda ()
@@ -87,7 +90,8 @@ Contains only core dir ,star dir and load path for built in libraries")
     )
 
 (defun moon-initialize-star ()
-  "Load each star in `moon-star-list'."
+  "Prepare each star in `moon-star-list'.
+Then they can be loaded by `moon-load-star'."
   (unless noninteractive
     (moon-load-autoload))
   (timeit| "load package and config"
@@ -96,15 +100,40 @@ Contains only core dir ,star dir and load path for built in libraries")
     ;; if there is a star which is some star's
     ;; dependencies' dependenciy,
     ;; if will not load.
-   (moon-load-package moon-star-path-list)
-   (moon-load-package moon-star-path-list)
-   (unless noninteractive
-     (moon-load-config moon-star-path-list)))
+
+    ;; save the original path list to another symbol
+    ;; so the second run can load less file.
+    (setq moon-star-path-list
+          (let ((original-moon-star-path-list moon-star-path-list)
+                (moon-star-path-list ())
+                (previous-path-list-length 0))
+            (defun get-path-list-length () (length moon-star-path-list))
+            ;; moon-star-path-list will be the
+            ;; additional paths
+            ;; keep loading package.el until path-list doesn't grow anymore
+            ;; that means all dependencies are loaded
+            (moon-load-package original-moon-star-path-list)
+            (while (not (eq previous-path-list-length (get-path-list-length)))
+              (moon-load-package moon-star-path-list)
+              (setq previous-path-list-length (get-path-list-length)))
+            (append original-moon-star-path-list moon-star-path-list)))
+    ;; now `moon|' and `package|' are evaled.
+    ;; so 1) `moon-star-path-list' is ready
+    ;; 2) additional packages are added to `moon-package-list'
+
+    ;; in config.el, `use-package|' will
+    ;; 1) add package to `moon-package-list'
+    ;; 2) add `use-package' sexp to `moon-grand-use-package-call'
+    (moon-load-config moon-star-path-list))
+  )
+
+(defun moon-load-star ()
+  "Actually load stars."
+  (moon-initialize-star)
   (timeit| "use-package"
     (require 'use-package)
-   (moon-grand-use-package-call))
-  (setq moon-star-loaded t)
-  )
+    (moon-grand-use-package-call))
+  (setq moon-star-loaded t))
 
 (defun moon-load-autoload ()
   "Load `moon-autoload-file'."
@@ -144,10 +173,17 @@ i.e. :keyword to \"keyword\"."
 (defun moon-load-package (path-list)
   "Load package.el in each star in PATH-LIST."
   (dolist (star-path path-list)
-    (let ((path (concat star-path "package.el")))
+    (let ((path (concat star-path "package.el"))
+          (config-path (concat star-path "config.el")))
       (if (file-exists-p path)
           (load path)
         (message (format "%s does not exist!" path)))
+      ;; parse config.el and add all packages
+      ;; declared in `use-package' and `use-packge|'
+      ;; (when (file-exists-p path)
+      ;;   (with-current-buffer (find-file path)
+      ;;     (while (re-search-forward "use-package.? \\(.+?\\)\\b" nil t)
+      ;;       (add-to-list 'moon-package-list (match-string-no-properties 1)))))
       ))
   (setq moon-package-loaded t))
 
@@ -277,22 +313,25 @@ Basically (use-package| evil :something something) adds
 to `moon-grand-use-pacage-call'
 to be evaluated at the end of `moon-initialize-star'"
   (declare (indent defun))
-  `(fset
-    'moon-grand-use-package-call
-    (append
-     (symbol-function 'moon-grand-use-package-call)
-     '((use-package
-         ,package
-         ,@rest-list
-         :init
-         (let ((symb (intern (format "pre-init-%s" (symbol-name ',package)))))
-           (when (fboundp symb)
-             (eval (list symb))))
-         :config
-         (let ((symb (intern (format "post-config-%s" (symbol-name ',package)))))
-           (when (fboundp symb)
-             (eval (list symb))))
-         )))))
+  `(progn
+     (add-to-list 'moon-package-list (symbol-name ',package))
+     (unless noninteractive
+       (fset
+        'moon-grand-use-package-call
+        (append
+         (symbol-function 'moon-grand-use-package-call)
+         '((use-package
+             ,package
+             ,@rest-list
+             :init
+             (let ((symb (intern (format "pre-init-%s" (symbol-name ',package)))))
+               (when (fboundp symb)
+                 (eval (list symb))))
+             :config
+             (let ((symb (intern (format "post-config-%s" (symbol-name ',package)))))
+               (when (fboundp symb)
+                 (eval (list symb))))
+             )))))))
 
 
 (defmacro customize| (&rest exp-list)
@@ -300,8 +339,9 @@ to be evaluated at the end of `moon-initialize-star'"
 
 Accepts expressions EXP-LIST, they will be run in `moon-post-init-hook'.
 Expressions will be appended."
-  `(add-hook 'moon-init-hook
-             (lambda () ,@exp-list) t))
+  `(unless noninteractive
+     (add-hook 'moon-init-hook
+               (lambda () ,@exp-list) t)))
 
 (defmacro async-load| (package &optional name)
   "Expand to a expression.
@@ -341,10 +381,12 @@ because it's too verbose."
   (moon-initialize)
   ;; moon-star-path-list is created by `moon|' macro
   ;; moon-load-package loads `moon-package-list'
-  (moon-load-package moon-star-path-list)
+  ;; (moon-load-package moon-star-path-list)
+  (moon-initialize-star)
   (package-refresh-contents)
   (dolist (package moon-package-list)
-    (unless (package-installed-p (intern package))
+    (unless (or (package-installed-p (intern package))
+                (locate-library package))
       (message (format "Installing %s" package))
       ;; installing packages prints lot too many messages
       (silent| (package-install (intern package)))
@@ -357,14 +399,16 @@ It will not print messages printed by updating packages
 because it's too verbose."
   (interactive)
   (moon-initialize)
+  (moon-initialize-load-path)
   ;; moon-star-path-list is created by `moon|' macro
   ;; moon-load-package loads `moon-package-list'
-  (moon-load-package moon-star-path-list)
+  ;; (moon-load-package moon-star-path-list)
+  (moon-initialize-star)
   ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
   
   ;; If there is no package to update,
   ;; package.el will throw "No operation specified"
-  ;; but I didn't find any codd throwing error
+  ;; but I didn't find any code throwing error
   ;; in package.el...
   ;; TODO find out a better implementation
   (silent| ; don't print message
@@ -386,15 +430,17 @@ because it's too verbose."
   
   ;; moon-star-path-list is created by `moon|' macro
   ;; moon-load-package loads `moon-package-list'
-  (unless moon-package-loaded
-    (moon-load-package moon-star-path-list))
+  (unless moon-star-prepared
+    ;; (moon-load-package moon-star-path-list)
+    (moon-initialize-star))
   (dolist (package package-alist)
     (let ((package-name (car package))
-          (package-description (car (cdr package))))
-      (unless (member (symbol-name package-name) moon-package-list)
-        ;; if the package is a dependency of other,
-        ;; it will be be deleted, but rather throw an error.
-        (ignore-errors (package-delete package-description)))
+          (package-description (car (cdr package)))
+          (non-dependency-list (package--find-non-dependencies)))
+      (when (and (not (member (symbol-name package-name) moon-package-list))
+                 (package-built-in-p package)
+                 (member package-name non-dependency-list))
+        (package-delete package-description))
       )))
 
 (defun moon/generate-autoload-file ()
