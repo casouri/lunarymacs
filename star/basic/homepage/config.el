@@ -33,24 +33,27 @@
 
 MOON is used when buffer's width is less than 86."
   (interactive)
-  (let (
-	(banner-list (if (>= (window-width) 86)
-                         (split-string moon-banner "\n")
-                       (split-string moon-short-banner "\n")))
-	)
+  (unless noninteractive
     (let (
-	  (space-to-insert
-	   (make-string
-	    (/ (- (window-width)
-                  ;; first line could be empty, use second line for length
-                  (length (nth 1 banner-list))) 2) ?\s))
+	  (banner-list (if (>= (window-width) 86)
+                           (split-string moon-banner "\n")
+                         (split-string moon-short-banner "\n")))
 	  )
-      (insert (make-string 10 ?\n))
-      (dolist (line banner-list)
-	(insert space-to-insert)
-	(insert line)
-	(insert "\n"))
-      ))
+      (let (
+	    (space-to-insert
+	     (make-string
+	      (/ (let ((free-length
+                        (- (window-width)
+                           ;; first line could be empty, use second line for length
+                           (length (nth 1 banner-list)))))
+                   (if (wholenump free-length)
+                       free-length
+                     0)) 2) ?\s)))
+        (insert (make-string 10 ?\n))
+        (dolist (line banner-list)
+	  (insert space-to-insert)
+	  (insert line)
+	  (insert "\n")))))
   (moon/log-news)
   (goto-char (point-min))
   )
