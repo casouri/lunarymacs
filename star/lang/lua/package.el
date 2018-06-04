@@ -2,4 +2,3 @@
 
 (moon| :basic key)
 
-(package| lua-mode)

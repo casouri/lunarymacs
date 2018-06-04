@@ -2,5 +2,3 @@
 
 (moon| :basic key)
 
-(package| yasnippet
-          auto-yasnippet)
