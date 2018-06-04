@@ -6,6 +6,11 @@
 
 (global-hl-line-mode 1)
 
+(add-hook 'prog-mode-hook #'hs-minor-mode)
+
+(define-key 'hs-minor-mode-map (kbd "C-c C-h") #'hs-hide-block)
+(define-key 'hs-minor-mode-map (kbd "C-c C-s") #'hs-show-block)
+
 ;;
 ;; Cursor Color
 ;;
