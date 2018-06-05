@@ -59,4 +59,4 @@ install-emacs26:
 >brew install emacs-plus --without-spacemacs-icon --devel
 
 test:
->emacs -f moon/run-test
+>emacs --eval "(add-hook 'moon-post-init-hook #'moon/run-test t)"
