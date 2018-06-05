@@ -44,10 +44,15 @@ Used to jump back and forth between two buffers.")
 
 ;;;###autoload
 (defun moon/open-in-iterm ()
-  "Open current current dir in iTerm2."
+  "Open current dir in iTerm2."
   (interactive)
- (shell-command-to-string (format "open %s -a iterm" default-directory)))
+  (shell-command-to-string (format "open %s -a iterm" default-directory)))
 
+;;;###autoload
+(defun moon/open-in-finder ()
+  "Open current dir in Finder."
+  (interactive)
+  (shell-command-to-string (format "open %s" default-directory)))
 
 ;; http://emacsredux.com/blog/2013/04/03/delete-file-and-buffer/
 ;;;###autoload
