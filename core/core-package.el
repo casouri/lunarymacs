@@ -125,6 +125,7 @@ Then they can be loaded by `moon-load-star'."
     ;; 1) add package to `moon-package-list'
     ;; 2) add `use-package' sexp to `moon-grand-use-package-call'
     (moon-load-config moon-star-path-list))
+  (setq moon-star-prepared t)
   )
 
 (defun moon-load-star ()
@@ -378,12 +379,14 @@ Use example:
 It will not print messages printed by `package-install'
 because it's too verbose."
   (interactive)
-  (moon-initialize-load-path)
+  (unless moon-load-path-loaded
+    (moon-initialize-load-path))
   (moon-initialize)
   ;; moon-star-path-list is created by `moon|' macro
   ;; moon-load-package loads `moon-package-list'
   ;; (moon-load-package moon-star-path-list)
-  (moon-initialize-star)
+  (unless moon-star-prepared
+    (moon-initialize-star))
   (package-refresh-contents)
   (dolist (package moon-package-list)
     (unless (or (package-installed-p (intern package))
@@ -400,11 +403,13 @@ It will not print messages printed by updating packages
 because it's too verbose."
   (interactive)
   (moon-initialize)
-  (moon-initialize-load-path)
+  (unless moon-load-path-loaded
+    (moon-initialize-load-path))
   ;; moon-star-path-list is created by `moon|' macro
   ;; moon-load-package loads `moon-package-list'
   ;; (moon-load-package moon-star-path-list)
-  (moon-initialize-star)
+  (unless moon-star-prepared
+    (moon-initialize-star))
   ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
   
   ;; If there is no package to update,
