@@ -11,8 +11,9 @@ install:
   - brew install make
   - PATH="/usr/local/opt/make/libexec/gnubin:${PATH}"
   - export PATH
-  - cp init.example.el init.el
+  - cp init.test.el init.el
 
 script:
   - make
+  - make test
 

@@ -59,4 +59,4 @@ install-emacs26:
 >brew install emacs-plus --without-spacemacs-icon --devel
 
 test:
->emacs --eval "(run-with-idle-timer 5 nil (lambda () (kill-emacs)))"
+>emacs -f moon/run-test

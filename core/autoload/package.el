@@ -47,3 +47,24 @@ if TYPE is 'autoload-dir, go to autoload/."
   "Jump to autoload directory of a star."
   (interactive)
   (moon-jump-to-config-or-package 'autoload-dir))
+
+;;;###autoload
+(defun moon/check-config ()
+  "Check if ther is anything wrong with your star config."
+  (interactive)
+  )
+
+
+;;;###autoload
+(defun moon-check-package (config-file package-file)
+  "Check if all the packages in `use-package|' `config.el' are declared in `package|' in `package.el'."
+  (let ((package-list ()))
+    (while (re-search-forward "use-package.? \\(.+?\\)\\b" nil t)
+      (add-to-list 'package-list (match-string-no-properties 1)))))
+
+
+;;;###autoload
+(defun moon/run-test ()
+  "Run tests."
+  (interactive)
+  (save-buffers-kill-emacs))
