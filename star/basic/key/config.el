@@ -22,11 +22,17 @@
   (general-create-definer default-no-leader
     :states '(normal visual insert emacs jpnb)
     :keymaps 'override)
+
   (general-create-definer default-g-leader
     :states '(normal visual)
     :keymaps 'override
     :prefix "g"
     )
+  (general-create-definer default-cc-leader
+    :state '(normal visual insert emacs jpnb)
+    :keymaps 'override
+    :prefix "C-c")
+  
   
   ;; One escape to escape them all.
   ;; (global-set-key (kbd "<escape>") #'keyboard-escape-quit)
@@ -56,13 +62,11 @@
    "c" '(:ignore t :which-key "change visual")
    ;; Frame
    "Fd" #'delete-frame
-   ;; action/edit
-   "aa"  #'align-regexp
-   "aot"  #'moon/open-in-iterm
-   ;; visual
-   "ch" '(:ignore t :which-key "highlight")
-   "chs" #'hlt-highlight
-   "chu" #'hlt-highlight
+   ;; align
+   "="  #'align-regexp
+   ;; open
+   "ot"  #'moon/open-in-iterm
+   "of"  #'moon/open-in-finder
    ;; file
    "fR"  #'moon/rename-file
    "fs"  #'save-buffer
@@ -98,7 +102,6 @@
    "jmd" #'moon/jump-to-autoload-dir
    "jmr" #'moon/jump-to-readme
   )
-
 
   (general-define-key :states '(normal visual)
                       "TAB" #'indent-for-tab-command
