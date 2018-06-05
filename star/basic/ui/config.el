@@ -8,8 +8,8 @@
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 
-(define-key 'hs-minor-mode-map (kbd "C-c C-h") #'hs-hide-block)
-(define-key 'hs-minor-mode-map (kbd "C-c C-s") #'hs-show-block)
+(global-set-key (kbd "C-c C-h") #'hs-hide-block)
+(global-set-key (kbd "C-c C-s") #'hs-show-block)
 
 ;;
 ;; Cursor Color
