@@ -80,8 +80,10 @@
     (moon-initialize-load-path)
    )
   (moon-load-star)
-  (dolist (hook '(moon-init-hook moon-post-init-hook))
-    (run-hook-with-args hook))
+  
+  (unless noninteractive
+    (dolist (hook '(moon-init-hook moon-post-init-hook))
+    (run-hook-with-args hook)))
   
   ;; If you forget to reset this, you'll get stuttering and random freezes!
   (setq gc-cons-threshold 800000
