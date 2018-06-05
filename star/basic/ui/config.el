@@ -32,9 +32,11 @@
 ;; Package
 ;;
 
-;; spacemacs-theme
-(add-to-list 'custom-theme-load-path (car (directory-files (concat moon-package-dir "elpa/") t "spacemacs-theme.+")) t)
-(load-theme 'spacemacs-dark t)
+(use-package| spacemacs-theme
+  :defer t
+  :init
+  (add-to-list 'custom-theme-load-path (car (directory-files (concat moon-package-dir "elpa/") t "spacemacs-theme.+")) t)
+  (load-theme 'spacemacs-dark t))
 
 (use-package| rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode)
@@ -348,13 +350,15 @@ and saveing desktop."
 
 
 ;; nerdtab
-(load (concat moon-star-dir "basic/ui/nerdtab/nerdtab"))
-(setq nerdtab-window-position 'top)
-(set-face-attribute 'nerdtab-tab-face nil :inherit 'hl-line)
-(dolist (index (number-sequence 0 9))
-  (global-set-key (kbd (format "s-%d" index)) (intern (format "nerdtab-jump-%d" index))))
-(dolist (index (number-sequence 0 9))
-  (global-set-key (kbd (format "C-s-%d" index)) (intern (format "nerdtab-kill-%d" index))))
+(use-package| nerdtab
+  :defer 2
+  :config
+  (setq nerdtab-window-position 'top)
+  (set-face-attribute 'nerdtab-tab-face nil :inherit 'hl-line)
+  (dolist (index (number-sequence 0 9))
+    (global-set-key (kbd (format "s-%d" index)) (intern (format "nerdtab-jump-%d" index))))
+  (dolist (index (number-sequence 0 9))
+    (global-set-key (kbd (format "C-s-%d" index)) (intern (format "nerdtab-kill-%d" index)))))
 
 (post-config| general
   (default-leader
