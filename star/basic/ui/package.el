@@ -4,6 +4,5 @@
 
 (package|
  minions
- spacemacs-theme
  all-the-icons
  )
