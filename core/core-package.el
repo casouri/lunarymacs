@@ -378,6 +378,7 @@ Use example:
 It will not print messages printed by `package-install'
 because it's too verbose."
   (interactive)
+  (moon-initialize-load-path)
   (moon-initialize)
   ;; moon-star-path-list is created by `moon|' macro
   ;; moon-load-package loads `moon-package-list'
@@ -386,7 +387,7 @@ because it's too verbose."
   (package-refresh-contents)
   (dolist (package moon-package-list)
     (unless (or (package-installed-p (intern package))
-                (locate-library package))
+                (require (intern package) nil t))
       (message (format "Installing %s" package))
       ;; installing packages prints lot too many messages
       (silent| (package-install (intern package)))
