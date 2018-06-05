@@ -60,6 +60,12 @@
 ;; used for chinese editiing on macOS
 (load| switch-input-mode)
 
+
+(use-package| hungry-delete
+  :defer 2
+  :config
+  (global-set-key (kbd "M-DEL") #'hungry-delete-backward))
+
 ;;
 ;; Config
 ;;
