@@ -75,6 +75,7 @@ Contains only core dir ,star dir and load path for built in libraries")
   "Initialize installed packages (using package.el)."
   (require 'package)
   (package-initialize t)
+  (unless (package-installed-p 'use-package) (package-install 'use-package))
   )
 
 (defun moon-initialize-load-path ()
@@ -393,7 +394,9 @@ because it's too verbose."
                 (require (intern package) nil t))
       (message (format "Installing %s" package))
       ;; installing packages prints lot too many messages
-      (silent| (package-install (intern package)))
+      (silent| (condition-case nil
+                   (package-install (intern package))
+                   (error nil)))
       )))
 
 (defun moon/update-package ()
