@@ -75,7 +75,6 @@ Contains only core dir ,star dir and load path for built in libraries")
   "Initialize installed packages (using package.el)."
   (require 'package)
   (package-initialize t)
-  (unless (package-installed-p 'use-package) (package-install 'use-package))
   )
 
 (defun moon-initialize-load-path ()
