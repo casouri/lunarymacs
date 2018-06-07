@@ -5,4 +5,5 @@
 (package|
  minions
  all-the-icons
+ atom-one-dark-theme
  )

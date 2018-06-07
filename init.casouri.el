@@ -87,7 +87,6 @@
 (when window-system
   (setq evil-insert-state-cursor 'box))
 
-(setq moon-format-on-save t)
 
 ;; (setq mac-command-modifier 'control)
 ;; (setq mac-control-modifier 'super)
@@ -108,6 +107,16 @@
 
  ;; theme toggle
  ;; (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
+
+ ;; theme
+ (require 'atom-one-dark-theme)
+ (set-face-attribute 'mode-line nil :background "#603D8E")
+ (set-face-attribute 'company-tooltip-common nil :foreground "#C678DD")
+ (set-face-attribute 'company-tooltip-common-selection nil :foreground "#C678DD")
+ (set-face-attribute 'company-preview-common nil :foreground "#C678DD")
+
+
+ (setq moon-format-on-save t)
 
  ;; scroll margin
  (setq scroll-margin 8)
