@@ -36,7 +36,8 @@
   :defer t
   :init
   (add-to-list 'custom-theme-load-path (car (directory-files (concat moon-package-dir "elpa/") t "spacemacs-theme.+")) t)
-  (load-theme 'spacemacs-dark t))
+  ;; (load-theme 'spacemacs-dark t)
+  )
 
 (use-package| rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode)
@@ -375,3 +376,17 @@ and saveing desktop."
     "bM7" #'nerdtab-move-to-7
     "bM8" #'nerdtab-move-to-8
     "bM9" #'nerdtab-move-to-9))
+
+
+;; buffer swap
+(use-package| buffer-move
+  :commands
+  (buf-move-up
+   buf-move-dowan
+   buf-move-left
+   buf-move-right))
+
+(global-set-key (kbd "C-x C-h") #'buf-move-left)
+(global-set-key (kbd "C-x C-l") #'buf-move-right)
+(global-set-key (kbd "C-x C-j") #'buf-move-down)
+(global-set-key (kbd "C-x C-k") #'buf-move-up)
