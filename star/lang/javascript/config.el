@@ -1,8 +1,8 @@
-;; (use-package| js2-mode
-;;   :mode "\\.js\\'")
+(use-package| js2-mode
+  :init (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 (use-package| xref-js2
-  :mode "\\.js$"
+  :after js2-mode
   :config
   (define-key js-mode-map (kbd "M-.") nil)
   (add-hook 'js2-mode-hook (lambda ()
@@ -21,13 +21,10 @@
 
 
 (use-package| js-format
-  :mode "\\.js$"
+  :after js2-mode
   :config
-  (add-hook 'js2-mode-hook
-            (lambda()
-              (js-format-setup "standard")
-              (add-hook 'after-save-hook (lambda ()
-                                           (when moon-format-on-save
-                                             (js-format-buffer)))))))
+  (js-format-setup "standard")
+  (add-to-list 'moon-smart-format-alist '(js2-mode . js-format-buffer)))
+
 ;; indent
 (setq js-indent-level 2)

@@ -9,7 +9,8 @@
   :defer t
   :init
   (add-hook 'python-mode-hook #'lsp-python-enable)
-  (add-hook 'python-mode-hook (lambda () (require 'lsp-mode) (require 'lsp-python))))
+  (add-hook 'python-mode-hook (lambda () (require 'lsp-mode) (require 'lsp-python)))
+  (add-to-list 'moon-smart-format-alist '(python-mode . lsp-format-buffer)))
 
 
 (use-package| pyvenv
