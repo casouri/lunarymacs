@@ -55,7 +55,7 @@
  display-line-numbers-width          3
  ;; Popup window to right!
  split-height-threshold              nil
- split-width-threshold               80
+ ;; split-width-threshold               100
  )
 
 (blink-cursor-mode                   -1)
