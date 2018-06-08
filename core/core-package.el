@@ -451,10 +451,14 @@ because it's too verbose."
        (file-relative-name file moon-emacs-d-dir)
        green-check))
     ;; autoload files in packages
-    (message "Loading autoload file from packages... %s" green-check)
-    (dolist (file (reverse package-autoload-file-list))
-      (update-file-autoloads file t moon-autoload-file))
-    ))
+    (message "Loading autoload file from packages")
+    (let ((count 0))
+      (dolist (file (reverse package-autoload-file-list))
+        (when (eq (% count 250) 0)
+          (message "."))
+        (setq count (1+ count))
+        (update-file-autoloads file t moon-autoload-file)))
+    (message green-check)))
 
 (provide 'core-package)
 ;;; core-package.el ends here
