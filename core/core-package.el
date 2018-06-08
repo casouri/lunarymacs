@@ -323,7 +323,9 @@ Basically (use-package| evil :something something) adds
 :init (pre-init-evil)
 :config (post-config-evil))
 to `moon-grand-use-pacage-call'
-to be evaluated at the end of `moon-initialize-star'"
+to be evaluated at the end of `moon-initialize-star'
+
+PACKAGE can also be a straight recipe."
   (declare (indent defun))
   `(progn
      (add-to-list 'moon-package-list ',package)
@@ -333,7 +335,11 @@ to be evaluated at the end of `moon-initialize-star'"
         (append
          (symbol-function 'moon-grand-use-package-call)
          '((use-package
-             ,package
+             ;; if a normal symbol, pass it
+             ;; if not, get the package symbol from recipe
+             ,(if (symbolp package)
+                  package
+                (car package))
              ,@rest-list
              :init
              (let ((symb (intern (format "pre-init-%s" (symbol-name ',package)))))
