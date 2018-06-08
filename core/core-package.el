@@ -12,7 +12,7 @@
 Contains only core dir ,star dir and load path for built in libraries")
 
 
-(defvar moon-package-dir (concat user-emacs-directory ".local/package/")
+(defvar moon-package-dir (concat user-emacs-directory "straight/build/")
   "Where melpa and elpa packages are installed.")
 
 
@@ -53,7 +53,7 @@ Contains only core dir ,star dir and load path for built in libraries")
       '(lambda ()
          "A bunch of (use-package blah blah blah) collected by use-package| macro from each config file of stars."))
 
-
+(defvar green-check "\033[00;32m✔\033[0m")
 ;;
 ;; Config
 ;;
@@ -79,13 +79,9 @@ Contains only core dir ,star dir and load path for built in libraries")
 
 (defun moon-initialize-load-path ()
   "Add each package to load path."
-    (setq moon-package-load-path (directory-files package-user-dir t nil t) ;; get all sub-dir
+  (setq moon-package-load-path (directory-files moon-package-dir t nil t) ;; get all sub-dir
           load-path (append moon-base-load-path moon-package-load-path))
     (add-to-list 'load-path moon-local-dir)
-    ;; make sure use-package and bind-key are in load path on the very first install
-    (add-to-list 'load-path (car (directory-files (concat moon-package-dir "elpa/") t "use-package.+")) t)
-    (add-to-list 'load-path (car (directory-files (concat moon-package-dir "elpa/") t "bind-key.+")) t)
-
     (setq moon-load-path-loaded t)
     )
 
@@ -200,6 +196,21 @@ i.e. :keyword to \"keyword\"."
            (length moon-star-path-list)
            (setq moon-init-time (float-time (time-subtract (current-time) before-init-time)))
            ))
+
+(defun straight-bootstrap ()
+  "Bootstrap code for straight.el."
+  (interactive)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 4))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage)))
 
 ;;
 ;; Macro
@@ -373,83 +384,29 @@ Use example:
 ;;
 
 
-(defun moon/install-package ()
+(defun moon/use-package ()
   "Install packages specified in `package.el' files in each star.
 
 It will not print messages printed by `package-install'
 because it's too verbose."
   (interactive)
+  (straight-bootstrap)
   (unless moon-load-path-loaded
     (moon-initialize-load-path))
-  (moon-initialize)
+  ;; (moon-initialize)
   ;; moon-star-path-list is created by `moon|' macro
   ;; moon-load-package loads `moon-package-list'
   ;; (moon-load-package moon-star-path-list)
   (unless moon-star-prepared
     (moon-initialize-star))
-  (package-refresh-contents)
+  ;; (package-refresh-contents)
   (dolist (package moon-package-list)
-    (unless (or (package-installed-p (intern package))
-                (require (intern package) nil t))
-      (message (format "Installing %s" package))
-      ;; installing packages prints lot too many messages
-      (silent| (condition-case nil
-                   (package-install (intern package))
-                   (error nil)))
-      )))
-
-(defun moon/update-package ()
-  "Update packages to the latest version.
-
-It will not print messages printed by updating packages
-because it's too verbose."
-  (interactive)
-  (moon-initialize)
-  (unless moon-load-path-loaded
-    (moon-initialize-load-path))
-  ;; moon-star-path-list is created by `moon|' macro
-  ;; moon-load-package loads `moon-package-list'
-  ;; (moon-load-package moon-star-path-list)
-  (unless moon-star-prepared
-    (moon-initialize-star))
-  ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
-  
-  ;; If there is no package to update,
-  ;; package.el will throw "No operation specified"
-  ;; but I didn't find any code throwing error
-  ;; in package.el...
-  ;; TODO find out a better implementation
-  (silent| ; don't print message
-   (condition-case nil
-       (save-window-excursion
-         (package-list-packages t)
-         (package-menu-mark-upgrades)
-         (package-menu-execute t))
-     (error nil)))
-  )
-
-(defun moon/remove-unused-package ()
-  "Remove packages that are not declared in any star with `package|' macro."
-  (interactive)
-
-  (unless moon-load-path-loaded
-    (moon-initialize-load-path))
-  (moon-initialize)
-  
-  ;; moon-star-path-list is created by `moon|' macro
-  ;; moon-load-package loads `moon-package-list'
-  (unless moon-star-prepared
-    ;; (moon-load-package moon-star-path-list)
-    (moon-initialize-star))
-  (dolist (package package-alist)
-    (let ((package-name (car package))
-          (package-description (car (cdr package)))
-          (non-dependency-list (package--find-non-dependencies)))
-      (when (and (not (member (symbol-name package-name) moon-package-list))
-                 (package-built-in-p package)
-                 (member package-name non-dependency-list))
-        (package-delete package-description))
-      )))
+    (message (format "Checking %s   %s" package green-check))
+    ;; installing packages prints lot too many messages
+    (silent| (condition-case nil
+                 (straight-use-package (intern package))
+               (error nil)))
+    ))
 
 (defun moon/generate-autoload-file ()
   "Extract autload file from each star to `moon-autoload-file'."
@@ -467,7 +424,7 @@ because it's too verbose."
         (package-autoload-file-list ()))
     ;; package autoload
     (dolist (file (directory-files-recursively
-		   (concat moon-package-dir "elpa/")
+		   moon-package-dir
 		   "\\.el$"))
       (push (expand-file-name file) package-autoload-file-list))
     ;; star autoload
@@ -490,10 +447,11 @@ because it's too verbose."
       (message
        (cond ((update-file-autoloads file t moon-autoload-file)
               "Nothing in %s")
-             (t "Scanned %s"))
-       (file-relative-name file moon-emacs-d-dir)))
+             (t "Scanned %s   %s"))
+       (file-relative-name file moon-emacs-d-dir)
+       green-check))
     ;; autoload files in packages
-    (message "Loading autoload file from packages...")
+    (message "Loading autoload file from packages... %s" green-check)
     (dolist (file (reverse package-autoload-file-list))
       (update-file-autoloads file t moon-autoload-file))
     ))
