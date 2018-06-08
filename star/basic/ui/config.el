@@ -94,8 +94,7 @@ minor-modes that is usually displayed directly in the mode line."
                    'minions-mode-line-modes
                    mode-line-format)))
 
-    (minions-mode 1))
-  )
+    (minions-mode 1)))
 
 (use-package| moody
   :config
