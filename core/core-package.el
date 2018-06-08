@@ -355,7 +355,7 @@ Use example:
   `(make-thread (lambda () (require ',package)) ,name))
 
 (defmacro silent| (&rest form)
-  "Run expressions in form without displaying message."
+  "Run expressions in FORM without displaying message."
   `(let ((inhibit-message t))
     ,@form))
 
@@ -497,7 +497,6 @@ because it's too verbose."
     (dolist (file (reverse package-autoload-file-list))
       (update-file-autoloads file t moon-autoload-file))
     ))
-
 
 (provide 'core-package)
 ;;; core-package.el ends here
