@@ -326,7 +326,7 @@ to `moon-grand-use-pacage-call'
 to be evaluated at the end of `moon-initialize-star'"
   (declare (indent defun))
   `(progn
-     (add-to-list 'moon-package-list (symbol-name ',package))
+     (add-to-list 'moon-package-list ',package)
      (unless noninteractive
        (fset
         'moon-grand-use-package-call
@@ -404,7 +404,7 @@ because it's too verbose."
     (message (format "Checking %s   %s" package green-check))
     ;; installing packages prints lot too many messages
     (silent| (condition-case nil
-                 (straight-use-package (intern package))
+                 (straight-use-package package)
                (error nil)))
     ))
 
