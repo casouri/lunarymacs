@@ -47,7 +47,7 @@ You can:
 *backup you .emacs.d first!*
 
 #+BEGIN_SRC shell
-git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d --recurse-submodules
+git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
 cd ~/.emacs.d
 cp init.example.el init.el
 make
@@ -55,7 +55,6 @@ emacs
 
 # to update lunarymacs
 git pull --rebase
-git submodule update --init --recursive
 
 # or
 make update-moon # it's the same
