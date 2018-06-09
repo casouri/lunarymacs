@@ -16,7 +16,7 @@ Contains only core dir ,star dir and load path for built in libraries")
   "Where melpa and elpa packages are installed.")
 
 
-(defvar moon-package-list '("use-package" "bind-key")
+(defvar moon-package-list '(use-package bind-key)
   "A list of packages to install. Packages are represented by strings not symbols.")
 
 (defvar moon--refreshed-p nil
@@ -244,7 +244,7 @@ Modify them with `pre-init|' and `post-config|' macro.
 Can take multiple packages.
 e.g. (package| evil evil-surround)"
   (dolist (package package-list)
-    (add-to-list 'moon-package-list (symbol-name package))
+    (add-to-list 'moon-package-list package)
     ;; (fset (intern (format "post-config-%s" (symbol-name package))) '(lambda () ()))
     ;; (fset (intern (format "pre-init-%s" (symbol-name package))) '(lambda () ()))
     ))
