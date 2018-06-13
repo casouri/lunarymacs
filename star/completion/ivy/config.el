@@ -49,6 +49,7 @@
   )
 
 (global-set-key (kbd "C-x C-y") #'counsel-yank-pop)
+(global-set-key (kbd "C-c C-y") #'counsel-yank-pop)
 
 (use-package| swiper :commands (swiper swiper-all))
 (use-package| counsel
