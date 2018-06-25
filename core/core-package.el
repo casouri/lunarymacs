@@ -16,8 +16,11 @@ Contains only core dir ,star dir and load path for built in libraries")
   "Where melpa and elpa packages are installed.")
 
 
-(defvar moon-package-list '("use-package" "bind-key")
-  "A list of packages to install. Packages are represented by strings not symbols.")
+(defvar moon-package-list '(use-package bind-key)
+  "A list of packages to install. Packages are represented by symbols.")
+
+(defvar moon-quelpa-package-list ()
+  "A list of packages to install by quelpa. Packages are represented by recipe list.")
 
 (defvar moon--refreshed-p nil
   "Have you refreshed contents?")
@@ -233,7 +236,9 @@ Modify them with `pre-init|' and `post-config|' macro.
 Can take multiple packages.
 e.g. (package| evil evil-surround)"
   (dolist (package package-list)
-    (add-to-list 'moon-package-list (symbol-name package))
+    (if (symbolp ',package)
+         (add-to-list 'moon-package-list ',package)
+       (add-to-list 'moon-quelpa-package-list ',package))
     ;; (fset (intern (format "post-config-%s" (symbol-name package))) '(lambda () ()))
     ;; (fset (intern (format "pre-init-%s" (symbol-name package))) '(lambda () ()))
     ))
@@ -304,6 +309,12 @@ before `post-config|' but after `post-init'."
         (progn ,@rest-list)
       (with-eval-after-load ',feature ,@rest-list)))
 
+(defmacro get-package-symbol| (sexp)
+  "If SEXP is a symbol, return it. If SEXP is a sequence, return car."
+  `(if (symbolp ,sexp)
+       ,sexp
+     (car ,sexp)))
+
 (defmacro use-package| (package &rest rest-list)
   "Thin wrapper around `use-package', just add some hooks.
 
@@ -315,21 +326,23 @@ to `moon-grand-use-pacage-call'
 to be evaluated at the end of `moon-initialize-star'"
   (declare (indent defun))
   `(progn
-     (add-to-list 'moon-package-list (symbol-name ',package))
+     (if (symbolp ',package)
+         (add-to-list 'moon-package-list ',package)
+       (add-to-list 'moon-quelpa-package-list ',package))
      (unless noninteractive
        (fset
         'moon-grand-use-package-call
         (append
          (symbol-function 'moon-grand-use-package-call)
          '((use-package
-             ,package
+             ,(get-package-symbol| package)
              ,@rest-list
              :init
-             (let ((symb (intern (format "pre-init-%s" (symbol-name ',package)))))
+             (let ((symb (intern (format "pre-init-%s" (symbol-name ',(get-package-symbol| package))))))
                (when (fboundp symb)
                  (eval (list symb))))
              :config
-             (let ((symb (intern (format "post-config-%s" (symbol-name ',package)))))
+             (let ((symb (intern (format "post-config-%s" (symbol-name ',(get-package-symbol| package))))))
                (when (fboundp symb)
                  (eval (list symb))))
              )))))))
@@ -379,6 +392,7 @@ Use example:
 It will not print messages printed by `package-install'
 because it's too verbose."
   (interactive)
+  (bootstrap-quelpa)
   (unless moon-load-path-loaded
     (moon-initialize-load-path))
   (moon-initialize)
@@ -388,13 +402,15 @@ because it's too verbose."
   (unless moon-star-prepared
     (moon-initialize-star))
   (package-refresh-contents)
+  (dolist (package moon-quelpa-package-list)
+    (quelpa package))
   (dolist (package moon-package-list)
-    (unless (or (package-installed-p (intern package))
-                (require (intern package) nil t))
+    (unless (or (package-installed-p package)
+                (require package nil t))
       (message (format "Installing %s" package))
       ;; installing packages prints lot too many messages
       (silent| (condition-case nil
-                   (package-install (intern package))
+                   (package-install package)
                    (error nil)))
       )))
 
@@ -445,7 +461,7 @@ because it's too verbose."
     (let ((package-name (car package))
           (package-description (car (cdr package)))
           (non-dependency-list (package--find-non-dependencies)))
-      (when (and (not (member (symbol-name package-name) moon-package-list))
+      (when (and (not (member package-name moon-package-list))
                  (package-built-in-p package)
                  (member package-name non-dependency-list))
         (package-delete package-description))
@@ -497,6 +513,14 @@ because it's too verbose."
     (dolist (file (reverse package-autoload-file-list))
       (update-file-autoloads file t moon-autoload-file))
     ))
+
+(defun bootstrap-quelpa ()
+  "Install quelpa."
+  (package-initialize)
+  (unless (require 'quelpa nil t)
+    (with-temp-buffer
+      (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
+      (eval-buffer))))
 
 (provide 'core-package)
 ;;; core-package.el ends here
