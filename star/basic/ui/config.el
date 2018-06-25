@@ -55,7 +55,8 @@
   (setq hl-paren-colors '("green"))
   ;; red in light theme, green in dark
   (change-by-theme '((spacemacs-dark . (progn (setq hl-paren-colors '("green")) (hl-paren-color-update)))
-                     (spacemacs-light . (progn (setq hl-paren-colors '("red")) (hl-paren-color-update))))))
+                     (spacemacs-light . (progn (setq hl-paren-colors '("red")) (hl-paren-color-update)))))
+  )
 
 
 ;;
@@ -100,9 +101,9 @@ minor-modes that is usually displayed directly in the mode line."
   :config
   (setq moody-slant-function #'moody-slant-apple-rgb)
   (setq x-underline-at-descent-line t)
-  (defface powerline-active1 nil "fake powerline theme")
-  (set-face-attribute 'mode-line nil :box nil :background (face-attribute 'powerline-active1 :background))
-  (set-face-attribute 'mode-line-inactive nil :box nil)
+  ;; (defface powerline-active1 nil "fake powerline theme")
+  ;; (set-face-attribute 'mode-line nil :box nil :background (face-attribute 'powerline-active1 :background))
+  ;; (set-face-attribute 'mode-line-inactive nil :box nil)
   (moon/setup-moody))
 
 ;; (defun moon-load-powerline ()
@@ -325,13 +326,13 @@ and saveing desktop."
 ;; mission control
 ;;
 
-(load (concat moon-star-dir "basic/ui/emacs-mission-control/mission-control"))
-(setq mcon-c-tab-initial-selection-offset 1
-      mcon-frame-name "mcon")
-(mcon-c-tab-setup-binding)
-(post-config| general
-  (default-leader
-    "bc" #'mcon-switch))
+;; (load (concat moon-star-dir "basic/ui/emacs-mission-control/mission-control"))
+;; (setq mcon-c-tab-initial-selection-offset 1
+;;       mcon-frame-name "mcon")
+;; (mcon-c-tab-setup-binding)
+;; (post-config| general
+;;   (default-leader
+;;     "bc" #'mcon-switch))
 
 
 
