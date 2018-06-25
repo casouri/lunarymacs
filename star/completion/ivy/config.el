@@ -68,3 +68,6 @@
 (use-package| smex
   :commands (smex smex-major-mode-commands)
   :config (setq smex-save-file (concat moon-local-dir "smex-items")))
+
+(use-package| (ivy-filthy-rich :repo "casouri/ivy-filthy-rich" :fetcher github)
+  :config (ivy-filthy-rich-mode))
