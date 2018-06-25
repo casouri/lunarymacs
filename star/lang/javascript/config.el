@@ -1,5 +1,9 @@
 (use-package| js2-mode
-  :init (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+  :init (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  :config
+  ;; don't lint
+  (setq js2-mode-show-parse-errors nil)
+  (setq js2-mode-show-strict-warnings nil))
 
 (use-package| xref-js2
   :after js2-mode
