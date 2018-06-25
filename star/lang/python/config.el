@@ -38,10 +38,11 @@
              ein:notebooklist-login
              ein:junk-new)
   :config
-  (setq ein:worksheet-enable-undo 'yes)
-  (load (concat
-         moon-emacs-d-dir
-         "star/lang/python/jpnb-state/jpnb-state.el")))
+  (setq ein:worksheet-enable-undo 'yes))
+
+;;   (load (concat
+;;          moon-emacs-d-dir
+;;          "star/lang/python/jpnb-state/jpnb-state.el"))
 
 (post-config| general
   (after-load| ein
