@@ -30,7 +30,7 @@
        lsp
        python
        elisp
-       rust
+       ;; rust
        javascript
        web
        lua
@@ -109,11 +109,13 @@
  ;; (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
 
  ;; theme
- (require 'atom-one-dark-theme)
+ ;; (require 'atom-one-dark-theme)
+ (require 'doom-themes)
+ (load-theme 'doom-one)
  (set-face-attribute 'mode-line nil :background "#603D8E")
- (set-face-attribute 'company-tooltip-common nil :foreground "#C678DD")
- (set-face-attribute 'company-tooltip-common-selection nil :foreground "#C678DD")
- (set-face-attribute 'company-preview-common nil :foreground "#C678DD")
+ ;; (set-face-attribute 'company-tooltip-common nil :foreground "#C678DD")
+ ;; (set-face-attribute 'company-tooltip-common-selection nil :foreground "#C678DD")
+ ;; (set-face-attribute 'company-preview-common nil :foreground "#C678DD")
 
 
  (setq moon-format-on-save t)

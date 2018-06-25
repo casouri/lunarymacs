@@ -17,7 +17,10 @@ Contains only core dir ,star dir and load path for built in libraries")
 
 
 (defvar moon-package-list '(use-package bind-key)
-  "A list of packages to install. Packages are represented by strings not symbols.")
+  "A list of packages to install. Packages are represented by symbols.")
+
+(defvar moon-quelpa-package-list ()
+  "A list of packages to install by quelpa. Packages are represented by recipe list.")
 
 (defvar moon--refreshed-p nil
   "Have you refreshed contents?")
@@ -244,7 +247,9 @@ Modify them with `pre-init|' and `post-config|' macro.
 Can take multiple packages.
 e.g. (package| evil evil-surround)"
   (dolist (package package-list)
-    (add-to-list 'moon-package-list package)
+    (if (symbolp ',package)
+         (add-to-list 'moon-package-list ',package)
+       (add-to-list 'moon-quelpa-package-list ',package))
     ;; (fset (intern (format "post-config-%s" (symbol-name package))) '(lambda () ()))
     ;; (fset (intern (format "pre-init-%s" (symbol-name package))) '(lambda () ()))
     ))
@@ -315,6 +320,12 @@ before `post-config|' but after `post-init'."
         (progn ,@rest-list)
       (with-eval-after-load ',feature ,@rest-list)))
 
+(defmacro get-package-symbol| (sexp)
+  "If SEXP is a symbol, return it. If SEXP is a sequence, return car."
+  `(if (symbolp ,sexp)
+       ,sexp
+     (car ,sexp)))
+
 (defmacro use-package| (package &rest rest-list)
   "Thin wrapper around `use-package', just add some hooks.
 
@@ -328,25 +339,23 @@ to be evaluated at the end of `moon-initialize-star'
 PACKAGE can also be a straight recipe."
   (declare (indent defun))
   `(progn
-     (add-to-list 'moon-package-list ',package)
+     (if (symbolp ',package)
+         (add-to-list 'moon-package-list ',package)
+       (add-to-list 'moon-quelpa-package-list ',package))
      (unless noninteractive
        (fset
         'moon-grand-use-package-call
         (append
          (symbol-function 'moon-grand-use-package-call)
          '((use-package
-             ;; if a normal symbol, pass it
-             ;; if not, get the package symbol from recipe
-             ,(if (symbolp package)
-                  package
-                (car package))
+             ,(get-package-symbol| package)
              ,@rest-list
              :init
-             (let ((symb (intern (format "pre-init-%s" (symbol-name ',package)))))
+             (let ((symb (intern (format "pre-init-%s" (symbol-name ',(get-package-symbol| package))))))
                (when (fboundp symb)
                  (eval (list symb))))
              :config
-             (let ((symb (intern (format "post-config-%s" (symbol-name ',package)))))
+             (let ((symb (intern (format "post-config-%s" (symbol-name ',(get-package-symbol| package))))))
                (when (fboundp symb)
                  (eval (list symb))))
              )))))))
@@ -396,7 +405,7 @@ Use example:
 It will not print messages printed by `package-install'
 because it's too verbose."
   (interactive)
-  (straight-bootstrap)
+  (bootstrap-quelpa)
   (unless moon-load-path-loaded
     (moon-initialize-load-path))
   ;; (moon-initialize)
@@ -405,14 +414,71 @@ because it's too verbose."
   ;; (moon-load-package moon-star-path-list)
   (unless moon-star-prepared
     (moon-initialize-star))
-  ;; (package-refresh-contents)
+  (package-refresh-contents)
+  (dolist (package moon-quelpa-package-list)
+    (quelpa package))
   (dolist (package moon-package-list)
-    (message (format "Checking %s   %s" package green-check))
-    ;; installing packages prints lot too many messages
-    (silent| (condition-case nil
-                 (straight-use-package package)
-               (error nil)))
-    ))
+    (unless (or (package-installed-p package)
+                (require package nil t))
+      (message (format "Installing %s" package))
+      ;; installing packages prints lot too many messages
+      (silent| (condition-case nil
+                   (package-install package)
+                   (error nil)))
+      )))
+
+(defun moon/update-package ()
+  "Update packages to the latest version.
+
+It will not print messages printed by updating packages
+because it's too verbose."
+  (interactive)
+  (moon-initialize)
+  (unless moon-load-path-loaded
+    (moon-initialize-load-path))
+  ;; moon-star-path-list is created by `moon|' macro
+  ;; moon-load-package loads `moon-package-list'
+  ;; (moon-load-package moon-star-path-list)
+  (unless moon-star-prepared
+    (moon-initialize-star))
+  ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
+  
+  ;; If there is no package to update,
+  ;; package.el will throw "No operation specified"
+  ;; but I didn't find any code throwing error
+  ;; in package.el...
+  ;; TODO find out a better implementation
+  (silent| ; don't print message
+   (condition-case nil
+       (save-window-excursion
+         (package-list-packages t)
+         (package-menu-mark-upgrades)
+         (package-menu-execute t))
+     (error nil)))
+  )
+
+(defun moon/remove-unused-package ()
+  "Remove packages that are not declared in any star with `package|' macro."
+  (interactive)
+
+  (unless moon-load-path-loaded
+    (moon-initialize-load-path))
+  (moon-initialize)
+  
+  ;; moon-star-path-list is created by `moon|' macro
+  ;; moon-load-package loads `moon-package-list'
+  (unless moon-star-prepared
+    ;; (moon-load-package moon-star-path-list)
+    (moon-initialize-star))
+  (dolist (package package-alist)
+    (let ((package-name (car package))
+          (package-description (car (cdr package)))
+          (non-dependency-list (package--find-non-dependencies)))
+      (when (and (not (member package-name moon-package-list))
+                 (package-built-in-p package)
+                 (member package-name non-dependency-list))
+        (package-delete package-description))
+      )))
 
 (defun moon/generate-autoload-file ()
   "Extract autload file from each star to `moon-autoload-file'."
@@ -465,6 +531,14 @@ because it's too verbose."
         (setq count (1+ count))
         (update-file-autoloads file t moon-autoload-file)))
     (message green-check)))
+
+(defun bootstrap-quelpa ()
+  "Install quelpa."
+  (package-initialize)
+  (unless (require 'quelpa nil t)
+    (with-temp-buffer
+      (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
+      (eval-buffer))))
 
 (provide 'core-package)
 ;;; core-package.el ends here

@@ -40,8 +40,9 @@
   :config
   (setq ein:worksheet-enable-undo 'yes))
 
-(use-package| (jpnb-state :type git :host github :repo "casouri/jpnb-state")
-  :after ein)
+;;   (load (concat
+;;          moon-emacs-d-dir
+;;          "star/lang/python/jpnb-state/jpnb-state.el"))
 
 (post-config| general
   (after-load| ein
