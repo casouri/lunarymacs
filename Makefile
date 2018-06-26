@@ -18,7 +18,7 @@ help:
 >@echo "Avaliable commands:\ninstall  autoload  clean update-moon"
 
 .local:
->mkdir .local .local/package .local/package/elpa
+>mkdir .local .local/package/
 
 custom.el: .local
 >touch .local/custom.el

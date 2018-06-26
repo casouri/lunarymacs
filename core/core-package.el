@@ -7,12 +7,12 @@
 (defvar moon-base-load-path
   (append (list moon-core-dir moon-star-dir)
           load-path)
-  "A backup of `load-path' before it was altered by `doom-initialize'.
+  "A backup of `load-path' before it was altered by `moon-initialize'.
 
 Contains only core dir ,star dir and load path for built in libraries")
 
 
-(defvar moon-package-dir (concat user-emacs-directory "straight/build/")
+(defvar moon-package-dir (concat moon-local-dir "package/")
   "Where melpa and elpa packages are installed.")
 
 
@@ -63,10 +63,10 @@ Contains only core dir ,star dir and load path for built in libraries")
 
 (setq package--init-file-ensured t
       package-enable-at-startup nil
-      package-user-dir (expand-file-name "elpa" moon-package-dir)
+      package-user-dir moon-package-dir
       package-archives
-      '(("melpa" . "https://melpa.org/packages/")
-        ("gnu"   . "https://elpa.gnu.org/packages/")
+      '(("melpa" . "http://elpa.emacs-china.org/melpa/")
+        ("gnu"   . "http://elpa.emacs-china.org/gnu/")
         ("org" . "https://orgmode.org/elpa/")))
 
 
@@ -200,21 +200,6 @@ i.e. :keyword to \"keyword\"."
            (setq moon-init-time (float-time (time-subtract (current-time) before-init-time)))
            ))
 
-(defun straight-bootstrap ()
-  "Bootstrap code for straight.el."
-  (interactive)
-  (let ((bootstrap-file
-         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-        (bootstrap-version 4))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage)))
-
 ;;
 ;; Macro
 ;;
@@ -246,13 +231,14 @@ Modify them with `pre-init|' and `post-config|' macro.
 
 Can take multiple packages.
 e.g. (package| evil evil-surround)"
-  (dolist (package package-list)
-    (if (symbolp ',package)
-         (add-to-list 'moon-package-list ',package)
-       (add-to-list 'moon-quelpa-package-list ',package))
-    ;; (fset (intern (format "post-config-%s" (symbol-name package))) '(lambda () ()))
-    ;; (fset (intern (format "pre-init-%s" (symbol-name package))) '(lambda () ()))
-    ))
+  `(dolist (package ',package-list)
+     (if (symbolp package)
+         (add-to-list 'moon-package-list package)
+       (print package)
+       (add-to-list 'moon-quelpa-package-list package))
+     ;; (fset (intern (format "post-config-%s" (symbol-name package))) '(lambda () ()))
+     ;; (fset (intern (format "pre-init-%s" (symbol-name package))) '(lambda () ()))
+     ))
 
 (defmacro moon| (&rest star-list)
   "Declare stars in STAR-LIST.
@@ -341,6 +327,7 @@ PACKAGE can also be a straight recipe."
   `(progn
      (if (symbolp ',package)
          (add-to-list 'moon-package-list ',package)
+       (print ',package)
        (add-to-list 'moon-quelpa-package-list ',package))
      (unless noninteractive
        (fset
@@ -405,6 +392,7 @@ Use example:
 It will not print messages printed by `package-install'
 because it's too verbose."
   (interactive)
+  (package-refresh-contents)
   (bootstrap-quelpa)
   (unless moon-load-path-loaded
     (moon-initialize-load-path))
@@ -414,13 +402,14 @@ because it's too verbose."
   ;; (moon-load-package moon-star-path-list)
   (unless moon-star-prepared
     (moon-initialize-star))
-  (package-refresh-contents)
+  (print moon-quelpa-package-list)
   (dolist (package moon-quelpa-package-list)
+    (message (format "Installing %s" (symbol-name (car package))))
     (quelpa package))
   (dolist (package moon-package-list)
     (unless (or (package-installed-p package)
                 (require package nil t))
-      (message (format "Installing %s" package))
+      (message (format "Installing %s" (symbol-name package)))
       ;; installing packages prints lot too many messages
       (silent| (condition-case nil
                    (package-install package)
@@ -536,9 +525,8 @@ because it's too verbose."
   "Install quelpa."
   (package-initialize)
   (unless (require 'quelpa nil t)
-    (with-temp-buffer
-      (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
-      (eval-buffer))))
+    (package-install 'quelpa)
+    (moon-initialize-load-path)))
 
 (provide 'core-package)
 ;;; core-package.el ends here
