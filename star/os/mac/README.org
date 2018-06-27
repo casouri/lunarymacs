@@ -1,7 +1,0 @@
-#+TITLE: mac
-
-
-* Package list
-
--exec-path-from-shell
-

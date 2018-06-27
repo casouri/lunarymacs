@@ -1,1 +1,0 @@
-(load| imagemagick-preview-mode)

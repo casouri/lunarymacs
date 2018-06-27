@@ -1,8 +1,0 @@
-#+TITLE: homepage
-
-This star renders the homepage.
-
-- moon-log-news :: Whether to show breaking changes on homepage.
-
-
-
