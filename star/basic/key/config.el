@@ -33,11 +33,6 @@
     :keymaps 'override
     :prefix "C-c")
   
-  
-  ;; One escape to escape them all.
-  ;; (global-set-key (kbd "<escape>") #'keyboard-escape-quit)
-
-  
   (default-leader
    "f" '(:ignore t :which-key "file")
    "F" '(:ignore t :which-key "Frame")

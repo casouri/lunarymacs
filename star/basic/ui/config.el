@@ -101,24 +101,7 @@ minor-modes that is usually displayed directly in the mode line."
   :config
   (setq moody-slant-function #'moody-slant-apple-rgb)
   (setq x-underline-at-descent-line t)
-  ;; (defface powerline-active1 nil "fake powerline theme")
-  ;; (set-face-attribute 'mode-line nil :box nil :background (face-attribute 'powerline-active1 :background))
-  ;; (set-face-attribute 'mode-line-inactive nil :box nil)
   (moon/setup-moody))
-
-;; (defun moon-load-powerline ()
-;;   (require 'powerline)
-;;   (setq powerline-default-separator 'slant)
-;;   (setq powerline-image-apple-rgb t)
-;;   (setq powerline-height 28)
-;;   (load (concat moon-star-dir "basic/ui/lunaryline/lunaryline"))
-;;   (lunaryline-default-theme)
-;;   ;; fix different separator color after changing theme
-;;   (add-hook 'moon-load-theme-hook #'powerline-reset)
-;;   (remove-hook 'after-change-major-mode-hook #'moon-load-powerline))
-
-;; (add-hook 'after-change-major-mode-hook #'moon-load-powerline)
-
 
 ;;
 ;; Line number
@@ -278,8 +261,6 @@ minor-modes that is usually displayed directly in the mode line."
 ;; Desktop
 ;;
 
-;; (add-hook 'moon-post-init-hook #'desktop-save-mode)
-
 (post-config| general
   (default-leader
     "wr" #'moon/desktop-read))
@@ -321,19 +302,6 @@ and saveing desktop."
                 (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))))
     ;; )
 )
-
-;;
-;; mission control
-;;
-
-;; (load (concat moon-star-dir "basic/ui/emacs-mission-control/mission-control"))
-;; (setq mcon-c-tab-initial-selection-offset 1
-;;       mcon-frame-name "mcon")
-;; (mcon-c-tab-setup-binding)
-;; (post-config| general
-;;   (default-leader
-;;     "bc" #'mcon-switch))
-
 
 
 ;; form feed

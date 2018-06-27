@@ -24,24 +24,6 @@
       (setq evil-ex-search-pattern (evil-ex-make-search-pattern region))
       (deactivate-mark)))
 
-  ;; https://emacs-china.org/t/topic/5696/15
-
-  ;; / in visual mode
-;;   (defun moon-put-region-in-search-history (&rest arg-list)
-;;     "Put region into evil-search history.
-;; COUNT is passed to evil-search command."
-;;     (when (evil-visual-state-p)
-;;       ;; in evil-mode region-end is one less than actuall point
-;;       ;; (strip-text-properties (funcall region-extract-function nil))
-;;       (let ((region (buffer-substring-no-properties
-;;                      ;; therefore I add 1 to region-end
-;;                      (region-beginning) (1+ (region-end)))))
-;;         (push region evil-ex-search-history)
-;;         (setq evil-ex-search-pattern (evil-ex-make-search-pattern region))
-;;         ;; (push region evil-ex-s)
-;;         (deactivate-mark))))
-
-;;   (advice-add 'evil-ex-start-search :before #'moon-put-region-in-search-history)
 
   ;; / in visual mode will start search immediatly
   (defun moon-evil-ex-start-search-with-region-string ()
@@ -94,7 +76,6 @@
 ;;   :config (global-evil-surround-mode 1)
 ;;   (evil-define-key 'visual 'global "s" 'evil-surround-region))
 
-
 (use-package| evil-nerd-commenter
   :commands evilnc-comment-operator)
 
@@ -103,8 +84,6 @@
    :keymaps 'visual
    :prefix "g"
    "c" #'evilnc-comment-operator))
-
-
 
 ;; (use-package| evil-escape
 ;;   :config (evil-escape-mode 1)
@@ -120,13 +99,6 @@
   :defer 2
   :init (setq vimish-fold-dir (concat moon-local-dir "vimish-fold")))
 
-;; I gave up using term in Emacs
-;; (after-load| term
-;;  (require 'evil-collection-term)
-;;  (evil-collection-term-setup)
-;;   (add-hook 'term-mode-hook (lambda ()
-;;                              (setq-local evil-insert-state-cursor 'box)))
-;;  )
 
 (use-package| evil-embrace
   ;; doesn't need defer, embrace is autoloaded
@@ -202,4 +174,3 @@
       (isearch-push-state)
       (isearch-yank-string region))))
 (add-hook 'isearch-mode-hook #'moon-isearch-with-region)
-

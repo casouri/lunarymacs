@@ -20,13 +20,6 @@
   :commands (recentf counsel-recentf)
   )
 
-;; (use-package| smooth-scrolling
-;;   :init
-;;   (defun setup-smooth-scrolling ()
-;;     (require 'smooth-scrolling)
-;;     (smooth-scrolling-mode 1))
-;;   (delay-load| setup-smooth-scrolling))
-
 (use-package| avy
   :defer 2
   :config
@@ -43,17 +36,12 @@
    minimap-width-fraction 0.1
    minimap-window-location 'right
    minimap-update-delay 0)
-  ;; (overlay-put minimap-line-overlay 'face '(:background "blue" :foreground "blue"))
   (custom-theme-set-faces 'user
                           '(minimap-active-region-background
                             ((((background dark)) (:background "#61526E"))
                              (t (:background "#d3d3e7")))))
   :commands minimap-mode)
 
-;; (custom-theme-set-faces 'user
-;;                         '(minimap-active-region-background
-;;                           ((((background dark)) (:background "#56B0EC" :foreground "#61526E"))
-;;                            (t (:background "#56B0EC" :foreground "#56B0EC")))))
 (post-config| general
   (default-leader "tm" #'minimap-mode))
 
@@ -65,6 +53,15 @@
   :defer 2
   :config
   (global-set-key (kbd "M-DEL") #'hungry-delete-backward))
+
+(use-package| (bicycle :repo "tarsius/bicycle" :fetcher github)
+  :after outline
+  :bind (:map outline-minor-mode-map
+              ([C-tab] . bicycle-cycle)
+              ([S-tab] . bicycle-cycle-global))
+  :init
+  (add-hook 'prog-mode-hook 'outline-minor-mode)
+  (add-hook 'prog-mode-hook 'hs-minor-mode))
 
 ;;
 ;; Config
@@ -97,9 +94,6 @@
 (prefer-coding-system 'utf-8)
 (setq-default buffer-file-coding-system 'utf-8)
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
-
-;; fold
-;; (add-hook 'prog-mode-hook (lambda () (outline-minor-mode 1)))
 
 (defun open-next-line (arg)
       "Move to the next line and then opens a line.
