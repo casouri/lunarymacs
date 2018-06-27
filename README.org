@@ -55,7 +55,7 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
 
 This project is a good starting point of your own config!
 You can:
-1. Use my configuration(opinionated) and add your own config (submit PR to casour/luanrymacs-stars if you think yours is good!)
+1. Use my configuration(opinionated) and add your own config (submit PR to [[https://github.com/casouri/lunarymacs-stars][casouri/lunarymacs-stars]] if you think yours is good!)
 2. *OR* Only use the core as a framework and manage your own configurations within it.
 3. *OR* Just read the core and wiki as a reference and build your own config from scratch.
 
