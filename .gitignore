@@ -2,7 +2,7 @@
 .cache/
 .DS_Store
 init.el
-straight/
+quelpa/
 
 # ignore compiles files
 *.elc
