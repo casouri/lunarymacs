@@ -8,12 +8,16 @@
 After sharing my config/framework for some time,
 I realized that trying to make the config fit everybody is naive and unessessary.
 
-I assume most people would like to fork and modify lunarymacs to their taste.
-But I still want you guys can keep up with the changes in core.
-So I decide to launch a "core" branch which only have the core files.
-Then you can merge core and keep all your config save.
+It seems to me that most people likes to fork and modify default starts to their taste,
+instead of adding config in private stars.
+That makess merging upstream a bit more messy.
 
-I'll also add a make command for that
+"Working tree clean" is super important, as well as keeping update to date in core.
+So I decide to seperate luanrymacs core and my personal (default) configs.
+Then you can be in sync with core easily and manage your config in another repo:
+maybe a fork of default configs, but you don't need to ever merge upstream of that.
+
+I'll also add make commands for convenience.
 
 It is adviced to show news on startup, so you can follow the really important changes in core.
 
