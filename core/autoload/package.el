@@ -1,9 +1,4 @@
 ;;;###autoload
-(defun my-autoload-func ()
-  (message "it works!"))
-
-
-;;;###autoload
 (defun moon-jump-to-config-or-package (type)
   "Jump to a TYPE file of a star.
 If TYPE is 'config, go to config.el,

@@ -81,11 +81,7 @@
       (apply old-func count symbol)))
 
   (advice-add #'evil-ex-search-word-backward :around #'moon-evil-ex-search-word-backward-advice)
-  (advice-add #'evil-ex-search-word-forward :around #'moon-evil-ex-search-word-forward-advice)
-  )
-
-(post-config| evil
-              (message "it works!"))
+  (advice-add #'evil-ex-search-word-forward :around #'moon-evil-ex-search-word-forward-advice))
 
 (use-package| evil-matchit
   :after evil
