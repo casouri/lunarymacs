@@ -17,8 +17,6 @@ So I decide to seperate luanrymacs core and my personal (default) configs.
 Then you can be in sync with core easily and manage your config in another repo:
 maybe a fork of default configs, but you don't need to ever merge upstream of that.
 
-I'll also add make commands for convenience.
-
 It is adviced to show news on startup, so you can follow the really important changes in core.
 
 * UPDATE!
