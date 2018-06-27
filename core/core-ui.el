@@ -29,8 +29,7 @@
 (defvar moon-current-theme ""
   "The last loaded theme name in string.")
 
-(defvar moon-toggle-theme-list
-  '(spacemacs-dark spacemacs-light)
+(defvar moon-toggle-theme-list ()
   "Themes that you can toggle bwtween by `moon/switch-theme'")
 
 (defvar moon-theme-book '(spacemacs-dark spacemacs-light)
