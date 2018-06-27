@@ -50,6 +50,7 @@
 
 (global-set-key (kbd "C-x C-y") #'counsel-yank-pop)
 (global-set-key (kbd "C-c C-y") #'counsel-yank-pop)
+(global-set-key (kbd "C-c C-r") #'ivy-resume)
 
 (use-package| swiper :commands (swiper swiper-all))
 (use-package| counsel
