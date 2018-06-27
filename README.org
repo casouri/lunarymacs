@@ -3,6 +3,28 @@
 [[https://github.com/casouri/lunarymacs/blob/master/LICENSE][https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square]]
 [[https://travis-ci.org/casouri/lunarymacs][https://img.shields.io/travis/casouri/lunarymacs/master.svg?style=flat-square]]
 
+* UPDATE!
+
+After sharing my config/framework for some time,
+I realized that trying to make the config fit everybody is naive and unessessary.
+
+I assume most people would like to fork and modify lunarymacs to their taste.
+But I still want you guys can keep up with the changes in core.
+So I decide to launch a "core" branch which only have the core files.
+Then you can merge core and keep all your config save.
+
+I'll also add a make command for that
+
+
+* UPDATE!
+
+I changed the core, now you *don't* need to declare package dependencies in =package|= anymore,
+=use-package|= will do that for you!
+
+Also, quelpa support is added, 
+just replace package symbol with a quelpa recipe,
+all the macros and functions would just work.
+
 [[./screenshot/screenshot0.png]]
 
 
@@ -12,19 +34,14 @@
 
 \\
 
-This is a stripped down framework modeling after doom-emacs. It's extremely basic, but working.
-
-#+BEGIN_QUOTE
-开局一条狗，装备全靠抢   
-
-                     ——鲁迅
-#+END_QUOTE
+This is a stripped down framework modeling after doom-emacs. It's extremely basic, but working for me.
 
 *Warning:* There is no seatbelt.
 
 - *code is easy* to understand (since I don't really know too much elisp)
 - *not opinionated*: no default settings set in core. 
-  everything is up to you, no more forking for customization
+  everything is up to you. So you can follow the latest update in core
+  while keeping your own config safe.
 - *minimum* core files
 - *no default package* required by core except use-package
   
