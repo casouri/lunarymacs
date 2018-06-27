@@ -7,14 +7,8 @@ quelpa/
 # ignore compiles files
 *.elc
 
-# ignore private stars
-star/*
-!star/completion/
-!star/basic/
-!star/checker/
-!star/os/
-!star/lang/
-!star/utility/
+# ignore stars
+star/
 
 # wiki is in another git repository
 wiki/
