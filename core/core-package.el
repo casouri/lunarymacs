@@ -386,7 +386,7 @@ Use example:
 ;;
 
 
-(defun moon/use-package ()
+(defun moon/install-package ()
   "Install packages specified in `package.el' files in each star.
 
 It will not print messages printed by `package-install'
@@ -430,6 +430,8 @@ because it's too verbose."
   ;; (moon-load-package moon-star-path-list)
   (unless moon-star-prepared
     (moon-initialize-star))
+  (bootstrap-quelpa)
+  (print moon-quelpa-package-list)
   (quelpa-upgrade)
   ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
   
