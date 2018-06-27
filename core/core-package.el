@@ -64,6 +64,7 @@ Contains only core dir ,star dir and load path for built in libraries")
 (setq package--init-file-ensured t
       package-enable-at-startup nil
       package-user-dir moon-package-dir
+      quelpa-dir (concat moon-local-dir "quelpa/")
       package-archives
       '(("melpa" . "http://elpa.emacs-china.org/melpa/")
         ("gnu"   . "http://elpa.emacs-china.org/gnu/")
@@ -77,8 +78,7 @@ Contains only core dir ,star dir and load path for built in libraries")
 (defun moon-initialize ()
   "Initialize installed packages (using package.el)."
   (require 'package)
-  (package-initialize t)
-  )
+  (package-initialize t))
 
 (defun moon-initialize-load-path ()
   "Add each package to load path."
