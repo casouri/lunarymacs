@@ -15,6 +15,7 @@ Then you can merge core and keep all your config save.
 
 I'll also add a make command for that
 
+It is adviced to show news on startup, so you can follow the really important changes in core.
 
 * UPDATE!
 
