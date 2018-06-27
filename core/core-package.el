@@ -234,7 +234,7 @@ e.g. (package| evil evil-surround)"
   `(dolist (package ',package-list)
      (if (symbolp package)
          (add-to-list 'moon-package-list package)
-       (print package)
+       ;; (print package)
        (add-to-list 'moon-quelpa-package-list package))
      ;; (fset (intern (format "post-config-%s" (symbol-name package))) '(lambda () ()))
      ;; (fset (intern (format "pre-init-%s" (symbol-name package))) '(lambda () ()))
@@ -327,7 +327,7 @@ PACKAGE can also be a straight recipe."
   `(progn
      (if (symbolp ',package)
          (add-to-list 'moon-package-list ',package)
-       (print ',package)
+       ;; (print ',package)
        (add-to-list 'moon-quelpa-package-list ',package))
      (unless noninteractive
        (fset
@@ -402,7 +402,7 @@ because it's too verbose."
   ;; (moon-load-package moon-star-path-list)
   (unless moon-star-prepared
     (moon-initialize-star))
-  (print moon-quelpa-package-list)
+  ;; (print moon-quelpa-package-list)
   (dolist (package moon-quelpa-package-list)
     (message (format "Installing %s" (symbol-name (car package))))
     (quelpa package))
@@ -430,6 +430,7 @@ because it's too verbose."
   ;; (moon-load-package moon-star-path-list)
   (unless moon-star-prepared
     (moon-initialize-star))
+  (quelpa-upgrade)
   ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
   
   ;; If there is no package to update,
