@@ -48,14 +48,14 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
   everything is up to you. So you can follow the latest update in core
   while keeping your own config safe.
 - *minimum* core files
-- *no default package* required by core except use-package
+- *no default package* required by core except use-package and quelpa
   
 
 *In summary:* 
 
 This project is a good starting point of your own config!
 You can:
-1. Use my configuration(opinionated) and add your own config (submit PR if you think yours is good!)
+1. Use my configuration(opinionated) and add your own config (submit PR to casour/luanrymacs-stars if you think yours is good!)
 2. *OR* Only use the core as a framework and manage your own configurations within it.
 3. *OR* Just read the core and wiki as a reference and build your own config from scratch.
 
@@ -72,6 +72,7 @@ You can:
 git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
 cd ~/.emacs.d
 cp init.example.el init.el
+git clone https://github.com/casouri/lunarymacs-stars.git star
 make
 emacs
 
@@ -82,11 +83,6 @@ git pull --rebase
 make update-moon # it's the same
 #+END_SRC
 
-After every update,
-hit =SPC f e D= and check for update from example init file.
-
-Also remember to check [[./news.org][update news]] for significant changes.
- 
 * Thank you
 Thanks to all the contributors of spacemacs and doom-emacs. I copyied a lot of code from them.
 
@@ -97,8 +93,8 @@ And of course a big thank-you to all the package contributors and emacs contribu
 Emacs community is the best! :smile: :heart: (just rhetorical, not comparing :P)
 * etc
   
-I don't know what is lunary, don't ask me.
+I don't know what is lunary.
 
-I know it says lunarymacs but homepage is moon emacs.
+I know it says lunarymacs but homepage is moon emacs, it's for visual effect.
 
 Stay fresh!
