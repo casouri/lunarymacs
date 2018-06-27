@@ -6,9 +6,13 @@
 
 (post-config| general
   (default-leader
-    "gs" #'magit-status)
-  )
+    "gs" #'magit-status
+    "gfc" #'magit-file-checkout
+    "gfl" #'magit-log-buffer-file))
 
 (use-package| evil-magit
   :defer t
   :hook (magit-mode . (lambda () (require 'evil-magit))))
+
+(use-package| magit-todos
+  :after magit)
