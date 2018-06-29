@@ -404,8 +404,9 @@ because it's too verbose."
     (moon-initialize-star))
   ;; (print moon-quelpa-package-list)
   (dolist (package moon-quelpa-package-list)
-    (message (format "Installing %s" (symbol-name (car package))))
-    (quelpa package))
+    (unless (package-installed-p package)
+      (message (format "Installing %s" (symbol-name (car package))))
+      (quelpa package)))
   (dolist (package moon-package-list)
     (unless (or (package-installed-p package)
                 (require package nil t))
@@ -431,8 +432,10 @@ because it's too verbose."
   (unless moon-star-prepared
     (moon-initialize-star))
   (bootstrap-quelpa)
-  (print moon-quelpa-package-list)
-  (quelpa-upgrade)
+  ;; (print moon-quelpa-package-list)
+  (dolist (package moon-quelpa-package-list)
+    (print package)
+    (quelpa (append package '(:upgrade t))))
   ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
   
   ;; If there is no package to update,
@@ -515,18 +518,21 @@ because it's too verbose."
        (file-relative-name file moon-emacs-d-dir)
        green-check))
     ;; autoload files in packages
-    (message "Loading autoload file from packages")
+    (princ "Loading autoload file from packages")
     (let ((count 0))
       (dolist (file (reverse package-autoload-file-list))
         (when (eq (% count 250) 0)
-          (message "."))
+          (princ "."))
         (setq count (1+ count))
         (update-file-autoloads file t moon-autoload-file)))
-    (message green-check)))
+    (princ green-check)
+    (princ "\n")))
 
 (defun bootstrap-quelpa ()
   "Install quelpa."
-  (package-initialize)
+  (moon-initialize)
+  (unless moon-load-path-loaded
+    (moon-initialize-load-path))
   (unless (require 'quelpa nil t)
     (package-install 'quelpa)
     (moon-initialize-load-path)))
