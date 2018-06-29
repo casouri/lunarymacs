@@ -6,6 +6,7 @@ install:
   - cd ~
   - git clone https://github.com/casouri/lunarymacs.git .emacs.d --recurse-submodules
   - cd .emacs.d
+  - git clone https://github.com/casouri/lunarymacs-stars.git star
   - brew tap d12frosted/emacs-plus
   - brew install emacs-plus
   - brew install make
