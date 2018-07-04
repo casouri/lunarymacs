@@ -28,7 +28,7 @@ Also, quelpa support is added,
 just replace package symbol with a quelpa recipe,
 all the macros and functions would just work.
 
-[[./screenshot/screenshot0.png]]
+[[./screenshot/screenshot-moon.png]]
 
 
 #+HTML:<div align=center>
@@ -59,6 +59,8 @@ You can:
 
 
 * More screenshot
+
+[[./screenshot/screenshot0.png]]
 
 [[./screenshot/screenshot1.png]]
 
