@@ -55,7 +55,7 @@ git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
 cd ~/.emacs.d
 # clone my config
 git clone https://github.com/casouri/lunarymacs-stars.git star
-# my inti.el in under star/ while init.example.el is under .emacs.d/
+# my init.el is under star/ while init.example.el is under .emacs.d/
 # don't cp my init.el unless you use Emacs 26+ on macOS 10.13+
 cp init.example.el init.el
 make
