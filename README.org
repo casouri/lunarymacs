@@ -74,7 +74,7 @@ make update-moon # it's the same
 After sharing my config/framework for some time,
 I realized that trying to make the config fit everybody is naive and unessessary.
 
-It seems to me that most people (1/1, so actually 100%) likes to fork and modify default starts to their taste,
+It seems to me that most people (1/1, so actually 100%) like to fork and modify default starts to their taste,
 instead of adding config in private stars.
 That makess merging upstream a bit more messy.
 
