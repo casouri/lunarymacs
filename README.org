@@ -3,30 +3,6 @@
 [[https://github.com/casouri/lunarymacs/blob/master/LICENSE][https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square]]
 [[https://travis-ci.org/casouri/lunarymacs][https://img.shields.io/travis/casouri/lunarymacs/master.svg?style=flat-square]]
 
-* UPDATE!
-
-After sharing my config/framework for some time,
-I realized that trying to make the config fit everybody is naive and unessessary.
-
-It seems to me that most people likes to fork and modify default starts to their taste,
-instead of adding config in private stars.
-That makess merging upstream a bit more messy.
-
-"Working tree clean" is super important, as well as keeping update to date in core.
-So I decide to seperate luanrymacs core and my personal (default) configs.
-Then you can be in sync with core easily and manage your config in another repo:
-maybe a fork of default configs, but you don't need to ever merge upstream of that.
-
-It is adviced to show news on startup, so you can follow the really important changes in core.
-
-* UPDATE!
-
-I changed the core, now you *don't* need to declare package dependencies in =package|= anymore,
-=use-package|= will do that for you!
-
-Also, quelpa support is added, 
-just replace package symbol with a quelpa recipe,
-all the macros and functions would just work.
 
 [[./screenshot/screenshot-moon.png]]
 
@@ -65,14 +41,23 @@ You can:
 [[./screenshot/screenshot1.png]]
 
 * Quick start
+  
+Lunarymacs is separated into =core= and =config=. 
+=core= is this repo, and =config= is my personal configurations (stars/modules) in a separate repo.
+
+You can clone only this repo and write your own stars, or clone both and modify my config.
 
 *backup you .emacs.d first!*
 
 #+BEGIN_SRC shell
+# clonw core
 git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
 cd ~/.emacs.d
-cp init.example.el init.el
+# clone my config
 git clone https://github.com/casouri/lunarymacs-stars.git star
+# my inti.el in under star/ while init.example.el is under .emacs.d/
+# don't cp my init.el unless you use Emacs 26+ on macOS 10.13+
+cp init.example.el init.el
 make
 emacs
 
@@ -82,6 +67,21 @@ git pull --rebase
 # or
 make update-moon # it's the same
 #+END_SRC
+
+
+* Why separate repo
+
+After sharing my config/framework for some time,
+I realized that trying to make the config fit everybody is naive and unessessary.
+
+It seems to me that most people (1/1, so actually 100%) likes to fork and modify default starts to their taste,
+instead of adding config in private stars.
+That makess merging upstream a bit more messy.
+
+"Working tree clean" is super important, as well as keeping update to date in core.
+So I decide to seperate luanrymacs core and my personal (default) configs.
+Then you can be in sync with core easily and manage your config in another repo
+(maybe a fork of default configs, but you don't ever need to merge upstream of that).
 
 * Thank you
 Thanks to all the contributors of spacemacs and doom-emacs. I copyied a lot of code from them.
@@ -95,6 +95,6 @@ Emacs community is the best! :smile: :heart: (just rhetorical, not comparing :P)
   
 I don't know what is lunary.
 
-I know it says lunarymacs but homepage is moon emacs, it's for visual effect.
++I know it says lunarymacs but homepage is moon emacs, it's for visual effect.+ (Now it's changd to actual moon!)
 
 Stay fresh!
