@@ -4,6 +4,9 @@
 ;; Homepage
 ;;
 
+(setq inhibit-startup-screen t)
+(setq initial-buffer-choice (lambda () (get-buffer-create moon-homepage-buffer)))
+
 ;;
 ;; Var
 
@@ -13,8 +16,6 @@
 ;;
 ;; Config
 
-(setq inhibit-startup-screen t)
-(setq initial-buffer-choice (lambda () (get-buffer-create moon-homepage-buffer)))
 
 ;;
 ;; Theme
