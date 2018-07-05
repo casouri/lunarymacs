@@ -38,6 +38,10 @@ You can:
 
 [[./screenshot/screenshot0.png]]
 
+[[./screenshot/wave.png]]
+
+[[./screenshot/text-moon-wave.png]]
+
 [[./screenshot/screenshot1.png]]
 
 * Quick start
