@@ -407,6 +407,7 @@ because it's too verbose."
     (unless (package-installed-p package)
       (message (format "Installing %s" (symbol-name (car package))))
       (quelpa package)))
+  (quelpa-save-cache)
   (dolist (package moon-package-list)
     (unless (or (package-installed-p package)
                 (require package nil t))
@@ -538,4 +539,5 @@ because it's too verbose."
     (moon-initialize-load-path)))
 
 (provide 'core-package)
+
 ;;; core-package.el ends here
