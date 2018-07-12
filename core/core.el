@@ -16,7 +16,7 @@
   "Where tmp files rest. For files that are dedicated to each session.")
 
 (defvar moon-init-time nil
-  "How long it took for emacs to start")
+  "How long it takes for Emacs to start.")
 
 (defvar lunary-version "1.0.0"
   "Current version of lunarymacs.")
@@ -29,8 +29,7 @@
   "A list of hooks run when Emacs is initialized, before `moon-post-init-hook'.")
 
 (defvar moon-post-init-hook ()
-  "A list of hooks run after Emacs initialization is complete, and after
-`moon-init-hook'.")
+  "A list of hooks that run after Emacs initialization is complete, and after `moon-init-hook'.")
 
 
 ;;
@@ -47,7 +46,7 @@
 ;;
 
 (defmacro timeit| (message &rest rest)
-  "Time the execution of forms and print a message."
+  "Time the execution of forms (REST) and print MESSAGE."
   (declare (indent 1))
   `(let ((start-time (current-time)))
      ,@rest
