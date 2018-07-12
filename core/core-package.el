@@ -392,6 +392,7 @@ Use example:
 It will not print messages printed by `package-install'
 because it's too verbose."
   (interactive)
+  (package-initialize t)
   (package-refresh-contents)
   (bootstrap-quelpa)
   (unless moon-load-path-loaded
@@ -404,15 +405,16 @@ because it's too verbose."
     (moon-initialize-star))
   ;; (print moon-quelpa-package-list)
   (dolist (package moon-quelpa-package-list)
-    (unless (package-installed-p package)
+    (unless (or (package-installed-p (car package))
+                (require (car package) nil t))
       (message (format "Installing %s" (symbol-name (car package))))
       (quelpa package)))
   (quelpa-save-cache)
   (dolist (package moon-package-list)
     (unless (or (package-installed-p package)
-                (require package nil t))
+                (require (car package) nil t))
       (message (format "Installing %s" (symbol-name package)))
-      ;; installing packages prints lot too many messages
+      ;; installing packages prints too many messages
       (silent| (condition-case nil
                    (package-install package)
                    (error nil)))
@@ -515,9 +517,8 @@ because it's too verbose."
       (message
        (cond ((update-file-autoloads file t moon-autoload-file)
               "Nothing in %s")
-             (t "Scanned %s   %s"))
-       (file-relative-name file moon-emacs-d-dir)
-       green-check))
+             (t "Scanned %s"))
+       (file-relative-name file moon-emacs-d-dir)))
     ;; autoload files in packages
     (princ "Loading autoload file from packages")
     (let ((count 0))

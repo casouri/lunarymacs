@@ -1,4 +1,4 @@
-;;; -*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
 
 (defvar moon-smart-format-alist ()
   "Alist of format functions of each major mode.
