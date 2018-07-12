@@ -1,28 +1,18 @@
 ;; -*- lexical-binding: t -*-
 
 ;;
-;; Homepage
+;;; Homepage
 ;;
 
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice (lambda () (get-buffer-create moon-homepage-buffer)))
 
-;;
-;; Var
-
 (defvar moon-homepage-buffer "HOME"
   "The buffer name of the homepage")
 
 ;;
-;; Config
-
-
+;;; Theme
 ;;
-;; Theme
-;;
-
-;;
-;; Var
 
 (defvar moon-load-theme-hook ()
   "Hook ran after `load-theme'")
@@ -35,14 +25,10 @@
 
 (defvar moon-theme-book '(spacemacs-dark spacemacs-light)
   "A list of themes that you can load with `moon/load-theme'.")
-;;
-;; Func
+
 (defun moon-set-current-theme (&rest form)
   "Adveiced before `load-theme', set `moon-current-theme'."
   (setq moon-current-theme (symbol-name (car form))))
-
-;;
-;; Config
 
 (defadvice load-theme (after run-load-theme-hook activate)
   (run-hook-with-args 'moon-load-theme-hook))
@@ -50,7 +36,7 @@
 (advice-add #'load-theme :before #'moon-set-current-theme)
 
 ;;
-;; Font
+;;; Font
 ;;
 
 (defvar moon-magic-font-book
@@ -74,7 +60,7 @@ And such list cannot be passed into a `font-spec'.")
 
 
 ;;
-;; Rmove GUI elements
+;;; Rmove GUI elements
 ;;
 
 (when window-system
@@ -84,7 +70,7 @@ And such list cannot be passed into a `font-spec'.")
   (menu-bar-mode -1))
 
 ;;
-;; Color
+;;; Color
 ;;
 
 (defvar moon-color-book
@@ -160,7 +146,7 @@ Can be uesed for hightlight region.")
   "Yellow color on mac titlebar.")
 
 ;;
-;; Function
+;;; Function
 ;;
 
 (defun change-by-theme (config-list)
