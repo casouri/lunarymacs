@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 ;;
-;; Var
+;;; Var
 ;;
 
 (defvar moon-base-load-path
@@ -57,8 +57,9 @@ Contains only core dir ,star dir and load path for built in libraries")
          "A bunch of (use-package blah blah blah) collected by use-package| macro from each config file of stars."))
 
 (defvar green-check "\033[00;32m✔\033[0m")
+
 ;;
-;; Config
+;;; Config
 ;;
 
 (setq package--init-file-ensured t
@@ -72,7 +73,7 @@ Contains only core dir ,star dir and load path for built in libraries")
 
 
 ;;
-;; Func
+;;; Func
 ;;
 
 (defun moon-initialize ()
@@ -201,7 +202,7 @@ i.e. :keyword to \"keyword\"."
            ))
 
 ;;
-;; Macro
+;;; Macro
 ;;
 
 (defmacro load| (filesym &optional path)
@@ -382,7 +383,7 @@ Use example:
 ;; (post-config| general (message "it works!"))
 
 ;;
-;; Interactive
+;;; Commands
 ;;
 
 
@@ -532,7 +533,7 @@ because it's too verbose."
 
 (defun bootstrap-quelpa ()
   "Install quelpa."
-  (moon-initialize)
+  (package-initialize)
   (unless moon-load-path-loaded
     (moon-initialize-load-path))
   (unless (require 'quelpa nil t)

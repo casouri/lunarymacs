@@ -20,7 +20,7 @@ For example, '(python-mode . format-python)")
   text)
 
 ;;
-;; Config
+;;; Config
 ;;
 
 (add-hook 'after-save-hook #'moon/smart-format-buffer)
