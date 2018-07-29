@@ -40,9 +40,6 @@ You can:
 
 [[./screenshot/mont.png]]
 
-[[./screenshot/text-moon-wave.png]]
-
-[[./screenshot/screenshot1.png]]
 
 * Quick start
   
