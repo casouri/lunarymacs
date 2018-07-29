@@ -51,12 +51,20 @@ if TYPE is 'autoload-dir, go to autoload/."
 
 
 ;;;###autoload
-(defun moon-check-package (config-file package-file)
-  "Check if all the packages in `use-package|' `config.el' are declared in `package|' in `package.el'."
-  (let ((package-list ()))
-    (while (re-search-forward "use-package.? \\(.+?\\)\\b" nil t)
-      (add-to-list 'package-list (match-string-no-properties 1)))))
-
+(defun moon/insert-package-list ()
+  "Insert package list at point.
+Current dir has to have a config.el file."
+  (interactive)
+  (let (package-list
+        (current-buffer (current-buffer)))
+    
+    (find-file (concat default-directory "config.el"))
+    (goto-char (point-min))
+    (while (re-search-forward "use-package\\(|\\)?\\s-+\\([^ \t\f\n\r\v]+\\)" nil t)
+      (add-to-list 'package-list (match-string 2) t))
+    (switch-to-buffer current-buffer)
+    (dolist (package package-list)
+      (insert (format "- %s\n" package)))))
 
 ;;;###autoload
 (defun moon/run-test ()
