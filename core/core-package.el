@@ -405,6 +405,7 @@ because it's too verbose."
   (unless moon-star-prepared
     (moon-initialize-star))
   ;; (print moon-quelpa-package-list)
+  ;; (print moon-package-list)
   (dolist (package moon-quelpa-package-list)
     (unless (or (package-installed-p (car package))
                 (require (car package) nil t))
@@ -413,7 +414,7 @@ because it's too verbose."
   (quelpa-save-cache)
   (dolist (package moon-package-list)
     (unless (or (package-installed-p package)
-                (require (car package) nil t))
+                (require package nil t))
       (message (format "Installing %s" (symbol-name package)))
       ;; installing packages prints too many messages
       (silent| (condition-case nil
