@@ -67,6 +67,26 @@ Current dir has to have a config.el file."
       (insert (format "- %s\n" package)))))
 
 ;;;###autoload
+(defun moon/insert-key-binding ()
+  "Insert package keybindings at point.
+Current dir has to have a config.el file."
+  (interactive)
+  (let (binding-list
+        (current-buffer (current-buffer)))
+    (find-file (concat default-directory "config.el"))
+    (goto-char (point-min))
+    (while (re-search-forward "\"\\(.+?\\)\"\\s-+?#?'\\([^ \t\f\n\r\v(){}\";]+\\)" nil t)
+      (when (intern-soft (match-string 2))
+        (add-to-list 'binding-list (cons (match-string 1) (match-string 2)))))
+    (switch-to-buffer current-buffer)
+    (insert "| Key | Command |\n|-----+---------|\n")
+    (dolist (binding binding-list)
+      (insert (format "| %s | %s |\n" (car binding) (cdr binding))))
+    ;; relayout table
+    (previous-line 2)
+    (org-cycle)))
+
+;;;###autoload
 (defun moon/run-test ()
   "Run tests."
   (interactive)
