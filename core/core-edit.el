@@ -19,6 +19,19 @@ For example, '(python-mode . format-python)")
   (set-text-properties 0 (length text) nil text)
   text)
 
+(defvar moon-evil t
+  "whether to use evil.")
+
+(defmacro moon-vim-emacs (vim emacs)
+  "If `moon-evil' is true:
+Evaluate VIM;
+otherwise evalueate EMACS."
+    `(if moon-evil
+         ,vim
+       ,emacs))
+
+(defalias 'mve #'moon-vim-emacs)
+
 ;;
 ;;; Config
 ;;
