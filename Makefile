@@ -50,7 +50,7 @@ git submodule update --init --recursive
 
 clean:
 >@echo "Removing compiled files" ;\
-rm -f *.elc
+find . -type f -name *.elc -delete
 
 test:
 >emacs --eval "(add-hook 'moon-post-init-hook #'moon/run-test t)"
