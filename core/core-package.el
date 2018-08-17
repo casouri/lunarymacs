@@ -507,13 +507,10 @@ because it's too verbose."
           (push auto-file autoload-file-list))
         (when (file-directory-p auto-dir)
           (dolist (file (directory-files-recursively auto-dir "\\.el$"))
-            (push file autoload-file-list)))
-        )
+            (push file autoload-file-list))))
       (when (file-exists-p moon-autoload-file)
         (delete-file moon-autoload-file)
-        (message "Delete old autoload file")
-        )
-      )
+        (message "Delete old autoload file")))
     ;; autoload file in stars
     (dolist (file (reverse autoload-file-list))
       (message
