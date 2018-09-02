@@ -1,18 +1,15 @@
 .RECIPEPREFIX = >
 
-EMACS_FLAGS=-l init.el
-EMACS=emacs --quick --batch $(EMACS_FLAGS)
+EMACS=emacs --quick --batch --eval "(setq moon-setup t)" -l init.el --eval "(moon-load-config moon-star-path-list)"
 
 .PHONY: install autoload autoremove update clean doc help update-moon
 
 # install have to be in the front
-# otherwise use-package will not be avaliable
+# otherwise use-package will not be available
 # on fresh install
 # all: | install autoload autoremove
-all: custom.el autoloads.el
->@$(EMACS) --eval '(progn (message "\nInstalling packages...\n") (moon/install-package) (message "\nGenerating autoload file...\n") (moon/generate-autoload-file) (message "\nRemoving unused packages...\n") (moon/remove-unused-package))' ;\
-rm -f .local/autoloads.el~
-
+all: custom.el autoload.el
+>@$(EMACS) -f moon/make
 
 help:
 >@echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean update-moon"
@@ -23,18 +20,18 @@ help:
 custom.el: .local
 >touch .local/custom.el
 
-autoloads.el: .local
->touch .local/autoloads.el
+autoload.el: .local
+>touch .local/autoload.el
 
 # commands
-install: init.el autoloads.el .local custom.el
+install: init.el autoload.el .local custom.el
 >@echo "Installing packages" ;\
 $(EMACS) -f moon/install-package
 
 autoload: init.el
 >@echo "Generating autoload files" ;\
 $(EMACS) -f moon/generate-autoload-file ;\
-rm -f .local/autoloads.el~
+rm -f .local/autoload.el~
 
 autoremove: init.el
 >@echo "Removing unused packages" ;\
@@ -53,4 +50,4 @@ clean:
 find . -type f -name *.elc -delete
 
 test:
->emacs --eval "(add-hook 'moon-post-init-hook #'moon/run-test t)"
+>emacs --eval "(add-hook 'moon-startup-hook-2 #'moon/run-test t)"
