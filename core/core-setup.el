@@ -43,7 +43,7 @@ because it's too verbose."
       (princ (format "Installing %s ... " (symbol-name (car package))))
       (princ (or
               (ignore-errors
-                (quelpa package)
+                (silent| (quelpa package))
                 green-check)
               red-cross))
       (princ "\n")))
@@ -55,7 +55,7 @@ because it's too verbose."
       ;; installing packages prints too many messages
       (princ (or
               (ignore-errors
-                (package-install package)
+                (silent| (package-install package))
                 green-check)
               red-cross))
       (princ "\n"))))
@@ -67,8 +67,7 @@ It will not print messages printed by updating packages
 because it's too verbose."
   (interactive)
   (dolist (package moon-quelpa-package-list)
-    (print package)
-    (quelpa (append package '(:upgrade t))))
+    (silent| (quelpa (append package '(:upgrade t)))))
   ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
   
   ;; If there is no package to update,
@@ -77,13 +76,11 @@ because it's too verbose."
   ;; in package.el...
   ;; TODO find out a better implementation
   (silent| ; don't print message
-   (condition-case nil
-       (save-window-excursion
+   (ignore-errors
+     (save-window-excursion
          (package-list-packages t)
          (package-menu-mark-upgrades)
-         (package-menu-execute t))
-     (error nil)))
-  )
+         (package-menu-execute t)))))
 
 (defun moon/remove-unused-package ()
   "Remove packages that are not declared in any star with `package|' macro."
