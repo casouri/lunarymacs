@@ -41,23 +41,24 @@ because it's too verbose."
     (unless (or (package-installed-p (car package))
                 (require (car package) nil t))
       (princ (format "Installing %s ... " (symbol-name (car package))))
-      (print (or
+      (princ (or
               (ignore-errors
                 (quelpa package)
                 green-check)
-              red-cross))))
+              red-cross))
+      (princ "\n")))
   (quelpa-save-cache)
   (dolist (package moon-package-list)
     (unless (or (package-installed-p package)
                 (require package nil t))
       (princ (format "Installing %s ... " (symbol-name package)))
       ;; installing packages prints too many messages
-      (print (or
+      (princ (or
               (ignore-errors
                 (package-install package)
                 green-check)
               red-cross))
-      )))
+      (princ "\n"))))
 
 (defun moon/update-package ()
   "Update packages to the latest version.
@@ -137,7 +138,8 @@ because it's too verbose."
           (princ ". "))
         (setq count (1+ count))
         (update-file-autoloads file t moon-autoload-file)))
-    (print green-check)))
+    (princ green-check)
+    (princ "\n")))
 
 
 (defun moon/make ()
