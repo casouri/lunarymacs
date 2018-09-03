@@ -180,13 +180,6 @@ In a word, denpend of stars that don't depend on other stars!"
        (fset func-symbol '(lambda ())))
      (setf (cdr (last (symbol-function func-symbol))) ',body)))
 
-(defmacro after-load| (feature &rest rest-list)
-  "Deprecate"
-  (declare (indent defun) (debug t))
-  `(if (featurep ',feature)
-        (progn ,@rest-list)
-      (with-eval-after-load ',feature ,@rest-list)))
-
 (defmacro get-package-symbol| (sexp)
   "If SEXP is a symbol, return it. If SEXP is a sequence, return car."
   `(if (symbolp ,sexp)
