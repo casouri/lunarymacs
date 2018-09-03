@@ -1,11 +1,17 @@
 ;;(package-initialize t)
 
-(load (concat (expand-file-name user-emacs-directory) "core/core"))
+(defvar moon-setup nil)
+
+(if moon-setup
+    (load (concat (expand-file-name user-emacs-directory) "core/core-setup.el"))
+  (load (concat (expand-file-name user-emacs-directory) "core/core-startup.el")))
 
 (moon| :basic
+       ;; non-evil
        homepage
        key
        evil
+       angel
        ui
        other
        edit
@@ -17,6 +23,7 @@
        :os
        mac
        :utility
+       eshell
        tex
        dir
        git
@@ -30,8 +37,8 @@
        lsp
        python
        elisp
+       ;; rust
        javascript
        web
-       lua
+       ;; lua
        )
-
