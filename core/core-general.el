@@ -59,6 +59,8 @@
 
 (defvar green-check "\033[00;32m✔\033[0m")
 
+(defvar red-cross "\033[00;31mX\033[0m")
+
 
 ;;
 ;;; Func

@@ -40,15 +40,23 @@ because it's too verbose."
   (dolist (package moon-quelpa-package-list)
     (unless (or (package-installed-p (car package))
                 (require (car package) nil t))
-      (message (format "Installing %s" (symbol-name (car package))))
-      (quelpa package)))
+      (princ (format "Installing %s ... " (symbol-name (car package))))
+      (print (or
+              (ignore-errors
+                (quelpa package)
+                green-check)
+              red-cross))))
   (quelpa-save-cache)
   (dolist (package moon-package-list)
     (unless (or (package-installed-p package)
                 (require package nil t))
-      (message (format "Installing %s" (symbol-name package)))
+      (princ (format "Installing %s ... " (symbol-name package)))
       ;; installing packages prints too many messages
-      (package-install package)
+      (print (or
+              (ignore-errors
+                (package-install package)
+                green-check)
+              red-cross))
       )))
 
 (defun moon/update-package ()
@@ -122,15 +130,14 @@ because it's too verbose."
              (t "Scanned %s"))
        (file-relative-name file moon-emacs-d-dir)))
     ;; autoload files in packages
-    (princ "Loading autoload file from packages")
+    (princ "Loading autoload file from packages ")
     (let ((count 0))
       (dolist (file (reverse package-autoload-file-list))
         (when (eq (% count 250) 0)
-          (princ "."))
+          (princ ". "))
         (setq count (1+ count))
         (update-file-autoloads file t moon-autoload-file)))
-    (princ green-check)
-    (princ "\n")))
+    (print green-check)))
 
 
 (defun moon/make ()
