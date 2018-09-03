@@ -141,6 +141,8 @@ because it's too verbose."
 ;;; Run code
 
 (bootstrap)
+(load| core-ui)
+(load| core-edit)
 ;; (moon-set-load-path)
 
 (provide 'core-setup)
