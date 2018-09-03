@@ -41,7 +41,7 @@ because it's too verbose."
     (unless (or (package-installed-p (car package))
                 (require (car package) nil t))
       (princ (format "Installing %s %s " (symbol-name (car package))
-                     (make-string (- 30 (length (symbol-name (car package))))
+                     (make-string (abs (- 30 (length (symbol-name (car package)))))
                                   ?.)))
       (princ (or
               (ignore-errors
@@ -54,7 +54,7 @@ because it's too verbose."
     (unless (or (package-installed-p package)
                 (require package nil t))
       (princ (format "Installing %s %s " (symbol-name package)
-                     (make-string (- 30 (length (symbol-name package)))
+                     (make-string (abs (- 30 (length (symbol-name package))))
                                   ?.)))
       ;; installing packages prints too many messages
       (princ (or
