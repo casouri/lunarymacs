@@ -1,0 +1,11 @@
+- [X] init hooks
+- [X] version
+- [X] autoload file
+- [ ] base load path
+- [X] emacs china
+- [ ] lunar
+- [X] afterload
+- [X] autoload function
+- [X] update function
+- [X] autoremove function
+- [ ] path file from shell
