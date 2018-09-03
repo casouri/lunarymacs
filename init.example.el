@@ -11,7 +11,7 @@
        homepage
        key
        evil
-       angel
+       ;; angel ; don't enable angel and evil in the same time
        ui
        other
        edit
