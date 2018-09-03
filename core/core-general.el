@@ -175,18 +175,10 @@ In a word, denpend of stars that don't depend on other stars!"
 (defmacro post-config| (package &rest body)
   "Add expressions in BODY to be called after (use-package PACKAGE :config)."
   (declare (indent defun))
-  (let ((func-symbol (intern (format "post-config-%s" package))))
-    (unless (fboundp func-symbol)
-      (fset func-symbol '(lambda () nil)))
-    (fset func-symbol (append (symbol-function func-symbol) body))))
-
-(defmacro pre-init| (package &rest body)
-  "Add expressions in BODY to be called after (use-package PACKAGE :init)."
-  (declare (indent defun))
-  (let ((func-symbol (intern (format "pre-init-%s" package))))
-    (unless (fboundp func-symbol)
-      (fset func-symbol '(lambda () nil)))
-    (fset func-symbol (append (symbol-function func-symbol) body))))
+  `(let ((func-symbol (intern (format "post-config-%s" (symbol-name ',package)))))
+     (unless (fboundp func-symbol)
+       (fset func-symbol '(lambda ())))
+     (setf (cdr (last (symbol-function func-symbol))) ',body)))
 
 (defmacro after-load| (feature &rest rest-list)
   "Deprecate"
