@@ -42,8 +42,7 @@ update: init.el
 $(EMACS) -f moon/update-package -f moon/generate-autoload-file
 
 update-moon:
->git pull --rebase ;\
-git submodule update --init --recursive
+>git pull --rebase
 
 clean:
 >@echo "Removing compiled files" ;\

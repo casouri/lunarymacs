@@ -1,11 +1,17 @@
 ;;(package-initialize t)
 
-(load (concat (expand-file-name user-emacs-directory) "core/core"))
+(defvar moon-setup nil)
+
+(if moon-setup
+    (load (concat (expand-file-name user-emacs-directory) "core/core-setup.el"))
+  (load (concat (expand-file-name user-emacs-directory) "core/core-startup.el")))
 
 (moon| :basic
+       ;; non-evil
        homepage
        key
        evil
+       angel
        ui
        other
        edit
@@ -15,47 +21,24 @@
        company
        snippet
        :os
-       ;; mac
+       mac
        :utility
-       ;; dir
+       eshell
+       tex
+       dir
        git
        org
        ;; imagemagick
        :checker
        syntax
-       ;; spell
+       spell
        :lang
-       ;; lsp
-       ;; python
-       ;; elisp
+       cc
+       lsp
+       python
+       elisp
        ;; rust
-       ;; javascript
-       ;; web
+       javascript
+       web
        ;; lua
        )
-
-
-;;
-;; Settings evaluate befor loading any stars i.e. user-init
-;;
-
-
-;; max
-(toggle-frame-maximized)
-
-;;
-;; Settings to overwrite configs in stars i.e. user-config
-;;
-
-(customize| 
-
- ;; theme toggle
- ;; (setq moon-toggle-theme-list '(spacemacs-dark spacemacs-light))
-
- ;; font
- ;; (moon-set-font| :family "SF Mono" :weight 'light :size 14)
-
- ;;
- ;;customize ends here
- )
-
