@@ -127,9 +127,11 @@ because it's too verbose."
     ;; autoload file in stars
     (dolist (file (reverse autoload-file-list))
       (message
-       (cond ((update-file-autoloads file t moon-autoload-file)
-              "Nothing in %s")
-             (t "Scanned %s"))
+       (condition-case err
+           (cond ((update-file-autoloads file t moon-autoload-file)
+                  "Nothing in %s")
+                 (t "Scanned %s"))
+         (error (format "Error: %s %s" err red-cross)))
        (file-relative-name file moon-emacs-d-dir)))
     ;; autoload files in packages
     (princ "Loading autoload file from packages ")
@@ -138,7 +140,8 @@ because it's too verbose."
         (when (eq (% count 250) 0)
           (princ ". "))
         (setq count (1+ count))
-        (update-file-autoloads file t moon-autoload-file)))
+        (ignore-errors
+          (update-file-autoloads file t moon-autoload-file))))
     (princ green-check)
     (princ "\n")))
 
