@@ -42,7 +42,7 @@ because it's too verbose."
                 (require (car package) nil t))
       (princ (format "Installing %s %s " (symbol-name (car package))
                      (make-string (abs (- 30 (length (symbol-name (car package)))))
-                                  ?.)))
+                                  ?\s)))
       (princ (or
               (ignore-errors
                 (silent| (quelpa package))
