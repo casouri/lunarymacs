@@ -19,7 +19,7 @@ For example, '(python-mode . format-python)")
   (set-text-properties 0 (length text) nil text)
   text)
 
-(defvar moon-evil t
+(defvar moon-evil nil
   "whether to use evil.")
 
 (defmacro moon-vim-emacs (vim emacs)
