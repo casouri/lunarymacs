@@ -58,9 +58,10 @@
          "A bunch of (use-package blah blah blah) collected by use-package| macro from each config file of stars."))
 
 (defvar green-check "\033[00;32m✔\033[0m")
+(defvar green-OK "\033[00;32mOK\033[0m")
 
 (defvar red-cross "\033[00;31mX\033[0m")
-
+(defvar red-ERROR "\033[00;31mERROR\033[0m")
 
 ;;
 ;;; Func

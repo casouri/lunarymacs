@@ -46,8 +46,8 @@ because it's too verbose."
       (princ (or
               (ignore-errors
                 (silent| (quelpa package))
-                green-check)
-              red-cross))
+                green-OK)
+              red-ERROR))
       (princ "\n")))
   (quelpa-save-cache)
   (dolist (package moon-package-list)
@@ -55,13 +55,13 @@ because it's too verbose."
                 (require package nil t))
       (princ (format "Installing %s %s " (symbol-name package)
                      (make-string (abs (- 30 (length (symbol-name package))))
-                                  ?.)))
+                                  ?\s)))
       ;; installing packages prints too many messages
       (princ (or
               (ignore-errors
                 (silent| (package-install package))
-                green-check)
-              red-cross))
+                green-OK)
+              red-ERROR))
       (princ "\n"))))
 
 (defun moon/update-package ()
@@ -80,11 +80,14 @@ because it's too verbose."
   ;; in package.el...
   ;; TODO find out a better implementation
   (silent| ; don't print message
-   (ignore-errors
-     (save-window-excursion
+   (condition-case err
+       (save-window-excursion
          (package-list-packages t)
          (package-menu-mark-upgrades)
-         (package-menu-execute t)))))
+         (package-menu-execute t))
+     ;; if there is no package to upgrade,
+     ;; this errr will emit
+     (user-error nil))))
 
 (defun moon/remove-unused-package ()
   "Remove packages that are not declared in any star with `package|' macro."
@@ -131,7 +134,7 @@ because it's too verbose."
            (cond ((update-file-autoloads file t moon-autoload-file)
                   "Nothing in %s")
                  (t "Scanned %s"))
-         (error (format "Error: %s %s" err red-cross)))
+         (error (format "%s: %s %s" red-error err red-cross)))
        (file-relative-name file moon-emacs-d-dir)))
     ;; autoload files in packages
     (princ "Loading autoload file from packages ")
@@ -142,7 +145,7 @@ because it's too verbose."
         (setq count (1+ count))
         (ignore-errors
           (update-file-autoloads file t moon-autoload-file))))
-    (princ green-check)
+    (princ green-OK)
     (princ "\n")))
 
 
