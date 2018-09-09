@@ -58,6 +58,9 @@ cd ~/.emacs.d
 git clone https://github.com/casouri/lunarymacs-stars.git star
 # my init.el is under star/ while init.example.el is under .emacs.d/
 # don't cp my init.el unless you use Emacs 26+ on macOS 10.13+
+
+# angel star(emacs layout) and evil star (vim layout) might
+# not be compatible. Chose the one you like.
 cp init.example.el init.el
 make
 emacs
@@ -69,6 +72,16 @@ git pull --rebase
 make update-moon # it's the same
 #+END_SRC
 
+* After installation
+
+What to do now?
+
+Give lunarymacs a try.
+As for Aug 2018 The main leader key is =C-SPC= for angel star, =SPC= for evil star.
+For angel star I added some binding to =C-x=.
+
+The best way to get the config is to read it, it's easy to understand.
+There are README in each star but they are usually outdated (sorry).
 
 * Why separate repo
 
