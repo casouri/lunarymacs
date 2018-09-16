@@ -77,8 +77,12 @@ make update-moon # it's the same
 What to do now?
 
 Give lunarymacs a try.
-As for Aug 2018 The main leader key is =C-SPC= for angel star, =SPC= for evil star.
-For angel star I added some binding to =C-x=.
+
+And if you use my config ([[https://github.com/casouri/lunarymacs-stars][casouri/lunary-stars]]) note:
+
+As for August 2018 I have moved to emacs layout and the main leader key is =C-SPC= for angel star (my default), =SPC= for evil star.
+For angel star I added some binding to =C-x= and other first level bindings like =C-'= for jump-char and =C-== for expand-region.
+Because =C-SPC= is used for leader key, =set-mark-command= is binded to =C-v=.
 
 The best way to get the config is to read it, it's easy to understand.
 There are README in each star but they are usually outdated (sorry).
