@@ -41,6 +41,8 @@
 (defvar moon-package-list '(use-package bind-key)
   "A list of packages to install. Packages are represented by symbols.")
 
+(defvar moon-site-lisp-dir (concat moon-emacs-d-dir "site-lisp/"))
+
 (defvar moon-quelpa-package-list ()
   "A list of packages to install by quelpa. Packages are represented by recipe list.")
 
@@ -71,7 +73,8 @@
   "Add each package to load path."
   (dolist (dir (append (list moon-core-dir
                              moon-star-dir
-                             moon-local-dir)
+                             moon-local-dir
+                             moon-site-lisp-dir)
                        (directory-files moon-package-dir t nil t)))
     (when (file-directory-p dir)
       (push dir load-path))))

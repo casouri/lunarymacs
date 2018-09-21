@@ -38,15 +38,19 @@ It will not print messages printed by `package-install'
 because it's too verbose."
   (interactive)
   (dolist (package moon-package-list)
-    (unless (require package nil t)
+    (unless (or (member package cowboy-package-list)
+                (ignore-errors
+                  ;; if the required file loads something else
+                  ;; and the thing is not in load path, require will error.
+                  ;; but we don't really care about that.
+                  (require package nil t)
+                  t))
       (princ (format "Installing %s %s " (symbol-name package)
                      (make-string (abs (- 30 (length (symbol-name package))))
                                   ?\s)))
-      (princ (or
-              (ignore-errors
-                (cowboy-install package)
-                green-OK)
-              red-ERROR))
+      (princ (if (cowboy-install package)
+                 green-OK
+               red-ERROR))
       (princ "\n"))))
 
 (defun moon/update-package ()
@@ -145,7 +149,7 @@ because it's too verbose."
 (bootstrap)
 (load| core-ui)
 (load| core-edit)
-;; (moon-set-load-path)
+(moon-set-load-path)
 
 (provide 'core-setup)
 

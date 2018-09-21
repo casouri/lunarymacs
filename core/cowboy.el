@@ -76,13 +76,18 @@
                               (flyspell-correct-ivy . (:repo "d12frosted/flyspell-correct"))
                               (langtool . (:repo "mhayashi1120/Emacs-langtool"))
                               (sly . (:repo "joaotavora/sly"))
-                              (lsp-mode . (:repo "lsp-mode/lsp-mode"))
-                              (lsp-python . (:repo "lsp-mode/lsp-python"))
+                              (lsp-mode . (:repo "emacs-lsp/lsp-mode"))
+                              (lsp-python . (:repo "emacs-lsp/lsp-python"))
                               (pyvenv . (:repo "jorgenschaefer/pyvenv"))
                               (aggressive-indent . (:repo "Malabarba/aggressive-indent-mode"))
-                              (lsp-typescript . (:repo "lsp-mode/lsp-typescript"))
+                              (lsp-typescript . (:repo "emacs-lsp/lsp-javascript"))
                               (web-mode . (:repo "fxbois/web-mode"))
-                              (lua-mode . (:repo "immerrr/lua-mode")))
+                              (lua-mode . (:repo "immerrr/lua-mode"))
+                              (doom-themes . (:repo "hlissner/emacs-doom-themes"))
+                              (atom-one-dark-theme . (:repo "jonathanchu/atom-one-dark-theme"))
+                              (lsp-ui . (:repo "emacs-lsp/lsp-ui"))
+                              (company-lsp . (:repo "tigersoldier/company-lsp"))
+                              (ivy-filthy-rich . (:repo "casouri/ivy-filthy-rich")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
