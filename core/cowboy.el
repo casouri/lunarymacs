@@ -33,7 +33,7 @@
 
 ;;; Variable
 
-(defvar cowboy-package-dir (concat user-emacs-directory "ranch/")
+(defvar cowboy-package-dir package-user-dir
   "The directory where cowboy downloads packages to.")
 
 (defvar cowboy-package-list nil
@@ -111,20 +111,24 @@ If none specified, default to 'github.
       (add-to-list 'load-path package-subdir-path))))
 
 (defun cowboy-install (package &optional full-clone)
-   "Install PACKAGE (a symbol) by cloning it down. Do nothing else.
+  "Install PACKAGE (a symbol) by cloning it down. Do nothing else.
 By default use shadow-clone, if FULL-CLONE is t, use full clone."
-   (let ((recipe (alist-get package cowboy-recipe-alist)))
-     (if recipe
-         (funcall (intern (format "cowboy--%s-clone"
-                                  (symbol-name (or (plist-get :fetcher recipe) 'github))))
-                  package (plist-get recipe :repo) full-clone)
-       (message "Cannot find recipe for %s" (symbol-name package)))))
+  (let ((recipe (alist-get package cowboy-recipe-alist)))
+    (if recipe
+        (if (eq 0 (funcall (intern (format "cowboy--%s-clone"
+                                           (symbol-name (or (plist-get :fetcher recipe) 'github))))
+                           package (plist-get recipe :repo) full-clone))
+            ;; exit code 0 means success, any other code means failure
+            t
+          nil)
+      (error "Cannot find recipe for %s" (symbol-name package))
+      nil)))
 
 (defun cowboy--github-clone (package repo &optional full-clone)
   "Clone a REPO down and name it PACKAGE (symbol).
 Shadow clone if FULL-CLONE nil. REPO is of form \"user/repo\"."
   (let ((default-directory cowboy-package-dir))
-    (call-process "git" nil (current-buffer) nil
+    (call-process "git" nil "*COWBOY*" nil
                   "clone"
                   (unless full-clone "--depth")
                   (unless full-clone "1")

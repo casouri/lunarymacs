@@ -248,16 +248,13 @@ Expressions will be appended."
 
 (defun bootstrap ()
   "Bootstrap quelpa."
-  (message "Bootstrap package.el and quelpa.el.")
+  (message "Load cowboy.")
+  ;; TODO remove this require
+  ;; by remving package-installed-p
   (require 'package)
-  (package-initialize)
-  (load| quelpa)
-  (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                      (not (gnutls-available-p))))
-         (proto (if no-ssl "http" "https")))
-    (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-    (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t))
-  (package-refresh-contents))
+  (package-initialize t)
+  (push moon-core-dir load-path)
+  (require 'cowboy))
 
 
 ;;; Run code

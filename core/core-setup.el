@@ -37,34 +37,20 @@
 It will not print messages printed by `package-install'
 because it's too verbose."
   (interactive)
-  (dolist (package moon-quelpa-package-list)
-    (unless (or (package-installed-p (car package))
-                (require (car package) nil t))
-      (princ (format "Installing %s %s " (symbol-name (car package))
-                     (make-string (abs (- 30 (length (symbol-name (car package)))))
-                                  ?\s)))
-      (princ (or
-              (ignore-errors
-                (silent| (quelpa package))
-                green-OK)
-              red-ERROR))
-      (princ "\n")))
-  (quelpa-save-cache)
   (dolist (package moon-package-list)
-    (unless (or (package-installed-p package)
-                (require package nil t))
+    (unless (require package nil t)
       (princ (format "Installing %s %s " (symbol-name package)
                      (make-string (abs (- 30 (length (symbol-name package))))
                                   ?\s)))
-      ;; installing packages prints too many messages
       (princ (or
               (ignore-errors
-                (silent| (package-install package))
+                (cowboy-install package)
                 green-OK)
               red-ERROR))
       (princ "\n"))))
 
 (defun moon/update-package ()
+  ;; TODO
   "Update packages to the latest version.
 
 It will not print messages printed by updating packages

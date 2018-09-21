@@ -1,6 +1,6 @@
 .RECIPEPREFIX = >
 
-EMACS=emacs --quick --batch --eval "(setq moon-setup t)" -l init.el --eval "(moon-load-config moon-star-path-list)"
+EMACS=emacs --quick --eval "(setq moon-setup t)" -l init.el --eval "(moon-load-config moon-star-path-list)"
 
 .PHONY: install autoload autoremove update clean doc help update-moon
 
