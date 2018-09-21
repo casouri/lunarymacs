@@ -12,7 +12,9 @@ For example, '(python-mode . format-python)")
   "Only format buffer when `moon-format-on-save' is non-nil."
   (interactive)
   (when moon-format-on-save
-    (funcall (cdr (assoc major-mode moon-smart-format-alist)))))
+    (let ((format-func (alist-get major-mode moon-smart-format-alist)))
+      (when format-func
+        (funcall format-func)))))
 
 (defun strip-text-properties(text)
   "Return TEXT without any properties."
