@@ -34,7 +34,7 @@
 (moon-set-load-path)
 (require 'f)
 
-(defvar moon-ignore-package-list '(system-packages recentf-ext rainbow-mode)
+(defvar moon-ignore-package-list '(system-packages)
   "Ignore system packages.")
 
 (defun moon/install-package ()
@@ -52,10 +52,12 @@ because it's too verbose."
     (dolist (package moon-package-list)
       (let ((package-symbol (if (symbolp package)
                                 package
-                              (car package))))
+                              (car package)))
+            (system-package-p (when (listp package) (plist-get (cdr package) :system))))
         (unless (or (member (symbol-name package-symbol)
                             all-file-in-load-path)
-                    (member package-symbol moon-ignore-package-list))
+                    (member package-symbol moon-ignore-package-list)
+                    system-package-p)
           (princ (format "Installing %s %s " (symbol-name package-symbol)
                          (make-string (abs (- 30 (length (symbol-name package-symbol))))
                                       ?\s)))
