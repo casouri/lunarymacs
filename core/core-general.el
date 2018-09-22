@@ -71,13 +71,18 @@
 
 (defun moon-set-load-path ()
   "Add each package to load path."
+  (push moon-core-dir load-path)
+  (require 'f)
   (dolist (dir (append (list moon-core-dir
                              moon-star-dir
                              moon-local-dir
-                             moon-site-lisp-dir)
-                       (directory-files moon-package-dir t nil t)))
+                             moon-site-lisp-dir)))
     (when (file-directory-p dir)
-      (push dir load-path))))
+      (push dir load-path)))
+  (dolist (package-dir (f-directories moon-package-dir))
+    (setq load-path
+          (append load-path (f-directories package-dir)
+                  (list package-dir)))))
 
 (defun moon-load-star ()
   "Prepare each star in `moon-star-list'.
@@ -205,10 +210,7 @@ to be evaluated at the end of `moon-initialize-star'
 PACKAGE can also be a straight recipe."
   (declare (indent defun))
   `(progn
-     (if (symbolp ',package)
-         (add-to-list 'moon-package-list ',package)
-       ;; (print ',package)
-       (add-to-list 'moon-quelpa-package-list ',package))
+     (add-to-list 'moon-package-list ',package)
      (unless moon-setup
        (fset
         'moon-grand-use-package-call
@@ -257,7 +259,8 @@ Expressions will be appended."
   (require 'package)
   (package-initialize t)
   (push moon-core-dir load-path)
-  (require 'cowboy))
+  (require 'cowboy)
+  (cowboy-initialize))
 
 
 ;;; Run code

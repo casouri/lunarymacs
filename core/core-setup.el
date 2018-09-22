@@ -31,27 +31,38 @@
 
 (eval-when-compile (load (concat (expand-file-name user-emacs-directory) "core/core-general.el")))
 
+(moon-set-load-path)
+(require 'f)
+
+(defvar moon-ignore-package-list '(system-packages recentf-ext rainbow-mode)
+  "Ignore system packages.")
+
 (defun moon/install-package ()
   "Install packages specified in `package.el' files in each star.
 
 It will not print messages printed by `package-install'
 because it's too verbose."
   (interactive)
-  (dolist (package moon-package-list)
-    (unless (or (member package cowboy-package-list)
-                (ignore-errors
-                  ;; if the required file loads something else
-                  ;; and the thing is not in load path, require will error.
-                  ;; but we don't really care about that.
-                  (require package nil t)
-                  t))
-      (princ (format "Installing %s %s " (symbol-name package)
-                     (make-string (abs (- 30 (length (symbol-name package))))
-                                  ?\s)))
-      (princ (if (cowboy-install package)
-                 green-OK
-               red-ERROR))
-      (princ "\n"))))
+  (let ((all-file-in-load-path
+         (mapcan (lambda (path)
+                   (mapcar #'file-name-base
+                           (f-files path (lambda (path)
+                                           (s-ends-with-p ".el" path)) t)))
+                 (list moon-package-dir moon-site-lisp-dir))))
+    (dolist (package moon-package-list)
+      (let ((package-symbol (if (symbolp package)
+                                package
+                              (car package))))
+        (unless (or (member (symbol-name package-symbol)
+                            all-file-in-load-path)
+                    (member package-symbol moon-ignore-package-list))
+          (princ (format "Installing %s %s " (symbol-name package-symbol)
+                         (make-string (abs (- 30 (length (symbol-name package-symbol))))
+                                      ?\s)))
+          (princ (if (cowboy-install package)
+                     green-OK
+                   red-ERROR))
+          (princ "\n"))))))
 
 (defun moon/update-package ()
   ;; TODO
@@ -149,7 +160,6 @@ because it's too verbose."
 (bootstrap)
 (load| core-ui)
 (load| core-edit)
-(moon-set-load-path)
 
 (provide 'core-setup)
 

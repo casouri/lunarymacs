@@ -42,13 +42,20 @@
 (defvar cowboy-recipe-alist '((isolate . (:repo "casouri/isolate"))
                               (aweshell . (:repo "manateelazycat/aweshell"))
                               (use-package . (:repo "jwiegley/use-package"))
+                              (bind-key . (:pseudo t))
                               (general . (:repo "noctuid/general.el"))
                               (which-key . (:repo "justbur/emacs-which-key"))
                               (hydra . (:repo abo-abo/hydra))
                               (rainbow-delimiters . (:repo "Fanael/rainbow-delimiters"))
                               (highlight-parentheses . (:repo "tsdh/highlight-parentheses.el"))
                               (minions . (:repo "tarsius/minions"))
-                              (magit . (:repo "tarsius/magit"))
+                              (magit . (:repo "magit/magit" :dependency (with-editor magit-popup ghub async)))
+                              (ghub . (:repo "magit/ghub" :dependency (graphql treepy)))
+                              (treepy . (:repo "volrath/treepy.el"))
+                              (graphql . (:repo "vermiculus/graphql.el"))
+                              (async . (:repo "jwiegley/emacs-async"))
+                              (magit-popup . (:repo "magit/magit-popup"))
+                              (with-editor . (:repo "magit/with-editor"))
                               (moody . (:repo "tarsius/moody"))
                               (nyan-mode . (:repo "TeMPOraL/nyan-mode"))
                               (hl-todo . (:repo "tarsius/hl-todo"))
@@ -59,15 +66,19 @@
                               (expand-region . (:repo "magnars/expand-region.el"))
                               (avy . (:repo "abo-abo/avy"))
                               (minimap . (:repo "dengste/minimap"))
-                              (outshine . (:repo "tj64/outshine"))
+                              (outshine . (:repo "tj64/outshine" :dependency (outorg)))
+                              (outorg . (:repo "alphapapa/outorg"))
                               (projectile . (:repo "bbatsov/projectile"))
                               (counsel-projectile . (:repo "ericdanan/counsel-projectile"))
                               (ivy . (:repo "abo-abo/swiper"))
+                              (counsel . (:pseudo t))
+                              (swiper . (:pseudo t))
                               (company . (:repo "company-mode/company-mode"))
                               (yasnippet . (:repo "joaotavora/yasnippet"))
                               (auto-yasnippet . (:repo "abo-abo/auto-yasnippet"))
                               (latex-preview-pane . (:repo "jsinglet/latex-preview-pane"))
-                              (neotree . (:repo "emacs-neotree"))
+                              (neotree . (:repo "jaypei/emacs-neotree"))
+                              (awesome-tab . (:repo "manateelazycat/awesome-tab"))
                               (ranger . (:repo "ralesi/ranger.el"))
                               (dired-narrow . (:repo "Fuco1/dired-hacks"))
                               (toc-org . (:repo "snosov1/toc-org"))
@@ -87,7 +98,11 @@
                               (atom-one-dark-theme . (:repo "jonathanchu/atom-one-dark-theme"))
                               (lsp-ui . (:repo "emacs-lsp/lsp-ui"))
                               (company-lsp . (:repo "tigersoldier/company-lsp"))
-                              (ivy-filthy-rich . (:repo "casouri/ivy-filthy-rich")))
+                              (ivy-filthy-rich . (:repo "casouri/ivy-filthy-rich"))
+                              (hungry-delete . (:repo "nflath/hungry-delete"))
+                              (magit-todos . (:repo "alphapapa/magit-todos" :dependency (pcre2el)))
+                              (pcre2el . (:repo "joddie/pcre2el"))
+                              (jump-char . (:repo "lewang/jump-char")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
@@ -106,7 +121,7 @@ If none specified, default to 'github.
 (defun cowboy-initialize ()
   "Dress up cowboy. Scans `cowboy-package-dir' and update `cowboy-package-list'."
   (dolist (package-dir-path (f-directories cowboy-package-dir))
-    (push (directory-file-name package-dir-path) cowboy-package-list)))
+    (push (file-name-base (directory-file-name package-dir-path)) cowboy-package-list)))
 
 (defun cowboy-add-load-path ()
   "Add packages to `load-path.'"
@@ -118,15 +133,25 @@ If none specified, default to 'github.
 (defun cowboy-install (package &optional full-clone)
   "Install PACKAGE (a symbol) by cloning it down. Do nothing else.
 By default use shadow-clone, if FULL-CLONE is t, use full clone."
-  (let ((recipe (alist-get package cowboy-recipe-alist)))
+  (let ((recipe (if (symbolp package)
+                    (alist-get package cowboy-recipe-alist)
+                  (cdr package)))
+        (package (if (symbolp package)
+                     package
+                   (car package))))
     (if recipe
-        (if (eq 0 (funcall (intern (format "cowboy--%s-clone"
-                                           (symbol-name (or (plist-get :fetcher recipe) 'github))))
-                           package (plist-get recipe :repo) full-clone))
-            ;; exit code 0 means success, any other code means failure
-            t
-          nil)
-      (error "Cannot find recipe for %s" (symbol-name package))
+        (if (plist-get recipe :pseudo)
+            t ; return with success immediately 
+          (let ((dependency-list (plist-get recipe :dependency)))
+            (when dependency-list
+              (mapcar #'cowboy-install dependency-list)))
+          (if (eq 0 (funcall (intern (format "cowboy--%s-clone"
+                                             (symbol-name (or (plist-get :fetcher recipe) 'github))))
+                             package (plist-get recipe :repo) full-clone))
+              ;; exit code 0 means success, any other code means failure
+              t
+            nil))
+      (message "Cannot find recipe for %s" (symbol-name package))
       nil)))
 
 (defun cowboy--github-clone (package repo &optional full-clone)
