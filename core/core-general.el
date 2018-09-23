@@ -41,6 +41,8 @@
 (defvar moon-package-list '(use-package bind-key)
   "A list of packages to install. Packages are represented by symbols.")
 
+(defvar moon-site-lisp-dir (concat moon-emacs-d-dir "site-lisp/"))
+
 (defvar moon-quelpa-package-list ()
   "A list of packages to install by quelpa. Packages are represented by recipe list.")
 
@@ -69,12 +71,18 @@
 
 (defun moon-set-load-path ()
   "Add each package to load path."
+  (push moon-core-dir load-path)
+  (require 'f)
   (dolist (dir (append (list moon-core-dir
                              moon-star-dir
-                             moon-local-dir)
-                       (directory-files moon-package-dir t nil t)))
+                             moon-local-dir
+                             moon-site-lisp-dir)))
     (when (file-directory-p dir)
-      (push dir load-path))))
+      (push dir load-path)))
+  (dolist (package-dir (f-directories moon-package-dir))
+    (setq load-path
+          (append load-path (f-directories package-dir)
+                  (list package-dir)))))
 
 (defun moon-load-star ()
   "Prepare each star in `moon-star-list'.
@@ -202,10 +210,7 @@ to be evaluated at the end of `moon-initialize-star'
 PACKAGE can also be a straight recipe."
   (declare (indent defun))
   `(progn
-     (if (symbolp ',package)
-         (add-to-list 'moon-package-list ',package)
-       ;; (print ',package)
-       (add-to-list 'moon-quelpa-package-list ',package))
+     (add-to-list 'moon-package-list ',package)
      (unless moon-setup
        (fset
         'moon-grand-use-package-call
@@ -248,16 +253,14 @@ Expressions will be appended."
 
 (defun bootstrap ()
   "Bootstrap quelpa."
-  (message "Bootstrap package.el and quelpa.el.")
+  (message "Load cowboy.")
+  ;; TODO remove this require
+  ;; by remving package-installed-p
   (require 'package)
-  (package-initialize)
-  (load| quelpa)
-  (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                      (not (gnutls-available-p))))
-         (proto (if no-ssl "http" "https")))
-    (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-    (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t))
-  (package-refresh-contents))
+  (package-initialize t)
+  (push moon-core-dir load-path)
+  (require 'cowboy)
+  (cowboy-initialize))
 
 
 ;;; Run code

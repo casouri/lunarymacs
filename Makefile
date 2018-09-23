@@ -1,5 +1,6 @@
 .RECIPEPREFIX = >
 
+# EMACS=emacs --quick --eval "(setq moon-setup t)" --eval "(toggle-debug-on-error)" -l init.el --eval "(moon-load-config moon-star-path-list)"
 EMACS=emacs --quick --batch --eval "(setq moon-setup t)" -l init.el --eval "(moon-load-config moon-star-path-list)"
 
 .PHONY: install autoload autoremove update clean doc help update-moon
@@ -39,11 +40,7 @@ $(EMACS) -f moon/remove-unused-package
 
 update: init.el
 >@echo "Updating packages" ;\
-rm -rf ./.local/package/* ;\
-$(EMACS) -f moon/install-package ;\
-$(EMACS) -f moon/generate-autoload-file ;\
-rm -f .local/autoload.el~
-
+$(EMACS) -f moon/update-package
 update-moon:
 >git pull --rebase
 
