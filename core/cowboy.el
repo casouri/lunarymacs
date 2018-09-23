@@ -98,6 +98,7 @@
                               (atom-one-dark-theme . (:repo "jonathanchu/atom-one-dark-theme"))
                               (lsp-ui . (:repo "emacs-lsp/lsp-ui"))
                               (company-lsp . (:repo "tigersoldier/company-lsp"))
+                              (markdown-mode . (:repo "jrblevin/markdown-mode"))
                               (ivy-filthy-rich . (:repo "casouri/ivy-filthy-rich"))
                               (hungry-delete . (:repo "nflath/hungry-delete"))
                               (magit-todos . (:repo "alphapapa/magit-todos" :dependency (pcre2el)))
