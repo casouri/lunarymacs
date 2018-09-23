@@ -32,24 +32,38 @@
 (eval-when-compile (load (concat (expand-file-name user-emacs-directory) "core/core-general.el")))
 
 (moon-set-load-path)
+
 (require 'f)
 
 (defvar moon-ignore-package-list '(system-packages)
   "Ignore system packages.")
 
-(defun moon/install-package ()
+(defmacro moon-message&result (message &rest body)
+  "Pring message and eval BODY, then show result."
+  `(progn
+     (princ ,message)
+     (princ (if (progn ,@body)
+                green-OK
+              red-ERROR))
+     (princ "\n")))
+
+(defun moon-ing-msg (ing symbol)
+  "\(moon-ing-msg \"Installing\" 'package\) -> \"Installing package\"."
+  (format "%s %s %s " ing (symbol-name symbol)
+          (make-string (abs (- 30 (length (symbol-name symbol))))
+                       ?\s)))
+
+(defun moon/install-package (&optional package)
   "Install packages specified in `package.el' files in each star.
 
-It will not print messages printed by `package-install'
-because it's too verbose."
+If PACKAGE non-nill, install only that package."
+  ;; TODO concurrency when possible
+  ;; make-thread is not concurrent
   (interactive)
   (let ((all-file-in-load-path
-         (mapcan (lambda (path)
-                   (mapcar #'file-name-base
-                           (f-files path (lambda (path)
-                                           (s-ends-with-p ".el" path)) t)))
+         (mapcan (lambda (dir) (mapcar #'file-name-base (directory-files-recursively dir "\\.el$")))
                  (list moon-package-dir moon-site-lisp-dir))))
-    (dolist (package moon-package-list)
+    (dolist (package (if package (list package) moon-package-list))
       (let ((package-symbol (if (symbolp package)
                                 package
                               (car package)))
@@ -58,52 +72,22 @@ because it's too verbose."
                             all-file-in-load-path)
                     (member package-symbol moon-ignore-package-list)
                     system-package-p)
-          (princ (format "Installing %s %s " (symbol-name package-symbol)
-                         (make-string (abs (- 30 (length (symbol-name package-symbol))))
-                                      ?\s)))
-          (princ (if (cowboy-install package)
-                     green-OK
-                   red-ERROR))
-          (princ "\n"))))))
+          (moon-message&result (moon-ing-msg "Installing" package-symbol)
+                               (cowboy-install package)))))))
 
-(defun moon/update-package ()
-  ;; TODO
+(defun moon/update-package (&optional package)
   "Update packages to the latest version.
 
-It will not print messages printed by updating packages
-because it's too verbose."
+If PACKAGE non-nil, install only that package."
+  ;; TODO concurrency when possible
+  ;; make-thread is not concurrent
   (interactive)
-  (dolist (package moon-quelpa-package-list)
-    (silent| (quelpa (append package '(:upgrade t)))))
-  ;; https://oremacs.com/2015/03/20/managing-emacs-packages/
-  
-  ;; If there is no package to update,
-  ;; package.el will throw "No operation specified"
-  ;; but I didn't find any code throwing error
-  ;; in package.el...
-  ;; TODO find out a better implementation
-  (silent| ; don't print message
-   (condition-case err
-       (save-window-excursion
-         (package-list-packages t)
-         (package-menu-mark-upgrades)
-         (package-menu-execute t))
-     ;; if there is no package to upgrade,
-     ;; this errr will emit
-     (user-error nil))))
+  (if package
+      (cowboy-update package)
+    (dolist (package-dir (f-directories cowboy-package-dir))
+      (moon-message&result (moon-ing-msg "Updating" (cowboy--package-symbol package-dir))
+                           (cowboy-update package-dir)))))
 
-(defun moon/remove-unused-package ()
-  "Remove packages that are not declared in any star with `package|' macro."
-  (interactive)
-  (dolist (package package-alist)
-    (let ((package-name (car package))
-          (package-description (car (cdr package)))
-          (non-dependency-list (package--find-non-dependencies)))
-      (when (and (not (member package-name moon-package-list))
-                 (package-built-in-p package)
-                 (member package-name non-dependency-list))
-        (package-delete package-description))
-      )))
 
 (defun moon/generate-autoload-file ()
   "Extract autload file from each star to `moon-autoload-file'."

@@ -40,11 +40,7 @@ $(EMACS) -f moon/remove-unused-package
 
 update: init.el
 >@echo "Updating packages" ;\
-rm -rf ./.local/package/* ;\
-$(EMACS) -f moon/install-package ;\
-$(EMACS) -f moon/generate-autoload-file ;\
-rm -f .local/autoload.el~
-
+$(EMACS) -f moon/update-package
 update-moon:
 >git pull --rebase
 

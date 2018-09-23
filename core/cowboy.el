@@ -133,38 +133,74 @@ If none specified, default to 'github.
 (defun cowboy-install (package &optional full-clone)
   "Install PACKAGE (a symbol) by cloning it down. Do nothing else.
 By default use shadow-clone, if FULL-CLONE is t, use full clone."
-  (let ((recipe (if (symbolp package)
-                    (alist-get package cowboy-recipe-alist)
-                  (cdr package)))
-        (package (if (symbolp package)
-                     package
-                   (car package))))
-    (if recipe
-        (if (plist-get recipe :pseudo)
-            t ; return with success immediately 
-          (let ((dependency-list (plist-get recipe :dependency)))
-            (when dependency-list
-              (mapcar #'cowboy-install dependency-list)))
-          (if (eq 0 (funcall (intern (format "cowboy--%s-clone"
-                                             (symbol-name (or (plist-get :fetcher recipe) 'github))))
-                             package (plist-get recipe :repo) full-clone))
-              ;; exit code 0 means success, any other code means failure
-              t
-            nil))
-      (message "Cannot find recipe for %s" (symbol-name package))
-      nil)))
+  (cowboy--with-recipe
+   (if (plist-get recipe :pseudo)
+       t ; return with success immediately 
+     (let ((dependency-list (plist-get recipe :dependency)))
+       (when dependency-list
+         (mapcar #'cowboy-install dependency-list)))
+     (if (eq 0 (funcall (intern (format "cowboy--%s-clone"
+                                        (symbol-name (or (plist-get :fetcher recipe) 'github))))
+                        package (plist-get recipe :repo) full-clone))
+         ;; exit code 0 means success, any other code means failure
+         t
+       nil))))
+
+(defun cowboy--package-symbol (package)
+  "PACKAGE can be a recipe, a symbol or a dir. Return package symbol."
+  (pcase package
+    ((pred symbolp) package)
+    ((pred stringp) (intern (file-name-base package)))
+    ((pred listp) (car package))
+    (_ (error "Cannot make into package symbol: %s" package))))
+
+(defmacro cowboy--with-recipe (&rest body)
+  "With package recipe, eval BODY. Return nil if none found.
+If PACKAGE is a symbol or list, treat as package,
+if it is a string, treate as dir."
+  `(let* ((package-symbol (cowboy--package-symbol package))
+          (recipe (if (listp package)
+                      (cdr package)
+                    (alist-get package-symbol cowboy-recipe-alist))))
+     (if recipe
+         ,@body
+       (message "Cannot find recipe for %s" (symbol-name package-symbol))
+       nil)))
+
+(defmacro cowboy--command (command dir &rest args)
+  "Call process with COMMAND and ARGS in DIR."
+  `(let ((default-directory ,dir))
+     (call-process ,command nil "*COWBOY*" nil
+                   ,@args)))
 
 (defun cowboy--github-clone (package repo &optional full-clone)
   "Clone a REPO down and name it PACKAGE (symbol).
 Shadow clone if FULL-CLONE nil. REPO is of form \"user/repo\"."
-  (let ((default-directory cowboy-package-dir))
-    (call-process "git" nil "*COWBOY*" nil
-                  "clone"
-                  (unless full-clone "--depth")
-                  (unless full-clone "1")
-                  (format "https://github.com/%s.git" repo)
-                  (symbol-name package))))
+  (cowboy--command "git" cowboy-package-dir "clone" (unless full-clone "--depth")
+                   (unless full-clone "1")
+                   (format "https://github.com/%s.git" repo)
+                   (symbol-name package)))
 
+(defun cowboy-update (package)
+  "Update PACKAGE from upstream.
+If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
+  (cowboy--with-recipe
+   (if (eq 0 (funcall (intern (format "cowboy--%s-pull"
+                                      (symbol-name
+                                       (or
+                                        (plist-get recipe :fetcher)
+                                        'github))))
+                      package))
+       t
+     nil)))
+
+(defun cowboy--github-pull (package)
+  "Pull PACKAGE from upstream.
+If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
+  (cowboy--command "git" (if (stringp package)
+                             package
+                           (concat cowboy-package-dir (symbol-name package) "/"))
+                   "pull" "--rebase"))
 
 (provide 'cowboy)
 
