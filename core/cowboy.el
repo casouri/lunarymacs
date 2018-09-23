@@ -6,23 +6,6 @@
 
 ;;; This file is NOT part of GNU Emacs
 
-;;; License
-;;
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 3, or (at your option)
-;; any later version.
-
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
-;; Floor, Boston, MA 02110-1301, USA.
-
 ;;; Commentary:
 ;; 
 
@@ -142,7 +125,7 @@ By default use shadow-clone, if FULL-CLONE is t, use full clone."
          (mapcar #'cowboy-install dependency-list)))
      (if (eq 0 (funcall (intern (format "cowboy--%s-clone"
                                         (symbol-name (or (plist-get :fetcher recipe) 'github))))
-                        package (plist-get recipe :repo) full-clone))
+                        package-symbol (plist-get recipe :repo) full-clone))
          ;; exit code 0 means success, any other code means failure
          t
        nil))))
@@ -158,9 +141,12 @@ By default use shadow-clone, if FULL-CLONE is t, use full clone."
 (defmacro cowboy--with-recipe (&rest body)
   "With package recipe, eval BODY. Return nil if none found.
 If PACKAGE is a symbol or list, treat as package,
-if it is a string, treate as dir."
+if it is a string, treate as dir.
+
+Variable PACKAGE should be defined prior to this macro,
+inside the macro you get variable PACKAGE-SYMBOL and RECIPE."
   `(let* ((package-symbol (cowboy--package-symbol package))
-          (recipe (if (listp package)
+          (recipe (if (listp package) ; in-place recipe always override recipe in cowboy-recipe-alist
                       (cdr package)
                     (alist-get package-symbol cowboy-recipe-alist))))
      (if recipe
@@ -202,6 +188,16 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
                              package
                            (concat cowboy-package-dir (symbol-name package) "/"))
                    "pull" "--rebase"))
+
+(defun cowboy-delete (package)
+  "Delete PACKAGE.
+If PACKAGE is a symbol, treat as a package, if a string, treat as a dir."
+  (delete-directory
+   (if (stringp package)
+       package
+     (concat cowboy-package-dir (symbol-name (cowboy--package-symbol package)) "/"))
+   t t)
+  t)
 
 (provide 'cowboy)
 
