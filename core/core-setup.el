@@ -59,21 +59,24 @@
 If PACKAGE non-nill, install only that package."
   ;; TODO concurrency when possible
   ;; make-thread is not concurrent
+  ;; TODO extract cowboy-install out from if statement
   (interactive)
-  (let ((all-file-in-load-path
-         (mapcan (lambda (dir) (mapcar #'file-name-base (directory-files-recursively dir "\\.el$")))
-                 (list moon-package-dir moon-site-lisp-dir))))
-    (dolist (package (if package (list package) moon-package-list))
-      (let ((package-symbol (if (symbolp package)
-                                package
-                              (car package)))
-            (system-package-p (when (listp package) (plist-get (cdr package) :system))))
-        (unless (or (member (symbol-name package-symbol)
-                            all-file-in-load-path)
-                    (member package-symbol moon-ignore-package-list)
-                    system-package-p)
-          (moon-message&result (moon-ing-msg "Installing" package-symbol)
-                               (cowboy-install package)))))))
+  (if package
+      (cowboy-install package)
+    (let ((all-file-in-load-path
+           (mapcan (lambda (dir) (mapcar #'file-name-base (directory-files-recursively dir "\\.el$")))
+                   (list moon-package-dir moon-site-lisp-dir))))
+      (dolist (package (if package (list package) moon-package-list))
+        (let ((package-symbol (if (symbolp package)
+                                  package
+                                (car package)))
+              (system-package-p (when (listp package) (plist-get (cdr package) :system))))
+          (unless (or (member (symbol-name package-symbol)
+                              all-file-in-load-path)
+                      (member package-symbol moon-ignore-package-list)
+                      system-package-p)
+            (moon-message&result (moon-ing-msg "Installing" package-symbol)
+                                 (cowboy-install package))))))))
 
 (defun moon/update-package (&optional package)
   "Update packages to the latest version.
@@ -81,6 +84,7 @@ If PACKAGE non-nill, install only that package."
 If PACKAGE non-nil, install only that package."
   ;; TODO concurrency when possible
   ;; make-thread is not concurrent
+  ;; TODO extract cowboy-update from if statement
   (interactive)
   (if package
       (cowboy-update package)
