@@ -24,7 +24,7 @@
 (defvar moon-init-time nil
   "How long it takes for Emacs to start.")
 
-(defvar lunary-version "1.1.0"
+(defvar lunary-version "1.2.0"
   "Current version of lunarymacs.")
 
 (defvar moon-phase :startup
@@ -252,23 +252,17 @@ Expressions will be appended."
      (message (format "%s time: %.03f" ,message (float-time (time-subtract (current-time) start-time))))))
 
 (defun bootstrap ()
-  "Bootstrap quelpa."
+  "Bootstrap cowboy."
   (message "Load cowboy.")
-  ;; TODO remove this require
-  ;; by remving package-installed-p
-  (require 'package)
-  (package-initialize t)
   (push moon-core-dir load-path)
-  (require 'cowboy)
-  (cowboy-initialize))
+  (require 'cowboy))
 
 
 ;;; Run code
 
 (setq package--init-file-ensured t
       package-enable-at-startup nil
-      package-user-dir moon-package-dir
-      quelpa-dir (concat moon-local-dir "quelpa/"))
+      package-user-dir moon-package-dir)
 
 (provide 'core-package)
 
