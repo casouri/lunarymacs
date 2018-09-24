@@ -38,6 +38,6 @@ otherwise evalueate EMACS."
 ;;; Config
 ;;
 
-(add-hook 'after-save-hook #'moon/smart-format-buffer)
+(add-hook 'moon-startup-hook-2  (lambda () (add-hook 'after-save-hook #'moon/smart-format-buffer)))
 
 
