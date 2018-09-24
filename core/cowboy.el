@@ -24,6 +24,7 @@
 
 (defvar cowboy-recipe-alist '((isolate . (:repo "casouri/isolate"))
                               (aweshell . (:repo "manateelazycat/aweshell"))
+                              (olivetti . (:repo "rnkn/olivetti"))
                               (use-package . (:repo "jwiegley/use-package"))
                               (bind-key . (:pseudo t :dependenc (use-package)))
                               (general . (:repo "noctuid/general.el"))
@@ -98,14 +99,18 @@ If none specified, default to 'github.
 
 :repo is a string representing a repository from github, it shuold be like \"user/repo\".
 
-:dependency is a list of symbols of packages thar this package depends on.")
+TODO :branch fetch a particular branch of repo.
+
+:dependency is a list of symbols of packages thar this package depends on.
+
+:pseudo is for pseudo packages. for example, ivy, counsel & swiper are in one repo,
+they you only need one recipe. The other two can be pseudo packages.
+
+TODO :load-path is for additional load-path entries. By default cowboy adds package dir
+and subdir under that into load-path, if the package needs to add subdirs that are deeper
+to load-path, use this key to specify a relative path to package-dir. No preceeding slash or dot.")
 
 ;;; Function
-
-(defun cowboy-initialize ()
-  "Dress up cowboy. Scans `cowboy-package-dir' and update `cowboy-package-list'."
-  (dolist (package-dir-path (f-directories cowboy-package-dir))
-    (push (file-name-base (directory-file-name package-dir-path)) cowboy-package-list)))
 
 (defun cowboy-add-load-path ()
   "Add packages to `load-path.'"
@@ -198,6 +203,11 @@ If PACKAGE is a symbol, treat as a package, if a string, treat as a dir."
      (concat cowboy-package-dir (symbol-name (cowboy--package-symbol package)) "/"))
    t t)
   t)
+
+(defun cowboy-reinstall (package)
+  "Reinstall PACKAGE."
+  (cowboy-delete package)
+  (cowboy-install package))
 
 (provide 'cowboy)
 
