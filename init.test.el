@@ -10,8 +10,8 @@
        ;; non-evil
        homepage
        key
-       evil
-       ;; angel ; don't enable angel and evil in the same time
+       ;; evil
+       angel ; don't enable angel and evil in the same time
        ui
        other
        edit
@@ -23,6 +23,7 @@
        :os
        mac
        :utility
+       markdown
        eshell
        tex
        dir
@@ -40,5 +41,5 @@
        ;; rust
        javascript
        web
-       ;; lua
+       lua
        )
