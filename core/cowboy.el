@@ -25,6 +25,7 @@
 (defvar cowboy-recipe-alist '((isolate . (:repo "casouri/isolate"))
                               (aweshell . (:repo "manateelazycat/aweshell"))
                               (olivetti . (:repo "rnkn/olivetti"))
+                              (ws-butler . (:repo "lewang/ws-butler"))
                               (use-package . (:repo "jwiegley/use-package"))
                               (bind-key . (:pseudo t :dependenc (use-package)))
                               (general . (:repo "noctuid/general.el"))
