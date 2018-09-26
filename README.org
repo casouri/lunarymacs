@@ -86,6 +86,9 @@ Because =C-SPC= is used for leader key, =set-mark-command= is binded to =C-v=.
 The best way to get the config is to read it, it's easy to understand.
 There are README in each star but they are usually outdated (sorry).
 
+*Note:* I am constantly changing my config and I have shifted to emacs layout since Aug 2018,
+so evil bindings *will* fall short on compatibility.
+
 * Why separate repo
 
 After sharing my config/framework for some time,
