@@ -88,7 +88,12 @@
                               (hungry-delete . (:repo "nflath/hungry-delete"))
                               (magit-todos . (:repo "alphapapa/magit-todos" :dependency (pcre2el)))
                               (pcre2el . (:repo "joddie/pcre2el"))
-                              (jump-char . (:repo "lewang/jump-char")))
+                              (jump-char . (:repo "lewang/jump-char"))
+                              (typescript-mode . (:repo "ananthakumaran/typescript.el"))
+                              (wanderlust . (:repo "wanderlust/wanderlust" :dependency (semi flim apel)))
+                              (semi . (:repo "wanderlust/semi"))
+                              (flim . (:repo "wanderlust/flim"))
+                              (apel . (:repo "wanderlust/apel")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
