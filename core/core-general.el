@@ -76,7 +76,8 @@
   (dolist (dir (append (list moon-core-dir
                              moon-star-dir
                              moon-local-dir
-                             moon-site-lisp-dir)))
+                             moon-site-lisp-dir)
+                       (directory-files-recursively moon-site-lisp-dir "" t)))
     (when (file-directory-p dir)
       (push dir load-path)))
   (dolist (package-dir (f-directories moon-package-dir))
