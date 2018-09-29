@@ -1,5 +1,11 @@
 ;;; -*- lexical-binding: t -*-
 
+;;; Commentary:
+;;
+;; No third parry packages supported in this file,
+;; however you require package in  site-lisp once this file is loaded
+;; more see the very bottom, Run Code section.
+
 ;;; Variable
 
 ;;;; Directories
@@ -75,8 +81,10 @@
   (require 'f)
   (dolist (dir (append (list moon-core-dir
                              moon-star-dir
-                             moon-local-dir
-                             moon-site-lisp-dir)
+                             moon-local-dir)
+                       ;; moon-site-lisp=dir is added in Run Code section
+                       ;; in this file, much earlier than this function
+                       ;; would run
                        (directory-files-recursively moon-site-lisp-dir "" t)))
     (when (file-directory-p dir)
       (push dir load-path)))
@@ -264,6 +272,10 @@ Expressions will be appended."
 (setq package--init-file-ensured t
       package-enable-at-startup nil
       package-user-dir moon-package-dir)
+
+;; Add site-lisp to load-path
+;; so dash.el s.el and f.el are ready
+(push moon-site-lisp-dir load-path)
 
 (provide 'core-package)
 
