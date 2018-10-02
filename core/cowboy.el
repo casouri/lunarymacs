@@ -23,6 +23,7 @@
   "The package list.")
 
 (defvar cowboy-recipe-alist '((isolate . (:repo "casouri/isolate"))
+                              (smex . (:repo "nonsequitur/smex"))
                               (aweshell . (:repo "manateelazycat/aweshell"))
                               (olivetti . (:repo "rnkn/olivetti"))
                               (ws-butler . (:repo "lewang/ws-butler"))
@@ -108,7 +109,7 @@ If none specified, default to 'github.
 TODO :branch fetch a particular branch of repo.
 
 :dependency is a list of symbols of packages thar this package depends on.
-
+p
 :pseudo is for pseudo packages. for example, ivy, counsel & swiper are in one repo,
 they you only need one recipe. The other two can be pseudo packages.
 
@@ -117,6 +118,11 @@ and subdir under that into load-path, if the package needs to add subdirs that a
 to load-path, use this key to specify a relative path to package-dir. No preceeding slash or dot.")
 
 ;;; Function
+
+(defun cowboy-compile ()
+  "Compile all packages."
+  ;; cpmpile all file but only when .elc file is older than .el file
+  (byte-recompile-directory cowboy-package-dir 0))
 
 (defun cowboy-add-load-path ()
   "Add packages to `load-path.'"
