@@ -1,0 +1,6442 @@
+2017-12-20  Roland Winkler  <winkler@gnu.org>
+
+	Add files bbdb-gnus.el and bbdb-vm.el.
+
+2017-12-20  Roland Winkler  <winkler@gnu.org>
+
+	Fix declarations for byte compiler.  Use file tex-site.el.
+
+2017-11-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Fix copyright headers
+
+2017-11-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Remove files with unclear copyright status; prepare for move to
+	externals/
+
+2017-10-29  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	First cut at adapting BBDB for GNU ELPA
+
+2017-10-17  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-parse-records: bug fix
+
+2017-10-11  Roland Winkler  <winkler@gnu.org>
+
+	Advertise bbdb-user@nongnu.org
+
+2017-10-11  Roland Winkler  <winkler@gnu.org>
+
+	Query before migrating BBDB to new format
+
+2017-10-11  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-read-record: Fix calling sequence for calls to set record
+
+2017-08-09  Roland Winkler  <winkler@gnu.org>
+
+	New var bbdb-migrate-uuid-xfield
+
+2017-08-09  Roland Winkler  <winkler@gnu.org>
+
+	New field uuid.	 Make creation-date and timestamp immutable
+
+2017-07-25  Roland Winkler  <winkler@gnu.org>
+
+	Makefile.am: Fix rule BBDB_ELPA_FILES (Bug#51563)
+
+2017-07-25  Roland Winkler  <winkler@gnu.org>
+
+	lisp/bbdb-tex.el: Improve documentation
+
+2017-07-25  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-tex: Bug fix (Bug#51564)
+
+2017-07-22  Roland Winkler  <winkler@gnu.org>
+
+	Fix previous patch
+
+2017-07-22  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-split: use arg TRIM of split-string with emacs-version >= 24.4.
+
+2017-07-19  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-tex: ignore spaces when calling usepackage
+
+2017-07-19  Roland Winkler  <winkler@gnu.org>
+
+	bbdb.sty: use RequirePackage
+
+2017-07-19  Roland Winkler  <winkler@gnu.org>
+
+	Fix docstring
+
+2017-07-05  Roland Winkler  <winkler@gnu.org>
+
+	Use LaTeX for TeXing BBDB
+
+2017-01-31  Roland Winkler  <winkler@gnu.org>
+
+	Really discontinue support for GNU Emacs 23
+
+2017-01-30  Roland Winkler  <winkler@gnu.org>
+
+	TODO: Extend feature wishlist
+
+2017-01-30  Roland Winkler  <winkler@gnu.org>
+
+	README: Add pointer to emacs wiki upgrade page
+
+2017-01-30  Roland Winkler  <winkler@gnu.org>
+
+	README, lisp/bbdb-site.el.in: Discontinue support for GNU Emacs 23
+
+2017-01-28  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-anniv: use diary-goto-entry-function
+
+2017-01-28  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-anniv-diary-entries: Use cl-flet
+
+2017-01-28  Roland Winkler  <winkler@gnu.org>
+
+	Use lexical binding for bbdb-anniv.el
+
+2017-01-28  Roland Winkler  <winkler@gnu.org>
+
+	Discontinue support for GNU Emacs 23
+
+2017-01-28  Roland Winkler  <winkler@gnu.org>
+
+	Update copyright year
+
+2016-10-02  Roland Winkler  <winkler@gnu.org>
+
+	use lexical binding
+
+2016-07-21  Roland Winkler  <winkler@gnu.org>
+
+	fix calls of looking-back
+
+2016-07-21  Roland Winkler  <winkler@gnu.org>
+
+	Update copyright year
+
+2016-07-20  Roland Winkler  <winkler@gnu.org>
+
+	Support mu4e-compose-mode and notmuch-message-mode
+
+2016-07-20  Roland Winkler  <winkler@gnu.org>
+
+	Add support for Wanderlust
+
+2016-07-20  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-omit-record: bug fix
+
+2016-07-20  Roland Winkler  <winkler@gnu.org>
+
+	Make bbdb-hashtable a proper hash table
+
+2016-07-20  Roland Winkler  <winkler@gnu.org>
+
+	New macros bbdb-pushnew
+
+2015-11-14  Roland Winkler  <winkler@gnu.org>
+
+	Fix defcustoms
+
+2015-11-08  Roland Winkler  <winkler@gnu.org>
+
+	Add new snarfing rule eu for many continental European countries
+
+2015-11-08  Roland Winkler  <winkler@gnu.org>
+
+	Simplify re-sorting of records when a record has been changed
+
+2015-09-10  Roland Winkler  <winkler@gnu.org>
+
+	Conform to Emacs Lisp package format convention
+
+2015-09-10  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-separator-alist: Use two newline characters to separate records
+
+2015-09-07  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-search-changed: Fix docstring
+
+2015-09-07  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-delete-field-or-record: Use delete for phone and address fields
+
+2015-09-07  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-copy-records-as-kill: fix docstring
+
+2015-09-07  Roland Winkler  <winkler@gnu.org>
+
+	New command bbdb-copy-fields-as-kill
+
+2015-05-23  Roland Winkler  <winkler@gnu.org>
+
+	Use equal for comparison when populating lists of labels
+
+2015-05-22  Roland Winkler  <winkler@gnu.org>
+
+	Add basic support for mu4e mailer
+
+2015-05-22  Roland Winkler  <winkler@gnu.org>
+
+	Remove variables bbdb/MUA-update-records-p
+
+2015-05-22  Roland Winkler  <winkler@gnu.org>
+
+	Handle prefix command bbdb-do-all-records more robustly
+
+2015-05-22  Roland Winkler  <winkler@gnu.org>
+
+	Bugfix: Select (un)displayed records properly
+
+2015-05-22  Roland Winkler  <winkler@gnu.org>
+
+	Update copyright year in all files
+
+2014-08-30  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-print-require: Improve docstring
+
+2014-08-30  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-print: Fix messages
+
+2014-08-30  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-print-record: Handle xfields the value of which are sexps
+
+2014-08-09  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-snarf: always install and display the new record
+
+2014-08-01  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-add-mail-alias: fix previous change
+
+2014-08-01  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-add-mail-alias: handle multiple records / multiple aliases
+
+2014-08-01  Roland Winkler  <winkler@gnu.org>
+
+	lisp/makefile-temp: fix previous change
+
+2014-07-22  Roland Winkler  <winkler@gnu.org>
+
+	Do not load init file or site file for byte compilation
+
+2014-05-15  Roland Winkler  <winkler@gnu.org>
+
+	Delete record from bbdb-records if record is undisplayed
+
+2014-05-15  Roland Winkler  <winkler@gnu.org>
+
+	Fix and improve previous patch
+
+2014-05-12  Roland Winkler  <winkler@gnu.org>
+
+	Only save edited records that got really changed
+
+2014-05-12  Roland Winkler  <winkler@gnu.org>
+
+	Create bbdb-pkg.el from bbdb-pkg.el.in
+
+2014-05-06  Roland Winkler  <winkler@gnu.org>
+
+	Do not treat bbdb-change-hook special inside bbdb-notice-hooks
+
+2014-05-06  Roland Winkler  <winkler@gnu.org>
+
+	Allow arbitrary lisp expressions as values of xfields
+
+2014-05-06  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-parse-postcode: Finish immediately if one test succeeds
+
+2014-04-27  Roland Winkler  <winkler@gnu.org>
+
+	ready for release 3.1.2
+
+2014-04-12  Roland Winkler  <winkler@gnu.org>
+
+	Be more careful that empty strings do not pollute the data base
+
+2014-04-12  Roland Winkler  <winkler@gnu.org>
+
+	Check type of record data structures more carefully
+
+2014-04-12  Roland Winkler  <winkler@gnu.org>
+
+	lisp/Makefile.am: Include makefile-temp in distribution
+
+2014-04-12  Roland Winkler  <winkler@gnu.org>
+
+	lisp/bbdb-site.el.in: Be more verbose about what we want
+
+2014-04-12  Roland Winkler  <winkler@gnu.org>
+
+	makefile-temp: Obey proper dependencies
+
+2014-04-12  Roland Winkler  <winkler@gnu.org>
+
+	For vm support, require vm-autoloads
+
+2014-04-12  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-separator-alist: Treat AKAs consistent with other fields
+
+2014-03-11  Roland Winkler  <winkler@gnu.org>
+
+	lisp/bbdb-site.el: honor pkgdatadir
+
+2014-03-11  Roland Winkler  <winkler@gnu.org>
+
+	Install miscellaneous files in the doc directory
+
+2014-03-11  Roland Winkler  <winkler@gnu.org>
+
+	m4/package_date.m4: Use "date -u" if "date --rfc-3339" fails
+
+2014-02-28  Roland Winkler  <winkler@gnu.org>
+
+	ready for release 3.1
+
+2014-02-28  Roland Winkler  <winkler@gnu.org>
+
+	Do not use 'prompt' in a non-emacs sense
+
+2014-02-28  Roland Winkler  <winkler@gnu.org>
+
+	Small fixes
+
+2014-02-17  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-update-records: eval arg update-p as many times as needed
+
+2014-02-16  Roland Winkler  <winkler@gnu.org>
+
+	Bug fix for previous commit
+
+2014-02-15  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-update-records: Always evaluate arg update-p twice
+
+2014-01-24  Roland Winkler  <winkler@gnu.org>
+
+	Fix ChangLog.  Update AUTHORS.
+
+2014-01-23  Roland Winkler  <winkler@gnu.org>
+
+	make 'eq the 4th arg of add-to-list
+
+2014-01-23  Roland Winkler  <winkler@gnu.org>
+
+	make completion for bbdb-read-string less obtrusive
+
+2014-01-12  Roland Winkler  <winkler@gnu.org>
+
+	Make sure the *BBDB* buffer exists
+
+2014-01-12  Roland Winkler  <winkler@gnu.org>
+
+	Provide auto completion for streets and postcodes known to BBDB
+
+2014-01-08  Roland Winkler  <winkler@gnu.org>
+
+	move mail clean-up to bbdb.el
+
+2014-01-08  Roland Winkler  <winkler@gnu.org>
+
+	provide auto completion for address components
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	Update copyright year in all files
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	Avoid hard-coded references to xfield notes
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	complete previous commit
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	After editing always update display in all BBDB buffers
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	Clean up supercite support
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	Overhaul bbdb-pgp.el for BBDB 3
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	adapt bbdb-pgp.el for BBDB 3
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	new file lisp/bbdb-pgp.el
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	More flexible editing of xfields
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	use bbdb-initialize for anniversary support
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	Clean up handling of redundant email addresses
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	Check more carefully/frequently that BBDB is editable
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	Small bug fixes
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	Display records for messages more flexibly
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	Handle new records more carefully
+
+2014-01-03  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-snarf-rule-interactive: Use symbol-name
+
+2013-11-16  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-site.el.in: fix typo
+
+2013-11-16  Roland Winkler  <winkler@gnu.org>
+
+	get authorship right
+
+2013-11-16  Roland Winkler  <winkler@gnu.org>
+
+	increase version number to 3.0.50
+
+2013-11-16  Roland Winkler  <winkler@gnu.org>
+
+	new make target elpa
+
+2013-11-16  Roland Winkler  <winkler@gnu.org>
+
+	m4/package_date.m4: Use git log
+
+2013-11-16  Roland Winkler  <winkler@gnu.org>
+
+	bbdb/sc-consult-attr: Do not use car (Bug#40398)
+
+2013-11-16  Roland Winkler  <winkler@gnu.org>
+
+	bbdb.el: simplify mouse menus
+
+2013-11-16  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-mua-update-interactive-p: Clarify doc string
+
+2013-11-16  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-file: Use locate-user-emacs-file
+
+2013-11-16  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-complete-mail: make command more robust
+
+2013-10-06  Roland Winkler  <winkler@gnu.org>
+
+	Clean up lisp/makefile-temp
+
+2013-07-28  Roland Winkler  <winkler@gnu.org>
+
+	doc/bbdb.texi: Add @dircategory and @direntry
+
+2013-07-28  Roland Winkler  <winkler@gnu.org>
+
+	m4/package_date.m4: Use more robust output redirection
+
+2013-07-28  Roland Winkler  <winkler@gnu.org>
+
+	m4/emacs_vm.m4: Fix typo
+
+2013-07-28  Roland Winkler  <winkler@gnu.org>
+
+	m4/emacs_vm.m4: Define mconditional VM unconditionally
+
+2013-07-27  Roland Winkler  <winkler@gnu.org>
+
+	Further clean up of autoconf
+
+2013-07-18  Roland Winkler  <winkler@gnu.org>
+
+	Clean up usage of automake and autoconf
+
+2013-07-17  Roland Winkler  <winkler@gnu.org>
+
+	INSTALL: fix typos
+
+2013-07-17  Roland Winkler  <winkler@gnu.org>
+
+	INSTALL: fix typo
+
+2013-07-17  Roland Winkler  <winkler@gnu.org>
+
+	Use Automake
+
+2013-07-07  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-mua-auto-update: Use bbdb-pop-up-layout
+
+2013-07-07  Roland Winkler  <winkler@gnu.org>
+
+	Handle a new bbdb-file more carefully
+
+2013-07-07  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-update-records-p: Fix docstring
+
+2013-05-26  Roland Winkler  <winkler@gnu.org>
+
+	Simplify configure.ac and lisp/Makefile.in
+
+2013-05-26  Roland Winkler  <winkler@gnu.org>
+
+	Convert VM path to absolute and canonicalize it
+
+2013-05-26  Roland Winkler  <winkler@gnu.org>
+
+	Honor bbdb-message-clean-name-function and
+	bbdb-canonicalize-mail-function consistently
+
+2013-04-21  Roland Winkler  <winkler@gnu.org>
+
+	lisp/bbdb-mua.el (bbdb-mua-summary-mark): Bug fix
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-snarf.el: new file
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-merge-records: merge also affixes, fix docstring
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	Allow city, postcode, state, and country to be nil when formatting
+	addresses
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-hash-record, bbdb-change-record: Fix docstring
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-new-mails-primary: Change default to query
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	Allow bbdb-mua-summary-mark-field to be a function
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-extract-address-components: new function
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-complete-mail: simplify
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	bbdb/vm-virtual-folder: set vm-virtual-folder-alist properly
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	lisp/bbdb-sc.el (bbdb/sc-attribution-field): Fix docstring
+
+2013-04-13  Roland Winkler  <winkler@gnu.org>
+
+	tex/Makefile.in: Acknowledge DESTDIR.
+
+2013-02-16  Roland Winkler  <winkler@gnu.org>
+
+	make bbdb-complete-mail and related functions more robust
+
+2013-02-16  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-mail-yank: Bind case-fold-search to t
+
+2013-02-15  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-delete-field-or-record: Handle multiple records.
+
+2013-02-15  Roland Winkler  <winkler@gnu.org>
+
+	Use inhibit-quit more often.
+
+2013-02-15  Roland Winkler  <winkler@gnu.org>
+
+	Doc fixes
+
+2013-02-15  Roland Winkler  <winkler@gnu.org>
+
+	Remove internal variable bbdb-modified
+
+2013-02-02  Roland Winkler  <winkler@gnu.org>
+
+	Avoid more carefully that text properties do not accidentally enter BBDB
+
+2013-01-20  Roland Winkler  <winkler@gnu.org>
+
+	aclocal.m4: Do not throw an error if tex_dir does not exist
+
+2013-01-20  Roland Winkler  <winkler@gnu.org>
+
+	doc/Makefile.in, tex/Makefile.in: Provide the DESTDIR variable
+
+2013-01-13  Roland Winkler  <winkler@gnu.org>
+
+	Bug fix: Set bbdb-xfield-labels-list and bbdb-organization-list to nil
+	only once.
+
+2013-01-13  Roland Winkler  <winkler@gnu.org>
+
+	Update copyright year
+
+2013-01-13  Roland Winkler  <winkler@gnu.org>
+
+	Use completing-read-multiple for editing organization fields
+
+2012-12-30  Roland Winkler  <winkler@gnu.org>
+
+	minor fix
+
+2012-12-30  Roland Winkler  <winkler@gnu.org>
+
+	Add supercite support
+
+2012-12-29  Roland Winkler  <winkler@gnu.org>
+
+	configure option --with-tex-dir renamed from --with-texmf-dir
+
+2012-12-29  Roland Winkler  <winkler@gnu.org>
+
+	Minor fixes
+
+2012-12-29  Roland Winkler  <winkler@gnu.org>
+
+	Add MUA Summary support
+
+2012-12-26  Roland Winkler  <winkler@gnu.org>
+
+	Small fixes
+
+2012-12-26  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-complete-mail: bug fix
+
+2012-12-26  Roland Winkler  <winkler@gnu.org>
+
+	make quit-window restore the window configuration
+
+2012-12-25  Roland Winkler  <winkler@gnu.org>
+
+	bbdb/vm-auto-add-label: Doc fix and cleanup.
+
+2012-12-25  Roland Winkler  <winkler@gnu.org>
+
+	README: minor docfix
+
+2012-12-25  Roland Winkler  <winkler@gnu.org>
+
+	For the user-defined fields of a record replace the generic internal
+	name notes by xfield.
+
+2012-12-25  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-parse-records): If multiple records have the same name, hash all
+	these records
+
+2012-09-23  Roland Winkler  <winkler@gnu.org>
+
+	Add support for RFC-822 mail addresses
+
+2012-09-23  Roland Winkler  <winkler@gnu.org>
+
+	Clarify usage of bbdb-mua-auto-update
+
+2012-09-09  Roland Winkler  <winkler@gnu.org>
+
+	unified scheme for customizing how BBDB analyzes messages
+
+2012-09-08  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-message-header: use gnus-fetch-original-field
+
+2012-09-07  Roland Winkler  <winkler@gnu.org>
+
+	make bbdb-accept-name-mismatch more flexible
+
+2012-09-01  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-mua-edit-field: Bug fix
+
+2012-09-01  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-record-set-field: Bug fix
+
+2012-09-01  Roland Winkler  <winkler@gnu.org>
+
+	new macro bbdb-with-print-loadably
+
+2012-08-11  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-complete-mail: clean up with *Completions*
+
+2012-08-11  Roland Winkler  <winkler@gnu.org>
+
+	remove broken electricity
+
+2012-08-09  Roland Winkler  <winkler@gnu.org>
+
+	remove broken message cache
+
+2012-08-07  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-complete-mail: use quit-window instead of playing with the window
+	configuration
+
+2012-08-06  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-complete-mail: Revert 2012-07-06 change
+
+2012-08-05  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-annotate-message: simplify
+
+2012-08-05  Roland Winkler  <winkler@gnu.org>
+
+	update hash table more carefully
+
+2012-08-05  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-complete-mail: rely on set-window-configuration
+
+2012-08-01  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-merge-records: Improve interactive call and docstring
+
+2012-08-01  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-merge-records: Handle duplicates properly
+
+2012-08-01  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-complete-mail: cycle single address
+
+2012-07-20  Roland Winkler  <winkler@gnu.org>
+
+	Bug fix bbdb-annotate-message: create new record if update-p has not
+	value update
+
+2012-07-20  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-gethash: Allow value of t for arg predicate
+
+2012-07-20  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-message-search: Allow args name or mail to be nil
+
+2012-07-19  Roland Winkler  <winkler@gnu.org>
+
+	Simplify electric display
+
+2012-07-18  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-electric-display-records: Fix previous patch.
+
+2012-07-18  Roland Winkler  <winkler@gnu.org>
+
+	bbdb.el: Clean up electric command loop
+
+2012-07-17  Roland Winkler  <winkler@gnu.org>
+
+	MUA interface: allow update of existing records only; re-enable message
+	cache
+
+2012-07-12  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-mua.el: Fix docstrings
+
+2012-07-09  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-mua-*: new arg update-p
+
+2012-07-08  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-update-records: Fix previous patch
+
+2012-07-08  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-update-records: Make records a list ordered like address-list
+
+2012-07-06  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-complete-mail: Use window-live-p
+
+2012-07-06  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-mua-edit-field: Revert previous change
+
+2012-07-06  Sam Steingold  <sds@gnu.org>
+
+	* lisp/bbdb-com.el (bbdb-complete-mail): Use `quit-window' instead of
+	`bury-buffer' to get rid of *Completions*.
+
+2012-07-06  Sam Steingold  <sds@gnu.org>
+
+	* lisp/bbdb-mua.el (bbdb-mua-edit-field): Edit THE record for THE
+	sender, not all the relevant records.
+
+2012-07-03  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-search: also search last_first names
+
+2012-07-01  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-get-address-components: name may be nil.
+
+2012-07-01  Roland Winkler  <winkler@gnu.org>
+
+	ignore Makefiles and configure files
+
+2012-06-24  Roland Winkler  <winkler@gnu.org>
+
+	major update, see ChangeLog
+
+2012-01-02  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-auto-notes-rules: Use :set keyword
+
+2012-01-02  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-anniv-alist: clarify docstring
+
+2012-01-02  Roland Winkler  <winkler@gnu.org>
+
+	Clean up custom-loads
+
+2011-12-18  Roland Winkler  <winkler@gnu.org>
+
+	remove leading and trailing whitespace in text properly
+
+2011-12-18  Roland Winkler  <winkler@gnu.org>
+
+	do not create backup of bbdb-loaddefs.el
+
+2011-12-18  Roland Winkler  <winkler@gnu.org>
+
+	new format `%t' for bbdb-anniv-alist
+
+2011-12-11  Roland Winkler  <winkler@gnu.org>
+
+	add autoconf support, add doc and tex dirs
+
+2011-12-11  Roland Winkler  <winkler@gnu.org>
+
+	rename lisp/Makefile to lisp/makefile-temp
+
+2011-12-11  Roland Winkler  <winkler@gnu.org>
+
+	rename lisp/Makefile to lisp/makefile-temp
+
+2011-12-11  Roland Winkler  <winkler@gnu.org>
+
+	new file lisp/bbdb-ispell.el
+
+2011-11-27  Roland Winkler  <winkler@gnu.org>
+
+	Minor clarifications in README
+
+2011-11-27  Roland Winkler  <winkler@gnu.org>
+
+	Disable VM support by default
+
+2011-11-27  Roland Winkler  <winkler@gnu.org>
+
+	Fix typos, update README
+
+2011-11-20  Roland Winkler  <winkler@gnu.org>
+
+	major overhaul (part 2)
+
+2011-11-20  Roland Winkler  <winkler@gnu.org>
+
+	major overhaul
+
+2011-10-11  Ted Zlatanov  <tzz@lifelogs.com>
+
+	* lisp/bbdb.el: Also autoload `bbdb-insinuate-{message,rmail,vm,mh}'
+	from bbdb-*.el so `bbdb-initialize' won't throw an error when passed
+	that symbol.
+
+2011-10-11  Ted Zlatanov  <tzz@lifelogs.com>
+
+	* lisp/bbdb.el: Autoload `bbdb-insinuate-gnus' from bbdb-gnus.el so
+	`bbdb-initialize' won't throw an error when passed 'gnus.
+
+2011-10-10  Roland Winkler  <winkler@gnu.org>
+
+	improve editing and display of record names, improve merging fields of
+	records, bug fixes
+
+2011-09-22  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-pop-up-window: remove Gnus-specific code
+
+2011-09-21  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-browse-url: Fix usage of prefix arg.
+
+2011-09-19  Roland Winkler  <winkler@gnu.org>
+
+	bug fix: lisp/bbdb-com.el (bbdb-add-mail-alias)
+
+2011-09-19  Roland Winkler  <winkler@gnu.org>
+
+	Use / as search prefix
+
+2011-09-19  Roland Winkler  <winkler@gnu.org>
+
+	simplify dialing
+
+2011-09-19  Roland Winkler  <winkler@gnu.org>
+
+	small bug fixes
+
+2011-05-11  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-prompt-for-create: Use special-mode
+
+2011-05-11  Roland Winkler  <winkler@gnu.org>
+
+	split bbdb-notice-hook into bbdb-notice-mail-hook and
+	bbdb-notice-record-hook
+
+2011-05-08  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-display-all-records: Use redisplay.
+
+2011-05-08  Roland Winkler  <winkler@gnu.org>
+
+	Fix typos
+
+2011-05-07  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-display-current-record: New command
+
+2011-05-07  Roland Winkler  <winkler@gnu.org>
+
+	Fix commit 2011-04-30 03:58:01
+
+2011-04-29  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-parse-internal: Clarify error message.
+
+2011-04-29  Roland Winkler  <winkler@gnu.org>
+
+	Ignore TAGS files
+
+2011-04-29  Roland Winkler  <winkler@gnu.org>
+
+	Fix corrupted BBDB files when migrating.
+
+2011-04-29  Roland Winkler  <winkler@gnu.org>
+
+	Makefile: Use option --batch
+
+2011-04-29  Roland Winkler  <winkler@gnu.org>
+
+	Rename degree field to affix.
+
+2011-04-29  Roland Winkler  <winkler@gnu.org>
+
+	New commands bbdb-next-field, bbdb-prev-field.
+
+2011-04-23  Roland Winkler  <winkler@gnu.org>
+
+	distinguish 1 and 1.0 in bbdb-pop-up-window-size
+
+2011-04-23  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-insinuate-MUA: Fix docstring.
+
+2011-04-23  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-mode-map: Do no call set-keymap-parent.
+
+2011-04-16  Roland Winkler  <winkler@gnu.org>
+
+	Use defvar for bbdb-create-hook and bbdb-change-hook
+
+2011-04-16  Roland Winkler  <winkler@gnu.org>
+
+	Include timezone info in bbdb-time-stamp-format
+
+2011-04-16  Roland Winkler  <winkler@gnu.org>
+
+	New file TODO
+
+2011-04-16  Roland Winkler  <winkler@gnu.org>
+
+	lisp/bbdb.el:  Define and use BBDB's own faces
+
+2011-04-16  Roland Winkler  <winkler@gnu.org>
+
+	lisp/bbdb.el:  Inherit from special-mode
+
+2011-04-16  Roland Winkler  <winkler@gnu.org>
+
+	lisp/bbdb.el:  Fix indentation of multi-line fields (bug#33101)
+
+2011-04-16  Roland Winkler  <winkler@gnu.org>
+
+	lisp/bbdb-com.el:  Autoload browse-url-url-at-point
+
+2011-04-16  Roland Winkler  <winkler@gnu.org>
+
+	Call add-hook for bbdb-create-hook and bbdb-change-hook
+
+2011-04-11  Barak A. Pearlmutter  <barak+git@cs.nuim.ie>
+
+	cvs to git in README
+
+2011-04-11  Barak A. Pearlmutter  <barak+git@cs.nuim.ie>
+
+	git ignore build products
+
+2011-04-11  Roland Winkler  <winkler@gnu.org>
+
+	bbdb-complete-mail: Ensure initialization of database
+
+2011-04-10  Roland Winkler  <winkler@gnu.org>
+
+	Fix Makefile
+
+2011-04-10  Roland Winkler  <winkler@gnu.org>
+
+	Add support for anniversaries.	Make bbdb-transpose-fields more robust. 
+	Separate formatting functions from display functions. Various bug fixes
+	and improved documentation.  Cleanup code.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/rmail-update-records-p): Doc fix.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/gnus-update-records-p): Doc fix.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/mh-update-records-p): Doc fix.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/vm-update-records-p): Doc fix.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/message-update-records-p): Doc fix.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-mua-wrapper): Simplify code.
+	(bbdb-mua-auto-update-init): Doc fix.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-append-display-p, bbdb-append-display)
+	(bbdb-search-invert-p, bbdb-search-invert): Use bbdb-modeline-info.
+	(bbdb-search): Also search for addresses.  Simplify codde.
+	(bbdb-search-address): New command.
+	(bbdb-search-phone): Fix prompt.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-modeline-info): New variable.
+	(bbdb-mode): Use it.
+	(bbdb-mode-map): Unify keybindings for search commands.
+	(bbdb-sort-records): Update marker positions correctly.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-migrate-postcodes-to-strings): Renamed from
+	bbdb-migrate-zip-codes-to-strings.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-message-search): Use name only if mail address does not match.
+	(bbdb-parse-postcode): Renamed from bbdb-parse-zip.
+	(bbdb-insert-field): In interactive calls ignore fields that are already
+	present.
+	(bbdb-record-edit-phone): Convert format of phone number if old and new
+	format are different.
+	(bbdb-edit-field): Use new bbdb-record-edit-phone.
+	(bbdb-record-edit-address): Use bbdb-address-format-list.
+	(bbdb-edit-address-street): Renamed from bbdb-address-edit-street. Take
+	arg street instead of address.
+	(bbdb-edit-address-default): Renamed from bbdb-address-edit-default.
+	(bbdb-address-edit-continental): Removed (obsolete).
+	(bbdb-complete-mail-cleanup): Removed. Code merged with
+	bbdb-complete-mail.
+	(bbdb-complete-mail): Return non-nil if valid completion exists.
+	Simplify code.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-print-tex-quote-alist): Fix regexp.
+	(bbdb-print-address-format-list): Renamed from 
+	bbdb-print-address-format-alist. Use bbdb-address-format-list as
+	default.
+	(bbdb-print): Use bbdb-format-address.
+	(bbdb-print-address-continental): Removed.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-annotate-message): Use bbdb-string=.
+	(bbdb-mua-wrapper): Also handle mail and message mode.
+	(bbdb-mua-auto-update): Renamed from bbdb-mua-pop-up-bbdb-buffer. 
+	Perform auto update even if bbdb-message-pop-up is nil.
+	(bbdb-mua-auto-update-init): Renamed from bbdb-mua-pop-up-init. Doc fix.
+	Use memq instead of member.
+	(bbdb-force-record-create): Removed (obsolete).
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-address-format-list): New variable for customization of address
+	formatting and editing. (renamed from bbdb-address-format-alist).
+	(bbdb-format-address): Use it.
+	(bbdb-format-record-one-line, bbdb-format-record-multi-line): Use 
+	bbdb-format-address.
+	(bbdb-address-edit-function, bbdb-format-streets)
+	(bbdb-format-address-continental): Removed. Obsolete because of 
+	bbdb-address-format-list.
+	(bbdb-format-record): Use funcall instead of eval.
+	(bbdb-continental-postcode-regexp): Renamed from 
+	bbdb-continental-zip-regexp.
+	(bbdb-check-postcode): Renamed from bbdb-check-zip.
+	(bbdb-legal-postcodes): Renamed from bbdb-legal-zip-codes.
+	(bbdb-expand-mail-aliases): Removed.
+	(bbdb-notes-label-list): Renamed from bbdb-notes-names.
+	(bbdb-parse-frobnicate): Calculate value of bbdb-notes-label-list 
+	instead of reading it.	Use memq instead of member.
+	(bbdb-set-notes-labels): Renamed from bbdb-set-notes-names. Do not write
+	value of bbdb-notes-label-list.
+	(bbdb-set-eq): Removed (obsolete).
+	(bbdb-defstruct): Use defsubst.
+	(bbdb-record-unset-name): Clarify code.
+	(bbdb-initialize): Doc fix.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	Do not attempt to add empty line to bbdb-autloads.el.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	Updated.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	In bbdb-autloads.el, add BBDB lisp directory to load-path.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-pop-up-buffer): Use condition-case, in case split-window fails.
+	(bbdb-records, bbdb-mode, bbdb-version, bbdb-initialize): Add autoload
+	cookie.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-complete-name): Obsolete alias for bbdb-complete-mail.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-insinuate-gnus): Code doc updated.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-mua-update-records): For Gnus use gnus-article-buffer.
+	(bbdb-mua-wrapper): New macro.
+	(bbdb-mua-display-records, bbdb-mua-annotate-sender)
+	(bbdb-mua-annotate-recipients, bbdb-mua-edit-notes-sender)
+	(bbdb-mua-edit-notes-recipients): Use it.
+	(bbdb-mua-update-mua): Removed (obsolete because of bbdb-mua-wrapper).
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-insinuate-vm): Do not hook in bbdb-mua-pop-up-bbdb-buffer.  (Use
+	instead bbdb-mua-pop-up-init.)
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-insinuate-mh): Do not hook in bbdb-mua-pop-up-bbdb-buffer.  (Use
+	instead bbdb-mua-pop-up-init.)
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-insinuate-gnus): Do not hook in bbdb-mua-pop-up-bbdb-buffer.  (Use
+	instead bbdb-mua-pop-up-init.)
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-insinuate-rmail): Do not hook in bbdb-mua-pop-up-bbdb-buffer. 
+	(Use instead bbdb-mua-pop-up-init.)
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-insinuate-message, bbdb-insinuate-mail): Do not hook in 
+	bbdb-mua-pop-up-bbdb-buffer.  (Use instead bbdb-mua-pop-up-init.)
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	Use eval-and-compile.
+	(bbdb-update-records): Avoid name clash with function search in
+	cl-seq.el.
+	(bbdb-message-header-re): New function.
+	(bbdb-accept-message): Use it.
+	(bbdb-get-address-components): Also return MUA.
+	(bbdb-annotate-message): Bug fix.  Simplify.
+	(bbdb-mua-pop-up-init): New function.
+	(bbdb-auto-notes): Complete re-write.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	Use eval-and-compile.
+	(bbdb-subint): Moved here from lisp/bbdb.el. Simplified.
+	(bbdb-parse-phone): Return value always includes extension.
+	(bbdb-read-record): Simplified accordingly.
+	(bbdb-prompt-for-new-field): Use phone number style as returned from
+	bbdb-parse-phone.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-message-headers, bbdb-accept-name-mismatch)
+	(bbdb-use-alternate-names): Fix docstring.
+	(bbdb-auto-notes-rules): Renamed from bbdb-auto-notes-alist.  New
+	format.
+	(bbdb-auto-notes-ignore-messages): Renamed from 
+	bbdb-auto-notes-ignore-all.
+	(bbdb-auto-notes-ignore-headers): Renamed from bbdb-auto-notes-ignore.
+	(bbdb-pop-up-window-size): Fix docstring.
+	(bbdb-horiz-pop-up-window-size): New variable.
+	(bbdb-pop-up-buffer): Use it.
+	(bbdb-auto-notes-rules-expanded): New variable.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	Updated to compile also the new files.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	Initial version.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/rmail-update-records)
+	(bbdb/rmail-pop-up-bbdb-buffer, bbdb/rmail-show-records)
+	(bbdb/rmail-show-sender, bbdb/rmail-show-recipients)
+	(bbdb/rmail-annotate-sender, bbdb/rmail-edit-notes)
+	(bbdb/rmail-summary-show-all-recipients): Obsolete. Use instead generic
+	functions in bbdb-mua.el.
+	(bbdb-insinuate-rmail): Use generic commands.  Remove defadvice which
+	has become obsolete because header Messge-ID is used for message
+	caching.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/gnus-update-records)
+	(bbdb/gnus-pop-up-bbdb-buffer, bbdb/gnus-show-records)
+	(bbdb/gnus-show-sender, bbdb/gnus-show-recipients)
+	(bbdb/gnus-annotate-sender, bbdb/gnus-edit-notes)
+	(bbdb/gnus-summary-show-all-recipients): Obsolete. Use instead generic
+	functions in bbdb-mua.el.
+	(bbdb-insinuate-gnus): Use generic commands.
+	(bbdb/gnus-lines-and-from-length): Removed as gnus-optional-headers
+	appears to be obsolete, too.
+	(bbdb/gnus-message-marker-field): New variable.
+	(bbdb-message-marker-field): Declared obsolete.
+	(bbdb/gnus-summary-get-sender, bbdb/gnus-summary-sender-in-bbdb)
+	(bbdb/gnus-nnimap-folder-list-from-bbdb): Simplified.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/vm-header): Remove MIME decoding.
+	(bbdb/vm-update-records, bbdb/vm-pop-up-bbdb-buffer)
+	(bbdb/vm-show-records, bbdb/vm-show-sender)
+	(bbdb/vm-show-recipients, bbdb/vm-annotate-sender)
+	(bbdb/vm-edit-notes): Obsolete. Use instead generic functions in
+	bbdb-mua.el.
+	(bbdb-insinuate-vm): Use generic commands.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-mua, bbdb-message-header): New functions.
+	(bbdb-get-address-components): Use bbdb-message-header.	 Simplified.
+	(bbdb-update-records): New arg msg-key. Handle message cache. Arg
+	update-p may also be a function.
+	(bbdb-mua-update-records, bbdb-mua-update-mua)
+	(bbdb-mua-update-interactive-p, bbdb-mua-pop-up-bbdb-buffer): New
+	functions.
+	(bbdb-mua-display-records, bbdb-mua-display-sender)
+	(bbdb-mua-display-recipients, bbdb-mua-annotate-sender)
+	(bbdb-mua-annotate-recipients, bbdb-mua-edit-notes-sender)
+	(bbdb-mua-edit-notes-recipients): New commands.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-mail, bbdb-mail-address): Simplified.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-mua-message): New customization group.
+	(bbdb-update-records-p): Value may also be a function.
+	(bbdb-mua-update-interactive-p): New variable.
+	(bbdb-init-forms): Add message and mail mode support. Sendmail is 
+	depreciated (use mail instead). Remove outdated support for reportmail,
+	supercite and w3.
+	(bbdb-initialize): Updated accordingly. Do not test presence of features
+	(which is not needed).
+	(bbdb-insinuate-sendmail): Removed (use bbdb-insinuate-mail).
+	( bbdb-insinuate-message): Moved to bbdb-message.el.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/rmail-update-records-p): Improved default.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/gnus-update-records-p): Improved default.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb/vm-update-records-p): Improved default.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-delete-duplicate-mails, bbdb-display-records-completely)
+	(bbdb-display-records-with-layout, bbdb-copy-records-as-kill): Doc fix.
+	(bbdb-search-duplicates): Improved interactive spec.  New arg records. 
+	Doc fix
+	(bbdb-delete-field-or-record): Make records a required arg. New arg
+	fields. Doc fix.
+	(bbdb-delete-records, bbdb-toggle-records-layout)
+	(bbdb-sort-addresses, bbdb-sort-phones, bbdb-sort-notes)
+	(bbdb-add-mail-alias): Make records a required arg.  Doc fix.
+	(bbdb-mail-address): New command bound to M.
+	(bbdb-mail): Use it.  New arg verbose.	Fix interactive spec.
+	(bbdb-mail-yank): Renamed from bbdb-yank-addresses.  Bug fix.
+	(bbdb-yank-addresses): Declared obsolete.
+	(bbdb-browse-url): Simplify.  Doc fix.
+	(bbdb-grab-url): Simplify.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-update-records-p): Fix docstring.
+	(bbdb-message-pop-up): Change default to a less aggressive nil.
+	(bbdb-format-record-one-line): Remove linebreaks from multi-line notes.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-dwim-mail): Fix typo.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-wrap-column): New variable.
+	(bbdb-format-list): Use bbdb-wrap-column and bbdb-separator-alist.
+	(bbdb-layout-alist, bbdb-format-address-continental)
+	(bbdb-format-address-default, bbdb-format-record-multi-line): Change
+	value of indentation such that it becomes the total indentation.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-mail-allow-redundancy): Doc fix.
+	(bbdb-mode-map): Include bbdb-do-all-records in "Use database" submenu.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-record-list): Doc fix.
+	(bbdb-dwim-mail): Arg MAIL may be a number, which will pick the MAILth
+	mail address.
+	(bbdb-mail): New optional arg N to pick Nth mail address.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	ChangeLog
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-dwim-mail): Cleanup code.
+
+2011-03-28  Roland Winkler  <winkler@gnu.org>
+
+	(bbdb-insert-record-internal): Handle empty database properly.
+
+2011-03-28  Barak A. Pearlmutter  <barak+git@cs.nuim.ie>
+
+	Start v3.x development: flush v2.x, Copyleft, README, ChangeLog, initial
+	code
+
+2011-03-12  Barak A. Pearlmutter  <barak+git@cs.nuim.ie>
+
+	un-expand stray expanded CVS keywords introduced in patches
+
+2008-03-16  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: Prompting was not handling the ? properly.
+
+	Also reworked some other odd code.
+
+2008-03-16  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed a docstring typo.
+
+2008-03-10  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: Now hopefully really do it right for all cases.
+
+	The cases are:
+	- bbdb/mail-auto-create-p nil
+	- bbdb/mail-auto-create-p 'prompt
+	- bbdb/mail-auto-create-p t
+
+2008-03-10  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: Prompting for creation now works again as documented.
+
+	Thanks to Leo for reporting this.
+
+	Also did some docstring fixes.
+
+2008-01-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Commit of missing changlog entry for 2007-12-08	 Kousik Nandy.
+
+2008-01-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Removed CVS keywords, since expansion messes with bzr.
+
+2008-01-29  Didier Verna  <didier@xemacs.org>
+
+	Fix for gnus-user-format-function-B
+
+2008-01-29  Didier Verna  <didier@xemacs.org>
+
+	Handle recent type change of gnus-ignored-from-addresses
+
+2008-01-29  Didier Verna  <didier@xemacs.org>
+
+	Improve bbdb-define-all-aliases docstring
+
+2008-01-29  Didier Verna  <didier@xemacs.org>
+
+	Fix infinite loop (misplaced iteration) in bbdb-collect-all-aliases
+
+2007-12-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-dwim-net-address-title-field): New field controlling if a title is 
+	prepended to an email address.	The default value is 'title.
+
+2007-12-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed two compile time warnings.
+
+2007-11-26  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: Set `bbdb/vm-update-records-mode' to annotating.
+
+	The sexp was never evaluated to 'annotating as VM was clearing the new 
+	flag just before BBDBs update functions are called, this will only work 
+	in VM 8.1.*!
+
+2007-11-26  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Minor whitespace cleanup and quoting of "(" in `bbdb-get-addresses' doc
+	string.
+
+	Now really the right source file.
+
+2007-11-26  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Minor whitespace cleanup and quoting of "(" in `bbdb-get-addresses' doc
+	string.
+
+2007-11-26  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: Normalize and unify names before comparing them.
+
+2007-11-08  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Allow to customize `bbdb-file-coding-system', but be warned!
+
+2007-11-08  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Patch from Jim Blandy for (bbdb-always-add-addresses): Document new 
+	meanings of 'ask', nil, and function symbols and @pxref, not @xref.
+
+2007-11-08  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: Added BBDB version of prin1 and prin1-to-string binding 
+	print-level and print-length to nil to avoid abbreviation when writing 
+	records.
+
+2007-07-03  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/gnus-summary-get-author): Added handling of
+	`gnus-ignored-from-addresses' and `gnus-summary-to-prefix'.
+
+2007-06-26  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Renamed primep to bbdb-primep which calls primep if it exists.
+
+2007-06-26  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Call bbdb-mail-abbrev-expand-hook after expansion.
+
+	This allows for modifying the expanded stuff or do voodoo based on it.
+
+2007-05-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: Make display-buffer work again.
+
+	While the *BBDB* buffer is replacing an existing window instead of
+	poping up it will make special-display work again.
+
+2007-05-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Ensure we are poping up a *BBDB* buffer when displaying records.
+
+	`bbdb-use-pop-up' is actually checked in the MUA code and no displaying 
+	will happen when it is nil.
+
+2007-05-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Ensure we are poping up the *BBDB* buffer but do it not twice, at least
+	when it is possible.
+
+2007-05-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Avoid a warning about "... seems to ignore the --datarootdir setting".
+
+2007-05-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: clear the *BBDB* buffer before displaying records.
+
+	Many thanks to Leo for the fix and clarifying this to me.
+
+2007-05-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix for bbdb-display-records-1 if there is no BBDB buffer.
+
+	This was (probably) caused by the last changes to
+	bbdb-pop-up-bbdb-buffer due to honoring bbdb-use-pop-up.
+
+	Thanks to Leo for reporting this.
+
+2007-05-28  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Use save-excursion instead with-output-to-temp-buffer to avoid popup.
+
+2007-05-28  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Added missing require for vm-undo.el.
+
+2007-05-28  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Merge with trunk.
+
+2007-05-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed links, tagged broken ones and added bbdb2tbird.
+
+2007-05-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Honor `bbdb-use-pop-up' the right way.
+
+2007-05-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	No popups when bbdb-use-pop-up is nil.
+
+	This is how the docs say it and how it should be, thus I break 
+	compatibility with older versions!
+
+2007-05-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed compile warnings about not existing variables and functions.
+
+2007-05-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Cleanup of requires to built without warning.
+
+2007-05-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Do not care for ancient VM version and simplified MUA directory checks.
+
+2007-05-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Some cleanup and more docs on magic nets.
+
+2007-05-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Removed old `bbdb-define-all-aliases' function and variable
+	`bbdb-define-all-aliases-mode'.
+
+2007-05-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Magic aliases and nets are working now.
+
+2007-05-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Rewrite of `bbdb-define-all-aliases' using magic aliases.
+
+2007-04-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: in MH split the mh-show-mode buffer not the mh-folder-mode one.
+
+	Thanks to Thomas Baumann for the fix.
+
+2007-04-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: Only put hash for (lastname firstname) if they both exist.
+
+2007-04-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Rewrote the function `bbdb-pop-up-bbdb-buffer' to use PREDICATE 
+	regardless of the split mode selected by `bbdb-use-pop-up'.
+
+	`bbdb-use-pop-up' can be used to select the split mode.
+
+	Also added the new variable `bbdb-pop-up-target-columns' which is the 
+	number of columns for the BBDB buffer window when splitting vertically.
+
+2007-04-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Added `bbdb-update-records-mode', `bbdb-get-addresses-headers' and
+	`bbdb-get-only-first-address-p' also to the customize group
+	'bbdb-noticing-records.
+
+2007-04-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Include also the vm-presentation buffers in the search for a proper 
+	pop-up buffer.
+
+2007-04-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	"rmailsum.el" has no provide thus load it instead of requiring it.
+
+	This is a fix from the XEmacs CVS.
+
+2007-04-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed all byte compiler warnings for XEmacs except those about 
+	unreferenced variables in the functions `bbdb-format-record' and
+	`bbdb-force-record-create' where I am not quite sure how to fix them .
+
+2007-04-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Better docstring for `bbdb-update-records'.
+
+2007-04-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed the doc string of bbdb/vm-pop-up-bbdb-buffer.
+
+2007-02-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Removed all CVS keywords from the sources as they are a pita when
+	gatewaying into another VCS.   They were not present in all files
+	anyway.
+
+2007-02-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Handle sexp/function in bbdb-quiet-about-name-mismatches more
+	gracefully. Also added the readonly field example in the defcustom.
+
+2007-02-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	bbdb-quiet-about-name-mismatches: Can be a function or sexp to allow
+	user tweak-able name updates.
+
+2007-02-14  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb.el (bbdb-use-pop-up): Changed the default to 'horiz.
+	 (bbdb-pop-up-display-layout):	Changed the default to 'one-line.
+	 Some code linting here and there.
+
+	* lisp/bbdb-com.el (bbdb-complete-name-allow-cycling): changed
+	 default to t.
+	 (bbdb-get-only-first-address-p): changed default to nil.
+	 (bbdb-get-addresses): Added a doc string.
+
+2007-02-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Finally fixed the release date on the homepage.
+
+2007-02-06  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Added support for completion on "lastname firstname".
+
+2007-02-06  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed generation of Makefile from Makefile.in.
+
+2007-02-06  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed release date.
+
+2007-02-06  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: Tom Tromey's small makefile patch
+
+	Message-ID: <m3veijazeo.fsf@localhost.localdomain> From: Tom Tromey
+	<tromey@redhat.com> To: bbdb-info@lists.sourceforge.net Date: 03 Feb
+	2007 11:06:55 -0700 Subject: small makefile patch
+
+2007-01-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Increased version to '2.36 devo'
+
+2007-01-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Added rule to update the web site
+
+2007-01-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Added rule to generate bbdb.html manual
+
+2007-01-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Updated Homepage for 2.35
+
+2007-01-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Finally fixed the completion bug reported by Svend Tollak Munk. It was
+	broken by the last bugfix for it. ;-/
+
+2007-01-01  Ronan Waide	 <waider@waider.ie>
+
+	Patrick Campbell-Preston's fixed version of primep
+
+2006-12-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Applied the patch fixing warnings on obsolete string-to-int for GNU
+	Emacs 22. Thanks to Leo <sdl.web AT gmail.com>.
+
+2006-12-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Reverted changes which slipped in with the previous commit.
+
+2006-12-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix: we must store the callback data for the defadvice 
+	choose-completion-string in a buffer local variable, otherwise it breaks
+	completions other than bbdb-complete-name.
+
+2006-12-15  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix for correctly replacing completed string in GNU Emacs when
+	selection a completion for bbdb-complete-name from the completions
+	buffer.	 This fixes the bug reported in
+	<hddac4kla8w.fsf@decibel.pvv.ntnu.no> by Svend Tollak Munk.
+
+	[We should create the changelog from the CVS log instead of writing it
+	by hand, since it is annoying to write the same log 3 times, e.g. two
+	times for the commit and once in the changelog.]
+
+2006-12-15  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Bugfix for correctly replacing completed string in GNU Emacs when
+	selection a completion for bbdb-complete-name from the completions
+	buffer.	 This fixes the bug reported in
+	<hddac4kla8w.fsf@decibel.pvv.ntnu.no> by Svend Tollak Munk.
+
+2006-10-09  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Guard setting of mail-mode-header-syntax-table in
+	bbdb-define-all-aliases, as it has been removed in newer GNU Emacs
+	versions.
+
+2006-10-09  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed call to replace-in-string in bbdb-format-record-one-line-notes.
+
+2006-10-09  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Rewrote detection of records with vm-folder field in
+	bbdb/vm-set-auto-folder-alist.
+
+2006-10-09  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Added decoding of the header returned by bbdb-extract-field-value.
+
+	This is nice if you have QP encoded stuff in there.
+
+	See the original message <874pw915df.fsf@stalin.home.catap.ru> on this.
+
+2006-05-26  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Now the fallback "?" should also be used if no real name could be
+	extracted from the email address.
+
+2006-05-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-snarf-region): Bugfix where snarfing on a region only containing a
+	net caused an infinite loop.  Also try to extract real name from the
+	email address if there was none in the snarf region.
+
+2006-05-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Avoid vm-mail-internal if there was no subject since this might
+	circumvent other extensions using an defadvice around vm-mail.	I cannot
+	recall the actuall msg-id or person reporting this.
+
+2006-05-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-format-record-one-line-notes): Remove line breaks and trim white
+	space for one line format.  Also fixed some doc strings.
+
+2006-05-21  Ronan Waide	 <waider@waider.ie>
+
+	* fix references to CVS location (Thankyou sourceforge)
+
+2006-05-14  Ronan Waide	 <waider@waider.ie>
+
+	* lisp/bbdb-w3.el (bbdb-www): use ftp note as the default when www is
+	 not present (Sam Steingold)
+
+2006-03-29  Ronan Waide	 <waider@waider.ie>
+
+	* set buffer coding system to bbdb-file-coding-system when writing the
+	 BBDB (Hubert Chan)
+
+2006-02-08  Ronan Waide	 <waider@waider.ie>
+
+	* do a full path check for emacs/xemacs, otherwise test -x won't work.
+
+2006-02-08  Ronan Waide	 <waider@waider.ie>
+
+	* add lbdb2bbdb link, plus mild warning at the top of the page.
+
+2006-01-30  Ronan Waide	 <waider@waider.ie>
+
+	* inverted condition check. Doh.
+
+2006-01-29  Ronan Waide	 <waider@waider.ie>
+
+	* misunderstood use of 2>&1 in conjunction with message. More hate.
+
+2006-01-29  Ronan Waide	 <waider@waider.ie>
+
+	* I hate autoconf. Make sure that --disable-vm doesn't accidentally
+	 trigger checks for the availability of vm... (also other MTAs)
+
+2006-01-29  Ronan Waide	 <waider@waider.ie>
+
+	* check if the provided/found emacs program is executable
+
+2006-01-07  Ronan Waide	 <waider@waider.ie>
+
+	Use all-completions instead of try-completion (Chris Mears)
+
+2005-09-06  Ronan Waide	 <waider@waider.ie>
+
+	* minor additions to cleanup
+
+2005-09-06  Ronan Waide	 <waider@waider.ie>
+
+	* add loadpath.el and autom4te.cache
+
+2005-09-06  Ronan Waide	 <waider@waider.ie>
+
+	* make use of some of the configure mods
+
+2005-09-06  Ronan Waide	 <waider@waider.ie>
+
+	* move some of the auxilliary package detection and the load-path
+	 build in here
+	* check value of VMDIR before trying to build with it
+
+2005-09-06  Ronan Waide	 <waider@waider.ie>
+
+	* clean up some compiler warnings again
+
+2005-09-05  Ronan Waide	 <waider@waider.ie>
+
+	* if there's a space in EMACS_PROG, quote the whole string.
+
+2005-09-05  Ronan Waide	 <waider@waider.ie>
+
+	* discard useless vector for bbdb/rmail-get-header-content
+	* marginally better bbdb/rmail-update-records-mode
+	* add bbdb/rmail-new-flag, which almost works
+
+2005-08-28  Ronan Waide	 <waider@waider.ie>
+
+	* try and match the VM/Gnus method of updating. Not quite there yet.
+
+2005-08-28  Ronan Waide	 <waider@waider.ie>
+
+	* move bbdb-extract-address-components-func to bbdb-com. Trying to clean
+	up
+	 a circular dependency problem.
+
+2005-08-20  Ronan Waide	 <waider@waider.ie>
+
+	* a few updates. I really should keep this more up-to-date, though.
+
+2005-08-11  Ronan Waide	 <waider@waider.ie>
+
+	* remove mule-utf-8 per Dave Love's suggestion
+
+2005-08-11  Ronan Waide	 <waider@waider.ie>
+
+	* fix the AC_ARG_ENABLE options so that --disable and --enable-foo=no
+	 actually works.
+
+2005-08-11  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2005-08-11  Ronan Waide	 <waider@waider.ie>
+
+	* typo
+
+2005-08-11  Ronan Waide	 <waider@waider.ie>
+
+	* remove CVS Log tag
+
+2005-08-02  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2005-08-02  Ronan Waide	 <waider@waider.ie>
+
+	Fix prompt-for-creation stuff
+
+2005-08-02  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2005-08-02  Ronan Waide	 <waider@waider.ie>
+
+	* oops. overbraced.
+
+2005-08-02  Ronan Waide	 <waider@waider.ie>
+
+	* rewrite the coding cookie on save. This makes sure that the setting
+	 of bbdb-file-coding-system is reflected in the file. I'm still not
+	 sure that this coding system hacking about is a good idea OR
+	 correct, however.
+
+2005-08-02  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	Change GNUS to Gnus, assuming nobody cares for GNUS support anymore...
+
+2005-08-02  Ronan Waide	 <waider@waider.ie>
+
+	* fix docstring for bbdb-invoke-hook-for-value
+
+2005-08-02  Ronan Waide	 <waider@waider.ie>
+
+	* if bbdb/mail-auto-create-p is set to 'prompt (or a function that
+	returns
+	 'prompt) then prompt the user before creating the record.
+
+2005-07-23  Ronan Waide	 <waider@waider.ie>
+
+	* remove RCS keywords, replace with Id tag
+
+2005-07-23  Ronan Waide	 <waider@waider.ie>
+
+	* remove Log tag
+
+2005-07-23  Ronan Waide	 <waider@waider.ie>
+
+	* nuke RCS tags and replace with an Id tag
+
+2005-07-23  Ronan Waide	 <waider@waider.ie>
+
+	* sync with XEmacs CVS
+
+2005-07-23  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2005-05-22  Ronan Waide	 <waider@waider.ie>
+
+	* missed one of the pilotmanager entries
+
+2005-05-22  Ronan Waide	 <waider@waider.ie>
+
+	* update links for PilotManager
+
+2005-03-19  Ronan Waide	 <waider@waider.ie>
+
+	* coding system guessing for emacs 22 (Frederik Fouvry)
+
+2005-02-28  Ronan Waide	 <waider@waider.ie>
+
+	* bbdb/gnus-nnimap-folder-list-from-bbdb:
+	 new function from Uwe Brauer
+
+2005-02-22  Ronan Waide	 <waider@waider.ie>
+
+	* get Gnus data from the raw article buffer (Nix/David Goldberg)
+
+2005-02-22  Ronan Waide	 <waider@waider.ie>
+
+	* include prefixes in bbdb-name-gubbish
+
+2005-02-13  Ronan Waide	 <waider@waider.ie>
+
+	* (Manual Record Addition):
+	* add pointer to bbdb-snarf
+
+2005-02-13  Ronan Waide	 <waider@waider.ie>
+
+	* added new file, with minor abuse to make it work with current BBDB
+
+2004-11-09  Ronan Waide	 <waider@waider.ie>
+
+	* bury completion buffer when completion is done
+
+2004-10-13  Ronan Waide	 <waider@waider.ie>
+
+	* Fix bbdb-print-omit-fields text
+	* Update copyright date
+
+2004-10-13  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2004-10-13  Ronan Waide	 <waider@waider.ie>
+
+	* Correct variable name in comment
+
+2004-10-13  Ronan Waide	 <waider@waider.ie>
+
+	* Don't open a new window for BBDB if there are no records to display
+
+2004-10-10  Alex Schroeder  <kensanata@yahoo.com>
+
+	(Database Fields): New entry for the concept index: mail-alias
+	definition.
+	(Mail Sending Interfaces): New entry for the concept index: mail-alias
+	usage.	New subheading: Mailing Lists and Mail Aliases.
+	(Known Bugs): New section on using M-x bbdb-submit-bug-report replacing
+	the old bug reporting section.
+
+2004-10-10  Alex Schroeder  <kensanata@yahoo.com>
+
+	*** empty log message ***
+
+2004-08-16  Ronan Waide	 <waider@waider.ie>
+
+	* Copy in my old add-or-update-phone function. This may actually still
+	 work and possibly even be of use to people.
+
+2004-06-07  Ronan Waide	 <waider@waider.ie>
+
+	* Updates from Frank J. Christophersen <FJC@control.ee.ethz.ch>
+
+2004-05-28  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	lisp/bbdb.el (bbdb-record-set-net): added a hack to detect that
+	aliases require rebuilding. lisp/bbdb.el (bbdb-mode-map): added
+	del/space binding for scrolling.
+
+2004-05-22  Ronan Waide	 <waider@waider.ie>
+
+	Update CVS hostname
+
+2004-04-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2004-03-22  Ronan Waide	 <waider@waider.ie>
+
+	Propagate bbdb-digit change
+
+2004-03-22  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2004-03-22  Ronan Waide	 <waider@waider.ie>
+
+	* Minor docstring fix (Stefan Monnier)
+	* Catch error if attempting to kill only window in frame (Stefan
+	Monnier)
+
+2004-03-22  Ronan Waide	 <waider@waider.ie>
+
+	Namespace pollution fix (digit => bbdb-digit) (Stefan Monnier)
+
+2004-03-22  Ronan Waide	 <waider@waider.ie>
+
+	* restore auto-create behaviour (Robert Widhopf-Fenk)
+
+2004-03-22  Ronan Waide	 <waider@waider.ie>
+
+	* Bugfix for bug caused by previous patch (Robert Widhopf-Fenk)
+	* Additions to alias generation (Robert Widhopf-Fenk)
+
+2004-02-01  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2004-02-01  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-merge-interactively): If the specified value of 'nets' isn't a
+	list, make it so.
+
+2004-01-23  Ronan Waide	 <waider@waider.ie>
+
+	Handle surnames with prefixes (Adrian Lanz <lanz@fowi.ethz.ch>)
+
+2003-12-12  Ronan Waide	 <waider@waider.ie>
+
+	Redoing last fix, since some other changes slipped in accidentally
+
+2003-10-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-10-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb.el
+	 (bbdb-annotate-message-sender): Honor create-p when creating new
+	records
+	       if a similar record already exists.
+	* lisp/bbdb-com.el
+	 (bbdb-edit-current-field): Handle field detection gracefully at
+	line-end of
+		one-line display. (reported by Dan Jacobson)
+	 (bbdb-help): Added colons to separate help items and thus avoid
+	confusion
+		(reported by Dan Jacobson)
+	 (bbdb-prompt-for-create): Slightly changed the semantics of the
+	returned
+		value to honor create-p.
+	 (bbdb-annotate-message-sender): Honor create-p for creating new records
+	if a
+		similar record already exists.
+
+2003-10-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/gnus-split-method): Honor Resent-* headers if present. (Reported
+	by Thomas Gerds)
+
+2003-08-11  Ronan Waide	 <waider@waider.ie>
+
+	One more tiny fix from Jochen
+
+2003-08-08  Ronan Waide	 <waider@waider.ie>
+
+	More fixes from Jochen
+
+2003-08-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-08-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-dwim-net-address-allow-redundancy):
+	(bbdb-dwim-net-address): *shurg* added 'netonly thus allowing to
+	       have no real-names being shown for expanded aliases and completed
+	       names.
+
+2003-08-05  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2003-08-05  Ronan Waide	 <waider@waider.ie>
+
+	Patch from Jochen KÃ¼pper	 <bbdb@jochen-kuepper.de>:
+	- No error if mailcrypt isn't available.
+	- (bbdb/pgp-quiet): Added.
+	- (bbdb/pgp-hook-fun): Be quite if bbdb/pgp-quiet is set.
+
+2003-08-05  Ronan Waide	 <waider@waider.ie>
+
+	* bbdb-default-area-code: fix customize hook to recognize integers
+
+2003-08-05  Ronan Waide	 <waider@waider.ie>
+
+	* Rewrite doco for bbdb-electric-p to make it a little clearer.
+
+2003-08-05  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2003-08-05  Ronan Waide	 <waider@waider.ie>
+
+	* Use GREP and GREPCONTEXT autoconfs
+
+2003-08-05  Ronan Waide	 <waider@waider.ie>
+
+	* Added a check for grep, and a test to figure out grep's context
+	argument
+
+2003-08-05  Ronan Waide	 <waider@waider.ie>
+
+	* Added a record to test completion stuff
+
+2003-08-05  Ronan Waide	 <waider@waider.ie>
+
+	* Updated to reflect small change in completion logic
+
+2003-07-24  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-07-24  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Patch to support sending mail via gnus (from Scott Lawrence)
+
+2003-07-24  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-07-24  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-update-records): Ignore empty/broken
+	addresses, e.g. extraction on "foo@bar.baz<>" results in (nil nil)
+	which should be ignored.  (reported by "Neil W. Van Dyke)
+
+2003-07-23  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-07-23  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-annotate-message-sender): Invoke the
+	       prompt-to-create hook just if it has a value.  (fixes MH not
+	       honoring 'promt for bbdb/mail-auto-create-p)
+
+2003-07-23  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-07-23  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-force-record-create): A fix for the mhe-mode case (from Vladimir
+	G. Ivanovic)
+
+2003-06-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-06-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-user-menu-commands): Is defcustom now instead of defvar.
+	(build-bbdb-menu): If bbdb-user-menu-commands is a functionp we
+	call it in order to get a menu.
+
+2003-06-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-pop-up-bbdb-buffer): Some fixes for special
+	cases of the multiple *BBDB* buffers hack.
+
+2003-06-09  Ronan Waide	 <waider@waider.ie>
+
+	use fboundp, not boundp, to check highlight-headers-x-face
+
+2003-05-19  Ronan Waide	 <waider@waider.ie>
+
+	* Fix bug in bbdb-default-area-code :type section
+
+2003-04-09  Ronan Waide	 <waider@waider.ie>
+
+	Whoops. Last one was an erroneus commit. This is Dave Love's patch
+
+2003-04-09  Ronan Waide	 <waider@waider.ie>
+
+	Dave Love patch
+
+2003-04-02  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Did a rollback of the changes related to replacing 
+	with-output-to-temp-buffer.  We use it now again and treat it as a Emacs
+	bug.
+
+2003-03-28  Ronan Waide	 <waider@waider.ie>
+
+	Remove references to Info-directory, since it's no longer valid
+
+2003-03-28  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2003-03-28  Ronan Waide	 <waider@waider.ie>
+
+	Call bbdb-complete-name-hooks after name completion
+
+2003-03-27  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	This is the real fix for broken mail-abbrev-expansion.
+
+2003-03-27  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-03-15  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-03-15  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-display-records-1): erase buffer when
+	      appending, since we are redisplaying the records, not just one.
+	(bbdb-multiple-buffers-default): Default/example function for *BBDB*
+	      buffer name generation.
+	(bbdb-pop-up-bbdb-buffer): code move to bbdb-multiple-buffers-default
+
+2003-03-15  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Removed extra parens, did not see the error during compilation. ;/ 
+	Thanks David S. G. ;c)
+
+2003-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Also recognize vm-mode for bbdb-multiple-buffers.
+
+2003-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Droped support for GNUS versions <= 3.14
+
+	Files:	lisp/bbdb-gnus.el
+	lisp/bbdb-hooks.el
+	lisp/bbdb.el
+
+2003-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	 Files:	ChangeLog
+
+2003-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-frob-mode-line): show the BBDB buffer name.
+	(bbdb-display-records-1): removed call to bbdb-pop-up-bbdb-buffer to
+	avoid problems with special-display-*, still we are not back to the old
+	behavior, i.e. if calling BBDB from an frame without *BBDB* buffer while
+	other frames are displaying it we will not get it on the current frame,
+	but that is how it used to be.
+	(bbdb-multiple-buffers): Yet another new variable. Enables the creation
+	of multiple *BBDB* buffers.
+	(bbdb-pop-up-bbdb-buffer): if bbdb-multiple-buffers is enabled created
+	new *BBDB: <BUFNAME>* buffer and set it up correctly.
+
+	Files:	lisp/bbdb.el
+
+2003-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-header-start): There is no gnus-subject-mode, its called
+	gnus-summary-mode.
+
+	Files:	lisp/bbdb-hooks.el
+
+2003-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/gnus-summary-show-all-recipients): Throwing away old code and use
+	bbdb/gnus-update-records now.
+	(bbdb/gnus-update-records): Do not toggle headers to gain access to the
+	hidden headers, since gnus-fetch-field is doing this for us.
+
+	Files:	lisp/bbdb-gnus.el
+
+2003-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	 Files:	ChangeLog
+
+2003-03-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-03-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-display-records-1): call bbdb-pop-up-buffer to ensure we get a
+	buffer in the current frame.
+
+2003-03-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/gnus-update-records):  use gnus-fetch-field instead of
+	mail-fetch-field.  Fixes problems reported by Klaus Zeitler.
+
+2003-03-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-display-records-1): Do not use the function
+	with-output-to-temp-buffer since on recent GNU Emacses the local
+	variables get killed.
+	(bbdb-encache-message): Fix from Dan Debertin to avoid caching of
+	nil, i.e. empty record list, causing problems later.
+
+2003-03-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-set-auto-folder-alist): added missing
+	local vars to avoid cluttering global namespace.CVS:
+	----------------------------------------------------------------------
+
+2003-03-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/mh-update-record): Do a sanity check
+	to avoid adding a nil record to the cache causing trouble
+	afterwards.
+
+2003-03-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-snarf-extract-label): added safety check
+	for backward movement.
+	(bbdb-snarf-region): Added label completion for phones and
+	addresses.CVS:
+	----------------------------------------------------------------------
+
+2003-03-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-delete-current-record): fixed docs and
+	bbdb-apply-next-command-to-all-records handling. Removed ".el" from VM
+	loads to allow Emacs
+	also loading .elc files if they are present.
+	(bbdb-edit-current-field): mark mail-aliases for rebuilt when we are
+	editing the aliases field of a record.
+	(bbdb-add-or-remove-mail-alias): mark mail-aliases for rebuilt
+	when creating new records or deleting a record.
+	(bbdb-prompt-for-create): delete help window when it is not needed
+	anymore.
+
+2003-03-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2003-01-31  Alex Schroeder  <kensanata@yahoo.com>
+
+	(bbdb-mode): Tiny change to the doc string by David S Goldberg
+	<david.goldberg6@verizon.net>.
+
+2003-01-31  Alex Schroeder  <kensanata@yahoo.com>
+
+	(bbdb-resort-database): Make interactive.
+
+2003-01-31  Alex Schroeder  <kensanata@yahoo.com>
+
+	*** empty log message ***
+
+2003-01-30  Ronan Waide	 <waider@waider.ie>
+
+	mapc->bbdb-mapc. Thanks to Greg Troxel.
+
+2003-01-30  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2003-01-02  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-complete-name) Fix for the fix.
+
+2003-01-02  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2003-01-02  Ronan Waide	 <waider@waider.ie>
+
+	* lisp/bbdb-com.el (bbdb-complete-name):
+	 Fix completion in the case of multiple addresses matching from a
+	 single record. Basically behaves as if you'd matched on the
+	 primary name.
+
+2002-12-25  Alex Schroeder  <kensanata@yahoo.com>
+
+	*** empty log message ***
+
+2002-12-25  Alex Schroeder  <kensanata@yahoo.com>
+
+	(bbdb-phones-label-list): Doc.
+	(bbdb-addresses-label-list): Doc.
+	(bbdb-label-completion-list): Doc.
+	(bbdb-label-completion-default): Doc.
+	(bbdb-data-completion-list): Doc.
+	(bbdb-data-completion-default): Doc.
+
+2002-12-24  Alex Schroeder  <kensanata@yahoo.com>
+
+	*** empty log message ***
+
+2002-12-24  Alex Schroeder  <kensanata@yahoo.com>
+
+	(bbdb-complete-name): Handle the case where the only exact match does
+	not have a net field, instead of looping forever.
+
+2002-12-24  Alex Schroeder  <kensanata@yahoo.com>
+
+	*** empty log message ***
+
+2002-12-24  Alex Schroeder  <kensanata@yahoo.com>
+
+	(bbdb-display-layout-alist): Extended custom type to include primary and
+	test, and fixed phone to phones, and address to addresses.
+	(bbdb-format-record-layout-one-line): Take primary into account.
+	(bbdb-format-record-layout-multi-line): Take primary into account.
+	(bbdb-format-record): Take test into account, use multi-line layout
+	function if none was found.
+
+2002-12-24  Alex Schroeder  <kensanata@yahoo.com>
+
+	(bbdb-display-record-with-layout): New.
+	(bbdb-toggle-all-records-display-layout): Print layout used.
+
+2002-11-02  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2002-10-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-10-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-set-auto-folder-alist): Some fixes for
+	the generation of vm-auto-folder-alist when using a function as
+	folder name.
+
+2002-10-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-display-layout):
+	(bbdb-pop-up-display-layout): Fixed a toggling bug reported by
+	Patrick Campbell-Preston.
+	(bbdb-display-layout-alist): Fixed docs and added layout
+	pop-up-multi-line to the list of layouts.
+
+2002-10-20  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2002-10-18  Ronan Waide	 <waider@waider.ie>
+
+	allows bbdb-pgp.el to be configured to use message.el MML tags to
+	perform the signing and encryption, instead of only plain Mailcrypt
+	which is not MIME-aware. (Michael Shields)
+
+2002-09-17  Ronan Waide	 <waider@waider.ie>
+
+	Treat bbdb-canonicalize-net-hook as an actual hook. Some prompting & 
+	code from Micha Wiedenmann. NB documentation not yet updated.
+
+2002-09-17  Ronan Waide	 <waider@waider.ie>
+
+	Added dircategory (Jochen Küpper)
+
+2002-08-19  Ronan Waide	 <waider@waider.ie>
+
+	Jim Blandy: bugfix in bbdb-complete-name
+
+2002-08-19  Ronan Waide	 <waider@waider.ie>
+
+	Jim Blandy's fix for migrating notes.
+
+2002-08-14  Ronan Waide	 <waider@waider.ie>
+
+	Patch from Simon Josefsson to correct a typo & a custom error
+
+2002-07-08  Ronan Waide	 <waider@waider.ie>
+
+	Defanged a commented-out line with a redirection in it.
+
+2002-07-03  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2002-07-03  Ronan Waide	 <waider@waider.ie>
+
+	Remove comment about bbdb-complete-name-allow-cycling not working in
+	GNUmacs.
+
+2002-07-03  Ronan Waide	 <waider@waider.ie>
+
+	Fix from Eli Tziperman to fix expunging
+
+2002-06-30  Ronan Waide	 <waider@waider.ie>
+
+	Cleaner version of ignoring the testing directory if it's not there.
+
+2002-06-30  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2002-06-30  Ronan Waide	 <waider@waider.ie>
+
+		(bbdb-read-new-ftp-site-record): Parse URL or ange-ftp style
+	names
+	for username and directory.
+
+2002-06-30  Ronan Waide	 <waider@waider.ie>
+
+	Don't try to finger if there are no addresses
+
+2002-06-29  Ronan Waide	 <waider@waider.ie>
+
+	Colin Rafferty contribution.
+
+2002-06-29  Ronan Waide	 <waider@waider.ie>
+
+	Allow '.' as a separator in phone numbers (Howard Melman)
+
+2002-06-29  Ronan Waide	 <waider@waider.ie>
+
+	Don't escape '.' in [] (Howard Melman)
+
+2002-06-29  Ronan Waide	 <waider@waider.ie>
+
+	Don't configure the testing directory if it doesn't exist.
+
+2002-06-28  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	From: Andre Srinivasan <andre@slamdunknetworks.com> Organization: Slam
+	Dunk Networks To: bbdb-info@lists.sourceforge.net Date: 6 Jun 2002
+	17:06:47 -0700 Subject: Minor bug fix to bbdb-define-all-aliases
+
+	Added a downcase as fix.
+
+2002-06-28  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-05-12  Ronan Waide	 <waider@waider.ie>
+
+	Dave Love's big patch. See ChangeLog for full details.
+
+2002-04-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-04-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-play-sound): argument NUM is integer now, i.e. before it was not
+	correct, since (char-int ?0) is 49 and not 0. ;/
+	(bbdb-sound-player): If set use this programm, otherwise try
+	native sound support.
+	(bbdb-dial-number): Calculate the right integer, i.e. do not use
+	char-int.
+
+2002-04-18  Ronan Waide	 <waider@waider.ie>
+
+	Require cl, because we can't guarantee it'll be loaded.
+
+2002-04-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-04-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(build-bbdb-insert-field-menu): Added record to
+	the arguments for bbdb-insert-new-field.
+
+	Bug report: From: Joerg Jaspert
+	<joerg+Mailinglisten.Emacs.BBDB@german.ath.cx> Organization: Goliath-BBS 
+	To: bbdb-info@lists.sourceforge.net Date: Thu, 18 Apr 2002 18:23:17
+	+0200 Subject: Cant insert any field using the Mouse
+
+2002-04-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-04-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-read-new-record): Added completion for labels.
+
+2002-04-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	lisp/bbdb-vm.el (bbdb/vm-show-all-recipients), (bbdb/vm-show-sender), 
+	lisp/bbdb-gnus.el (bbdb/gnus-show-sender),
+	(bbdb/gnus-show-all-recipients):
+	       Fixed  */show-all-reciepients to always do what it should do!
+
+	BUGFIX FOR the following report:
+
+	From: Gerd Boerrigter <gerd.boerrigter@gmx.net> To:
+	bbdb-info@lists.sourceforge.net Date: Thu, 18 Apr 2002 10:59:50 +0200 
+	Subject: bbdb/gnus-show-all-recipients only uses first entry
+
+2002-04-03  Ronan Waide	 <waider@waider.ie>
+
+	Nasty hack to get around string-match tripping over things that look 
+	like regexps in bbdb-merge-strings
+
+2002-04-01  Ronan Waide	 <waider@waider.ie>
+
+	highlight-headers-hack-x-face-p is a variable, not a function (Jeff
+	Miller)
+
+2002-03-20  Ronan Waide	 <waider@waider.ie>
+
+	Add a few more VM-related notes.
+
+2002-03-20  Ronan Waide	 <waider@waider.ie>
+
+	Remove fontifying messages, since they're not around long enough to be
+	read and only serve to obliterate other messages.
+
+2002-03-20  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2002-03-20  Ronan Waide	 <waider@waider.ie>
+
+	Added testing/Makefile
+
+2002-03-20  Ronan Waide	 <waider@waider.ie>
+
+	Needed by makefile
+
+2002-03-20  Ronan Waide	 <waider@waider.ie>
+
+	Rewrote bbdb-dial documentation Updated copyright and version notices
+
+2002-03-20  Ronan Waide	 <waider@waider.ie>
+
+	Added Testing for dial functions Added Makefile.in
+
+2002-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-redisplay-one-record): Care for the case when a record is
+	not present any more in the BBDB buffer.
+	(bbdb-insert-new-field): get the current records before doing
+	anything else to ensure that we do not lose the context.
+
+2002-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-03-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-complete-name): Create a popup buffer before displaying records in
+	order
+		to make sure it has the right size & position .
+
+2002-03-12  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-03-12  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-test/switch-to-test-db): Restore old BBDB after exiting recusive
+	edit.
+
+2002-03-12  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-03-12  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	use the function
+	buffer-substring-no-properties instead of buffer-substring
+	to ensure that we do not add some garbage into BBDB.
+
+2002-03-12  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	removed defuns for bbdb-orig-rmail-expunge
+	and bbdb-orig-undigestify-rmail-message since they seem to cause
+	problems and are not required.
+
+2002-03-12  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-complete-name): fixed completion bug for case where name and
+	primary net
+	are identical.
+
+2002-03-12  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	2002-03-12  Robert Fenk	 <Robert.Fenk@gmx.de>
+
+		* bbdb-test.el (bbdb-test/switch-to-test-bbdb): Fixed bugs.
+	(bbdb-test/bbdb-completion-type): Added "First Last" case to
+	name-or-primary (reported by  ET <eli@beach.weizmann.ac.il>)
+
+2002-03-11  Ronan Waide	 <waider@waider.ie>
+
+	Documentation fix
+
+2002-03-11  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2002-03-11  Ronan Waide	 <waider@waider.ie>
+
+	Only invoke bbdb-notice-hook if we actually noticed something
+
+2002-03-03  Ronan Waide	 <waider@waider.ie>
+
+	Change warning message to reflect the fact that it's /message/ that 
+	can't be found, not Gnus.
+
+2002-03-03  Ronan Waide	 <waider@waider.ie>
+
+	Use gnus-original-article-buffer instead of gnus-article-buffer
+
+2002-03-03  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-dial-number):
+	memq takes two args, not three! prologue:
+	add autoload for bbdb-fontify-buffer
+
+2002-03-03  Ronan Waide	 <waider@waider.ie>
+
+		* lisp/bbdb-com.el (bbdb dialing stuff):
+	Documentation fixes.
+	(bbdb-dial-number):
+	According to what docs I can find, it's quite okay to pass * and #
+	to a modem as part of a dial string
+	(bbdb-next-event):
+	Made work on emacs (using read-event instead of next-event)
+	(bbdb-play-sound):
+	New function: plays a sound using internal feature, if available,
+	otherwise it falls back to an external sound player.
+	(bbdb-dial-local-prefix-alist):
+	Fix default mapping to allow a string or an integer for default
+	area code.
+	* lisp/bbdb-com.el (bbdb-search-invert-set):
+	Documentation fix
+
+2002-02-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-02-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-format-address-default):
+	(bbdb-format-address-continental): do not ouput the label.  This
+	       is done by `bbdb-format-record-layout-multi-line'
+
+	(bbdb-format-record-layout-multi-line): Fixed buggy setting of
+	       text-property for 'bbdb-field for addresses amd phones.
+
+2002-02-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Variable renaming.
+
+2002-02-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-02-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-format-record-layout-multi-line):
+	(bbdb-format-record-layout-one-line): Set text-property bbdb-field with
+	element 'field-name for labels of phones and addresses.
+
+2002-02-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-set-auto-folder-alist): Fixed some comments and creation of
+	vm-auto-folder-alist to match headers in the order of
+	(bbdb/vm-set-auto-folder-alist-headers): a new variable.
+
+2002-02-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-fontify-buffer): Use test properties also	for name, company and
+	labels
+	of phones and addresses.  Highlight them also in one-line layout.
+
+2002-02-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-address-edit-continental): Asking for the	ZIP code before the city
+	and
+	do not ask for a state.
+	(bbdb-redisplay-one-record): Remove
+	text-property bbdb-field before redisplaying to avoid extending the
+	new properties. Remove bbdb-field text-properties before redisplaying.
+
+2002-01-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-01-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-define-all-aliases): Fixed warning message for records
+	without net, but with alias field.
+
+2002-01-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-01-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/sc-consult-attr): Fixed to really use
+	recipient when logged in user sent this.
+
+2002-01-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-fontify-buffer): Fixed fontification to
+	use text-properties (bbdb-field) rather than regexps, which fixes
+	indentations problems with non standard indentation.
+
+2002-01-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-display-layout-alist): Fixed the docs, typos and default values.
+
+2002-01-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-phones): Prompt indicates inverted search now.
+	(bbdb-update-records): No useless "Updating of BBDB records
+	finished" message any more.
+
+2002-01-22  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Avoid compiler warning on bbdb-append-records-p.
+
+2002-01-22  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-01-22  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-delete-current-record): honor the bbdb-do-all-records-p!
+
+2002-01-22  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-01-22  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb): Reflect inverted search in search prompt.
+	(bbdb-search-invert): New variable.
+	(bbdb-search-invert-p): New function.
+	(bbdb-search-invert-set): New function.
+	(bbdb-search): Use bbdb-search-invert-p to maybe invert the search
+	result.
+
+2002-01-22  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-mode-map): Bind bbdb-search-invert-set to "!"
+
+2002-01-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed placement of point when deleting a record.
+
+2002-01-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	In Gnus go to the original article buffer for fetching headers.
+
+2002-01-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fixed bug in efficient redisplay of one record
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Patch from
+
+	From: "Jochen Küpper" <jochen@unc.edu> Date: 18 Jan 2002 10:57:17 -0500 
+	Subject:  configure.ac
+
+	There is a mismatch between default rmail support in
+	'./configure--help' and actual happenings. I removed the line to build 
+	rmail on default and also fixed some slight display problems for default
+	options.
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Some enhancements for convenient testing.
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Removed the old elide stuff docs. Added some new docs. STILL MISSING:
+	*display-layout* docs.
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Removed the old elide code stuff.
+	(bbdb-display-records-1): see bbdb-fontify-buffer.
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-fontify-buffer): is now more efficent
+	when redisplaying records. button2 work now again as intended.
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-fontify-buffer): is now more efficent
+	(bbdb-append-records): (prefix) command (like "*") bound
+	to "+" which forces the display/search command to add its content to
+	the BBDB buffer rather than replacing it.
+	Appending can be once, always or a given number of times.
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Fix for fontification of records without a name. Submitted by "Rooke,
+	Philip" <Philip.Rooke@cmck.com>
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-redisplay-one-record): Try to preserve the position during
+	redisplay.
+	(bbdb-add-next-search-results):
+	(bbdb-add-next-search-results-p):
+	(bbdb-add-next-search-results): A prefix command (like "*") bound
+	to "+" which forces the next display command to add its content to
+	the BBDB buffer rather than replacing it.
+	(bbdb-completion-check-record): removed the dependency on
+	`bbdb-case-fold-search' since completions from the bbdb-hashtable
+	are always lower case.
+	(bbdb-complete-name): fixed cycling when the
+	current completion is equal to one of the nets.
+	Added code for C-u M-TAB which lists all possible nets of current
+	completed addess.  Fixed some special cases by rewriting some
+	"complex" parts of the code.
+	 I personally want to thank the new testing code, here
+	 When will this function finnaly do exactly what it should do?
+	(bbdb-define-all-aliases-mode): new variable controling special
+	aliases, i.e. alias<NUMBER> & alias*.
+	(bbdb-define-all-aliases): (XEmacs only sofar) Clear abbrev-table
+	before defining abbreves and honor new aliases-mode.
+	Automatice rebuilt of aliases if necessary.
+	(bbdb-add-or-remove-mail-alias): after adding or removing an
+	alias, set a flag for rebuilting..
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-display-records-1): enable appending of records.
+	(bbdb-search-intertwingle): Search also for records when no name
+	was given, but just a net.
+	(bbdb-mode-map): bbdb-add-next-search-results bound to +
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-extract-address-component-regexps): Fixed regexp.
+	(bbdb-rfc822-addresses): Fixed autoload string.
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	removed binding of unused variabe `error'.
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-test/switch-to-test-bbdb): use a own known
+	version of a DB for testing, since then we know what to expect
+	as result.
+	(bbdb-test/run-all): Checks now also for the docstring of the var,
+	so we may have testing vars which do not interfere with other
+	vars used in bbdb-test.el.
+	(bbdb-test/run-one-test): Fixed frob* stuff to be more save by
+	using a macros for binding in a let statement.	When running tests
+	this avoids having spoiled the global variables, i.e. after
+	running a test the var does not have its original value, but the
+	last test value.  Additionally test functions may get more
+	arguments, see bbdb-test/bbdb-complete-name, or even none.
+	(bbdb-test/bbdb-complete-name): Added test for the output (common
+	prefix) + completion list.
+	Get the completions by flet bbdb-display-completion-list, which is
+	saver than grabbing them from the buffer.
+	(bbdb-test/bbdb-completion-type): Added more tests + completion
+	list tests.
+	!! Tests are desinged for the BBDB in the testing dir.!!
+
+2002-01-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	BBDB used for the tests in bbd-test.el
+
+2002-01-18  Ronan Waide	 <waider@waider.ie>
+
+	Fix autoload
+
+2002-01-15  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2002-01-15  Ronan Waide	 <waider@waider.ie>
+
+	BBDB-2.35 - Let the games begin.
+
+2002-01-15  Ronan Waide	 <waider@waider.ie>
+
+	Updated manual for 2.34
+
+2002-01-15  Ronan Waide	 <waider@waider.ie>
+
+	2.34 release changes
+
+2002-01-15  Ronan Waide	 <waider@waider.ie>
+
+	2.34 Release. Whee!
+
+2002-01-15  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2002-01-15  Ronan Waide	 <waider@waider.ie>
+
+	New file
+
+2002-01-15  Ronan Waide	 <waider@waider.ie>
+
+	Merged in some changes from the mailing list. Note, this is still
+	experimental.
+
+2002-01-15  Ronan Waide	 <waider@waider.ie>
+
+	Don't fset things that aren't ours Last of compiler warning cleanup 
+	Fixed one more completion bug
+
+2002-01-15  Ronan Waide	 <waider@waider.ie>
+
+	Ignore 'testing' directory when making tarball
+
+2002-01-14  Ronan Waide	 <waider@waider.ie>
+
+	Conditionalise the rmail load
+
+2002-01-14  Ronan Waide	 <waider@waider.ie>
+
+	Make X/Emacs compatibility less intrusive
+
+2002-01-13  Ronan Waide	 <waider@waider.ie>
+
+	Don't force VM on people, even if it is a great mailer...
+
+2002-01-10  Ronan Waide	 <waider@waider.ie>
+
+	Last few fixes (hopefully) to completion
+
+2002-01-10  Ronan Waide	 <waider@waider.ie>
+
+	Make bbdb-rfc822-addresses the default address parser Remove
+	test-harness code to elsewhere (i.e. not in user code!)
+
+2002-01-10  Ronan Waide	 <waider@waider.ie>
+
+	Changed the workaround for set-keymap-prompt, as it seemed to be 
+	clashing with VM. Ideally, all this Emacs/XEmacs stuff should go in a
+	separate file, or at least all in one part of bbdb.el.
+
+2002-01-06  Ronan Waide	 <waider@waider.ie>
+
+	Edits from Karl Fogel (see Changelog)
+
+2002-01-06  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2002-01-06  Ronan Waide	 <waider@waider.ie>
+
+	Compiler cleanup
+
+2002-01-06  Ronan Waide	 <waider@waider.ie>
+
+	Put the 'custom' hacks in bbdb-autoloads Less noise while building
+
+2002-01-06  Ronan Waide	 <waider@waider.ie>
+
+	Compiler cleanup
+
+2002-01-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2002-01-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-extract-address-component-regexps):
+	Replaced the call of bbdb-clean-username by a call to
+	mail-extract-address-components in order to handle addresses of
+	the form "Lastname, Fistname" and "Firstnam Lastname, Jr" in the
+	right way.
+	(bbdb-test/bbdb-extract-address-components): New test function to
+	check if everything is working as it should.
+
+2002-01-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Removed the faulty ;; swap Lastname, Firstname introdice by the last
+	commit.
+
+2002-01-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	bbdb-complete-name): fixed cycling when the
+	current completion is equal to one of the nets.
+	Added code for C-u M-TAB which lists all possible nets of current
+	completed addess. (code was lost during rewrite)
+
+2002-01-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-clean-username): Swap last/first name if written as "Lastname,
+	Fistname".
+
+2002-01-03  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-complete-name): fixed cycling for nets differing only in
+	upper/lower case.
+	The call to (member ...) fails if the current net (which is downcased)
+	has upper case in the list of the nets of the record.
+
+2002-01-01  Ronan Waide	 <waider@waider.ie>
+
+	Fixed two bugs in completion
+
+2001-12-27  Ronan Waide	 <waider@waider.ie>
+
+	Allow mew as an option for sending mail Fix small bug in cycling code 
+	bbdb-completing-read-one-record handles no selection correctly
+
+2001-12-27  Ronan Waide	 <waider@waider.ie>
+
+	Add MEW as an option for bbdb-send-mail-style
+
+2001-12-27  Ronan Waide	 <waider@waider.ie>
+
+	Now compiles cleanly (under GNU Emacs, at least)
+
+2001-12-27  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-12-26  Ronan Waide	 <waider@waider.ie>
+
+	bbdb-complete-name: Mostly rewritten. New version is more consistent
+	about completions, smaller, and more commented.
+
+2001-12-26  Ronan Waide	 <waider@waider.ie>
+
+	New function. More stringent version of bbdb-search-simple, intended for
+	internal bbdb use only
+
+2001-12-12  Ronan Waide	 <waider@waider.ie>
+
+	Fix display of string-only notes (patch from list, name not handy,
+	sorry!) Change bbdb-canonicalize-nets-hook's type to :function (Adrian
+	Aichner)
+
+2001-11-19  Ronan Waide	 <waider@waider.ie>
+
+	Sane defaults for autoconf stuff. See ChangeLog
+
+2001-11-19  Ronan Waide	 <waider@waider.ie>
+
+	Documentation fix Move bbdb/vm-set-auto-folder-alist-field to
+	mua-specific custom group
+
+2001-11-19  Ronan Waide	 <waider@waider.ie>
+
+	Allow '+' in mail addresses Catch unparseable addresses in
+	bbdb-rfc822-addresses
+
+2001-11-19  Ronan Waide	 <waider@waider.ie>
+
+	Added link to bbdb-expire
+
+2001-11-19  Ronan Waide	 <waider@waider.ie>
+
+	Documentation fixes Dead Code removal
+
+2001-11-19  Ronan Waide	 <waider@waider.ie>
+
+	Patch from Alex Schroeder autoload mode maps from message & sendmail
+
+2001-11-19  Ronan Waide	 <waider@waider.ie>
+
+	Patch from Alex Schroeder
+
+2001-11-08  Ronan Waide	 <waider@waider.ie>
+
+	Trying to fix multiple-match completion behaviour
+
+2001-10-14  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb/gnus-pop-up-bbdb-buffer): Move the call to bbdb-display-records
+	back inside the (when...) I had two bug reports for this (Sudesh Joseph
+	and Michael Totschnig).
+
+2001-10-14  Ronan Waide	 <waider@waider.ie>
+
+		Added Nix's patch to make inside-bbdb-notice-hook work as
+	advertised, also other bbdb-expire support.
+	(bbdb-search-simple):
+	Try company name if record name is unset, before falling back to
+	"". (Martin Schwenke)
+
+2001-10-14  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-complete-name): Restored the original code to handle making sure
+	primary addresses get picked first, since the code I'd replaced it with
+	had some dubious side-effects.
+
+	(bbdb-create-internal): Documentation fix. (Ueli Schläpfer)
+
+2001-10-06  Ronan Waide	 <waider@waider.ie>
+
+	Forgot to remove a debugging (error...) statement
+
+2001-09-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-09-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-create-hook), (bbdb-notice-hook):
+	Added a note that hook functions might use the new variables
+	bbdb-update-address-class and bbdb-update-address-header to obtain
+	information about the currently processed email address.
+
+2001-09-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-auto-notes-alist): Additional element
+	type to allow actions also on recipients of an message
+	(bbdb-auto-notes-hook): Fixed to perfom auto-note actions only for
+	authors of a message.  Support for new features of
+	bbdb-auto-notes-alist.	Honor bbdb-silent-running.
+
+2001-09-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-get-header-content): VM specific header
+	extraction function.
+	(bbdb/vm-update-records): bbdb-get-addresses instead of
+	bbdb/vm-get-addresses which was removed.
+	(bbdb/vm-show-all-recipients),
+	(bbdb/vm-show-sender), (bbdb/vm-show-records): modified to use new
+	style of bbdb-get-addresses-headers
+
+2001-09-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/gnus-update-records): uses
+	bbdb-get-addresses instead of bbdb/gnus-get-addresses which was
+	removed.
+	(bbdb/gnus-show-sender), (bbdb/gnus-show-all-recipients),
+	(bbdb/gnus-show-records): modified to use new style of
+	bbdb-get-addresses-headers
+
+2001-09-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-get-addresses-headers): merged
+	bbdb-get-addresses-from-headers	 and bbdb-get-addresses-to-headers
+	into this variable.
+	(bbdb-get-addresses): new generic function for extraction of email
+	addresses from header, which is used by Gnus and VM
+	(bbdb-update-address-class), (bbdb-update-address-header): new
+	variable providing additional information to hook functions about
+	the currently processed email address.
+
+2001-09-16  Ronan Waide	 <waider@waider.ie>
+
+	Fixed bogus fset (fsetting variable instead of 'variable)
+	(bbdb-hack-x-face):
+	use bbdb-find-face, not find-face
+
+2001-09-16  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-initialize):
+	Fixed vm entry. vm-load-hook no longer exists!
+	(bbdb-mode):
+	Removed references to bbdb-elide-record
+
+2001-09-11  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-09-11  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Appliend fixed according to change log
+
+2001-09-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-display-layout-alist): replaced by the nice version
+	provieded by Alex Schroeder <alex@gnu.org>
+	(bbdb-annotate-message-sender): calling of
+	bbdb-create-hook functions moved to the end of function
+
+2001-09-04  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-08-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-08-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-auto-notes-alist): applied posted patch of better customization.
+
+2001-08-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	replaced occureneces of bbdb-elided-display and
+	bbdb-pop-up-elided-display.
+
+2001-08-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(build-bbdb-menu): Fix menus to use new display
+	layout toggeling functions.
+
+2001-08-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-change-records-state-and-redisplay),
+	(bbdb-toggle-all-records-display-layout),
+	(bbdb-toggle-records-display-layout),
+	(bbdb-display-all-records-completely),
+	(bbdb-display-record-completely): modified functions for toggeling
+	the display layout of records.	Old functions bbdb-elide-record
+	and bbdb-unelide-records have been removed.
+
+2001-08-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-display-layout-alist): variable controling options for
+	display layouts, support for user defines format functions still
+	missing.
+	(bbdb-display-layout): variable controling the default display layout
+	(bbdb-pop-up-display-layout): variable controling  the default display
+	layout for pop-up buffers.
+	(bbdb-elided-display), (bbdb-pop-up-elided-display): are obsolete
+	variables now.
+	(bbdb-elided-display-sanity-setup): function which sets up the
+	layout variables from the obsolete bbdb-elided-display and
+	bbdb-pop-up-elided-display variables.  Might be removed along with
+	the variables in the future.
+	(bbdb-format-record): rewitten to support multiple
+	layouts according to bbdb-display-layout-alist
+	(bbdb-format-record-layout-multi-line),
+	(bbdb-format-record-layout-one-line),
+	(bbdb-format-record-one-line-*): Function specific to certain
+	layouts.
+
+2001-08-22  Ronan Waide	 <waider@waider.ie>
+
+	Added .tar.gz to .cvsignore Added a whole bunch of stuff to the FAQ
+
+2001-08-14  Ronan Waide	 <waider@waider.ie>
+
+	Fix for bbdb-hack-x-face
+
+2001-08-03  Ronan Waide	 <waider@waider.ie>
+
+	Clean up some compiler stuff. Remove the things that are defined in cl,
+	and load cl instead.
+
+2001-08-03  Ronan Waide	 <waider@waider.ie>
+
+	Make BBDB respect the order of your net: fields, so that you get the 
+	first completion on the line.
+
+2001-08-03  Ronan Waide	 <waider@waider.ie>
+
+	Allow bbdb-rfc822-addresses to take an optional parameter, so it should
+	now work precisely as I'd originally intended.
+
+2001-08-03  Ronan Waide	 <waider@waider.ie>
+
+	Fixes to make bbdb/srv-add-phone more useful.
+
+2001-08-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-08-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-unelide-record),
+	(bbdb-elide-record-internal):  Modified for more convenient
+	toggeling of the omitted display mode.
+
+2001-07-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-07-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-elide-all-records): New function for the BBDB menu
+	(bbdb-unelide-record):	New function for showing fileds hidden by
+	`bbdb-display-omit-fields'
+	(bbdb-record-edit-field-internal): Added location arg and company
+	field.
+	(bbdb-current-field): Simpified it ti use text-properties for
+	field recognition
+	(bbdb-record-edit-company): New function for editing the records
+	company
+	(bbdb-record-edit-address): Fixed the docs
+	(bbdb-record-edit-phone): Added optional location arg
+	(bbdb-prompt-for-create): Use characters instead of integers for
+	the key-presses and avoid calling char-int.
+
+2001-07-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-field-shown-p): Changed the defsubst to a defun.
+	(bbdb-format-record-elided), (bbdb-format-record-full):	 Replace
+	bbdb-format-record.  They add text-properties to the fields in
+	order to know fields for editing.
+	(bbdb-display-omit-fields): New variable which is a list fields
+	omitted during full display of a record.
+	(bbdb-display-fields-order): New variable specifying to order of
+	fields for during full display of a record.
+	(bbdb-format-elided-phones), (bbdb-format-elided-net): Formating
+	functions for elided display.
+
+2001-07-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(build-bbdb-menu): Added an "(Un)Elide All
+	       Records entry" and content of variable
+	`global-bbdb-menu-commands'
+	       moved into the defun.
+	(bbdb-user-menu-commands): New variable with user menu commands
+	       appended to default menu.
+	(build-bbdb-menu): Add extra menu entry for displaying all fields
+	       when `bbdb-display-omit-fields' is set.
+	(bbdb-menu): Added detection of fields for menu commands.
+
+2001-07-09  Ronan Waide	 <waider@waider.ie>
+
+	I'm sorry, and I'll not rag on folk again for breaking one Emacs or the
+	other. Well, until next time.
+
+2001-07-08  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-07-08  Ronan Waide	 <waider@waider.ie>
+
+	More work on the completion-of-labels stuff. NB I've changed some 
+	variable names. Sorry if you actually used this already, but hey.
+	Bleeding edge.
+
+2001-07-08  Ronan Waide	 <waider@waider.ie>
+
+	More work on the completion-of-labels stuff. NB I've changed some 
+	variable names. Sorry if you actually used this already, but hey.
+	Bleeding edge.
+
+2001-07-08  Ronan Waide	 <waider@waider.ie>
+
+	Made quieter, so it's easier to see compilation problems Fixed
+	gnuserv/bbdb-srv build
+
+2001-07-07  Ronan Waide	 <waider@waider.ie>
+
+	Use bbdb-extract-field-value Minor compiler cleanup
+
+2001-07-07  Ronan Waide	 <waider@waider.ie>
+
+	Use bbdb-extract-address-components-func
+
+2001-07-07  Ronan Waide	 <waider@waider.ie>
+
+	19.34 support mods.
+
+	Use bbdb-extract-address-components-func.
+
+2001-07-07  Ronan Waide	 <waider@waider.ie>
+
+	New customization variable: bbdb-extract-address-components-func - this
+	tells BBDB what function you'd like to use to attempt parsing of the
+	mail addresses.
+
+	New function for use with the above: bbdb-rfc822-addresses. Brute force,
+	but does a pretty good job.
+
+	Fixed some comment and documentation typos.
+
+2001-07-07  Ronan Waide	 <waider@waider.ie>
+
+	Added link to jwz's message describing palm/bbdb conflicts
+
+2001-07-01  Ronan Waide	 <waider@waider.ie>
+
+	Whoops. eval-and-compile, not eval-when-compile.
+
+2001-06-30  Ronan Waide	 <waider@waider.ie>
+
+	Linked FAQ
+
+2001-06-30  Ronan Waide	 <waider@waider.ie>
+
+	Added a few more bits.
+
+2001-06-28  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-06-28  Ronan Waide	 <waider@waider.ie>
+
+	bbdb/mh-cache-key: cope with big inode numbers
+
+2001-06-28  Ronan Waide	 <waider@waider.ie>
+
+	Added Robert Fenk's bbdb/vm-force-create
+
+2001-06-28  Ronan Waide	 <waider@waider.ie>
+
+	Added link to freshmeat page
+
+2001-06-28  Ronan Waide	 <waider@waider.ie>
+
+	Cleaned up a whole bunch of compiler warnings through judicious use of 
+	eval-and-compile or eval-when-compile. If anyone has a good opinion on 
+	use of these functions, please cast enlightenment in my direction.
+
+2001-06-28  Ronan Waide	 <waider@waider.ie>
+
+	Rearranged the compiled quieting to actually be more-or-less the right 
+	thing, i.e. it loads packages instead of defining arbitrary variables.
+
+	Put in Matan Ninio's "From: " fix.
+
+2001-06-28  Ronan Waide	 <waider@waider.ie>
+
+	bbdb-search-simple: don't use bbdb-record-name's result if it's empty.
+
+2001-06-23  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb-mhe.el (bbdb/mh-update-record):
+	* lisp/bbdb-rmail.el (bbdb-insinuate-rmail):
+		 Fixed the faulty use of bbdb/prompt-for-create-p.
+
+2001-06-23  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-06-12  Ronan Waide	 <waider@waider.ie>
+
+	Fix to yesterday's fixed URL. Not my fault, honest.
+
+2001-06-12  Ronan Waide	 <waider@waider.ie>
+
+	Initial cut. This has been sitting on my drive for almost a year; 
+	perhaps if I put it in CVS I'll be "encouraged" to develop it further.
+
+2001-06-11  Ronan Waide	 <waider@waider.ie>
+
+	Better fix for char-int thing. This one works, for starters. Serves me
+	 right for that comment about code testing.
+
+2001-06-10  Ronan Waide	 <waider@waider.ie>
+
+	Obsolete; contents rolled into bbdb-gnus.el
+
+2001-06-10  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-06-10  Ronan Waide	 <waider@waider.ie>
+
+	Fixed URL for Martin Schwenke.
+
+2001-06-10  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-prompt-for-create): Fixed some XEmacsisms to work with
+	 GNUmacs. PLEASE TEST YOUR CODE AGAINST BOTH EMACS VARIANTS BEFORE
+	 CHECKING IT IN.
+	(bbdb-address-edit-default): If no data is entered for the address,
+	 enter a spurious country name. This is a temporary hack to get
+	 around a problem in address display when the address has no data.
+	(general): Fixed the occasional documentation typo.
+	 Added completion for Phone and Address labels.
+	 Added bbdb-default-country as an attempt to stop you from entering
+	   blank addresses. Also because it was requested at some point.
+
+2001-06-10  Ronan Waide	 <waider@waider.ie>
+
+	Allow specifying a list of completions, which causes completing-read
+	 to be invoked instead of read-string.
+
+2001-06-05  Ronan Waide	 <waider@waider.ie>
+
+	Fix tarball build
+
+2001-06-05  Didier Verna  <didier@xemacs.org>
+
+	aclocal.m4, configure.ac: Upgrade to Autoconf 2.50.
+
+2001-06-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb-vm.el (bbdb/vm-update-records):
+	* lisp/bbdb-gnus.el (bbdb/gnus-update-records):
+	Subject: bbdb-get-only-first-address-p patches
+
+2001-06-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-05-31  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb-gnus.el (bbdb/gnus-get-addresses): Fixed the bug which
+	was not really fixed with the commit from the 2001-03-29.
+
+2001-05-23  Didier Verna  <didier@xemacs.org>
+
+	aclocal.m4: fix Emacs detection problem when
+	configuring from an Emacs shell buffer.
+
+2001-05-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/news-auto-create-p):
+	(bbdb/mail-auto-create-p):
+	Fixed a typo.
+
+2001-05-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-05-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-update-records): Fixed a typo.
+
+2001-05-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-05-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-complete-name):
+	(bbdb-complete-name-hooks): Instead of dinging when completing a
+	complete address (and with cycling disabled) call theses hook
+	functions.
+
+2001-05-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-05-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-invoke-hook-for-value): Fix: Return symbols BUT CALL FUNCTIONS!
+
+2001-05-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-05-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/news-auto-create-p): When set to 'promt then ask the user	before
+	automatically creating a record.
+	(bbdb-invoke-hook-for-value): Return symbols just as they are, do not
+	eval them.
+	(bbdb*prompt-for-auto-create-p): Removed the variable and packed its
+	functionality into the bbdb/*-auto-create-p variables.
+
+2001-05-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-update-records): Fixed documentation.
+	(bbdb/vm-update-records-mode): Removed extra quote from the defcustom
+	arguments.
+
+2001-05-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/rmail-pop-up-bbdb-buffer): Remove the BBDB buffer window when
+	empty.
+
+2001-05-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-unmigrate-zip-codes-to-strings): Fixed the faulty use of let
+	instead of let*.
+
+2001-05-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-extract-address-components): Allow also nil as name or email
+	address, not only strings.
+
+2001-05-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-ignore-selected-messages-confirmation): Added the missing	default
+	value nil.
+	(bbdb-force-record-create): New hook function for automatic adding of
+	addresses when replying to a message.
+
+2001-05-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/gnus-update-records-mode): Removed extra quote from the defcustom
+	arguments.
+	(bbdb/gnus-update-records): Fixed documentation.
+
+2001-05-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-update-records-mode): Removed extra quote from the defcustom
+	arguments.
+	(bbdb-update-records): Fixed search for nets and documentation.
+
+2001-04-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-04-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Renamed the variables bbdb-pop-up-elided-display-name-end and
+	bbdb-pop-up-elided-display-fields to bbdb-elided-display-name-end and
+	bbdb-elided-display-fields, as they are not related to the pop-up
+	feature.
+
+2001-04-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	lisp/bbdb-gui.el (bbdb-fontify-buffer): lisp/bbdb.el
+	(bbdb-elided-display-fields):
+	Renamed the variables bbdb-pop-up-elided-display-name-end and
+	bbdb-pop-up-elided-display-fields to bbdb-elided-display-name-end and
+	bbdb-elided-display-fields, as they are not related to the pop-up
+	feature.
+
+2001-04-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-04-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Added missing docs for the variables bbdb-pop-up-elided-display-name-end
+	and bbdb-pop-up-elided-display-fields
+
+2001-04-16  Ronan Waide	 <waider@waider.ie>
+
+	BSD Compatibility fix! Make sure RM is set in Makefiles.
+
+2001-04-16  Ronan Waide	 <waider@waider.ie>
+
+	Whoops. Stray quote mark.
+
+2001-04-15  Ronan Waide	 <waider@waider.ie>
+
+	Added John F. Whitehead's default mail domain patch. Hack around some
+	silliness in GNU Emacs completion code
+
+2001-04-15  Ronan Waide	 <waider@waider.ie>
+
+	Added emacs-version to bug report text. Added John F. Whitehead's
+	default-domain patch.
+
+2001-03-30  Ronan Waide	 <waider@waider.ie>
+
+	Fix list-vs-not bug in bbdb/gnus-edit-notes
+
+2001-03-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-03-29  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/gnus-get-addresses): Fixed a bug in getting the header content.
+	!mail-fetch-field requires a final newline!
+
+2001-03-26  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-03-26  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb.el (bbdb-message-cache-lookup):
+	* lisp/bbdb-gnus.el (bbdb/gnus-update-records):
+	* lisp/bbdb-vm.el (bbdb/vm-update-records):
+	YABugfix: first record was lost when looking it up from the
+	cache.
+
+2001-03-26  Ronan Waide	 <waider@waider.ie>
+
+	Added instructions for running from CVS and from source. Removed
+	direction to copy .tex and .el files as they're not required
+	 for a working installation.
+
+2001-03-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-03-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb.el (bbdb-message-cache-lookup):
+	Removed the faulty single record code for Rmail/MHE
+
+	* lisp/bbdb-mhe.el (bbdb/mh-update-record):
+	Bugfix for new caching functions
+
+	* lisp/bbdb-rmail.el (bbdb/rmail-update-records):
+	Another bugfix: check for nil before caching
+
+2001-03-25  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb-gnus.el (bbdb/gnus-show-sender):
+	* lisp/bbdb-vm.el (bbdb/vm-show-sender):
+	Show recipients if we find no senders
+
+	* lisp/bbdb-vm.el (bbdb/gnus-show-records):
+	* lisp/bbdb-vm.el (bbdb/vm-show-records):
+	Also show the records of uninteresting senders
+
+2001-03-25  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-03-25  Ronan Waide	 <waider@waider.ie>
+
+	Fix some bugs related to new message caching functions.
+
+2001-03-23  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-03-23  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-search-simple): Fix silly bug with list-walking (Daniel Pittman)
+
+2001-03-23  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-03-23  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb-vm.el (bbdb/vm-update-records):
+	* lisp/bbdb-gnus.el (bbdb/gnus-update-records):
+	* lisp/bbdb-com.el (bbdb-update-records): honor the right
+	offer-to-create flag and removed the faulty *-auto-create-p
+	which was added by the last commit.
+
+2001-03-22  Ronan Waide	 <waider@waider.ie>
+
+	Fix the priority stuff. You should be able to highlight individual 
+	fields and edit them on GNU Emacs again.
+
+2001-03-22  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-show-records): bbdb/mail-auto-create-p
+	is loacally set to t in order to force creation of records when
+	explicitly showing them.
+
+2001-03-22  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-03-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-prompt-for-create): bugfid for XEmacs introduced with the GNU
+	Emacs fix
+
+2001-03-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-prompt-for-create): fix a bug with GNU Emacs.
+
+2001-03-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-03-20  Ronan Waide	 <waider@waider.ie>
+
+	Remove what was presumably a debug occurrence of (message...)
+
+2001-03-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-03-19  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-update-records): honors now bbdb-gag-messages; fixed the overall
+	number
+	in the progress	message.
+
+2001-03-19  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-header-start): Check for vm-presentation-mode as well as vm-mode 
+	and vm-summary-mode (Nicolas Rennert)
+
+2001-03-18  Ronan Waide	 <waider@waider.ie>
+
+	bbdb/gnus-get-addresses: gnus-ignored-from-addresses is not defined in
+	 the Gnus that comes with Emacs 20.7. Check for boundness before using.
+
+2001-03-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Variable/function changes as documented in the ChangeLog entry 
+	2001-03-17  Robert Fenk	 <fenk@forwiss.de>
+
+2001-03-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-redisplay-records): unused variable condition removed
+
+	(bbdb-delete-current-field-or-record): unused variable do-all-p removed
+
+	(bbdb-refile-record): called with a prefix arg it tries to merge
+	with the corresponding duplicate record
+
+	(bbdb-display-completion-list): Use the call back
+	'bbdb-complete-clicked-name when running in Xemacs, thus to
+	further complete after the user selects a completion.
+
+	(bbdb-complete-name):
+	(bbdb-complete-name-full-completion): new variable controlling
+	whether completion shows expanded entries or not.  This avoids
+	the need for subsequent completions, but might generate more
+	completion alternatives.
+
+	(bbdb-prompt-for-create):
+	(bbdb-prompt-for-create):
+	(bbdb-get-help-window):
+	(bbdb-update-records): functions used to update BBDB records from
+	headers of messages in Gnus and VM (RMail and MHE may eventually
+	follow).  Those functions have been renamed and moved from
+	bbdb-vm.el to this location.
+
+	(bbdb-update-records-mode):
+	(bbdb-offer-to-create):
+	(bbdb-address):
+	(bbdb-get-addresses-from-headers):
+	(bbdb-get-addresses-to-headers):
+	(bbdb-get-addresses-headers):
+	(bbdb-get-only-first-address-p): variables for generic
+	update-records support in Gnus and VM.	Those variables have been
+	renamed and moved from bbdb-vm.el to this location.
+
+2001-03-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-merge-file): unused variable 'live-records removed
+
+2001-03-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-pop-up-elided-display):
+	(bbdb-pop-up-elided-display): changed to require no unbound
+	bbdb-pop-up-elided-display
+
+	(bbdb-message-cache-lookup):
+	(bbdb-encache-message): Once again functions to replace the old
+	macros.	 This was necessary as the old macros were not sufficient
+	for the new update mechanism, were we have a list of records.
+
+2001-03-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-load-touchtones): unused variale 'error removed
+
+2001-03-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb-vm.el (bbdb/vm-get-addresses): was formally bbdb/vm-get-from
+	(bbdb/vm-get-from-headers):
+	(bbdb/vm-get-only-first-from-p):
+	(bbdb/vm-message-cache-lookup):
+	(bbdb/vm-encache-message): have been removed, global variables and
+	functions are used now
+
+	(bbdb/vm-show-sender): when called with a prefix call
+	bbdb/vm-show-all-recipients instead, so we use the same binding
+	for getting both.
+	(bbdb/vm-show-records): new function doing the bbdb/vm-show-*
+	thing and caring for updating the records.
+
+	(bbdb/vm-snarf-all):
+	(bbdb/vm-snarf-all-headers): have been removed as the
+	bbdb/vm-show-* function provide the same functionality
+
+	* lisp/bbdb-gnus.el: the same changes as for bbdb-vm.el
+
+2001-03-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-snarf-region): Unused variables
+	'country and 'namebegin removed
+
+	(bbdb-snarf-nice-real-name-regexp):
+	(bbdb-snarf-nice-real-name): removed and calls replaced by
+	bbdb-clean-username which is more sophisticated
+
+2001-03-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb-mhe.el:
+	* lisp/bbdb-rmail.el: uses the new caching functions + some
+	other minor changes
+
+2001-03-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Definition of some variable in order to avoid warnings during
+	compilation
+
+2001-03-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-03-04  Ronan Waide	 <waider@waider.ie>
+
+	Forgot to change the release date. (Urban Boquist)
+
+2001-03-04  Ronan Waide	 <waider@waider.ie>
+
+	Bumped version again, for new developer version.
+
+2001-03-04  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-03-04  Ronan Waide	 <waider@waider.ie>
+
+	Version number update for release.
+
+2001-03-04  Ronan Waide	 <waider@waider.ie>
+
+	Updates for BBDB 2.32
+
+2001-03-04  Ronan Waide	 <waider@waider.ie>
+
+	Add a buffer-coding tag. (Yair Friedman)
+
+2001-03-04  Ronan Waide	 <waider@waider.ie>
+
+	Initial cut at this (Yair Friedman)
+
+2001-03-04  Ronan Waide	 <waider@waider.ie>
+
+	Require bbdb-com (for bbdb-parse-phone-number) Stop from loading .bbdb
+	when compiling!
+
+2001-03-04  Ronan Waide	 <waider@waider.ie>
+
+	Mark bbdb/sc-default for autoload. Not sure this is entirely the right
+	thing.
+
+2001-03-04  ShengHuo ZHU  <zsh@cs.rochester.edu>
+
+	set max-lisp-eval-depth. From "Yair Friedman (Jerusalem)"
+	<YAIRFR@amdocs.com>
+
+2001-03-04  Ronan Waide	 <waider@waider.ie>
+
+	">>" and ">" transposed. (Yair Friedman)
+
+2001-03-03  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-03-03  Ronan Waide	 <waider@waider.ie>
+
+	bbdb-search-simple: check that the name actually matchs (not company)
+
+2001-03-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	bbdb.el (bbdb-submit-bug-report): A function for submitting bug
+	reports, which should make it easier for reportes and maintaines
+	to give and have all necessary information.  Additional variables
+	may have to be add and a remark in the documentation to use this
+	function when reporting problems.
+
+2001-03-01  Ronan Waide	 <waider@waider.ie>
+
+	More bits, possibly incompatible with 2.00.06. Use at own risk.
+
+2001-02-25  Ronan Waide	 <waider@waider.ie>
+
+	I corrected something that wasn't a bug. (provide.. ) was in the right
+	place.
+
+2001-02-25  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-02-25  ShengHuo ZHU  <zsh@cs.rochester.edu>
+
+	texinfo-format-buffer knows detailmenu. Thanks to Yair Friedman
+	(Jerusalem)" <YAIRFR@amdocs.com>.
+
+2001-02-25  ShengHuo ZHU  <zsh@cs.rochester.edu>
+
+	*** empty log message ***
+
+2001-02-25  ShengHuo ZHU  <zsh@cs.rochester.edu>
+
+		* texinfo/bbdb.texinfo: Format it so that texinfo-format-buffer
+	can parse it.
+
+		* texinfo/infohack.el: New.
+
+		* texinfo/Makefile.in (Makefile): Add.
+	(bbdb.info): Use batch-makeinfo if there is no makeinfo.
+
+2001-02-25  Ronan Waide	 <waider@waider.ie>
+
+	Shouldn't have been in here in the first place. Sorry 'bout that.
+
+2001-02-23  Ronan Waide	 <waider@waider.ie>
+
+	call `bbdb/gnus-pop-up-bbdb-buffer' instead of `bbdb/gnus-update-record'
+	(bbdb/gnus-pop-up-bbdb-buffer): use `gnus-buffer-configuration' instead
+	 of the obsolete `gnus-window-configuration'.
+
+2001-02-21  Ronan Waide	 <waider@waider.ie>
+
+	Restore old bbdb-message-cache macros as replacement functions were
+	buggy.
+
+2001-02-21  Sam Steingold  <sds@goems.com>
+
+	(bbdb-gui): new user option
+
+2001-02-21  Sam Steingold  <sds@goems.com>
+
+	do not add bbdb-fontify-buffer to bbdb-list-hook (done in bbdb.el)
+
+2001-02-21  Ronan Waide	 <waider@waider.ie>
+
+	Use add-hook to load bbdb-gui by side-effect
+
+2001-02-21  Ronan Waide	 <waider@waider.ie>
+
+	Put the (provide 'bbdb-autoloads) line in the right place.
+
+2001-02-21  Ronan Waide	 <waider@waider.ie>
+
+	Stop BBDB from adding AKAs when you tell it you don't want them.
+
+2001-02-20  Sam Steingold  <sds@goems.com>
+
+	(bbdb-extent-face): use `overlay-get', not `extent-property'
+	(bbdb-set-extent-face): use `overlay-put', not `set-extent-property'
+
+2001-02-20  Sam Steingold  <sds@goems.com>
+
+	Fixed the overlay bug in GNU Emacs. As documented, 3 is higher priority
+	than 2!
+	(bbdb-main-extent-priority): new variable
+	(bbdb-fontify-buffer): use it Also, do not quote lambdas since they are
+	not compiled
+	when quoted (at least in GNU Emacs!)
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	Now that I've fixed bbdb-gui properly, reenable the load hook.
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	Final few tweaks to function names to avoid upsetting things.
+
+2001-02-19  Sam Steingold  <sds@goems.com>
+
+	(bbdb-list-extents): use `nconc', not `append',
+	since we know that the lists are new
+	(bbdb-extent-property, bbdb-highlight-extent,
+	bbdb-extent-start-position, bbdb-extent-end-position): define
+	[were undefined due to a typo]
+	(bbdb-set-extent-begin-glyph, bbdb-set-extent-end-glyph):
+	`fset' to `ignore' insted of redefining with `defun'
+
+2001-02-19  ShengHuo ZHU  <zsh@cs.rochester.edu>
+
+	Makefile.in (bbdb-autoloads.el): Change the order.
+
+2001-02-19  ShengHuo ZHU  <zsh@cs.rochester.edu>
+
+		* lisp/Makefile.in (bbdb-autoloads.el): Insert (provide
+	'bbdb-autoloads) when generated by FSF Emacs.
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	Temporarily disable loading of bbdb-gui, since there's an interaction 
+	bug with VM right now. Non-serious, but annoying.
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	VM appears to get upset with bbdb-extent-at switching around buffers.
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	Automatically pull in the GUI stuff, now that I seem to have caught all
+	the typos.
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	Faulty bracing in touchtone code.
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	Final typo correction, I promise.
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	More typo. Thanks to Dan Pittman for spotting these.
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	whoops. typo.
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	doco typo fixo
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	bbdb-electric-p defaults to off. require 'bbdb-autoloads instead of
+	loading them. bbdb-whois moved from M-w to W so you can do copies in
+	*BBDB* moved some XEmacs-stuff to bbdb-gui, where it's Emacs-agnostic
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	Moved font and menu stuff to bbdb-gui.el
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	Added target for bbdb-gui
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	Menu and font hackery. Works in Emacs as well as XEmacs.
+
+2001-02-19  Ronan Waide	 <waider@waider.ie>
+
+	Quick fix for LN_S not being defined. Perhaps it's even the correct fix.
+
+2001-02-14  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-14  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	bbdb/vm-update-records): Fixed bug of calling
+	message with wrong argument.
+
+2001-02-14  Ronan Waide	 <waider@waider.ie>
+
+	Whoops. Missed a close paren.
+
+2001-02-14  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-02-14  Ronan Waide	 <waider@waider.ie>
+
+	Some more defcustom stuff (Alex Schroeder)
+
+2001-02-14  Ronan Waide	 <waider@waider.ie>
+
+	Some defvars changed to defcustoms bbdb-add-or-remove-mail-alias
+	documented in mode help (Alex Schroeder)
+
+2001-02-14  Ronan Waide	 <waider@waider.ie>
+
+	Documentation for zipcode stuff (Alex Schroeder)
+
+2001-02-14  Ronan Waide	 <waider@waider.ie>
+
+	Empty string is a valid Zip code (Alex Schroeder)
+
+2001-02-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	- display-message macro removed
+	- fix defcustom type for bbdb-pop-up-elided-display-fields
+
+2001-02-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-update-records): replaced display-message calls by
+	message calls which is more portable.
+
+2001-02-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Applied ShengHuos patch to fix the customize problems caused by defining
+	'characterp as a mcaro im GNU Emacs
+
+2001-02-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-13  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-complete-name):
+	(bbdb-complete-name-allow-cycling): Allow to enable/disable the
+	cycling of nets.  Default is disabled, as there are some strange
+	problems with GNU Emacs.
+
+2001-02-11  ShengHuo ZHU  <zsh@cs.rochester.edu>
+
+		* lisp/bbdb-snarf.el (replace-in-string): Fix the argument order
+	of replace-regexp-in-string.
+
+2001-02-10  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-02-10  Ronan Waide	 <waider@waider.ie>
+
+	Seems like the change to bbdb-undisplay-records fixes the VM window
+	problem.
+
+2001-02-10  Ronan Waide	 <waider@waider.ie>
+
+	Fixed bbdb-undisplay-records. bbdb-buffer-name is /not/ a buffer!
+
+2001-02-08  Sam Steingold  <sds@goems.com>
+
+	doc fix
+
+2001-02-08  Sam Steingold  <sds@goems.com>
+
+	doc fixes
+
+2001-02-08  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-annotate-message-sender):
+	Applied bugfix for adding new net addresses, which was broken by
+	the new featue of creating a new record if the address does not
+	belong to the existing record.
+	(bbdb-display-records):
+	(bbdb-display-records-1):
+	run the hooks 'bbdb-list-hook in bbdb-display-records-1, instead
+	of bbdb-display-records, in order to call them also for electric
+	display.
+
+2001-02-08  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-07  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-02-07  Ronan Waide	 <waider@waider.ie>
+
+	(ding) if there's nothing in mail-abbrevs either.
+
+2001-02-07  Ronan Waide	 <waider@waider.ie>
+
+	Only call the sit-for bugfix in fsfemacs.
+
+2001-02-07  ShengHuo ZHU  <zsh@cs.rochester.edu>
+
+	Use field-separator.
+
+2001-02-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-complete-name): Fxed bug which showed
+	its effect only with GNU Emacs.
+	(bbdb-add-or-remove-mail-alias): Better prompt.
+
+2001-02-07  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-05  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-05  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-hooks.elc): removed need to load VM.
+
+2001-02-05  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-05  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Removed faulty replace-in-string.
+
+2001-02-03  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-annotate-message-sender): Changed the creation of new "duplicate
+	records to
+	honor the value of bbdb-always-add-addresses.
+
+2001-02-03  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-03  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-message-cache-lookup), (bbdb-encache-message):
+	       Replaced the unreadable macros by a function in order to use it
+	       also for bbdb-vm.el.
+	(bbdb-decache-message): new function to remove an element from the
+	cache.
+	(bbdb-annotate-message-sender): Added creation of a new "duplicate"
+	       record when the given email address does not belong to the
+	       existing one.
+
+2001-02-02  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-find-duplicates): Fixes records without a
+	name and adds additional messages in order to understand the
+	duplicates.
+
+2001-02-02  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-02  Didier Verna  <didier@xemacs.org>
+
+	XEmacs Package installation fixes
+
+2001-02-02  Didier Verna  <didier@xemacs.org>
+
+	makefile for utils dir
+
+2001-02-02  Didier Verna  <didier@xemacs.org>
+
+	makefile for tex dir
+
+2001-02-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-mode-map): Added elide-records binding
+	for button2
+
+2001-02-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	bbdb-mail-abbrev-expand-hook): honor the
+	pop-up settings, e.g. bbdb-pop-up-target-lines
+
+2001-02-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-02-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* lisp/bbdb-vm.el (bbdb/vm-pop-up-bbdb-buffer): Fixed the pop-up
+	behaviour.
+
+2001-01-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	lisp/bbdb-com.el (bbdb-complete-name): Fixes completion problem
+	       slipped into with revision 1.89
+
+2001-01-29  Ronan Waide	 <waider@waider.ie>
+
+	Added autoload cookie for bbdb-ignore-selected-messages-hook
+
+2001-01-29  Ronan Waide	 <waider@waider.ie>
+
+	Include configure in ignored files.
+
+2001-01-25  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-01-25  Ronan Waide	 <waider@waider.ie>
+
+	Updates for 2.2
+
+2001-01-25  Ronan Waide	 <waider@waider.ie>
+
+	Updates for 2.2 release
+
+2001-01-25  Ronan Waide	 <waider@waider.ie>
+
+	Changed version to 2.3, which is now the official developer release.
+
+2001-01-24  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-01-24  Ronan Waide	 <waider@waider.ie>
+
+	Added distclean target
+
+2001-01-24  Ronan Waide	 <waider@waider.ie>
+
+	Removed test targets as they weren't helpful Added some new cleaning
+	targets, including distclean
+
+2001-01-24  Ronan Waide	 <waider@waider.ie>
+
+	New cleanup targets
+
+2001-01-24  Ronan Waide	 <waider@waider.ie>
+
+	Define caddar if it's not found. Yeesh. How hard is it to do
+	(car (cdr ...)) anyway?
+
+2001-01-24  Ronan Waide	 <waider@waider.ie>
+
+	Add-ons that didn't make it to the current release.
+
+2001-01-24  Sam Steingold  <sds@goems.com>
+
+	(replace-in-string): Emacs 21 has `replace-regexp-in-string' - use it!
+
+2001-01-24  Sam Steingold  <sds@goems.com>
+
+	ignore Makefiles
+
+2001-01-24  Sam Steingold  <sds@goems.com>
+
+	initial checkin
+
+2001-01-24  Sam Steingold  <sds@goems.com>
+
+	lisp/bbdb-merge.el (bbdb-merge-file): bugfix: the parameter for
+	`match-fun' is `rec', not `r'
+
+2001-01-24  Ronan Waide	 <waider@waider.ie>
+
+	Use geektools.com instead of rs.internic.net Slightly smarter parsing of
+	results
+
+2001-01-24  Ronan Waide	 <waider@waider.ie>
+
+	Add support for M-TAB to expand mail aliases
+
+2001-01-24  Ronan Waide	 <waider@waider.ie>
+
+	Don't look for email completions when there are none!
+
+2001-01-24  Ronan Waide	 <waider@waider.ie>
+
+	Don't load touchtones if the touchtones directory is unset.
+
+2001-01-22  Ronan Waide	 <waider@waider.ie>
+
+	Check that an AKA is not already in the list before adding it
+
+2001-01-18  Ronan Waide	 <waider@waider.ie>
+
+	Minor typo fix
+
+2001-01-18  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2001-01-18  Ronan Waide	 <waider@waider.ie>
+
+	* Proper fix for VM windowing bug
+
+2001-01-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2001-01-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-complete-name):
+	If the completion is done then cycle thru the nets or when called
+	with a prefix arg then display a list of all nets.
+	(bbdb-dial-local-prefix-alist):
+	Used to replace parts of the number depending on a regexp.
+	(bbdb-modem-dial): command used for dialing with the modem.
+	(bbdb-modem-device): the modem device
+	(bbdb-dial-number): new function which performs the dialing of a
+	number.	 Depending on the settings it uses the play command,
+	native Xemacs sound support or the modem device.
+	(bbdb-dial): modified in order to use the new stuff
+
+2001-01-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-sounds-directory):
+	(bbdb-sound-volume):
+	(bbdb-load-touchtones):
+	Added variables & functions for Xemacs native sound support
+	used by	bbdb-dialing stuff
+
+2001-01-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-www-grab-homepage):
+	Fix to read just one record not a list of records
+
+2001-01-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-update-record):
+	Restored old behavior of returning one record
+	(bbdb/vm-update-records-mode):
+	(bbdb/vm-update-records):
+	Enhanced in order to allow annotating only new messages, which is
+	now the default.  This avoids the annoying questions repetition
+	weather to add records for unknown persons after restarting a
+	VM session.
+
+2001-01-17  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-always-add-addresses): Docfix
+
+2001-01-08  Ronan Waide	 <waider@waider.ie>
+
+	Minor change to make it work again.
+
+2001-01-08  Ronan Waide	 <waider@waider.ie>
+
+	Corrected pointers to mailing lists.
+
+2001-01-08  Didier Verna  <didier@xemacs.org>
+
+	configure script from autoconf 2.13
+
+2001-01-08  Didier Verna  <didier@xemacs.org>
+
+	Autoconf support
+
+2001-01-08  Didier Verna  <didier@xemacs.org>
+
+	Autoconf support documentation
+
+2001-01-08  Didier Verna  <didier@xemacs.org>
+
+	removed files for autoconf support
+
+2001-01-08  Didier Verna  <didier@xemacs.org>
+
+	new files for autoconf support
+
+2001-01-08  Ronan Waide	 <waider@waider.ie>
+
+	Fixed commented-out items in TODO section.
+
+2001-01-08  Ronan Waide	 <waider@waider.ie>
+
+	Added Bill Carpenter-provided function
+	 'bbdb-ignore-selected-messages-confirmation'
+
+2001-01-03  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-dial) Change docstring for bbdb-dial Remove check for window
+	system
+
+2001-01-03  Ronan Waide	 <waider@waider.ie>
+
+	* Removed some things from the TODO list
+	* Removed the Log section
+	* Added xref from BBDB Mailing Lists to Using BBDB to implement Mailing
+	Lists
+	* A few other minor tweaks
+
+2001-01-03  Ronan Waide	 <waider@waider.ie>
+
+	Updated the links section; some other minor changes.
+
+2000-12-31  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-12-31  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-undisplay-records) Don't try to use *BBDB* buffer if it doesn't
+	exist.
+
+2000-12-18  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-12-18  Ronan Waide	 <waider@waider.ie>
+
+	* Added definition for cadar.
+	* Docu typo in bbdb-elided-display
+	* If bbdb-display-records isn't appending, clear the buffer
+	* bbdb-undisplay-records erases the buffer
+	* bbdb-insinuate-message now hooks on message-setup-hook
+
+2000-12-18  Ronan Waide	 <waider@waider.ie>
+
+	Small change to get around an apparent emacs windowing bug.
+
+2000-11-27  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-11-27  Ronan Waide	 <waider@waider.ie>
+
+	Alex's zipcode changes. WARNING: New database format.
+
+2000-11-16  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Just minor fixes.
+
+2000-11-16  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-fontify-buffer): Fixed fontification
+	for elided display.
+
+2000-11-16  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	((fboundp 'display-message)): added macro for
+	display-message (for GNU Emacs) used for progress reports in
+	bbdb-vm.el
+	(bbdb-format-record): fixed display for elided display
+
+2000-11-16  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-update-records): Uses display-message
+	for progress report and honor bbdb-silent-running.
+	(bbdb/vm-snarf-all): removed faulty "second" call of
+	bbdb-update-records
+
+2000-11-16  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-extract-address-component-regexps):
+	added recognition of true names form addresses like
+	Robert.Fenk@gmx.de, in order to avoid creation of duplicate
+	records.
+
+2000-11-16  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-extract-field-value): added
+	(case-fold-search t) as headers should be checked case insensitive
+
+2000-11-16  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-show-all-recipients): simplified the function and added missing
+	headers
+
+2000-11-07  Ronan Waide	 <waider@waider.ie>
+
+	Doc fix (Martin Buchholz)
+
+2000-11-06  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-11-06  Ronan Waide	 <waider@waider.ie>
+
+	Respect value of bbdb-use-pop-up.
+
+2000-11-06  Ronan Waide	 <waider@waider.ie>
+
+	Corrected mirror link.
+
+2000-11-02  Ronan Waide	 <waider@waider.ie>
+
+	Define characterp if it's not already bound. Used in bbdb-vm.
+
+2000-11-02  Sam Steingold  <sds@goems.com>
+
+	(bbdb-hashtable-size): call `bbdb-records' only when it is defined
+
+2000-11-01  Sam Steingold  <sds@goems.com>
+
+	(bbdb-hashtable-size): new custom variable
+	(primep): define if not defined already
+	(bbdb-records): use `bbdb-hashtable-size' when initializing
+	`bbdb-hashtable'
+
+2000-10-30  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(display-message 'progress mess) does not exist for FSF Emacs, therefore
+	we polluted the message log by calling (message mess).
+
+2000-10-27  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2000-10-27  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-fontify-buffer): changed in order to meet flexible
+	`bbdb-pop-up-elided-display-name-end'.
+
+2000-10-27  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-update-records): Searching for	existing records is limited to
+	the
+	net, as a search for a name may	no return the right record.
+	Adding of new records can be controlled similar to query-replace,
+	with y,!,n,s,q
+	The new variable `bbdb/prompt-for-create-p' can be set to `t' in
+	order to force VM to ask the user before adding a new BBBD record,
+	caused by the automatic update of the popup buffer.
+
+2000-10-27  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/prompt-for-create-p):
+	The new variable `bbdb/prompt-for-create-p' can be set to `t' in
+	order to force VM, Gnus, MHE, RMAIL to ask the user before adding a
+	new BBBD record, caused by the automatic update of the popup buffer.
+	(bbdb-pop-up-elided-display-name-end): A new variable which
+	controls for elided display where the "name - company" pair
+	usually ends and where we start to display phone numbers and the
+	like.
+	(bbdb-pop-up-elided-display-fields): A new variable controlling
+	what fields are displayed in elided display.  Users may write
+	their own formating functions. (kind of experimental by now)
+
+2000-10-27  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	The new variable `bbdb/prompt-for-create-p' can be set to `t' in order
+	to force VM, Gnus, MHE, RMAIL to ask the user before adding a new BBBD
+	record, caused by the automatic update of the popup buffer.
+
+2000-10-27  Ronan Waide	 <waider@waider.ie>
+
+	Fixed silly bug that stopped auto-noticing from working at all. Doh.
+
+2000-10-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-complete-name): minor bugfix for cycling of addresses.
+
+2000-10-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2000-10-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-extract-address-components): added an optional argument
+	`ignore-errors'.
+
+2000-10-20  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-complete-name): If there are multiple nets and the address is
+	already
+	completed then cycle trough the list of nets.
+
+2000-10-15  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-10-15  Ronan Waide	 <waider@waider.ie>
+
+	Fix to allow building with Martin Schwenke's gnuserv.
+
+2000-10-15  Ronan Waide	 <waider@waider.ie>
+
+	Fixed to work with newer version of gnuserv provided by Martin Schwenke
+	and downloadable from 
+	http://linuxcare.com.au/people/martins/hacks/emacs/
+
+2000-10-15  Ronan Waide	 <waider@waider.ie>
+
+	Cleaned up some of the customization stuff. Fixed handling of
+	vm-uninteresting-senders
+
+2000-10-15  Ronan Waide	 <waider@waider.ie>
+
+	Cleaned up some of the customization stuff.
+
+2000-10-15  Ronan Waide	 <waider@waider.ie>
+
+	Added Brian Edmonds' filing hackery, modified to fit in bbdb's concept 
+	of a namespace. Cleaned up some compiler noise.
+
+2000-10-15  Ronan Waide	 <waider@waider.ie>
+
+	Fixed the compose-mail selection for bbdb-send-mail-style. Thanks to 
+	Raymond Scholz for pointing out that it wasn't actually working.
+
+2000-09-20  Ronan Waide	 <waider@waider.ie>
+
+	Fix primary-or-name search to pay attention to bbdb-case-fold-search 
+	when checking names. (bug report: Eli Tziperman)
+
+2000-09-12  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2000-09-12  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb/vm-snarf-all): fixed wrong documentation
+
+2000-09-12  Ronan Waide	 <waider@waider.ie>
+
+	Added "BBDB Development Team" to the list at the start. Fixed 'missing
+	node' problem with older versions of makeinfo. Added Kai's example of
+	working around the ispell key-mapping conflict.
+
+2000-09-11  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-09-11  Ronan Waide	 <waider@waider.ie>
+
+	Reinstated 2.00.06 behaviour of creating a record if necessary when :
+	 is pressed Added new function, bbdb/vm-show-all-recipients, to do the
+	necessary
+	 fandango to show recipients for the current message. Map it to
+	 something in vm-mode-map if you wish to use it. I'd suggest "'".
+
+2000-09-08  Sam Steingold  <sds@goems.com>
+
+	(bbdbq-mk): new function
+
+2000-09-08  Ronan Waide	 <waider@waider.ie>
+
+	Daniel Pittman's patch does indeed override Alex's!
+
+2000-09-07  Ronan Waide	 <waider@waider.ie>
+
+	Daniel Pittman's autoload patch. May make Alex's patch obsolete.
+
+2000-09-07  Ronan Waide	 <waider@waider.ie>
+
+	Alex Coventry's patch to fix compile-vs-runtime autoloads
+
+2000-09-03  Ronan Waide	 <waider@waider.ie>
+
+	Default completed name to an empty string to avoid error
+
+2000-08-29  Ronan Waide	 <waider@waider.ie>
+
+	Check if vm-summary-uninteresting-senders is a string before using it
+
+2000-08-28  Ronan Waide	 <waider@waider.ie>
+
+	Changed [(meta...)] keybindings to "\M-..."
+
+2000-08-28  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-08-28  Ronan Waide	 <waider@waider.ie>
+
+	Fix for bbdb-autoloads.el and Xemacs
+
+2000-08-28  Ronan Waide	 <waider@waider.ie>
+
+	Moved bbdb-insinuate-message out to bbdb.el to prevent gnus startup
+	looping
+
+2000-08-28  Ronan Waide	 <waider@waider.ie>
+
+	Moved bbdb-insinuate-message into this file to prevent gnus startup
+	looping Changed \M-\t to [(meta tab)]
+
+2000-08-25  Ronan Waide	 <waider@waider.ie>
+
+	Added link to Martin's bbdb-gnokii.el
+
+2000-08-25  Ronan Waide	 <waider@waider.ie>
+
+	Updated the HTML version of the manual. Fixed broken stylesheet
+	reference in web page. Added link for Noah Friedman's copy of jwz's
+	bbdb-pilot.el Fixed link to Alex's page.
+
+2000-08-25  Ronan Waide	 <waider@waider.ie>
+
+	Cache the fact that you didn't want to create an entry for someone, so 
+	you don't get prompted repeatedly. Also removed changelog from file.
+
+2000-08-21  Ronan Waide	 <waider@waider.ie>
+
+	Fix an error in VM doco that prevented file from building
+
+2000-08-21  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Removed the faulty autoload.
+
+2000-08-19  Ronan Waide	 <waider@waider.ie>
+
+	Rearrange Lastname, Firstname even if it's not in quotes.
+
+2000-08-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Restored the previous version of bbdb-annotate-message-sender, since the
+	change was not exactly doing what it should do.
+
+2000-08-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	*** empty log message ***
+
+2000-08-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	`bbdb-annotate-message-sender' was changed in order to ask the user for
+	adding new addresses to net only if `create-p' is `t'.
+
+2000-08-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	`bbdb/vm-get-only-first-from-p' was renamed to
+	`bbdb/vm-get-first-from-p' which is more self explanatory.
+
+	The default value of `bbdb/vm-get-only-first-from-p' is `t' in order to
+	keep
+	the old BBDB behavior.
+
+	`bbdb/vm-get-from' was partially rewritten in order to make it more
+	readable.
+
+2000-08-18  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	* texinfo/bbdb.texinfo (VM Features): Documentation of new VM
+	features.
+
+2000-08-18  Ronan Waide	 <waider@waider.ie>
+
+	Fixed a minor bug related to retrieving empty records from cache
+
+2000-08-14  Sam Steingold  <sds@goems.com>
+
+	* lisp/bbdb-com.el: require `cl' at compile time for `flet'
+	(bbdb-add-or-remove-mail-alias): use `let', not `setq'
+	(bbdb-send-mail-internal): fixed call to `vm-mail-internal'
+
+2000-08-12  Ronan Waide	 <waider@waider.ie>
+
+	Don't return an empty string as the name or address, return nil.
+
+2000-08-11  Sam Steingold  <sds@goems.com>
+
+	* lisp/bbdb.el (bbdb-save-db): fixed the calling sequence of
+	`y-or-n-p-with-timeout'
+
+2000-08-11  Sam Steingold  <sds@goems.com>
+
+	* lisp/bbdb-snarf.el (bbdb-extract-address-components): use
+	`bbdb-warn' instead of `warn'
+	(replace-in-string): check for `boundp', not `functionp'
+	(bbdb-snarf-nice-real-name-regexp, bbdb-snarf-nice-real-name): doc fix
+
+	* lisp/bbdb.el: removed the `defsubst' kludge - we do not support emaxen
+	without `defsubst' anyway; also pacify the compiler a little bit
+
+2000-08-11  Ronan Waide	 <waider@waider.ie>
+
+	Check if bbdb-file-remote is set before trying to use it.
+
+2000-08-10  Sam Steingold  <sds@goems.com>
+
+	Remote DB synchronization:
+	(bbdb-file-remote, bbdb-file-remote-save-always): new user variables
+	(bbdb-buffer): a function now; copy `bbdb-file-remote' to
+	`bbdb-file' when it is newer
+	(bbdb-write-file-hook-fn): maybe write `bbdb-file-remote'
+
+	junk removal:
+	(bbdb-modified-p): dumped
+	(bbdb-read-string): removed minibuffer-resizing code: all supported
+	emaxen can resize minibuffers themselves
+
+2000-08-10  Sam Steingold  <sds@goems.com>
+
+	(save-current-buffer): fset to `save-excursion' if not present
+	(with-current-buffer): defmacro if not present
+	(bbdb-save-buffer-excursion): dumped
+	(bbdb-with-db-buffer, bbdb-records, bbdb-write-file-hook-fn): use
+	`with-current-buffer' instead of `bbdb-save-buffer-excursion'
+
+2000-08-10  Sam Steingold  <sds@goems.com>
+
+	* lisp/bbdb.el (bbdb-join): dropped an unused variable
+
+2000-08-10  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Documentation of new features (somehow incomplete by now).
+
+	Files:	texinfo/bbdb.texinfo
+
+2000-08-10  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-quiet-about-name-mismatches): if a number it will be the number of
+	seconds to sit-for when displaying the notification about a name
+	mismatch.
+	(bbdb-join): inverse function of bbdb-split.
+	(bbdb-annotate-message-sender): tries to guess a reasonable default name
+	when creating new records.
+
+	Files:	lisp/bbdb.el
+
+2000-08-10  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	T(bbdb/vm-get-from): uses now bbdb-extract-address-components to extract
+	all recipients and uses vm-summary-uninteresting-senders for ignoring
+	senders, which is more consistently with respect VM.  One can set the
+	variable
+	`bbdb/vm-get-from-headers' and `bbdb/vm-get-first-from-p' in order to
+	control what headers are processed and what is display is what order.
+	(bbdb/vm-message-cache-lookup):
+	(bbdb/vm-encache-message): We use our own caching functions instead of
+	the bbdb default functions since we are handling a set of records and
+	not a single one.
+	(bbdb/vm-update-record): is now just a call to
+	(bbdb/vm-update-records): which performs the actual work of finding and
+	updating records.
+	(bbdb/vm-set-auto-folder-alist): Is a function from Mark Thomas
+	<mthomas@jprc.com> which sets `vm-auto-folder-alist' according to the
+	field `bbdb/vm-set-auto-folder-alist-field'.
+
+	Files:	lisp/bbdb-vm.el
+
+2000-08-10  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-snarf-nice-real-name-regexp): regexp matching unwanted characters
+	used by
+	(bbdb-snarf-nice-real-name): removes unwanted characters from real 
+	names/email addresses.
+	(bbdb-extract-address-component-regexps): alist of regexps and 
+	transformation-instructions used by
+	(bbdb-extract-address-components): is for the extraction of full name
+	and email address from headers.	 This function is a bit more 
+	configurable than `mail-extract-address-components' and it will return a
+	list of all found address components. Some note about why to use this
+	extract-function.
+	`bbdb-show-all-recipients' uses `bbdb-split' ,but this will not work for 
+	email addresses like
+	"Boss, Hugo" <hugo@boss.com> or hugop@boss.com (Hugo Boss) On the
+	otherside `mail-extr.el' returns just the first mail address, but we may
+	be interrested also in the other addresses within one header. 
+	Furthermore this function is configureable to do smart parsing ...
+
+	Files:	lisp/bbdb-snarf.el
+
+2000-08-10  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	(bbdb-define-all-aliases): Records without a net nolonger cause a error,
+	one will get just a waring when not running in silent mode.
+	(bbdb-delete-current-field-or-record): added handling of "*" in order to
+	delete multiple records and 'noprompt'.
+	(bbdb-send-mail-internal): added missing call of vm hooks.
+	(bbdb-add-or-remove-mail-alias): returns all mail aliases in a format 
+	suitable for completing read.
+	(bbdb-add-or-remove-mail-alias): convenience function for adding or
+	removing mail aliases from one or multiple records.  This makes it much
+	simpler to define groups.
+
+	Files:	lisp/bbdb-com.el
+
+2000-08-10  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	 Files:	ChangeLog
+
+2000-08-10  Sam Steingold  <sds@goems.com>
+
+	* lisp/bbdb.el (bbdb-annotate-notes): `regexp-quote' the annotation
+	before matching it on existing notes
+
+2000-08-05  Ronan Waide	 <waider@waider.ie>
+
+	When converting the streets to a list, delete "nil" as well as "".
+
+2000-08-03  Sam Steingold  <sds@goems.com>
+
+	* lisp/bbdb.el (bbdb-notes-default-separator): new user option
+	(bbdb-annotate-notes): use it
+	(notes, company): put `field-separator' property
+	* lisp/bbdb-hooks.el (bbdb-auto-notes-hook): search the whole notes
+	string for the new note before adding
+
+2000-08-03  Ronan Waide	 <waider@waider.ie>
+
+	fixed a build problem with the autoloads file.
+
+2000-08-01  Ronan Waide	 <waider@waider.ie>
+
+	last fix (honest) to the bbdb-yadda-mismatch thing.
+
+2000-08-01  Ronan Waide	 <waider@waider.ie>
+
+	Finally I understand the machinations of
+	bbdb-quiet-about-name-mismatches. Apologies for the confusion.
+
+2000-08-01  Robert Fenk	 <fenk@users.sourceforge.net>
+
+	Added setting of variable autoload-package-name and deletion of 
+	bbdb-autoloads.el file before creation in order to create it with the
+	right featurep and contents. Otherwise it was not working correctly with
+	my Xemacs.
+
+2000-08-01  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-08-01  Ronan Waide	 <waider@waider.ie>
+
+	Add compose-mail as an option for bbdb-send-mail-style (Kai Großjohann)
+
+2000-08-01  Ronan Waide	 <waider@waider.ie>
+
+	Added Howard Melman's VM labelling code. It's switched off by default; 
+	use (add-hook 'bbdb-notice-hook 'bbdb/vm-auto-add-label) to enable it.
+
+2000-08-01  Ronan Waide	 <waider@waider.ie>
+
+	Added Thomas DeWeese's May 19 (!) fix for bbdb-build-name.
+
+2000-07-27  Sam Steingold  <sds@goems.com>
+
+	dropped bbdb-add-hook
+
+2000-07-27  Sam Steingold  <sds@goems.com>
+
+	limited `bbdb-init-forms' to hooks to protect the innocent
+
+2000-07-25  Sam Steingold  <sds@goems.com>
+
+	(bbdb-init-forms): new variable
+	(bbdb-initialize): use it
+
+2000-07-25  Sam Steingold  <sds@goems.com>
+
+	use auto-generated autoloads consistently
+
+2000-07-24  Sam Steingold  <sds@goems.com>
+
+	added some autoload cookies
+
+2000-07-21  Sam Steingold  <sds@goems.com>
+
+	removed TABs.  this, finally, passed weblint!
+
+2000-07-21  Ronan Waide	 <waider@waider.ie>
+
+	Fixed some badness on the web page New version of the bbdb manual, split
+	per section.
+
+2000-07-21  Ronan Waide	 <waider@waider.ie>
+
+	ShengHuo Zhou's patch to update this for v5 file format
+
+2000-07-21  Ronan Waide	 <waider@waider.ie>
+
+	Removed a debug (message...) form
+
+2000-07-21  Ronan Waide	 <waider@waider.ie>
+
+	Added robert fenk's patch to use bbdb-popup in gnus.
+
+2000-07-21  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-07-21  Ronan Waide	 <waider@waider.ie>
+
+	More bbdb-silent-running edits.
+
+2000-07-20  Sam Steingold  <sds@goems.com>
+
+	* lisp/bbdb-com.el (bbdb-finger): use `bbdb-get-record'
+	* lisp/bbdb-whois.el (bbdb-whois): use `bbdb-get-record'
+	* lisp/bbdb-ftp.el (bbdb-ftp): use `bbdb-get-record'
+
+2000-07-20  Sam Steingold  <sds@goems.com>
+
+	a couple more keybindings...
+
+2000-07-20  Sam Steingold  <sds@goems.com>
+
+	added project home to quicklinks
+
+2000-07-18  Sam Steingold  <sds@goems.com>
+
+	mail-abbrevs/aliases handling
+
+2000-07-14  Sam Steingold  <sds@goems.com>
+
+	untabified
+
+2000-07-14  Ronan Waide	 <waider@waider.ie>
+
+	* Fixed bbdb-quiet-about-mismatches logic
+	* Added new variable, bbdb-silent-running, to suppress informational
+	 messages and queries. Not all messages are suppressed by this yet,
+	 though.
+
+2000-07-13  Sam Steingold  <sds@goems.com>
+
+	erroneously dropped a setq in the last commit; reinstate it.
+
+2000-07-13  Sam Steingold  <sds@goems.com>
+
+	minor doc fixes to comply with the standards
+
+2000-07-13  Sam Steingold  <sds@goems.com>
+
+	added bbdb-write-file-hooks user variable
+
+2000-07-13  Sam Steingold  <sds@goems.com>
+
+	added `bbdb-write-file-hooks' user variable
+
+2000-07-11  Sam Steingold  <sds@goems.com>
+
+	(bbdb-migrate-record-lambda): `mapcar', not `mapc' here!
+
+2000-07-11  Sam Steingold  <sds@goems.com>
+
+	clean-up as per weblint
+
+2000-07-10  Sam Steingold  <sds@goems.com>
+
+	revert the last patch (`mapc' is more efficient than `mapcar')
+
+2000-07-10  Sam Steingold  <sds@goems.com>
+
+	emacs 21 has `mapc'; define it when we don't have it.
+
+2000-07-09  Ronan Waide	 <waider@waider.ie>
+
+	GNUmacs doesn't have "mapc".
+
+2000-07-09  Ronan Waide	 <waider@waider.ie>
+
+	Get install-pkg to ignore CVS directories as well as SCCS and RCS.
+
+2000-07-05  Sam Steingold  <sds@goems.com>
+
+	rewrote migration in a modular way
+
+2000-07-05  Sam Steingold  <sds@goems.com>
+
+	code readability
+
+2000-07-05  Sam Steingold  <sds@goems.com>
+
+	(parse-bbdb-internal): bind, not setq the version.
+
+2000-07-03  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	Fixed typo.
+
+2000-07-03  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	Fixed ftp address. Added thanks. Synced ml info to Web.
+
+2000-07-03  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	Various little info changes, including ml info, TeX output changes,
+	thanks. Added info-directory information. Added detailed node list.
+
+2000-06-30  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	Build bbdb-merge.elc
+
+2000-06-30  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	Minor fixes.
+
+2000-06-30  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	Ignore info files.
+
+2000-06-30  Sam Steingold  <sds@goems.com>
+
+	(bbdb-format-streets): use `mapc', not `mapcar'
+
+2000-06-30  Sam Steingold  <sds@goems.com>
+
+	(bbdb-format-streets): fixed for the new BBDB format (5)
+
+2000-06-30  Sam Steingold  <sds@goems.com>
+
+	(bbdb-migrate): re-wrote using `mapcar' instead of `append' this is
+	linear instead of quadratic and avoids much consing
+
+2000-06-14  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-06-14  Ronan Waide	 <waider@waider.ie>
+
+	Fixed bbdb-current-field properly. Note that if you define a new address
+	formatting function, this code may not work correctly.
+
+2000-06-14  Ronan Waide	 <waider@waider.ie>
+
+	Fixed obi-wan error in bbdb-current-field. NB this is fixed for the
+	default display address. I need to tweak further for continental address
+	display, maybe.
+
+2000-06-14  Ronan Waide	 <waider@waider.ie>
+
+	* Trying another way to get the from field, since the Presentation
+	 buffer hack seems to be somewhat unusable.
+
+2000-06-14  Ronan Waide	 <waider@waider.ie>
+
+	* Fixed docstring for bbdb-quiet-about-name-mismatches
+
+2000-06-14  Ronan Waide	 <waider@waider.ie>
+
+	* Documented changes in database structure
+	* Changed web address, email addresses
+	* Some minor typos corrected & details added
+
+2000-06-14  Ronan Waide	 <waider@waider.ie>
+
+	* Added CVS revision discards to tarball exclude list.
+
+2000-06-14  Ronan Waide	 <waider@waider.ie>
+
+	* made notes merging use bbdb-merge-strings.
+
+2000-05-29  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-05-25  Ronan Waide	 <waider@waider.ie>
+
+	Fixed a broken link & updated the archive information
+
+2000-05-25  Ronan Waide	 <waider@waider.ie>
+
+	Updated some of the test targets
+
+2000-05-02  Sam Steingold  <sds@goems.com>
+
+	* lisp/bbdb.el, lisp/bbdb-com.el: define `unless' and `when' if 
+	necessary, do not quote `lambda' in code, do quote (`') functions and
+	variables in doc strings.
+	* lisp/bbdb.el (bbdb-get-field): new helper function.
+	* lisp/bbdb-com.el (bbdb-notes-sort-order): new variable
+	(bbdb-sort-notes, bbdb-sort-phones, bbdb-sort-addresses): new functions,
+	suitable for `bbdb-change-hook'.
+	(bbdb-get-record): new helper function.
+	* lisp/bbdb-w3.el (bbdb-www): do not browse to multiple URLs 
+	simultaneously, allow multiple URLs for the same record instead.
+	(bbdb-www-grab-homepage): add the URL if there is such a fields already.
+
+2000-05-01  Ronan Waide	 <waider@waider.ie>
+
+	* "API" is a little more settled, also a little more obvious.
+	* Making use of more of the existing functions in bbdb-com
+
+2000-05-01  Ronan Waide	 <waider@waider.ie>
+
+	* Tweaked layout and added a CVS revision tag.
+
+2000-05-01  Ronan Waide	 <waider@waider.ie>
+
+	Initial checkin
+
+2000-05-01  Ronan Waide	 <waider@waider.ie>
+
+	Initial checkin
+
+2000-05-01  Ronan Waide	 <waider@waider.ie>
+
+	Initial creation of the BITS tree
+
+2000-04-21  Ronan Waide	 <waider@waider.ie>
+
+	* documentation corrections
+	* Added timestamp compare to bbdb-refile-notes-generate-alist
+
+2000-04-21  Ronan Waide	 <waider@waider.ie>
+
+	* Refined so it works a little better, particularly with mergeing
+	timestamps
+	* Added bbdb-merge-file, so you can now import another bbdb and merge
+	it.
+
+2000-04-19  Ronan Waide	 <waider@waider.ie>
+
+	* First cut at merging with a view towards syncing, as opposed to
+	 simply cramming everything together a la refile.
+
+2000-04-17  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	*** empty log message ***
+
+2000-04-17  Ronan Waide	 <waider@waider.ie>
+
+	omitted bracket on unmigrate for v5->v4
+
+2000-04-16  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	bbdb-print documentation Fix \bigbf
+
+2000-04-16  Ronan Waide	 <waider@waider.ie>
+
+	* Added 5->4 unmigration
+
+2000-04-15  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	Adopt TeX-output of streets to new file-format v5.
+
+2000-04-15  Ronan Waide	 <waider@waider.ie>
+
+	* Fixed misplaced bracket in street migration code.
+
+2000-04-13  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	Fix comment regarding mailing lists.
+
+2000-04-13  Jochen Küpper  <bbdb@jochen-kuepper.de>
+
+	Improved TeX output (fonts, breaks).
+
+2000-04-13  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-04-13  Ronan Waide	 <waider@waider.ie>
+
+	* Address layout patch, including Euro addresses and the streets->list
+	thing
+
+2000-04-13  Ronan Waide	 <waider@waider.ie>
+
+	* Added keymap C-: for bbdb/gnus-summary-show-all-recipients
+
+2000-04-13  Ronan Waide	 <waider@waider.ie>
+
+	* Thomas's duplicates patch
+
+2000-04-13  Ronan Waide	 <waider@waider.ie>
+
+	* Thomas' duplicates patch
+	* streets modification
+
+2000-04-12  Ronan Waide	 <waider@waider.ie>
+
+	* commented out enough to get it working with the streets -> list mod.
+
+2000-04-12  Ronan Waide	 <waider@waider.ie>
+
+	* Added v5 migration. NB no back-migration yet.
+
+2000-04-12  Ronan Waide	 <waider@waider.ie>
+
+	* Thomas Deweese's multiple-same-name-records patch
+	* "streets" is now a list, not street1 street2 street3
+	* relaxed zip checking a little.
+	* new function: bbdb-add-new-field. allows you to programatically
+	 add properties to the bbdb file.
+
+2000-04-12  Ronan Waide	 <waider@waider.ie>
+
+	Cleanup work
+
+2000-04-05  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-04-05  Ronan Waide	 <waider@waider.ie>
+
+	* Autoload cookie for bbdb-header-start
+
+2000-04-05  Ronan Waide	 <waider@waider.ie>
+
+	* Country patch
+
+2000-04-05  Ronan Waide	 <waider@waider.ie>
+
+	* Colin's show-all-recipients
+
+2000-04-05  Ronan Waide	 <waider@waider.ie>
+
+	* Country patch
+
+2000-04-05  Ronan Waide	 <waider@waider.ie>
+
+	Initial.
+
+2000-04-05  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-04-05  Ronan Waide	 <waider@waider.ie>
+
+	* Country patch
+
+2000-04-05  Ronan Waide	 <waider@waider.ie>
+
+	* Added Alex's BBDB v4 format migration (country field)
+
+2000-03-31  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb/vm-get-from): If there's a presentation buffer, get the address 
+	from there, since it will be MIME-decoded.
+
+2000-03-30  Ronan Waide	 <waider@waider.ie>
+
+	*** empty log message ***
+
+2000-03-30  Ronan Waide	 <waider@waider.ie>
+
+	(bbdb-annotate-notes): do not add a repeated annotation (Sam Steingold)
+
+2000-03-30  Ronan Waide	 <waider@waider.ie>
+
+	Added gareth rees' patch to improve bbdb-mode documentation.
+
+2000-03-30  Ronan Waide	 <waider@waider.ie>
+
+	Added Noah Friedman's patch to make completion work as documented.
+
+2000-03-30  Ronan Waide	 <waider@waider.ie>
+
+	Fixed xref entries per mail from gareth rees.
+
+1999-01-26  Matt Simmons  <simmonmt@acm.org>
+
+	Don't freak out on 0-line Article buffers (pgnus)
+
+1999-01-26  Matt Simmons  <simmonmt@acm.org>
+
+	Make e-mail addresses scale properly
+
+1999-01-25  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1999-01-25  Matt Simmons  <simmonmt@acm.org>
+
+	Add autoload cookie for bbdb-snarf-region
+
+1999-01-25  Matt Simmons  <simmonmt@acm.org>
+
+	Added bbdb/gnus-snarf-signature
+
+1999-01-25  Matt Simmons  <simmonmt@acm.org>
+
+	Set-text-properties to nil in bbdb-string-trim
+
+1999-01-25  Matt Simmons  <simmonmt@acm.org>
+
+	Protect mark in bbdb-redisplay-records
+
+1999-01-25  Matt Simmons  <simmonmt@acm.org>
+
+	Use Info-directory-list
+
+1999-01-25  Matt Simmons  <simmonmt@acm.org>
+
+	Nil out hooks to keep view-mode from interfering with bbdb-mode
+
+1999-01-25  Matt Simmons  <simmonmt@acm.org>
+
+	Don't use concat with integers
+
+1999-01-25  Matt Simmons  <simmonmt@acm.org>
+
+	Added bbdb/gnus-snarf-signature
+
+1999-01-01  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1999-01-01  Matt Simmons  <simmonmt@acm.org>
+
+	BBDB 2.00.05
+
+1999-01-01  Matt Simmons  <simmonmt@acm.org>
+
+	Fold in 1.8.1.x subtree
+
+1999-01-01  Matt Simmons  <simmonmt@acm.org>
+
+	Added instructions for those without make
+
+1998-12-31  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-12-31  Matt Simmons  <simmonmt@acm.org>
+
+	Customize bbdb-snarf-web-prop, make it use the www field instead of web.
+
+1998-12-31  Matt Simmons  <simmonmt@acm.org>
+
+	Run the bbdb-load-hook after the bbdb provide.
+
+1998-12-31  Matt Simmons  <simmonmt@acm.org>
+
+	Protect against null record
+
+1998-12-31  Matt Simmons  <simmonmt@acm.org>
+
+	bbdb-version should insert the version into the current buffer if 
+	invoked with a prefix.
+
+1998-12-30  Matt Simmons  <simmonmt@acm.org>
+
+	Let bbdb-current-field handle blank users
+
+1998-12-05  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-12-05  Matt Simmons  <simmonmt@acm.org>
+
+	Allow redundant expansions
+
+1998-12-05  Matt Simmons  <simmonmt@acm.org>
+
+	bbdb/gnus-show-sender should refer to summary buffer, not article 
+	buffer.
+
+1998-12-05  Matt Simmons  <simmonmt@acm.org>
+
+	Honor bbdb-user-mail-names.
+
+1998-12-05  Matt Simmons  <simmonmt@acm.org>
+
+	Remove extent-data
+
+1998-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	Correct escaping of mailing list address
+
+1998-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	Change mailing list address
+
+1998-10-17  Matt Simmons  <simmonmt@acm.org>
+
+	Patch to convert default area code protection from condition-case to 
+	integerp.
+
+1998-10-17  Matt Simmons  <simmonmt@acm.org>
+
+	Removed RCS logs in comments.  Applied patch to protect bbdb-info-file,
+	and to protect against non-integer default area code
+
+1998-10-10  Matt Simmons  <simmonmt@acm.org>
+
+	From slbaur - Switch from `screen' functions to `frame' functions
+
+1998-10-10  Matt Simmons  <simmonmt@acm.org>
+
+	From slbaur: set-extent-attribute -> set-extent-property, 
+	set-extent-data -> set-extent-property
+
+1998-10-10  Matt Simmons  <simmonmt@acm.org>
+
+	From slbaur - Use new name for set-window-buffer-dedicated.
+
+1998-10-10  Matt Simmons  <simmonmt@acm.org>
+
+	From slbaur: Don't pass an integer to concat. Format dates with number
+	format - not string - so we get leading zeros.
+
+1998-10-10  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-04-11  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-04-11  Matt Simmons  <simmonmt@acm.org>
+
+	Added EOL list, EOL'd advertized-bbdb-delete-current-field-or-record and
+	GNUS support.  Documented new bindings in *BBDB* buffer.
+
+1998-04-11  Matt Simmons  <simmonmt@acm.org>
+
+	Colin Rafferty's patch adding autoload cookies back. Changed prompts for
+	bbdb-phones, bbdb-net, bbdb-company, bbdb-name and bbdb to make them
+	more intuitive.	 Started to remove support for 
+	advertized-bbdb-delete-current-field-or-record.	 Fixed error in comment.
+
+1998-04-11  Matt Simmons  <simmonmt@acm.org>
+
+	Changed documentation for bbdb-load-hook, added bbdb-initialize hook. 
+	Began to remove support for
+	advertized-bbdb-delete-current-field-or-record. Moved everything except
+	the insinuation code out of bbdb-initialize. Added bbdb-mode-search-map
+	for search commands in BBDB buffer prefixed by S.  Added more bindings
+	to BBDB buffer
+
+1998-04-11  Matt Simmons  <simmonmt@acm.org>
+
+	Updated the XEmacs packaging version number
+
+1998-04-11  Matt Simmons  <simmonmt@acm.org>
+
+	Fix for compatibility with more makes
+
+1998-04-11  Matt Simmons  <simmonmt@acm.org>
+
+	Colin Rafferty's patch adding autoload cookies back, regenerated 
+	auto-autoloads file.
+
+1998-04-11  Matt Simmons  <simmonmt@acm.org>
+
+	Colin Rafferty's patch adding autoload cookies back. Made
+	`format-time-string' take two arguments for XEmacs 19.15.
+
+1998-04-11  Matt Simmons  <simmonmt@acm.org>
+
+	Colin Rafferty's patch adding autoload cookies back
+
+1998-04-11  Matt Simmons  <simmonmt@acm.org>
+
+	Colin Rafferty's patch adding autoload cookies back
+
+1998-03-16  Matt Simmons  <simmonmt@acm.org>
+
+	Released 2.00
+
+1998-03-16  Matt Simmons  <simmonmt@acm.org>
+
+	intermediate
+
+1998-03-13  Matt Simmons  <simmonmt@acm.org>
+
+	This is for version 2.00
+
+1998-03-13  Matt Simmons  <simmonmt@acm.org>
+
+	Colin's fix for properly counting the size of notes fields
+
+1998-03-13  Matt Simmons  <simmonmt@acm.org>
+
+	Colin's change for migration error message
+
+1998-03-13  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	Finished revision
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	Fixed defface standin.	Created widget (bbdb-alist-with-header) for 
+	bbdb-auto-notes-alist customization fix.  Changed defaults for 
+	bbdb-create-hook and bbdb-change-hook to create timestamp and 
+	creation-date fields.  Added autoload for bbdb-srv.
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	Fix for Carsten Leonhardt to not die if XEmacs compiled without 
+	scrollbar support
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	buffer-disable-undo doesn't always return the argument
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	Protecting bbdb-default-area-code
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	Fixed customization of bbdb-auto-notes-alist
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	Colin's new refiling code, protecting default-area-code
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	Finally fixed that damn 19.34 :link problem - needed to put OTHERDIR 
+	stuff first in the load-path before loading bbdb.el.
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	Added comment about the Custom requirement for building Gnus support 
+	under 19.34
+
+1998-03-10  Matt Simmons  <simmonmt@acm.org>
+
+	Removed my paths, added comments about the Custom requirement for 
+	building Gnus support under 19.34
+
+1998-02-24  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	Support for OTHERDIR, rearranged flags to Emacs so we can use 
+	bbdb-split-string (19.34 doesn't have split-string)
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	Fixed intro comments.  Use add-hook, not bbdb-add-hook
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	Created deffaces standing macro, added to bbdb-initialize for bbdb-print
+	and bbdb-ftp, added autoload for bbdb-com, use native add-hook if we
+	can, fset it to bbdb-add-hook otherwise.
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	Use add-hook, not bbdb-add-hook
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	Moved key binding to bbdb.el, changed default of bbdb-print-elide, fixed
+	problem with nil bbdb-default-area-code
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	Use add-hook
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	We use add-hook now
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	Alphabetized MUA directory variables, added OTHERDIR variable
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	Changed comments for Gnus/GNUS-specific stuff and for stuff that thought
+	it was specific but is really not. bbdb/gnus-summary-author-in-bbdb now
+	uses `bbdb-message-marker-field' as it said it did.  Using add-hook
+	instead of bbdb-add-hook.
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	Intro rewrite to say that EFS is also OK as a prereq
+
+1998-02-23  Matt Simmons  <simmonmt@acm.org>
+
+	Almost finished doc rewrite
+
+1998-02-22  Matt Simmons  <simmonmt@acm.org>
+
+	Initial revision
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Changed to `setq' to `add-hook' in setup instructions.	Added to 
+	Internals section.
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Fixed bug
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Added deploy target.  Added migrate.el
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Added define-widget definition for users without Custom.  Added Custom 
+	groups for utilities (print, finger, etc).  Moved migration code to 
+	bbdb-migrate.el.  Commented some code (mostly code dealing with the 
+	manipulation of the internal database representation).	Added code to
+	`bbdb-initialize' that allows for the selective insinuation of the BBDB
+	into various external packages.
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Removed autoloads
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Added `part of BBDB' to copyright.  Customized variables.
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Removed autoloads and added provide for bbdb-w3
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Rearranged copyright and customized variables
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Customized variables, removed autoloads, and added provide of bbdb-sc
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Changed setup documentation and added RCS ID and Log strings
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Customized variables and removed autoloads
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Initial revision
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Added provide of bbdb-hooks.  Fixed custom specs (added cons type 
+	instead of group where appropriate).  Replaced bbdb-time-string function
+	with bbdb-time-internal-format variable.
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Removed autoloads and when statements
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Customized variables (into utilities-ftp group).  Added provide.
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Fixed copyright, moved customized finger variables into utilities-finger
+	group (from finger).  Removed autoloads.
+
+1998-01-06  Matt Simmons  <simmonmt@acm.org>
+
+	Removed all autoloads except for the `bbdb-initialize' one.  The removal
+	was done because bbdb-initialize a) must be called before anything else
+	in the BBDB will work and b) contains all of the autoloads found in
+	auto-autoloads anyway.
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Startup code documentation
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Reintroduced for BBDB 1.57Aunoff
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Documented new startup procedure
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Initial revision
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Removed `BBDB database' per jwz, added prerequisites section, more 
+	description of special fields, and dissection of record format in 
+	internals section
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	We now distribute *.info*, so removed its deletion from clean target. 
+	Created reallyclean target to get rid of *.info*
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Added migration code, customized variables, created record-copying 
+	function, moved automatically-executing code into bbdb-initialize 
+	function, documented defstruct.
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Soren Dayton's fix to correct tilde printing
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Customized, added sshteingold@cctrading.com's change to time-string 
+	function to use a format string.
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Customized variables, changed some comments, changed user format code 
+	error message
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Added sshteingold@cctrading.com's date-based database-manipulation 
+	functions.  Customized variables.
+
+1997-12-01  Matt Simmons  <simmonmt@acm.org>
+
+	Autoloads for date functions in bbdb-com.el
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	Welcome to the family.	Moved the automatically running code into 
+	functions.  Generalized attribution field.
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	Added bbdb-warn and code to avoid it for XEmacs users.	Reformatted 
+	autoloads (again).  Autoloads for sc.
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	bbdb/rmail-annotate-sender now takes REPLACE argument
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	bbdb/mh-annotate-sender now takes REPLACE argument
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	bbdb/vm-annotate-sender now takes REPLACE argument
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	Added REPLACE argument to bbdb/gnus-annotate-sender.  Variable to catch
+	changes to bbdb/gnus-score-default.  Commented out most of score 
+	insinuation code.  Variable aliases.  Added in-bbdb format letter.
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	Support for bbdb-sc.  Housekeeping for others.
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	Fixed package install - `foo 'bar` (as opposed to `foo 'bar'`) works in
+	Bourne shell, but not in others.  That and it's not exactly intuitive.
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	Support for bbdb-sc.el
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	Rewrite Part 2 (through MUA-specific features)
+
+1997-11-02  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-10-26  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-10-26  Matt Simmons  <simmonmt@acm.org>
+
+	New autoloads.	Override bbdb-display-completion-list for XEmacs users
+
+1997-10-26  Matt Simmons  <simmonmt@acm.org>
+
+	Rewrite part 1
+
+1997-10-26  Matt Simmons  <simmonmt@acm.org>
+
+	Build the dvi if the user wants
+
+1997-10-26  Matt Simmons  <simmonmt@acm.org>
+
+	Installation timing change: .el before .elc.  Tried to optimize install
+
+1997-10-26  Matt Simmons  <simmonmt@acm.org>
+
+	finger-host fixes.  New function `bbdb-xemacs-display-completion-list' 
+	is an XEmacs version of `bbdb-display-completion-list', which is a 
+	wrapper for display-completion-list.
+
+1997-10-26  Matt Simmons  <simmonmt@acm.org>
+
+	Use browse-url-browser-function rather than a funcall
+
+1997-10-26  Matt Simmons  <simmonmt@acm.org>
+
+	Integration of Brian Edmonds <edmonds@cs.ubc.ca>'s gnus-bbdb.el.  Got 
+	scoring and summary buffer stuff.  Need to do splitting
+
+1997-10-26  Matt Simmons  <simmonmt@acm.org>
+
+	Fix name completion bug (original fix by Marco Walther
+	<Marco.Walther@mch.sni.de>, mangled beyond recognition by Matt Simmons
+	<simmonmt@acm.org> Docs for bbdb-finger by Christoph Wedler 
+	<wedler@fmi.uni-passau.de>
+
+1997-10-26  Matt Simmons  <simmonmt@acm.org>
+
+	autoloads for new functions in bbdb-xemacs and bbdb-gnus
+
+1997-10-16  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-10-12  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-10-12  Matt Simmons  <simmonmt@acm.org>
+
+	Changed VM, GNUS, and MHE definitions.	If the corresponding DIR 
+	variables are set, the (the DIR vars) are added to load-path.  The 
+	relevant el files are then loaded using the load-path.	This allows 
+	VMDIR, et al to be unset if the packages live in load-path by default. 
+	Added bbdb-snarf and bbdb-w3.  Made the bbdb-srv and bbdb-reportmail
+	skip messages more informative for the poor souls (FSF Emacs users) who
+	can't use them.	 Added a check for itimer, since apparently some FSF
+	Emacs users have installed gnuserv - without itimer, bbdb-srv still
+	won't compile.
+
+1997-10-12  Matt Simmons  <simmonmt@acm.org>
+
+	Added bbdb-insinuate-w3 to set keyboard map correctly.	Merged 
+	bbdb-www-netscape into bbdb-www using browse-url-browser-function to 
+	differentiate.
+
+1997-10-12  Matt Simmons  <simmonmt@acm.org>
+
+	Autoloads for bbdb-www, bbdb-snarf, bbdb-insinuate-message
+
+1997-10-12  Matt Simmons  <simmonmt@acm.org>
+
+	Added documentation and keymap definition for bbdb-www.	 Added autoloads
+	for bbdb-www (and friends), bbdb-snarf, and bbdb-insinuate-message
+
+1997-10-12  Matt Simmons  <simmonmt@acm.org>
+
+	Kees de Bruin <kees_de_bruin@tasking.nl>'s patch to make VM use 
+	canonicalized net address instead of default address.
+
+1997-10-11  Matt Simmons  <simmonmt@acm.org>
+
+	Created bbdb-insinuate-message to set M-t binding in message-mode so I 
+	don't have to load gnus first.
+
+1997-10-11  Matt Simmons  <simmonmt@acm.org>
+
+	Message-mode fixes from Kees de Bruin <kees_de_bruin@tasking.nl>
+
+1997-10-11  Matt Simmons  <simmonmt@acm.org>
+
+	Removed my paths from VMDIR and MHEDIR.	 Seems I had broken the 
+	documented 'if these are blank and the packages live on load-path, Emacs
+	will find them' behavior by dying if VMDIR, MHEDIR and GNUSDIR weren't
+	set.  It's fixed now.
+
+1997-10-11  Matt Simmons  <simmonmt@acm.org>
+
+	Modifications mailed in by David Carlton <carlton@math.mit.edu>.  They 
+	look to be mostly adaptations for netscape
+
+1997-10-11  Matt Simmons  <simmonmt@acm.org>
+
+	Initial revision
+
+1997-10-11  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	BBDB 1.53unoff
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	Initial revision
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	Fixed for new grand reorg.  Rewrote XEmacs package installation code.
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	Version number format changes
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	jwz patches to support caller ID script, mail/news classification 
+	routine, make sure *BBDB* is bottommost buffer
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	New version of bbdb-print from Boris Goldowsky <boris@gnu.ai.mit.edu>
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	Jamie Zawinski <jwz@netscape.com>'s comment change about the new area 
+	codes that aren't restricted to [012] in the second digit.
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	Initial revision
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-10-06  Matt Simmons  <simmonmt@acm.org>
+
+	New version of bbdb-print from Boris Goldowsky
+
+1997-09-28  Matt Simmons  <simmonmt@acm.org>
+
+	Some reformatting, removal of mail-abbrev and mail-extr, fixed gnus path
+	stuff (since gnus is no longer distributed with xemacs-20.3
+
+1997-09-28  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-09-28  Matt Simmons  <simmonmt@acm.org>
+
+	Fix to accomodate nil gnus-single-article-buffer
+
+1997-09-28  Matt Simmons  <simmonmt@acm.org>
+
+	Added check for EFS (there must be a better way that what I did, but I 
+	really don't want to be reduced to checking version strings.
+
+1997-09-28  Matt Simmons  <simmonmt@acm.org>
+
+	Fixed area code parsing for new US area codes.	Patches integrated: use
+	of message-mail for sending mail, finger-host record for fingering
+
+1997-09-28  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-09-28  Matt Simmons  <simmonmt@acm.org>
+
+	Began to fix some obsolete functions to shut up the compiler, integrated
+	some patches (see ChangeLog) to allow use of message-mail for sending
+	mail and nil names.
+
+1997-09-28  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
+1997-09-28  Matt Simmons  <simmonmt@acm.org>
+
+	*** empty log message ***
+
