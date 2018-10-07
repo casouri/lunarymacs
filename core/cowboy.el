@@ -94,7 +94,8 @@
                               (wanderlust . (:repo "wanderlust/wanderlust" :dependency (semi flim apel)))
                               (semi . (:repo "wanderlust/semi"))
                               (flim . (:repo "wanderlust/flim"))
-                              (apel . (:repo "wanderlust/apel")))
+                              (apel . (:repo "wanderlust/apel"))
+                              (quickrun . (:repo "syohex/emacs-quickrun")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
