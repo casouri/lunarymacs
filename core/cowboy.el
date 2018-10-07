@@ -95,7 +95,9 @@
                               (semi . (:repo "wanderlust/semi"))
                               (flim . (:repo "wanderlust/flim"))
                               (apel . (:repo "wanderlust/apel"))
-                              (quickrun . (:repo "syohex/emacs-quickrun")))
+                              (quickrun . (:repo "syohex/emacs-quickrun"))
+                              (visual-regexp . (:repo "benma/visual-regexp.el"))
+                              (multiple-cursors . (:repo "magnars/multiple-cursors.el")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
