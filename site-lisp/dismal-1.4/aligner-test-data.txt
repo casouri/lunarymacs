@@ -1,0 +1,6 @@
+11	a	A	a
+12	a	B	a
+13	a	C	b
+14	b	D	c
+15	c	E	c
+16	d	F	d

@@ -1,0 +1,2317 @@
+\input texinfo   @c -*-texinfo-*-
+@comment %**start of header (This is for running Texinfo on a region.)
+@setfilename dismal.info
+@settitle The Dismal Emacs Spreadsheet Mode
+@setchapternewpage odd
+@comment %**end of header (This is for running Texinfo on a region.)
+@comment From: David Fox <fox@graphics.cs.nyu.edu>
+@comment   To: "Frank E. Ritter" <ritter@vpsyc>
+@comment   Subject: Re: ascii
+@comment   Date: Thu, 29 Jun 95 11:35:05 EDT
+@comment   
+@comment   I just looked at the texinfo file as formatted by TeX.  Its
+@comment   not too bad, but I think the "M-x dis-..." commands should
+@comment   come last rather than first in the table entries.  Also, I
+@comment   couldn't figure out where one of your footnotes went, so it
+@comment   is just tacked onto the end of the file.  Also, there's a
+@comment   figure missing somwhere.  And the example spreadsheets are
+@comment   complete rubbish.
+@comment   
+@comment   Here's a somewhat cleaned up version.
+
+@setchapternewpage odd
+
+@ifinfo
+Dismal: A spreadsheet for GNU-Emacs
+(For GNU Emacs release 19 and 20)
+and
+dismal 0.9 and higher
+8-Nov-97
+
+Frank E. Ritter, Sarah C. Nichols, and Shara K. Lochun
+ritter@@psyc.nott.ac.uk
+@end ifinfo
+
+@titlepage
+@sp 10
+@center @titlefont{Dismal: A spreadsheet for GNU-Emacs}
+@end titlepage
+
+@node Top, Abstract, (dir), (dir)
+@menu
+* Abstract::
+* Introduction::
+* Getting Started::
+* Selecting and Applying Commands::
+* Saving and Manipulating whole Spreadsheets::
+* Using A Spreadsheet::
+* Analysing And Calculating A Worksheet::
+* Management Of Sequential Data::
+* Advanced use of Dismal::
+* Known Bugs And Interactions::
+* GNU-Emacs/Dismal compatibility::
+* Detailed Dismal Site Installation::
+* An Example Use of Dismal::
+* Keybindings::
+@end menu
+
+@comment Chapter 1 -- Introduction	1
+@comment What can Dismal do?	1
+@comment About this manual	1
+@comment Design Features of Dismal	2
+@comment Chapter 2 -- Getting Started	4
+@comment Installation	4
+@comment Site Installation	4
+@comment User Installation	4
+@comment Chapter 3 -- Selecting and Applying Commands	5
+@comment The Dismal Menu	5
+@comment How To Get Help	5
+@comment Entering and Leaving Dismal	5
+@comment Chapter 4 -- Saving and Manipulating whole Spreadsheets	7
+@comment Creating A Spreadsheet	7
+@comment Opening Existing Spreadsheets	7
+@comment Saving A Worksheet	7
+@comment Creating Reports	7
+@comment Printing Reports	8
+@comment Chapter 5 -- Using A Spreadsheet	9
+@comment Editing a cell	9
+@comment How Data is Read in	9
+@comment Modifying the Format of Cells	9
+@comment Formatting A Cell	10
+@comment Formatting The Whole Spreadsheet	10
+@comment Moving Between Cells	11
+@comment Adjusting the display	12
+@comment Command Summary -- Options	12
+@comment Chapter 6 -- Analysing And Calculating A Worksheet	14
+@comment Referring to other cells	14
+@comment Controlling Calculation	14
+@comment How Dismal updates formula	14
+@comment Entering Functions As Cell Values	15
+@comment Creating A Series Of Dates Or Numbers	15
+@comment Chapter 7 -- Management Of Sequential Data	17
+@comment Creating A Metacolumn	17
+@comment Model-based Manipulations	17
+@comment Chapter 8 -- Advanced use of Dismal	19
+@comment User Settable Variables	19
+@comment Designing And Writing Macros	20
+@comment Including extra functions in Dismal	21
+@comment Using Other SpreadsheetProgram's Data	22
+@comment Number Representations	22
+@comment Databases	22
+@comment Command Summary -- Miscellaneous	22
+@comment Chapter 9 -- Known Bugs And Interactions	23
+@comment Hidden variables preclude modifying mode by hand	23
+@comment Little use of Emacs 19 features	23
+@comment No undo facility	23
+@comment Treatment of ambiguous formula	23
+@comment Limitations on column and row sizes	23
+@comment Appendix 1: GNU-Emacs/Dismal compatibility	25
+@comment Appendix 2: Detailed Dismal Site Installation	26
+@comment Appendix 3 -- An Example Use of Dismal	28
+@comment The task	28
+@comment Creating the spreadsheet	28
+@comment Example spreadsheet 1	28
+@comment Example spreadsheet 2	30
+@comment Example spreadsheet 3	31
+@comment Appendix 4: Keybindings	32
+
+@comment Dismal: A spreadsheet for GNU-Emacs
+@comment (For GNU release 18.5X and 19)
+@comment and
+@comment dismal 0.9 and higher
+@comment November 7, 1994
+@comment Frank E. Ritter,Sarah C. Nichols, and Shara K. Lochun
+@comment ritter@psyc.nott.ac.uk
+@comment 
+@comment Psychology Department
+@comment U. of Nottingham
+@comment Nottingham, England
+@comment NG7 2RD
+
+
+@node Abstract, Introduction, Top, Top
+@chapter Abstract
+
+This is a manual for Dismal (Dis' Mode Ain't Lotus), a major mode in
+GNU-Emacs that implements a spreadsheet.  Dismal provides basic
+spreadsheet functions, and, because it is based on GNU-Emacs, it
+offers several relatively novel features for a spreadsheet.  It is
+designed to be keystroke driven, although it can be partially mouse
+and menu driven.  It is extendible, so that users can write their own
+commands and functions, Dismal was developed to support sequential
+data (protocol) analysis, and therefore provides typical supporting
+functions such as the ability to search for lines matching regular
+expressions.  It also supports more complex manipulations -- in
+particular Dismal can be used to align a series of predicted codes
+(for example, a model trace) with sequential data, using included
+automatic and semi-automatic alignment algorithms.
+
+Dismal ) F. E. Ritter & D. Fox
+
+@section Research Credit
+
+This work was sponsored in part by a training grant from the Air Force
+Office of Scientific Research, Bolling AFB, DC; and in part by the
+Avionics Laboratory, Wright Research and Development Center,
+Aeronautical Systems Division (AFSC), U.S. Air Force, Wright-Patterson
+AFB, OH 45433-6543 under Contract F33615-90-C-1465, ARPA Order No. 7597.
+It was supported by a grant from the Joint Council Initiative in HCI and
+Cognitive Science, number SPG 9018736, and by a grant from the DRA(UK).
+
+The views and conclusions contained in this document are those of the
+authors and should not be interpreted as representing the official
+policies, either expressed or implied, of the U.S. or
+U.K. Governments.
+
+Dismal was created by Frank E. Ritter and David Fox (fox@@cs.nyu.edu) of
+Dept. of Computer Science, New York University.  The manual and code
+have benefited from comments from Erik Altmann (ema@@cs.cmu.edu), Robert
+Chassell (bob@@gnu.ai.mit.edu), Todd Johnson (tj@@med.ohio-state.edu),
+and see the source for comments from David Lamkins (DBLamkins@@aol.com)
+and several other people who have significantly influenced the
+development of dismal by providing some really quite good code.
+
+@section Distribution Notes
+
+This piece of software is copylefted as per the Free Software
+Foundation's standard agreement.  Dismal is made available AS IS (like
+Soar itself), and the University of Nottingham, and the software's
+developers, make no warranty about the software or its performance.
+Please contact ritter@@psyc.nott.ac.uk for more information or to
+report problems.
+
+Separate documents are available for the companion pieces of software
+mentioned here, soar-mode and taql-mode, which modify GNU-Emacs to
+more directly support programming in the Soar cognitive modelling
+language.  This is achieved through a structured editor with useful
+commands such as automatic production loading and match set displays.
+Derivative software called SDE, the Soar Development Environment,
+supersedes and greatly extends these.  It is available from
+Mike.Hucka@@engin.umich.edu.
+
+Some of the supporting software comes with different copyright
+conditions.  In particular, soar-mode and taql-mode use several
+utility programs that are protected under the Free Software
+Foundation's Copyleft agreement.
+
+@node Introduction, Getting Started, Abstract, Top
+@chapter Introduction
+
+Dismal (DIS' Mode Ain't Lotus) is a spreadsheet implemented in GNU Emacs.  Although it has many similarities with commercially available spreadsheet software, there are also several major differences between Dismal and other spreadsheets because of the fact that Dismal lives within GNU-Emacs.  First of all, it is free.  It was developed by Fox and Ritter as part of their thesis work, and is offered as is.  It is also copylefted, meaning that you are provided with the full source code, and agree to provide free copies to others.  This also means that it is not fully supported.  Several people have passed back comments, bug reports and bug fixes (most notably Erik Altmann, David Lamkins, and Robert J. Chassell), and these improvements have greatly added to Dismal.  There are currently over 20 known bugs or limitations to Dismal's features.  These are documented in a later chapter in this manual, alternatively, they can be found in the front of the source code.
+
+Second, Dismal is an extendible mode which allows users to write their own functions which can be implemented within the spreadsheet.  This also makes it flexible enough to be driven by other programs, such as a cognitive model.  Dismal is written in Emacs lisp and since the GNU-Emacs' lisp interpreter is immediately available, extensions and modifications can be realised simply and directly.
+
+Third, being implemented in GNU-Emacs offers several technical differences.  The main disadvantage is that Dismal is not as fast as a commercially supported stand-alone spreadsheet.  However, the latest versions (0.95 and after) include new code and now run approximately 40 times faster than older versions of Dismal.  As Dismal exists in a text editor, what it can't support, the underlying editor can.  Where possible, to support consistency between the software packages, we have made GNU's text manipulation commands and keybindings work appropriately for spreadsheet cells (e.g. C-w, a command to cut and copy (kill in Emacs-speak) a region of text, is a command to cut and copy a range of cells). 
+
+@section What can Dismal do?
+
+Dismal, like other spreadsheet programs, manipulates and performs
+calculations from data contained in cells.  As it is easily accessible
+from a UNIX environment it is very easy to transfer data collected
+automatically and analyse it from within Dismal.  Dismal is a current
+project -- this means that new versions get developed as we fix problems
+that we run across and include fixes sent in to us.  Sometimes we can
+even fix other's problems.  While this means that there may be more bugs
+than in a commercially available spreadsheet, the bugs can get fixed
+quickly, particularly if you can fix them yourself.  At the moment,
+Dismal is being affected by improvements in GNU-Emacs which affect how
+it handles different types of numbers.  Earlier versions of Dismal used
+Bill Rosenblatt's 1986 float package, but with Emacs 19, floats are
+directly supported.  We have recently migrated the code from the old f
+notation to the integrated float code and this leads to an overall
+greatly enhanced performance in calculations and general handling of
+numbers by Dismal.
+
+@section About this manual
+
+This manual is divided into chapters which roughly correspond with the
+sections in the Dismal menu.  In order to prevent the text becoming
+too confusing any actions to be performed on a spreadsheet are
+generally referred to by command name within the main text, and at the
+end of each chapter is a summary including all the commands which have
+been introduced in that chapter, their keybindings and their positions
+in the Dismal menu.  It should also be noted that the symbol @code{\tt M-}
+will be used to refer to any commands which require the Meta (Escape)
+key to be pressed, and that all commands which are written in longhand
+e.g. @code{\tt dis-write-file} will be assumed to have been preceded by the
+key combination M-x which allows commands to be entered at the
+minibuffer.  All Dismal commands which are intended to be accessed by
+the user begin with the prefix dis.
+
+As with all computer tools, the best and fastest way to learn about
+Dismal is by actually using it.  To help explain how some of
+Dismal's commands work, an example project is described in Appendix
+3.  This example (of various examinations of some automatically
+gathered program command logs) is based on an HCI project which
+actually used Dismal as a data manipulation tool 1 and it is hoped
+that this description will help in learning about how Dismal works.
+
+This manual includes information about how to load, run, and use
+Dismal and Dismal spreadsheets.  In order to be able to use Dismal
+(and in order to be able to read this manual!) you must first be
+reasonably familiar with Emacs (e.g., to have done the on-line
+tutorial accessible by typing @code{C-h t}).  This accomplished, the
+transfer from using Emacs to using Dismal is hopefully a fairly simple
+one.  Where you would move around through text in a normal buffer, in
+a Dismal buffer you move through cells.  Dismal files are saved with
+the same keybindings as other Emacs files.  Similarly editing and
+formatting spreadsheets in Dismal can be mapped on to similar
+functions in ordinary Emacs buffers.
+
+@section Where Dismal is written up
+
+There is also two conference papers and one journal paper available that
+start to describe dismal, which you can cite or request.
+
+  Ritter, F. E., Lochun, S., Bibby, P. A., & Marshall, S. (1994).
+  Dismal: A free spreadsheet for sequential data analysis and HCI
+  experimentation. In A. Trapp & N. Hammond (Eds.), Computers in
+  Psychology '94, 62-63. York (UK): CTI Centre for Psychology, U. of
+  York.
+  
+  Nichols, S., & Ritter, F. E. (1994).  A Theoretically motivated tool
+  for automatically generating command aliases.  In the Proceedings of
+  CHI '95.  393-400
+
+  Ritter, F. E., & Larkin, J. H. (1994) Using process models to
+  summarize sequences of human actions.  Human Computer Interaction's
+  special issue on Exploratory Sequential Data Analysis. 9 (3&4).
+  345-383.
+
+  http://www.psychology.nottingham.ac.uk/staff/ritter/papers/dismal/dismal.html
+
+@section Design Features of Dismal
+
+One of the advantages of Dismal is that its source code is easily
+accessible.  It uses several design concepts which are already present
+in the Emacs environment and adapts their use within the context of
+Dismal mode.  Several terms and objects which are used in both Emacs
+and Dismal are listed below and the ways in which they are used in
+Dismal are explained.
+
+@section Terms
+
+@table @samp
+
+@item Mark
+
+Mark, which used to be a text position, is now the marked cell.
+Typing "m", C-SPACE, or C-@@ will set the mark.  C-x C-x (Exchange
+mark and point) works now with cell positions.
+
+@item Point
+
+Point is the current cell.
+
+@item Ranges
+
+The idea of a text range that is used in GNU-Emacs is modified and
+used in Dismal as the region of cells between point and mark.  When
+the variable dis-show-selected-ranges is t, the user is shown the
+selected range when performing a function on it, such as cutting or
+erasing.  What this means is that the range selected will be briefly
+moved over (i.e., the point and mark will be exchanged for one
+second).  When the user kills a range, it is saved in Dismal's kill
+buffer.  This buffer can be yanked and inserted in the initial buffer,
+or other Dismal buffers as well.
+
+@item Menu
+
+Dismal can be menu driven -- when the user types C-c C-m a simple menu
+appears on the bottom of the Emacs display in what is called the
+message line.  For more details see section entiled ``The Dismal
+menu''.
+
+@item Ruler
+
+Dismal supports putting up a ruler at the top of the
+window indicating the contents of columns.  The default ruler is the
+letters heading the columns, followed by dashes and crosses
+(+----+--+---+) indicating the column borders.  Users can change this
+ruler to provide columns with more meaningful headings by using the
+function dis-set-ruler-rows, and then selecting another row number to
+act as the ruler row.  For example, if you wanted the contents of the
+cells in row 3 to act as the ruler row, you could give the variable
+RulerRow the value 3.  Advanced users can set the variable
+dis-ruler-row.  The new ruler will appear at the top of a window only
+when you scroll off the page with scroll-up/down-in-place (C-v, M-v).
+When just moving line by line (C-n, C-p) the ruler will not be
+refreshed.  Not refreshing the ruler speeds travel through the
+spreadsheet, although this speed change is less significant with
+Dismal 0.95.  The ruler can be brought back by recentering the buffer
+(C-l).  The ruler will occupy the top two rows of the window, but will
+not overwrite any of the contents of the cells in these rows.
+
+If a ruler is not desired, it can be removed by selecting any negative
+number (default is -2) to be the value of the ruler row.  Ruler
+settings are remembered across sessions.  The ruler gets redrawn at
+the top of the screen with C-x r.  If an argument is passed to C-x r
+(e.g., C-u C-x r), the ruler is remade, and any changes in the ruler
+rule will appear in the ruler.
+
+@item Mode line
+
+This is the inverse video line that appears at the bottom of each
+window.  In Dismal it displays two asterisks if the file has been
+modified; the file you are editing (e.g., filename.dis); the current
+cell (e.g., A6); the status of the cell updating algorithm
+(automatically if AutoUp is displayed, or upon request if ManUp is
+displayed), the metacolumn (the < column-name ] indicates the
+rightmost boundary of the metacolumn), the mode (in this case dismal),
+and the location in the file of the bottom line.  For example, [To be
+supplied].
+
+@end table
+
+@node Getting Started, Selecting and Applying Commands, Introduction, Top
+@chapter Getting Started
+
+@section Installation
+
+Dismal has two installation procedures -- one for the site and one
+for each user.  For users of Dismal 0.94 and higher, a README file is
+provided with the release which gives details on obtaining and
+installing Dismal which may be more current than this manual.  Once
+installed, many of Dismal's global variables can be altered to suit
+the needs of the individual user.  Some of these are detailed in
+section number titled `User settable variables' (Chapter 8).
+
+@section Site Installation
+
+The latest release of Dismal is typically available via anonymous FTP
+from host ftp.nottingham.ac.uk (or granby.ccc.nott.ac.uk, but some
+machines don't know it, so you may need to use 128.243.40.43), in the
+directory "/pub/lpzfr".  Within this directory, the file is named
+"dismal-VERSION.tar.Z", where version gives the version of Dismal that
+you are getting.  A more stable version of Dismal resides in THE Ohio
+State elisp archive.  The Dismal release that you can run depends upon
+the version of GNU Emacs that is currently installed at your site (see
+Appendix 1).  Additional version information is available by querying
+the first author.
+
+Dismal is faster when byte compiled.  In Emacs 18 it is faster yet
+when the "bytecomp" byte compiler is used (essentially the same as the
+Emacs 19 compiler, but not compatible).  Bytecomp is an improved
+bytecompiler available from archive.cis.ohio-state.edu in
+/pub/gnu/emacs/elisp-archive/packages/ bytecomp.tar.Z.  Dismal is
+designed to take advantage of this compiler.  Installing it takes
+about 20 minutes.  If you can read Emacs documentation, know some
+basic UNIX stuff, and know what a compiler is, you should be able to
+do this.
+
+For details of step-by-step Dismal installation see Appendix 2 or the
+README file.
+
+@section User Installation
+
+Once Dismal has been set up, users only have to add to their .emacs file the following command:
+@example
+(load "... where Dismal lives .../dismal-mode-defaults.el")
+@end example
+@noindent
+So for example, if Dismal had been installed in
+/usr/local/emacs/dismal, you would put:
+@example
+(load "/usr/local/emacs/dismal/dismal-mode-defaults.el")
+@end example
+@noindent
+into your .emacs file.
+
+
+@node Selecting and Applying Commands, Saving and Manipulating whole Spreadsheets, Getting Started, Top
+@chapter Selecting and Applying Commands
+
+Spreadsheet commands within Dismal can generally be executed in three
+ways.  All the commands can be typed out in longhand at the minibuffer
+be preceding them with M-x.  Many of the commands are also keystroke
+linked -- and can be executed from the press of the keystroke command.
+Finally, Dismal is also menu driven.  This table gives an example of
+the different ways to change the width of the current column within
+Dismal:
+
+@table @samp
+
+@item Minibuffer
+
+M-x dis-read-column-format
+
+@item Keystroke
+
+f
+
+@item Menu
+
+C-c C-m Format Width
+
+@end table
+
+@section The Dismal Menu
+
+As previously mentioned, when the user types C-c C-m a simple menu
+appears in the minibuffer.  Users can type the first letter of a menu
+item to choose that item.  There may be multiple levels of the menu to
+go through in this way, and users can type ahead.  If you select the
+wrong command at any point then you can type C-d which returns you to
+the previous level of the menu.  If you decide that you no longer want
+to execute a command from the menu you the typing C-g will quit the
+menu process and the cursor will return to the main buffer.
+
+Typing "?" or SPACE will pop up a help screen providing more details
+on the menu items displayed at the current level of the menu,
+including their keybindings (if any).  After a user selects an item
+and it has been executed, its keybinding will be displayed in the
+message window as well.  This supports migration to using the
+keybindings instead of the menus.
+
+There are three conventions used to indicate information about menu
+items.  When a command ends in a period, that item will request
+further information.  When an item ends with a slash, that item is
+another menu.  When a menu item ends with an asterisk, that function
+has yet to be implemented.
+
+When the user types C-c C-m a simple menu appears on the bottom of the
+Emacs display in what is called the message line.  Users can type the
+first letter of a menu item to choose that item.  There may be
+multiple levels of the menu to go through in this way, and users can
+type ahead.
+
+@section How To Get Help
+
+Dismal runs an online help facility.  To access this type C-h.  From
+this point the options available can be seen by typing ?.  If your
+query is not answered in the help section, feel free to send questions
+to the first author.
+
+@section Entering and Leaving Dismal
+
+Leaving Dismal is very easy!  All you have to do is (save, if
+required, and) quit all of the open buffers which are running
+dismal-mode, just as you would normally quit buffers in Emacs
+(i.e. C-x C-k to kill a buffer and C-x C-c to leave Emacs).  Buffers
+running dismal-mode are identified by having (dismal) in their mode
+line.
+
+@section Command Summary -- General
+
+@table @code
+
+@item M-x describe-mode
+@itemx ?
+
+Display all the possible Dismal commands and their keybindings in a
+*Help* buffer
+
+@item M-x dis-run-menu
+@itemx C-c C-m
+@itemx C-c RET
+
+Displays menu bar in minibuffer at the bottom of the screen
+
+@end table
+
+@node Saving and Manipulating whole Spreadsheets, Using A Spreadsheet, Selecting and Applying Commands, Top
+@chapter Saving and Manipulating whole Spreadsheets
+
+Once you have installed the code, and set up your .emacs file you can
+start to use Dismal spreadsheets.  New spreadsheets are created and
+existing spreadsheets are opened in the same way as other files which
+live in Emacs.
+
+@section Creating A Spreadsheet
+
+You can create a new Dismal file by typing 
+@example
+C-x C-f (find-file) new-file-name.dis  
+@end example
+@noindent
+Dismal-mode will get loaded (if necessary) and will create an initial
+blank spreadsheet.  You can also create a Dismal spreadsheet by
+calling dismal-mode in an existing blank buffer, but this is best left
+to people debugging Dismal.
+
+The size of spreadsheet that can be created is limited both by the
+source code, and also by practical considerations.  The cell names
+that Dismal accepts are limited to columns ZZ or less.  This allows by
+default 676 columns in a spreadsheet.  If more columns are needed, the
+source code can be modified to allow for 3 or more letter referenced
+columns (search the source code for dismal-cell-name-regexp).  Taking
+a practical viewpoint other constraints such as screen size might
+apply.  From past experience, we would generally suggest that on a Sun
+I or equivalent (e.g., Dec3100), 500 rows x 40 columns (20,000 cells)
+is too much but 400 x 24 (9600 cells) is manageable.
+
+@section Opening Existing Spreadsheets
+
+Dismal-mode is automatically entered when an existing Dismal
+spreadsheet is opened in Emacs.  Redrawing a spreadsheet can take a
+couple of minutes, depending on the speed of the machine that Dismal
+is installed upon A double beep will indicate that the spreadsheet has
+been completely redrawn.  One limitation to this is that, currently,
+Dismal is not able to open a file that it cannot write to (i.e. one
+for which you do not have write permission).  The easiest solution to
+this problem is to copy the file that you are trying to open to your
+own filespace and then open it.
+
+@section Saving A Worksheet
+
+Dismal spreadsheets can be saved in the same way as other buffers in
+Emacs, using C-x C-s to save changes to a spreadsheet under its
+existing name, or by using C-x C-w to save the file with a new name.
+
+@section Creating Reports
+
+A spreadsheet saved as a .dis file contains all of the formatting
+information contained in the spreadsheet.  This is also the default
+format for Dismal spreadsheets saved with other names (i.e., without
+the .dis suffix).  Do not print files in this format!  To create and
+print a report from a .dis file, this must first be saved as either a
+plain text or a tabbed output format.  For example, you must save the
+file
+@example
+filename.dis
+@end example
+@noindent
+as
+@example
+filename.dp  or  filename.dt
+@end example
+@noindent
+for printing, where .dp files are plain text formats of Dismal
+spreadsheets augmented with extra copies of the ruler, (either a row
+you've set, or the A B C default) and .dt files are tabbed output
+formats of Dismal spreadsheets.  You can either make this save
+manually (using C-x C-w), or use the commands dis-make-report (from
+the menu this is IO: FPrin) to produce plain text files, and
+dis-write-tabbed-file to produce tabbed output files.  These
+reformatted files can then be printed.  For most purposes the .dp file
+is best, as it includes useful headers which display the date, time,
+user and file pathname.
+
+Before printing, the file could be tidied up: dis-clean-printout is a
+function that can be called interactively (M-x dis-clean-printout) to
+cleanup a .dp and a .dt file.  It removes the leading headers
+(produced from using dis-make-reportthe FPrin command), alphabetic
+column labels, and the leading two digit number in each column (i.e.,
+the row number.
+
+@section Printing Reports
+
+Reformatted Dismal files can be printed in a number of ways.  Once you
+have left or suspended Emacs you can print the file in the normal way
+for whatever operating system you are running (e.g. by using the lpr
+command in Unix) or you can print automatically from within Dismal
+using print-buffer.  We suggest using the enscript program (the
+default) to convert the file to a postscript file and then print it,
+but you could set dismal-raw-print-command to be lpr if you wish.
+
+@section Command Summary -- Input and Output
+
+@table @code
+
+@item M-x dis-find-file
+@itemx IO: New
+Create a new spreadsheet.
+
+@item M-x find-file
+@itemx C-x C-f
+@itemx IO: Open
+Open an existing spreadsheet.
+
+@item M-x dis-save-file
+@itemx C-x C-s
+@itemx IO: Save
+Save a spreadsheet.
+
+@item M-x dis- write-file
+@itemx C-x C-w
+@itemx IO: Write
+Save a spreadsheet to a new location.
+
+@item M-x dis-insert-file
+@itemx C-x TAB
+@itemx C-x i
+@itemx IO: Insert
+Insert contents of file into buffer starting at the current cell.
+
+@item M-x dis-print-setup
+@itemx IO: 2Prin
+Setup print variables
+
+@item M-x dis-make-report
+@itemx IO: FPrin
+Create a formatted plain text file of Dismal spreadsheet.
+
+@item M-x dis-print-report
+@itemx IO: PPrin
+Print a plain text file to a printer
+
+@item M-x dis-dump-range
+@itemx IO: RDump
+Dump a range to a tabbed file
+
+@item M-x dis-tex-dump-range
+@itemx IO: RDump
+Dump a range to a tabbed file for use by TeX
+
+
+@item M-x dis-unpaginate
+@itemx IO: Unpage
+Removes page breaks from a report (plain text file)
+
+@item M-x kill-buffer
+@itemx IO: Quit
+Kills the buffer containing the spreadsheet.
+
+@item M-x dis-clean-printout
+Strip header information and a set of leading digits from each line.
+
+@item M-x dis-write-tabbed-file
+Dumps a spreadsheet to a tabbed file
+
+@item M-x dis-tex-dump-range-file
+Dumps a spreadsheet to a tabbed file for use by TeX
+
+@end table
+
+
+@node Using A Spreadsheet, Analysing And Calculating A Worksheet, Saving and Manipulating whole Spreadsheets, Top
+@chapter Using A Spreadsheet
+
+Data entered into a Dismal spreadsheet can either have constant values
+(i.e., numbers/character strings which are typed directly into a
+cell), or can be formulae (i.e., cell entries which are dependent upon
+some combination of the values of other cells in the spreadsheet).
+Dismal recognises what type of variable is contained in a cell -- a
+common source of error is that a function which performs an arithmetic
+calculation, and therefore requires cell which it takes as its
+argument to contain a number, actually refers to a cell which contains
+another type of data.
+
+@section Editing a cell
+
+The best way to enter every type of data is to move to the cell and
+type 'e' (this invokes the dis-edit-cell-plain function).  The
+following prompt will then be displayed in the minibuffer Enter
+expression:
+
+The data can then be typed in the minibuffer and should be terminated
+with a carriage return.  The data will then be displayed in the
+appropriate cell in the spreadsheet.
+
+There are default settings which govern how the data is displayed--
+numbers are automatically right aligned and strings are automatically
+left aligned.  However, these settings can be overridden by using the
+functions dis-edit-cell-leftjust, dis-edit-cell-rightjust, and
+dis-edit-cell-center.  It tends to be easier to enter data using the
+dis-edit-cell-plain function at first and then modify the formatting
+for aesthetic purposes at a later date.  This is because the
+formatting information is associated with the cell rather than with
+the data, and so if the cell contents are transferred using copy and
+paste commands the format of the data in its new position will depend
+on any previous formatting information in the new cell@footnote{The
+character "%" can be entered as "%".  It is stored as %% because % is
+difficult to print out on its own.  In the future this burr should be
+hidden from the user, but at present the user must be careful to only
+enter a single % when reediting cell contents.}
+
+For information about entering formulae as cell values, see the later
+chapter "Analysing And Calculating A Worksheet".
+
+@section How Data is Read in
+
+Dismal will recognise data as a number if it either contains a decimal
+point or if it references a cell which contains data which has
+previously been recognised as a float.  If data contains any
+characters which are not numbers then it will be treated as a string.
+
+Also see the section on 'Limitations on column and row sizes'.
+
+@section Modifying the Format of Cells
+
+Dismal supports printing out cell contents in several ways.  The user
+can set the number of decimal columns to print out, the alignment
+(justification) of the cell contents (flush right, flush left,
+centred, and the default of numbers right and strings left), the cell
+width, and the display fonts.  All these commands are available on the
+main menu (C-c C-m) under Format.
+
+You can also modify the justification a single cell by editing it with
+"<", ">", and "|".  These keystroke commands allow you to edit a cell,
+and then set the cell's justification to be left, right, or centred.
+The default way of editing a cell, "e" or "=", leave the cell's
+justification alone.
+
+If the ruler changes because the cell contents change in the row that
+makes it up, the user can redraw the ruler by using the command in the
+Main: Format menu (also by typing C-x r).
+
+@section Formatting A Cell
+
+You can put numbers (integer and floating point), strings, and formula
+into cells.  In each case you type one of the commands below, and then
+enter the value, and then hit return.
+
+@section Command Summary -- Format
+
+@table @code
+
+@item M-x dis-set-column-decimal		
+@itemx Format: Number
+Set the decimal format for the current column.
+@item M-x dis-set-alignment		
+@itemx Format: Align
+@item M-x dis-read-column-format	
+@itemx f	
+@itemx Format: Width
+Read in the format of the current column (i.e. adjust width) and
+redraw the ruler.
+@item M-x dis-auto-column-width		
+@itemx Format: 1auto-width
+Make column as wide as widest element.
+@item M-x dis-set-font		
+@itemx Format: Fonts:
+Adjust size of font in spreadsheet.
+@item M-x dis-update-ruler	
+@itemx C-x r
+@itemx Format: UpdateR
+Move ruler to top of screen.
+@item M-x dis-kill-line	
+@itemx C-k	
+Kill the rest of the current line.
+@item M-x dis-open-line	
+@itemx C-o	
+Insert a new row and leave a point before it.
+@item M-x dis-quoted-insert	
+@itemx C-q	
+Insert a quoted character after querying the user.
+@item M-x dis-backward-kill-cell	
+@itemx DEL
+[I think the text got messed up around here -- dsf.]
+@item M-DEL
+Kill cells backward.
+@item M-x dis-exchange-point-and-mark
+@itemx C-x C-x	
+Put the Dismal mark where the point is now, and point where the mark is now.
+@item M-x dis-transpose-cells
+@itemx M
+@itemx C-t	
+Swaps the current cell and the one to its left.
+@item M-x dis-kill-cell
+@itemx M-d	
+Kill the contents of the current cell.
+@item M-x dis-upcase-cell
+@itemx M-u	
+Make the contents of the current cell to be in upper case.
+@item M-x dis-downcase-cell
+@itemx M-l	
+Make the contents of the current cell to be in lower case.
+@item M-x dis-capitalize-cell
+@itemx M-c	
+Make the first letter of the cell upper case  and the rest lower case.
+
+@end table
+
+@section Formatting The Whole Spreadsheet
+
+In addition to modifying a single cell, you can also modify the
+spreadsheet's topology as a whole by inserting and deleting ranges of
+cells, such as rows or columns.  All the commands that deal with
+handling ranges use a set of cells contained in the mark buffer, so it
+is important to remember to cut or copy a range before attempting to
+paste.  Another warning is that the cut and paste commands take the
+current position as the second point defining the range -- even if a
+range has been marked using mark point (C - space) and C - x C -x (All
+of these commands should behave nicely and in a way analogous to their
+text counterparts.
+
+@section Command Summary -- Edit
+
+@table @code
+
+@item M-x dis-no-op		Edit: Undo	not documented
+
+@item M-x dis-kill-range
+@itemx x
+@itemx C-w
+@itemx Edit: XKill
+Cut a range (from marked point to present point) into the mark buffer
+
+@item M-x dis-copy-range	
+@itemx c
+@itemx M-w	
+@itemx Edit: 2Copy	
+Copy a marked range into the mark buffer
+
+@item M-x dis-paste-range	
+@itemx v
+@itemx C-y
+@itemx Edit: Yank
+Paste a (previously copied or killed range) from the mark buffer into
+the spreadsheet starting from current cursor position.
+
+@item M-x dis-erase-range
+@itemx M-C-e
+@itemx Edit: Erase
+Delete a range without saving it.
+
+@item M-x dis-edit-cell-center
+@itemx Edit: Set: Center
+Read a center-justified value into the current cell.
+
+@item M-x dismal-read-cell
+@itemx Edit: Set: General	
+
+@item M-x dis-edit-cell-leftjust
+@itemx Edit: Set: Left
+Read a left-justified value into the current cell.
+
+@item M-x dis-edit-cell-rightjust
+@itemx Edit: Set: Right
+Read a right-justified value into the current cell.
+
+@item M-x dis-insert-row
+@itemx i r
+@itemx Edit: Insert: Row
+Inserts one row immediately above current cursor position
+
+@item M-x dis-insert-column
+@itemx i c
+@itemx Edit: Insert: Column
+Inserts one column immediately to the left of the current cursor position
+
+@item M-x dis-insert-range
+@itemx i i
+@itemx M-o
+@itemx Edit: Insert: Marked-range
+Inserts a marked row, column or single cell immediately above or to
+the left of the current cursor position.
+
+@item M-x dis-insert-z-box
+@itemx i z
+@itemx Edit: Insert: Z-box
+Insert cells to bring point and mark (which mush be on different sides
+of the metacolumn marker) into the same row.
+
+@item M-x dis-delete-row
+@itemx d r
+@itemx Edit: Delete: Row
+@itemx Deletes the current row, moving the remaining rows up.
+
+@item M-x dis-delete-column
+@itemx d c
+@itemx Edit: Delete: Column
+Deletes the current column, moving the remaining columns to the left.
+
+@item M-x dis-delete-range
+@itemx d d
+@itemx Edit: Delete: Marked-range
+Deletes a marked row, column or single cell, moving the remaining
+cells either up or to the left as appropriate.
+
+@item M-x dis-edit-cell-rightjust
+@itemx >
+@itemx Edit: Modify: >
+Read a right-justified value into the current cell.
+
+@item M-x dis-edit-cell-leftjust
+@itemx <
+@itemx Edit: Modify: <
+Read a left-justified value into the current cell.
+
+@item M-x dis-edit-cell-default
+@itemx =
+@itemx Edit: Modify: =
+Read a default justified value into the current cell.
+
+@item M-x dis-edit-cell-center
+@itemx |
+@itemx Edit: Modify: |
+Read a center-justified value into the current cell.
+
+@item M-x dis-edit-cell-plain
+@itemx e
+@itemx Edit: Modify: e
+Read a value into the current cell retaining any previous
+justification specification.
+
+@item M-x dis-insert-cells
+@itemx i .		
+
+@item M-x dis-clear-cell
+@itemx C-d		
+
+@end table
+
+@section Moving Between Cells
+
+Most of the commands you know and love from plain Emacs work in a
+corresponding way in Dismal.  Therefore, as you might expect, you can
+move around in a Dismal buffer in a similar way to a regular buffer,
+using either the commands, or their associated keybindings.  If you're
+using Emacs 18 or Emacs 19.28 with version 1.1, 
+and Emacs is compiled with the X window options, clicking
+a left mouse will move you to the pointed at cell.
+
+Clicking right will select a row.  Selecting a column can be quite slow,
+so it is not offered.
+
+@section Command summary -- Go
+
+@table @code
+
+@item M-x dis-first-column
+@itemx C-a
+@itemx Go: Column: 1st	
+Move to first column of spreadsheet.
+@item M-x dis-backward-column	
+@itemx C-b
+@itemx M-TAB
+@itemx M-SPC
+@itemx Go: Column: Back	
+Move back one column.
+@item M-x dis-last-column
+@itemx M-e	
+@itemx Go: Column: Last	
+Move to last column of spreadsheet.
+@item M-x dis-forward-column
+@itemx C-f
+@itemx TAB
+@itemx SPC
+@itemx Go: Column: Forward	
+Move forward one column.
+@item M-x dis-start-of-col
+@itemx C-x [
+@itemx Go: Row: 1st	
+Move to first row of spreadsheet
+@item M-x dis-backward-row
+@itemx M-RET
+@itemx C-p
+@itemx Go: Row: Back
+Move up one row in spreadsheet
+@item M-x dis-end-of-col
+@itemx C-x ]
+@itemx Go: Row: Last
+Move to last row in spreadsheet
+@item M-x dis-forward-row
+@itemx RET
+@itemx C-n
+@itemx Go: Row: Forward
+Move down one row in spreadsheet
+@item M-x scroll-left
+@itemx Go: <--	
+Scroll screen to the left.
+@item M-x scroll-right
+@itemx Go: -->	
+Scroll screen to the right.
+@item M-x dis-beginning-of-buffer
+@itemx M-<
+@itemx Go: Begin	
+Move cursor to the top of the buffer.
+@item M-x dis-end-of-buffer
+@itemx M->
+@itemx Go: End	
+Move cursor to the end of the buffer.
+@item M-x dis-jump
+@itemx j
+@itemx Go: Jump	
+Prompts for row and column, moves to requested cell in spreadsheet.
+@item M-x dis-end-of-row	
+@itemx C-e		
+Move to last cell with a value in the current row.
+@item M-x dis-forward-filled-column
+@itemx M-f		
+Move forward (right) to next column with a value in current row.
+@item M-x dis-backward-filled-column
+@itemx M-b		
+Move backward (left) to next column with a value in current row.
+@item M-x dis-scroll-up-in-place
+@itemx C-v
+Scroll down the spreadsheet one screen length.
+@item M-x dis-scroll-down-in-place
+@itemx M-v		
+Scroll up the spreadsheet one screen length.
+@item M-x dis-next-filled-row-cell	
+@itemx n
+@itemx M-n		
+Move down to the next filled cell in that column.
+@item M-x dis-previous-filled-row-cell
+@itemx p
+@itemx M-p
+Move up to the previous filled cell in that column.
+@item M-x dis-move-to-window-line
+@itemx M-r
+@itemx ???
+
+@end table
+
+@section Adjusting the Display
+
+Once you have built a spreadsheet you can adjust the screen display
+using the commands below.  Ones that are particularly useful are the
+redrawing functions -- if you have only a single line which is
+corrupted then it is best to use the dis-hard-redraw-row function, but
+to redraw the whole spreadsheet a hard redraw may be necessary.
+
+@section Command Summary -- Options
+
+@table @code
+
+@item M-x dis-set-ruler-rows
+@itemx Options: SetV: RulerRow
+Set the row for ruler position and redraw it (default -2)
+@item M-x dis-set-ruler
+@itemx Options: SetV: 2Ruler	
+@item M-x dis-toggle-auto-update
+@itemx Options: SetV: Auto-update
+Choose whether to be in auto update or manual update mode.
+@item M-x dis-set-metacolumn
+@itemx Options: SetV: Middle-col
+Set the middle column which is used to create two meta-columns in the
+spreadsheet.
+@item M-x dis-redraw
+@itemx M-C-r
+@itemx Options: A-Redraw	
+Redraw all the cells in the spreadsheet.
+@item Options: C-redraw	
+@item M-x dis-hard-redraw-row
+@itemx r
+@itemx Options: R-redraw	
+Redraw the current row and move down to next row.
+@item M-x dis-update-ruler
+@itemx Options: Uler-redraw	
+Move ruler to top of screen
+@item M-x dis-redraw-range
+@itemx z
+@itemx Options: Z-range	
+Redraw the current range between point and mark.
+@item M-x dis-isearch
+@itemx C-s		
+Do incremental search forwards
+@item M-x dis-isearch-backwards	
+@itemx C-r		
+Do incremental search backwards
+@item M-x dis-set-mark-command
+@itemx m 
+@itemx C-SPC		
+Set mark in Dismal buffers to current cell
+
+@end table
+
+@node Analysing And Calculating A Worksheet, Management Of Sequential Data, Using A Spreadsheet, Top
+@chapter Analysing And Calculating A Worksheet
+
+It used to be the case that two types of numbers were used within
+Dismal -- integers and floating points.  The two conversion functions,
+fint and f changed these types and there were two sets of arithmetic
+operators which dealt with either floats or integers.  Now, versions
+of emacs 19 and later handle floating point numbers, and so the normal
+arithmetic operators can be used within Dismal.  However, there are
+still some problems with these numbers and so the old floating point
+operators remain for those people who do not have the latest versions
+of Emacs.  It is also sometimes the case that the Emacs floats are so
+long that they cannot be displayed on the spreadsheet -- if the column
+width is too short then they appear as a row of asterisks.  As a
+temporary solution to this problem, a short lisp function has been
+written which displays a floating points cell contents as a string.
+This solves the aesthetic problem, but means that two columns must now
+be used -- one of which holds the raw data and one of which displays
+the number as a string to the required number of decimal places.
+
+All types of lisp function can be used as cell contents.  Arguments
+can be written as cell references.  Now, with the improved emacs, the
+lisp arithmetic functions can be used directly as Dismal cell values.
+However, this can cause some problems.  The emacs floating point
+numbers are very long and cannot be dealt with by either the old
+Dismal code which handles integers or that which handled floating
+points
+
+Once the dismal-mode-default.el file has been loaded, you can create a
+worksheet by simply opening a file (C-x C-f) that ends in ".dis".  You
+can edit cells by typing "e" or "=".
+
+@section Referring to other cells
+
+There are two types of area to which you can refer in a Dismal formula
+-- an individual cell or a cell range.  To refer to a cell use the
+format shown in the example below, where the value returned will be
+the sum of the values in two other cells.
+@example
+(+ B4 B5)
+@end example
+@noindent
+To refer to a range, the first and last cells to be included are named
+-- if the cells are not in the same row or column, then the references
+will be treated as two corners of a rectangle.  So for example, the
+range referred to in the formula
+@example
+(dis-sum D3:E4)
+@end example
+@noindent
+will contain the cells D3, D4, E3 and E4.
+
+One warning that should be mentioned is to beware of leaving blank
+spaces at the end of formulae- this can sometimes cause problems.  You
+can easily test when entering data by typing C-e when you are in the
+minibuffer -- the cursor will move to the last character on the line.
+
+There are two types of ways of referencing a cell.  You can reference a
+cell so that when it is cut and pasted, it will move its references
+relative to where it came from.  This is the default, and looks like
+"A3".  If you want to reference a cell in a way that does not change
+when it is cut and pasted, then A$3$ will do the trick.  Single dollar
+signs will stop the column or row from being modified.
+
+@section Controlling Calculation
+
+You can do this.  The Dismal defaults provide for automatic updates of
+cells and their dependencies whenever a cell changes through
+insertion, deletion or editing.  On large spreadsheets with lots of
+cells, this can take a long time.  Manual updating mode can be invoked
+through the (Options: Set: AutoUpdate) menu.  Manual updating can then
+be done through the menu (Main: Commands: Update) upon request only.
+
+@section How Dismal updates formula
+
+After a cell has been edited, cells that are dependent on its value
+are updated.  This may lead to a series of changes, as further cells
+are updated.  Currently Dismal does not detect circular references,
+instead, its-name-here, a variable, indicates the maximum number of
+times cells can be updated after a cell changes value.  The default
+value is 9, which is large enough to keep large spreadsheets updated,
+yet small enough to be useful in stopping circular references from
+running amok.  Users can change this value by putting the following
+line in their .Emacs file: 
+@example
+(setq its-name-here new-value)
+@end example
+
+@section Entering Functions As Cell Values
+
+There are still two types of number used in the Dismal spreadsheet,
+integers and floats.  They both can be coerced into each other with
+the functions f and fint.  Most functions starting with 'dis-' should
+be able to translate for you on the fly, but the functions that begin
+with f require that their input be floating points numbers (and will
+cause an error otherwise).
+
+You can put @code{(f+ NUM1 NUM2)} as the value of a cell.  @code{f+}
+does not take more than two arguments. (Is there a good way around
+this?  Could we make it a macro?)
+
+You can also use the following lisp functions to compute a cell's
+value.  The format for all of them is a lisp S-expressions.  A simple
+example would be @code{(dis-count a0:b23)}.  More complicated
+expressions (preserving type, integer or float) can also be built up.
+Several examples are: @code{(dis-div A19 (dis-sum A19:B19))} and
+@code{(dis-div (dis-sum A0:A3) (f 34))}.
+
+@section Command Summary -- Numbers
+
+@table @code
+
+@item dis-count 	
+Given a cell RANGE computes the count of filled cells.
+@item dis-count-if-regexp-match 	
+Given a cell RANGE computes the number of cells that match REGEXP.
+@item dis-sum 	
+Given a cell RANGE computes the sum of filled cells.
+@item dis-mean
+Given a cell RANGE computes the mean of filled cells.
+@item dis-product 	
+Given a cell RANGE computes the product of filled cells.
+@item dis-current-date	
+Insert current date as string.  If DAY-FIRST is t, do that.
+@item dis-date-to-days	
+Return number of days between Jan. 1, 1970 and DATE (a string).
+@item min	
+Returns the minimum of two floating point numbers.
+@item max 	
+Returns the maximum of two floating point numbers.
+@item +	
+Returns the sum of two floating point numbers.
+@item /	
+Returns the quotient of two floating point numbers.
+@item *	
+Returns the product of two floating point numbers.
+@item -	
+Returns the difference of two floating point numbers.
+@item Other math functions
+Generally now work as expected in Emacs 19.
+
+@end table
+
+The formula are actually evaluated as Lisp S-expressions, so you may
+also set variables within the formula.  The variables must be declared
+or set before they can be used, so all uses of them must come after
+they are set (initial evaluation is done in a right to left, top to
+bottom order).  For example, @code{(setq multiplier 34)}.
+
+@section Creating A Series Of Dates Or Numbers
+
+There are commands to manipulate numbers as dates.  dis-current-date
+provides the current date as a string.  dis-date-to-days returns the
+number of days between Jan. 1, 1970 and DATE (a string with format
+dd-mmm-yy), ignoring leap years.  Further commands are shown in the
+table below.
+
+@section Command Summary -- Commands
+
+@table @code
+
+@item M-x dis-align-metacolumns	
+@itemx M-j	
+@itemx Commands: Align
+Align the metacolumns so that the point and mark are on the same line,
+keeping other parts of the column still aligned.
+@item M-x dis-copy-to-dismal		
+@itemx Commands: Cp2dis	
+Copy column specified by point and mark to a Dismal buffer.  See
+on-line help for more details.
+@item M-x dis-redraw		
+@itemx Commands: Redrw	
+Redraw all the cells in the spreadsheet -- if Hard redraw, clear the
+lines first and update dependencies.
+@item M-x dis-expand-cols-in-range		
+@itemx Commands: Expand	
+Make all the columns in the marked range with width = 0 have a
+specified width.
+@item M-x dis-fill-range		
+@itemx Commands: FillRng	
+In a marked range insert a sequence of numbers specifying starting
+number and incrementation amount.
+@item M-x dis-show-functions		
+@itemx Commands: ShowFns	
+Show all the functions that Dismal will let you use.
+@item M-x dis-update-matrix	
+@itemx M-C-u	
+@itemx Commands: Update	
+Recalculate the ``dirty'' cells in the spreadsheet.
+@item M-x dis-recalculate-matrix		
+@itemx Commands: Hupdate	
+Recalculate and redraw the whole matrix
+@item M-x dis-query-replace	
+@itemx M-q
+@itemx M-%
+@itemx Commands: QueryR	
+Replace specified string with new string.
+@item M-x dis-delete-blank-rows
+@itemx d SPC
+@itemx Commands: DeBlank	
+Delete any blank rows from specified start row to specified end row.
+
+@end table
+
+@node Management Of Sequential Data, Advanced use of Dismal, Analysing And Calculating A Worksheet, Top
+@chapter Management Of Sequential Data
+
+Dismal was originally written to work with sequential data (Ritter &
+Larkin, 1994).  It supports several simple manipulations common to
+most of exploratory sequential data analysis, but it also supports
+manipulating two streams of sequential data to be aligned, which is
+what was its first purpose.
+
+@section Creating A Metacolumn
+
+The first new concept incorporated in Dismal was the idea of
+metacolumns, groups of columns bundled together to be treated
+together.  Typically data columns (e.g., timestamp, verbal utterance,
+and statement number) will be grouped in to one metacolumn, while the
+model's predictions (e.g., simulation cycle, simulation action) will
+be grouped into the other.  Model-based manipulations will then
+manipulate the data columns as a group with respect to the model
+columns.
+
+The metacolumn, if there is one, is displayed in the Dismal mode line
+at the bottom of the Dismal buffer.  The Dismal command to set this
+column is @code{M-x dis-set-metacolumn}, which is also available on
+the menu as Options: Set: Middle-column.
+
+@section Model-based Manipulations
+
+There are a set of commands to make use of the two metacolumns by
+treating one of them as a series of model predictions, and the other a
+series of subject actions, or just one column as a series of data, and
+the other as a column of data to have codes assigned to it (e.g.,
+simply coding verbal protocol data).
+
+The function dis-initialise-operator-codes will help you initialise
+Dismal with operator codes by prompting you for a file of code names
+to read in.  This file should contain codes, one per line.  Once these
+are set up, you can insert a code into a cell by typing @code{C-c C-M-c},
+which will give you a menu of codes that can be inserted.
+
+After codes have been inserted, they can be aligned with objects in
+the other metacolumn.  To do this, first turn auto-update off (this
+speeds up the process considerably).  Set up middle-column that
+defines the two metacolumns.  This can be done as a menu action.  Set
+up the pairs of regular expressions that define objects that are
+equivalent across the two columns.  These should be put in the
+variable dis-paired-regexps.  This can be done by putting them in your
+.emacs, or @code{M-x load-file} the file that contains their definition.
+Here is an example:
+@example
+;; "Pairs of equivalent regexps that match valid pred & obs codes"
+(setq dis-paired-regexps  
+      '( ("^C,C$" . "O: double-click-button")
+          ("^M(" . "O: move-mouse")
+          ("^C$" . "O: click-button")
+          ("^C(" . "O: click-button")
+          ("^D$" . "O: press-button")
+          ("^U$" . "O: release-button")))
+@end example
+
+You can then call the function dis-auto-align-model, and following the
+prompts provided there, align the two metacolumns.  It will ask you
+for the columns to compare from each metacolumn, and which row to
+start and end with.
+
+If this doesn't work completely, or at all, you can align items in the
+metacolumns by hand by using M-j, dis-align-metacolumns
+
+Once the alignment has been completed, there are several other
+functions you can call to see how it went:
+
+@table @code
+
+@item dis-model-match-op
+When given a cell RANGE-LIST, computes the percentage of colA matched
+with something in colA-2, and col A is an operator (it begins with "O:
+").  It only counts stuff that is in order.
+
+@item dis-model-match
+When given a cell RANGE-LIST, computes the percentage of colA matched
+with something in colA-1.  It too only counts stuff that is in order.
+@end table
+
+This explanation is probably inadaquate for most uses, but we
+anticipate that few will actually use this functionality.  If you find
+that you are intersted in using this, please feel free to email me or
+call for more specific help.  Really.  Tony Simon did this, and we got
+his code to work (but we ran out of time for demoing it in his class).
+
+@section Command Summary -- Model
+
+@table @code
+
+@item M-x dis-save-op-code
+@itemx Model: Codes: Save
+Saves the list of codes used
+@item M-x dis-op-code-segment
+@itemx Model: Codes: Code
+Assign a code to a cell allowing autocompletion
+@item M-x dis-load-op-codes
+@itemx Model: Codes: Load
+Load a file of codes to use
+@item M-x dis-initialize-operator-codes
+@itemx Model: Codes: Init	
+@itemx Model: Stats: Stats*	
+@itemx Model: Stats: Count*	
+@item M-x dis-auto-align-model
+@itemx Model: Utils: AutoAlign
+Automatically align the two metacolumns based on items in two
+subcolumns (prompted for) matching the regular expressions in
+dis-paired-regexps
+@item M-x dis-align-columns
+@itemx Model: Utils: 2AutoAlign
+Automatically align the two metacolumns using the previous but perhaps
+aborted command autoalign
+
+@end table
+
+@node Advanced use of Dismal, Known Bugs And Interactions, Management Of Sequential Data, Top
+@chapter Advanced use of Dismal
+
+Dismal comes with its source code showing and with a relatively large
+number of user settable variables.  Most users won't need them, but
+power users will find this level interesting in a spreadsheet.
+
+@section User Settable Variables
+
+There are several variables that influence Dismal's behaviour on a
+global level.  The default values for these variables, (i.e., those
+which are used in each new Dismal spreadsheet created), are shown
+below.  Users can change these default values by setting them in their
+.emacs file.  Variables set using this method will be altered from the
+next time that Dismal is started up, and will hold their changed value
+for each subsequent time that Dismal is run until the .emacs file is
+changed again.  For example, to set the default width for columns to
+15, you might include the following in your .emacs file:
+@example
+(setq dis-default-column-width 15)
+@end example
+@noindent
+To implement this change you must either quit and restart Emacs, or
+load your .emacs file after you have amended it, by typing:
+@example
+M-x load-file
+@end example
+@noindent
+The changed value of the variable will automatically apply to all new
+Dismal spreadsheets created after this change has been made, i.e., in
+this example, a new Dismal spreadsheet will initially have all of the
+columns 15 characters wide.  For all existing Dismal spreadsheets the
+changed value of the variable will now be the default value for that
+variable, but will not in itself change the formatting of the sheet.
+
+Some of the variables that you might want to set include:
+
+@table @code
+
+@item dis-default-column-width
+
+(Default is 10.) This sets the default width for all columns in the
+spreadsheet.  The default value of 10 can be replaced by any positive
+integer.
+
+@item dis-default-column-alignment
+
+(Default is @code{'default}.)  This sets the default alignment for all
+of the cells.  The default value for this variable (@code{'default})
+sets right cell alignment for numeric characters, and left cell
+alignment for non-numeric characters.  Other possible values of this
+variable are left, right and center (note American spelling!), and
+these apply to all cells, whether containing numeric or non-numeric
+values.
+
+@item dis-default-column-decimal
+
+(Default is 2.)  This sets the number of decimal places for each cell.
+Any value greater than or equal to 0 is acceptable. Whole integers
+entered will not be padded with 0s.  Integers followed by a decimal
+point and any number of subsequent digits will be represented with the
+exact number of decimal digits specified.  Dismal uses a `round
+towards zero' or truncating algorithm for reducing numbers to the
+required number of decimal digits, thus 2.58 and -2.58 would both be
+represented as (-)2.5 if the value of dis-default-column-decimal was
+set at 1.
+
+@item dis-field-sep
+
+(Default is @code{"\t"}.)  This sets the field separator character to
+be used when working with other software dump files.  The default
+value (TAB) can be replaced with other common field separators, such
+as SPACE by using  dis-dump-between-col-marker.
+
+@item dis-page-length
+
+(Default is 66.)  This sets the anticipated page length for printing
+-- 66 works well for 8.5"x11" or A4 landscape with an 8 pt. courier
+font.
+
+@end table
+
+For more advanced worksheet manipulations, changing the following
+variables might also be useful:
+
+@table @code
+
+@item dis-mode-hooks
+
+(Default is @code{nil}.)  Hook functions to be run upon entering a
+Dismal file.
+
+@item dis-load-hook
+
+(Default is @code{nil}.)  Hook functions run after Dismal is loaded.
+
+@item dismal-recursion-limit
+
+(Default is 9.)  Maximum depth allowed when evaluating (perhaps)
+circular dependencies.  This can take any positive integer.
+
+@end table
+
+@section Designing And Writing Macros
+
+Dismal supports ELisp functions (it is written in them) and keyboard
+macros.  Simple, repetitive jobs such as removing a decimal point can
+be written as a standard Emacs keyboard macro.  This is done by
+starting the macro defining process by typing
+@example
+C-x (
+@end example
+@noindent
+and then typing the set of keystrokes that you wish to repeat.  One
+way in which this is particularly useful is when copying a formula
+from one cell to another -- Dismal automatically updates the cell
+references when the text is pasted.  So if a cell value such as
+@example
+(+ B1 B2)
+@end example
+@noindent
+had been copied from cell B3 -- when it was pasted into cell C3 it
+would have the value
+@example
+(+ C1 C2) 
+@end example
+@noindent
+Therefore, if you wished to repeat this pasting process down the next
+ten columns of the spreadsheet, you would define the macro as
+@example
+v	(paste marked range)
+C-n	(move down one row)
+@end example
+@noindent
+You would then conclude the definition by typing 
+@example
+C-x )
+@end example
+@noindent
+and could execute the macro by typing 
+@example
+C-x e
+@end example
+@noindent
+If you wished to repeat this execution then you could type 
+@example
+C-u N C-x e
+@end example
+@noindent
+where N is the number of times you wish to execute the macro.  So, in
+this example, if you wished to paste the cell 10 times you would type
+@example
+C-u 10 C-x e
+@end example
+@noindent
+Learning about macros will prove to be an invaluable experience and
+will speed up the data entry process considerably.
+
+@section Including extra functions in Dismal
+
+Any Lisp function can be used in a Dismal cell -- of course, if it
+references other cells then they need to contain the right type of
+data or an error will occur.  Dismal cannot handle errors as well as a
+dedicated Lisp environment and so it is important that you include
+helpful error messages yourself in any additional functions.  For
+example, if a function requires a string as its second argument it
+will save you a lot of debugging time if you make sure that an error
+message to that effect is displayed when it references a cell
+containing the incorrect type of value.
+
+At the end of the Dismal loading process, the functions on the
+dismal-mode-load-hook are called.  If you wish to load additions, you
+can put them in a file, and put a lambda expression to load them
+there.  For example,
+@example
+(setq dis-load-hook 
+   '(lambda () (load "/afs/nott/usr/ritter/my-dismal-file.el")))
+@end example
+
+The functions you need to modify and manipulate cells are available in
+the source code.  Until this section gets properly filled in, we can
+suggest a simple and direct way to find out by exploring the source
+code.  Type @code{C-h k}, and then the key command that points you in
+the direction you need to find out.  This will tell you the command
+name, which you can further examine by looking directly in the source
+code.  For example, if you want to know how to get a cell's value,
+type @code{C-h k e}.  This will display the help for
+dis-read-cell-plain.  Examining dismal.el, you will find that this
+function references the expression (the string, number or expression
+that is evaluated to give the cell's value) through dismal-get-exp.
+
+You should try to use functions that start with dis-, for these are
+pretty stable.  If you have to, and you will, functions that start with
+dismal- are less stable, and access internal data structures, and you
+can get youself more easily in trouble this way.
+
+If you really want to live dangerously (and this is documented for that
+person), you can use dynamically bound variables.  When dismal evaluates
+a cell it binds r and c to the row and column of the cell getting
+evaluated.  If you first set r and c to be variables, the input parser
+will recognize them as top-level variables, and let them be variables,
+not strings.  You can then use them in functions, such as (+ r c) will
+add the current row and column of the cell itself.  Maybe this is a good
+idea, but it makes me nervous.
+
+@section Using the Keystroke level model in dismal
+
+As an example set of functions, the Keystroke model of Card, Moran and
+Newell (1983, , The Psychology of Human-Computer Interaction, Hillsdale,
+NJ: Lawrence Earlbaum Associates) has been implemented as a set of two
+functions.
+
+The first function, klm-time, is used to calculate the time to enter a
+command that is given as an argument when the function is called, or
+entered as a value in a Dismal spreadsheet cell.  It will compute the
+number of mental operators needed, but it can also take that as an
+optional arguement if the analyst knows that this is higher or lower
+than expected.  The default algorithm give one Mop per word separated by
+a dash or space.  This rule is derived from the heuristic specified by
+Card et al (1983, Figure 8.2 rule 2).  It was specifically used when
+looking at Soar commands -- the structure of which meant that this
+approach was particularly appropriate.
+
+The default specifications for the variables that are included here are
+the length of the Mental Operator (Mop) at 1.35 seconds as specified by
+Card et al (1983), and the typing speed.  This is in words per minute so
+that is can be easily altered to suit different users, and a simple
+modification to the function could allow the individual's typing speed
+to be entered into a cell on a spreadsheet, and the value read from
+there.  The key-const value is a necessary constant used to convert from
+words per minute to average time for a keystroke in seconds, and was
+derived from Card et al (1981).  The defaults are 40 wpm, which is a
+fairly good typist, a value of 10.8 keystroke/word taken from Card,
+Moran and Newell (1983).
+
+The second function is make-alias, which takes a command as a string and
+creates an alias for it.  If the command is over 5 letters, it does so
+by taking the first letter of each hyphanated word in it, otherwise,
+just the first letter.  make-alias keeps track of aliases it has made,
+and keeps them on *new-aliases*, and puts duplicate aliases on
+*dup-aliases*.   There is a helper function, init-make-aliases, to
+initialize these variables. 
+
+
+@section Using Other Spreadsheet Program's Data
+
+You can transfer data between Dismal and other spreadsheets in both
+directions using tabbed output files.
+
+To pass data to Dismal, write the data out as a tabbed file from the
+other spreadsheet software.  Read it in to a blank Dismal spreadsheet,
+or into the appropriate place on a previously created sheet using
+dis-insert-file, bound to @code{C-x C-i}.
+
+To pass data from Dismal, use the dis-dump-range command (@code{M-x
+dis-dump-range} or @code{C-c C-m}: I/O: RDump) to dump a range to a
+tabbed ASCII file, or use @code{dis-dump-tabbed-file} if you want to
+write out the whole file this way.  You can also get a plain text
+version through the FPrin (file print) command on the same menu (bound
+to @code{M-x dis-make-report}).
+
+dis-dump-range procedure can also use different separators between
+columns of data and at the end of the row using dis-dump-end-row-marker
+and dis-dump-between-col-marker.  
+
+There are also functions for dumping output for direct use by TeX and
+gnuplot. dis-tex-dump-range and dis-tex-dump-range-file will dump a file
+and a range for tex to use.  The only difference between the two tex
+functions is that one of them outputs just the
+\begin@{tabular@} ... 
+\end@{tabular@} whereas the other one also outputs 
+\begin@{document@} ... \end@{document@} so that 
+the file can be immediately run through latex.
+
+dis-gnuplot-range will dump a range into gnuplot.  You should see the
+function itself to further documentation.  Some users use this, but I
+haven't gotten it to work locally.
+
+
+@section Number Representations
+
+@table @samp
+
+@item Integers
+@itemx s
+Currently we use Emacs Lisp numbers as the basis for all numbers.
+They are limited on most machines to -2@@+(12) to 2@@+(12) - 1.  Some
+machines will have a larger exponent, but you will still be limited to
+a fixed range.
+
+@item Rational
+@itemx s
+The representation of nmbers in Emacs 19 suppoert rational and
+interger numbers, which should be adaquate for most users.
+
+@item Floating point
+@itemx s
+We used to use Rosenblatt's float.el package to represent floating
+point numbers.  These numbers are actually made up out of Emacs Lisp
+integers, so they too suffer a limited precision (and range, but at
+10@@+(2@@+[12]) you don't notice so much).  This has disappeared in
+the latest release because it's much easier to use the native numbers
+only.
+
+@item Imaginary
+@itemx s
+Are only imaginary at this point.  If calc is ever cut in, then they
+become more feasible.
+
+@end table
+
+@section Databases
+
+In general you can't do databases like Excel supports, yet.  But there
+is one command that may be directly useful to you that is part of
+GNU-Emacs, and you could write future ones: list-matching-lines is a
+function that shows all lines following point containing a match for
+the REGEXP (which it prompts for).  The list of matching lines is
+shown in the *Occur* buffer, which is erased each time the function is
+called.
+
+The variable list-matching-lines-default-context-lines denotes the
+default number of context lines to include around a line matched by
+list-matching-lines.
+
+If you copy the contents of a Dismal buffer into a scratch buffer, you
+can manipulate the resulting buffer with M-x
+delete-non-matching-lines, which deletes all lines except those
+containing matches for REGEXP, and delete-matching-lines, which does
+the opposite.
+
+@section Command Summary -- Miscellaneous
+
+@table @code
+
+@item M-x dis-debug-cell
+@itemx M-=		
+
+@end table
+
+
+@node Known Bugs And Interactions, GNU-Emacs/Dismal compatibility, Advanced use of Dismal, Top
+@chapter Known Bugs And Interactions
+
+Dismal has been developed to serve specific needs and with limited resources.  In addition to these limiations, Emacs was designed as an editor, and there remain a few problems with making it behave like a spreadsheet.  We note these here for your understanding and avoidance.
+
+@section Hidden variables preclude modifying mode by hand
+
+BIGGEST WARNING: Don't change the mode by hand.  For example, this can
+happen if you accidentally or on purpose change into text-mode or
+fundamental mode (e.g., by typing M-x text-mode).  When you change a
+Dismal buffer into another mode, you reset all its local variables.
+In doing so, you delete the underlying data structures, and are, in a
+word, completely hosed -- You will not be able to correctly save that
+buffer ever again, nor will modifications that you make be implemented
+in the underlying data structures.  You can only save the text image.
+You are probably safer killing the buffer and reusing the saved file.
+I would turn off the ability to change the mode if I could, but I
+don't see how.  This is in general dangerous, for while you can save
+the buffer's textual contents, you aren't saving the fundamental
+aspects that make it a spreadsheet.  You won't know that this has
+happened until you try to open and edit the file.  The only good thing
+about this problem, is that novices are unlikely to change modes, and
+experts are wise enough to be careful when doing this.
+
+@section Little use of Emacs 19 features
+
+While Dismal works under GNU-Emacs 19, few modifications have been
+performed to take advantage of any of its features.  This also means
+that the mouse keybindings no longer work in 19.
+
+Large (20x500) Dismal files have a tendency to crash GNU-Emacs 18.54
+on loading or after working for a while.  This behaviour has not been
+observed in 18.57+ because the garbage collector has been fixed in
+these versions.
+
+@section No undo facility
+
+There is no true undo facility (undo will undo the drawing operations,
+but not the underlying changes to the spreadsheet).  We therefore
+suggest that you use a conservative number for the autosave variable
+value @code{dis-auto-save-interval}.  This number represents the
+number of cell movements between autosaves.  Its default is 1000.
+
+@section Treatment of ambiguous formula
+
+You can read in and write out formulas as S-expressions.  This also
+means that if you have cell items like: "(and this is a comment in
+parenthesis.)", you may have problems.  Dismal will attempt to read it
+as a function call of "and".  If you run into this problem, you can
+avoid it by making sure that each cell in parenthesis does not begin
+with a valid function.  One could also modify Dismal to use a flag
+while reading in files that sez "don't attempt to read in functions".
+If the dependencies get out of hand, which some users report happens,
+@code{M-x dismal-fix-dependencies} will clean them up.
+
+@section Limitations on column and row sizes
+
+The cell names that Dismal accepts are limited to columns ZZ and less.
+This allows by default 676 columns in a spreadsheet.  If more columns
+are needed, the source code can be modified to allow for three or more
+letter referenced columns (search for dismal-cell-name-regexp).
+
+Dismal accepts cell references up to XXXXNN or XXNNNN.  This means that
+cell values like John89 will be parsed as a cell reference rather than
+text, like a citation.  You can get around this by putting such
+references in as quoted strings ('"Eb1"' instead of 'Eb1'), or by
+putting a space or other character on the front of such strings
+('<space>Eb1' instead of 'Eb1').
+
+@node GNU-Emacs/Dismal compatibility, Detailed Dismal Site Installation, Known Bugs And Interactions, Top
+@chapter GNU-Emacs/Dismal compatibility
+
+The initial version of Dismal was developed under GNU-Emacs 18.59
+under Unix.  The latest version of Dismal that works in 18.59 is 0.86.
+In this version all its initial features worked.  We do not recommend
+using this version of Emacs or of Dismal.  Dismal currently works best
+under version 19, and has been tested up to release 19.24, although it
+takes relatively little advantage of any of the new features.  It has
+not been tested to our knowledge under Lucid-Emacs, or GNU-Emacs for
+VMS, DOS machines (Demacs), or versions compiled for Macintosh
+machines.  We would be interested in hearing from users who have used
+Dismal under these configurations.
+
+As you might expect, different versions of Dismal work best with
+different releases of GNU-Emacs.  For the most recent releases of
+Dismal, the compatible combinations are:
+@itemize @bullet
+@item Dismal 0.86 is the last version that works well with Parmet's Emacs
+for the Mac.
+@item Dismal versions up to and including 0.93 work with Emacs 18.59 -> 19.22
+@item Dismal 0.94 will work with Emacs 18.59 -> 19.24
+@item Dismal versions greater than 0.95 will work with 19.24 or higher only. 
+@end itemize
+
+@node Detailed Dismal Site Installation, An Example Use of Dismal, GNU-Emacs/Dismal compatibility, Top
+@chapter Detailed Dismal Site Installation
+
+There are many and varied ways of doing this.  This is just one way
+which has worked in the past, for getting Dismal from the University of
+Nottingham.
+
+@itemize @bullet
+
+@item Step 1:  FTP the file using the anonymous FTP protocol.
+
+First get into the directory where you wish to install the package, then type:
+@example
+ftp ftp.nottingham.ac.uk
+@end example
+
+If your machine doesn't recognise ftp.nottingham.ac.uk as a host, try typing:
+@example
+ftp granby.nottingham.ac.uk  or  ftp 128.243.40.43
+@end example
+
+If this works, you should be faced with a prompt asking you for your name.
+Type:
+@example
+anonymous
+@end example
+
+Then you will be asked for a password.  In this case, this means your
+email address, e.g.,
+@example
+ritter@@psyc.nott.ac.uk
+@end example
+
+You should now be logged on to a machine at Nottinhgam.  The next
+command notes that you will be pulling a file that may contain control
+characters:
+@example
+binary
+@end example
+
+The next stage is to find the most up-to-date version of Dismal.  This
+will be in the directory /pub/lpzfr, so type:
+@example
+cd /pub/lpzfr
+@end example
+
+List the contents of this directory (ls) and look for the most recent
+version of the file "dismal-version.tar.Z" that you can find (where
+'version' will be replaced by a number denoting the release of Dismal
+which you will be getting).  To copy this file to the directory where
+you want to install Dismal (i.e., the one that you were in when you
+started the FTP) simply type:
+@example
+get dismal-version.tar.Z
+@end example
+
+Leave the FTP program by typing
+@example
+bye
+@end example
+
+@item Step 2:  Uncompress it
+
+Find the Dismal file that you have just FTP'ed, just to make sure that
+it's there, and then type:
+@example
+uncompress dismal-version.tar.Z
+@end example
+
+@item Step 3:  Untar it
+
+This will separate all of the Dismal files that you've just acquired
+(which were previously all merged together), and will create the
+directory for Dismal based on it's version.  Simply type
+@example
+tar xvf dismal-version.tar
+@end example
+@noindent
+Note that the .Z part of the filename has now gone, indicating that
+the file is no longer compressed.  As a result of this last command, a
+directory will be created called "dismal-version", which will contain
+all of the files that Dismal needs in order to run.
+
+@item Step 4:  cd to that directory
+
+i.e.,  cd dismal-version
+
+@item Step 5:  Type "make"
+
+Again this is exactly as it sounds, unless GNU Emacs at your site is
+not called "Emacs" but is called something else instead, e.g.,
+"gmacs", see below.
+
+@item Step 6: Go have a coffee whilst Dismal installs itself.
+
+(The easiest part of all!)
+
+@end itemize
+
+N.B.  A few additional points: Firstly, if the GNU Emacs at your site
+is not called "emacs", but something else (e.g., some places use
+"gmacs"), then compile the .el files accordingly.  In other words,
+instead of typing "make", type the alternative command "make
+EMACS=xxxx" where "xxxx" is the name of your Emacs program.
+
+The second point is that the font paths in
+@code{dismal-simple-menu.el} defining where the X display fonts live
+will have to be updated for your site.  If you don't know where these
+live, you will not be able to change the display font size, and
+attempts to do this will results in error messages (but no crashes).
+
+@node An Example Use of Dismal, Keybindings, Detailed Dismal Site Installation, Top
+@chapter An Example Use of Dismal
+
+@section The task
+
+The task described here illustrates how Dismal can be used.  This task
+illustrates taking data from an automatically generated tabbed log
+file of various people who have been working with a computer
+interface.  For the purposes of this example, the number of key
+presses will be calculated using the Lisp function @code{length} to
+work out the number of characters per word, a subset of commands will
+be isolated using the search facility, and a smaller spreadsheet
+created.  Throughout the example, where appropriate, keybindings will
+be mentioned.
+
+@section Creating the spreadsheet
+
+A spreadsheet (example.dis) is opened using @code{C-x C-f}.
+
+The tabbed file (e.g. @code{tabbed-commands}) is read into the
+spreadsheet using @code{C-x i}.
+
+It may be that some of the formatting has got a bit corrupted when the
+files was inserted (this used to a be large problem in early versions
+of Dismal, but it's getting better but not perfect).  The best way to
+tidy this up is to go to the row which is mis-aligned by pressing
+@code{'r'} -- this redraws the current row.  You can redraw the whole
+spreadsheet but this takes longer.
+
+It is best to adjust the size of the columns so that all the data can
+be seen.  In this case, column A could do with being 15 characters
+wide -- this adjustment is best done by placing the cursor in column A
+and typing @code{'f'}.  You will then be prompted
+@example
+Enter column width (default is 10): 10
+@end example
+@noindent
+and you can adjust this value.  After the column width has been
+adjusted, the following spreadsheet will be seen
+
+@section Example spreadsheet 1
+
+@example
+       A              B         C         D         E     
+  +--------------+---------+---------+---------+---------+
+ 0 excise            10                                        
+ 1 excise-all        10                                        
+ 2 excise-chunks     10                                        
+ 3 excise-task        2                                        
+ 4 go                 5                              
+ 5 help              10                              
+ 6 learn              5                              
+ 7 load               5                                        
+ 8 log                2                                        
+ 9 p                 20                              
+10 pgs               10                                        
+11 pwd                2                              
+12 quit               2                                        
+13 r                 30                                        
+14 sp                 1                                        
+15 stats              2                              
+16 time               3                              
+17 version            1                                        
+18 warnings           1                              
+19 watch              3                              
+20 wm                 3                                        
+21                                                             
+@end example
+
+You will notice that there are in fact five columns in the spreadsheet
+although data has only been entered in two.  This would due to extra
+tabs in the original file and in this case does not really cause any
+problems as we are going to enter data into those columns soon.
+
+The next task to be completed is to normalise the frequency count.
+This will be done by summing the frequency measures and then using
+that sum to convert each of the counts into a percentage.  At this
+point it is handy to label our columns, and so an extra row (or two)
+can be inserted at the head of the spreadsheet and the columns
+labelled.  This can be done quickly using the keystroke binding i r
+preceded by the multiplier prefix C - u, so to insert two rows we type
+@example
+C-u 2 i r
+@end example
+
+Headings can then be inserted in row 0.  You will note that the
+default formatting has been used so far -- the commands are
+left-aligned and the numbers are right aligned.  This can be adjusted
+later -- some of the columns will be centred using the command bound
+to |.  The sum of the frequency counts can be calculated by putting
+the formula
+@example
+(dis-sum B2:B22)
+@end example
+
+in cell B24 (remember that two rows have been inserted at the top of
+the spreadsheet.  If these two actions had been done in the other
+order then Dismal would have automatically updated any references in
+already existing cells).  The cell formula is displayed in the
+minibuffer but the cell value (i.e., 137) is displayed on the
+spreadsheet.  Note also that the current cell position is displayed on
+the mode line -- this is particularly useful when you are working on a
+large spreadsheet and do not wish to keep redrawing your ruler.
+
+To normalise the frequency a formula can be used which refers to the
+sum of all the frequencies.  (Remember a quick way to move about the
+spreadsheet if you know where you want to go to is to ``jump'' using
+j).  For example, in cell C2 you would enter
+@example
+(/ (* 100.0 B2) B24)
+@end example
+
+Note that we use 100.0.  Including the decimal point this ensures that the numbers are treated as rationals and not integers, ensuring a higher degree of accuracy.  The ratinals can be displayed to the required number of decimal digits by using the function dis-set-column-decimal which can be accessed via the menu Format: Number 
+
+You can then use the lisp function length to work out the length of
+each command and then multiply the length by the frequency.  So for
+example, the contents of cell D2 would be
+@example
+ (length A2)
+@end example
+@noindent
+and the contents of cell E2 would be
+@example
+(*B2 D2)
+@end example
+@noindent
+-- the total of column E would be the total number of characters
+typed.  To speed up the process, the copy and paste utilities (c for
+copy and v for paste) and be used -- the cell references will
+automatically change, and to make the input process even faster these
+can be incorporated into a macro, so for example, if the cell contents
+had already been copied, a macro containing the commands move to the
+next line (@code{C-n}) and paste the marked cell (@code{v}) could be
+defined, and then executed the required number of times (e.g.,
+@code{C-u 15 C-x e})
+
+When this input process is complete, a spreadsheet such as the one below will have been created.
+
+@section Example spreadsheet 2
+
+@example
+          A           B         C         D         E     
+  +--------------+---------+---------+---------+---------+
+ 0 Command name   Frequency Normalised  Length   Length*F 
+ 1                                                        
+ 2 excise                 10      7.29         6        60
+ 3 excise-all             10      7.29        10       100
+ 4 excise-chunks          10      7.29        13       130
+ 5 excise-task             2      1.45        11        22
+ 6 go                      5      3.64         2        10
+ 7 help                   10      7.29         4        40
+ 8 learn                   5      3.64         5        25
+ 9 load                    5      3.64         4        20
+10 log                     2      1.45         3         6
+11 p                      20     14.59         1        20
+12 pgs                    10      7.29         3        30
+13 pwd                     2      1.45         3         6
+14 quit                    2      1.45         4         8
+15 r                      30     21.89         1        30
+16 sp                      1      0.72         2         2
+17 stats                   2      1.45         5        10
+18 time                    3      2.18         4        12
+19 version                 1      0.72         7         7
+20 warnings                1      0.72         8         8
+21 watch                   3      2.18         5        15
+22 wm                      3      2.18         2         6
+23                                                        
+24 SUM                   137          Characters       567
+25                                                        
+@end example
+
+Now, the function list-matching-lines can be used to isolated those
+commands that contain the word excise.  The first step is to copy the
+buffer into a blank buffer (i.e., M-x insert-buffer).  We did this by
+hand with the use of macros but you may discover a faster way to do
+it.  You can then reinsert the isolated rows and perform arithmetic
+calculations on them individually.  When your spreadsheet is complete
+it can be converted into a .dp document (via the menu IO: FPrin) A
+completed spreadsheet which has been converted for printing is shown
+below.
+
+@section Example spreadsheet 3
+
+@example
+Tue Sep 20 12:58:11 1994 - Dismal (0.95) report for user lpyhsn
+For file /disks/one2a/92year/lpyhsn/RA-stuff/manual.dis
+
+To print use  "enscript -r -G -fCourier7 -L66  ~lpyhsn/RA-stuff/manual.dp"
+-------------------------------------------------------------
+
+          A           B         C         D         E         F     
+  +--------------+---------+---------+---------+---------+---------+
+ 0 Command name   Frequency Normalised  Length   Length*F 
+ 1                                                        
+ 2 excise                 10      7.29         6        60
+ 3 excise-all             10      7.29        10       100
+ 4 excise-chunks          10      7.29        13       130
+ 5 excise-task             2      1.45        11        22
+ 6 go                      5      3.64         2        10
+ 7 help                   10      7.29         4        40
+ 8 learn                   5      3.64         5        25
+ 9 load                    5      3.64         4        20
+10 log                     2      1.45         3         6
+11 p                      20     14.59         1        20
+12 pgs                    10      7.29         3        30
+13 pwd                     2      1.45         3         6
+14 quit                    2      1.45         4         8
+15 r                      30     21.89         1        30
+16 sp                      1      0.72         2         2
+17 stats                   2      1.45         5        10
+18 time                    3      2.18         4        12
+19 version                 1      0.72         7         7
+20 warnings                1      0.72         8         8
+21 watch                   3      2.18         5        15
+22 wm                      3      2.18         2         6
+23                                                        
+24 SUM                   137          Characters       567
+25                                                        
+26 Lines matching "excise" in buffer manual.dis.          
+27  excise                10      7.29         6        60          
+28  excise-all            10      7.29        10       100
+29  excise-chunks         10      7.29        13       130
+30  excise-task            2      1.45        11        22
+31                          Total "excise" chars       312
+@end example
+
+@node Keybindings, , An Example Use of Dismal, Top
+@chapter Keybindings
+
+These are all the keybindings as noted in the online help 
+(C-c C-h; C-h m; or menu Main: Help).
+
+@example
+
+C-@@	dis-set-mark
+C-a	dis-first-column
+C-b	dis-backward-column
+C-c	Prefix Command
+C-d	dis-clear-cell
+C-e	dis-end-of-row
+C-f	dis-forward-column
+TAB	dis-forward-column
+C-k	dis-kill-line
+RET	dis-forward-row
+C-n	dis-forward-row
+C-o	dis-open-line
+C-p	dis-backward-row
+C-q	dis-quoted-insert
+C-r	dis-isearch-backwards
+C-s	dis-isearch
+C-t	dis-no-op
+C-v	dis-scroll-up-in-place
+C-w	dis-kill-range
+C-x	Prefix Command
+C-y	dis-paste-range
+ESC	Prefix Command
+SPC	dis-forward-column
+-	negative-argument
+0 .. 9	digit-argument
+<	dis-edit-cell-leftjust
+=	dis-edit-cell-default
+>	dis-edit-cell-rightjust
+?	describe-mode
+c	dis-copy-range
+d	Prefix Command
+e	dis-edit-cell-plain
+f	dis-read-column-format
+i	Prefix Command
+j	dis-jump
+m	dis-set-mark
+n	dis-next-filled-row-cell
+p	dis-previous-filled-row-cell
+r	dis-hard-redraw-row
+v	dis-paste-range
+x	dis-kill-range
+z	dis-redraw-range
+|	dis-edit-cell-center
+DEL	dis-backward-kill-cell
+
+C-c RET	dis-run-menu
+C-x >	dis-no-op
+C-x ]	dis-end-of-col
+C-x [	dis-start-of-col
+C-x C-x	dis-exchange-point-and-mark
+C-x C-w	dis-write-file
+C-x C-s	dis-save-file
+C-x s	save-some-buffers
+C-x r	dis-update-ruler
+C-x TAB	dis-insert-file
+C-x i	dis-insert-file
+
+ESC C-u	dis-update-matrix
+ESC C-t	dis-transpose-cells
+ESC C-r	dis-redraw
+ESC RET	dis-backward-row
+ESC C-e	dis-erase-range
+ESC C-k 	dis-no-op
+ESC ,	dis-no-op
+ESC %	dis-query-replace
+ESC =	dis-debug-cell
+ESC w	dis-copy-range
+ESC v	dis-scroll-down-in-place
+ESC u	dis-upcase-cell
+ESC t	dis-no-op
+ESC r	dis-move-to-window-line
+ESC q	dis-query-replace
+ESC p	dis-previous-filled-row-cell
+ESC o	dis-insert-range
+ESC n	dis-next-filled-row-cell
+ESC l	dis-downcase-cell
+ESC k	dis-no-op
+ESC j	dis-align-metacolumns
+ESC i	dis-no-op
+ESC h	dis-no-op
+ESC g	dis-no-op
+ESC f	dis-forward-filled-column
+ESC e	dis-last-column
+ESC d	dis-kill-cell
+ESC c	dis-capitalize-cell
+ESC b	dis-backward-filled-column
+ESC a	dis-no-op
+ESC TAB	dis-backward-column
+ESC ]	dis-no-op
+ESC [	dis-no-op
+ESC >	dis-end-of-buffer
+ESC <	dis-beginning-of-buffer
+ESC SPC	dis-backward-column
+ESC DEL	dis-backward-kill-cell
+
+d SPC	dis-delete-blank-rows
+d r 	dis-delete-row
+d d	dis-delete-range
+d c	dis-delete-column
+
+i r	dis-insert-row
+i .	dis-insert-cells
+i z	dis-insert-z-box
+i i	dis-insert-range
+i c	dis-insert-column
+@end example
+
+Special commands:
+
+Uses keymap "dismal-minibuffer-map", which is not currently defined.
+
+1 Nichols, S. & Ritter, F. E. (1994) Automatically generating command
+aliases by applying the keystroke model.  Technical Report 18.  ESRC
+Centre for Research in Development, Instruction, and Training,
+Psychology Dept., U. of Nottingham.
+
+@bye

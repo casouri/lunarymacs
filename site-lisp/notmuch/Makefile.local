@@ -1,0 +1,123 @@
+# -*- makefile -*-
+
+dir := emacs
+emacs_sources := \
+	$(dir)/notmuch-lib.el \
+	$(dir)/notmuch-compat.el \
+	$(dir)/notmuch-parser.el \
+	$(dir)/notmuch.el \
+	$(dir)/notmuch-query.el \
+	$(dir)/notmuch-show.el \
+	$(dir)/notmuch-tree.el \
+	$(dir)/notmuch-wash.el \
+	$(dir)/notmuch-hello.el \
+	$(dir)/notmuch-mua.el \
+	$(dir)/notmuch-address.el \
+	$(dir)/notmuch-maildir-fcc.el \
+	$(dir)/notmuch-message.el \
+	$(dir)/notmuch-crypto.el \
+	$(dir)/notmuch-tag.el \
+	$(dir)/coolj.el \
+	$(dir)/notmuch-print.el \
+	$(dir)/notmuch-version.el \
+	$(dir)/notmuch-jump.el \
+	$(dir)/notmuch-company.el \
+	$(dir)/notmuch-draft.el
+
+elpa_sources := ${emacs_sources} $(dir)/notmuch-pkg.el
+
+$(dir)/notmuch-version.el: $(dir)/Makefile.local version.stamp
+$(dir)/notmuch-version.el: $(srcdir)/$(dir)/notmuch-version.el.tmpl
+	@sed -e 's/%AG%/Generated file (from $(<F)) -- do not edit!/' \
+	     -e 's/%VERSION%/"$(VERSION)"/' $< > $@
+
+$(dir)/notmuch-pkg.el: $(srcdir)/$(dir)/notmuch-pkg.el.tmpl
+	@sed -e 's/%AG%/Generated file (from $(<F)) -- do not edit!/' \
+	     -e 's/%VERSION%/"$(ELPA_VERSION)"/' $< > $@
+
+all: $(dir)/notmuch-pkg.el
+install-emacs: $(dir)/notmuch-pkg.el
+
+emacs_mua := $(dir)/notmuch-emacs-mua
+emacs_mua_desktop := $(dir)/notmuch-emacs-mua.desktop
+
+emacs_images := \
+	$(srcdir)/$(dir)/notmuch-logo.png
+
+emacs_bytecode = $(emacs_sources:.el=.elc)
+
+# Because of defmacro's and defsubst's, we have to account for load
+# dependencies between Elisp files when byte compiling.  Otherwise,
+# the byte compiler may load an old .elc file when processing a
+# "require" or we may fail to rebuild a .elc that depended on a macro
+# from an updated file.
+ifeq ($(HAVE_EMACS),1)
+$(dir)/.eldeps: $(dir)/Makefile.local $(dir)/make-deps.el $(emacs_sources)
+	$(call quiet,EMACS) --directory emacs -batch -l make-deps.el \
+		-f batch-make-deps $(emacs_sources) > $@.tmp && \
+		mv $@.tmp $@
+# We could include .eldeps directly, but that would cause a make
+# restart whenever any .el file was modified, even if dependencies
+# didn't change, because the mtime of .eldeps will change.  Instead,
+# we include a second file, .eldeps.x, which we ensure always has the
+# same content as .eldeps, but its mtime only changes when dependency
+# information changes, in which case a make restart is necessary
+# anyway.
+$(dir)/.eldeps.x: $(dir)/.eldeps
+	@cmp -s $^ $@ || cp $^ $@
+-include $(dir)/.eldeps.x
+
+# Add the one dependency make-deps.el does not have visibility to.
+$(dir)/notmuch-lib.elc: $(dir)/notmuch-version.elc
+
+endif
+CLEAN+=$(dir)/.eldeps $(dir)/.eldeps.tmp $(dir)/.eldeps.x
+
+ifeq ($(HAVE_EMACS),1)
+%.elc: %.el $(global_deps)
+	$(call quiet,EMACS) --directory emacs -batch -f batch-byte-compile $<
+endif
+
+elpa: $(ELPA_FILE)
+
+ELPA_DIR=.elpa-build/notmuch-${ELPA_VERSION}
+notmuch-emacs-%.tar: ${elpa_sources} build-info
+	mkdir -p .elpa-build/notmuch-${ELPA_VERSION}
+	cp ${elpa_sources} ${ELPA_DIR}
+ifeq ($(HAVE_SPHINX)$(HAVE_MAKEINFO)$(HAVE_INSTALL_INFO),111)
+	cp ${INFO_INFO_FILES} ${ELPA_DIR}
+	for file in ${INFO_INFO_FILES}; do install-info $$file ${ELPA_DIR}/dir; done
+endif
+	tar -C .elpa-build -cf $@ notmuch-${ELPA_VERSION}
+	rm -r .elpa-build
+
+ifeq ($(WITH_EMACS),1)
+ifeq ($(HAVE_EMACS),1)
+all: $(emacs_bytecode)
+install-emacs: $(emacs_bytecode)
+endif
+
+install: install-emacs
+endif
+
+.PHONY: install-emacs
+install-emacs: $(emacs_sources) $(emacs_images)
+	mkdir -p "$(DESTDIR)$(emacslispdir)"
+	install -m0644 $(emacs_sources) "$(DESTDIR)$(emacslispdir)"
+ifeq ($(HAVE_EMACS),1)
+	install -m0644 $(emacs_bytecode) "$(DESTDIR)$(emacslispdir)"
+endif
+	mkdir -p "$(DESTDIR)$(emacsetcdir)"
+	install -m0644 $(emacs_images) "$(DESTDIR)$(emacsetcdir)"
+	mkdir -p "$(DESTDIR)$(prefix)/bin/"
+ifeq ($(HAVE_BASH),1)
+	sed "1s|^#!.*|#! $(BASH_ABSOLUTE)|" < $(emacs_mua) > $(DESTDIR)$(prefix)/bin/notmuch-emacs-mua
+	chmod 755 $(DESTDIR)$(prefix)/bin/notmuch-emacs-mua
+endif
+ifeq ($(WITH_DESKTOP),1)
+	mkdir -p "$(DESTDIR)$(desktop_dir)"
+	desktop-file-install --mode 0644 --dir "$(DESTDIR)$(desktop_dir)" $(emacs_mua_desktop)
+	-update-desktop-database "$(DESTDIR)$(desktop_dir)"
+endif
+
+CLEAN := $(CLEAN) $(emacs_bytecode) $(dir)/notmuch-version.el $(dir)/notmuch-pkg.el

@@ -1,0 +1,151 @@
+;;;; -*- Mode: text -*- 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; 
+;;;; File            : checkout-dismal.script
+;;;; Author          : Frank Ritter
+;;;; Created On      : 27-Feb-92
+;;;; Last Modified By: Frank Ritter
+;;;; Last Modified On: Sat Sep 25 15:44:48 1993
+;;;; Update Count    : 14
+;;;; 
+;;;; PURPOSE
+;;;; 	Checkout script for dismal-mode.
+;;;; TABLE OF CONTENTS
+;;;; 	|>Contents of this module<|
+;;;; 
+;;;; Copyright 1991, Frank E. Ritter.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+I.  You should first recompile and assemble everything with
+release-dismal or the makefile.
+
+   a.    (setq debug-on-error t)
+    
+II. simple testing: startup
+
+    a) startup emacs with 
+  emacs -q  -wn testings-dismal  \
+  -i /psyc/lang/soar/emacs/utils/dismal/new/checkout-dismal.script  &
+     (use appropriate file name here)
+
+  ;; /afs/cs/user/ritter/spa/spa-mode/new/dismal/0.6/checkout-dismal.script  &
+    
+
+   (load
+     "/psyc/lang/soar/emacs/utils/dismal/new/dismal-mode-defaults.el")
+ ;; "/afs/cs/user/ritter/spa/spa-mode/new/dismal/0.6/dismal-mode-defaults.el"
+
+    b) call  (dismal-mode) on an empty buffer
+
+    c) call C-x C-f on a file.dis
+    
+    d) check for simple doc string  ^h m
+    
+    e) Write it out, and read it in.
+
+
+III.   The menu:  simple parts
+
+    1) get help on main menu to come up
+
+    2) Test about & ?
+
+    C) get help on all menus
+
+IV.   The menu:  all the parts
+
+    A) I/O
+
+    
+V.   Dismal key stroke commands
+    
+    A.  Movement commands
+
+    C-a    go to beginning of line
+    C-e    go to the end of filled column
+    ESC e  go to actual end of column
+    C-f    go Forward one column
+    ESC f  go Forward one filled column 
+    ESC >  dismal-first-cell
+    ESC <  dismal-last-cell
+
+VI.  Functions
+
+     A. 
+        1.  Put dis-count into a1 for a2:a4
+        2.  Delete a cell, a4, and make it update count.
+
+VII.  mousable items
+
+   MOUSE                   ACTION
+   left                    set point     
+   middle                  paste text     left for the user to set]
+   right                   select text
+   SHIFT-left              
+   SHIFT-middle            
+   SHIFT-right             
+   CONTROL-left            
+   CONTROL-middle          
+   CONTROL-right           
+
+VIII.	SPA stuff
+
+       \C-c\M-\C-c spa-op-code-segment
+
+
+VII.  Hard stuff
+
+1. check out the dismal-mode hook
+
+;; example set up for stuff to do when putting a buffer into dismal-mode
+(setq soar-mode-hook
+     '((lambda ()
+        (define-key soar-mode-map "\C-c\C-t" 'favorite-cmd)
+        )))
+
+2. checkout recompile-dismal-mode
+
+VIII.  Very hard stuff
+
+(defun dis-checkout-auto-aligner ()
+  (interactive)
+  (find-file "test-dismal.dis")
+  (dismal-beginning-of-buffer)
+  (dismal-insert-file
+     (concat dismal-directory "/aligner-test-data.txt"))
+  (dismal-set-metacolumn "b")
+  (let ((dis-paired-regexps
+        '(("a" . "a")
+          ("b" . "b")
+          ("c" . "c")
+          ("d" . "d"))))
+    (dis-auto-align-model "B" "D" 0 5))
+   (message "Dis auto-aligner successfully tested.")
+   (beep t)   (beep t)
+   (sit-for 2))
+
+(defun dismal-hard-test ()
+  "Test dismal with a function!"
+  ;; note: this is imcomplete, but getting better.
+  (interactive)
+  (switch-to-buffer "test-dismal")
+  (dismal-mode)
+  (test-dis-auto-aligner)
+  (dismal-beginning-of-buffer)
+  (dismal-read-cell-plain 1)
+  (dismal-forward-row 1)
+  (dismal-read-cell-plain 2)
+  (dismal-forward-row 1)
+  (dismal-read-cell-plain '(dis-sum a0:a1))
+  (dismal-forward-row 1)
+  (dismal-read-cell-plain '(dis-plus a0 a1))
+  (dismal-forward-column 1)
+  (dismal-read-cell-plain '(+ a0 a1))
+  (dismal-beginning-of-buffer)
+  (dismal-end-of-buffer)
+  (dismal-forward-column 1)
+  (dismal-read-cell-rightjust "a string")
+  (dismal-read-column-format 15)
+  (message "Dismal successfully tested.")
+)

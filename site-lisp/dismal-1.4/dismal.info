@@ -1,0 +1,33 @@
+This is Info file dismal.info, produced by Makeinfo-1.63 from the
+input file /home/lpzfr/dismal-manual.tex.
+
+   Dismal: A spreadsheet for GNU-Emacs (For GNU Emacs release 19 and
+20) and dismal 0.9 and higher 8-Nov-97
+
+   Frank E. Ritter, Sarah C. Nichols, and Shara K. Lochun
+ritter@psyc.nott.ac.uk
+
+
+Indirect:
+dismal.info-1: 300
+dismal.info-2: 46605
+
+Tag Table:
+(Indirect)
+Node: Top300
+Node: Abstract796
+Node: Introduction4126
+Node: Getting Started14181
+Node: Selecting and Applying Commands16512
+Node: Saving and Manipulating whole Spreadsheets19718
+Node: Using A Spreadsheet25438
+Node: Analysing And Calculating A Worksheet38129
+Node: Management Of Sequential Data46605
+Node: Advanced use of Dismal51515
+Node: Known Bugs And Interactions64964
+Node: GNU-Emacs/Dismal compatibility68874
+Node: Detailed Dismal Site Installation70231
+Node: An Example Use of Dismal73751
+Node: Keybindings84031
+
+End Tag Table

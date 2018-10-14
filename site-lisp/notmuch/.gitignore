@@ -1,0 +1,4 @@
+/.eldeps*
+/*.elc
+/notmuch-version.el
+/notmuch-pkg.el

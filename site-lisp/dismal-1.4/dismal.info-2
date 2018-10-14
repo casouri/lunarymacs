@@ -1,0 +1,984 @@
+This is Info file dismal.info, produced by Makeinfo-1.63 from the
+input file /home/lpzfr/dismal-manual.tex.
+
+   Dismal: A spreadsheet for GNU-Emacs (For GNU Emacs release 19 and
+20) and dismal 0.9 and higher 8-Nov-97
+
+   Frank E. Ritter, Sarah C. Nichols, and Shara K. Lochun
+ritter@psyc.nott.ac.uk
+
+
+File: dismal.info,  Node: Management Of Sequential Data,  Next: Advanced use of Dismal,  Prev: Analysing And Calculating A Worksheet,  Up: Top
+
+Management Of Sequential Data
+*****************************
+
+   Dismal was originally written to work with sequential data (Ritter
+& Larkin, 1994).  It supports several simple manipulations common to
+most of exploratory sequential data analysis, but it also supports
+manipulating two streams of sequential data to be aligned, which is
+what was its first purpose.
+
+Creating A Metacolumn
+=====================
+
+   The first new concept incorporated in Dismal was the idea of
+metacolumns, groups of columns bundled together to be treated
+together.  Typically data columns (e.g., timestamp, verbal utterance,
+and statement number) will be grouped in to one metacolumn, while the
+model's predictions (e.g., simulation cycle, simulation action) will
+be grouped into the other.  Model-based manipulations will then
+manipulate the data columns as a group with respect to the model
+columns.
+
+   The metacolumn, if there is one, is displayed in the Dismal mode
+line at the bottom of the Dismal buffer.  The Dismal command to set
+this column is `M-x dis-set-metacolumn', which is also available on
+the menu as Options: Set: Middle-column.
+
+Model-based Manipulations
+=========================
+
+   There are a set of commands to make use of the two metacolumns by
+treating one of them as a series of model predictions, and the other a
+series of subject actions, or just one column as a series of data, and
+the other as a column of data to have codes assigned to it (e.g.,
+simply coding verbal protocol data).
+
+   The function dis-initialise-operator-codes will help you initialise
+Dismal with operator codes by prompting you for a file of code names
+to read in.  This file should contain codes, one per line.  Once these
+are set up, you can insert a code into a cell by typing `C-c C-M-c',
+which will give you a menu of codes that can be inserted.
+
+   After codes have been inserted, they can be aligned with objects in
+the other metacolumn.  To do this, first turn auto-update off (this
+speeds up the process considerably).  Set up middle-column that
+defines the two metacolumns.  This can be done as a menu action.  Set
+up the pairs of regular expressions that define objects that are
+equivalent across the two columns.  These should be put in the
+variable dis-paired-regexps.  This can be done by putting them in your
+.emacs, or `M-x load-file' the file that contains their definition.
+Here is an example:
+     ;; "Pairs of equivalent regexps that match valid pred & obs codes"
+     (setq dis-paired-regexps
+           '( ("^C,C$" . "O: double-click-button")
+               ("^M(" . "O: move-mouse")
+               ("^C$" . "O: click-button")
+               ("^C(" . "O: click-button")
+               ("^D$" . "O: press-button")
+               ("^U$" . "O: release-button")))
+
+   You can then call the function dis-auto-align-model, and following
+the prompts provided there, align the two metacolumns.  It will ask
+you for the columns to compare from each metacolumn, and which row to
+start and end with.
+
+   If this doesn't work completely, or at all, you can align items in
+the metacolumns by hand by using M-j, dis-align-metacolumns
+
+   Once the alignment has been completed, there are several other
+functions you can call to see how it went:
+
+`dis-model-match-op'
+     When given a cell RANGE-LIST, computes the percentage of colA
+     matched with something in colA-2, and col A is an operator (it
+     begins with "O: ").  It only counts stuff that is in order.
+
+`dis-model-match'
+     When given a cell RANGE-LIST, computes the percentage of colA
+     matched with something in colA-1.  It too only counts stuff that
+     is in order.
+
+   This explanation is probably inadaquate for most uses, but we
+anticipate that few will actually use this functionality.  If you find
+that you are intersted in using this, please feel free to email me or
+call for more specific help.  Really.  Tony Simon did this, and we got
+his code to work (but we ran out of time for demoing it in his class).
+
+Command Summary - Model
+=======================
+
+`M-x dis-save-op-code'
+`Model: Codes: Save'
+     Saves the list of codes used
+
+`M-x dis-op-code-segment'
+`Model: Codes: Code'
+     Assign a code to a cell allowing autocompletion
+
+`M-x dis-load-op-codes'
+`Model: Codes: Load'
+     Load a file of codes to use
+
+`M-x dis-initialize-operator-codes'
+`Model: Codes: Init'
+`Model: Stats: Stats*'
+`Model: Stats: Count*'
+`M-x dis-auto-align-model'
+`Model: Utils: AutoAlign'
+     Automatically align the two metacolumns based on items in two
+     subcolumns (prompted for) matching the regular expressions in
+     dis-paired-regexps
+
+`M-x dis-align-columns'
+`Model: Utils: 2AutoAlign'
+     Automatically align the two metacolumns using the previous but
+     perhaps aborted command autoalign
+
+
+File: dismal.info,  Node: Advanced use of Dismal,  Next: Known Bugs And Interactions,  Prev: Management Of Sequential Data,  Up: Top
+
+Advanced use of Dismal
+**********************
+
+   Dismal comes with its source code showing and with a relatively
+large number of user settable variables.  Most users won't need them,
+but power users will find this level interesting in a spreadsheet.
+
+User Settable Variables
+=======================
+
+   There are several variables that influence Dismal's behaviour on a
+global level.  The default values for these variables, (i.e., those
+which are used in each new Dismal spreadsheet created), are shown
+below.  Users can change these default values by setting them in their
+.emacs file.  Variables set using this method will be altered from the
+next time that Dismal is started up, and will hold their changed value
+for each subsequent time that Dismal is run until the .emacs file is
+changed again.  For example, to set the default width for columns to
+15, you might include the following in your .emacs file:
+     (setq dis-default-column-width 15)
+
+To implement this change you must either quit and restart Emacs, or
+load your .emacs file after you have amended it, by typing:
+     M-x load-file
+
+The changed value of the variable will automatically apply to all new
+Dismal spreadsheets created after this change has been made, i.e., in
+this example, a new Dismal spreadsheet will initially have all of the
+columns 15 characters wide.  For all existing Dismal spreadsheets the
+changed value of the variable will now be the default value for that
+variable, but will not in itself change the formatting of the sheet.
+
+   Some of the variables that you might want to set include:
+
+`dis-default-column-width'
+     (Default is 10.) This sets the default width for all columns in
+     the spreadsheet.  The default value of 10 can be replaced by any
+     positive integer.
+
+`dis-default-column-alignment'
+     (Default is `'default'.)  This sets the default alignment for all
+     of the cells.  The default value for this variable (`'default')
+     sets right cell alignment for numeric characters, and left cell
+     alignment for non-numeric characters.  Other possible values of
+     this variable are left, right and center (note American
+     spelling!), and these apply to all cells, whether containing
+     numeric or non-numeric values.
+
+`dis-default-column-decimal'
+     (Default is 2.)  This sets the number of decimal places for each
+     cell.  Any value greater than or equal to 0 is acceptable. Whole
+     integers entered will not be padded with 0s.  Integers followed
+     by a decimal point and any number of subsequent digits will be
+     represented with the exact number of decimal digits specified.
+     Dismal uses a `round towards zero' or truncating algorithm for
+     reducing numbers to the required number of decimal digits, thus
+     2.58 and -2.58 would both be represented as (-)2.5 if the value
+     of dis-default-column-decimal was set at 1.
+
+`dis-field-sep'
+     (Default is `"\t"'.)  This sets the field separator character to
+     be used when working with other software dump files.  The default
+     value (TAB) can be replaced with other common field separators,
+     such as SPACE by using  dis-dump-between-col-marker.
+
+`dis-page-length'
+     (Default is 66.)  This sets the anticipated page length for
+     printing - 66 works well for 8.5"x11" or A4 landscape with an 8
+     pt. courier font.
+
+   For more advanced worksheet manipulations, changing the following
+variables might also be useful:
+
+`dis-mode-hooks'
+     (Default is `nil'.)  Hook functions to be run upon entering a
+     Dismal file.
+
+`dis-load-hook'
+     (Default is `nil'.)  Hook functions run after Dismal is loaded.
+
+`dismal-recursion-limit'
+     (Default is 9.)  Maximum depth allowed when evaluating (perhaps)
+     circular dependencies.  This can take any positive integer.
+
+Designing And Writing Macros
+============================
+
+   Dismal supports ELisp functions (it is written in them) and
+keyboard macros.  Simple, repetitive jobs such as removing a decimal
+point can be written as a standard Emacs keyboard macro.  This is
+done by starting the macro defining process by typing
+     C-x (
+
+and then typing the set of keystrokes that you wish to repeat.  One
+way in which this is particularly useful is when copying a formula
+from one cell to another - Dismal automatically updates the cell
+references when the text is pasted.  So if a cell value such as
+     (+ B1 B2)
+
+had been copied from cell B3 - when it was pasted into cell C3 it
+would have the value
+     (+ C1 C2)
+
+Therefore, if you wished to repeat this pasting process down the next
+ten columns of the spreadsheet, you would define the macro as
+     v	(paste marked range)
+     C-n	(move down one row)
+
+You would then conclude the definition by typing
+     C-x )
+
+and could execute the macro by typing
+     C-x e
+
+If you wished to repeat this execution then you could type
+     C-u N C-x e
+
+where N is the number of times you wish to execute the macro.  So, in
+this example, if you wished to paste the cell 10 times you would type
+     C-u 10 C-x e
+
+Learning about macros will prove to be an invaluable experience and
+will speed up the data entry process considerably.
+
+Including extra functions in Dismal
+===================================
+
+   Any Lisp function can be used in a Dismal cell - of course, if it
+references other cells then they need to contain the right type of
+data or an error will occur.  Dismal cannot handle errors as well as a
+dedicated Lisp environment and so it is important that you include
+helpful error messages yourself in any additional functions.  For
+example, if a function requires a string as its second argument it
+will save you a lot of debugging time if you make sure that an error
+message to that effect is displayed when it references a cell
+containing the incorrect type of value.
+
+   At the end of the Dismal loading process, the functions on the
+dismal-mode-load-hook are called.  If you wish to load additions, you
+can put them in a file, and put a lambda expression to load them
+there.  For example,
+     (setq dis-load-hook
+        '(lambda () (load "/afs/nott/usr/ritter/my-dismal-file.el")))
+
+   The functions you need to modify and manipulate cells are
+available in the source code.  Until this section gets properly
+filled in, we can suggest a simple and direct way to find out by
+exploring the source code.  Type `C-h k', and then the key command
+that points you in the direction you need to find out.  This will
+tell you the command name, which you can further examine by looking
+directly in the source code.  For example, if you want to know how to
+get a cell's value, type `C-h k e'.  This will display the help for
+dis-read-cell-plain.  Examining dismal.el, you will find that this
+function references the expression (the string, number or expression
+that is evaluated to give the cell's value) through dismal-get-exp.
+
+   You should try to use functions that start with dis-, for these are
+pretty stable.  If you have to, and you will, functions that start
+with dismal- are less stable, and access internal data structures,
+and you can get youself more easily in trouble this way.
+
+   If you really want to live dangerously (and this is documented for
+that person), you can use dynamically bound variables.  When dismal
+evaluates a cell it binds r and c to the row and column of the cell
+getting evaluated.  If you first set r and c to be variables, the
+input parser will recognize them as top-level variables, and let them
+be variables, not strings.  You can then use them in functions, such
+as (+ r c) will add the current row and column of the cell itself.
+Maybe this is a good idea, but it makes me nervous.
+
+Using the Keystroke level model in dismal
+=========================================
+
+   As an example set of functions, the Keystroke model of Card, Moran
+and Newell (1983, , The Psychology of Human-Computer Interaction,
+Hillsdale, NJ: Lawrence Earlbaum Associates) has been implemented as
+a set of two functions.
+
+   The first function, klm-time, is used to calculate the time to
+enter a command that is given as an argument when the function is
+called, or entered as a value in a Dismal spreadsheet cell.  It will
+compute the number of mental operators needed, but it can also take
+that as an optional arguement if the analyst knows that this is
+higher or lower than expected.  The default algorithm give one Mop
+per word separated by a dash or space.  This rule is derived from the
+heuristic specified by Card et al (1983, Figure 8.2 rule 2).  It was
+specifically used when looking at Soar commands - the structure of
+which meant that this approach was particularly appropriate.
+
+   The default specifications for the variables that are included
+here are the length of the Mental Operator (Mop) at 1.35 seconds as
+specified by Card et al (1983), and the typing speed.  This is in
+words per minute so that is can be easily altered to suit different
+users, and a simple modification to the function could allow the
+individual's typing speed to be entered into a cell on a spreadsheet,
+and the value read from there.  The key-const value is a necessary
+constant used to convert from words per minute to average time for a
+keystroke in seconds, and was derived from Card et al (1981).  The
+defaults are 40 wpm, which is a fairly good typist, a value of 10.8
+keystroke/word taken from Card, Moran and Newell (1983).
+
+   The second function is make-alias, which takes a command as a
+string and creates an alias for it.  If the command is over 5
+letters, it does so by taking the first letter of each hyphanated
+word in it, otherwise, just the first letter.  make-alias keeps track
+of aliases it has made, and keeps them on *new-aliases*, and puts
+duplicate aliases on *dup-aliases*.   There is a helper function,
+init-make-aliases, to initialize these variables.
+
+Using Other Spreadsheet Program's Data
+======================================
+
+   You can transfer data between Dismal and other spreadsheets in both
+directions using tabbed output files.
+
+   To pass data to Dismal, write the data out as a tabbed file from
+the other spreadsheet software.  Read it in to a blank Dismal
+spreadsheet, or into the appropriate place on a previously created
+sheet using dis-insert-file, bound to `C-x C-i'.
+
+   To pass data from Dismal, use the dis-dump-range command (`M-x
+dis-dump-range' or `C-c C-m': I/O: RDump) to dump a range to a tabbed
+ASCII file, or use `dis-dump-tabbed-file' if you want to write out
+the whole file this way.  You can also get a plain text version
+through the FPrin (file print) command on the same menu (bound to
+`M-x dis-make-report').
+
+   dis-dump-range procedure can also use different separators between
+columns of data and at the end of the row using
+dis-dump-end-row-marker and dis-dump-between-col-marker.
+
+   There are also functions for dumping output for direct use by TeX
+and gnuplot. dis-tex-dump-range and dis-tex-dump-range-file will dump
+a file and a range for tex to use.  The only difference between the
+two tex functions is that one of them outputs just the
+\begin{tabular} ...  \end{tabular} whereas the other one also outputs
+\begin{document} ... \end{document} so that the file can be
+immediately run through latex.
+
+   dis-gnuplot-range will dump a range into gnuplot.  You should see
+the function itself to further documentation.  Some users use this,
+but I haven't gotten it to work locally.
+
+Number Representations
+======================
+
+`Integers'
+`s'
+     Currently we use Emacs Lisp numbers as the basis for all numbers.
+     They are limited on most machines to -2@+(12) to 2@+(12) - 1.
+     Some machines will have a larger exponent, but you will still be
+     limited to a fixed range.
+
+`Rational'
+`s'
+     The representation of nmbers in Emacs 19 suppoert rational and
+     interger numbers, which should be adaquate for most users.
+
+`Floating point'
+`s'
+     We used to use Rosenblatt's float.el package to represent
+     floating point numbers.  These numbers are actually made up out
+     of Emacs Lisp integers, so they too suffer a limited precision
+     (and range, but at 10@+(2@+[12]) you don't notice so much).
+     This has disappeared in the latest release because it's much
+     easier to use the native numbers only.
+
+`Imaginary'
+`s'
+     Are only imaginary at this point.  If calc is ever cut in, then
+     they become more feasible.
+
+Databases
+=========
+
+   In general you can't do databases like Excel supports, yet.  But
+there is one command that may be directly useful to you that is part
+of GNU-Emacs, and you could write future ones: list-matching-lines is
+a function that shows all lines following point containing a match for
+the REGEXP (which it prompts for).  The list of matching lines is
+shown in the *Occur* buffer, which is erased each time the function is
+called.
+
+   The variable list-matching-lines-default-context-lines denotes the
+default number of context lines to include around a line matched by
+list-matching-lines.
+
+   If you copy the contents of a Dismal buffer into a scratch buffer,
+you can manipulate the resulting buffer with M-x
+delete-non-matching-lines, which deletes all lines except those
+containing matches for REGEXP, and delete-matching-lines, which does
+the opposite.
+
+Command Summary - Miscellaneous
+===============================
+
+`M-x dis-debug-cell'
+`M-='
+
+File: dismal.info,  Node: Known Bugs And Interactions,  Next: GNU-Emacs/Dismal compatibility,  Prev: Advanced use of Dismal,  Up: Top
+
+Known Bugs And Interactions
+***************************
+
+   Dismal has been developed to serve specific needs and with limited
+resources.  In addition to these limiations, Emacs was designed as an
+editor, and there remain a few problems with making it behave like a
+spreadsheet.  We note these here for your understanding and avoidance.
+
+Hidden variables preclude modifying mode by hand
+================================================
+
+   BIGGEST WARNING: Don't change the mode by hand.  For example, this
+can happen if you accidentally or on purpose change into text-mode or
+fundamental mode (e.g., by typing M-x text-mode).  When you change a
+Dismal buffer into another mode, you reset all its local variables.
+In doing so, you delete the underlying data structures, and are, in a
+word, completely hosed - You will not be able to correctly save that
+buffer ever again, nor will modifications that you make be implemented
+in the underlying data structures.  You can only save the text image.
+You are probably safer killing the buffer and reusing the saved file.
+I would turn off the ability to change the mode if I could, but I
+don't see how.  This is in general dangerous, for while you can save
+the buffer's textual contents, you aren't saving the fundamental
+aspects that make it a spreadsheet.  You won't know that this has
+happened until you try to open and edit the file.  The only good thing
+about this problem, is that novices are unlikely to change modes, and
+experts are wise enough to be careful when doing this.
+
+Little use of Emacs 19 features
+===============================
+
+   While Dismal works under GNU-Emacs 19, few modifications have been
+performed to take advantage of any of its features.  This also means
+that the mouse keybindings no longer work in 19.
+
+   Large (20x500) Dismal files have a tendency to crash GNU-Emacs
+18.54 on loading or after working for a while.  This behaviour has
+not been observed in 18.57+ because the garbage collector has been
+fixed in these versions.
+
+No undo facility
+================
+
+   There is no true undo facility (undo will undo the drawing
+operations, but not the underlying changes to the spreadsheet).  We
+therefore suggest that you use a conservative number for the autosave
+variable value `dis-auto-save-interval'.  This number represents the
+number of cell movements between autosaves.  Its default is 1000.
+
+Treatment of ambiguous formula
+==============================
+
+   You can read in and write out formulas as S-expressions.  This also
+means that if you have cell items like: "(and this is a comment in
+parenthesis.)", you may have problems.  Dismal will attempt to read it
+as a function call of "and".  If you run into this problem, you can
+avoid it by making sure that each cell in parenthesis does not begin
+with a valid function.  One could also modify Dismal to use a flag
+while reading in files that sez "don't attempt to read in functions".
+If the dependencies get out of hand, which some users report happens,
+`M-x dismal-fix-dependencies' will clean them up.
+
+Limitations on column and row sizes
+===================================
+
+   The cell names that Dismal accepts are limited to columns ZZ and
+less.  This allows by default 676 columns in a spreadsheet.  If more
+columns are needed, the source code can be modified to allow for
+three or more letter referenced columns (search for
+dismal-cell-name-regexp).
+
+   Dismal accepts cell references up to XXXXNN or XXNNNN.  This means
+that cell values like John89 will be parsed as a cell reference
+rather than text, like a citation.  You can get around this by
+putting such references in as quoted strings ('"Eb1"' instead of
+'Eb1'), or by putting a space or other character on the front of such
+strings ('<space>Eb1' instead of 'Eb1').
+
+
+File: dismal.info,  Node: GNU-Emacs/Dismal compatibility,  Next: Detailed Dismal Site Installation,  Prev: Known Bugs And Interactions,  Up: Top
+
+GNU-Emacs/Dismal compatibility
+******************************
+
+   The initial version of Dismal was developed under GNU-Emacs 18.59
+under Unix.  The latest version of Dismal that works in 18.59 is 0.86.
+In this version all its initial features worked.  We do not recommend
+using this version of Emacs or of Dismal.  Dismal currently works best
+under version 19, and has been tested up to release 19.24, although it
+takes relatively little advantage of any of the new features.  It has
+not been tested to our knowledge under Lucid-Emacs, or GNU-Emacs for
+VMS, DOS machines (Demacs), or versions compiled for Macintosh
+machines.  We would be interested in hearing from users who have used
+Dismal under these configurations.
+
+   As you might expect, different versions of Dismal work best with
+different releases of GNU-Emacs.  For the most recent releases of
+Dismal, the compatible combinations are:
+   * Dismal 0.86 is the last version that works well with Parmet's
+     Emacs for the Mac.
+
+   * Dismal versions up to and including 0.93 work with Emacs 18.59
+     -> 19.22
+
+   * Dismal 0.94 will work with Emacs 18.59 -> 19.24
+
+   * Dismal versions greater than 0.95 will work with 19.24 or higher
+     only.
+
+
+File: dismal.info,  Node: Detailed Dismal Site Installation,  Next: An Example Use of Dismal,  Prev: GNU-Emacs/Dismal compatibility,  Up: Top
+
+Detailed Dismal Site Installation
+*********************************
+
+   There are many and varied ways of doing this.  This is just one way
+which has worked in the past, for getting Dismal from the University
+of Nottingham.
+
+   * Step 1:  FTP the file using the anonymous FTP protocol.
+
+     First get into the directory where you wish to install the
+     package, then type:
+          ftp ftp.nottingham.ac.uk
+
+     If your machine doesn't recognise ftp.nottingham.ac.uk as a
+     host, try typing:
+          ftp granby.nottingham.ac.uk  or  ftp 128.243.40.43
+
+     If this works, you should be faced with a prompt asking you for
+     your name.  Type:
+          anonymous
+
+     Then you will be asked for a password.  In this case, this means
+     your email address, e.g.,
+          ritter@psyc.nott.ac.uk
+
+     You should now be logged on to a machine at Nottinhgam.  The next
+     command notes that you will be pulling a file that may contain
+     control characters:
+          binary
+
+     The next stage is to find the most up-to-date version of Dismal.
+     This will be in the directory /pub/lpzfr, so type:
+          cd /pub/lpzfr
+
+     List the contents of this directory (ls) and look for the most
+     recent version of the file "dismal-version.tar.Z" that you can
+     find (where 'version' will be replaced by a number denoting the
+     release of Dismal which you will be getting).  To copy this file
+     to the directory where you want to install Dismal (i.e., the one
+     that you were in when you started the FTP) simply type:
+          get dismal-version.tar.Z
+
+     Leave the FTP program by typing
+          bye
+
+   * Step 2:  Uncompress it
+
+     Find the Dismal file that you have just FTP'ed, just to make
+     sure that it's there, and then type:
+          uncompress dismal-version.tar.Z
+
+   * Step 3:  Untar it
+
+     This will separate all of the Dismal files that you've just
+     acquired (which were previously all merged together), and will
+     create the directory for Dismal based on it's version.  Simply
+     type
+          tar xvf dismal-version.tar
+
+     Note that the .Z part of the filename has now gone, indicating
+     that the file is no longer compressed.  As a result of this last
+     command, a directory will be created called "dismal-version",
+     which will contain all of the files that Dismal needs in order
+     to run.
+
+   * Step 4:  cd to that directory
+
+     i.e.,  cd dismal-version
+
+   * Step 5:  Type "make"
+
+     Again this is exactly as it sounds, unless GNU Emacs at your
+     site is not called "Emacs" but is called something else instead,
+     e.g., "gmacs", see below.
+
+   * Step 6: Go have a coffee whilst Dismal installs itself.
+
+     (The easiest part of all!)
+
+   N.B.  A few additional points: Firstly, if the GNU Emacs at your
+site is not called "emacs", but something else (e.g., some places use
+"gmacs"), then compile the .el files accordingly.  In other words,
+instead of typing "make", type the alternative command "make
+EMACS=xxxx" where "xxxx" is the name of your Emacs program.
+
+   The second point is that the font paths in `dismal-simple-menu.el'
+defining where the X display fonts live will have to be updated for
+your site.  If you don't know where these live, you will not be able
+to change the display font size, and attempts to do this will results
+in error messages (but no crashes).
+
+
+File: dismal.info,  Node: An Example Use of Dismal,  Next: Keybindings,  Prev: Detailed Dismal Site Installation,  Up: Top
+
+An Example Use of Dismal
+************************
+
+The task
+========
+
+   The task described here illustrates how Dismal can be used.  This
+task illustrates taking data from an automatically generated tabbed
+log file of various people who have been working with a computer
+interface.  For the purposes of this example, the number of key
+presses will be calculated using the Lisp function `length' to work
+out the number of characters per word, a subset of commands will be
+isolated using the search facility, and a smaller spreadsheet
+created.  Throughout the example, where appropriate, keybindings will
+be mentioned.
+
+Creating the spreadsheet
+========================
+
+   A spreadsheet (example.dis) is opened using `C-x C-f'.
+
+   The tabbed file (e.g. `tabbed-commands') is read into the
+spreadsheet using `C-x i'.
+
+   It may be that some of the formatting has got a bit corrupted when
+the files was inserted (this used to a be large problem in early
+versions of Dismal, but it's getting better but not perfect).  The
+best way to tidy this up is to go to the row which is mis-aligned by
+pressing `'r'' - this redraws the current row.  You can redraw the
+whole spreadsheet but this takes longer.
+
+   It is best to adjust the size of the columns so that all the data
+can be seen.  In this case, column A could do with being 15 characters
+wide - this adjustment is best done by placing the cursor in column A
+and typing `'f''.  You will then be prompted
+     Enter column width (default is 10): 10
+
+and you can adjust this value.  After the column width has been
+adjusted, the following spreadsheet will be seen
+
+Example spreadsheet 1
+=====================
+
+            A              B         C         D         E
+       +--------------+---------+---------+---------+---------+
+      0 excise            10
+      1 excise-all        10
+      2 excise-chunks     10
+      3 excise-task        2
+      4 go                 5
+      5 help              10
+      6 learn              5
+      7 load               5
+      8 log                2
+      9 p                 20
+     10 pgs               10
+     11 pwd                2
+     12 quit               2
+     13 r                 30
+     14 sp                 1
+     15 stats              2
+     16 time               3
+     17 version            1
+     18 warnings           1
+     19 watch              3
+     20 wm                 3
+     21
+
+   You will notice that there are in fact five columns in the
+spreadsheet although data has only been entered in two.  This would
+due to extra tabs in the original file and in this case does not
+really cause any problems as we are going to enter data into those
+columns soon.
+
+   The next task to be completed is to normalise the frequency count.
+This will be done by summing the frequency measures and then using
+that sum to convert each of the counts into a percentage.  At this
+point it is handy to label our columns, and so an extra row (or two)
+can be inserted at the head of the spreadsheet and the columns
+labelled.  This can be done quickly using the keystroke binding i r
+preceded by the multiplier prefix C - u, so to insert two rows we type
+     C-u 2 i r
+
+   Headings can then be inserted in row 0.  You will note that the
+default formatting has been used so far - the commands are
+left-aligned and the numbers are right aligned.  This can be adjusted
+later - some of the columns will be centred using the command bound
+to |.  The sum of the frequency counts can be calculated by putting
+the formula
+     (dis-sum B2:B22)
+
+   in cell B24 (remember that two rows have been inserted at the top
+of the spreadsheet.  If these two actions had been done in the other
+order then Dismal would have automatically updated any references in
+already existing cells).  The cell formula is displayed in the
+minibuffer but the cell value (i.e., 137) is displayed on the
+spreadsheet.  Note also that the current cell position is displayed on
+the mode line - this is particularly useful when you are working on a
+large spreadsheet and do not wish to keep redrawing your ruler.
+
+   To normalise the frequency a formula can be used which refers to
+the sum of all the frequencies.  (Remember a quick way to move about
+the spreadsheet if you know where you want to go to is to "jump" using
+j).  For example, in cell C2 you would enter
+     (/ (* 100.0 B2) B24)
+
+   Note that we use 100.0.  Including the decimal point this ensures
+that the numbers are treated as rationals and not integers, ensuring
+a higher degree of accuracy.  The ratinals can be displayed to the
+required number of decimal digits by using the function
+dis-set-column-decimal which can be accessed via the menu Format:
+Number
+
+   You can then use the lisp function length to work out the length of
+each command and then multiply the length by the frequency.  So for
+example, the contents of cell D2 would be
+      (length A2)
+
+and the contents of cell E2 would be
+     (*B2 D2)
+
+- the total of column E would be the total number of characters
+typed.  To speed up the process, the copy and paste utilities (c for
+copy and v for paste) and be used - the cell references will
+automatically change, and to make the input process even faster these
+can be incorporated into a macro, so for example, if the cell contents
+had already been copied, a macro containing the commands move to the
+next line (`C-n') and paste the marked cell (`v') could be defined,
+and then executed the required number of times (e.g., `C-u 15 C-x e')
+
+   When this input process is complete, a spreadsheet such as the one
+below will have been created.
+
+Example spreadsheet 2
+=====================
+
+               A           B         C         D         E
+       +--------------+---------+---------+---------+---------+
+      0 Command name   Frequency Normalised  Length   Length*F
+      1
+      2 excise                 10      7.29         6        60
+      3 excise-all             10      7.29        10       100
+      4 excise-chunks          10      7.29        13       130
+      5 excise-task             2      1.45        11        22
+      6 go                      5      3.64         2        10
+      7 help                   10      7.29         4        40
+      8 learn                   5      3.64         5        25
+      9 load                    5      3.64         4        20
+     10 log                     2      1.45         3         6
+     11 p                      20     14.59         1        20
+     12 pgs                    10      7.29         3        30
+     13 pwd                     2      1.45         3         6
+     14 quit                    2      1.45         4         8
+     15 r                      30     21.89         1        30
+     16 sp                      1      0.72         2         2
+     17 stats                   2      1.45         5        10
+     18 time                    3      2.18         4        12
+     19 version                 1      0.72         7         7
+     20 warnings                1      0.72         8         8
+     21 watch                   3      2.18         5        15
+     22 wm                      3      2.18         2         6
+     23
+     24 SUM                   137          Characters       567
+     25
+
+   Now, the function list-matching-lines can be used to isolated those
+commands that contain the word excise.  The first step is to copy the
+buffer into a blank buffer (i.e., M-x insert-buffer).  We did this by
+hand with the use of macros but you may discover a faster way to do
+it.  You can then reinsert the isolated rows and perform arithmetic
+calculations on them individually.  When your spreadsheet is complete
+it can be converted into a .dp document (via the menu IO: FPrin) A
+completed spreadsheet which has been converted for printing is shown
+below.
+
+Example spreadsheet 3
+=====================
+
+     Tue Sep 20 12:58:11 1994 - Dismal (0.95) report for user lpyhsn
+     For file /disks/one2a/92year/lpyhsn/RA-stuff/manual.dis
+     
+     To print use  "enscript -r -G -fCourier7 -L66  ~lpyhsn/RA-stuff/manual.dp"
+     -------------------------------------------------------------
+     
+               A           B         C         D         E         F
+       +--------------+---------+---------+---------+---------+---------+
+      0 Command name   Frequency Normalised  Length   Length*F
+      1
+      2 excise                 10      7.29         6        60
+      3 excise-all             10      7.29        10       100
+      4 excise-chunks          10      7.29        13       130
+      5 excise-task             2      1.45        11        22
+      6 go                      5      3.64         2        10
+      7 help                   10      7.29         4        40
+      8 learn                   5      3.64         5        25
+      9 load                    5      3.64         4        20
+     10 log                     2      1.45         3         6
+     11 p                      20     14.59         1        20
+     12 pgs                    10      7.29         3        30
+     13 pwd                     2      1.45         3         6
+     14 quit                    2      1.45         4         8
+     15 r                      30     21.89         1        30
+     16 sp                      1      0.72         2         2
+     17 stats                   2      1.45         5        10
+     18 time                    3      2.18         4        12
+     19 version                 1      0.72         7         7
+     20 warnings                1      0.72         8         8
+     21 watch                   3      2.18         5        15
+     22 wm                      3      2.18         2         6
+     23
+     24 SUM                   137          Characters       567
+     25
+     26 Lines matching "excise" in buffer manual.dis.
+     27  excise                10      7.29         6        60
+     28  excise-all            10      7.29        10       100
+     29  excise-chunks         10      7.29        13       130
+     30  excise-task            2      1.45        11        22
+     31                          Total "excise" chars       312
+
+
+File: dismal.info,  Node: Keybindings,  Prev: An Example Use of Dismal,  Up: Top
+
+Keybindings
+***********
+
+   These are all the keybindings as noted in the online help (C-c
+C-h; C-h m; or menu Main: Help).
+
+
+     C-@	dis-set-mark
+     C-a	dis-first-column
+     C-b	dis-backward-column
+     C-c	Prefix Command
+     C-d	dis-clear-cell
+     C-e	dis-end-of-row
+     C-f	dis-forward-column
+     TAB	dis-forward-column
+     C-k	dis-kill-line
+     RET	dis-forward-row
+     C-n	dis-forward-row
+     C-o	dis-open-line
+     C-p	dis-backward-row
+     C-q	dis-quoted-insert
+     C-r	dis-isearch-backwards
+     C-s	dis-isearch
+     C-t	dis-no-op
+     C-v	dis-scroll-up-in-place
+     C-w	dis-kill-range
+     C-x	Prefix Command
+     C-y	dis-paste-range
+     ESC	Prefix Command
+     SPC	dis-forward-column
+     -	negative-argument
+     0 .. 9	digit-argument
+     <	dis-edit-cell-leftjust
+     =	dis-edit-cell-default
+     >	dis-edit-cell-rightjust
+     ?	describe-mode
+     c	dis-copy-range
+     d	Prefix Command
+     e	dis-edit-cell-plain
+     f	dis-read-column-format
+     i	Prefix Command
+     j	dis-jump
+     m	dis-set-mark
+     n	dis-next-filled-row-cell
+     p	dis-previous-filled-row-cell
+     r	dis-hard-redraw-row
+     v	dis-paste-range
+     x	dis-kill-range
+     z	dis-redraw-range
+     |	dis-edit-cell-center
+     DEL	dis-backward-kill-cell
+     
+     C-c RET	dis-run-menu
+     C-x >	dis-no-op
+     C-x ]	dis-end-of-col
+     C-x [	dis-start-of-col
+     C-x C-x	dis-exchange-point-and-mark
+     C-x C-w	dis-write-file
+     C-x C-s	dis-save-file
+     C-x s	save-some-buffers
+     C-x r	dis-update-ruler
+     C-x TAB	dis-insert-file
+     C-x i	dis-insert-file
+     
+     ESC C-u	dis-update-matrix
+     ESC C-t	dis-transpose-cells
+     ESC C-r	dis-redraw
+     ESC RET	dis-backward-row
+     ESC C-e	dis-erase-range
+     ESC C-k 	dis-no-op
+     ESC ,	dis-no-op
+     ESC %	dis-query-replace
+     ESC =	dis-debug-cell
+     ESC w	dis-copy-range
+     ESC v	dis-scroll-down-in-place
+     ESC u	dis-upcase-cell
+     ESC t	dis-no-op
+     ESC r	dis-move-to-window-line
+     ESC q	dis-query-replace
+     ESC p	dis-previous-filled-row-cell
+     ESC o	dis-insert-range
+     ESC n	dis-next-filled-row-cell
+     ESC l	dis-downcase-cell
+     ESC k	dis-no-op
+     ESC j	dis-align-metacolumns
+     ESC i	dis-no-op
+     ESC h	dis-no-op
+     ESC g	dis-no-op
+     ESC f	dis-forward-filled-column
+     ESC e	dis-last-column
+     ESC d	dis-kill-cell
+     ESC c	dis-capitalize-cell
+     ESC b	dis-backward-filled-column
+     ESC a	dis-no-op
+     ESC TAB	dis-backward-column
+     ESC ]	dis-no-op
+     ESC [	dis-no-op
+     ESC >	dis-end-of-buffer
+     ESC <	dis-beginning-of-buffer
+     ESC SPC	dis-backward-column
+     ESC DEL	dis-backward-kill-cell
+     
+     d SPC	dis-delete-blank-rows
+     d r 	dis-delete-row
+     d d	dis-delete-range
+     d c	dis-delete-column
+     
+     i r	dis-insert-row
+     i .	dis-insert-cells
+     i z	dis-insert-z-box
+     i i	dis-insert-range
+     i c	dis-insert-column
+
+   Special commands:
+
+   Uses keymap "dismal-minibuffer-map", which is not currently
+defined.
+
+   1 Nichols, S. & Ritter, F. E. (1994) Automatically generating
+command aliases by applying the keystroke model.  Technical Report
+18.  ESRC Centre for Research in Development, Instruction, and
+Training, Psychology Dept., U. of Nottingham.
+
+
