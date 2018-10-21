@@ -98,7 +98,8 @@
                               (apel . (:repo "wanderlust/apel"))
                               (quickrun . (:repo "syohex/emacs-quickrun"))
                               (visual-regexp . (:repo "benma/visual-regexp.el"))
-                              (multiple-cursors . (:repo "magnars/multiple-cursors.el")))
+                              (multiple-cursors . (:repo "magnars/multiple-cursors.el"))
+                              (eglot . (:repo "joaotavora/eglot" :dependency (jsonrpc))))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
