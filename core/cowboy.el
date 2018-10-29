@@ -102,7 +102,11 @@
                               (eglot . (:repo "joaotavora/eglot" :dependency (jsonrpc)))
                               (nyan-lite . (:repo "casouri/nyan-lite"))
                               (zone-nyan . (:repo "wasamasa/zone-nyan" :dependency (esxml)))
-                              (esxml . (:repo "tali713/esxml")))
+                              (esxml . (:repo "tali713/esxml"))
+                              (helpful . (:repo "Wilfred/helpful" :dependency (elisp-refs shut-up)))
+                              (elisp-refs . (:repo "Wilfred/elisp-refs" :dependency (loop)))
+                              (loop . (:repo "Wilfred/loop.el"))
+                              (shut-up . (:repo "cask/shut-up")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
