@@ -99,7 +99,10 @@
                               (quickrun . (:repo "syohex/emacs-quickrun"))
                               (visual-regexp . (:repo "benma/visual-regexp.el"))
                               (multiple-cursors . (:repo "magnars/multiple-cursors.el"))
-                              (eglot . (:repo "joaotavora/eglot" :dependency (jsonrpc))))
+                              (eglot . (:repo "joaotavora/eglot" :dependency (jsonrpc)))
+                              (nyan-lite . (:repo "casouri/nyan-lite"))
+                              (zone-nyan . (:repo "wasamasa/zone-nyan" :dependency (esxml)))
+                              (esxml . (:repo "tali713/esxml")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
