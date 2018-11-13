@@ -218,6 +218,23 @@ inside the macro you get variable PACKAGE-SYMBOL and RECIPE."
        (message "Cannot find recipe for %s" (symbol-name package-symbol))
        nil)))
 
+(defvar cowboy--default-error-func (lambda (STR &rest ARGS) (apply #'message str args))
+  "The default error handling function used by `cowboy--error'.")
+
+(defun cowboy--error (func str &rest args)
+  "Use function FUNC to invoke error with STR.
+STR and ARGS are like those in `message' and `error'.
+They (STR and ARGS) are passed to FUNC.
+
+If FUNC is nil, use `cowboy--default-error-func', if it is non-nil but not a function (symbol or lambda),
+use `error'."
+  (apply (if func (progn
+                    (if (functionp func)
+                        func
+                      #'error))
+           cowboy--default-error-func)
+         str args))
+
 (defmacro cowboy--command (command dir &rest args)
   "Call process with COMMAND and ARGS in DIR."
   `(let ((default-directory ,dir))
