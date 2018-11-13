@@ -131,33 +131,67 @@ to load-path, use this key to specify a relative path to package-dir. No preceed
 
 ;;; Function
 
+;;;; Userland
+
+(defun cowboy-install (package &optional full-clone)
+  "Install PACKAGE (a symbol or a recipe) by cloning it down. Do nothing else.
+By default use shallow-clone, if FULL-CLONE is t, use full clone."
+  (cowboy--with-recipe
+   (if (plist-get recipe :pseudo)
+       t ; return with success immediately
+     (let ((dependency-list (plist-get recipe :dependency)))
+       (when dependency-list
+         (mapcar #'cowboy-install dependency-list)))
+     (if (eq 0 (funcall (intern (format "cowboy--%s-clone"
+                                        (symbol-name (or (plist-get :fetcher recipe) 'github))))
+                        package-symbol recipe full-clone))
+         ;; exit code 0 means success, any other code means failure
+         t
+       nil))))
+
+(defun cowboy-update (package)
+  "Update PACKAGE from upstream.
+If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
+  (cowboy--with-recipe
+   (if (eq 0 (funcall (intern (format "cowboy--%s-pull"
+                                      (symbol-name
+                                       (or
+                                        (plist-get recipe :fetcher)
+                                        'github))))
+                      package))
+       t
+     nil)))
+(defun cowboy-delete (package)
+  "Delete PACKAGE.
+If PACKAGE is a symbol, treat as a package, if a string, treat as a dir."
+  (delete-directory
+   (if (stringp package)
+       package
+     (concat cowboy-package-dir (symbol-name (cowboy--package-symbol package)) "/"))
+   t t)
+  t)
+
+(defun cowboy-reinstall (package)
+  "Reinstall PACKAGE."
+  (cowboy-delete package)
+  (cowboy-install package))
+
 (defun cowboy-compile ()
   "Compile all packages."
   ;; cpmpile all file but only when .elc file is older than .el file
   (byte-recompile-directory cowboy-package-dir 0))
 
 (defun cowboy-add-load-path ()
-  "Add packages to `load-path.'"
+  "Add packages to `load-path'."
   (dolist (package-dir-path (f-directories cowboy-package-dir))
     (add-to-list 'load-path package-dir-path)
     (dolist (package-subdir-path (f-directories package-dir-path))
       (add-to-list 'load-path package-subdir-path))))
 
-(defun cowboy-install (package &optional full-clone)
-  "Install PACKAGE (a symbol) by cloning it down. Do nothing else.
-By default use shadow-clone, if FULL-CLONE is t, use full clone."
-  (cowboy--with-recipe
-   (if (plist-get recipe :pseudo)
-       t ; return with success immediately 
-     (let ((dependency-list (plist-get recipe :dependency)))
-       (when dependency-list
-         (mapcar #'cowboy-install dependency-list)))
-     (if (eq 0 (funcall (intern (format "cowboy--%s-clone"
-                                        (symbol-name (or (plist-get :fetcher recipe) 'github))))
-                        package-symbol (plist-get recipe :repo) full-clone))
-         ;; exit code 0 means success, any other code means failure
-         t
-       nil))))
+;;;; Backstage
+
+;;;;; Helpers
+
 
 (defun cowboy--package-symbol (package)
   "PACKAGE can be a recipe, a symbol or a dir. Return package symbol."
@@ -178,6 +212,7 @@ inside the macro you get variable PACKAGE-SYMBOL and RECIPE."
           (recipe (if (listp package) ; in-place recipe always override recipe in cowboy-recipe-alist
                       (cdr package)
                     (alist-get package-symbol cowboy-recipe-alist))))
+     (print recipe)
      (if recipe
          ,@body
        (message "Cannot find recipe for %s" (symbol-name package-symbol))
@@ -189,26 +224,22 @@ inside the macro you get variable PACKAGE-SYMBOL and RECIPE."
      (call-process ,command nil "*COWBOY*" nil
                    ,@args)))
 
-(defun cowboy--github-clone (package repo &optional full-clone)
-  "Clone a REPO down and name it PACKAGE (symbol).
-Shadow clone if FULL-CLONE nil. REPO is of form \"user/repo\"."
+
+;;;;; Fetchers
+
+;;;;;; Git
+
+(defun cowboy--github-clone (package recipe &optional full-clone)
+  "Clone the package specified by RECIPE and name it PACKAGE (symbol).
+Shadow clone if FULL-CLONE nil. REPO is of form \"user/repo\". Return 0 if success."
   (cowboy--command "git" cowboy-package-dir "clone" (unless full-clone "--depth")
                    (unless full-clone "1")
-                   (format "https://github.com/%s.git" repo)
+                   (format "https://github.com/%s.git" (plist-get recipe 'repo))
                    (symbol-name package)))
 
-(defun cowboy-update (package)
-  "Update PACKAGE from upstream.
-If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
-  (cowboy--with-recipe
-   (if (eq 0 (funcall (intern (format "cowboy--%s-pull"
-                                      (symbol-name
-                                       (or
-                                        (plist-get recipe :fetcher)
-                                        'github))))
-                      package))
-       t
-     nil)))
+
+
+
 
 (defun cowboy--github-pull (package)
   "Pull PACKAGE from upstream.
@@ -218,20 +249,33 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
                            (concat cowboy-package-dir (symbol-name package) "/"))
                    "pull" "--rebase"))
 
-(defun cowboy-delete (package)
-  "Delete PACKAGE.
-If PACKAGE is a symbol, treat as a package, if a string, treat as a dir."
-  (delete-directory
-   (if (stringp package)
-       package
-     (concat cowboy-package-dir (symbol-name (cowboy--package-symbol package)) "/"))
-   t t)
-  t)
 
-(defun cowboy-reinstall (package)
-  "Reinstall PACKAGE."
-  (cowboy-delete package)
-  (cowboy-install package))
+
+;;;;;; URL
+
+(defun cowboy--url-clone (package recipe &optional _)
+  "Download the PACKAGE (file) directly from URL. Return 0 is success."
+  (url-retrieve (plist-get recipe 'url)
+                (lambda (status)
+                  (let ((redirection (plist-get status :redirect)))
+                    (if redirection
+                        (cowboy--http-clone package (plist-put recipe 'url redirection))
+                      ;; current buffer is retrieved data
+                      (let ((file-content (buffer-substring (point-min) (point-max)))
+                            (dir (format "%s%s/" cowboy-package-dir package)))
+                        (unless (file-exists-p dir) (mkdir dir))
+                        (find-file (format "%s%s/%s.el" cowboy-package-dir package package))
+                        (insert file-content)
+                        (save-buffer)
+                        0))))))
+
+(defun cowboy--url-pull (package)
+  "Download PACKAGE again.
+If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
+  (cowboy-install (if (stringp package)
+                      (intern (file-name-base (directory-file-name package)))
+                    package)))
+
 
 (provide 'cowboy)
 
