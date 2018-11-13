@@ -192,7 +192,6 @@ If PACKAGE is a symbol, treat as a package, if a string, treat as a dir."
 
 ;;;;; Helpers
 
-
 (defun cowboy--package-symbol (package)
   "PACKAGE can be a recipe, a symbol or a dir. Return package symbol."
   (pcase package
@@ -202,7 +201,8 @@ If PACKAGE is a symbol, treat as a package, if a string, treat as a dir."
     (_ (error "Cannot make into package symbol: %s" package))))
 
 (defmacro cowboy--with-recipe (&rest body)
-  "With package recipe, eval BODY. Return nil if none found.
+  "Process package.
+With package recipe, eval BODY. Return nil if none found.
 If PACKAGE is a symbol or list, treat as package,
 if it is a string, treate as dir.
 
