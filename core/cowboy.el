@@ -196,7 +196,7 @@ If PACKAGE is a symbol, treat as a package, if a string, treat as a dir."
   "PACKAGE can be a recipe, a symbol or a dir. Return package symbol."
   (pcase package
     ((pred symbolp) package)
-    ((pred stringp) (intern (file-name-base package)))
+    ((pred stringp) (intern (file-name-base (directory-file-name package))))
     ((pred listp) (car package))
     (_ (error "Cannot make into package symbol: %s" package))))
 
