@@ -106,7 +106,12 @@
                               (helpful . (:repo "Wilfred/helpful" :dependency (elisp-refs shut-up)))
                               (elisp-refs . (:repo "Wilfred/elisp-refs" :dependency (loop)))
                               (loop . (:repo "Wilfred/loop.el"))
-                              (shut-up . (:repo "cask/shut-up")))
+                              (shut-up . (:repo "cask/shut-up"))
+                              (pp+ . (:fetcher url :url "https://www.emacswiki.org/emacs/download/pp%2b.el"))
+                              (rainbow-mode . (:fetcher url :url "https://raw.githubusercontent.com/emacsmirror/rainbow-mode/master/rainbow-mode.el"))
+                              (json-rpc . (:fetcher url :url "http://git.savannah.gnu.org/cgit/emacs.git/plain/lisp/jsonrpc.el"))
+                              (undo-tree . (:fetcher url :url "http://git.savannah.gnu.org/cgit/emacs/elpa.git/plain/packages/undo-tree/undo-tree.el"))
+                              )
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
@@ -151,7 +156,7 @@ ERROR is passes to `cowboy--error' as FUNC."
          (mapcar (lambda (package) (cowboy-install package full-clone error)) dependency-list)))
      ;; install, return t if success, nil if fail
      (funcall (intern (format "cowboy--%s-install"
-                              (symbol-name (or (plist-get :fetcher recipe) 'github))))
+                              (symbol-name (or (plist-get recipe :fetcher) 'github))))
               package-symbol recipe full-clone))))
 
 (defun cowboy-update (package &optional error)
@@ -212,6 +217,7 @@ ERROR is passes to `cowboy--error' as FUNC."
     ((pred symbolp) package)
     ((pred stringp) (intern (file-name-base (directory-file-name package))))
     ((pred listp) (car package))
+    ;; TODO rephrase
     (_ (error "Cannot make into package symbol: %s" package))))
 
 (defmacro cowboy--with-recipe (&rest body)
@@ -278,7 +284,7 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
    (cowboy--command "git" (if (stringp package)
                               package
                             (concat cowboy-package-dir (symbol-name package) "/"))
-                    "pull" "--rebase")))
+                    "pull" "--debase")))
 
 
 
@@ -286,28 +292,28 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
 
 (defun cowboy--url-install (package recipe &optional _)
   "Download the PACKAGE (file) directly from URL. Return 0 is success."
-  ;; TODO
-  (url-retrieve (plist-get recipe 'url)
-                (lambda (status)
-                  (let ((redirection (plist-get status :redirect)))
-                    (if redirection
-                        (cowboy--http-clone package (plist-put recipe 'url redirection))
-                      ;; current buffer is retrieved data
-                      (let ((file-content (buffer-substring (point-min) (point-max)))
-                            (dir (format "%s%s/" cowboy-package-dir package)))
-                        (unless (file-exists-p dir) (mkdir dir))
-                        (find-file (format "%s%s/%s.el" cowboy-package-dir package package))
-                        (insert file-content)
-                        (save-buffer)
-                        0))))))
+  (with-current-buffer (url-retrieve-synchronously
+                        (plist-get recipe :url) t nil 10)
+    (let ((file-content (buffer-substring (point-min) (point-max)))
+          (dir (format "%s%s/" cowboy-package-dir package)))
+      (unless (file-exists-p dir) (mkdir dir))
+      (find-file (format "%s%s/%s.el" cowboy-package-dir package package))
+      (insert file-content)
+      (save-buffer)
+      0)
+    ;; (let ((redirection (plist-get status :redirect)))
+    ;;   (if redirection
+    ;;       (cowboy--http-clone package (plist-put recipe 'url redirection))
+    ;;     ;; current buffer is retrieved data
+    ;;     ))
+    ))
 
 (defun cowboy--url-update (package)
   "Download PACKAGE again.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
   ;; TODO
-  (cowboy-install (if (stringp package)
-                      (intern (file-name-base (directory-file-name package)))
-                    package)))
+  (cowboy-delete package)
+  (cowboy-install package))
 
 
 (provide 'cowboy)
