@@ -1,7 +1,0 @@
-evaluate-current-window
-evaluate-help-text
-change-criteria
-read
-mouse-click
-mouse-up
-mouse-down
