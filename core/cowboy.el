@@ -133,37 +133,51 @@ to load-path, use this key to specify a relative path to package-dir. No preceed
 
 ;;;; Userland
 
-(defun cowboy-install (package &optional full-clone)
-  "Install PACKAGE (a symbol or a recipe) by cloning it down. Do nothing else.
-By default use shallow-clone, if FULL-CLONE is t, use full clone."
+(defun cowboy-install (package &optional full-clone error)
+  "Install PACKAGE (a symbol, a recipe or a directory) by cloning it down.
+Do nothing else.
+By default use shallow clone, if FULL-CLONE is t, use full clone.
+
+If package is a directory string,
+the directory file name will be used as package name.
+
+ERROR is passes to `cowboy--error' as FUNC."
   (cowboy--with-recipe
    (if (plist-get recipe :pseudo)
        t ; return with success immediately
+     ;; handle dependency
      (let ((dependency-list (plist-get recipe :dependency)))
        (when dependency-list
-         (mapcar #'cowboy-install dependency-list)))
-     (if (eq 0 (funcall (intern (format "cowboy--%s-clone"
-                                        (symbol-name (or (plist-get :fetcher recipe) 'github))))
-                        package-symbol recipe full-clone))
-         ;; exit code 0 means success, any other code means failure
-         t
-       nil))))
+         (mapcar (lambda (package) (cowboy-install package full-clone error)) dependency-list)))
+     ;; install, return t if success, nil if fail
+     (funcall (intern (format "cowboy--%s-install"
+                              (symbol-name (or (plist-get :fetcher recipe) 'github))))
+              package-symbol recipe full-clone))))
 
-(defun cowboy-update (package)
+(defun cowboy-update (package &optional error)
   "Update PACKAGE from upstream.
-If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
+If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir.
+
+ERROR is passes to `cowboy--error' as FUNC."
   (cowboy--with-recipe
-   (if (eq 0 (funcall (intern (format "cowboy--%s-pull"
-                                      (symbol-name
-                                       (or
-                                        (plist-get recipe :fetcher)
-                                        'github))))
-                      package))
-       t
-     nil)))
-(defun cowboy-delete (package)
+   ;; handle dependency
+   (let ((dependency-list (plist-get recipe :dependency)))
+     (when dependency-list
+       (mapcar (lambda (package) (cowboy-update package error)) dependency-list)))
+   ;; return t if success, nil if fail
+   (funcall (intern (format "cowboy--%s-update"
+                            (symbol-name
+                             (or
+                              (plist-get recipe :fetcher)
+                              'github))))
+            package)))
+
+(defun cowboy-delete (package &optional error)
   "Delete PACKAGE.
-If PACKAGE is a symbol, treat as a package, if a string, treat as a dir."
+If PACKAGE is a symbol, treat as a package, if a string, treat as a dir.
+
+ERROR is passes to `cowboy--error' as FUNC."
+  ;; TODO revise
   (delete-directory
    (if (stringp package)
        package
@@ -212,66 +226,67 @@ inside the macro you get variable PACKAGE-SYMBOL and RECIPE."
           (recipe (if (listp package) ; in-place recipe always override recipe in cowboy-recipe-alist
                       (cdr package)
                     (alist-get package-symbol cowboy-recipe-alist))))
-     (print recipe)
      (if recipe
          ,@body
        (message "Cannot find recipe for %s" (symbol-name package-symbol))
        nil)))
 
-(defvar cowboy--default-error-func (lambda (STR &rest ARGS) (apply #'message str args))
+(defvar cowboy--default-error-func (lambda (err) (apply #'message (cdr err)))
   "The default error handling function used by `cowboy--error'.")
 
-(defun cowboy--error (func str &rest args)
-  "Use function FUNC to invoke error with STR.
-STR and ARGS are like those in `message' and `error'.
-They (STR and ARGS) are passed to FUNC.
+(defmacro cowboy--handle-error (form &optional func)
+  "Eval FORM. Use function FUNC to handle error.
 
-If FUNC is nil, use `cowboy--default-error-func', if it is non-nil but not a function (symbol or lambda),
-use `error'."
-  (apply (if func (progn
-                    (if (functionp func)
-                        func
-                      #'error))
-           cowboy--default-error-func)
-         str args))
+If FUNC is nil, use `cowboy--default-error-func'.
 
-(defmacro cowboy--command (command dir &rest args)
+Return t if success, nil if fail."
+  `(condition-case err (progn ,form t)
+     (error (funcall (or ,func cowboy--default-error-func) err)
+            nil)))
+
+(defun cowboy--command (command dir &rest args)
   "Call process with COMMAND and ARGS in DIR."
-  `(let ((default-directory ,dir))
-     (call-process ,command nil "*COWBOY*" nil
-                   ,@args)))
+  (let ((default-directory dir))
+    (with-temp-buffer
+      (if (eq 0 (apply #'call-process command nil t nil
+                       args))
+          nil
+        (error (buffer-string))))))
 
 
 ;;;;; Fetchers
 
 ;;;;;; Git
 
-(defun cowboy--github-clone (package recipe &optional full-clone)
+(defun cowboy--github-install (package recipe &optional full-clone)
   "Clone the package specified by RECIPE and name it PACKAGE (symbol).
 Shadow clone if FULL-CLONE nil. REPO is of form \"user/repo\". Return 0 if success."
-  (cowboy--command "git" cowboy-package-dir "clone" (unless full-clone "--depth")
-                   (unless full-clone "1")
-                   (format "https://github.com/%s.git" (plist-get recipe 'repo))
-                   (symbol-name package)))
+  (cowboy--handle-error
+   (cowboy--command "git" cowboy-package-dir "clone" (unless full-clone "--depth")
+                    (unless full-clone "1")
+                    (format "https://github.com/%s.git" (plist-get recipe :repo))
+                    (symbol-name package))))
 
 
 
 
 
-(defun cowboy--github-pull (package)
+(defun cowboy--github-update (package)
   "Pull PACKAGE from upstream.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
-  (cowboy--command "git" (if (stringp package)
-                             package
-                           (concat cowboy-package-dir (symbol-name package) "/"))
-                   "pull" "--rebase"))
+  (cowboy--handle-error
+   (cowboy--command "git" (if (stringp package)
+                              package
+                            (concat cowboy-package-dir (symbol-name package) "/"))
+                    "pull" "--rebase")))
 
 
 
 ;;;;;; URL
 
-(defun cowboy--url-clone (package recipe &optional _)
+(defun cowboy--url-install (package recipe &optional _)
   "Download the PACKAGE (file) directly from URL. Return 0 is success."
+  ;; TODO
   (url-retrieve (plist-get recipe 'url)
                 (lambda (status)
                   (let ((redirection (plist-get status :redirect)))
@@ -286,9 +301,10 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
                         (save-buffer)
                         0))))))
 
-(defun cowboy--url-pull (package)
+(defun cowboy--url-update (package)
   "Download PACKAGE again.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
+  ;; TODO
   (cowboy-install (if (stringp package)
                       (intern (file-name-base (directory-file-name package)))
                     package)))
