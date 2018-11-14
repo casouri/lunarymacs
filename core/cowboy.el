@@ -175,7 +175,7 @@ ERROR is passes to `cowboy--error' as FUNC."
                              (or
                               (plist-get recipe :fetcher)
                               'github))))
-            package)))
+            package recipe)))
 
 (defun cowboy-delete (package &optional error)
   "Delete PACKAGE.
@@ -273,18 +273,27 @@ Shadow clone if FULL-CLONE nil. REPO is of form \"user/repo\". Return 0 if succe
                     (format "https://github.com/%s.git" (plist-get recipe :repo))
                     (symbol-name package))))
 
+(defun cowboy--github-shallowp (package)
+  "Return t if PACKAGE is shallow cloned, nil if not."
+  (let ((default-directory (format "%s%s/" cowboy-package-dir (symbol-name package))))
+    (with-temp-buffer
+      (if (eq 0 (funcall #'call-process "git" nil t nil
+                         "rev-parse" "--is-shallow-repository"))
+          ;; return t if true (shallow), nil if false (not shallow)
+          (search-backward "true" nil t)))))
 
-
-
-
-(defun cowboy--github-update (package)
+(defun cowboy--github-update (package recipe)
   "Pull PACKAGE from upstream.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
-  (cowboy--handle-error
-   (cowboy--command "git" (if (stringp package)
-                              package
-                            (concat cowboy-package-dir (symbol-name package) "/"))
-                    "pull" "--debase")))
+  (if (cowboy--github-shallowp package)
+      ;; simply reinstall
+      (progn (cowboy-delete package)
+             (cowboy--github-install package recipe))
+    (cowboy--handle-error
+     (cowboy--command "git" (if (stringp package)
+                                package
+                              (concat cowboy-package-dir (symbol-name package) "/"))
+                      "pull" "--rebase"))))
 
 
 
@@ -294,6 +303,9 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
   "Download the PACKAGE (file) directly from URL. Return 0 is success."
   (with-current-buffer (url-retrieve-synchronously
                         (plist-get recipe :url) t nil 10)
+    (goto-char (point-min))
+    (re-search-forward "\n\n")
+    (delete-region (point-min) (match-end 0))
     (let ((file-content (buffer-substring (point-min) (point-max)))
           (dir (format "%s%s/" cowboy-package-dir package)))
       (unless (file-exists-p dir) (mkdir dir))
@@ -308,12 +320,12 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
     ;;     ))
     ))
 
-(defun cowboy--url-update (package)
-  "Download PACKAGE again.
+(defun cowboy--url-update (package recipe)
+  "Download PACKAGE with RECIPE again.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
   ;; TODO
   (cowboy-delete package)
-  (cowboy-install package))
+  (cowboy--url-install package recipe))
 
 
 (provide 'cowboy)
