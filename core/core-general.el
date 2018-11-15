@@ -82,7 +82,7 @@
   (dolist (dir (append (list moon-core-dir
                              moon-star-dir
                              moon-local-dir)
-                       ;; moon-site-lisp=dir is added in Run Code section
+                       ;; moon-site-lisp-dir is added in Run Code section
                        ;; in this file, much earlier than this function
                        ;; would run
                        (directory-files-recursively moon-site-lisp-dir "" t)))
