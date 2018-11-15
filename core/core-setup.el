@@ -49,7 +49,7 @@ If PACKAGE non-nill, install only that package."
       (let ((package-symbol (if (symbolp package)
                                 package
                               (car package))))
-        (unless (cowboy--installedp package)
+        (unless (cowboy-installedp package)
           (moon-message&result (moon-ing-msg "Installing" package-symbol)
                                (cowboy-install package)))))
 

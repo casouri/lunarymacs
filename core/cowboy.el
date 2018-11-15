@@ -233,7 +233,7 @@ ERROR is passes to `cowboy--error' as FUNC."
           (append (mapcar #'file-name-base (mapcan (lambda (dir) (directory-files-recursively dir "\\.el$")) load-path))
                   (mapcar #'file-name-base (f-directories cowboy-package-dir))))))
 
-(defun cowboy--installedp (package)
+(defun cowboy-installedp (package)
   "Return t if PACKAGE (symbol, recipe, dir string) is installed, nil if not."
   (cowboy--with-recipe
    (if (or (plist-get recipe :system)
