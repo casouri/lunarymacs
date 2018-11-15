@@ -18,9 +18,6 @@
 
 (require 'f)
 
-(defvar moon-ignore-package-list '(system-packages)
-  "Ignore system packages.")
-
 (defmacro moon-message&result (message &rest body)
   "Pring message and eval BODY, then show result."
   `(progn
@@ -51,12 +48,8 @@ If PACKAGE non-nill, install only that package."
     (dolist (package (if package (list package) moon-package-list))
       (let ((package-symbol (if (symbolp package)
                                 package
-                              (car package)))
-            (system-package-p (when (listp package) (plist-get (cdr package) :system))))
-        (unless (or (member (symbol-name package-symbol)
-                            all-file-in-load-path)
-                    (member package-symbol moon-ignore-package-list)
-                    system-package-p)
+                              (car package))))
+        (unless (cowboy--installedp package)
           (moon-message&result (moon-ing-msg "Installing" package-symbol)
                                (cowboy-install package)))))
 

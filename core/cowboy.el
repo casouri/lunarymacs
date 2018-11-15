@@ -111,7 +111,9 @@
                               (rainbow-mode . (:fetcher url :url "https://raw.githubusercontent.com/emacsmirror/rainbow-mode/master/rainbow-mode.el"))
                               (json-rpc . (:fetcher url :url "http://git.savannah.gnu.org/cgit/emacs.git/plain/lisp/jsonrpc.el"))
                               (undo-tree . (:fetcher url :url "http://git.savannah.gnu.org/cgit/emacs/elpa.git/plain/packages/undo-tree/undo-tree.el"))
-                              )
+                              (objed . (:repo "clemera/objed"))
+                              (helm . (:repo "emacs-helm/helm" :dependency (async popup-el)))
+                              (popup-el . (:repo "auto-complete/popup-el")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
@@ -147,7 +149,7 @@ If package is a directory string,
 the directory file name will be used as package name.
 
 ERROR is passes to `cowboy--error' as FUNC."
-  (cowboy--with-recipe
+  (cowboy--only-with-recipe
    (if (plist-get recipe :pseudo)
        t ; return with success immediately
      ;; handle dependency
@@ -164,7 +166,7 @@ ERROR is passes to `cowboy--error' as FUNC."
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir.
 
 ERROR is passes to `cowboy--error' as FUNC."
-  (cowboy--with-recipe
+  (cowboy--only-with-recipe
    ;; handle dependency
    (let ((dependency-list (plist-get recipe :dependency)))
      (when dependency-list
@@ -211,6 +213,35 @@ ERROR is passes to `cowboy--error' as FUNC."
 
 ;;;;; Helpers
 
+
+(defvar cowboy--all-file-in-load-path nil
+  "All the base file names in file path.")
+
+(defvar cowboy--old-load-path load-path
+  "If this doesn't equal to `load-path', update `cowboy--all-file-in-load-path'.")
+
+(defvar cowboy-ignore-package-list nil
+  "A list of symbols of ignored system packages.")
+
+(defun cowboy--all-file-in-load-path ()
+  "Return a list of base file names of all files in load path."
+  (if (and (equal cowboy--old-load-path load-path)
+           cowboy--all-file-in-load-path)
+      cowboy--all-file-in-load-path
+    (setq cowboy--old-load-path load-path)
+    (setq cowboy--all-file-in-load-path ; setq and return
+          (append (mapcar #'file-name-base (mapcan (lambda (dir) (directory-files-recursively dir "\\.el$")) load-path))
+                  (mapcar #'file-name-base (f-directories cowboy-package-dir))))))
+
+(defun cowboy--installedp (package)
+  "Return t if PACKAGE (symbol, recipe, dir string) is installed, nil if not."
+  (cowboy--with-recipe
+   (if (or (plist-get recipe :system)
+           (member package-symbol cowboy-ignore-package-list)
+           (member (symbol-name package-symbol) (cowboy--all-file-in-load-path)))
+       t
+     nil)))
+
 (defun cowboy--package-symbol (package)
   "PACKAGE can be a recipe, a symbol or a dir. Return package symbol."
   (pcase package
@@ -220,22 +251,32 @@ ERROR is passes to `cowboy--error' as FUNC."
     ;; TODO rephrase
     (_ (error "Cannot make into package symbol: %s" package))))
 
-(defmacro cowboy--with-recipe (&rest body)
+(defmacro cowboy--only-with-recipe (&rest body)
   "Process package.
-With package recipe, eval BODY. Return nil if none found.
+With package recipe, eval BODY. Return nil if no recipe found.
 If PACKAGE is a symbol or list, treat as package,
 if it is a string, treate as dir.
 
 Variable PACKAGE should be defined prior to this macro,
 inside the macro you get variable PACKAGE-SYMBOL and RECIPE."
+  `(cowboy--with-recipe
+    (if recipe
+        ,@body
+      (message "Cannot find recipe for %s" (symbol-name package-symbol))
+      nil)))
+
+(defmacro cowboy--with-recipe (&rest body)
+  "Process package and evaluate BODY.
+If PACKAGE is a symbol or list, treat as package,
+if it is a string, treate as dir.
+
+Variable PACKAGE should be defined prior to this macro,
+inside the macro you get variable `package-symbol' and `recipe'."
   `(let* ((package-symbol (cowboy--package-symbol package))
           (recipe (if (listp package) ; in-place recipe always override recipe in cowboy-recipe-alist
                       (cdr package)
                     (alist-get package-symbol cowboy-recipe-alist))))
-     (if recipe
-         ,@body
-       (message "Cannot find recipe for %s" (symbol-name package-symbol))
-       nil)))
+     ,@body))
 
 (defvar cowboy--default-error-func (lambda (err) (apply #'message (cdr err)))
   "The default error handling function used by `cowboy--error'.")
