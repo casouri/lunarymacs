@@ -75,6 +75,13 @@
 ;;; Func
 ;;
 
+(defun moon-safe-load (file &rest args)
+  "Load FILE, if there is an error, print it an go on.
+ARGS same as in `load'."
+  (condition-case err
+      (apply #'load file args)
+    (error (message "error in file %s: %s" file err))))
+
 (defun moon-set-load-path ()
   "Add each package to load path."
   (push moon-core-dir load-path)
@@ -121,7 +128,7 @@ i.e. :keyword to \"keyword\"."
   (dolist (star-path path-list)
     (let ((path (concat star-path "config.el")))
       (if (file-exists-p path)
-          (load path)
+          (moon-safe-load path)
         (message (format "%s does not exist!" path))))))
 
 (defun moon-display-benchmark ()
