@@ -4,7 +4,7 @@
   (interactive)
   ;; move the fist element to last
   (add-to-list 'moon-toggle-theme-list (pop moon-toggle-theme-list) t)
-  (load-theme (car moon-toggle-theme-list)))
+  (moon-load-theme (car moon-toggle-theme-list) t))
 
 ;;;###autoload
 (defun moon/load-font ()
@@ -16,18 +16,6 @@ Each element is an alist with the form
   (interactive)
   (let ((font-name (completing-read "Font to load: " moon-magic-font-book)))
     (eval (cdr (assoc font-name moon-magic-font-book))) nil t
-    ))
-
-;;;###autoload
-(defun moon/load-theme ()
-  "Prompt for a theme and load it.
-Fonts are specified in `moon-theme-book'.
-Each element is an alist with the form
-(name . (moon-set-font| configuration))
- (name . (moon-set-font| :family \"family\" :weight ’weight))"
-  (interactive)
-  (let ((theme-name (completing-read "Theme to load: " moon-theme-book)))
-    (load-theme (intern theme-name) t)
     ))
 
 ;;;###autoload

@@ -17,8 +17,8 @@
 (defvar moon-load-theme-hook ()
   "Hook ran after `load-theme'")
 
-(defvar moon-current-theme ""
-  "The last loaded theme name in string.")
+(defvar moon-current-theme nil
+  "The last loaded theme (symbol) in string.")
 
 (defvar moon-toggle-theme-list ()
   "Themes that you can toggle bwtween by `moon/switch-theme'")
@@ -26,14 +26,22 @@
 (defvar moon-theme-book '(spacemacs-dark spacemacs-light)
   "A list of themes that you can load with `moon/load-theme'.")
 
-(defun moon-set-current-theme (&rest form)
-  "Adveiced before `load-theme', set `moon-current-theme'."
-  (setq moon-current-theme (symbol-name (car form))))
+(defun moon-set-current-theme (theme &rest _)
+  "Adveiced before `load-theme', set `moon-current-theme' to THEME."
+  (setq moon-current-theme theme))
 
-(defadvice load-theme (after run-load-theme-hook activate)
+(defun moon-run-load-theme-hook (&rest _)
+  "Run `moon-load-theme-hook'."
   (run-hook-with-args 'moon-load-theme-hook))
 
+(advice-add #'load-theme :after #'moon-run-load-theme-hook)
+
 (advice-add #'load-theme :before #'moon-set-current-theme)
+
+(defun moon-load-theme (theme &optional no-confirm no-enable)
+  "Disable `moon-currnt-theme' and oad THEME."
+  (disable-theme moon-current-theme)
+  (load-theme theme no-confirm no-enable))
 
 ;;
 ;;; Font
@@ -42,8 +50,8 @@
 (defvar moon-magic-font-book
   '(
     ("Source Code Pro" . (moon-set-font| :family "Source Code Pro"
-                                  :weight 'light
-                                  :size 14))
+                                         :weight 'light
+                                         :size 14))
     ("SF Mono" . (moon-set-font| :family "SF Mono" :weight 'light :size 14))
     ("Source Code Pro for Powerline" . (moon-set-font| :family "Source Code Pro for Powerline" :weight 'light :size 14))
     )
