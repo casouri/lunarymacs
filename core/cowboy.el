@@ -113,7 +113,9 @@
                               (undo-tree . (:fetcher url :url "http://git.savannah.gnu.org/cgit/emacs/elpa.git/plain/packages/undo-tree/undo-tree.el"))
                               (objed . (:repo "clemera/objed"))
                               (helm . (:repo "emacs-helm/helm" :dependency (async popup-el)))
-                              (popup-el . (:repo "auto-complete/popup-el")))
+                              (popup-el . (:repo "auto-complete/popup-el"))
+                              (helm-swoop . (:repo "ShingoFukuyama/helm-swoop" :dependency (helm)))
+                              (ox-rss . (:fetcher url :url "https://raw.githubusercontent.com/Munksgaard/org-mode/master/contrib/lisp/ox-rss.el")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
@@ -155,7 +157,9 @@ ERROR is passes to `cowboy--error' as FUNC."
      ;; handle dependency
      (let ((dependency-list (plist-get recipe :dependency)))
        (when dependency-list
-         (mapcar (lambda (package) (cowboy-install package full-clone error)) dependency-list)))
+         (mapcar (lambda (package) (unless (cowboy-installedp package)
+                                     (cowboy-install package full-clone error)))
+                 dependency-list)))
      ;; install, return t if success, nil if fail
      (funcall (intern (format "cowboy--%s-install"
                               (symbol-name (or (plist-get recipe :fetcher) 'github))))
