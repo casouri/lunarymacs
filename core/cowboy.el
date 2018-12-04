@@ -1,4 +1,4 @@
-;;; cowboy.el --- Package mannager      -*- lexical-binding: t; -*-
+;;; cowboy.el --- Package manager      -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018  Yuan Fu
 
