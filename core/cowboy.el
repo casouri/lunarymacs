@@ -351,25 +351,26 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
 ;;;;;; URL
 
 (defun cowboy--url-install (package recipe &optional _)
-  "Download the PACKAGE (file) directly from URL. Return 0 is success."
-  (with-current-buffer (url-retrieve-synchronously
-                        (plist-get recipe :url) t nil 10)
-    (goto-char (point-min))
-    (re-search-forward "\n\n")
-    (delete-region (point-min) (match-end 0))
-    (let ((file-content (buffer-substring (point-min) (point-max)))
-          (dir (format "%s%s/" cowboy-package-dir package)))
-      (unless (file-exists-p dir) (mkdir dir))
-      (find-file (format "%s%s/%s.el" cowboy-package-dir package package))
-      (insert file-content)
-      (save-buffer)
-      0)
-    ;; (let ((redirection (plist-get status :redirect)))
-    ;;   (if redirection
-    ;;       (cowboy--http-clone package (plist-put recipe 'url redirection))
-    ;;     ;; current buffer is retrieved data
-    ;;     ))
-    ))
+  "Download the PACKAGE (file) directly from URL.
+Return t if success, nil if fail."
+  (cowboy--handle-error
+   (with-current-buffer (url-retrieve-synchronously
+                         (plist-get recipe :url) t nil 10)
+     (goto-char (point-min))
+     (re-search-forward "\n\n")
+     (delete-region (point-min) (match-end 0))
+     (let ((file-content (buffer-substring (point-min) (point-max)))
+           (dir (format "%s%s/" cowboy-package-dir package)))
+       (unless (file-exists-p dir) (mkdir dir))
+       (find-file (format "%s%s/%s.el" cowboy-package-dir package package))
+       (insert file-content)
+       (save-buffer))
+     ;; (let ((redirection (plist-get status :redirect)))
+     ;;   (if redirection
+     ;;       (cowboy--http-clone package (plist-put recipe 'url redirection))
+     ;;     ;; current buffer is retrieved data
+     ;;     ))
+     )))
 
 (defun cowboy--url-update (package recipe)
   "Download PACKAGE with RECIPE again.
