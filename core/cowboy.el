@@ -7,7 +7,12 @@
 ;;; This file is NOT part of GNU Emacs
 
 ;;; Commentary:
-;; 
+;;
+;;;; Conventions:
+;;
+;; 1. Use `cowboy--handle-error' in fetchers.
+;;    This guarantees fetchers to return t when success
+;;    and handles error with `cowboy--default-error-func'.
 
 ;;; Code:
 ;;
