@@ -148,7 +148,7 @@ to load-path, use this key to specify a relative path to package-dir. No preceed
 
 (defun cowboy-install (package &optional full-clone error)
   "Install PACKAGE (a symbol, a recipe or a directory) by cloning it down.
-Do nothing else.
+Do nothing else (no autoload, no byte compile). Return t if success, nil if fail.
 By default use shallow clone, if FULL-CLONE is t, use full clone.
 
 If package is a directory string,
@@ -170,7 +170,7 @@ ERROR is passes to `cowboy--handle-error' as FUNC."
               package-symbol recipe full-clone))))
 
 (defun cowboy-update (package &optional error)
-  "Update PACKAGE from upstream.
+  "Update PACKAGE from upstream. Return t if success, nil if fail.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir.
 
 ERROR is passes to `cowboy--handle-error' as FUNC."
@@ -188,7 +188,7 @@ ERROR is passes to `cowboy--handle-error' as FUNC."
             package recipe)))
 
 (defun cowboy-delete (package &optional error)
-  "Delete PACKAGE.
+  "Delete PACKAGE.  Return t if success, nil if fail.
 If PACKAGE is a symbol, treat as a package, if a string, treat as a dir.
 
 ERROR is passes to `cowboy--handle-error' as FUNC."
@@ -315,7 +315,8 @@ Return t if success, nil if fail."
 
 (defun cowboy--github-install (package recipe &optional full-clone)
   "Clone the package specified by RECIPE and name it PACKAGE (symbol).
-Shadow clone if FULL-CLONE nil. REPO is of form \"user/repo\". Return 0 if success."
+Shadow clone if FULL-CLONE nil. REPO is of form \"user/repo\". Return 0 if success.
+Return t if success, nil if fail."
   (cowboy--handle-error
    (cowboy--command "git" cowboy-package-dir "clone" (unless full-clone "--depth")
                     (unless full-clone "1")
@@ -323,16 +324,17 @@ Shadow clone if FULL-CLONE nil. REPO is of form \"user/repo\". Return 0 if succe
                     (symbol-name package))))
 
 (defun cowboy--github-shallowp (package)
-  "Return t if PACKAGE is shallow cloned, nil if not."
-  (let ((default-directory (format "%s%s/" cowboy-package-dir (symbol-name package))))
+  "Return t if PACKAGE (a symbol, a recipe or a directory) is shallow cloned, nil if not."
+  (let ((default-directory (format "%s%s/" cowboy-package-dir (symbol-name (cowboy--package-symbol package)))))
     (with-temp-buffer
       (if (eq 0 (funcall #'call-process "git" nil t nil
                          "rev-parse" "--is-shallow-repository"))
           ;; return t if true (shallow), nil if false (not shallow)
-          (search-backward "true" nil t)))))
+          (search-backward "true" nil t)
+        nil))))
 
 (defun cowboy--github-update (package recipe)
-  "Pull PACKAGE from upstream.
+  "Pull PACKAGE with RECIPE from upstream. Return t if success, nil if fail.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
   (if (cowboy--github-shallowp package)
       ;; simply reinstall
@@ -371,6 +373,7 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
 
 (defun cowboy--url-update (package recipe)
   "Download PACKAGE with RECIPE again.
+Return t if success, nil if fail.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
   ;; TODO
   (cowboy-delete package)
