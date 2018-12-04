@@ -154,7 +154,7 @@ By default use shallow clone, if FULL-CLONE is t, use full clone.
 If package is a directory string,
 the directory file name will be used as package name.
 
-ERROR is passes to `cowboy--error' as FUNC."
+ERROR is passes to `cowboy--handle-error' as FUNC."
   (cowboy--only-with-recipe
    (if (plist-get recipe :pseudo)
        t ; return with success immediately
@@ -173,7 +173,7 @@ ERROR is passes to `cowboy--error' as FUNC."
   "Update PACKAGE from upstream.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir.
 
-ERROR is passes to `cowboy--error' as FUNC."
+ERROR is passes to `cowboy--handle-error' as FUNC."
   (cowboy--only-with-recipe
    ;; handle dependency
    (let ((dependency-list (plist-get recipe :dependency)))
@@ -191,7 +191,7 @@ ERROR is passes to `cowboy--error' as FUNC."
   "Delete PACKAGE.
 If PACKAGE is a symbol, treat as a package, if a string, treat as a dir.
 
-ERROR is passes to `cowboy--error' as FUNC."
+ERROR is passes to `cowboy--handle-error' as FUNC."
   ;; TODO revise
   (delete-directory
    (if (stringp package)
@@ -287,7 +287,7 @@ inside the macro you get variable `package-symbol' and `recipe'."
      ,@body))
 
 (defvar cowboy--default-error-func (lambda (err) (apply #'message (cdr err)))
-  "The default error handling function used by `cowboy--error'.")
+  "The default error handling function used by `cowboy--handle-error'.")
 
 (defmacro cowboy--handle-error (form &optional func)
   "Eval FORM. Use function FUNC to handle error.
