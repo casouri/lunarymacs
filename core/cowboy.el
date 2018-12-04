@@ -115,7 +115,11 @@
                               (helm . (:repo "emacs-helm/helm" :dependency (async popup-el)))
                               (popup-el . (:repo "auto-complete/popup-el"))
                               (helm-swoop . (:repo "ShingoFukuyama/helm-swoop" :dependency (helm)))
-                              (ox-rss . (:fetcher url :url "https://raw.githubusercontent.com/Munksgaard/org-mode/master/contrib/lisp/ox-rss.el")))
+                              (ox-rss . (:fetcher url :url "https://raw.githubusercontent.com/Munksgaard/org-mode/master/contrib/lisp/ox-rss.el"))
+                              (dired+ . (:fetcher url :url "https://www.emacswiki.org/emacs/download/dired%2b.el"))
+                              (dired-explore . (:repo "zk-phi/dired-explore"))
+                              (org-download . (:repo "abo-abo/org-download" :dependency (async)))
+                              (chinese-word-at-point . (:repo "xuchunyang/chinese-word-at-point.el")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
