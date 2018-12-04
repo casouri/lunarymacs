@@ -109,7 +109,7 @@
                               (shut-up . (:repo "cask/shut-up"))
                               (pp+ . (:fetcher url :url "https://www.emacswiki.org/emacs/download/pp%2b.el"))
                               (rainbow-mode . (:fetcher url :url "https://raw.githubusercontent.com/emacsmirror/rainbow-mode/master/rainbow-mode.el"))
-                              (json-rpc . (:fetcher url :url "http://git.savannah.gnu.org/cgit/emacs.git/plain/lisp/jsonrpc.el"))
+                              (jsonrpc . (:fetcher url :url "http://git.savannah.gnu.org/cgit/emacs.git/plain/lisp/jsonrpc.el"))
                               (undo-tree . (:fetcher url :url "http://git.savannah.gnu.org/cgit/emacs/elpa.git/plain/packages/undo-tree/undo-tree.el"))
                               (objed . (:repo "clemera/objed"))
                               (helm . (:repo "emacs-helm/helm" :dependency (async popup-el)))
