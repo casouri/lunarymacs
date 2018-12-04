@@ -178,6 +178,15 @@ For example:
               (form (cdr config)))
           (when (equal moon-current-theme theme)
             (eval form)))))))
+(defun moon-quit-window ()
+  "Quit current window and bury it's buffer.
+Unlike `quit-window', this function deletes the window no matter what."
+  (interactive)
+  (if (equal major-mode 'dired-mode)
+      (while (equal major-mode 'dired-mode)
+        (kill-buffer))
+    (bury-buffer))
+  (ignore-errors (delete-window)))
 
 
 (provide 'core-ui)
