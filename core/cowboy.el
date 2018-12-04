@@ -291,7 +291,7 @@ inside the macro you get variable `package-symbol' and `recipe'."
                     (alist-get package-symbol cowboy-recipe-alist))))
      ,@body))
 
-(defvar cowboy--default-error-func (lambda (err) (apply #'message (cdr err)))
+(defvar cowboy--default-error-func (lambda (err) (message (error-message-string err)))
   "The default error handling function used by `cowboy--handle-error'.")
 
 (defmacro cowboy--handle-error (form &optional func)
