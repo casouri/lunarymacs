@@ -124,7 +124,8 @@
                               (dired+ . (:fetcher url :url "https://www.emacswiki.org/emacs/download/dired%2b.el"))
                               (dired-explore . (:repo "zk-phi/dired-explore"))
                               (org-download . (:repo "abo-abo/org-download" :dependency (async)))
-                              (chinese-word-at-point . (:repo "xuchunyang/chinese-word-at-point.el")))
+                              (chinese-word-at-point . (:repo "xuchunyang/chinese-word-at-point.el"))
+                              (helm-c-yasnippet . (:repo "emacs-jp/helm-c-yasnippet")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
