@@ -304,8 +304,8 @@ If FUNC is nil, use `cowboy--default-error-func'.
 
 Return t if success, nil if fail."
   `(condition-case err (progn ,form t)
-     (error (funcall (or ,func cowboy--default-error-func) err)
-            nil)))
+     ((debug error) (funcall (or ,func cowboy--default-error-func) err)
+      nil)))
 
 (defun cowboy--command (command dir &rest args)
   "Call process with COMMAND and ARGS in DIR."
