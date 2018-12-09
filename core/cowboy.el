@@ -36,7 +36,7 @@
                               (bind-key . (:pseudo t :dependenc (use-package)))
                               (general . (:repo "noctuid/general.el"))
                               (which-key . (:repo "justbur/emacs-which-key"))
-                              (hydra . (:repo abo-abo/hydra))
+                              (hydra . (:repo "abo-abo/hydra"))
                               (rainbow-delimiters . (:repo "Fanael/rainbow-delimiters"))
                               (highlight-parentheses . (:repo "tsdh/highlight-parentheses.el"))
                               (minions . (:repo "tarsius/minions"))
