@@ -1,10 +1,14 @@
+(require 'cl-lib)
+
 ;;;###autoload
 (defun moon/switch-theme ()
   "Switch between themes in `moon-toggle-theme-list'"
   (interactive)
   ;; move the fist element to last
-  (add-to-list 'moon-toggle-theme-list (pop moon-toggle-theme-list) t)
-  (moon-load-theme (car moon-toggle-theme-list) t))
+  (let ((index (or (cl-position moon-current-theme moon-toggle-theme-list)
+                   (progn (error "`moon-current-theme' is not in `moon-toggle-theme-list'") 0)))
+        (len (length moon-toggle-theme-list)))
+    (moon-load-theme (nth (% (1+ index) len) moon-toggle-theme-list) t)))
 
 ;;;###autoload
 (defun moon/load-font ()
