@@ -181,17 +181,19 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir.
 
 ERROR is passes to `cowboy--handle-error' as FUNC."
   (cowboy--only-with-recipe
-   ;; handle dependency
-   (let ((dependency-list (plist-get recipe :dependency)))
-     (when dependency-list
-       (mapcar (lambda (package) (cowboy-update package error)) dependency-list)))
-   ;; return t if success, nil if fail
-   (funcall (intern (format "cowboy--%s-update"
-                            (symbol-name
-                             (or
-                              (plist-get recipe :fetcher)
-                              'github))))
-            package recipe)))
+   (if (plist-get recipe :pseudo)
+       t
+     ;; handle dependency
+     (let ((dependency-list (plist-get recipe :dependency)))
+       (when dependency-list
+         (mapcar (lambda (package) (cowboy-update package error)) dependency-list)))
+     ;; return t if success, nil if fail
+     (funcall (intern (format "cowboy--%s-update"
+                              (symbol-name
+                               (or
+                                (plist-get recipe :fetcher)
+                                'github))))
+              package-symbol recipe))))
 
 (defun cowboy-delete (package &optional error)
   "Delete PACKAGE.  Return t if success, nil if fail.
@@ -336,17 +338,17 @@ Return t if success, nil if fail."
       (if (eq 0 (funcall #'call-process "git" nil t nil
                          "rev-parse" "--is-shallow-repository"))
           ;; return t if true (shallow), nil if false (not shallow)
-          (search-backward "true" nil t)
+          (if (search-backward "true" nil t) t nil)
         nil))))
 
 (defun cowboy--github-update (package recipe)
   "Pull PACKAGE with RECIPE from upstream. Return t if success, nil if fail.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
-  (if (cowboy--github-shallowp package)
-      ;; simply reinstall
-      (progn (cowboy-delete package)
-             (cowboy--github-install package recipe))
-    (cowboy--handle-error
+  (cowboy--handle-error
+   (if (cowboy--github-shallowp package)
+       ;; simply reinstall
+       (progn (cowboy-delete package)
+              (cowboy--github-install package recipe))
      (cowboy--command "git" (if (stringp package)
                                 package
                               (concat cowboy-package-dir (symbol-name package) "/"))
