@@ -5,7 +5,7 @@
 (defvar moon-startup-hook-1 ()
   "Run after startup and before moon-startup-hook-2.")
 
-(defvar moon-startup-hook-2 '((lambda () (load custom-file)))
+(defvar moon-startup-hook-2 ()
   "Run after startup and after moon-startup-hook-1.")
 
 (defvar moon-profile-startup nil
@@ -30,7 +30,7 @@
           (load| core-ui)
           (load| core-edit)
           (moon-load-star)
-
+          (load custom-file)
           (run-hooks 'moon-startup-hook-1 'moon-startup-hook-2))
       ((debug error) (print err))))
   (when moon-profile-startup
