@@ -13,7 +13,10 @@
 ;; 1. Use `cowboy--handle-error' in fetchers.
 ;;    This guarantees fetchers to return t when success
 ;;    and handles error with `cowboy--default-error-func'.
-
+;;;; Notes:
+;;
+;; 1. You can use a recipe when installing package, e.g. (cowboy-install (color-rg :fetcher github :repo "manateelazycat/color-rg"))
+;;    But you can't update it because cowboy doesn't have the recipe of it. So this method is not recommended.
 ;;; Code:
 ;;
 
@@ -125,7 +128,8 @@
                               (dired-explore . (:repo "zk-phi/dired-explore"))
                               (org-download . (:repo "abo-abo/org-download" :dependency (async)))
                               (chinese-word-at-point . (:repo "xuchunyang/chinese-word-at-point.el"))
-                              (helm-c-yasnippet . (:repo "emacs-jp/helm-c-yasnippet")))
+                              (helm-c-yasnippet . (:repo "emacs-jp/helm-c-yasnippet"))
+                              (color-rg . (:repo "manateelazycat/color-rg")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
@@ -352,7 +356,7 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
      (cowboy--command "git" (if (stringp package)
                                 package
                               (concat cowboy-package-dir (symbol-name package) "/"))
-                      "pull" "--rebase"))))
+                      "fetch"))))
 
 
 
