@@ -39,9 +39,18 @@
 (advice-add #'load-theme :before #'moon-set-current-theme)
 
 (defun moon-load-theme (theme &optional no-confirm no-enable)
-  "Disable `moon-currnt-theme' and oad THEME."
+  "Disable `moon-currnt-theme' and oad THEME.
+Set `moon-theme' to THEME."
   (disable-theme moon-current-theme)
-  (load-theme theme no-confirm no-enable))
+  (load-theme theme no-confirm no-enable)
+  (customize-set-variable 'moon-theme theme)
+  (custom-save-all))
+
+(defcustom moon-theme nil
+  "The theme used on startup.
+This way luanrymacs remembers the theme.
+You need to load `moon-theme' somewhere (after loading custom.el)."
+  :group 'convenience)
 
 ;;
 ;;; Font
