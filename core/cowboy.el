@@ -82,7 +82,11 @@
                               (flyspell-correct-ivy . (:repo "d12frosted/flyspell-correct"))
                               (langtool . (:repo "mhayashi1120/Emacs-langtool"))
                               (sly . (:repo "joaotavora/sly"))
-                              (lsp-mode . (:repo "emacs-lsp/lsp-mode"))
+                              (lsp . (:repo "emacs-lsp/lsp-mode" :dependency (ht f spinner)))
+                              (company-lsp . (:repo "tigersoldier/company-lsp"))
+                              (lsp-ui . (:repo "emacs-lsp/lsp-ui"))
+                              (spinner . (:repo "Malabarba/spinner.el"))
+                              (ht . (:repo "Wilfred/ht.el" :dependency (dash)))
                               (lsp-python . (:repo "emacs-lsp/lsp-python"))
                               (pyvenv . (:repo "jorgenschaefer/pyvenv"))
                               (aggressive-indent . (:repo "Malabarba/aggressive-indent-mode"))
@@ -91,8 +95,6 @@
                               (lua-mode . (:repo "immerrr/lua-mode"))
                               (doom-themes . (:repo "hlissner/emacs-doom-themes"))
                               (atom-one-dark-theme . (:repo "jonathanchu/atom-one-dark-theme"))
-                              (lsp-ui . (:repo "emacs-lsp/lsp-ui"))
-                              (company-lsp . (:repo "tigersoldier/company-lsp"))
                               (markdown-mode . (:repo "jrblevin/markdown-mode"))
                               (ivy-filthy-rich . (:repo "casouri/ivy-filthy-rich"))
                               (hungry-delete . (:repo "nflath/hungry-delete"))
@@ -129,7 +131,9 @@
                               (org-download . (:repo "abo-abo/org-download" :dependency (async)))
                               (chinese-word-at-point . (:repo "xuchunyang/chinese-word-at-point.el"))
                               (helm-c-yasnippet . (:repo "emacs-jp/helm-c-yasnippet"))
-                              (color-rg . (:repo "manateelazycat/color-rg")))
+                              (color-rg . (:repo "manateelazycat/color-rg"))
+                              (ccls . (:repo "MaskRay/emacs-ccls"))
+                              (writegood-mode . (:repo "bnbeckwith/writegood-mode")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
