@@ -125,7 +125,7 @@
                               (helm . (:repo "emacs-helm/helm" :dependency (async popup-el)))
                               (popup-el . (:repo "auto-complete/popup-el"))
                               (helm-swoop . (:repo "ShingoFukuyama/helm-swoop" :dependency (helm)))
-                              (ox-rss . (:fetcher url :url "https://raw.githubusercontent.com/Munksgaard/org-mode/master/contrib/lisp/ox-rss.el"))
+                              (ox-rss . (:pseudo t))
                               (dired+ . (:fetcher url :url "https://www.emacswiki.org/emacs/download/dired%2b.el"))
                               (dired-explore . (:repo "zk-phi/dired-explore"))
                               (org-download . (:repo "abo-abo/org-download" :dependency (async)))
