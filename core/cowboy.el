@@ -20,7 +20,6 @@
 ;;; Code:
 ;;
 
-(require 'f)
 
 ;;; Variable
 
@@ -36,13 +35,13 @@
                               (olivetti . (:repo "rnkn/olivetti"))
                               (ws-butler . (:repo "lewang/ws-butler"))
                               (use-package . (:repo "jwiegley/use-package"))
-                              (bind-key . (:pseudo t :dependenc (use-package)))
+                              (bind-key . (:pseudo t :dependency (use-package)))
                               (general . (:repo "noctuid/general.el"))
                               (which-key . (:repo "justbur/emacs-which-key"))
                               (hydra . (:repo "abo-abo/hydra"))
                               (rainbow-delimiters . (:repo "Fanael/rainbow-delimiters"))
                               (highlight-parentheses . (:repo "tsdh/highlight-parentheses.el"))
-                              (minions . (:repo "tarsius/minions"))
+                              (minions . (:repo "tarsius/minions" :dependency (dash)))
                               (magit . (:repo "magit/magit" :dependency (with-editor magit-popup ghub async)))
                               (ghub . (:repo "magit/ghub" :dependency (graphql treepy)))
                               (treepy . (:repo "volrath/treepy.el"))
@@ -78,7 +77,7 @@
                               (dired-narrow . (:repo "Fuco1/dired-hacks"))
                               (toc-org . (:repo "snosov1/toc-org"))
                               (htmlize . (:repo "hniksic/emacs-htmlize"))
-                              (flycheck . (:repo "flycheck/flycheck"))
+                              (flycheck . (:repo "flycheck/flycheck" :dependency (dash)))
                               (flyspell-correct-ivy . (:repo "d12frosted/flyspell-correct"))
                               (langtool . (:repo "mhayashi1120/Emacs-langtool"))
                               (sly . (:repo "joaotavora/sly"))
@@ -87,6 +86,9 @@
                               (company-box . (:repo "sebastiencs/company-box"))
                               (lsp-ui . (:repo "emacs-lsp/lsp-ui"))
                               (spinner . (:repo "Malabarba/spinner.el"))
+                              (dash . (:repo "magnars/dash.el"))
+                              (f . (:repo "rejeep/f.el" :dependency (dash s)))
+                              (s . (:repo "magnars/s.el"))
                               (ht . (:repo "Wilfred/ht.el" :dependency (dash)))
                               (lsp-python . (:repo "emacs-lsp/lsp-python"))
                               (pyvenv . (:repo "jorgenschaefer/pyvenv"))
@@ -231,15 +233,19 @@ ERROR is passes to `cowboy--handle-error' as FUNC."
 
 (defun cowboy-add-load-path ()
   "Add packages to `load-path'."
-  (dolist (package-dir-path (f-directories cowboy-package-dir))
+  (dolist (package-dir-path (cowboy--directory-list cowboy-package-dir))
     (add-to-list 'load-path package-dir-path)
-    (dolist (package-subdir-path (f-directories package-dir-path))
+    (dolist (package-subdir-path (cowboy--directory-list package-dir-path))
       (add-to-list 'load-path package-subdir-path))))
 
 ;;;; Backstage
 
 ;;;;; Helpers
 
+(defun cowboy--directory-list (dir)
+  "Return a list of directories under DIR. Return absolute path."
+  (cl-remove-if (lambda (path) (not (file-directory-p path)))
+                (directory-files dir t directory-files-no-dot-files-regexp)))
 
 (defvar cowboy--all-file-in-load-path nil
   "All the base file names in file path.")
@@ -258,7 +264,7 @@ ERROR is passes to `cowboy--handle-error' as FUNC."
     (setq cowboy--old-load-path load-path)
     (setq cowboy--all-file-in-load-path ; setq and return
           (append (mapcar #'file-name-base (mapcan (lambda (dir) (directory-files-recursively dir "\\.el$")) load-path))
-                  (mapcar #'file-name-base (f-directories cowboy-package-dir))))))
+                  (mapcar #'file-name-base (cowboy--directory-list cowboy-package-dir))))))
 
 (defun cowboy-installedp (package)
   "Return t if PACKAGE (symbol, recipe, dir string) is installed, nil if not."

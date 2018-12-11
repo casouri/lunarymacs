@@ -6,6 +6,8 @@
 ;; however you require package in  site-lisp once this file is loaded
 ;; more see the very bottom, Run Code section.
 
+(require 'cl-lib)
+
 ;;; Variable
 
 ;;;; Directories
@@ -82,10 +84,14 @@ ARGS same as in `load'."
       (apply #'load file args)
     (error (message "error in file %s: %s" file err))))
 
+(defun moon-directory-list (dir)
+  "Return a list of directories under DIR. Return absolute path."
+  (cl-remove-if (lambda (path) (not (file-directory-p path)))
+                (directory-files dir t directory-files-no-dot-files-regexp)))
+
 (defun moon-set-load-path ()
   "Add each package to load path."
   (push moon-core-dir load-path)
-  (require 'f)
   (dolist (dir (append (list moon-core-dir
                              moon-star-dir
                              moon-local-dir)
@@ -95,9 +101,9 @@ ARGS same as in `load'."
                        (directory-files-recursively moon-site-lisp-dir "" t)))
     (when (file-directory-p dir)
       (push dir load-path)))
-  (dolist (package-dir (f-directories moon-package-dir))
+  (dolist (package-dir (moon-directory-list moon-package-dir))
     (setq load-path
-          (append load-path (f-directories package-dir)
+          (append load-path (moon-directory-list package-dir)
                   (list package-dir)))))
 
 (defun moon-load-star ()

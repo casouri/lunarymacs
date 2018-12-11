@@ -16,8 +16,6 @@
 
 (moon-set-load-path)
 
-(require 'f)
-
 (defmacro moon-message&result (message &rest body)
   "Pring message and eval BODY, then show result."
   `(progn
@@ -43,7 +41,7 @@ If PACKAGE non-nill, install only that package."
   (interactive)
   (let ((all-file-in-load-path
          (mapcan (lambda (dir) (append (mapcar #'file-name-base (directory-files-recursively dir "\\.el$"))
-                                       (mapcar #'file-name-base (f-directories moon-package-dir))))
+                                       (mapcar #'file-name-base (moon-directory-list moon-package-dir))))
                  (list moon-package-dir moon-site-lisp-dir))))
     (dolist (package (if package (list package) moon-package-list))
       (let ((package-symbol (if (symbolp package)
