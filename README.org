@@ -11,7 +11,7 @@
 
 \\
 
-*Notice* (<2018-12-10 Mon>): Now I use my own package manager, consider this if you want to try out lunarymacs.
+*Notice* (<2018-12-10 Mon>): Now I use [[https://github.com/casouri/lunarymacs/wiki/cowboy][my own package manager]], consider this if you want to try out lunarymacs.
 
 This is a stripped down framework modeling after doom-emacs. It's extremely basic, but working for me.
 
