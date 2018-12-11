@@ -84,6 +84,7 @@
                               (sly . (:repo "joaotavora/sly"))
                               (lsp . (:repo "emacs-lsp/lsp-mode" :dependency (ht f spinner)))
                               (company-lsp . (:repo "tigersoldier/company-lsp"))
+                              (company-box . (:repo "sebastiencs/company-box"))
                               (lsp-ui . (:repo "emacs-lsp/lsp-ui"))
                               (spinner . (:repo "Malabarba/spinner.el"))
                               (ht . (:repo "Wilfred/ht.el" :dependency (dash)))
@@ -133,24 +134,25 @@
                               (helm-c-yasnippet . (:repo "emacs-jp/helm-c-yasnippet"))
                               (color-rg . (:repo "manateelazycat/color-rg"))
                               (ccls . (:repo "MaskRay/emacs-ccls"))
-                              (writegood-mode . (:repo "bnbeckwith/writegood-mode")))
+                              (writegood-mode . (:repo "bnbeckwith/writegood-mode"))
+                              (eglot-doc . (:repo "casouri/eglot-doc")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
 package is a symbol, properties is a plist.
-Avaliable keywords: :fetcher, :repo, :dependency.
+Avaliable keywords: :fetcher, :repo, :dependency, :pseudo.
 
-:fetcher is a symbol representing the source, avaliable options are 'github.
+:fetcher is a symbol representing the source, available options are 'github, 'url.
 If none specified, default to 'github.
 
-:repo is a string representing a repository from github, it shuold be like \"user/repo\".
+:repo is a string representing a repository from github, it should be like \"user/repo\".
 
 TODO :branch fetch a particular branch of repo.
 
 :dependency is a list of symbols of packages thar this package depends on.
 p
 :pseudo is for pseudo packages. for example, ivy, counsel & swiper are in one repo,
-they you only need one recipe. The other two can be pseudo packages.
+then you only need one recipe. The other two can be configured as pseudo packages.
 
 TODO :load-path is for additional load-path entries. By default cowboy adds package dir
 and subdir under that into load-path, if the package needs to add subdirs that are deeper
@@ -224,7 +226,8 @@ ERROR is passes to `cowboy--handle-error' as FUNC."
 (defun cowboy-compile ()
   "Compile all packages."
   ;; cpmpile all file but only when .elc file is older than .el file
-  (byte-recompile-directory cowboy-package-dir 0))
+  (let ((inhibit-message t))
+    (byte-recompile-directory cowboy-package-dir 0)))
 
 (defun cowboy-add-load-path ()
   "Add packages to `load-path'."
