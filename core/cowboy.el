@@ -137,7 +137,7 @@
                               (color-rg . (:repo "manateelazycat/color-rg"))
                               (ccls . (:repo "MaskRay/emacs-ccls"))
                               (writegood-mode . (:repo "bnbeckwith/writegood-mode"))
-                              (eglot-doc . (:repo "casouri/eglot-doc")))
+                              (eldoc-box . (:repo "casouri/eldoc-box")))
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
