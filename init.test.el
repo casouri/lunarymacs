@@ -11,18 +11,20 @@
        homepage
        key
        ;; evil
-       angel ; don't enable angel and evil in the same time
+       angel
        ui
        other
        edit
        project
        :completion
-       ivy
+       ;; ivy
+       helm
        company
        snippet
        :os
        mac
        :utility
+       ;; email
        markdown
        eshell
        tex
@@ -34,8 +36,11 @@
        syntax
        spell
        :lang
-       cc
        lsp
+       ;; arduino
+       general
+       common-lisp
+       cc
        python
        elisp
        ;; rust
