@@ -32,7 +32,7 @@
 (defvar moon-init-time nil
   "How long it takes for Emacs to start.")
 
-(defvar lunary-version "1.2.0"
+(defvar lunary-version "1.2.1"
   "Current version of lunarymacs.")
 
 (defvar moon-phase :startup
