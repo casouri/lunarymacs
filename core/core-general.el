@@ -275,7 +275,7 @@ Expressions will be appended."
 
 (defun bootstrap ()
   "Bootstrap cowboy."
-  (message "Load cowboy.")
+  (message "Load cowboy")
   (push moon-core-dir load-path)
   (require 'cowboy))
 
