@@ -166,14 +166,17 @@ Can be uesed for hightlight region.")
 ;;; Function
 ;;
 
-(defun moon-quit-window ()
+(defun moon-quit-window (arg)
   "Quit current window and bury it's buffer.
-Unlike `quit-window', this function deletes the window no matter what."
-  (interactive)
+Unlike `quit-window', this function deletes the window no matter what.
+If run with prefix argument (ARG), kill buffer."
+  (interactive "p")
   (if (equal major-mode 'dired-mode)
       (while (equal major-mode 'dired-mode)
         (kill-buffer))
-    (bury-buffer))
+    (if (eq arg 4) ; with C-u
+        (kill-buffer)
+      (bury-buffer)))
   (ignore-errors (delete-window)))
 
 
