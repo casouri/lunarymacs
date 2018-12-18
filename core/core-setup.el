@@ -109,7 +109,7 @@ If PACKAGE non-nil, install only that package."
       (dolist (file (reverse package-autoload-file-list))
         (when (eq (% count 250) 0)
           (princ ". "))
-        (incf count)
+        (cl-incf count)
         (silent| (ignore-errors
                    (update-file-autoloads file t moon-autoload-file)))))
     (princ green-OK)
