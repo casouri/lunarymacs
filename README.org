@@ -21,8 +21,7 @@ This is a stripped down framework modeling after doom-emacs. It's extremely basi
 - *not opinionated*: ([[https://github.com/casouri/lunarymacs/blob/324b6f8739ccd6fd43aa29009c566048ec180def/core/core-ui.el#L7][except this]]) no default settings set in core.
 - *minimum* core files. Only three
 
-* 
-Quick start
+* Quick start
   
 Lunarymacs is separated into =core= and =config=. 
 =core= is this repo, and =config= is my personal configurations (stars/modules) in a separate repo. You can clone only this repo and write your own stars, or clone both and modify my config.
@@ -42,7 +41,7 @@ git clone https://github.com/casouri/lunarymacs-stars.git star
 
 # angel star(emacs layout) and evil star (vim layout) might
 # not be compatible. Chose the one you like.
-cp init.example.el init.el
+cpp init.example.el init.el
 make
 emacs
 
@@ -52,9 +51,7 @@ git pull --rebase
 # or
 make update-moon # it's the same
 #+END_SRC
-
-* 
-After installation
+* After installation
 
 Each star has a README file, Key bindings are on the top of every star's config file.
 
