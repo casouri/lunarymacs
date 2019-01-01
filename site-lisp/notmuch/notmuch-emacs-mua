@@ -1,0 +1,179 @@
+#!/usr/bin/env bash
+#
+# notmuch-emacs-mua - start composing a mail on the command line
+#
+# Copyright © 2014 Jani Nikula
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see https://www.gnu.org/licenses/ .
+#
+# Authors: Jani Nikula <jani@nikula.org>
+#
+
+set -eu
+
+# escape: "expand" '\' as '\\' and '"' as '\"'
+# calling convention: escape -v var "$arg" (like in bash printf).
+escape ()
+{
+    local __escape_arg__=${3//\\/\\\\}
+    printf -v $2 '%s' "${__escape_arg__//\"/\\\"}"
+}
+
+EMACS=${EMACS:-emacs}
+EMACSCLIENT=${EMACSCLIENT:-emacsclient}
+
+PRINT_ONLY=
+NO_WINDOW=
+USE_EMACSCLIENT=
+AUTO_DAEMON=
+CREATE_FRAME=
+ELISP=
+MAILTO=
+HELLO=
+
+# Short options compatible with mutt(1).
+while getopts :s:c:b:i:h opt; do
+    # Handle errors and long options.
+    case "${opt}" in
+	:)
+	    echo "$0: short option -${OPTARG} requires an argument." >&2
+	    exit 1
+	    ;;
+	\?)
+	    opt=$1
+	    if [ "${OPTARG}" != "-" ]; then
+		echo "$0: unknown short option -${OPTARG}." >&2
+		exit 1
+	    fi
+
+	    case "${opt}" in
+		# Long options with arguments.
+		--subject=*|--to=*|--cc=*|--bcc=*|--body=*)
+		    OPTARG=${opt#--*=}
+		    opt=${opt%%=*}
+		    ;;
+		# Long options without arguments.
+		--help|--print|--no-window-system|--client|--auto-daemon|--create-frame|--hello)
+		    ;;
+		*)
+		    echo "$0: unknown long option ${opt}, or argument mismatch." >&2
+		    exit 1
+		    ;;
+	    esac
+	    # getopts does not do this for what it considers errors.
+	    OPTIND=$((OPTIND + 1))
+	    ;;
+    esac
+
+    escape -v OPTARG "${OPTARG-none}"
+
+    case "${opt}" in
+	--help|h)
+	    exec man notmuch-emacs-mua
+	    ;;
+	--subject|s)
+	    ELISP="${ELISP} (message-goto-subject) (insert \"${OPTARG}\")"
+	    ;;
+	--to)
+	    ELISP="${ELISP} (message-goto-to) (insert \"${OPTARG}, \")"
+	    ;;
+	--cc|c)
+	    ELISP="${ELISP} (message-goto-cc) (insert \"${OPTARG}, \")"
+	    ;;
+	--bcc|b)
+	    ELISP="${ELISP} (message-goto-bcc) (insert \"${OPTARG}, \")"
+	    ;;
+	--body|i)
+	    ELISP="${ELISP} (message-goto-body) (insert-file \"${OPTARG}\")"
+	    ;;
+	--print)
+	    PRINT_ONLY=1
+	    ;;
+	--no-window-system)
+	    NO_WINDOW="-nw"
+	    ;;
+	--client)
+	    USE_EMACSCLIENT="yes"
+	    ;;
+	--auto-daemon)
+	    AUTO_DAEMON="--alternate-editor="
+	    CREATE_FRAME="-c"
+	    ;;
+	--create-frame)
+	    CREATE_FRAME="-c"
+	    ;;
+	--hello)
+	    HELLO=1
+	    ;;
+	*)
+	    # We should never end up here.
+	    echo "$0: internal error (option ${opt})." >&2
+	    exit 1
+	    ;;
+    esac
+
+    shift $((OPTIND - 1))
+    OPTIND=1
+done
+
+# Positional parameters.
+for arg; do
+    escape -v arg "${arg}"
+    case $arg in
+	mailto:*)
+	    if [ -n "${MAILTO}" ]; then
+		echo "$0: more than one mailto: argument." >&2
+		exit 1
+	    fi
+	    MAILTO="${arg}"
+	    ;;
+	*)
+	    ELISP="${ELISP} (message-goto-to) (insert \"${arg}, \")"
+	    ;;
+    esac
+done
+
+if [ -n "${MAILTO}" ]; then
+    if [ -n "${ELISP}" ]; then
+	echo "$0: mailto: is not compatible with other message parameters." >&2
+	exit 1
+    fi
+    ELISP="(browse-url-mail \"${MAILTO}\")"
+elif [ -z "${ELISP}" -a -n "${HELLO}" ]; then
+    ELISP="(notmuch)"
+else
+    ELISP="(notmuch-mua-new-mail) ${ELISP}"
+fi
+
+# Kill the terminal/frame if we're creating one.
+if [ -z "$USE_EMACSCLIENT" -o -n "$CREATE_FRAME" -o -n "$NO_WINDOW" ]; then
+    ELISP="${ELISP} (message-add-action #'save-buffers-kill-terminal 'exit)"
+fi
+
+escape -v pwd "$PWD"
+
+# The crux of it all: construct an elisp progn and eval it.
+ELISP="(prog1 'done (require 'notmuch) (cd \"$pwd\") ${ELISP})"
+
+if [ -n "$PRINT_ONLY" ]; then
+    echo ${ELISP}
+    exit 0
+fi
+
+if [ -n "$USE_EMACSCLIENT" ]; then
+    # Evaluate the progn.
+    exec ${EMACSCLIENT} ${NO_WINDOW} ${CREATE_FRAME} ${AUTO_DAEMON} --eval "${ELISP}"
+else
+    exec ${EMACS} ${NO_WINDOW} --eval "${ELISP}"
+fi

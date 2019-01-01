@@ -1,61 +1,66 @@
-;;; -*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
 
 ;;
-;; Homepage
+;;; Homepage
 ;;
 
-;;
-;; Var
+(setq inhibit-startup-screen t)
+(setq initial-buffer-choice (lambda () (get-buffer-create moon-homepage-buffer)))
 
 (defvar moon-homepage-buffer "HOME"
   "The buffer name of the homepage")
 
 ;;
-;; Config
-
-(setq inhibit-startup-screen t)
-(setq initial-buffer-choice (lambda () (get-buffer-create moon-homepage-buffer)))
-
+;;; Theme
 ;;
-;; Theme
-;;
-
-;;
-;; Var
 
 (defvar moon-load-theme-hook ()
   "Hook ran after `load-theme'")
 
-(defvar moon-current-theme ""
-  "The last loaded theme name in string.")
+(defvar moon-current-theme nil
+  "The last loaded theme (symbol) in string.")
 
-(defvar moon-toggle-theme-list
-  '(spacemacs-dark spacemacs-light)
+(defvar moon-toggle-theme-list ()
   "Themes that you can toggle bwtween by `moon/switch-theme'")
 
-;;
-;; Func
-(defun moon-set-current-theme (&rest form)
-  "Adveiced before `load-theme', set `moon-current-theme'."
-  (setq moon-current-theme (symbol-name (car form))))
+(defvar moon-theme-book '(spacemacs-dark spacemacs-light)
+  "A list of themes that you can load with `moon/load-theme'.")
 
-;;
-;; Config
+(defun moon-set-current-theme (theme &rest _)
+  "Adveiced before `load-theme', set `moon-current-theme' to THEME."
+  (setq moon-current-theme theme))
 
-(defadvice load-theme (after run-load-theme-hook activate)
+(defun moon-run-load-theme-hook (&rest _)
+  "Run `moon-load-theme-hook'."
   (run-hook-with-args 'moon-load-theme-hook))
+
+(advice-add #'load-theme :after #'moon-run-load-theme-hook)
 
 (advice-add #'load-theme :before #'moon-set-current-theme)
 
+(defun moon-load-theme (theme &optional no-confirm no-enable)
+  "Disable `moon-currnt-theme' and oad THEME.
+Set `moon-theme' to THEME."
+  (disable-theme moon-current-theme)
+  (load-theme theme no-confirm no-enable)
+  (customize-set-variable 'moon-theme theme)
+  (custom-save-all))
+
+(defcustom moon-theme nil
+  "The theme used on startup.
+This way luanrymacs remembers the theme.
+You need to load `moon-theme' somewhere (after loading custom.el)."
+  :group 'convenience)
+
 ;;
-;; Font
+;;; Font
 ;;
 
 (defvar moon-magic-font-book
   '(
     ("Source Code Pro" . (moon-set-font| :family "Source Code Pro"
-                                  :weight 'light
-                                  :size 14))
+                                         :weight 'light
+                                         :size 14))
     ("SF Mono" . (moon-set-font| :family "SF Mono" :weight 'light :size 14))
     ("Source Code Pro for Powerline" . (moon-set-font| :family "Source Code Pro for Powerline" :weight 'light :size 14))
     )
@@ -72,7 +77,7 @@ And such list cannot be passed into a `font-spec'.")
 
 
 ;;
-;; Rmove GUI elements
+;;; Rmove GUI elements
 ;;
 
 (when window-system
@@ -82,7 +87,7 @@ And such list cannot be passed into a `font-spec'.")
   (menu-bar-mode -1))
 
 ;;
-;; Color
+;;; Color
 ;;
 
 (defvar moon-color-book
@@ -157,4 +162,23 @@ Can be uesed for hightlight region.")
 (defvar mac-yellow "#FEC041"
   "Yellow color on mac titlebar.")
 
+;;
+;;; Function
+;;
+
+(defun moon-quit-window (arg)
+  "Quit current window and bury it's buffer.
+Unlike `quit-window', this function deletes the window no matter what.
+If run with prefix argument (ARG), kill buffer."
+  (interactive "p")
+  (if (equal major-mode 'dired-mode)
+      (while (equal major-mode 'dired-mode)
+        (kill-buffer))
+    (if (eq arg 4) ; with C-u
+        (kill-buffer)
+      (bury-buffer)))
+  (ignore-errors (delete-window)))
+
+
 (provide 'core-ui)
+

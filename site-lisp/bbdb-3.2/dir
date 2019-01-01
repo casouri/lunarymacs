@@ -1,0 +1,20 @@
+Ceci est le fichier .../info/dir, qui contient le nœud le
+plus haut de la hiérarchie Info. Ce nœud est appelé (dir)Top.
+C'est de ce nœud que vous démarrez la première fois que
+vous utilisez Info.
+
+File: dir,	Node: Top	Ceci est le haut de l'arborescence INFO
+
+  Ceci (le nœud Répertoire) fournit un menu des sujets majeurs.
+  Entrez « q » pour quitter, « H » pour afficher toutes les commandes Info,
+  « d » pour revenir ici ;, « h » affiche un guide d'initiation pour les
+  nouveaux venus.
+  « mEmacs<Entrée> » démarre une consultation du manuel Emacs, et cætera.
+
+  Dans Emacs, vous pouvez cliquer avec le deuxième bouton de la souris
+  sur une entrée de menu ou sur un renvoi pour le sélectionner.
+
+* Menu:
+
+Emacs misc features
+* BBDB: (bbdb).                 Insidious Big Brother Database (BBDB).

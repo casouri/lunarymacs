@@ -1,5 +1,0 @@
-#+TITLE: homepage
-
-This star renders the homepage.
-
-

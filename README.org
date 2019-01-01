@@ -3,81 +3,61 @@
 [[https://github.com/casouri/lunarymacs/blob/master/LICENSE][https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square]]
 [[https://travis-ci.org/casouri/lunarymacs][https://img.shields.io/travis/casouri/lunarymacs/master.svg?style=flat-square]]
 
-[[./screenshot/screenshot0.png]]
-
+[[./screenshot/screenshot-moon.png]]
 
 #+HTML:<div align=center>
-[[./news.org][Update news]] | [[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
+[[https://github.com/casouri/lunarymacs/wiki][Wiki]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started][Getting started]] | [[https://github.com/casouri/lunarymacs/wiki/getting-started#if-anything-broke][If anything broke]]
 #+HTML:</div>
 
 \\
 
-This is a stripped down framework modeling after doom-emacs. It's extremely basic, but working.
+*Notice* (<2018-12-10 Mon>): Now I use [[https://github.com/casouri/lunarymacs/wiki/cowboy][my own package manager]], consider this if you want to try out lunarymacs.
 
-#+BEGIN_QUOTE
-开局一条狗，装备全靠抢   
+This is a stripped down framework modeling after doom-emacs. It's extremely basic, but working for me.
 
-                     ——鲁迅
-#+END_QUOTE
+*Warning:* There is no seat belt.
 
-*Warning:* There is no seatbelt.
-
-- *code is easy* to understand (since I don't really know too much elisp)
-- *not opinionated*: no default settings set in core. 
-  everything is up to you, no more forking for customization
-- Addon features like nyan-cat and org-bullets are *disabled by default*,
-  so you configure by enabling stuff instead of disabling stuff.
-- *minimum* core files
-- *no default package* required by core except use-package
-  
-
-*In summary:* 
-
-This project is a good starting point of your own config!
-You can:
-1. Use my configuration and add your own config (submit pull request if you think yours is good!)
-2. *OR* Only use the core as a framework and manage your own configurations within it.
-3. *OR* Just read the core and wiki as a reference and build your own config from scratch.
-
-
-* More screenshot
-
-[[./screenshot/screenshot1.png]]
+- *code is easy* to understand. There aren't much cool abstractions.
+- *not opinionated*: ([[https://github.com/casouri/lunarymacs/blob/324b6f8739ccd6fd43aa29009c566048ec180def/core/core-ui.el#L7][except this]]) no default settings set in core.
+- *minimum* core files. Only three.
 
 * Quick start
+  
+Lunarymacs is separated into =core= and =config=. 
+=core= is this repo, and =config= is my personal configurations (stars/modules) in a separate repo. You can clone only this repo and write your own stars, or clone both and modify my config.
 
-*backup you .emacs.d first!*
+Lunarymacs doesn't check packages on startup. Instead, you use Make commands to install, update and delete packages.
+
+*backup you .emacs.d first*
 
 #+BEGIN_SRC shell
-git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d --recurse-submodules
+# clonw core
+git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
 cd ~/.emacs.d
+# clone my config
+git clone https://github.com/casouri/lunarymacs-stars.git star
+# my init.el is under star/ while init.example.el is under .emacs.d/
+# don't cp my init.el unless you use Emacs 26+ on macOS 10.13+
+
+# angel star(emacs layout) and evil star (vim layout) might
+# not be compatible. Chose the one you like.
 cp init.example.el init.el
 make
 emacs
 
 # to update lunarymacs
 git pull --rebase
-git submodule update --init --recursive
 
 # or
 make update-moon # it's the same
 #+END_SRC
 
-After every update,
-hit =SPC f e D= and check for update from example init file.
+* After installation
 
-Also remember to check [[./news.org][update news]] for significant changes.
- 
+Each star has a README file, Key bindings are on the top of every star's config file.
+
 * Thank you
 Thanks to all the contributors of spacemacs and doom-emacs. I copyied a lot of code from them.
-
 Thanks to everyone in emacs-china.org, you answered many questions of mine.
-
 And of course a big thank-you to all the package contributors and emacs contributors. I can't enjoy such a great editor without your effort.
-
 Emacs community is the best! :smile: :heart: (just rhetorical, not comparing :P)
-* etc
-  
-I don't know what is lunary, don't ask me.
-
-I know it says lunarymacs but homepage is moon emacs.
