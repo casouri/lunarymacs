@@ -53,6 +53,13 @@ You need to load `moon-theme' somewhere (after loading custom.el)."
   :group 'convenience)
 
 ;;
+;;; Mode line
+;;
+
+(defvar moon-major-mode-info nil
+  "Each major mode can display something relative to it in this part of the mode line.")
+
+;;
 ;;; Font
 ;;
 
