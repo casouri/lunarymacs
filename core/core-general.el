@@ -273,6 +273,10 @@ Expressions will be appended."
      ,@rest
      (message (format "%s time: %.03f" ,message (float-time (time-subtract (current-time) start-time))))))
 
+(defmacro this-dir| ()
+  "The directory the current file is in."
+  `(file-name-directory (or load-file-name buffer-file-name)))
+
 (defun bootstrap ()
   "Bootstrap cowboy."
   (message "Load cowboy")
