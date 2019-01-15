@@ -110,8 +110,9 @@ If PACKAGE non-nil, install only that package."
         (when (eq (% count 250) 0)
           (princ ". "))
         (cl-incf count)
-        (silent| (ignore-errors
-                   (update-file-autoloads file t moon-autoload-file)))))
+        (let ((auto-save-default nil))
+          (silent| (ignore-errors
+                     (update-file-autoloads file t moon-autoload-file))))))
     (princ green-OK)
     (princ "\n")))
 
