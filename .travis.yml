@@ -11,7 +11,7 @@ env:
 install:
   # copied from eglot repo
   - curl -LO https://github.com/npostavs/emacs-travis/releases/download/bins/emacs-bin-${EMACS_VERSION}.tar.gz
-  - tar -xaf emacs-bin-${EMACS_VERSION}.tar.gz -C /
+  - tar -xf emacs-bin-${EMACS_VERSION}.tar.gz -C /
   # configure $PATH: Emacs installed to /tmp/emacs
   - export PATH=/tmp/emacs/bin:${PATH}
   - emacs --version
