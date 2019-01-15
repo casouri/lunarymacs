@@ -2,17 +2,25 @@ os: osx
 language: emacs-lisp
 sudo: false
 
+env:
+  global:
+    - TRAVIS_TESTING=t
+  matrix:
+    - EMACS_VERSION=26.1
+
 install:
+  # copied from eglot repo
+  - curl -LO https://github.com/npostavs/emacs-travis/releases/download/bins/emacs-bin-${EMACS_VERSION}.tar.gz
+  - tar -xaf emacs-bin-${EMACS_VERSION}.tar.gz -C /
+  # configure $PATH: Emacs installed to /tmp/emacs
+  - export PATH=/tmp/emacs/bin:${PATH}
+  - emacs --version
   - cd ~
-  - git clone https://github.com/casouri/lunarymacs.git .emacs.d --recurse-submodules
+  - git clone https://github.com/casouri/lunarymacs.git .emacs.d
   - cd .emacs.d
   - git clone https://github.com/casouri/lunarymacs-stars.git star
-  - brew tap d12frosted/emacs-plus
-  - brew install emacs-plus
-  - brew install make
-  - PATH="/usr/local/opt/make/libexec/gnubin:${PATH}"
-  - export PATH
   - cp init.test.el init.el
+  - make --version
 
 script:
   - make
