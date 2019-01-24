@@ -208,10 +208,10 @@ In a word, denpend of stars that don't depend on other stars!"
 (defmacro post-config| (package &rest body)
   "Add expressions in BODY to be called after (use-package PACKAGE :config)."
   (declare (indent defun))
-  `(let ((func-symbol (intern (format "post-config-%s" (symbol-name ',package)))))
-     (unless (fboundp func-symbol)
-       (fset func-symbol '(lambda ())))
-     (setf (cdr (last (symbol-function func-symbol))) ',body)))
+  (let ((func-symbol (intern (format "post-config-%s" (symbol-name package)))))
+    `(progn (unless (fboundp #',func-symbol)
+              (fset #',func-symbol '(lambda ())))
+            (fset #',func-symbol (append (symbol-function #',func-symbol) ',body)))))
 
 (defmacro get-package-symbol| (sexp)
   "If SEXP is a symbol, return it. If SEXP is a sequence, return car."
@@ -231,24 +231,20 @@ to be evaluated at the end of `moon-initialize-star'
 
 PACKAGE can also be a straight recipe."
   (declare (indent defun))
-  `(progn
-     (add-to-list 'moon-package-list ',package)
-     (unless moon-setup
-       (fset
-        'moon-grand-use-package-call
-        (append
-         (symbol-function 'moon-grand-use-package-call)
-         '((use-package
-             ,(get-package-symbol| package)
-             ,@rest-list
-             :init
-             (let ((symb (intern (format "pre-init-%s" (symbol-name ',(get-package-symbol| package))))))
-               (when (fboundp symb)
-                 (eval (list symb))))
-             :config
-             (let ((symb (intern (format "post-config-%s" (symbol-name ',(get-package-symbol| package))))))
-               (when (fboundp symb)
-                 (eval (list symb)))))))))))
+  (let ((post-func-symb (intern (format "post-config-%s" (symbol-name (get-package-symbol| package))))))
+    `(progn
+       (add-to-list 'moon-package-list ',package)
+       (unless moon-setup
+         (fset
+          'moon-grand-use-package-call
+          (append
+           (symbol-function 'moon-grand-use-package-call)
+           '((use-package
+               ,(get-package-symbol| package)
+               ,@rest-list
+               :config
+               (when (fboundp #',post-func-symb)
+                 (funcall #',post-func-symb))))))))))
 
 
 (defmacro customize| (&rest exp-list)
