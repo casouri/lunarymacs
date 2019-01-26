@@ -49,4 +49,4 @@ clean:
 find . -type f -name *.elc -delete
 
 test:
->emacs --eval "(add-hook 'moon-startup-hook-2 #'moon/run-test t)"
+>emacs --eval "(add-hook 'moon-startup-hook-2 #'moon/run-test nil t)"
