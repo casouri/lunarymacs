@@ -73,7 +73,7 @@
 (defvar red-cross "\033[00;31mX\033[0m")
 (defvar red-ERROR "\033[00;31mERROR\033[0m")
 
-(defvar moon-package-sub-dir-white-list (list "magit/lisp$")
+(defvar moon-package-sub-dir-white-list ()
   "A list of sub-dirs' regexp (of package) that are included in `load-path'.
 For example, magit/lisp.")
 
