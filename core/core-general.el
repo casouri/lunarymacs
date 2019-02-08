@@ -121,11 +121,15 @@ Return absolute path."
                   (list package-dir)))))
 
 (defun moon-load-star ()
-  "Prepare each star in `moon-star-list'.
-Then they can be loaded by `moon-load-star'."
-  (load moon-autoload-file t)
+  "Load star, load-path, autoload file."
   (moon-load-config moon-star-path-list)
+  ;; load star before load load-path
+  ;; otherwise sub-dir white lists are not
+  ;; configured
   (moon-set-load-path)
+  ;; load load-path before load autoload
+  ;; otherwise someone can't find path
+  (load moon-autoload-file t)
   (timeit| "use-package"
     (require 'use-package)
     (moon-grand-use-package-call)
