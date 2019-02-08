@@ -103,14 +103,29 @@ ERROR is passes to `cowboy--handle-error' as FUNC."
   "Delete PACKAGE.  Return t if success, nil if fail.
 If PACKAGE is a symbol, treat as a package, if a string, treat as a dir.
 
-ERROR is passes to `cowboy--handle-error' as FUNC."
+ERROR is passed to `cowboy--handle-error' as FUNC."
   ;; TODO revise
-  (delete-directory
-   (if (stringp package)
-       package
-     (concat cowboy-package-dir (symbol-name (cowboy--package-symbol package)) "/"))
-   t t)
-  t)
+  (cowboy--handle-error
+   (cowboy--with-recipe
+    (if (and (symbolp package)
+             (eq (plist-get recipe :fetcher) 'package))
+        (cowboy-delete-regexp cowboy-package-dir (format ".*/%s-.*$" (symbol-name package-symbol)))
+      (delete-directory
+       (if (stringp package)
+           package
+         (concat cowboy-package-dir (symbol-name (cowboy--package-symbol package)) "/"))
+       t t)))
+   error))
+
+(defun cowboy-delete-regexp (root-dir regexp)
+  "Delete directory under ROOT-DIR that matches REGEXP.
+It only deletes the fist match.
+No backslash at the end of regexp."
+  (when-let ((path (catch 'match
+                     (dolist (path (cowboy--directory-list root-dir))
+                       (when (string-match regexp path)
+                         (throw 'match path))))))
+    (cowboy-delete path)))
 
 (defun cowboy-reinstall (package)
   "Reinstall PACKAGE."
@@ -237,7 +252,9 @@ Return t if success, nil if fail."
   (cowboy--handle-error
    (cowboy--command "git" cowboy-package-dir "clone" (unless full-clone "--depth")
                     (unless full-clone "1")
-                    (format "https://github.com/%s.git" (plist-get recipe :repo))
+                    (if (plist-get recipe :repo)
+                        (format "https://github.com/%s.git" (plist-get recipe :repo))
+                      (plist-get recipe :http))
                     (symbol-name package))))
 
 (defun cowboy--github-shallowp (package)
@@ -269,6 +286,7 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
 
 (defun cowboy--url-install (package recipe &optional _)
   "Download the PACKAGE (file) directly from URL.
+RECIPE is a plist.
 Return t if success, nil if fail."
   (cowboy--handle-error
    (with-current-buffer (url-retrieve-synchronously
@@ -298,6 +316,27 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
   (cowboy-delete package)
   (cowboy--url-install package recipe))
 
+;;;;;; Package
+
+(defun cowboy--package-install (package recipe &optional _)
+  "Download the PACKAGE by package.el.
+RECIPE is a plist.
+Return t if success, nil if fail."
+  (cowboy--handle-error
+   (progn
+     (require 'package)
+     (package-initialize t)
+     (ignore-errors
+       (package-install (or (plist-get recipe :name)
+                            package))))))
+
+(defun cowboy--package-update (package recipe)
+  "Update PACKAGE by package.el.
+Return t if success, nil if fail.
+If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir.
+RECIPE is a plist."
+  (cowboy-delete package)
+  (cowboy--package-install package recipe))
 
 (provide 'cowboy)
 
