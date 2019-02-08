@@ -73,6 +73,10 @@
 (defvar red-cross "\033[00;31mX\033[0m")
 (defvar red-ERROR "\033[00;31mERROR\033[0m")
 
+(defvar moon-package-sub-dir-white-list (list "magit/lisp$")
+  "A list of sub-dirs' regexp (of package) that are included in `load-path'.
+For example, magit/lisp.")
+
 ;;
 ;;; Func
 ;;
@@ -89,6 +93,16 @@ ARGS same as in `load'."
   (cl-remove-if (lambda (path) (not (file-directory-p path)))
                 (directory-files dir t directory-files-no-dot-files-regexp)))
 
+(defun moon-subdir-list (dir)
+  "Return a list of sub-dirs that are included in `moon-package-sub-dir-white-list'.
+Return absolute path."
+  (cl-remove-if-not (lambda (path) (and (file-directory-p path)
+                                        (catch 'match
+                                          (dolist (regexp moon-package-sub-dir-white-list)
+                                            (when (string-match regexp path)
+                                              (throw 'match t))))))
+                    (directory-files dir t directory-files-no-dot-files-regexp)))
+
 (defun moon-set-load-path ()
   "Add each package to load path."
   (push moon-core-dir load-path)
@@ -103,7 +117,7 @@ ARGS same as in `load'."
       (push dir load-path)))
   (dolist (package-dir (moon-directory-list moon-package-dir))
     (setq load-path
-          (append load-path (moon-directory-list package-dir)
+          (append load-path (moon-subdir-list package-dir)
                   (list package-dir)))))
 
 (defun moon-load-star ()
@@ -269,9 +283,10 @@ Expressions will be appended."
      ,@rest
      (message (format "%s time: %.03f" ,message (float-time (time-subtract (current-time) start-time))))))
 
-(defmacro this-dir| ()
-  "The directory the current file is in."
-  `(file-name-directory (or load-file-name buffer-file-name)))
+(defmacro this-dir| (var form)
+  "Evaluate FORM with this directory binded to VAR."
+  `(let ((,var (file-name-directory (or load-file-name buffer-file-name))))
+     ,form))
 
 (defun bootstrap ()
   "Bootstrap cowboy."
