@@ -11,16 +11,16 @@
     (moon-load-theme (nth (% (1+ index) len) moon-toggle-theme-list) t)))
 
 ;;;###autoload
-(defun moon/load-font ()
+(defun moon/load-font (font-name)
   "Prompt for a font and set it.
-Fonts are specified in `moon-magic-font-book'.
-Each element is an alist with the form
-(name . (moon-set-font| configuration))
- (name . (moon-set-font| :family \"family\" :weight ’weight))"
-  (interactive)
-  (let ((font-name (completing-read "Font to load: " moon-magic-font-book)))
-    (eval (cdr (assoc font-name moon-magic-font-book))) nil t
-    ))
+Fonts are specified in `moon-font-alist'."
+  (interactive (list
+                (completing-read "Choose a font: "
+                                 (mapcar (lambda (cons) (symbol-name (car cons)))
+                                         moon-font-alist))))
+  (set-frame-font (apply #'font-spec
+                         (alist-get (intern font-name)
+                                    moon-font-alist))))
 
 ;;;###autoload
 (defmacro moon-set-font| (&rest config-list)

@@ -56,24 +56,11 @@ You need to load `moon-theme' somewhere (after loading custom.el)."
 ;;; Font
 ;;
 
-(defvar moon-magic-font-book
-  '(
-    ("Source Code Pro" . (moon-set-font| :family "Source Code Pro"
-                                         :weight 'light
-                                         :size 14))
-    ("SF Mono" . (moon-set-font| :family "SF Mono" :weight 'light :size 14))
-    ("Source Code Pro for Powerline" . (moon-set-font| :family "Source Code Pro for Powerline" :weight 'light :size 14))
-    )
-
-  "All the fonts you can switch between by `moon/load-font'
-It is an alist with the form
-((name . (moon-set-font| configuration))
- (name . (moon-set-font| :family \"family\" :weight 'weight)))
-
-I have to do it this way because apply flattens a list ignoring quotes.
-So '(:family \"SF Mono\" :weight 'light) will become
-(:family \"SF Mono\" :weight quote light).
-And such list cannot be passed into a `font-spec'.")
+(defvar moon-font-alist
+  '((sf-mono-13 . (:family "SF Mono" :size 13)))
+  "An alist of all the fonts you can switch between by `moon/load-font'.
+Key is a symbol as the name, value is a plist specifying the font spec.
+More info about spec in `font-spec'.")
 
 
 ;;
