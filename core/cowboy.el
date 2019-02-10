@@ -180,8 +180,10 @@ No backslash at the end of regexp."
 
 (defun cowboy-installedp (package)
   "Return t if PACKAGE (symbol, recipe, dir string) is installed, nil if not."
+  (ignore package)
   (cowboy--with-recipe
    (if (or (plist-get recipe :system)
+           (plist-get recipe :pseudo)
            (member package-symbol cowboy-ignore-package-list)
            (member (symbol-name package-symbol) (cowboy--all-file-in-load-path)))
        t
