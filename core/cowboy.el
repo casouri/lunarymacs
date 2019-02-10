@@ -44,7 +44,7 @@ If none specified, default to 'github.
 TODO :branch fetch a particular branch of repo.
 
 :dependency is a list of symbols of packages thar this package depends on.
-p
+
 :pseudo is for pseudo packages. for example, ivy, counsel & swiper are in one repo,
 then you only need one recipe. The other two can be configured as pseudo packages.
 
