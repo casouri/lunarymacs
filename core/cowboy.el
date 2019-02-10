@@ -65,39 +65,44 @@ If package is a directory string,
 the directory file name will be used as package name.
 
 ERROR is passes to `cowboy--handle-error' as FUNC."
-  (cowboy--only-with-recipe
-   (if (plist-get recipe :pseudo)
-       t ; return with success immediately
-     ;; handle dependency
-     (let ((dependency-list (plist-get recipe :dependency)))
-       (when dependency-list
-         (mapcar (lambda (package) (unless (cowboy-installedp package)
-                                     (cowboy-install package full-clone error)))
-                 dependency-list)))
-     ;; install, return t if success, nil if fail
-     (funcall (intern (format "cowboy--%s-install"
-                              (symbol-name (or (plist-get recipe :fetcher) 'github))))
-              package-symbol recipe full-clone))))
+  (cowboy--handle-error
+   (cowboy--only-with-recipe
+    (if (plist-get recipe :pseudo)
+        t ; return with success immediately
+      ;; handle dependency
+      (let ((dependency-list (plist-get recipe :dependency)))
+        (when dependency-list
+          (dolist (dep dependency-list)
+            (unless (cowboy-installedp dep)
+              (cowboy-install dep full-clone error)))))
+      ;; install, return t if success, nil if fail
+      (unless (cowboy-installedp package)
+        (funcall (intern (format "cowboy--%s-install"
+                                 (symbol-name (or (plist-get recipe :fetcher) 'github))))
+                 package-symbol recipe full-clone))))
+   error))
 
 (defun cowboy-update (package &optional error)
   "Update PACKAGE from upstream. Return t if success, nil if fail.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir.
 
 ERROR is passes to `cowboy--handle-error' as FUNC."
-  (cowboy--only-with-recipe
-   (if (plist-get recipe :pseudo)
-       t
-     ;; handle dependency
-     (let ((dependency-list (plist-get recipe :dependency)))
-       (when dependency-list
-         (mapcar (lambda (package) (cowboy-update package error)) dependency-list)))
-     ;; return t if success, nil if fail
-     (funcall (intern (format "cowboy--%s-update"
-                              (symbol-name
-                               (or
-                                (plist-get recipe :fetcher)
-                                'github))))
-              package-symbol recipe))))
+  (cowboy--handle-error
+   (cowboy--only-with-recipe
+    (if (plist-get recipe :pseudo)
+        t
+      ;; handle dependency
+      (let ((dependency-list (plist-get recipe :dependency)))
+        (when dependency-list
+          (mapcar (lambda (package) (cowboy-update package error)) dependency-list)))
+      ;; return t if success, nil if fail
+      (funcall (intern (format "cowboy--%s-update"
+                               (symbol-name
+                                (or
+                                 (plist-get recipe :fetcher)
+                                 'github))))
+               package-symbol recipe)))
+   error))
 
 (defun cowboy-delete (package &optional error)
   "Delete PACKAGE.  Return t if success, nil if fail.
@@ -249,13 +254,12 @@ Return t if success, nil if fail."
   "Clone the package specified by RECIPE and name it PACKAGE (symbol).
 Shadow clone if FULL-CLONE nil. REPO is of form \"user/repo\". Return 0 if success.
 Return t if success, nil if fail."
-  (cowboy--handle-error
-   (cowboy--command "git" cowboy-package-dir "clone" (unless full-clone "--depth")
-                    (unless full-clone "1")
-                    (if (plist-get recipe :repo)
-                        (format "https://github.com/%s.git" (plist-get recipe :repo))
-                      (plist-get recipe :http))
-                    (symbol-name package))))
+  (cowboy--command "git" cowboy-package-dir "clone" (unless full-clone "--depth")
+                   (unless full-clone "1")
+                   (if (plist-get recipe :repo)
+                       (format "https://github.com/%s.git" (plist-get recipe :repo))
+                     (plist-get recipe :http))
+                   (symbol-name package)))
 
 (defun cowboy--github-shallowp (package)
   "Return t if PACKAGE (a symbol, a recipe or a directory) is shallow cloned, nil if not."
@@ -270,15 +274,14 @@ Return t if success, nil if fail."
 (defun cowboy--github-update (package recipe)
   "Pull PACKAGE with RECIPE from upstream. Return t if success, nil if fail.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
-  (cowboy--handle-error
-   (if (cowboy--github-shallowp package)
-       ;; simply reinstall
-       (progn (cowboy-delete package)
-              (cowboy--github-install package recipe))
-     (cowboy--command "git" (if (stringp package)
-                                package
-                              (concat cowboy-package-dir (symbol-name package) "/"))
-                      "fetch"))))
+  (if (cowboy--github-shallowp package)
+      ;; simply reinstall
+      (progn (cowboy-delete package)
+             (cowboy--github-install package recipe))
+    (cowboy--command "git" (if (stringp package)
+                               package
+                             (concat cowboy-package-dir (symbol-name package) "/"))
+                     "fetch")))
 
 
 
@@ -288,25 +291,24 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
   "Download the PACKAGE (file) directly from URL.
 RECIPE is a plist.
 Return t if success, nil if fail."
-  (cowboy--handle-error
-   (with-current-buffer (url-retrieve-synchronously
-                         (plist-get recipe :url) t nil 10)
-     (goto-char (point-min))
-     (re-search-forward "\n\n")
-     (delete-region (point-min) (match-end 0))
-     (let ((file-content (buffer-substring (point-min) (point-max)))
-           (dir (format "%s%s/" cowboy-package-dir package))
-           (coding-system-for-write 'utf-8))
-       (unless (file-exists-p dir) (mkdir dir))
-       (find-file (format "%s%s/%s.el" cowboy-package-dir package package))
-       (insert file-content)
-       (save-buffer))
-     ;; (let ((redirection (plist-get status :redirect)))
-     ;;   (if redirection
-     ;;       (cowboy--http-clone package (plist-put recipe 'url redirection))
-     ;;     ;; current buffer is retrieved data
-     ;;     ))
-     )))
+  (with-current-buffer (url-retrieve-synchronously
+                        (plist-get recipe :url) t nil 10)
+    (goto-char (point-min))
+    (re-search-forward "\n\n")
+    (delete-region (point-min) (match-end 0))
+    (let ((file-content (buffer-substring (point-min) (point-max)))
+          (dir (format "%s%s/" cowboy-package-dir package))
+          (coding-system-for-write 'utf-8))
+      (unless (file-exists-p dir) (mkdir dir))
+      (find-file (format "%s%s/%s.el" cowboy-package-dir package package))
+      (insert file-content)
+      (save-buffer))
+    ;; (let ((redirection (plist-get status :redirect)))
+    ;;   (if redirection
+    ;;       (cowboy--http-clone package (plist-put recipe 'url redirection))
+    ;;     ;; current buffer is retrieved data
+    ;;     ))
+    ))
 
 (defun cowboy--url-update (package recipe)
   "Download PACKAGE with RECIPE again.
@@ -322,13 +324,11 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
   "Download the PACKAGE by package.el.
 RECIPE is a plist.
 Return t if success, nil if fail."
-  (cowboy--handle-error
-   (progn
-     (require 'package)
-     (package-initialize t)
-     (ignore-errors
-       (package-install (or (plist-get recipe :name)
-                            package))))))
+  (require 'package)
+  (package-initialize t)
+  (ignore-errors
+    (package-install (or (plist-get recipe :name)
+                         package))))
 
 (defun cowboy--package-update (package recipe)
   "Update PACKAGE by package.el.
