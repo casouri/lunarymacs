@@ -22,6 +22,22 @@ Fonts are specified in `moon-font-alist'."
                          (alist-get (intern font-name)
                                     moon-font-alist))))
 
+(defun moon/load-cjk-font (font-name)
+  "Prompt for a font and set it.
+Fonts are specified in `moon-font-alist'."
+  (interactive (list
+                (completing-read "Choose a font: "
+                                 (mapcar (lambda (cons) (symbol-name (car cons)))
+                                         moon-cjk-font-alist))))
+  (let ((spec (alist-get (intern font-name)
+                         moon-cjk-font-alist)))
+    (dolist (charset '(kana han cjk-misc))
+      (set-fontset-font (frame-parameter nil 'font)
+                        charset (apply #'font-spec
+                                       spec)))
+    (add-to-list 'face-font-rescale-alist
+                 (cons (plist-get spec :family) 1.3))))
+
 ;;;###autoload
 (defmacro moon-set-font| (&rest config-list)
   "Set font. Accepts `font-spec' arguments.

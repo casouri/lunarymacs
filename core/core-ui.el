@@ -62,6 +62,12 @@ You need to load `moon-theme' somewhere (after loading custom.el)."
 Key is a symbol as the name, value is a plist specifying the font spec.
 More info about spec in `font-spec'.")
 
+(defvar moon-cjk-font-alist
+  '((soure-han-serif-13 . (:family "Source Han Serif SC"
+                                   :size 13)))
+  "Similar to `moon-font-alist' but used for CJK scripts.
+Use `moon/load-cjk-font' to load them.")
+
 
 ;;
 ;;; Rmove GUI elements
