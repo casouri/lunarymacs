@@ -86,7 +86,8 @@ For example, magit/lisp.")
 ARGS same as in `load'."
   (condition-case err
       (apply #'load file args)
-    (error (message "error in file %s: %s" file err))))
+    (error (message (propertize (format "error in file %s: %s" file err)
+                                'face 'error)))))
 
 (defun moon-directory-list (dir)
   "Return a list of directories under DIR. Return absolute path."
