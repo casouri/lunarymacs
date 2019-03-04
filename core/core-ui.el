@@ -50,6 +50,17 @@ Set `moon-theme' to THEME."
   "The theme used on startup.
 This way luanrymacs remembers the theme.
 You need to load `moon-theme' somewhere (after loading custom.el)."
+  :type 'symbol
+  :group 'convenience)
+
+(defcustom moon-font nil
+  "Like `moon-theme', used to cache configuration across sessions."
+  :type 'string
+  :group 'convenience)
+
+(defcustom moon-cjk-font nil
+  "Like `moon-font'."
+  :type 'string
   :group 'convenience)
 
 ;;
