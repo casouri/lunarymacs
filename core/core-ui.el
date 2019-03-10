@@ -26,26 +26,6 @@
 (defvar moon-theme-book '(spacemacs-dark spacemacs-light)
   "A list of themes that you can load with `moon/load-theme'.")
 
-(defun moon-set-current-theme (theme &rest _)
-  "Adveiced before `load-theme', set `moon-current-theme' to THEME."
-  (setq moon-current-theme theme))
-
-(defun moon-run-load-theme-hook (&rest _)
-  "Run `moon-load-theme-hook'."
-  (run-hook-with-args 'moon-load-theme-hook))
-
-(advice-add #'load-theme :after #'moon-run-load-theme-hook)
-
-(advice-add #'load-theme :before #'moon-set-current-theme)
-
-(defun moon-load-theme (theme &optional no-confirm no-enable)
-  "Disable `moon-currnt-theme' and oad THEME.
-Set `moon-theme' to THEME."
-  (disable-theme moon-current-theme)
-  (load-theme theme no-confirm no-enable)
-  (customize-set-variable 'moon-theme theme)
-  (custom-save-all))
-
 (defcustom moon-theme nil
   "The theme used on startup.
 This way luanrymacs remembers the theme.
@@ -62,6 +42,69 @@ You need to load `moon-theme' somewhere (after loading custom.el)."
   "Like `moon-font'."
   :type 'string
   :group 'convenience)
+
+(defun moon-set-current-theme (theme &rest _)
+  "Adveiced before `load-theme', set `moon-current-theme' to THEME."
+  (setq moon-current-theme theme))
+
+(defun moon-run-load-theme-hook (&rest _)
+  "Run `moon-load-theme-hook'."
+  (run-hook-with-args 'moon-load-theme-hook))
+
+(advice-add #'load-theme :after #'moon-run-load-theme-hook)
+
+(advice-add #'load-theme :before #'moon-set-current-theme)
+
+(defun moon-load-theme (&optional theme no-confirm no-enable)
+  "Disable `moon-currnt-theme' and oad THEME.
+Set `moon-theme' to THEME."
+  (disable-theme moon-current-theme)
+  (load-theme (or theme (car moon-toggle-theme-list)) no-confirm no-enable)
+  (when theme
+    (customize-set-variable 'moon-theme theme)
+    (custom-save-all)))
+
+(defun moon/load-font (&optional font-name)
+  "Prompt for a font and set it.
+Fonts are specified in `moon-font-alist'."
+  (interactive (list
+                (completing-read "Choose a font: "
+                                 (mapcar (lambda (cons) (symbol-name (car cons)))
+                                         moon-font-alist))))
+
+  (let* ((arg font-name)
+         (font-name (or font-name moon-font))
+         (font (apply #'font-spec
+                      (if font-name (alist-get (intern font-name)
+                                               moon-font-alist)
+                        (cdar moon-font-alist)))))
+    (set-frame-font font nil t)
+    ;; seems that there isn't a good way to get font-object directly
+    (add-to-list 'default-frame-alist `(font . ,(face-attribute 'default :font)))
+    (when arg (customize-set-variable 'moon-font font-name))
+    ;; sync cjk font settings
+    (moon/load-cjk-font)))
+
+(defun moon/load-cjk-font (&optional font-name)
+  "Prompt for a font and set it.
+Fonts are specified in `moon-font-alist'."
+  (interactive (list
+                (completing-read "Choose a font: "
+                                 (mapcar (lambda (cons) (symbol-name (car cons)))
+                                         moon-cjk-font-alist))))
+  (let* ((arg font-name)
+         (font-name (or font-name moon-cjk-font))
+         (spec (apply #'font-spec (if font-name
+                                      (alist-get (intern font-name)
+                                                 moon-cjk-font-alist)
+                                    (cdar moon-cjk-font-alist)))))
+    (dolist (charset '(kana han cjk-misc))
+      (set-fontset-font (frame-parameter nil 'font)
+                        charset spec))
+    (when arg
+      (customize-set-variable 'moon-cjk-font font-name)
+      (custom-save-all))))
+
 
 ;;
 ;;; Font

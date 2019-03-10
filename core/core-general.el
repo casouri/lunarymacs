@@ -60,7 +60,7 @@
 (defvar moon-star-path-list ()
   "The path to each stars.")
 
-(defvar moon-autoload-file (concat moon-local-dir "autoload.el")
+(defvar moon-autoload-file (concat moon-local-dir "moon-autoload.el")
   "The path of autoload file which has all the autoload functions.")
 
 (fset 'moon-grand-use-package-call
@@ -73,9 +73,8 @@
 (defvar red-cross "\033[00;31mX\033[0m")
 (defvar red-ERROR "\033[00;31mERROR\033[0m")
 
-(defvar moon-package-sub-dir-white-list ()
-  "A list of sub-dirs' regexp (of package) that are included in `load-path'.
-For example, magit/lisp.")
+(defvar moon-subdir-regex-black-list '("auctex-.*/style")
+  "A list of regexps that matches subdirs of package dirs that should not be included into load-path.")
 
 ;;
 ;;; Func
@@ -94,15 +93,6 @@ ARGS same as in `load'."
   (cl-remove-if (lambda (path) (not (file-directory-p path)))
                 (directory-files dir t directory-files-no-dot-files-regexp)))
 
-(defun moon-subdir-list (dir)
-  "Return a list of sub-dirs that are included in `moon-package-sub-dir-white-list'.
-Return absolute path."
-  (cl-remove-if-not (lambda (path) (and (file-directory-p path)
-                                        (catch 'match
-                                          (dolist (regexp moon-package-sub-dir-white-list)
-                                            (when (string-match regexp path)
-                                              (throw 'match t))))))
-                    (directory-files dir t directory-files-no-dot-files-regexp)))
 
 (defun moon-set-load-path ()
   "Add each package to load path."
@@ -110,23 +100,18 @@ Return absolute path."
   (dolist (dir (append (list moon-core-dir
                              moon-star-dir
                              moon-local-dir)
-                       ;; moon-site-lisp-dir is added in Run Code section
-                       ;; in this file, much earlier than this function
-                       ;; would run
-                       (directory-files-recursively moon-site-lisp-dir "" t)))
-    (when (file-directory-p dir)
-      (push dir load-path)))
-  (dolist (package-dir (moon-directory-list moon-package-dir))
-    (setq load-path
-          (append load-path (moon-subdir-list package-dir)
-                  (list package-dir)))))
+                       (directory-files-recursively moon-site-lisp-dir "" t)
+                       (directory-files-recursively moon-package-dir "" t)))
+    (when (and (file-directory-p dir)
+               (catch 'result
+                 (dolist (regex moon-subdir-regex-black-list t)
+                   (when (string-match-p regex dir)
+                     (throw 'result nil)))))
+      (push dir load-path))))
 
 (defun moon-load-star ()
   "Load star, load-path, autoload file."
   (moon-load-config moon-star-path-list)
-  ;; load star before load load-path
-  ;; otherwise sub-dir white lists are not
-  ;; configured
   (moon-set-load-path)
   ;; load load-path before load autoload
   ;; otherwise someone can't find path
@@ -232,34 +217,35 @@ In a word, denpend of stars that don't depend on other stars!"
               (fset #',func-symbol '(lambda ())))
             (fset #',func-symbol (append (symbol-function #',func-symbol) ',body)))))
 
-(defmacro get-package-symbol| (sexp)
-  "If SEXP is a symbol, return it. If SEXP is a sequence, return car."
-  `(if (symbolp ,sexp)
-       ,sexp
-     (car ,sexp)))
+(defun get-package-symbol (package)
+  "Return the symbol of PACKAGE."
+  (if (symbolp package)
+      package
+    (car package)))
 
 (defmacro use-package| (package &rest rest-list)
   "Thin wrapper around `use-package', just add some hooks.
 
 Basically (use-package| evil :something something) adds
 \(use-package :something something
-:init (pre-init-evil)
 :config (post-config-evil))
 to `moon-grand-use-pacage-call'
 to be evaluated at the end of `moon-initialize-star'
 
 PACKAGE can also be a straight recipe."
   (declare (indent defun))
-  (let ((post-func-symb (intern (format "post-config-%s" (symbol-name (get-package-symbol| package))))))
+  (let ((post-func-symb (intern (format "post-config-%s" (symbol-name (get-package-symbol package))))))
     `(progn
+       ;; add package to `moon-package-list'
        (add-to-list 'moon-package-list ',package)
+       ;; push (use-package xxx) to `moon-grand-use-package-call'
        (unless moon-setup
          (fset
           'moon-grand-use-package-call
           (append
            (symbol-function 'moon-grand-use-package-call)
            '((use-package
-               ,(get-package-symbol| package)
+               ,(get-package-symbol package)
                ,@rest-list
                :config
                (when (fboundp #',post-func-symb)
@@ -293,22 +279,11 @@ Expressions will be appended."
   `(let ((,var (file-name-directory (or load-file-name buffer-file-name))))
      ,form))
 
-(defun bootstrap ()
-  "Bootstrap cowboy."
-  (message "Load cowboy")
-  (push moon-core-dir load-path)
-  (require 'cowboy))
-
-
 ;;; Run code
 
 (setq package--init-file-ensured t
       package-enable-at-startup nil
       package-user-dir moon-package-dir)
-
-;; Add site-lisp to load-path
-;; so dash.el s.el and f.el are ready
-(push moon-site-lisp-dir load-path)
 
 (provide 'core-package)
 

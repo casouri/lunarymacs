@@ -1,7 +1,7 @@
 # .RECIPEPREFIX = >
 
 # EMACS=emacs --quick --eval "(setq moon-setup t)" --eval "(toggle-debug-on-error)" -l init.el --eval "(moon-load-config moon-star-path-list)"
-EMACS=emacs --quick --batch --eval "(setq moon-setup t)" -l init.el --eval "(moon-load-config moon-star-path-list)"
+EMACS=emacs --quick --batch --eval "(setq moon-setup t)" -l init.el --eval "(moon-setup-setup)"
 
 .PHONY: install autoload autoremove update clean doc help update-moon
 
@@ -10,7 +10,7 @@ EMACS=emacs --quick --batch --eval "(setq moon-setup t)" -l init.el --eval "(moo
 # on fresh install
 # all: | install autoload autoremove
 all: custom.el autoload.el
-	@$(EMACS) -f moon/make
+	@$(EMACS) --eval "(moon/make)"
 
 help:
 	@echo "Avaliable commands:\ninstall  autoload  autoremove  update  clean update-moon"
@@ -22,7 +22,7 @@ custom.el: .local
 	touch .local/custom.el
 
 autoload.el: .local
-	touch .local/autoload.el
+	touch .local/moon-autoload.el
 
 # commands
 install: init.el autoload.el .local custom.el

@@ -14,7 +14,21 @@
 
 (eval-when-compile (load (concat (expand-file-name user-emacs-directory) "core/core-general.el")))
 
-(moon-set-load-path)
+(defun moon-setup-setup ()
+  "Setup for setup. Run after init.el so Emacs knows all the stars."
+  (load| core-ui)
+  (load| core-edit)
+
+  (moon-load-config moon-star-path-list)
+  (moon-set-load-path)
+
+  (require 'cowboy)
+  (setq cowboy-package-dir moon-package-dir)
+
+  (require 'package)
+  (package-initialize t)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  (package-refresh-contents))
 
 (defmacro moon-message&result (message &rest body)
   "Pring message and eval BODY, then show result."
@@ -31,43 +45,13 @@
           (make-string (abs (- 30 (length (symbol-name symbol))))
                        ?\s)))
 
+
 (defun moon/install-package (&optional package)
-  "Install packages specified in `package.el' files in each star.
-
-If PACKAGE non-nill, install only that package."
-  ;; TODO concurrency when possible
-  ;; make-thread is not concurrent
-  ;; TODO extract cowboy-install out from if statement
-  (interactive)
-  (let ((all-file-in-load-path
-         (mapcan (lambda (dir) (append (mapcar #'file-name-base (directory-files-recursively dir "\\.el$"))
-                                       (mapcar #'file-name-base (moon-directory-list moon-package-dir))))
-                 (list moon-package-dir moon-site-lisp-dir))))
-    (dolist (package (if package (list package) moon-package-list))
-      (let ((package-symbol (if (symbolp package)
-                                package
-                              (car package))))
-        (unless (cowboy-installedp package)
-          (moon-message&result (moon-ing-msg "Installing" package-symbol)
-                               (cowboy-install package)))))
-
-    (moon-message&result (moon-ing-msg "Compiling" 'packages) (silent| (cowboy-compile) t))))
-
-(defun moon/update-package (&optional package)
-  "Update packages to the latest version.
-
-If PACKAGE non-nil, install only that package."
-  ;; TODO concurrency when possible
-  ;; make-thread is not concurrent
-  ;; TODO extract cowboy-update from if statement
-  (interactive)
-  (if package
-      (cowboy-update package)
-    (dolist (package-dir (f-directories cowboy-package-dir))
-      (moon-message&result (moon-ing-msg "Updating" (cowboy--package-symbol package-dir))
-                           (cowboy-update package-dir))))
-  (moon-message&result (moon-ing-msg "Compiling" 'packages) (silent| (cowboy-compile) t)))
-
+  "Install PACKAGE or all packages in `moon-package-list'."
+  (let ((package-list (if package (list package) moon-package-list)))
+    (dolist (package package-list)
+      (unless (cowboy-installedp package)
+        (cowboy-install package)))))
 
 (defun moon/generate-autoload-file ()
   "Extract autload file from each star to `moon-autoload-file'."
@@ -121,12 +105,6 @@ If PACKAGE non-nil, install only that package."
   "Install package and autoload file."
   (moon/install-package)
   (moon/generate-autoload-file))
-
-;;; Run code
-
-(bootstrap)
-(load| core-ui)
-(load| core-edit)
 
 (provide 'core-setup)
 

@@ -38,6 +38,4 @@
 
 (add-hook 'emacs-startup-hook #'moon-startup t)
 
-
 (provide 'core)
-
