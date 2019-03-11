@@ -22,9 +22,13 @@
   (moon-load-config moon-star-path-list)
   (moon-set-load-path)
 
+  (unless (file-exists-p moon-package-dir)
+    (mkdir moon-package-dir))
+
   (require 'cowboy)
   (setq cowboy-package-dir moon-package-dir)
 
+  (setq package-user-dir moon-package-dir)
   (require 'package)
   (package-initialize t)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
@@ -56,7 +60,8 @@
 (defun moon/generate-autoload-file ()
   "Extract autload file from each star to `moon-autoload-file'."
   (interactive)
-  (let ((autoload-file-list
+  (let ((auto-save-default nil) ; don't save auto saves
+        (autoload-file-list
          (file-expand-wildcards
 	  ;; core autoload
           (expand-file-name "autoload/*.el" moon-core-dir)))

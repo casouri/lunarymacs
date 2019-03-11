@@ -80,6 +80,17 @@
 ;;; Func
 ;;
 
+(defun moon-load-or-create (file &rest args)
+  "Load FILE if file exists, otherwise create it.
+ARGS is as same as in `load'.
+FILE must be absolute path."
+  (if (file-exists-p file)
+      (apply #'load file args)
+    (save-excursion
+      (find-file file)
+      (save-buffer)
+      (kill-buffer))))
+
 (defun moon-safe-load (file &rest args)
   "Load FILE, if there is an error, print it an go on.
 ARGS same as in `load'."
@@ -115,7 +126,7 @@ ARGS same as in `load'."
   (moon-set-load-path)
   ;; load load-path before load autoload
   ;; otherwise someone can't find path
-  (load moon-autoload-file t)
+  (moon-load-or-create moon-autoload-file t)
   (timeit| "use-package"
     (require 'use-package)
     (moon-grand-use-package-call)
@@ -282,8 +293,7 @@ Expressions will be appended."
 ;;; Run code
 
 (setq package--init-file-ensured t
-      package-enable-at-startup nil
-      package-user-dir moon-package-dir)
+      package-enable-at-startup nil)
 
 (provide 'core-package)
 

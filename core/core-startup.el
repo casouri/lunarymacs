@@ -30,8 +30,9 @@
           (load| core-ui)
           (load| core-edit)
           (moon-load-star)
-          (load custom-file)
-          (run-hooks 'moon-startup-hook-1 'moon-startup-hook-2))
+          (moon-load-or-create custom-file)
+          (run-hook-with-args 'moon-startup-hook-1)
+          (run-hook-with-args 'moon-startup-hook-2))
       ((debug error) (print err))))
   (when moon-profile-startup
     (profiler-report)))
