@@ -23,11 +23,8 @@
 
 ;;; Variable
 
-(defvar cowboy-package-dir package-user-dir
+(defvar cowboy-package-dir (concat user-emacs-directory "ranch")
   "The directory where cowboy downloads packages to.")
-
-(defvar cowboy-package-list nil
-  "The package list.")
 
 (defvar cowboy-recipe-alist ()
   "Contains the recopies for each package.
@@ -73,7 +70,6 @@ ERROR is passes to `cowboy--handle-error' as FUNC."
                    (dolist (dep dependency-list)
                      (unless (cowboy-installedp dep)
                        (cowboy-install dep full-clone error)))))
-               ;; install, return t if success, nil if fail
                (unless (cowboy-installedp package)
                  (funcall (intern (format "cowboy--%s-install"
                                           (symbol-name (or (plist-get recipe :fetcher) 'github))))
@@ -81,55 +77,46 @@ ERROR is passes to `cowboy--handle-error' as FUNC."
       (package-install package-symbol)))
    error))
 
-;; (defun cowboy-update (package &optional error)
-;;   "Update PACKAGE from upstream. Return t if success, nil if fail.
-;; If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir.
+(defun cowboy-update (package &optional error)
+  "Update PACKAGE from upstream. Return t if success, nil if fail.
+If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir.
 
-;; ERROR is passes to `cowboy--handle-error' as FUNC."
-;;   (cowboy--handle-error
-;;    (cowboy--only-with-recipe
-;;     (if (plist-get recipe :pseudo)
-;;         t
-;;       ;; handle dependency
-;;       (let ((dependency-list (plist-get recipe :dependency)))
-;;         (when dependency-list
-;;           (mapcar (lambda (package) (cowboy-update package error)) dependency-list)))
-;;       ;; return t if success, nil if fail
-;;       (funcall (intern (format "cowboy--%s-update"
-;;                                (symbol-name
-;;                                 (or
-;;                                  (plist-get recipe :fetcher)
-;;                                  'github))))
-;;                package-symbol recipe)))
-;;    error))
+ERROR is passes to `cowboy--handle-error' as FUNC."
+  (cowboy--handle-error
+   (cowboy--with-recipe
+    (if recipe
+        (progn
+          ;; handle dependency
+          (let ((dependency-list (plist-get recipe :dependency)))
+            (when dependency-list
+              (mapcar (lambda (package) (cowboy-update package error)) dependency-list)))
+          ;; update this package
+          (funcall
+           (intern (format "cowboy--%s-update"
+                           (symbol-name
+                            (or (plist-get recipe :fetcher) 'github))))
+           package-symbol recipe))
+      ;; no cowboy recipe found, try with package.el
+      (package-delete (alist-get package package-alist))
+      (package-install package)))
+   error))
 
-;; (defun cowboy-delete (package &optional error)
-;;   "Delete PACKAGE.  Return t if success, nil if fail.
-;; If PACKAGE is a symbol, treat as a package, if a string, treat as a dir.
+(defun cowboy-delete (package &optional error)
+  "Delete PACKAGE.  Return t if success, nil if fail.
+If PACKAGE is a symbol, treat as a package, if a string, treat as a dir.
 
-;; ERROR is passed to `cowboy--handle-error' as FUNC."
-;;   ;; TODO revise
-;;   (cowboy--handle-error
-;;    (cowboy--with-recipe
-;;     (if (and (symbolp package)
-;;              (eq (plist-get recipe :fetcher) 'package))
-;;         (cowboy-delete-regexp cowboy-package-dir (format ".*/%s-.*$" (symbol-name package-symbol)))
-;;       (delete-directory
-;;        (if (stringp package)
-;;            package
-;;          (concat cowboy-package-dir (symbol-name (cowboy--package-symbol package)) "/"))
-;;        t t)))
-;;    error))
-
-(defun cowboy-delete-regexp (root-dir regexp)
-  "Delete directory under ROOT-DIR that matches REGEXP.
-It only deletes the fist match.
-No backslash at the end of regexp."
-  (when-let ((path (catch 'match
-                     (dolist (path (cowboy--directory-list root-dir))
-                       (when (string-match regexp path)
-                         (throw 'match path))))))
-    (cowboy-delete path)))
+ERROR is passed to `cowboy--handle-error' as FUNC."
+  (cowboy--handle-error
+   (cowboy--with-recipe
+    (cond ((stringp package)
+           ;; package is a path, delete that path
+           (delete-directory package t t))
+          ;; there exists a cowboy recipe, delete that cowboy package
+          (recipe
+           (concat cowboy-package-dir (symbol-name (cowboy--package-symbol package)) "/"))
+          ;; try to use package.el to delete
+          (t (package-delete (alist-get package package-alist)))))
+   error))
 
 (defun cowboy-reinstall (package)
   "Reinstall PACKAGE."
@@ -243,11 +230,10 @@ Return t if success, nil if fail."
   "Return t if PACKAGE (a symbol, a recipe or a directory) is shallow cloned, nil if not."
   (let ((default-directory (format "%s%s/" cowboy-package-dir (symbol-name (cowboy--package-symbol package)))))
     (with-temp-buffer
-      (if (eq 0 (funcall #'call-process "git" nil t nil
-                         "rev-parse" "--is-shallow-repository"))
-          ;; return t if true (shallow), nil if false (not shallow)
-          (if (search-backward "true" nil t) t nil)
-        nil))))
+      (and (eq 0 (funcall #'call-process "git" nil t nil
+                          "rev-parse" "--is-shallow-repository"))
+           ;; return t if true (shallow), nil if false (not shallow)
+           (search-backward "true" nil t)))))
 
 (defun cowboy--github-update (package recipe)
   "Pull PACKAGE with RECIPE from upstream. Return t if success, nil if fail.
