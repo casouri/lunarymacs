@@ -44,13 +44,6 @@ if TYPE is 'autoload-dir, go to autoload/."
   (moon-jump-to-config-or-package 'autoload-dir))
 
 ;;;###autoload
-(defun moon/check-config ()
-  "Check if ther is anything wrong with your star config."
-  (interactive)
-  )
-
-
-;;;###autoload
 (defun moon/insert-package-list ()
   "Insert package list at point.
 Current dir has to have a config.el file."
