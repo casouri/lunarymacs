@@ -80,6 +80,18 @@
 ;;; Func
 ;;
 
+(defalias 'moon-before-install-package #'moon-load-setup)
+
+(defun moon-load-setup ()
+  "Prepare Emacs for installing packages."
+  (interactive)
+  (require 'core-setup)
+  (moon-setup-setup)
+  ;; updating package archives seems to mess up minions
+  (when (featurep 'minions)
+    (minions-mode -1)
+    (minions-mode)))
+
 (defun moon-load-or-create (file &rest args)
   "Load FILE if file exists, otherwise create it.
 ARGS is as same as in `load'.
