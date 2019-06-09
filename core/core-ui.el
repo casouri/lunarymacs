@@ -59,14 +59,16 @@ You need to load `moon-theme' somewhere (after loading custom.el)."
   "Disable `moon-currnt-theme' and oad THEME.
 Set `moon-theme' to THEME."
   (disable-theme moon-current-theme)
-  (load-theme (or theme (car moon-toggle-theme-list)) no-confirm no-enable)
+  (load-theme (or theme moon-theme (car moon-toggle-theme-list)) no-confirm no-enable)
   (when theme
     (customize-set-variable 'moon-theme theme)
     (custom-save-all)))
 
 (defun moon/load-font (&optional font-name)
   "Prompt for a font and set it.
-Fonts are specified in `moon-font-alist'."
+Fonts are specified in `moon-font-alist'.
+
+Changes are saved to custom.el in a idle timer."
   (interactive (list
                 (completing-read "Choose a font: "
                                  (mapcar (lambda (cons) (symbol-name (car cons)))
@@ -87,23 +89,24 @@ Fonts are specified in `moon-font-alist'."
 
 (defun moon/load-cjk-font (&optional font-name)
   "Prompt for a font and set it.
-Fonts are specified in `moon-font-alist'."
+Fonts are specified in `moon-font-alist'.
+
+Changes are saved to custom.el in a idle timer."
   (interactive (list
                 (completing-read "Choose a font: "
                                  (mapcar (lambda (cons) (symbol-name (car cons)))
                                          moon-cjk-font-alist))))
   (let* ((arg font-name)
          (font-name (or font-name moon-cjk-font))
-         (spec (apply #'font-spec (if font-name
-                                      (alist-get (intern font-name)
-                                                 moon-cjk-font-alist)
-                                    (cdar moon-cjk-font-alist)))))
+         (font-spec (apply #'font-spec
+                           (if font-name
+                               (alist-get (intern font-name)
+                                          moon-cjk-font-alist)
+                             (cdar moon-cjk-font-alist)))))
     (dolist (charset '(kana han cjk-misc))
-      (set-fontset-font (frame-parameter nil 'font)
-                        charset spec))
+      (set-fontset-font t charset font-spec))
     (when arg
-      (customize-set-variable 'moon-cjk-font font-name)
-      (custom-save-all))))
+      (customize-set-variable 'moon-cjk-font font-spec))))
 
 
 ;;
