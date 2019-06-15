@@ -1,0 +1,12 @@
+(setq cowboy-recipe-alist
+      '((isolate . (:repo "casouri/isolate"))
+        (aweshell . (:repo "casouri/aweshell"))
+        (doom-themes . (:repo "casouri/emacs-doom-themes"))
+        (nyan-lite . (:repo "casouri/nyan-lite"))
+        (pp+ . (:fetcher url :url "https://www.emacswiki.org/emacs/download/pp%2b.el"))
+        (color-rg . (:repo "manateelazycat/color-rg" :dependency (exec-path-from-shell)))
+        (eldoc-box . (:repo "casouri/eldoc-box"))
+        (matlab-emacs . (:http "https://git.code.sf.net/p/matlab-emacs/src" :feature matlab))
+        (fshell . (:repo "casouri/fshell"))
+        (find-char . (:repo "casouri/find-char"))
+        (nerd-font . (:repo "twlz0ne/nerd-fonts.el"))))
