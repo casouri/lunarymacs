@@ -16,12 +16,18 @@
 
 ;;; Functions
 
+(defun luna-safe-load (file &rest args)
+  "Load FILE and don’t error out.
+ARGS is as same as in `load'."
+  (condition-case err
+      (apply #'load file args)
+    (error (message (error-message-string err)))))
+
 (defun luna-load-or-create (file &rest args)
   "Load FILE if file exists, otherwise create it.
-ARGS is as same as in `load'.
-FILE must be absolute path."
+ARGS is as same as in `load'."
   (if (file-exists-p file)
-      (apply #'load file args)
+      (apply #'luna-safe-load file args)
     (save-excursion
       (find-file file)
       (save-buffer)
