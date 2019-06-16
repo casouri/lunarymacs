@@ -35,12 +35,14 @@
 
 (setq luna-lsp 'eglot)
 
+(add-to-list 'luna-package-list 'use-package)
+
 (ignore-errors (require 'use-package))
 (luna-load-relative "star/other.el")
+(luna-load-relative "star/key.el")
 (luna-load-relative "star/recipe.el")
 (luna-load-relative "star/core-edit.el")
 (luna-load-relative "star/core-ui.el")
-(luna-load-relative "star/key.el")
 (luna-load-relative "star/angel.el")
 (luna-load-relative "star/ui.el")
 (luna-load-relative "star/edit.el")
