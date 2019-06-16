@@ -253,7 +253,7 @@
 ;; smooth scrolling
 (setq scroll-conservatively 101)
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq mouse-wheel-follow-mouse t) ;; scroll window under mouse
 
 (with-eval-after-load 'general
   (general-define-key
@@ -270,7 +270,6 @@
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
 (setq-default buffer-file-coding-system 'utf-8)
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 

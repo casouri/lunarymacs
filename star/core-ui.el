@@ -58,9 +58,8 @@ You need to load `luna-theme' somewhere (after loading custom.el)."
 Set `luna-theme' to THEME."
   (disable-theme luna-current-theme)
   (load-theme (or theme luna-theme (car luna-toggle-theme-list)) no-confirm no-enable)
-  (when theme
-    (customize-set-variable 'luna-theme theme)
-    (customize-save-customized)))
+  (when (or theme (not (custom-variable-p 'luna-theme)))
+    (customize-set-variable 'luna-theme theme)))
 
 (defun luna-load-font (&optional font-name)
   "Prompt for a font and set it.
@@ -81,10 +80,8 @@ Changes are saved to custom.el in a idle timer."
     (set-frame-font font nil t)
     ;; seems that there isn't a good way to get font-object directly
     (add-to-list 'default-frame-alist `(font . ,(face-attribute 'default :font)))
-    (when arg
-      (customize-set-variable 'luna-font font-name)
-      (message "Change will be saved in idle time (5 seconds)")
-      (run-with-idle-timer 5 nil #'customize-save-customized))))
+    (when (or arg (not (custom-variable-p 'luna-font)))
+      (customize-set-variable 'luna-font font-name))))
 
 (defun luna-load-cjk-font (&optional font-name)
   "Prompt for a font and set it.
@@ -104,10 +101,8 @@ Changes are saved to custom.el in a idle timer."
                              (cdar luna-cjk-font-alist)))))
     (dolist (charset '(kana han cjk-misc))
       (set-fontset-font t charset font-spec))
-    (when arg
-      (customize-set-variable 'luna-cjk-font font-name)
-      (message "Change will be saved in idle time (5 seconds)")
-      (run-with-idle-timer 5 nil #'customize-save-customized))))
+    (when (or arg (not (custom-variable-p 'luna-cjk-font)))
+      (customize-set-variable 'luna-cjk-font font-name))))
 
 (defun luna-quit-window (arg)
   "Quit current window and bury it's buffer.
