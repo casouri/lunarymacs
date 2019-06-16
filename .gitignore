@@ -3,12 +3,6 @@
 !site-lisp
 !README.org
 !.gitignore
-
 !ranch
-ranch/*
-
-!package
-package/*
-
 !cache
-cache/*
+!package
