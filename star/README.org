@@ -1,0 +1,9 @@
+* External dependencies
+
+** Javascript
+[[https://github.com/sourcegraph/javascript-typescript-langserver][JavaScript/TypeScript language server]]
+
+** Python
+#+BEGIN_SRC commandline
+pip install python-language-server
+#+END_SRC

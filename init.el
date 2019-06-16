@@ -67,27 +67,27 @@
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (luna-load-or-create custom-file)
+(add-hook 'kill-emacs-hook #'customize-save-customized)
 
 ;;;; theme
 (setq doom-cyberpunk-dark-mode-line nil)
 (luna-load-theme nil t)
 
- ;;;; Faster long lines
+;;;; Faster long lines
 (setq-default bidi-display-reordering nil)
 
- ;;;; format on save
+;;;; format on save
 (setq luna-format-on-save t)
 
- ;;;; scroll margin
+;;;; scroll margin
 (setq scroll-margin 4)
 
  ;;;; Font
 (luna-load-font)
 (luna-load-cjk-font)
 
- ;;;;; Chinese
+;;;;; Chinese
 
-;; 馬
 ;; WenYue GuDianMingChaoTi (Non-Commercial Use) W5
 ;; WenYue XHGuYaSong (Non-Commercial Use)
 ;; WenyueType GutiFangsong (Non-Commercial Use)
