@@ -9,14 +9,14 @@
 
 ;;; Keys
 
-(with-eval-after-load 'general
+(luna-with-eval-after-load 'key.general
   (luna-default-leader
-   "l f" #'eglot-format-buffer
-   "l R" #'eglot-rename
-   "l d" #'xref-find-definitions
-   "l r" #'xref-find-references
-   "l k" #'eldoc-box-quit-frame
-   "l s" #'eldoc-box-show-frame)
+    "l f" #'eglot-format-buffer
+    "l R" #'eglot-rename
+    "l d" #'xref-find-definitions
+    "l r" #'xref-find-references
+    "l k" #'eldoc-box-quit-frame
+    "l s" #'eldoc-box-show-frame)
   (general-define-key
    "C-h C-h" #'eldoc-box-eglot-help-at-point))
 

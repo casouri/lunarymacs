@@ -1,15 +1,15 @@
 ;;; -*- lexical-binding: t -*-
 
 ;;; Key
-(with-eval-after-load 'general
+(luna-with-eval-after-load 'key.general
   (luna-cx-leader
-   :keymaps 'emacs-lisp-mode-map
-   ;; eval
-   "w" '(:ignore t :which-key "eval")
-   "w e" #'eval-last-sexp
-   "w r" #'eval-region
-   "w f" #'eval-defun
-   "w b" #'eval-buffer))
+    :keymaps 'emacs-lisp-mode-map
+    ;; eval
+    "w" '(:ignore t :which-key "eval")
+    "w e" #'eval-last-sexp
+    "w r" #'eval-region
+    "w f" #'eval-defun
+    "w b" #'eval-buffer))
 
 ;;; Package
 (load-package aggressive-indent

@@ -2,7 +2,7 @@
 
 ;;; Keys
 
-(with-eval-after-load 'general
+(luna-with-eval-after-load 'key.general
   (general-define-key
    "s-n"   #'luna-scroll-down-reserve-point
    "s-p"   #'luna-scroll-up-reserve-point)

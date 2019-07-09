@@ -13,17 +13,24 @@
 
 ;;; Keys
 
-(with-eval-after-load 'general
+(luna-with-eval-after-load 'key.general
   (luna-default-leader
-   "fr" #'helm-recentf
-   "ss" #'helm-swoop
-   "C-s" #'helm-swoop
-   "si" #'helm-imenu
-   "sI" #'helm-imenu-in-all-buffers
-   "C-s" #'helm-swoop
-   "ip" #'helm-yas-complete)
-  (luna-cx-leader
-   "C-r" #'helm-resume)
+    "fr" #'helm-recentf
+    "ss" #'helm-swoop
+    "C-s" #'helm-swoop
+    "si" #'helm-imenu
+    "sI" #'helm-imenu-in-all-buffers
+    "C-s" #'helm-swoop
+    "ip" #'helm-yas-complete)
+  ;; (luna-cx-leader
+  ;;   "C-r" #'helm-resume)
+  (general-define-key
+   :keymaps 'helm-buffer-map
+   "M-k" #'helm-buffer-run-kill-persistent)
+  (general-define-key
+   :keymaps 'helm-map
+   "C-<return>" #'helm-toggle-visible-mark
+   "M-y" #'helm-copy-selection-and-quit)
   (general-define-key
    :keymaps 'override
    ;; "M-x" #'helm-smex

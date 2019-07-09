@@ -14,7 +14,39 @@
 (defvar luna-package-list nil
   "List of package symbols. Added by ‘load-package’.")
 
+(defvar luna--feature-hook-alist nil
+  "Stores hooks for each feature declared by ‘luna-provide’.
+Each element is like (feature . (hooks ...)).")
+
+(defvar luna--feature-enable-alist nil
+  "Stores whether a particular feature is provided already.")
+
 ;;; Functions
+
+(defun luna-provide (feature)
+  "Provide FEATURE."
+  (let ((hook-list (alist-get feature luna--feature-hook-alist)))
+    (when hook-list
+      ;; something is already appended to hook
+      (mapc #'funcall hook-list))
+    (setf (alist-get feature luna--feature-enable-alist)
+          t)))
+
+(defun luna-eval-after-load (feature hook)
+  "Ensure FEATURE (a symbol) is provided before running HOOK.
+HOOK is a function."
+  (if (alist-get feature luna--feature-enable-alist)
+      ;; feature already provided
+      (funcall hook)
+    (setf (alist-get feature luna--feature-hook-alist)
+          (append (alist-get feature luna--feature-hook-alist)
+                  (list hook)))))
+
+(defmacro luna-with-eval-after-load (feature &rest body)
+  "Ensure FEATURE (a symbol) is provided before evaluating BODY.
+HOOK is a function."
+  (declare (indent 1))
+  `(luna-eval-after-load ,feature (lambda () ,@body)))
 
 (defun luna-safe-load (file &rest args)
   "Load FILE and don’t error out.

@@ -2,7 +2,7 @@
 
 ;;; Key
 
-(with-eval-after-load 'general
+(luna-with-eval-after-load 'key.general
   ;;;; Outshine
   (luna-default-leader
     "tl" #'luna-toggle-left-margin
@@ -19,9 +19,6 @@
    ;; but flyspell mode shadows it
    "C-M-i" #'outshine-cycle-buffer
    "C-<mouse-1>" #'mc/add-cursor-on-click
-   ;;;; Move up/down
-   "M-P" #'luna-move-up
-   "M-N" #'luna-move-down
    ;;;; Hippie
    "M-/" #'hippie-expand
    ;;;; Hungry delete
@@ -29,8 +26,8 @@
   ;;;; Expand Region
   ;; (luna-g-leader
   ;;   "v" #'er/expand-region)
-  (luna-default-leader
-    "v" #'er/expand-region)
+  ;; (luna-default-leader
+  ;;   "v" #'er/expand-region)
   ;;;; Helpful
   (general-define-key
    :keymaps 'override

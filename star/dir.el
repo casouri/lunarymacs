@@ -2,7 +2,7 @@
 
 ;;; Key
 
-(with-eval-after-load 'general
+(luna-with-eval-after-load 'key.general
   (general-define-key
    :keymaps 'dired-mode-map
    "b" #'dired-up-directory

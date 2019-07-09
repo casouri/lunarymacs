@@ -2,26 +2,22 @@
 
 ;;; Key
 
-(with-eval-after-load 'general
+(luna-with-eval-after-load 'key.general
   (general-define-key
    "s-b" #'winner-undo
    "s-f" #'winner-redo
+
    "s-y" #'luna-toggle-console
+
    "s-K" #'buf-move-up
    "s-J" #'buf-move-down
    "s-H" #'buf-move-left
    "s-L" #'buf-move-right
    )
   (luna-default-leader
-   "tb" #'awesome-tab-mode))
-
-(with-eval-after-load 'general
-  (luna-default-leader
-   "wr" #'luna-desktop-read))
-
-(with-eval-after-load 'general
-  (luna-default-leader
-   "ah" #'luna-highlight-symbol))
+    "tb" #'awesome-tab-mode
+    "wr" #'luna-desktop-read
+    "ah" #'luna-highlight-symbol))
 
 ;;; Config
 

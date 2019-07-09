@@ -9,7 +9,7 @@
   (setq-default company-search-filtering t)
   (global-company-mode 1))
 
-(with-eval-after-load 'general
+(luna-with-eval-after-load 'key.general
   (general-define-key
    :keymaps '(company-active-map
               company-search-map)

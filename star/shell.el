@@ -10,7 +10,7 @@
 ;;; Code:
 ;;
 
-(with-eval-after-load 'general
+(luna-with-eval-after-load 'key.general
   (luna-default-leader
     "y" '(:ignore t :which-key "fshell")
     "ys" #'fshell-switch-buffer
@@ -20,6 +20,8 @@
   (general-define-key
    "s-e" #'fshell-toggle))
 
+
+
 (add-to-list 'luna-package-list 'xterm-color)
 
 (load-package fshell
@@ -28,7 +30,8 @@
              fshell-prev
              fshell-new
              fshell
-             fshell-toggle))
+             fshell-toggle)
+  :config (define-key fshell-mode-map (kbd "C-c C-b") nil))
 
 ;; (load-package vterm
 ;;   :init

@@ -11,10 +11,10 @@
 ;;
 ;;;; Key
 
-(with-eval-after-load 'general
+(luna-with-eval-after-load 'key.general
   (luna-default-leader
-   :keymaps 'tex-mode-map
-   "tp" #'latex-preview-pane-mode))
+    :keymaps 'tex-mode-map
+    "tp" #'latex-preview-pane-mode))
 
 ;;;; Packages
 

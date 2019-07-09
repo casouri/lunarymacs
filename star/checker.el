@@ -12,6 +12,14 @@
 ;;     "en" #'hydra-error/flymake-goto-next-error
 ;;     "ep" #'hydra-error/flymake-goto-prev-error))
 
+(luna-with-eval-after-load 'key.general
+  (luna-default-leader
+    "ts" #'luna-toggle-spell-check
+    "ef" #'flyspell-correct-previous
+    "eg" #'langtool-check
+    "ec" #'langtool-correct-buffer
+    "is" #'synonyms))
+
 ;;; Package
 
 ;; (load-package flymake-diagnostic-at-point
@@ -31,10 +39,10 @@
 
 ;;;; flymake
 
-(with-eval-after-load 'emacs-lisp-mode
-  (with-eval-after-load 'flymake
-    (setq elisp-flymake-byte-compile-load-path
-          (append elisp-flymake-byte-compile-load-path load-path))))
+;; (with-eval-after-load 'emacs-lisp-mode
+;;   (with-eval-after-load 'flymake
+;;     (setq elisp-flymake-byte-compile-load-path
+;;           (append elisp-flymake-byte-compile-load-path load-path))))
 
 ;;; flyspell
 
@@ -49,18 +57,6 @@
   ;;   (setq ispell-really-hunspell t)
   ;;   (setq ispell-dictionary "en_US"))
   )
-
-
-(with-eval-after-load 'general
-  (luna-default-leader
-    "ts" #'luna-toggle-spell-check))
-
-(with-eval-after-load 'general
-  (luna-default-leader
-    "ef" #'flyspell-correct-previous
-    "eg" #'langtool-check
-    "ec" #'langtool-correct-buffer
-    "is" #'synonyms))
 
 ;; (load-package langtool
 ;;   :commands langtool-check
