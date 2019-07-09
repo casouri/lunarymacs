@@ -53,6 +53,19 @@
 
 ;;; Functions
 
+(defun helm-copy-selection ()
+  "Copy selected candidates to kill ring."
+  (interactive)
+  (kill-new (mapconcat (lambda (c) (format "%s" c))
+                       (helm-marked-candidates)
+                       "\n")))
+
+(defun helm-copy-selection-and-quit ()
+  "Copy selected candidates to kill ring and quit helm."
+  (interactive)
+  (helm-copy-selection)
+  (helm-keyboard-quit))
+
 (defun helm-split-window-my-fn (window)
   "Replace `helm-split-window-preferred-function'.
 WINDOW."
@@ -67,7 +80,7 @@ WINDOW."
         other-buffer-list)
     (dolist (buffer buffer-list)
       (if (and (or (string-prefix-p "*" buffer)
-                   (string-prefix-p "Aweshell: " buffer)
+                   (string-prefix-p "fshell: " buffer)
                    (string-prefix-p "magit" buffer))
                (not (string= buffer "*scratch*")))
           (push buffer star-buffer-list)
