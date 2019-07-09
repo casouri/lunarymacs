@@ -53,12 +53,12 @@
 (luna-load-relative "star/eglot.el")
 (luna-load-relative "star/python.el")
 (luna-load-relative "star/elisp.el")
-(luna-load-relative "star/lisp.el")
 (luna-load-relative "star/git.el")
 (luna-load-relative "star/dir.el")
 (luna-load-relative "star/org.el")
 (luna-load-relative "star/tex.el")
 (luna-load-relative "star/shell.el")
+(luna-load-relative "star/simple-mode.el")
 
 
 ;;; Customize
