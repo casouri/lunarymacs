@@ -14,13 +14,11 @@
   (general-define-key
    :keymaps 'override
    "M-j"   #'find-char
-   "C-M-'" #'find-char-backward-cmd
-   "M-'"   #'avy-goto-char
+   "S-M-j" #'find-char-backward-cmd
+   ;; "M-'"   #'Avy-goto-char
    "C-M-;" #'inline-replace
    "M-f"   #'next-char
    "M-b"   #'last-char
-
-   "M-y"   #'kill-region
 
    "C-."   #'undo-tree-redo
 
@@ -49,15 +47,18 @@
    )
 
   (luna-cx-leader
-   "C-u" #'undo-tree-visualize
-   "C-v" #'cua-rectangle-mark-mode
-   "9"   '((lambda () (interactive) (kill-buffer (current-buffer))) :which-key "kill-current-buffer")
-   "0"   #'luna-quit-window
-   "C-," #'beginning-of-buffer ; as of <
-   "C-." #'end-of-buffer ; as of >
-   "C-b" #'switch-to-buffer
-   "C-;" #'goto-last-change
-   "M-;" #'goto-last-change-reverse))
+    "C-u" #'undo-tree-visualize
+    "C-v" #'cua-rectangle-mark-mode
+    "9"   '((lambda () (interactive) (kill-buffer (current-buffer))) :which-key "kill-current-buffer")
+    "0"   #'luna-quit-window
+    "C-," #'beginning-of-buffer ; as of <
+    "C-." #'end-of-buffer ; as of >
+    "C-b" #'switch-to-buffer
+    "C-;" #'goto-last-change
+    "M-;" #'goto-last-change-reverse)
+
+  (luna-cc-leader
+    "C-b" #'switch-buffer-same-major-mode))
 
 (defun luna-up-list-backward ()
   "`up-list' but up to the beginning instead of the end."
@@ -340,6 +341,19 @@ point reaches the beginning or end of the buffer, stop there."
 
 (load-package find-char
   :commands (find-char find-char-backward-cmd))
+
+;;; Switch buffer same major mode
+
+(defun switch-buffer-same-major-mode ()
+  "Switch buffer among those who have the same major mode as the current one."
+  (interactive)
+  (switch-to-buffer
+   (completing-read "Buffer: "
+                    (mapcar #'buffer-name
+                            (seq-filter (lambda (buf)
+                                          (eq (buffer-local-value 'major-mode buf)
+                                              major-mode))
+                                        (buffer-list))))))
 
 ;;; Inline replace
 
