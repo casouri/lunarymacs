@@ -105,6 +105,7 @@
 
 (defun luna-org-hook ()
   "Configuration for Org Mode."
+  (company-mode -1)
   (luna-prose-mode)
   (electric-quote-local-mode)
   (setq-local whitespace-style '(tab-mark))
