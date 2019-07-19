@@ -1,11 +1,16 @@
 ;;; -*- lexical-binding: t -*-
 
+(require 'pause)
+
 ;;; Keys
 
 (luna-with-eval-after-load 'key.general
   (general-define-key
    "s-n"   #'luna-scroll-down-reserve-point
-   "s-p"   #'luna-scroll-up-reserve-point)
+   "s-p"   #'luna-scroll-up-reserve-point
+   "s-a"   #'backward-sentence
+   "s-e"   #'forward-sentence
+   "M-%"   #'query-replace+)
 
   (general-define-key
    :keymas minibuffer-local-map
@@ -54,11 +59,13 @@
     "C-," #'beginning-of-buffer ; as of <
     "C-." #'end-of-buffer ; as of >
     "C-b" #'switch-to-buffer
+    "C-d" '((lambda () (interactive) (dired default-directory)) :which-key "open default directory")
     "C-;" #'goto-last-change
     "M-;" #'goto-last-change-reverse)
 
   (luna-cc-leader
-    "C-b" #'switch-buffer-same-major-mode))
+    "C-b" #'switch-buffer-same-major-mode
+    "q"   #'query-replace+-mode))
 
 (defun luna-up-list-backward ()
   "`up-list' but up to the beginning instead of the end."
@@ -237,44 +244,25 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key [remap move-beginning-of-line]
                 'smarter-move-beginning-of-line)
 
-;;; Query Replace +
+;;; Query Replace+
 
-(defvar query-replace+-mode-overlay nil
-  "Overlay of region to be replaced.")
-
-(defvar query-replace+-mode-from-string nil
-  "The from-string for `query-replace'.")
-
-(define-minor-mode query-replace+-mode
-  "Edit region and query replace."
-  :lighter "QUERY"
-  (if query-replace+-mode
-      (if (not mark-active)
-          (setq query-replace+-mode nil)
-        (overlay-put
-         (setq query-replace+-mode-from-string
-               (buffer-substring
-                (region-beginning)
-                (region-end))
-               query-replace+-mode-overlay
-               (make-overlay (region-beginning)
-                             (region-end)
-                             nil
-                             nil
-                             t))
-         'face '(:inherit region)))
-    (overlay-put query-replace+-mode-overlay
-                 'face '(:inherit lazy-highlight))
-    (goto-char (overlay-end
-                query-replace+-mode-overlay))
-    (query-replace query-replace+-mode-from-string
-                   (buffer-substring-no-properties
-                    (overlay-start
-                     query-replace+-mode-overlay)
-                    (overlay-end
-                     query-replace+-mode-overlay)))
-    (delete-overlay
-     query-replace+-mode-overlay)))
+(defun query-replace+ (beg end)
+  "Select a region and invoke this function.
+Edit the underlined region and press C-c C-c to qurey-replace."
+  (interactive "r")
+  (if (not (region-active-p))
+      (message "Select the text to be replaced first")
+    (let ((string (buffer-substring-no-properties
+                   beg end))
+          (ov (make-overlay beg end nil nil t)))
+      (deactivate-mark)
+      (overlay-put ov 'face '(:underline t))
+      (pause
+        (query-replace string (buffer-substring-no-properties
+                               (overlay-start ov)
+                               (overlay-end ov)))
+        nil
+        (delete-overlay ov)))))
 
 ;;; Better isearch
 
