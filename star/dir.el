@@ -56,14 +56,9 @@
 ;;; Config
 
 (add-hook 'dired-mode-hook #'auto-revert-mode)
+(setq dired-dwim-target t)
 
 ;;; Function
-;; TODO
-(defun luna-dired-copy-file (file)
-  (shell-command (format "pbcopy < " file)))
-
-(defun luna-dired-past-file ()
-  )
 
 (defun luna-dired-open-file-at-point ()
   (interactive)
