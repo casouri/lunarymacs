@@ -1,8 +1,7 @@
 *
-!star
-!site-lisp
 !README.org
-!.gitignore
-!ranch
-!cache
-!package
+!init.el
+!site-lisp/
+!site-lisp/**/*
+!star/
+!star/**/*
