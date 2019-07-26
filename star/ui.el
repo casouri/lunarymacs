@@ -4,8 +4,8 @@
 
 (luna-with-eval-after-load 'key.general
   (general-define-key
-   "s-b" #'winner-undo
-   "s-f" #'winner-redo
+   "s-<left>" #'winner-undo
+   "s-<right>" #'winner-redo
 
    "s-y" #'luna-toggle-console
 
@@ -387,19 +387,28 @@ More on ALIST in `display-buffer-alist'."
 ;;; Console
 
 
-(defvar-local luna-console-buffer-alist nil
-  "An alist of (major-mode . console buffer).")
+(defvar luna-console-buffer-alist '((emacs-lisp-mode . "*scratch*"))
+  "An alist where each element looks like (major-mode . console buffer).")
+
+(defvar-local luna-console-buffer-p nil
+  "T if this buffer is a console buffer.")
 
 (defun luna-toggle-console ()
   "Toggle display of console buffer."
   (interactive)
-  (let ((console-buffer (alist-get major-mode luna-console-buffer-alist)))
-    (if (eq (current-buffer) console-buffer)
-        (previous-buffer)
-      (switch-to-buffer console-buffer))))
+  (if luna-console-buffer-p
+      (previous-buffer)
+    ;; find console buffer and jump to it
+    (let ((console-buffer (alist-get major-mode luna-console-buffer-alist)))
+      (if (not console-buffer)
+          (message "No console buffer, use `luna-set-console-buffer' to set one")
+        (switch-to-buffer console-buffer)
+        (setq-local luna-console-buffer-p t)))))
 
 (defun luna-set-console-buffer (buffer)
   "Set current console buffer to BUFFER."
   (interactive "b")
   (setf (alist-get major-mode luna-console-buffer-alist)
         (get-buffer buffer)))
+
+(luna-provide 'ui.console-buffer)
