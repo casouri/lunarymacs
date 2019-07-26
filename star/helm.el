@@ -49,6 +49,7 @@
    [remap projectile-find-file]      #'helm-projectile-find-file
    [remap imenu]                     #'helm-imenu
    [remap execute-extended-command]  #'helm-M-x
+   "s-f" #'helm-locate
    ))
 
 ;;; Functions
@@ -177,7 +178,8 @@ Its element is a pair of `buffer-name' and `mode-line-format'.")
    helm-buffer-max-length 55
    helm-split-window-inside-p t
    helm-split-window-preferred-function #'helm-split-window-my-fn
-   helm-M-x-always-save-history t)
+   helm-M-x-always-save-history t
+   helm-locate-command "mdfind %s %s")
   (helm-autoresize-mode)
   (helm-mode)
   (define-key helm-map (kbd "C-i") #'helm-execute-persistent-action)
