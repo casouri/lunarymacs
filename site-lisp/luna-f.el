@@ -45,7 +45,7 @@ Return absolute path if ABSOLUTE is t."
   (if (eql (length path-list) 1)
       (car path-list)
     (expand-file-name (car (last path-list))
-                      (apply #'luna-publish--join-path (butlast path-list)))))
+                      (apply #'luna-f-join (butlast path-list)))))
 
 (provide 'luna-f)
 
