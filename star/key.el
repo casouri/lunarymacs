@@ -80,6 +80,13 @@
     ;; search
     "si"  #'imenu
     )
+  (general-define-key
+   :keymaps 'smerge-mode-map
+   "C-c n" #'smerge-next
+   "C-c p" #'smerge-prev
+   "C-c o" #'smerge-keep-lower ; other
+   "C-c m" #'smerge-keep-upper ; mine
+   )
 
   (general-define-key
    :keymaps 'override
