@@ -117,6 +117,21 @@ If run with prefix argument (ARG), kill buffer."
       (bury-buffer)))
   (ignore-errors (delete-window)))
 
+(defun luna-window-sibling-list (&optional window)
+  "Return all siblings of WINDOW or selected window."
+  (let* ((parent (window-parent window))
+         (win (window-child parent))
+         lst)
+    (while win
+      (push win lst)
+      (setq win (window-next-sibling win)))
+    (remove (or window (selected-window)) lst)))
+
+(defun luna-expand-window ()
+  "Delete all sibling windows."
+  (interactive)
+  (mapc #'delete-window (luna-window-sibling-list)))
+
 (defun luna-switch-theme ()
   "Switch between themes in `luna-toggle-theme-list'"
   (interactive)
