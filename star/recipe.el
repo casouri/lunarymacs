@@ -9,4 +9,5 @@
         (matlab-emacs . (:http "https://git.code.sf.net/p/matlab-emacs/src" :feature matlab))
         (fshell . (:repo "casouri/fshell"))
         (find-char . (:repo "casouri/find-char"))
-        (nerd-font . (:repo "twlz0ne/nerd-fonts.el"))))
+        (nerd-font . (:repo "twlz0ne/nerd-fonts.el"))
+        (snail . (:repo "manateelazycat/snails"))))
