@@ -6,11 +6,13 @@
 
 (luna-with-eval-after-load 'key.general
   (general-define-key
+   :keymaps 'override
    "s-n"   #'luna-scroll-down-reserve-point
    "s-p"   #'luna-scroll-up-reserve-point
    "s-a"   #'backward-sentence
    "s-e"   #'forward-sentence
-   "M-%"   #'query-replace+)
+   "M-%"   #'query-replace+
+   "C-,"   #'luna-jump-back)
 
   (general-define-key
    :keymas minibuffer-local-map
@@ -19,8 +21,10 @@
   (general-define-key
    :keymaps 'override
    "M-j"   #'find-char
-   "S-M-j" #'find-char-backward-cmd
+   "C-M-j" #'find-char-backward-cmd
    ;; "M-'"   #'Avy-goto-char
+   "C-'"   #'luna-set-mark
+   "M-'"   #'luna-jump
    "C-M-;" #'inline-replace
    "M-f"   #'next-char
    "M-b"   #'last-char
@@ -45,17 +49,13 @@
    ;; "M-l" (general-simulate-key "M-f")
    ;; "M-j" (general-simulate-key "M-n")
    ;; "M-k" (general-simulate-key "M-p")
-
-   "M--" #'delete-other-windows
-   "M-0" #'luna-quit-window
-   "M-9" '((lambda () (interactive) (kill-buffer (current-buffer))) :which-key "kill-current-buffer")
    )
 
   (luna-cx-leader
     "C-u" #'undo-tree-visualize
     "C-v" #'cua-rectangle-mark-mode
-    "9"   '((lambda () (interactive) (kill-buffer (current-buffer))) :which-key "kill-current-buffer")
-    "0"   #'luna-quit-window
+    "`"   #'luna-expand-window
+    "k"   '((lambda () (kill-buffer (current-buffer))) :which-key "kill-buffer")
     "C-," #'beginning-of-buffer ; as of <
     "C-." #'end-of-buffer ; as of >
     "C-b" #'switch-to-buffer
@@ -414,3 +414,48 @@ You can use \\&, \\N to refer matched text."
         (setq inline-replace-overlay (make-overlay (match-beginning 0) (match-end 0)))
         (overlay-put inline-replace-overlay 'face '(:strike-through t :background "#75000F"))
         (overlay-put inline-replace-overlay 'after-string (propertize replace 'face '(:background "#078A00")))))))
+
+;;; Jump back
+
+(defvar luna-marker-alist nil
+  "An alist of (char . marker).")
+
+(defun luna-jump-or-set (char)
+  "Jump to register CHAR if CHAR is lowercase.
+Set register CHAR to point if CHAR is uppercase."
+  (interactive "cRegister <- Char(a/A)")
+  (let ((low-char (downcase char)))
+    (if (eql low-char char)
+        ;; lower case, jump
+        (if-let ((marker (alist-get lower-char luna-marker-alist)))
+            (goto-char marker)
+          (message "Register %c unset" char))
+      ;; upper case, set
+      (setf (alist-get lower-char luna-marker-alist)
+            (point-marker)))))
+
+(defvar luna-jump-back-marker nil
+  "Marker set for `luna-jump-back'.")
+
+(defvar luna-jump-back-monitored-command-list
+  '(isearch-forward helm-swoop isearch-backward end-of-buffer beginning-of-buffer query-replace replace-string)
+  "Commands in this list sets mark before execution for jumping back later.")
+
+(defun luna-jump-back ()
+  "Jump back to previous position."
+  (interactive)
+  (if (not luna-jump-back-marker)
+      (message "No marker set")
+    ;; set `luna-jump-back-marker' to point and jump back
+    ;; so we can keep jumping back and forth
+    (let ((here (point-marker))
+          (there luna-jump-back-marker))
+      (setq luna-jump-back-marker here)
+      (goto-char there))))
+
+(defun luna-maybe-set-marker-to-jump-back ()
+  "Set marker to jump back if this command is search or jump."
+  (when (member this-command luna-jump-back-monitored-command-list)
+    (setq luna-jump-back-marker (point-marker))))
+
+(add-hook 'pre-command-hook #'luna-maybe-set-marker-to-jump-back)
