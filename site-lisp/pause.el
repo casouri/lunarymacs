@@ -42,10 +42,10 @@ Call after modified ‘pause--stack’."
 (defun pause-quit ()
   "Quit pause."
   (interactive)
-  (keyboard-quit)
   (unwind-protect
       (funcall (alist-get 'quit (pop pause--stack)))
-    (pause--control-minor-mode)))
+    (pause--control-minor-mode)
+    (keyboard-quit)))
 
 (defmacro pause (continue &optional quit finally)
   "”Pause” the execution.
