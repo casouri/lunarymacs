@@ -89,7 +89,7 @@
 (advice-add #'luna-scroll-down-reserve-point :after (lambda () (luna-scroll-mode)))
 (advice-add #'luna-scroll-up-reserve-point :after (lambda () (luna-scroll-mode)))
 
-;;; Navigation
+;;; Navigation (w W e E b B)
 ;;
 ;; Overall behavior:
 ;;
@@ -140,7 +140,7 @@ chars in it will be used as white space char (to be skipped over when rolling ba
 
 (defsubst last-of (charset &optional stop-charset)
   "Backward until hit char from CHARSET. Or before a char from STOP-CHARSET.
-But if hit newline, stop,  rollback (skipping spaces) and throw 'return.
+But if hit newline, stop, rollback (skipping spaces) and throw 'return.
 If WHITESPACE-CHARSET is non-nil,
 chars in it will be used as white space char (to be skipped over when rolling back)."
   (catch 'return
@@ -244,7 +244,7 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key [remap move-beginning-of-line]
                 'smarter-move-beginning-of-line)
 
-;;; Query Replace+
+;;; Query Replace+ (cgn)
 
 (defun query-replace+ (beg end)
   "Select a region and invoke this function.
@@ -277,7 +277,7 @@ Edit the underlined region and press C-c C-c to qurey-replace."
 
 (add-hook 'isearch-mode-hook #'luna-isearch-with-region)
 
-;;; Transient map in region
+;;; Transient map in region (y p)
 
 (defconst angel-transient-mode-map-alist
   `((mark-active
@@ -325,7 +325,7 @@ Edit the underlined region and press C-c C-c to qurey-replace."
              'angel-transient-mode-map-alist t)
 
 
-;;; Jump char
+;;; Jump char (f)
 
 (load-package find-char
   :commands (find-char find-char-backward-cmd))
@@ -343,7 +343,7 @@ Edit the underlined region and press C-c C-c to qurey-replace."
                                               major-mode))
                                         (buffer-list))))))
 
-;;; Inline replace
+;;; Inline replace (:s)
 
 
 (defvar inline-replace-last-input "")
