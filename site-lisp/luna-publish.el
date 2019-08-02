@@ -12,46 +12,6 @@
 
 (require 'luna-f)
 
-(defvar luna-org-html-postamble-format
-  '(("en" "<p class=\"author\">Written by %a <%e></p>
-<p class=\"first-publish\">First Published on %d</p>
-<p class-\"last-modified\">Last modified on %C</p>")))
-
-(defvar luna-org-html-home/up-format
-  "<div id=\"org-div-home-and-up-index-page\">
-<div>
-<a accesskey=\"h\" href=\"%s\"> UP </a> |
-<a accesskey=\"H\" href=\"%s\"> HOME </a>
-</div>
-<div>
-<a href=\"../index.xml\"> RSS </a> |
-<a href=\"https://github.com/casouri/casouri.github.io\"> Source </a> |
-<a href=\"https://creativecommons.org/licenses/by-sa/4.0/\"> License </a>
-</div>
-</div>")
-
-(defvar luna-org-html-home/up-format-for-note-index
-  "<div id=\"org-div-home-and-up-index-page\">
-<div>
-<a accesskey=\"h\" href=\"%s\"> UP </a> |
-<a accesskey=\"H\" href=\"%s\"> HOME </a>
-</div>
-<div>
-<a href=\"./index.xml\"> RSS </a> |
-<a href=\"https://github.com/casouri/casouri.github.io\"> Source </a> |
-<a href=\"https://creativecommons.org/licenses/by-sa/4.0/\"> License </a>
-</div>
-</div>"
-  "RSS url is different.")
-
-(defvar luna-publish-note-dir "~/p/casouri/note/"
-  "Make sure the path follow the convention of adding slash and the end of directory.")
-
-(defvar luna-publish-rock/day-dir "~/p/casouri/rock/day/"
-  "Make sure the path follow the convention of adding slash and the end of directory.")
-
-;;; Backstage
-
 (defun luna-publish-html-export (dir &optional force)
   "Export index.org to index.html in DIR if the latter is older.
 If FORCE is non-nil, only export when org file is newer than html file."
@@ -68,8 +28,9 @@ If FORCE is non-nil, only export when org file is newer than html file."
   (let ((old-buffer-list-sym (gensym)))
     `(let ((,old-buffer-list-sym (buffer-list)))
        ,@body
-       (mapc (lambda (buf) (unless (member buf ,old-buffer-list-sym) (kill-buffer buf)))
-             (buffer-list)))))
+       (dolist (buf (buffer-list))
+         (unless (member buf ,old-buffer-list-sym)
+           (kill-buffer buf))))))
 
 (defmacro luna-publish-with-theme (theme &rest body)
   "Use THEME during BODY."
