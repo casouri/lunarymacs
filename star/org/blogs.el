@@ -11,6 +11,8 @@
 ;;
 
 (require 'luna-publish)
+(require 'cl-lib)
+(require 'subr-x)
 
 ;;; Common
 
@@ -71,8 +73,7 @@ If FORCE is non-nil, only export when org file is newer than html file."
              (luna-publish-html-export post-dir force)))
 
          ;; publish index page
-         (let ((org-html-postamble-format luna-org-html-postamble-format)
-               (org-html-postamble t)
+         (let ((org-html-postamble nil)
                (org-html-home/up-format luna-org-html-home/up-format-for-note-index))
            (luna-publish-html-export luna-publish-note-dir force))
 
@@ -80,8 +81,7 @@ If FORCE is non-nil, only export when org file is newer than html file."
          (require 'ox-rss)
          (let ((buffer (find-file (luna-f-join luna-publish-note-dir "index.org"))))
            (with-current-buffer buffer
-             (org-rss-export-to-rss))
-           (kill-buffer buffer)))))))
+             (org-rss-export-to-rss))))))))
 
 (defun luna-new-note-blog (title)
   "Make a new blog post with TITLE."
@@ -120,6 +120,13 @@ If FORCE is non-nil, only export when org file is newer than html file."
 (defvar luna-publish-rock/day-dir "~/p/casouri/rock/day/"
   "Make sure the path follow the convention of adding slash and the end of directory.")
 
+(defun luna-blog-rock/day-generate-titles ()
+  "Generate titles for index page."
+  (let ((day-num (length (luna-f-directory-files (luna-f-join luna-publish-rock/day-dir "src") t))))
+    (string-join (cl-loop for day-idx downfrom day-num to 1
+                          collect (format "* [[./day-%d/index.html][Day %d]]" day-idx day-idx))
+                 "\n")))
+
 (defun luna-publish-rock/day (&optional force)
   "Publish rock/day blog.
 If FORCE is non-nil, only export when org file is newer than html file."
@@ -128,35 +135,54 @@ If FORCE is non-nil, only export when org file is newer than html file."
   (save-excursion
     (luna-publish-with-theme 'doom-one-light
       (luna-publish-with-tmp-buffers
-       (let ((environment '((org-html-postamble-format luna-org-html-postamble-format)
-                            (org-html-postamble t))))
-         (dolist (post-dir (luna-f-list-directory luna-publish-rock/day-dir t))
-           ;; publish each post
-           (luna-publish-html-export post-dir environment force))
-         ;; publish index page
-         (luna-publish-html-export luna-publish-rock/day-dir environment force))))))
+       ;; publish each post
+       (let ((org-html-postamble-format luna-org-html-postamble-format)
+             (org-html-postamble t)
+             (day-num (length (luna-f-directory-files (luna-f-join luna-publish-rock/day-dir "src") t))))
+         (defvar --luna-blog-rock-day-- nil)
+         (cl-loop for day-idx from 1 to day-num
+                  do (let* ((file-path (luna-f-join luna-publish-rock/day-dir "src" (format "day-%d.org" day-idx)))
+                            ;; (eval-env `((luna-blog-rock-day . ,day-idx))) ; used by macros in org files
+                            (html-dir (luna-f-join luna-publish-rock/day-dir
+                                                   (format "day-%d" day-idx)))
+                            (html-path (luna-f-join html-dir "index.html")))
+                       (unless (file-exists-p html-dir)
+                         (mkdir html-dir))
+                       (with-current-buffer (find-file file-path)
+                         (when (or force (file-newer-than-file-p file-path html-path))
+                           (setq --luna-blog-rock-day-- day-idx)
+                           (org-export-to-file 'html html-path))))))
+       ;; publish index page
+       (let ((org-html-postamble nil))
+         (luna-publish-html-export luna-publish-rock/day-dir force))))))
 
-(defun luna-new-rock/day (day)
+(defun luna-new-rock/day ()
   "Make a new blog post of rock/day of DAY."
-  (interactive "n")
-  (mkdir (format "~/p/casouri/rock/day/day-%d" day))
-  (find-file (format "~/p/casouri/rock/day/day-%d/index.org" day))
-  (insert (format "#+SETUPFILE: ../setup.org
-#+TITLE: Day %d
+  (interactive)
+  (let ((day (1+ (length (luna-f-directory-files (luna-f-join luna-publish-rock/day-dir "src"))))))
+    (mkdir (format "~/p/casouri/rock/day/day-%d" day))
+    (find-file (format "~/p/casouri/rock/day/src/day-%d.org" day))
+    (goto-char (point-min))
+    (insert "#+SETUPFILE: ../setup.org
+#+TITLE: {{{day_title}}}
 #+DATE:
 
-#+HTML: <div style=\"display: flex; justify-content: space-between;\"><a href=\"../day-%d/index.html\"><< Yesterday <<</a><a href=\"../day-%d/index.html\">>> Tommorrow >></a></div>
+{{{day_link}}}
 
-
-[[../album/]]
+{{{img()}}}
 
 * - *
 
-#+BEGIN_SRC
-#+END_SRC
-" day (1- day) (1+ day)))
-  (save-buffer)
-  (kill-new (format "- [[./day-%d/index.html][Day %d]]" day day))
-  (find-file "~/p/casouri/rock/day/index.org"))
+#+BEGIN_QUOTE
+#+END_QUOTE
+")
+    (save-buffer)
+    (kill-new (format "* [[./day-%d/index.html][Day %d]]" day day))
+    (find-file "~/p/casouri/rock/day/index.org")
+    (if (re-search-forward "# day-anchor" nil t)
+        (progn (end-of-line)
+               (insert (format "\n* [[./day-%d/index.html][Day %d]]" day day)))
+      (message "Cannot find anchor, please paste manually")
+      )))
 
 ;;; blogs.el ends here
