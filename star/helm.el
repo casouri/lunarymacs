@@ -67,9 +67,9 @@
   (helm-copy-selection)
   (helm-keyboard-quit))
 
-(defun helm-split-window-my-fn (window)
+(defun helm-split-window-my-fn (_)
   "Replace `helm-split-window-preferred-function'.
-WINDOW."
+Always at the bottom of the frame and span full width."
   (let ((root-win (frame-root-window)))
     (split-window root-win (floor (/ (window-height root-win)
                                      5)))))
@@ -80,15 +80,15 @@ WINDOW."
         star-buffer-list
         other-buffer-list)
     (dolist (buffer buffer-list)
-      (if (and (or (string-prefix-p "*" buffer)
-                   (string-prefix-p "fshell: " buffer)
-                   (string-prefix-p "magit" buffer))
-               (not (string= buffer "*scratch*")))
+      (if (or (string-prefix-p "*" buffer)
+              (string-prefix-p "fshell @ " buffer)
+              (string-prefix-p "magit: " buffer)
+              (string-prefix-p "magit-process: " buffer))
           (push buffer star-buffer-list)
         (push buffer other-buffer-list)))
     (nreverse (append star-buffer-list other-buffer-list))))
 
-;; (advice-add 'helm-buffers-sort-transformer :around #'luna-helm-sort-buffer)
+
 
 ;;;; helm-better-default
 ;; https://github.com/clemera/helm-ido-like-guide
@@ -187,7 +187,8 @@ Its element is a pair of `buffer-name' and `mode-line-format'.")
   (define-key helm-find-files-map (kbd "<RET>") #'helm-maybe-exit-minibuffer)
   (define-key helm-find-files-map (kbd "M-<backspace>") #'helm-find-files-up-one-level)
   ;; (helm-ido-like-hide-modelines)
-  (helm-ido-like-hide-helm-modeline))
+  (helm-ido-like-hide-helm-modeline)
+  (advice-add 'helm-buffers-sort-transformer :around #'luna-helm-sort-buffer))
 
 ;; (load-package helm-smex
 ;;   :commands helm-smex)
