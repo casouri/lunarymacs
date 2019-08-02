@@ -249,7 +249,8 @@
 
 ;; smooth scrolling
 (setq scroll-conservatively 101)
-(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+;; diabled for emacs-mac port
+;; (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse t) ;; scroll window under mouse
 
 (with-eval-after-load 'general
@@ -372,10 +373,6 @@ Transpose down one line means COUNT = 0, look at source for the reason."
   (luna-transpose-region/line -1))
 
 ;;;; smart-delete
-
-;; rainbow!
-'(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((())))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
-
 
 (defvar luna-hungry-delete-black-list '(org-mode text-mode fundamental-mode markdown-mode)
   "A list of major mode in where `luna-hungry-delete' should behave like normal delete.")
