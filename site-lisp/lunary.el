@@ -91,9 +91,9 @@ ARGS is as same as in `load'."
   (require 'cowboy)
   (require 'package)
   (package-initialize t)
-  ;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-  (setq package-archives '(("melpa" . "https://elpa.emacs-china.org/melpa/")
-                           ("gnu" . "https://elpa.emacs-china.org/gnu/")))
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  ;; (setq package-archives '(("melpa" . "https://elpa.emacs-china.org/melpa/")
+  ;;                          ("gnu" . "https://elpa.emacs-china.org/gnu/")))
   (package-refresh-contents)
   (setq luna-prepared-p t))
 
