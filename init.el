@@ -70,6 +70,7 @@
 (add-hook 'kill-emacs-hook #'customize-save-customized)
 
 ;;;; theme
+;; (setq doom-cyberpunk-bg 'violet)
 (setq doom-cyberpunk-dark-mode-line nil)
 (luna-load-theme nil t)
 
@@ -116,7 +117,24 @@
 ;; (nyan-start-animation)
 
 ;;;; winner
-(run-with-idle-timer 2 nil (lambda () (winner-mode)))
+(winner-mode)
+
+;;;; server
+(server-start)
 
 ;;;; Max
 (toggle-frame-maximized)
+
+;;;; Mac modifiers
+
+(setq mac-option-modifier 'meta
+      mac-command-modifier 'super)
+
+(setq mac-pass-command-to-system nil
+      mac-system-move-file-to-trash-use-finder t)
+
+(global-set-key (kbd "s-c") #'ns-copy-including-secondary)
+(global-set-key (kbd "s-v") #'yank)
+
+(load-package exec-path-from-shell
+  :config (exec-path-from-shell-initialize))
