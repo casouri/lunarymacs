@@ -341,51 +341,6 @@ and saveing desktop."
       (setq luna-auto-highlight-timer (run-with-idle-timer 1 t #'luna-auto-highlight))
     (cancel-timer luna-auto-highlight-timer)))
 
-;;; shell-window
-
-(defvar luna-shell-window nil
-  "Thw window at the bottom dedicated to temporary shell buffers.")
-
-(defvar luna-shell-window-buffer nil
-  "Used to recover shell window with last displayed buffer.")
-
-(defun luna-toggle-shell-window (arg)
-  "Toggle display of shell window at the bottom.
-If called with ARG, maximize shell window."
-  (interactive "p")
-  (if (eq arg 4) ; C-u
-      (luna-maximize-shell-window)
-    (if (and luna-shell-window (window-live-p luna-shell-window))
-        (delete-window luna-shell-window)
-      (luna-display-buffer-in-shell-window
-       (or luna-shell-window-buffer
-           (get-buffer-create
-            (completing-read
-             "Choose a buffer: "
-             (mapcar #'buffer-name (buffer-list)))))
-       nil))))
-
-(defun luna-maximize-shell-window ()
-  "Make shell window take full screen.
-To go back, use `winnner-undo'."
-  (interactive)
-  (when luna-shell-window-buffer
-    (delete-other-windows)
-    (switch-to-buffer luna-shell-window-buffer)))
-
-(defun luna-display-buffer-in-shell-window (buffer alist)
-  "Display BUFFER in `luna-shell-window'.
-More on ALIST in `display-buffer-alist'."
-  (setq luna-shell-window-buffer buffer)
-  ;; (display-buffer-in-side-window buffer (append alist '((side . bottom) (window-height . 0.2))))
-  (let ((win (display-buffer-at-bottom buffer (append alist '((window-height . 0.2))))))
-    (set-window-dedicated-p win t))
-  ;; set `luna-shell-window'
-  (walk-windows (lambda (win) (when (eq (window-buffer win) buffer)
-                                (setq luna-shell-window win)))
-                'no))
-
-
 ;;; Misc functions
 
 (defun chunyang-alpha-param-adjust ()
