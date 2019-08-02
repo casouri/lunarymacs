@@ -7,7 +7,20 @@
   :mode "\\.yaml$")
 
 (load-package haskell-mode
-  :mode "\\.hs$")
+  :mode "\\.hs$"
+  :config
+  ;; http://haskell.github.io/haskell-mode/manual/latest/Interactive-Haskell.html#Interactive-Haskell
+  (add-to-list 'luna-console-buffer-alist '(haskell-mode . "*haskell*"))
+  (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
+  (define-key haskell-mode-map (kbd "C-c `") 'haskell-interactive-bring)
+  (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
+  (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
+  (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+  (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+  (define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
+  (define-key haskell-interactive-mode-map (kbd "C-a") #'haskell-interactive-mode-beginning))
+
+
 
 (load-package matlab-emacs
   :init
