@@ -94,7 +94,8 @@
    "s-j" #'windmove-down
    "s-k" #'windmove-up
    "s-l" #'windmove-right
-   "s-s" #'save-buffer)
+   "s-s" #'save-buffer
+   "s-w" #'delete-frame)
 
   (luna-provide 'key.general))
 
