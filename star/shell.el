@@ -18,7 +18,7 @@
     "yp" #'fshell-prev
     "yN" #'fshell-new)
   (general-define-key
-   "s-e" #'fshell-toggle))
+   "s-i" #'fshell-toggle))
 
 
 
