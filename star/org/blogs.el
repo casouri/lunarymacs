@@ -53,6 +53,14 @@
 (defvar luna-publish-note-dir "~/p/casouri/note/"
   "Make sure the path follow the convention of adding slash and the end of directory.")
 
+(defun luna-blog-get-note-date (post-file-name)
+  (with-current-buffer (find-file-noselect post-file-name)
+    (plist-get (car (cdr (car (plist-get (org-export-get-environment) :date)))) :raw-value)))
+
+(defun luna-blog-get-note-content (post-file-name)
+  (with-current-buffer (find-file-noselect post-file-name)
+    (buffer-string)))
+
 (defun luna-publish-note (&optional force)
   "Publish my blog.
 If FORCE is non-nil, only export when org file is newer than html file."
