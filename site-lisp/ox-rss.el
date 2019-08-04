@@ -108,7 +108,9 @@ When nil, Org will create ids using `org-icalendar-create-uid'."
 
 ;;; Define backend
 
-(org-export-define-derived-backend 'rss 'html
+(org-export-define-backend 'rss
+  '((headline . org-rss-headline)
+    (template . org-rss-template))
   :menu-entry
   '(?r "Export to RSS"
        ((?R "As RSS buffer"
@@ -122,15 +124,9 @@ When nil, Org will create ids using `org-icalendar-create-uid'."
   '((:with-toc nil nil nil) ;; Never include HTML's toc
     (:rss-extension "RSS_EXTENSION" nil org-rss-extension)
     (:rss-image-url "RSS_IMAGE_URL" nil org-rss-image-url)
-    (:rss-categories nil nil org-rss-categories))
-  :filters-alist '((:filter-final-output . org-rss-final-function))
-  :translate-alist '((headline . org-rss-headline)
-		     (comment . (lambda (&rest args) ""))
-		     (comment-block . (lambda (&rest args) ""))
-		     (timestamp . (lambda (&rest args) ""))
-		     (plain-text . org-rss-plain-text)
-		     (section . org-rss-section)
-		     (template . org-rss-template)))
+    (:rss-categories nil nil org-rss-categories)
+    (:html-link-home "HTML_LINK_HOME" nil nil))
+  :filters-alist '((:filter-final-output . org-rss-final-function)))
 
 ;;; Export functions
 
@@ -279,7 +275,9 @@ communication channel."
 	  (org-rss-build-categories headline info) "\n"
 	  "<description><![CDATA[%s]]></description>\n"
 	  "</item>\n")
-	 title publink author guid pubdate contents)))))
+	 title publink author guid pubdate (let ((filename (concat hl-rel "index.html")))
+                                             (with-current-buffer (find-file-noselect filename)
+                                               (buffer-string))))))))
 
 (defun org-rss-build-categories (headline info)
   "Build categories for the RSS item."
