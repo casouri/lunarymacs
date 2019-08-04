@@ -18,7 +18,8 @@
   (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
   (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
   (define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
-  (define-key haskell-interactive-mode-map (kbd "C-a") #'haskell-interactive-mode-beginning))
+  (with-eval-after-load 'haskell-interactive-mode
+    (define-key haskell-interactive-mode-map (kbd "C-a") #'haskell-interactive-mode-beginning)))
 
 
 
