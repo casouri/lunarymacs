@@ -99,3 +99,20 @@
   :commands (setup-tide-mode))
 
 (setq js-indent-level 2)
+
+;; C/C++
+(with-eval-after-load 'c-mode
+  (eglot-ensure)
+  ;; ccls has a fuzzy matching algorithm to order candidates according to your query.
+  (setq-local company-transformers nil))
+
+(with-eval-after-load 'c++-mode
+  (eglot-ensure)
+  ;; ccls has a fuzzy matching algorithm to order candidates according to your query.
+  (setq-local company-transformers nil))
+
+;; Debugger
+(add-hook 'gud-mode-hook (lambda () (company-mode -1)))
+
+(load-package realgud
+  :commands (realgud:gdb realgud:lldb))
