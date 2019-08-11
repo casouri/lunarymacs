@@ -54,7 +54,13 @@
         (olivetti-mode))
     (message "Sorry, alea iacta est.")))
 
-(add-hook 'org-mode-hook #'luna-org-hook)
+;; export code with line wrap
+;; https://emacs.stackexchange.com/questions/33010/how-to-word-wrap-within-code-blocks
+;;
+(with-eval-after-load 'org-mode
+  (add-to-list 'org-latex-packages-alist '("" "listings" nil))
+  (setq org-latex-listings t)
+  (setq org-latex-listings-options '(("breaklines" "true"))))
 
 (defun luna-org-hook ()
   "Configuration for Org Mode."
@@ -63,6 +69,8 @@
   (electric-quote-local-mode)
   (setq-local whitespace-style '(tab-mark))
   (whitespace-mode))
+
+(add-hook 'org-mode-hook #'luna-org-hook)
 
 ;;;; 中文换行空格问题
 ;;
