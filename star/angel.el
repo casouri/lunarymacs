@@ -55,7 +55,7 @@
     "C-u" #'undo-tree-visualize
     "C-v" #'cua-rectangle-mark-mode
     "`"   #'luna-expand-window
-    "k"   '((lambda () (kill-buffer (current-buffer))) :which-key "kill-buffer")
+    "k"   '((lambda () (interactive) (kill-buffer (current-buffer))) :which-key "kill-buffer")
     "C-," #'beginning-of-buffer ; as of <
     "C-." #'end-of-buffer ; as of >
     "C-b" #'switch-to-buffer
