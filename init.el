@@ -8,6 +8,10 @@
 (setq package-user-dir (expand-file-name "package" user-emacs-directory))
 (require 'lunary)
 (require 'cowboy)
+;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(setq package-archives '(("melpa" . "https://elpa.emacs-china.org/melpa/")
+                         ("gnu" . "https://elpa.emacs-china.org/gnu/")))
+
 
 ;;;; Loadpath
 
