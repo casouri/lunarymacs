@@ -12,15 +12,16 @@
   (add-to-list 'luna-console-buffer-alist '(sage-shell:sage-mode . "*Sage*"))
   (add-to-list 'luna-console-buffer-alist '(python-mode . "*Python*")))
 
-;;;; LSP
+;;;; IDE
 
-(luna-lsp/eglot
- (progn
-   (add-hook 'python-mode-hook #'lsp t)
-   (push '(python-mode . lsp-format-buffer) luna-smart-format-alist))
- (progn
-   (add-hook 'python-mode-hook #'eglot-ensure)
-   (push '(python-mode . eglot-format-buffer) luna-smart-format-alist)))
+(load-package anaconda-mode
+  :commands (anaconda-mode)
+  :init (add-hook 'python-mode-hook #'anaconda-mode))
+
+(load-package company-anaconda
+  :after (anaconda-mode)
+  :init (with-eval-after-load 'company
+          (add-to-list 'company-backends 'company-anaconda)))
 
 ;;;; Virtual env
 

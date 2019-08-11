@@ -82,14 +82,20 @@
   :commands pdf-view-mode)
 
 ;; Javascript
-(luna-lsp/eglot
- (progn
-   (add-hook 'js-mode-hook #'lsp t)
-   (add-hook 'typescript-mode-hook #'lsp t)
-   (push '(js-mode . lsp-format-buffer) luna-smart-format-alist)
-   (push '(typescript-mode . lsp-format-buffer) luna-smart-format-alist))
- (progn
-   (add-hook 'js-mode-hook #'eglot-ensure)
-   (add-hook 'typescript-mode #'eglot-ensure)
-   (push '(js-mode . eglot-format-buffer) luna-smart-format-alist)
-   (push '(typescript-mode . eglot-format-buffer) luna-smart-format-alist)))
+(load-package tide
+  :init
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (flycheck-mode)
+    (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+    (setq-local flycheck-check-syntax-automatically '(save mode-enabled)
+                company-tooltip-align-annotations t)
+    (tide-hl-identifier-mode +1)
+    (add-to-list 'luna-smart-format-alist '(typescript-mode . tide-format-before-save))
+    (add-to-list 'luna-smart-format-alist '(js-mode . tide-format-before-save)))
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
+  (add-hook 'js-mode-hook #'setup-tide-mode)
+  :commands (setup-tide-mode))
+
+(setq js-indent-level 2)
