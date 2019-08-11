@@ -10,4 +10,5 @@
         (fshell . (:repo "casouri/fshell"))
         (find-char . (:repo "casouri/find-char"))
         (nerd-font . (:repo "twlz0ne/nerd-fonts.el"))
-        (snail . (:repo "manateelazycat/snails"))))
+        (snail . (:repo "manateelazycat/snails"))
+        (gdb-mi . (:repo "weirdNox/emacs-gdb" :dependency (hydra)))))
