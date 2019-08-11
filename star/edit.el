@@ -18,11 +18,15 @@
    ;; this is binded by default,
    ;; but flyspell mode shadows it
    "C-M-i" #'outshine-cycle-buffer
-   "C-<mouse-1>" #'mc/add-cursor-on-click
+   ;; "C-<mouse-1>" #'mc/add-cursor-on-click
+   )
+  (general-define-key
+   :keymaps 'global-map
    ;;;; Hippie
    "M-/" #'hippie-expand
    ;;;; Hungry delete
-   "<backspace>" #'luna-hungry-delete)
+   "<backspace>" #'luna-hungry-delete
+   )
   ;;;; Expand Region
   ;; (luna-g-leader
   ;;   "v" #'er/expand-region)
