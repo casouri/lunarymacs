@@ -57,8 +57,11 @@
   "\\.mustache\\'"
   "\\.djhtml\\'"
   "\\.html?\\'"
-  :config (when (featurep 'flycheck )
-            (flycheck-add-mode 'html-tidy 'web-mode)))
+  :config
+  (when (featurep 'flycheck )
+    (flycheck-add-mode 'html-tidy 'web-mode))
+  (setq web-mode-markup-indent-offset 2
+        web-mode-auto-close-style 2))
 
 ;; common lisp
 (load-package sly
