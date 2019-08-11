@@ -157,3 +157,10 @@
     ;; https://bitbucket.org/mituharu/emacs-mac/src/892fa7b2501a403b4f0aea8152df9d60d63f391a/doc/emacs/macport.texi?at=master#macport.texi-529
     (menu-bar-mode)
   (menu-bar-mode -1))
+
+;;;; Abbrev
+
+(read-abbrev-file (luna-f-join user-emacs-directory "star/abbrev-file.el"))
+(add-hook 'prog-mode #'abbrev-mode)
+(add-hook 'fundamental-mode #'abbre-mode)
+(add-hook 'text-mode #'abbrev-mode)
