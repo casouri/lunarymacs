@@ -56,7 +56,7 @@
 ;; (luna-load-relative "star/ivy.el")
 (luna-load-relative "star/checker.el")
 (luna-load-relative "star/company.el")
-(luna-load-relative "star/eglot.el")
+;; (luna-load-relative "star/eglot.el")
 (luna-load-relative "star/python.el")
 (luna-load-relative "star/elisp.el")
 (luna-load-relative "star/git.el")
