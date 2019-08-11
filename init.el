@@ -53,6 +53,7 @@
 (luna-load-relative "star/edit.el")
 (luna-load-relative "star/homepage.el")
 (luna-load-relative "star/helm.el")
+;; (luna-load-relative "star/ivy.el")
 (luna-load-relative "star/checker.el")
 (luna-load-relative "star/company.el")
 (luna-load-relative "star/eglot.el")
