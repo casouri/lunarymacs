@@ -12,12 +12,6 @@
     "w b" #'eval-buffer))
 
 ;;; Package
-(load-package aggressive-indent
-  :defer t
-  :init
-  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-  (add-hook 'css-mode-hook #'aggressive-indent-mode))
-
 ;; (load-package lispyville
 ;;   :hook (emacs-lisp-mode . lispyville-mode)
 ;;   :config
@@ -30,4 +24,9 @@
 
 
 ;;; Config
+
 (add-hook 'emacs-lisp-mode-hook #'flymake-mode)
+
+(add-hook 'emacs-lisp-mode-hook #'company-mode)
+
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)

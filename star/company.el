@@ -1,13 +1,13 @@
 ;;; -*- lexical-binding: t -*-
 
 (load-package company
+  :commands (company-mode)
   :config
   (setq company-idle-delay 0
         company-minimum-prefix-length 1
         company-dabbrev-downcase nil
         company-tooltip-limit 15)
-  (setq-default company-search-filtering t)
-  (global-company-mode 1))
+  (setq-default company-search-filtering t))
 
 (luna-with-eval-after-load 'key.general
   (general-define-key

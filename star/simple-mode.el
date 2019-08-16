@@ -1,13 +1,16 @@
 ;;; -*- lexical-binding: t -*-
 
 (load-package markdown-mode
-  :mode ("\\.md$" "\\.markdown$" "\\.mk$"))
+  :mode ("\\.md$" "\\.markdown$" "\\.mk$")
+  :init (add-hook 'markdown-mode-hook #'company-mode))
 
 (load-package yaml-mode
-  :mode "\\.yaml$")
+  :mode "\\.yaml$"
+  :init (add-hook 'yaml-mode-hook #'company-mode))
 
 (load-package haskell-mode
   :mode "\\.hs$"
+  :init (add-hook 'haskell-mode-hook #'company-mode)
   :config
   ;; http://haskell.github.io/haskell-mode/manual/latest/Interactive-Haskell.html#Interactive-Haskell
   (add-to-list 'luna-console-buffer-alist '(haskell-mode . "*haskell*"))
@@ -21,15 +24,13 @@
   (with-eval-after-load 'haskell-interactive-mode
     (define-key haskell-interactive-mode-map (kbd "C-a") #'haskell-interactive-mode-beginning)))
 
-
-
 (load-package matlab-emacs
   :init
+  (add-hook 'matlab-mode-hook #'company-mode)
   (setq matlab-shell-command "/Applications/MATLAB_R2018b.app/Contents/MacOS/MATLAB")
   (setq matlab-shell-command-switches (list "-nodesktop"))
-  (add-hook 'matlab-shell-mode-hook (lambda () (company-mode -1)))
-  :config (require 'matlab)
-  :commands matlab-shell)
+  ;; don’t enable company in matlab-shell-mode
+  :commands (matlab-shell))
 
 (load-package mips-mode
   :mode "\\.mips$")
@@ -48,6 +49,13 @@
                              "q" 'quit-window)))
 
 (load-package web-mode
+  :init
+  (add-to-list 'luna-package-list 'flycheck t)
+  (add-hook 'web-mode-hook #'company-mode)
+  (with-eval-after-load 'flycheck
+    (flycheck-add-mode 'html-tidy 'web-mode))
+  (add-hook 'web-mode-hook #'flycheck-mode)
+  (add-hook 'css-mode-hook #'aggressive-indent-mode)
   :mode
   "\\.phtml\\'"
   "\\.tpl\\.php\\'"
@@ -67,15 +75,13 @@
 (load-package sly
   :commands sly
   :init
+  (add-hook 'common-lisp-mode-hook #'company-mode)
+  (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'common-lisp-mode-hook #'sly-mode)
   (setq inferior-lisp-program "ccl64"))
 
-(load-package aggressive-indent
-  :commands aggressive-indent-mode
-  :init
-  (add-hook 'lisp-mode-hook #'aggressive-indent-mode))
-
 (load-package lua-mode
+  :init (add-hook 'lua-mode-hook #'company-mode)
   :mode "\\.lua$"
   :interpreter "lua")
 
@@ -90,10 +96,11 @@
   (defun setup-tide-mode ()
     (interactive)
     (tide-setup)
+    (company-mode)
     (flycheck-mode)
     (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-    (setq-local flycheck-check-syntax-automatically '(save mode-enabled)
-                company-tooltip-align-annotations t)
+    (setq-local flycheck-check-syntax-automatically '(save mode-enabled))
+    (setq-local company-tooltip-align-annotations t)
     (tide-hl-identifier-mode +1)
     (add-to-list 'luna-smart-format-alist '(typescript-mode . tide-format-before-save))
     (add-to-list 'luna-smart-format-alist '(js-mode . tide-format-before-save)))
@@ -104,18 +111,20 @@
 (setq js-indent-level 2)
 
 ;; C/C++
-(with-eval-after-load 'c-mode
-  (eglot-ensure)
-  ;; ccls has a fuzzy matching algorithm to order candidates according to your query.
-  (setq-local company-transformers nil))
+(add-hook 'c-mode-hook (lambda ()
+                         (eglot-ensure)
+                         ;; ccls has a fuzzy matching algorithm to order candidates according to your query.
+                         (setq-local company-transformers nil)))
+(add-hook 'c++-mode-hook (lambda ()
+                           (eglot-ensure)
+                           ;; ccls has a fuzzy matching algorithm to order candidates according to your query.
+                           (setq-local company-transformers nil)))
 
-(with-eval-after-load 'c++-mode
-  (eglot-ensure)
-  ;; ccls has a fuzzy matching algorithm to order candidates according to your query.
-  (setq-local company-transformers nil))
+(add-hook 'c-mode-hook #'company-mode)
+(add-hook 'c++-mode-hook #'company-mode)
+
 
 ;; Debugger
-(add-hook 'gud-mode-hook (lambda () (company-mode -1)))
 
 (load-package realgud
   :commands (realgud:gdb realgud:lldb))

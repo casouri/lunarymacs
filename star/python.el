@@ -17,11 +17,18 @@
 (load-package anaconda-mode
   :commands (anaconda-mode)
   :init (add-hook 'python-mode-hook #'anaconda-mode))
+;; (load-package company-anaconda
+;;   :after (anaconda-mode)
+;;   :init (with-eval-after-load 'company
+;;           (add-to-list 'company-backends 'company-anaconda)))
 
-(load-package company-anaconda
-  :after (anaconda-mode)
-  :init (with-eval-after-load 'company
-          (add-to-list 'company-backends 'company-anaconda)))
+;; (with-eval-after-load 'flycheck
+;;   (add-hook 'python-mode-hook #'flycheck-mode))
+
+(add-hook 'python-mode-hook #'eglot-ensure)
+(add-to-list 'luna-smart-format-alist '(python-mode . eglot-format-buffer))
+
+(add-hook 'python-mode-hook #'company-mode)
 
 ;;;; Virtual env
 
