@@ -89,7 +89,6 @@
    )
 
   (general-define-key
-   :keymaps 'override
    "s-h" #'windmove-left
    "s-j" #'windmove-down
    "s-k" #'windmove-up

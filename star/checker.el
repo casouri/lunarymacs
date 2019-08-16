@@ -50,6 +50,13 @@
   :hook ((text-mode . flyspell-mode)
          (prog-mode . flyspell-prog-mode))
   :config
+  (with-eval-after-load 'key.general
+    (general-define-key
+     :keymaps 'flyspell-mode-map
+     "C-," nil
+     "C-M-i" nil
+     "C-." nil
+     "C-c $" nil))
   (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
   (setq flyspell-issue-message-flag nil)
   ;; (when (executable-find "hunspell")

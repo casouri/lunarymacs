@@ -3,56 +3,46 @@
 ;;; Key
 
 (luna-with-eval-after-load 'key.general
-  ;;;; Outshine
   (luna-default-leader
+    ;; Outshine
     "tl" #'luna-toggle-left-margin
     "iu" #'insert-char
     "sr" #'luna-color-rg-search-input
     "o" '(:ignore t :which-key "outline")
     "o <tab>" #'outline-toggle-children
     "os" #'outline-show-all
-    "oh" #'outline-hide-body)
-  (global-unset-key (kbd "C-<down-mouse-1>"))
+    "oh" #'outline-hide-body
+    ;; minimap
+    "tm" #'minimap-mode
+    ;; avy
+    "k" #'avy-goto-char-timer)
+
   (general-define-key
    :keymaps 'override
    ;; this is binded by default,
    ;; but flyspell mode shadows it
-   "C-M-i" #'outshine-cycle-buffer
-   ;; "C-<mouse-1>" #'mc/add-cursor-on-click
-   )
+   "C-M-i" #'outshine-cycle-buffer)
+
   (general-define-key
-   :keymaps 'global-map
-   ;;;; Hippie
+   ;; Hippie
    "M-/" #'hippie-expand
-   ;;;; Hungry delete
+   ;; Hungry delete
    "<backspace>" #'luna-hungry-delete
-   )
-  ;;;; Expand Region
-  ;; (luna-g-leader
-  ;;   "v" #'er/expand-region)
-  ;; (luna-default-leader
-  ;;   "v" #'er/expand-region)
-  ;;;; Helpful
-  (general-define-key
-   :keymaps 'override
+   ;; helpful
    "C-h f" #'helpful-callable
    "C-h v" #'helpful-variable
    "C-h k" #'helpful-key)
-  (general-define-key
-   :keymaps 'helpful-mode-map
-   "b" #'helpful-previous-helpful-buffer
-   "f" #'helpful-next-helpful-buffer)
-  ;;;; Kill Ring Select
+
   (luna-cx-leader
     ;; C-y is too uncomfortable to reach
     ;; so C-p here we go
     "C-p" #'luna-kill-ring-select
     "<C-i>" #'luna-insert-special-symbol)
-  ;;;; Minimap
-  (luna-default-leader "tm" #'minimap-mode)
-  ;;;; avy
-  (luna-default-leader
-    "k" #'avy-goto-char-timer))
+
+  (general-define-key
+   :keymaps 'helpful-mode-map
+   "b" #'helpful-previous-helpful-buffer
+   "f" #'helpful-next-helpful-buffer))
 
 
 (mve (global-set-key (kbd "<S-return>") #'luna-return-cancel-completion) nil)

@@ -32,7 +32,6 @@
    "C-<return>" #'helm-toggle-visible-mark
    "M-y" #'helm-copy-selection-and-quit)
   (general-define-key
-   :keymaps 'override
    ;; "M-x" #'helm-smex
    [remap luna-kill-ring-select]     #'helm-show-kill-ring
    [remap switch-to-buffer]          #'helm-mini
