@@ -79,14 +79,13 @@ Always at the bottom of the frame and span full width."
         star-buffer-list
         other-buffer-list)
     (dolist (buffer buffer-list)
-      (if (or (string-prefix-p "*" buffer)
-              (string-prefix-p "fshell @ " buffer)
-              (string-prefix-p "magit: " buffer)
-              (string-prefix-p "magit-process: " buffer))
+      (if (catch 'match
+            (dolist (pattern luna-buffer-bottom-list nil)
+              (when (string-prefix-p pattern buffer)
+                (throw 'match t))))
           (push buffer star-buffer-list)
         (push buffer other-buffer-list)))
     (nreverse (append star-buffer-list other-buffer-list))))
-
 
 
 ;;;; helm-better-default

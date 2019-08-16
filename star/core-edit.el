@@ -69,3 +69,6 @@ project."
 
 ;;;; buffer ordering
 
+(defvar luna-buffer-bottom-list nil
+  "Buffer name patterns that stays at the bottom of buffer list in helm.
+Each pattern is the beginning of the buffer name, e.g., *Flymake, magit:, etc.")

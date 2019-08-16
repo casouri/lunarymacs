@@ -180,6 +180,7 @@
              helpful-key
              helpful-at-point)
   :config
+  (add-to-list 'luna-buffer-bottom-list "*helpful")
   (setq helpful-max-buffers 5)
   ;; don't pop new window
   (require 'subr-x)
