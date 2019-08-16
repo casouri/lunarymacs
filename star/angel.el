@@ -12,14 +12,8 @@
    "s-a"   #'backward-sentence
    "s-e"   #'forward-sentence
    "M-%"   #'query-replace+
-   "C-,"   #'luna-jump-back)
+   "C-,"   #'luna-jump-back
 
-  (general-define-key
-   :keymas minibuffer-local-map
-   "C-<return>" #'newline)
-
-  (general-define-key
-   :keymaps 'override
    "M-j"   #'find-char
    "C-M-j" #'find-char-backward-cmd
    ;; "M-'"   #'Avy-goto-char
@@ -61,11 +55,11 @@
     "C-b" #'switch-to-buffer
     "C-d" '((lambda () (interactive) (dired default-directory)) :which-key "open default directory")
     "C-;" #'goto-last-change
-    "M-;" #'goto-last-change-reverse)
+    "M-;" #'goto-last-change-reverse
+    "j" #'luna-jump-or-set)
 
   (luna-cc-leader
-    "C-b" #'switch-buffer-same-major-mode
-    "q"   #'query-replace+-mode))
+    "C-b" #'switch-buffer-same-major-mode))
 
 (defun luna-up-list-backward ()
   "`up-list' but up to the beginning instead of the end."
