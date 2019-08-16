@@ -179,15 +179,21 @@ Its element is a pair of `buffer-name' and `mode-line-format'.")
    helm-split-window-preferred-function #'helm-split-window-my-fn
    helm-M-x-always-save-history t
    helm-locate-command "mdfind %s %s")
-  (helm-autoresize-mode)
-  (helm-mode)
+
   (define-key helm-map (kbd "C-i") #'helm-execute-persistent-action)
   (define-key helm-map (kbd "C-j") #'helm-select-action)
+  (require 'helm-files)
   (define-key helm-find-files-map (kbd "<RET>") #'helm-maybe-exit-minibuffer)
   (define-key helm-find-files-map (kbd "M-<backspace>") #'helm-find-files-up-one-level)
   ;; (helm-ido-like-hide-modelines)
   (helm-ido-like-hide-helm-modeline)
-  (advice-add 'helm-buffers-sort-transformer :around #'luna-helm-sort-buffer))
+  (advice-add 'helm-buffers-sort-transformer :around #'luna-helm-sort-buffer)
+  ;; make helm overwrite interactive functions
+  ;; e.g., helpful commands
+  (add-hook 'after-init-hook
+            (lambda ()
+              (helm-mode)
+              (helm-autoresize-mode))))
 
 ;; (load-package helm-smex
 ;;   :commands helm-smex)
