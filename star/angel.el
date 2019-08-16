@@ -418,8 +418,8 @@ You can use \\&, \\N to refer matched text."
   "Jump to register CHAR if CHAR is lowercase.
 Set register CHAR to point if CHAR is uppercase."
   (interactive "cRegister <- Char(a/A)")
-  (let ((low-char (downcase char)))
-    (if (eql low-char char)
+  (let ((lower-char (downcase char)))
+    (if (eql lower-char char)
         ;; lower case, jump
         (if-let ((marker (alist-get lower-char luna-marker-alist)))
             (goto-char marker)
