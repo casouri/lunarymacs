@@ -135,15 +135,15 @@
 ;;;; Max
 (toggle-frame-maximized)
 
-;;;; Mac modifiers
+;;;; Mac port
 
 (setq mac-option-modifier 'meta
       mac-command-modifier 'super)
 
-(setq mac-pass-command-to-system nil
+(setq mac-pass-command-to-system nil ; fix cmd h
       mac-system-move-file-to-trash-use-finder t)
 
-(global-set-key (kbd "s-c") #'ns-copy-including-secondary)
+(global-set-key (kbd "s-c") #'kill-ring-save)
 (global-set-key (kbd "s-v") #'yank)
 
 (load-package exec-path-from-shell
