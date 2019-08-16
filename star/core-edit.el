@@ -16,26 +16,6 @@ For example, '(python-mode . format-python)")
       (when format-func
         (funcall format-func)))))
 
-(defun strip-text-properties(text)
-  "Return TEXT without any properties."
-  (set-text-properties 0 (length text) nil text)
-  text)
-
-
-(defvar luna-evil nil
-  "whether to use evil.")
-
-(defmacro luna-vim-emacs (vim emacs)
-  "If `luna-evil' is true:
-Evaluate VIM;
-otherwise evalueate EMACS."
-  `(if luna-evil
-       ,vim
-     ,emacs))
-
-(defalias 'mve #'luna-vim-emacs)
-
-
 (defun luna-kill-other-buffer ()
   "Kill all other buffers (besides the current one).
 

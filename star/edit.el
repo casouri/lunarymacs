@@ -44,9 +44,6 @@
    "b" #'helpful-previous-helpful-buffer
    "f" #'helpful-next-helpful-buffer))
 
-
-(mve (global-set-key (kbd "<S-return>") #'luna-return-cancel-completion) nil)
-
 ;;; Package
 
 ;;;; Edit
