@@ -14,6 +14,8 @@
 (setq package-archives '(("melpa" . "https://elpa.emacs-china.org/melpa/")
                          ("gnu" . "https://elpa.emacs-china.org/gnu/")))
 
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 
 ;;;; Loadpath
 
