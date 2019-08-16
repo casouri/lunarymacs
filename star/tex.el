@@ -19,18 +19,22 @@
 ;;;; Packages
 
 (load-package latex-preview-pane
-  :commands latex-preview-pane-mode)
+  :commands (latex-preview-pane-mode))
 
 (load-package company-math
-  :defer t
-  :init (add-hook 'LaTeX-mode-hook #'luna-latex-company-setup))
+  :commands (luna-latex-company-setup)
+  :init
+  (add-hook
+   'LaTeX-mode-hook
+   (lambda ()
+     (require 'company-math)
+     (setq-local company-backends
+                 (append '((company-math-symbols-latex company-latex-commands))
+                         company-backends)))))
 
-(defun luna-latex-company-setup ()
-  (require 'company-math)
-  (message "woome")
-  (setq-local company-backends
-              (append '((company-math-symbols-latex company-latex-commands))
-                      company-backends)))
+(load-package cdlatex
+  :defer t
+  :init (add-hook 'LaTeX-mode-hook #'cdlatex-mode))
 
 ;; (load-package webkit-katex-render
 ;;   :commands webkit-katex-render-mode)
@@ -39,44 +43,37 @@
 ;;   (add-to-list 'eglot-server-programs '(latex-mode . ("digestif"))))
 
 (load-package auctex
-  :defer t
+  :mode ("\\.tex\\'" . latex-mode)
   :init
+  (setq TeX-parse-self t)
+  (setq-default TeX-master nil)
+  (add-hook 'latex-mode-hook #'luna-require-auctex)
   ;; (setq TeX-electric-math (cons "$" "$")) ; too slow
-  (add-hook 'latex-mode-hook
+  ;; (setq TeX-command-default "XeLaTeX")
+  ;; (setq TeX-show-compilation t)
+  (setq TeX-save-query nil)
+  (add-hook 'LaTeX-mode-hook
             (lambda ()
-              (luna-require-auctex)
-              (TeX-latex-mode)
-              (electric-quote-local-mode -1))))
+              (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
+              ;; tex-insert-dollar is useless and slow
+              (define-key TeX-mode-map (kbd "$") nil))))
 
-(add-hook 'LaTeX-mode-hook
-          (lambda ()
-            (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
-            ;; (setq TeX-command-default "XeLaTeX")
-            (setq TeX-save-query nil)
-            ;; (setq TeX-show-compilation t)
-            ;; tex-insert-dollar is useless and slow
-            (define-key TeX-mode-map (kbd "$") nil)))
+;; (defun luna-require-auctex ()
+;;   "Require necessary files from auctex."
+;;   (require 'tex-site)
+;;   (require 'latex)
+;;   (require 'font-latex)
+;;   (require 'texmathp)
+;;   (require 'preview)
+;;   (TeX-latex-mode))
 
-(defun luna-require-auctex ()
-  "Require necessary files from auctex."
-  (require 'tex-site)
-  (require 'latex)
-  (require 'font-latex)
-  (require 'texmathp)
-  (require 'preview))
+;;;; Config
 
-;;;; Function
-;;
-;; auto {} after \
 
-;; (defun luna-tex-post-insert (&rest _)
-;;   "Insert {} after \\."
-;;   (interactive)
-;;   (when (eq (char-before) ?\\)
-;;     (insert "{}")
-;;     (backward-char 2)))
 
-;; (add-hook 'latex-mode-hook (lambda ()
-;;                              (add-hook 'post-self-insert-hook #'luna-tex-post-insert nil t)))
+
+
+
+
 
 ;;; config.el ends here
