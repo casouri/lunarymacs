@@ -1,5 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 
+;;;; Smart format on save
 (defvar luna-smart-format-alist ()
   "Alist of format functions of each major mode.
 Each element should be a con cell of major mode symbol and function symbol.
@@ -16,6 +17,9 @@ For example, '(python-mode . format-python)")
       (when format-func
         (funcall format-func)))))
 
+(add-hook 'after-save-hook #'luna-smart-format-buffer)
+
+;;;; Convenient functions
 (defun luna-kill-other-buffer ()
   "Kill all other buffers (besides the current one).
 
@@ -63,7 +67,5 @@ project."
           (message "File '%s' successfully renamed to '%s'"
                    name (file-name-nondirectory new-name)))))))
 
-;;; Config
+;;;; buffer ordering
 
-
-(add-hook 'after-save-hook #'luna-smart-format-buffer)
