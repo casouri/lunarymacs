@@ -27,6 +27,8 @@
 ;;   :init (setq flymake-diagnostic-at-point-error-prefix "|")
 ;;   :config (add-hook 'flymake-mode-hook #'flymake-diagnostic-at-point-mode))
 
+(add-to-list 'luna-buffer-bottom-list "*Flymake")
+
 ;;; Config
 
 ;; (post-config| hydra
