@@ -33,20 +33,9 @@
   :commands (matlab-shell))
 
 (load-package mips-mode
-  :mode "\\.mips$")
-
-(load-package quickrun
-  :commands (quickrun
-             quickrun-region
-             quickrun-with-arg
-             quickrun-shell
-             quickrun-compile-only
-             quickrun-replace-region
-             quickrun-autorun-mode)
-  ;; from evil-collection
-  :config (when (featurep 'evil)
-            (evil-define-key 'normal quickrun--mode-map
-                             "q" 'quit-window)))
+  :mode "\\.mips$"
+  :init (with-eval-after-load 'company
+          (add-hook 'mips-mode-hook #'company-mode)))
 
 (load-package web-mode
   :init
@@ -65,11 +54,8 @@
   "\\.mustache\\'"
   "\\.djhtml\\'"
   "\\.html?\\'"
-  :config
-  (when (featurep 'flycheck )
-    (flycheck-add-mode 'html-tidy 'web-mode))
-  (setq web-mode-markup-indent-offset 2
-        web-mode-auto-close-style 2))
+  :config (setq web-mode-markup-indent-offset 2
+                web-mode-auto-close-style 2))
 
 ;; common lisp
 (load-package sly
@@ -128,3 +114,26 @@
 
 (load-package realgud
   :commands (realgud:gdb realgud:lldb))
+
+(add-hook 'makefile-mode-hook
+          (lambda ()
+            (setq-local whitespace-style '(tab-mark))
+            (whitespace-mode)))
+
+;;; Genarl package
+
+(load-package aggressive-indent
+  :commands (aggressive-indent-mode))
+
+(load-package quickrun
+  :commands (quickrun
+             quickrun-region
+             quickrun-with-arg
+             quickrun-shell
+             quickrun-compile-only
+             quickrun-replace-region
+             quickrun-autorun-mode)
+  ;; from evil-collection
+  :init (with-eval-after-load 'evil
+          (evil-define-key 'normal quickrun--mode-map
+                           "q" 'quit-window)))
