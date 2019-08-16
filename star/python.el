@@ -2,6 +2,8 @@
 
 ;;; Config
 
+(setq python-indent-offset 4)
+
 ;;;; Sagemath
 
 (load-package sage-shell-mode
@@ -14,9 +16,10 @@
 
 ;;;; IDE
 
-(load-package anaconda-mode
-  :commands (anaconda-mode)
-  :init (add-hook 'python-mode-hook #'anaconda-mode))
+;; (load-package anaconda-mode
+;;   :commands (anaconda-mode)
+;;   :init (add-hook 'python-mode-hook #'anaconda-mode))
+
 ;; (load-package company-anaconda
 ;;   :after (anaconda-mode)
 ;;   :init (with-eval-after-load 'company
