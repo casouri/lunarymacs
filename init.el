@@ -88,7 +88,7 @@
 (setq-default bidi-display-reordering nil)
 
 ;;;; format on save
-(setq luna-format-on-save t)
+(setq-default luna-format-on-save t)
 
 ;;;; scroll margin
 (setq scroll-margin 4)
