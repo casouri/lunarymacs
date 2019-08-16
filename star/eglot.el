@@ -37,7 +37,10 @@
   :init
   ;; (add-hook 'eglot--managed-mode-hook #'eldoc-box-hover-mode t)
   (setq eldoc-box-cleanup-interval 0.2
-        eldoc-box-clear-with-C-g t))
+        eldoc-box-clear-with-C-g t
+        eldoc-box-doc-fold-threshold 200)
+  :config
+  (set-face-attribute 'eldoc-box-body nil :family "SF Pro"))
 
 ;;; Function
 
