@@ -123,6 +123,43 @@ If FORCE is non-nil, only export when org file is newer than html file."
         (kill-new post-header-info)
         (message "Cannot find post header anchor, please yank header information manually")))))
 
+(defvar luna-note-rss-template "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<rss version=\"2.0\">
+  <channel>
+    <title>The title of my RSS 2.0 Feed</title>
+    <link>http://www.example.com/</link>
+    <description>This is my rss 2 feed description</description>
+    <lastBuildDate>%s</lastBuildDate>
+%s
+  </channel>
+</rss>")
+
+(defun luna-note-export-rss (force)
+  "Export RSS for current buffer.
+If FORCE non-nil, re-export every post."
+  (interactive "P")
+  (let* ((str (buffer-string))
+         (rss (with-temp-buffer
+                (insert str)
+                (org-mode)
+                (org-macro-initialize-templates)
+                (org-macro-replace-all org-macro-templates)
+                (string-join
+                 (org-element-map
+                     (org-element-parse-buffer)
+                     'headline (lambda (hl)
+                                 (luna-publish-rss-export
+                                  (org-element-property :RSS_LINK hl)
+                                  nil
+                                  (org-element-property :RSS_DIR hl)
+                                  force)))))))
+    (with-current-buffer (find-file "./rss.xml")
+      (erase-buffer)
+      (insert (format luna-note-rss-template
+                      (format-time-string "%a, %d %b %Y %H:%M:%S %z")
+                      rss))
+      (save-buffer))))
+
 ;;; Rock/day
 
 (defvar luna-publish-rock/day-dir "~/p/casouri/rock/day/"
