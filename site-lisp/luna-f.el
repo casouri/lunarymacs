@@ -47,6 +47,11 @@ Return absolute path if ABSOLUTE is t."
     (expand-file-name (car (last path-list))
                       (apply #'luna-f-join (butlast path-list)))))
 
+(defun luna-f-content (path)
+  "Read text with PATH."
+  (with-current-buffer (find-file path)
+    (buffer-string)))
+
 (provide 'luna-f)
 
 ;;; luna-f.el ends here
