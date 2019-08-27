@@ -8,12 +8,7 @@
    "b" #'dired-up-directory
    "q" #'luna-quit-window
    "C-c C-s" #'dired-narrow
-   "C-c C-o" #'luna-dired-open-file-at-point)
-  (general-define-key
-   "j" #'next-line
-   "k" #'previous-line
-   "h" #'dired-up-directory
-   "l" #'dired-find-file))
+   "C-c C-o" #'luna-dired-open-file-at-point))
 
 ;; (with-eval-after-load 'general
 ;;   (luna-default-leader
