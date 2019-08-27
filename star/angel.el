@@ -6,6 +6,11 @@
 
 (luna-with-eval-after-load 'key.general
   (general-define-key
+   :keymaps 'global-map
+   ;; scrolling in terminal
+   "M-n"   #'luna-scroll-down-reserve-point
+   "M-p"   #'luna-scroll-up-reserve-point)
+  (general-define-key
    :keymaps 'override
    "s-n"   #'luna-scroll-down-reserve-point
    "s-p"   #'luna-scroll-up-reserve-point
