@@ -81,9 +81,10 @@
 (add-hook 'kill-emacs-hook #'customize-save-customized)
 
 ;;;; theme
-;; (setq doom-cyberpunk-bg 'violet)
-(setq doom-cyberpunk-dark-mode-line nil)
-(luna-load-theme nil t)
+(when window-system
+  ;; (setq doom-cyberpunk-bg 'violet)
+  (setq doom-cyberpunk-dark-mode-line nil)
+  (luna-load-theme nil t))
 
 ;;;; Faster long lines
 (setq-default bidi-display-reordering nil)
@@ -95,9 +96,9 @@
 (setq scroll-margin 4)
 
  ;;;; Font
-(luna-load-font)
-(luna-load-cjk-font)
-
+(when window-system
+  (luna-load-font)
+  (luna-load-cjk-font))
 ;;;;; Chinese
 
 ;; WenYue GuDianMingChaoTi (Non-Commercial Use) W5
@@ -134,7 +135,8 @@
 (server-start)
 
 ;;;; Max
-(toggle-frame-maximized)
+(when window-system
+  (toggle-frame-maximized))
 
 ;;;; Mac port
 
@@ -147,8 +149,10 @@
 (global-set-key (kbd "s-c") #'kill-ring-save)
 (global-set-key (kbd "s-v") #'yank)
 
-(load-package exec-path-from-shell
-  :config (exec-path-from-shell-initialize))
+;;;; path from shell
+(when window-system
+  (load-package exec-path-from-shell
+    :config (exec-path-from-shell-initialize)))
 
 ;;;; UI element
 
