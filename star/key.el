@@ -1,5 +1,6 @@
 ;; separate C-i from TAB
-(define-key input-decode-map "\C-i" [C-i])
+(when window-system
+  (define-key input-decode-map "\C-i" [C-i]))
 
 ;;;;; general
 
