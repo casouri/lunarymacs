@@ -173,3 +173,10 @@
 (add-hook 'prog-mode #'abbrev-mode)
 (add-hook 'fundamental-mode #'abbre-mode)
 (add-hook 'text-mode #'abbrev-mode)
+;;;; Term mouse
+
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  ;; (defun track-mouse (e))
+  (setq mouse-sel-mode t))
