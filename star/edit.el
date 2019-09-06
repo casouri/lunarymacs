@@ -24,8 +24,6 @@
    "C-M-i" #'outshine-cycle-buffer)
 
   (general-define-key
-   ;; Hippie
-   "M-/" #'hippie-expand
    ;; Hungry delete
    "<backspace>" #'luna-hungry-delete
    ;; helpful

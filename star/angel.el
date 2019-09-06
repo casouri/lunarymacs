@@ -9,7 +9,8 @@
    :keymaps 'global-map
    ;; scrolling in terminal
    "M-n"   #'luna-scroll-down-reserve-point
-   "M-p"   #'luna-scroll-up-reserve-point)
+   "M-p"   #'luna-scroll-up-reserve-point
+   "M-/"   #'hippie-expand)
   (general-define-key
    :keymaps 'override
    "s-n"   #'luna-scroll-down-reserve-point
