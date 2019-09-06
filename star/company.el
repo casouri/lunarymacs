@@ -13,9 +13,7 @@
   (general-define-key
    :keymaps '(company-active-map
               company-search-map)
-   "C-j"      #'company-search-candidates
-   "C-p"      #'company-select-previous
-   "C-n"      #'company-select-next)
+   "C-j"      #'company-search-candidates)
   (general-define-key
    :keymaps 'company-search-map
    "<escape>" #'company-abort))
