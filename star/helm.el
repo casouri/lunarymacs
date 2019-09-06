@@ -180,7 +180,7 @@ Its element is a pair of `buffer-name' and `mode-line-format'.")
    helm-locate-command "mdfind %s %s")
 
   (define-key helm-map (kbd "C-i") #'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-j") #'helm-select-action)
+  (define-key helm-map (kbd "<f1>") #'helm-select-action)
   (require 'helm-files)
   (define-key helm-find-files-map (kbd "<RET>") #'helm-maybe-exit-minibuffer)
   (define-key helm-find-files-map (kbd "M-<backspace>") #'helm-find-files-up-one-level)
