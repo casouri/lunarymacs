@@ -100,13 +100,13 @@
 (add-hook 'c-mode-hook (lambda ()
                          (eglot-ensure)
                          ;; ccls has a fuzzy matching algorithm to order candidates according to your query.
-                         (setq-local company-transformers nil
-                                     comment-multi-line t)))
+                         (setq-local company-transformers nil)
+                         (setq-local comment-multi-line t)))
 (add-hook 'c++-mode-hook (lambda ()
                            (eglot-ensure)
                            ;; ccls has a fuzzy matching algorithm to order candidates according to your query.
-                           (setq-local company-transformers nil
-                                       comment-multi-line t)))
+                           (setq-local company-transformers nil)
+                           (setq-local comment-multi-line t)))
 
 (add-hook 'c-mode-hook #'company-mode)
 (add-hook 'c++-mode-hook #'company-mode)
