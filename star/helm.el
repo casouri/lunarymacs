@@ -20,7 +20,6 @@
     "C-s" #'helm-swoop
     "si" #'helm-imenu
     "sI" #'helm-imenu-in-all-buffers
-    "C-s" #'helm-swoop
     "ip" #'helm-yas-complete)
   ;; (luna-cx-leader
   ;;   "C-r" #'helm-resume)
