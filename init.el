@@ -118,11 +118,11 @@
                                 :family)
                      1.3)))
 
- ;;;;; Emoji
+;;;;; Emoji
 ;; (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
 ;;                   nil 'prepend)
 
- ;;;; nyan
+;;;; nyan
 ;; (nyan-lite-mode)
 ;; (setq nyan-wavy-trail t)
 ;; enabling this makes highlight on buttons blink
