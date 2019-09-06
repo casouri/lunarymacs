@@ -470,15 +470,13 @@ and moves point to the previous line."
 (defun luna-scroll-down-reserve-point ()
   (interactive)
   (scroll-up 2)
-  (next-line)
-  (next-line))
+  (next-line 2))
 
 
 (defun luna-scroll-up-reserve-point ()
   (interactive)
   (scroll-down 2)
-  (previous-line)
-  (previous-line))
+  (previous-line 2))
 
 
 (defun luna-sudo-edit (&optional arg)
