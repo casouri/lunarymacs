@@ -35,7 +35,7 @@
     ;; C-y is too uncomfortable to reach
     ;; so C-p here we go
     "C-p" #'luna-kill-ring-select
-    "<C-i>" #'luna-insert-special-symbol)
+    "i" #'luna-insert-special-symbol)
 
   (general-define-key
    :keymaps 'helpful-mode-map
