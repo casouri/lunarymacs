@@ -5,3 +5,4 @@
 !site-lisp/**/*
 !star/
 !star/**/*
+.DS_Store
