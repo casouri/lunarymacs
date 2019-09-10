@@ -7,7 +7,8 @@
   :commands (company-mode)
   :config
   (if luna-company-manual
-      (setq company-idle-delay 9999)
+      (setq company-idle-delay 9999
+            company-auto-complete t)
     (setq company-idle-delay 0.1))
   (setq company-minimum-prefix-length 1
         company-dabbrev-downcase nil
@@ -17,7 +18,7 @@
 (luna-with-eval-after-load 'key.general
   (when luna-company-manual
     (general-define-key
-     "<tab>" #'company-indent-or-complete-common)
+     "C-o" #'company-complete)
     (general-define-key
      :keymaps '(company-active-map
                 company-search-map)
