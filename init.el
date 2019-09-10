@@ -164,12 +164,7 @@
     (menu-bar-mode)
   (menu-bar-mode -1))
 
-;;;; Abbrev
 
-(read-abbrev-file (luna-f-join user-emacs-directory "star/abbrev-file.el"))
-(add-hook 'prog-mode #'abbrev-mode)
-(add-hook 'fundamental-mode #'abbre-mode)
-(add-hook 'text-mode #'abbrev-mode)
 ;;;; Term mouse
 
 (unless window-system
