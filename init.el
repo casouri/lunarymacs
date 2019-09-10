@@ -128,9 +128,6 @@
 ;; enabling this makes highlight on buttons blink
 ;; (nyan-start-animation)
 
-;;;; winner
-(winner-mode)
-
 ;;;; server
 (server-start)
 

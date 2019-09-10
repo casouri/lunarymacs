@@ -26,6 +26,8 @@
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 
+(winner-mode)
+
 ;;;; Display buffer alist
 
 (setq display-buffer-alist
