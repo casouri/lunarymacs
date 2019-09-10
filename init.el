@@ -46,10 +46,10 @@
 
 (add-to-list 'luna-package-list 'use-package)
 
-(ignore-errors (require 'use-package))
+(luna-message-error (require 'use-package))
 (luna-load-relative "star/core-edit.el")
 (luna-load-relative "star/core-ui.el")
-;; core much load first because other configs depends on them
+;; core must load first because other configs depends on them
 (luna-load-relative "star/other.el")
 (luna-load-relative "star/key.el")
 (luna-load-relative "star/recipe.el")

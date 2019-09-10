@@ -48,12 +48,17 @@ HOOK is a function."
   (declare (indent 1))
   `(luna-eval-after-load ,feature (lambda () ,@body)))
 
+(defmacro luna-message-error (&rest body)
+  "Eval BODY and print error message if any."
+  `(condition-case err
+       (progn ,@body)
+     (error (message (format "Error occured:\n%s\n" (error-message-string err))))))
+
 (defun luna-safe-load (file &rest args)
   "Load FILE and don’t error out.
 ARGS is as same as in `load'."
-  (condition-case err
-      (apply #'load file args)
-    (error (message (error-message-string err)))))
+  (luna-message-error
+   (apply #'load file args)))
 
 (defun luna-load-or-create (file &rest args)
   "Load FILE if file exists, otherwise create it.
@@ -70,17 +75,11 @@ ARGS is as same as in `load'."
   (apply #'luna-load-or-create (expand-file-name file user-emacs-directory) args))
 
 (defmacro load-package (package &rest body)
-  "Thin wrapper around ‘use-package’. "
+  "Thin wrapper around ‘use-package’."
   (declare (indent 1))
-  `(safe-eval (add-to-list 'luna-package-list ',package t)
-              (use-package ,package
-                ,@body)))
-
-(defmacro safe-eval (&rest body)
-  "Eval BODY and not afraid of error."
-  `(condition-case err
-       (progn ,@body)
-     (error (message (format "Error: %s" (error-message-string err))))))
+  `(luna-message-error (add-to-list 'luna-package-list ',package t)
+                       (use-package ,package
+                         ,@body)))
 
 (defvar luna-prepared-p nil
   "T if ‘luna-before-install-package’ has ran.")
