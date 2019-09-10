@@ -71,7 +71,7 @@ ARGS is as same as in `load'."
       (kill-buffer))))
 
 (defun luna-load-relative (file &rest args)
-  "Load file relative to user-emacs-directory. ARGS are applied to ‘load'."
+  "Load FILE relative to user-emacs-directory. ARGS are applied to ‘load'."
   (apply #'luna-load-or-create (expand-file-name file user-emacs-directory) args))
 
 (defmacro load-package (package &rest body)
