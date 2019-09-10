@@ -11,4 +11,5 @@
         (find-char . (:repo "casouri/find-char"))
         (nerd-font . (:repo "twlz0ne/nerd-fonts.el"))
         (snail . (:repo "manateelazycat/snails"))
-        (gdb-mi . (:repo "weirdNox/emacs-gdb" :dependency (hydra)))))
+        (gdb-mi . (:repo "weirdNox/emacs-gdb" :dependency (hydra)))
+        (julia-emacs . (:repo "JuliaEditorSupport/julia-emacs"))))
