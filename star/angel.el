@@ -7,9 +7,8 @@
 (luna-with-eval-after-load 'key.general
   (general-define-key
    :keymaps 'global-map
-   ;; scrolling in terminal
-   "M-n"   #'luna-scroll-down-reserve-point
-   "M-p"   #'luna-scroll-up-reserve-point
+   "M-n"   #'scroll-up
+   "M-p"   #'scroll-down
    "M-/"   #'hippie-expand)
   (general-define-key
    :keymaps 'override
