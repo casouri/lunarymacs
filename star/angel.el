@@ -458,3 +458,17 @@ Set register CHAR to point if CHAR is uppercase."
     (setq luna-jump-back-marker (point-marker))))
 
 (add-hook 'pre-command-hook #'luna-maybe-set-marker-to-jump-back)
+
+;;;; Abbrev
+
+(defun luna-insert-space-or-expand-abbrev ()
+  "Expand abbrev if previous char is a space, then insert space."
+  (interactive)
+  (if (not (equal (char-before) ?\s))
+      (insert-char ?\s)
+    (backward-char)
+    (expand-abbrev)
+    (forward-char)))
+
+(global-set-key " " #'luna-insert-space-or-expand-abbrev)
+(read-abbrev-file (luna-f-join user-emacs-directory "star/abbrev-file.el"))
