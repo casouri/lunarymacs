@@ -496,21 +496,8 @@ buffer is not visiting a file."
   (let* ((filename (file-name-nondirectory (buffer-file-name)))
          (year (format-time-string "%Y"))
          (feature (file-name-base (buffer-file-name))))
-    (insert (format ";;; %s --- %s      -*- lexical-binding: t; -*-
-
-;; Author: Yuan Fu <casouri@gmail.com>
-
-;;; This file is NOT part of GNU Emacs
-
-;;; Commentary:
-;;
-
-;;; Code:
-;;
-
-(provide '%s)
-
-;;; %s ends here"
+    (insert (format (with-current-buffer (find-file ("autoinsert-template.el"))
+                      (buffer-string))
                     filename description feature filename))))
 
 ;;;###autoload
