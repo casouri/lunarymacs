@@ -138,7 +138,9 @@ If FORCE is non-nil, only export when org file is newer than html file."
   "Export RSS for current buffer.
 If FORCE non-nil, re-export every post."
   (interactive "P")
-  (let* ((str (buffer-string))
+  (let* ((default-directory luna-publish-note-dir)
+         (str (with-current-buffer (find-file (luna-f-join luna-publish-note-dir "index.org"))
+                (buffer-string)))
          (rss (with-temp-buffer
                 (insert str)
                 (org-mode)
@@ -151,7 +153,7 @@ If FORCE non-nil, re-export every post."
                                  (luna-publish-rss-export
                                   (org-element-property :RSS_LINK hl)
                                   nil
-                                  (org-element-property :RSS_DIR hl)
+                                  (message (org-element-property :RSS_DIR hl))
                                   force)))))))
     (with-current-buffer (find-file "./rss.xml")
       (erase-buffer)

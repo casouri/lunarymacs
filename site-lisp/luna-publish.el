@@ -64,27 +64,37 @@ Categories in CATEGORY-LIST are strings."
                                    'plain-text #'identity
                                    nil t)))
                             "No intro."))
-                 ;; (html (with-current-buffer (find-file org-file)
-                 ;;         (let ((org-html-home/up-format ""))
-                 ;;           (org-export-as 'html))))
+                 (html (with-current-buffer (find-file org-file)
+                         (let ((org-html-home/up-format "")
+                               (org-html-postamble ""))
+                           (org-export-as 'html))))
                  (env (with-current-buffer (find-file org-file)
                         (org-export-get-environment)))
-                 (date (format-time-string
-                        "%a, %d %b %Y %H:%M:%S %z"))
+                 (date (let ((time (cadar (plist-get env :date))))
+                         (format-time-string
+                          "%a, %d %b %Y %H:%M:%S %z"
+                          (encode-time
+                           0
+                           (or (plist-get time :minute-start) 0)
+                           (or (plist-get time :hour-start)   0)
+                           (or (plist-get time :day-start)    0)
+                           (or (plist-get time :month-start)  0)
+                           (or (plist-get time :year-start)   0)))))
                  (title (or (car (plist-get env :title))
                             "No title"))
                  (link (url-encode-url link)))
             (with-current-buffer (find-file rss-file)
               (erase-buffer)
-              (insert (string-join '("<item>"
-                                     (format "<title>%s</title>" title)
-                                     (format "<link>%s</link>" link)
-                                     (format "<guid>%s</guid>" link)
-                                     (format "<description>%s</description>" intro)
-                                     ;; (format "<description>![CDATA[%s]]</description>\n" html)
-                                     (format "<pubDate>%s</pubDate>" date)
-                                     "</item>\n")
-                                   "\n"))
+              (insert (string-join
+                       (list "<item>"
+                             (format "<title>%s</title>" title)
+                             (format "<link>%s</link>" link)
+                             (format "<guid>%s</guid>" link)
+                             ;; (format "<description>%s</description>" intro)
+                             (format "<description><![CDATA[%s]]></description>\n" html)
+                             (format "<pubDate>%s</pubDate>" date)
+                             "</item>\n")
+                       "\n"))
               (save-buffer)
               (buffer-string)))
         ;; if not newer
