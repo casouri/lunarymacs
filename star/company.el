@@ -1,15 +1,14 @@
 ;;; -*- lexical-binding: t -*-
 
-(defvar luna-company-manual t
+(defvar luna-company-manual nil
   "If t, invoke company manually.")
 
 (load-package company
   :commands (company-mode)
   :config
-  (if luna-company-manual
-      (setq company-idle-delay 9999
-            company-auto-complete t)
-    (setq company-idle-delay 0.1))
+  (when luna-company-manual
+    (setq company-idle-delay 9999
+          company-auto-complete t))
   (setq company-minimum-prefix-length 1
         company-dabbrev-downcase nil
         company-tooltip-limit 15)
@@ -17,16 +16,16 @@
 
 (luna-with-eval-after-load 'key.general
   (when luna-company-manual
-    (general-define-key
-     "C-o" #'company-complete)
-    (general-define-key
-     :keymaps '(company-active-map
-                company-search-map)
-     "C-p" #'company-select-previous
-     "C-n" #'company-select-next))
+    ;; we secretly swap tab and C-o so
+    ;; default bindings of tab (folding, indent, etc) goes to C-o
+    ;; (define-key input-decode-map (kbd "<tab>") (kbd "C-o"))
+    ;; (define-key input-decode-map (kbd "C-o") (kbd "<tab>"))
+    (global-set-key (kbd "C-o") #'company-complete))
   (general-define-key
    :keymaps '(company-active-map
               company-search-map)
+   "C-p" #'company-select-previous
+   "C-n" #'company-select-next
    "C-j"      #'company-search-candidates)
   (general-define-key
    :keymaps 'company-search-map
