@@ -84,14 +84,6 @@
 (load-package recentf-ext
   :commands (recentf counsel-recentf))
 
-(load-package avy
-  :commands (avy-goto-char
-             avy-goto-char-2
-             avy-goto-char-timer)
-  :config
-  (setq avy-background t)
-  (setq avy-all-windows nil))
-
 (load-package minimap
   :config
   (setq
