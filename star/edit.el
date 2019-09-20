@@ -81,9 +81,6 @@
 
 ;;;; Navigation
 
-(load-package recentf-ext
-  :commands (recentf counsel-recentf))
-
 (load-package minimap
   :config
   (setq
