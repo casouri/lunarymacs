@@ -159,11 +159,6 @@
              vr/query-replace
              vr/mc-mark))
 
-(load-package multiple-cursors
-  :commands (mc/edit-lines
-             mc/add-cursor-on-click)
-  :init (setq mc/list-file (expand-file-name "mc-lists.el" luna-cache-dir))
-  )
 
 ;;;; Help
 
