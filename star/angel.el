@@ -59,8 +59,6 @@
     "C-." #'end-of-buffer ; as of >
     "C-b" #'switch-to-buffer
     "C-d" '((lambda () (interactive) (dired default-directory)) :which-key "open default directory")
-    "C-;" #'goto-last-change
-    "M-;" #'goto-last-change-reverse
     "j" #'luna-jump-or-set)
 
   (luna-cc-leader
