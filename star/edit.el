@@ -8,10 +8,7 @@
     "tl" #'luna-toggle-left-margin
     "iu" #'insert-char
     "sr" #'luna-color-rg-search-input
-    "o" '(:ignore t :which-key "outline")
-    "o <tab>" #'outline-toggle-children
-    "os" #'outline-show-all
-    "oh" #'outline-hide-body
+    "C-o" #'outline-toggle-children
     ;; minimap
     "tm" #'minimap-mode
     ;; avy
@@ -122,7 +119,8 @@
   :init
   (add-hook 'outline-minor-mode-hook 'outshine-mode)
   (add-hook 'prog-mode-hook 'outline-minor-mode)
-  (defvar outline-minor-mode-prefix (kbd "C-c o")))
+  (defvar outline-minor-mode-prefix (kbd "C-c o"))
+  :config (define-key outshine-mode-map (kbd "TAB") nil))
 
 
 (load-package color-rg
