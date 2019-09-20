@@ -43,9 +43,6 @@
 
 ;;;; Edit
 
-;; (load-package (camelsnake-mode :fetcher github :repo "casouri/camelsnake-mode")
-;;   :commands camelsnake-mode)
-
 (load-package ws-butler
   :defer 3
   :config (ws-butler-global-mode))
@@ -254,6 +251,7 @@
 (setq ediff-split-window-function #'split-window-horizontally)
 
 ;;;; Xref
+
 (setq xref-prompt-for-identifier
       '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame))
 
