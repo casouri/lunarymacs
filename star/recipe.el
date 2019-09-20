@@ -12,4 +12,5 @@
         (nerd-font . (:repo "twlz0ne/nerd-fonts.el"))
         (snail . (:repo "manateelazycat/snails"))
         (gdb-mi . (:repo "weirdNox/emacs-gdb" :dependency (hydra)))
-        (julia-emacs . (:repo "JuliaEditorSupport/julia-emacs"))))
+        (julia-emacs . (:repo "JuliaEditorSupport/julia-emacs"))
+        (yaoddmuse . (:fetcher url :url "https://www.emacswiki.org/emacs/download/yaoddmuse.el"))))
