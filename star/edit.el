@@ -260,12 +260,11 @@
   (interactive)
   (company-abort)
   (newline nil t))
+
 ;;;; Xref
 (setq xref-prompt-for-identifier
       '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame))
 
-;;;; Hippie
-(add-to-list 'hippie-expand-try-functions-list #'dabbrev-expand)
 
 ;;; smart-delete
 
