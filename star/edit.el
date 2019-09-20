@@ -286,57 +286,7 @@ so the definition doesn't really matter."
 ;;;; Hippie
 (add-to-list 'hippie-expand-try-functions-list #'dabbrev-expand)
 
-;;; Functions
-
-
-(defun luna--line-beg (point)
-  "Return the line beginning of POINT."
-  (save-excursion
-    (goto-char point)
-    (line-beginning-position)))
-
-(defun luna--line-end (point)
-  "Return the line end of POINT."
-  (save-excursion
-    (goto-char point)
-    (line-end-position)))
-
-(defun luna-transpose-region/line (count)
-  "Transpose region or current line with the line COUNT from current line.
-negative COUNT means go up.
-
-Transpose down one line means COUNT = 0, look at source for the reason."
-  ;; if the cursor is at end of a line, move to the beginning of
-  ;; the next line to include the trailing newline
-  (let* ((region1 (if (region-active-p)
-                      (cons (luna--line-beg (region-beginning))
-                            ;; include the trailing newline
-                            (1+ (luna--line-end (region-end))))
-                    ;; include the trailing newline
-                    (cons (line-beginning-position) (1+ (line-end-position)))))
-         (region2 (save-excursion
-                    ;; normalize starting point
-                    ;; go to the beginning of beg/end of region1
-                    (if (< count 0)
-                        (goto-char (car region1))
-                      (goto-char (cdr region1)))
-                    ;; go up/down to beg of line of region2
-                    (forward-line count)
-                    ;; include the trailing newline
-                    (cons (line-beginning-position) (1+ (line-end-position))))))
-    (transpose-regions (car region1) (cdr region1) (car region2) (cdr region2))))
-
-(defun luna-move-down ()
-  "Move region or current line down one line."
-  (interactive)
-  (luna-transpose-region/line 0))
-
-(defun luna-move-up ()
-  "Move region or current line down one line."
-  (interactive)
-  (luna-transpose-region/line -1))
-
-;;;; smart-delete
+;;; smart-delete
 
 (defvar luna-hungry-delete-black-list '(org-mode text-mode fundamental-mode markdown-mode)
   "A list of major mode in where `luna-hungry-delete' should behave like normal delete.")
