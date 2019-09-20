@@ -241,16 +241,6 @@
 ;; (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse t) ;; scroll window under mouse
 
-(with-eval-after-load 'general
-  (general-define-key
-   :states '(normal insert)
-   "C-;" #'luna-insert-semi-at-eol
-   )
-  (general-define-key
-   :states 'normal
-   "J" #'luna-scroll-down-reserve-point
-   "K" #'luna-scroll-up-reserve-point))
-
 ;; utf-8
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
