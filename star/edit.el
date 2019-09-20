@@ -79,25 +79,6 @@
         undo-tree-auto-save-history t
         undo-tree-history-directory-alist `(("." . ,luna-cache-dir))))
 
-;;;; Navigation
-
-(load-package minimap
-  :config
-  (setq
-   minimap-width-fraction 0.1
-   minimap-window-location 'right
-   minimap-update-delay 0)
-  (custom-theme-set-faces 'user
-                          '(minimap-active-region-background
-                            ((((background dark)) (:background "#61526E"))
-                             (t (:background "#d3d3e7")))))
-  :commands minimap-mode)
-
-;; used for chinese editiing on macOS
-;; TODO autoload this
-;; (load| switch-input-mode)
-
-
 ;;;; Code Structure
 
 (load-package outshine
