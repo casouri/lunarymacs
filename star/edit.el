@@ -253,15 +253,6 @@
 ;;;; split screen vertically in ediff
 (setq ediff-split-window-function #'split-window-horizontally)
 
-;;;; Kill Ring
-
-(defun luna-kill-ring-select ()
-  "Select from `kill-ring' and yank.
-Helm and ivy starts will remap this function,
-so the definition doesn't really matter."
-  (interactive)
-  (message "This is intended to be remapped by either Helm or ivy star."))
-
 ;;;; Fix
 
 (defun luna-return-cancel-completion ()
