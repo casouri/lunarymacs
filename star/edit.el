@@ -253,14 +253,6 @@
 ;;;; split screen vertically in ediff
 (setq ediff-split-window-function #'split-window-horizontally)
 
-;;;; Fix
-
-(defun luna-return-cancel-completion ()
-  "Cancel completion and return."
-  (interactive)
-  (company-abort)
-  (newline nil t))
-
 ;;;; Xref
 (setq xref-prompt-for-identifier
       '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame))
