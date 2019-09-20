@@ -467,7 +467,8 @@ Set register CHAR to point if CHAR is uppercase."
   (if (not (equal (char-before) ?\s))
       (insert-char ?\s)
     (backward-char)
-    (expand-abbrev)
+    (unless (expand-abbrev)
+      (insert-char ?\s))
     (forward-char)))
 
 (global-set-key " " #'luna-insert-space-or-expand-abbrev)
