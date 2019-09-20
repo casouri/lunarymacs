@@ -288,30 +288,6 @@ so the definition doesn't really matter."
 
 ;;; Functions
 
-(defvar luna-left-margin-window nil
-  "Left margin window")
-
-(defvar luna-left-margin-buffer (get-buffer-create " luna-left-margin")
-  "Empty buffer used by `luna-left-margin-mode'.")
-
-(define-minor-mode luna-left-margin-mode
-  "Create a empty window to the left that act as a margin."
-  :lighter ""
-  :global t
-  (if luna-left-margin-mode
-      (unless luna-left-margin-window
-        (setq luna-left-margin-window
-              (display-buffer-in-side-window luna-left-margin-buffer '((side . left)))))
-    (when (and luna-left-margin-window (window-live-p luna-left-margin-window))
-      (delete-window luna-left-margin-window)
-      (setq luna-left-margin-window nil))))
-
-(defun luna-toggle-left-margin ()
-  "Toggle left margin side window."
-  (interactive)
-  (if luna-left-margin-window
-      (window-toggle-side-windows)
-    (luna-left-margin-mode)))
 
 (defun luna--line-beg (point)
   "Return the line beginning of POINT."
