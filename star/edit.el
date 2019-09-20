@@ -432,9 +432,6 @@ and moves point to the previous line."
 
 ;;; Other functions
 
-(defun luna-open-log () (interactive) (find-file "~/log.org"))
-
-
 (defun luna-insert-current-date ()
   "insert date for blog composing"
   (interactive)
@@ -498,49 +495,6 @@ buffer is not visiting a file."
                       (buffer-string))
                     filename description feature filename))))
 
-;;;###autoload
-(defun luna-autoinsert-copyright (description)
-  "Autoinsert what auto-insert inserts with copyright."
-  (interactive "MDescription: ")
-  (let* ((filename (file-name-nondirectory (buffer-file-name)))
-         (year (format-time-string "%Y"))
-         (feature (file-name-base (buffer-file-name))))
-    (insert (format ";;; %s --- %s      -*- lexical-binding: t; -*-
-
-;; Copyright (C) %s Yuan Fu.
-
-;; Author: Yuan Fu <casouri@gmail.com>
-;; Maintainer: Yuan Fu <casouri@gmail.com>
-;; Keywords:
-;; Package-Requires: ((emacs \"\"))
-;; Version:
-
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation, either version 3 of the License, or
-;; (at your option) any later version.
-
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-;;; This file is NOT part of GNU Emacs
-
-;;; Commentary:
-;;
-
-;;; Code:
-;;
-
-(provide '%s)
-
-;;; %s ends here"
-                    filename description feature filename))))
-
 (defvar luna-special-symbol-alist '(("(c)" . "©")
                                     ("tm" . "™")
                                     ("p" . " ")
@@ -560,7 +514,7 @@ buffer is not visiting a file."
                                     ("r" . "’")
                                     ("ll" . "“")
                                     ("rr" . "”")
-                                    (" " . " ") ; non-breaking spacef
+                                    (" " . " ") ; non-breaking space
                                     ("hand" . "☞")
                                     )
   "Alist used by `luna-insert-special-symbol'.")
@@ -573,23 +527,3 @@ E.g. SURNAME (c) to symbol ©."
                         (when (equal (car elt) surname)
                           (throw 'ret (cdr elt)))
                         ""))))
-
-(defvar-local luna-package-prefix nil
-  "The prefix of the package you are writing in the current buffer.")
-
-(defun luna-insert-prefix ()
-  "Insert `luna-package-prefix'."
-  (interactive)
-  (if luna-package-prefix
-      (insert luna-package-prefix)
-    (message "No prefix defined.")))
-
-(defun luna-set-prefix (prefix)
-  "Set current buffer's package prefix."
-  (interactive "s")
-  (setq luna-package-prefix prefix))
-
-;;; autoload.el ends here
-
-
-;;; config.el ends here
