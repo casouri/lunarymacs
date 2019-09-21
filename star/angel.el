@@ -19,9 +19,8 @@
    "M-%"   #'query-replace+
    "C-,"   #'luna-jump-back
 
-   "M-j"   #'find-char
-   "C-M-j" #'find-char-backward-cmd
-   ;; "M-'"   #'Avy-goto-char
+   "s-f"   #'find-char
+
    "C-'"   #'luna-set-mark
    "M-'"   #'luna-jump
    "C-M-;" #'inline-replace

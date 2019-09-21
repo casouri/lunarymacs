@@ -47,7 +47,7 @@
    [remap projectile-find-file]      #'helm-projectile-find-file
    [remap imenu]                     #'helm-imenu
    [remap execute-extended-command]  #'helm-M-x
-   "s-f" #'helm-locate
+   ;; "s-f" #'helm-locate
    ))
 
 ;;; Functions
