@@ -1,5 +1,7 @@
 ;;; ivy.el --- Ivy config      -*- lexical-binding: t; -*-
 
+(require 'luna-f)
+
 ;;; Key
 (luna-with-eval-after-load 'key.general
   (luna-default-leader
@@ -8,6 +10,7 @@
 ;;; Package
 (load-package ivy
   :config
+  (recentf-mode)
   (ivy-mode)
   (setq ivy-use-virtual-buffers t)
   (advice-add 'ivy-sort-function-buffer :before #'luna-ivy-sort-match-buffers)
@@ -18,6 +21,13 @@
 
 (load-package counsel
   :config (counsel-mode))
+
+(load-package ivy-precient
+  :init (setq prescient-save-file
+              (luna-f-join user-emacs-directory "cache/prescient-save.el"))
+  :config
+  (prescient-persist-mode)
+  (ivy-prescient-mode))
 
 ;;; Sort function
 
