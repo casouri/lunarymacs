@@ -129,6 +129,8 @@
 ;; (nyan-start-animation)
 
 ;;;; server
+;; checking whether server started can be slow
+;; see emacs-horror
 (ignore-errors (server-start))
 
 ;;;; Max
