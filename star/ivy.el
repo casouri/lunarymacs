@@ -10,7 +10,6 @@
 ;;; Package
 (load-package ivy
   :config
-  (recentf-mode)
   (ivy-mode)
   (setq ivy-use-virtual-buffers t)
   (advice-add 'ivy-sort-function-buffer :before #'luna-ivy-sort-match-buffers)
@@ -22,12 +21,15 @@
 (load-package counsel
   :config (counsel-mode))
 
-(load-package ivy-precient
-  :init (setq prescient-save-file
-              (luna-f-join user-emacs-directory "cache/prescient-save.el"))
+(load-package ivy-prescient
+  :after ivy
+  :init
+  (setq prescient-save-file
+        (luna-f-join user-emacs-directory
+                     "cache/prescient-save.el"))
   :config
-  (prescient-persist-mode)
-  (ivy-prescient-mode))
+  (ivy-prescient-mode)
+  (prescient-persist-mode))
 
 ;;; Sort function
 
