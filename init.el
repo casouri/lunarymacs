@@ -129,7 +129,7 @@
 ;; (nyan-start-animation)
 
 ;;;; server
-(server-start)
+(ignore-errors (server-start))
 
 ;;;; Max
 (when window-system
