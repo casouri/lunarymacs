@@ -83,13 +83,7 @@ If FORCE is non-nil, only export when org file is newer than html file."
          ;; publish index page
          (let ((org-html-postamble nil)
                (org-html-home/up-format luna-org-html-home/up-format-for-note-index))
-           (luna-publish-html-export luna-publish-note-dir force))
-
-         ;; export RSS
-         (require 'ox-rss)
-         (let ((buffer (find-file (luna-f-join luna-publish-note-dir "index.org"))))
-           (with-current-buffer buffer
-             (org-rss-export-to-rss))))))))
+           (luna-publish-html-export luna-publish-note-dir force)))))))
 
 (defun luna-new-note-blog (title)
   "Make a new blog post with TITLE."
