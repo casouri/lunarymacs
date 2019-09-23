@@ -3,6 +3,11 @@
   ;; use as (kbd "<C-i>")
   (define-key input-decode-map "\C-i" [C-i]))
 
+;; translate iTerm sequences
+(require 'cl-lib)
+(cl-loop for char from ?a to ?z
+         do (define-key input-decode-map (format "\e[1;P%c" char) (kbd (format "s-%c" char))))
+
 ;;;;; general
 
 (load-package general
