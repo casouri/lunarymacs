@@ -50,7 +50,7 @@ Return absolute path if ABSOLUTE is t."
 (defun luna-f-content (path)
   "Read text with PATH."
   (with-current-buffer (find-file path)
-    (buffer-string)))
+    (buffer-substring-no-properties 1 (1+ (buffer-size)))))
 
 (provide 'luna-f)
 
