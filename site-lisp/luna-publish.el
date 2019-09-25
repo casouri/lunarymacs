@@ -51,7 +51,8 @@ If FORCE is non-nil, only export when org file is newer than html file.
 LINK is the web link for the post in dir.
 Categories in CATEGORY-LIST are strings."
   (let ((org-file (expand-file-name "index.org" dir))
-        (rss-file (expand-file-name "css-item.xml" dir)))
+        (rss-file (expand-file-name "css-item.xml" dir))
+        (auto-save-interval 99999999999999))
     (when (file-exists-p org-file)
       (if (or force ; force export
               (not (file-exists-p rss-file)) ; rss doesn’t exist
@@ -69,13 +70,15 @@ Categories in CATEGORY-LIST are strings."
                                (org-html-head "")
                                (org-html-head-extra "")
                                (org-html-postamble nil)
-                               (org-html-scripts "")
+                               (org-html-head-include-scripts nil)
                                (org-export-with-toc nil)
                                (org-export-use-babel nil)
                                (org-html-htmlize-output-type nil))
                            ;; org-export-as doesn’t seem to respect above settings
-                           (org-html-export-as-html)
-                           (buffer-string))))
+                           ;; body only
+                           (org-html-export-as-html nil nil nil t)
+                           (buffer-substring-no-properties
+                            1 (1+ (buffer-size))))))
                  (env (with-current-buffer (find-file org-file)
                         (org-export-get-environment)))
                  (date (let ((time (cadar (plist-get env :date))))
@@ -104,7 +107,7 @@ Categories in CATEGORY-LIST are strings."
                              "</item>\n")
                        "\n"))
               (save-buffer)
-              (buffer-string)))
+              (buffer-substring-no-properties 1 (1+ (buffer-size)))))
         ;; if not newer
         (luna-f-content rss-file)))))
 
