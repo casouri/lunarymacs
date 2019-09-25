@@ -1,7 +1,9 @@
 ;; separate C-i from TAB
 (when window-system
   ;; use as (kbd "<C-i>")
-  (define-key input-decode-map "\C-i" [C-i]))
+  (define-key input-decode-map "\C-i" [C-i])
+  ;; iterm2 escape sequence
+  (define-key input-decode-map "\e[1;Ci" [C-i]))
 
 ;; translate iTerm sequences
 (require 'cl-lib)

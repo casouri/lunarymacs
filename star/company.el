@@ -20,13 +20,13 @@
     ;; default bindings of tab (folding, indent, etc) goes to C-o
     ;; (define-key input-decode-map (kbd "<tab>") (kbd "C-o"))
     ;; (define-key input-decode-map (kbd "C-o") (kbd "<tab>"))
-    (global-set-key (kbd "C-o") #'company-complete))
+    (global-set-key (kbd "<C-i>") #'company-complete))
   (general-define-key
    :keymaps '(company-active-map
               company-search-map)
    "C-p" #'company-select-previous
    "C-n" #'company-select-next
-   "C-j"      #'company-search-candidates)
+   "C-j" #'company-search-candidates)
   (general-define-key
    :keymaps 'company-search-map
    "<escape>" #'company-abort))
