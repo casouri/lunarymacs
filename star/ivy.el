@@ -31,6 +31,8 @@
   (ivy-prescient-mode)
   (prescient-persist-mode))
 
+(load-package recentf-ext)
+
 ;;; Sort function
 
 (defvar luna-ivy-sort-buffer-rank-list '("*helpful"
