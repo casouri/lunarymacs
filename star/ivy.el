@@ -2,6 +2,16 @@
 
 (require 'luna-f)
 
+;;; Note
+;;
+;; In ivy search session:
+;;
+;; C-c C-o ivy-occur : port current search to a new buffer like occur
+;; M-o : additional actions
+;;
+;; In global map:
+;; M-y : counsel-yank-pop (list kill-ring)
+
 ;;; Key
 (luna-with-eval-after-load 'key.general
   (luna-default-leader
