@@ -7,7 +7,7 @@
   :commands (company-mode)
   :config
   (when luna-company-manual
-    (setq company-idle-delay 9999
+    (setq company-idle-delay nil
           company-auto-complete t))
   (setq company-minimum-prefix-length 1
         company-dabbrev-downcase nil
