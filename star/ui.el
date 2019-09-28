@@ -22,7 +22,7 @@
 
 ;;; Config
 
-(global-hl-line-mode)
+;; (global-hl-line-mode)
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 
