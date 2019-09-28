@@ -43,7 +43,7 @@
 ;;; Package
 
 (setq luna-lsp 'eglot)
-
+(setq luna-company-manual t)
 (add-to-list 'luna-package-list 'use-package)
 
 (luna-message-error (require 'use-package))
@@ -79,6 +79,10 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (luna-load-or-create custom-file)
 (add-hook 'kill-emacs-hook #'customize-save-customized)
+(setq-default luna-format-on-save t)
+(setq-default bidi-display-reordering nil) ;; faster long line
+(setq scroll-margin 4)
+(setq ispell-program-name "hunspell")
 
 ;;;; theme
 (when window-system
@@ -86,20 +90,10 @@
   (setq doom-cyberpunk-dark-mode-line nil)
   (luna-load-theme nil t))
 
-;;;; Faster long lines
-(setq-default bidi-display-reordering nil)
-
-;;;; format on save
-(setq-default luna-format-on-save t)
-
-;;;; scroll margin
-(setq scroll-margin 4)
-
  ;;;; Font
 (when window-system
   (luna-load-font)
   (luna-load-cjk-font))
-;;;;; Chinese
 
 ;; WenYue GuDianMingChaoTi (Non-Commercial Use) W5
 ;; WenYue XHGuYaSong (Non-Commercial Use)
@@ -118,7 +112,6 @@
                                 :family)
                      1.3)))
 
-;;;;; Emoji
 ;; (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
 ;;                   nil 'prepend)
 
