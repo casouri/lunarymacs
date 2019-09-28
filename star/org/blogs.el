@@ -120,9 +120,9 @@ If FORCE is non-nil, only export when org file is newer than html file."
 (defvar luna-note-rss-template "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <rss version=\"2.0\">
   <channel>
-    <title>The title of my RSS 2.0 Feed</title>
-    <link>http://www.example.com/</link>
-    <description>This is my rss 2 feed description</description>
+    <title>Notes</title>
+    <link>http://archive.casouri.co.uk/note</link>
+    <description>RSS feed for my notes</description>
     <lastBuildDate>%s</lastBuildDate>
 %s
   </channel>
