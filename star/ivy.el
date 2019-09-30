@@ -48,7 +48,8 @@
 (defvar luna-ivy-sort-buffer-rank-list '("*helpful"
                                          "*Flymake"
                                          "*magit: "
-                                         "*Customize")
+                                         "*Customize"
+                                         "*EGLOT")
   "top of the rank list means bottom of the sort.")
 
 (defun luna-ivy-sort-buffer (a b)
