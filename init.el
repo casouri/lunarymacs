@@ -159,7 +159,6 @@
     (menu-bar-mode)
   (menu-bar-mode -1))
 
-
 ;;;; Term mouse
 
 (unless window-system
