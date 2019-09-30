@@ -99,8 +99,12 @@
    "C-c p" #'smerge-prev
    "C-c o" #'smerge-keep-lower ; other
    "C-c m" #'smerge-keep-upper ; mine
-   )
-
+   "C-c l" #'smerge-keep-lower
+   "C-c u" #'smerge-keep-upper)
+  (general-define-key
+   :keymaps 'comint-mode
+   "<up>" #'comint-previous-input
+   "<down>" #'comint-next-input)
   (general-define-key
    "s-h" #'windmove-left
    "s-j" #'windmove-down
