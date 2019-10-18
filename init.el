@@ -166,6 +166,15 @@
   (xterm-mouse-mode t)
   ;; (defun track-mouse (e))
   (setq mouse-sel-mode t))
+
+;;;; notmuch
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/notmuch")
+(setq notmuch-init-file (luna-f-join user-emacs-directory "star/notmuch-config.el"))
+(setq message-auto-save-directory "~/mail/draft")
+(setq message-kill-buffer-on-exit t)
+(setq notmuch-search-oldest-first nil)
+(require 'notmuch)
+
 ;;;; ENV
 (luna-load-env)
 (add-hook 'kill-emacs-hook #'luna-save-env)
