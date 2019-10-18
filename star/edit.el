@@ -22,7 +22,7 @@
 
   (general-define-key
    ;; Hungry delete
-   "<backspace>" #'luna-hungry-delete
+   [remap backward-delete-char-untabify] #'luna-hungry-delete
    ;; helpful
    "C-h f" #'helpful-callable
    "C-h v" #'helpful-variable
