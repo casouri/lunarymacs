@@ -28,7 +28,10 @@
 ;; (with-eval-after-load 'flycheck
 ;;   (add-hook 'python-mode-hook #'flycheck-mode))
 
-(add-hook 'python-mode-hook #'eglot-ensure)
+(add-hook 'python-mode-hook
+          (lambda ()
+            (unless (string-match "\.sage$" (buffer-file-name))
+              (eglot-ensure))))
 (add-to-list 'luna-smart-format-alist '(python-mode . eglot-format-buffer))
 
 (add-hook 'python-mode-hook #'company-mode)
