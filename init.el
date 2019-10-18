@@ -141,11 +141,6 @@
 (global-set-key (kbd "s-c") #'kill-ring-save)
 (global-set-key (kbd "s-v") #'yank)
 
-;;;; path from shell
-(when window-system
-  (load-package exec-path-from-shell
-    :config (exec-path-from-shell-initialize)))
-
 ;;;; UI element
 
 (when window-system
