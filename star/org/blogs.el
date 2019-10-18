@@ -189,7 +189,10 @@ If FORCE is non-nil, only export when org file is newer than html file."
                             ;; (eval-env `((luna-blog-rock-day . ,day-idx))) ; used by macros in org files
                             (html-dir (luna-f-join luna-publish-rock/day-dir
                                                    (format "day-%d" day-idx)))
-                            (html-path (luna-f-join html-dir "index.html")))
+                            (html-path (luna-f-join html-dir "index.html"))
+                            (org-html-head-include-scripts nil)
+                            (org-export-with-toc nil)
+                            (org-export-use-babel nil))
                        (unless (file-exists-p html-dir)
                          (mkdir html-dir))
                        (with-current-buffer (find-file file-path)
@@ -198,7 +201,9 @@ If FORCE is non-nil, only export when org file is newer than html file."
                            (org-export-to-file 'html html-path))))))
        ;; publish index page
        (let ((org-html-postamble nil))
-         (luna-publish-html-export luna-publish-rock/day-dir force))))))
+         ;; always force because the index is automatically generated now
+         ;; so there normally won’t be changes
+         (luna-publish-html-export luna-publish-rock/day-dir t))))))
 
 (defun luna-new-rock/day ()
   "Make a new blog post of rock/day of DAY."
@@ -217,8 +222,8 @@ If FORCE is non-nil, only export when org file is newer than html file."
 
 * - *
 
-#+BEGIN_QUOTE
-#+END_QUOTE
+#+BEGIN_EXAMPLE
+#+END_EXAMPLE
 ")
     (save-buffer)
     (kill-new (format "* [[./day-%d/index.html][Day %d]]" day day))
