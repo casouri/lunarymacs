@@ -18,6 +18,7 @@
   (luna-default-leader
     "tb" #'awesome-tab-mode
     "wr" #'luna-desktop-read
+    "ww" #'windman-select-window
     "ah" #'luna-highlight-symbol))
 
 ;;; Config
@@ -38,6 +39,9 @@
                 )))
 
 ;;; Package
+
+(load-package windman
+  :commands windman-select-window)
 
 (load-package doom-themes
   :config
