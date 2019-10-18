@@ -470,3 +470,32 @@ Set register CHAR to point if CHAR is uppercase."
 
 (global-set-key " " #'luna-insert-space-or-expand-abbrev)
 (read-abbrev-file (luna-f-join user-emacs-directory "star/abbrev-file.el"))
+
+
+;;;; ENV
+
+(defun luna-save-env ()
+  "Save PATH and CPATH to a file."
+  (interactive)
+  (condition-case err
+      (with-current-buffer (find-file-noselect (luna-f-join luna-cache-dir
+                                                            "env"))
+        (erase-buffer)
+        (prin1 `(progn
+                  (setenv "PATH"
+                          ,(string-trim-right
+                            (shell-command-to-string "source ~/.profile; echo $PATH")))
+                  (setenv "CPATH"
+                          ,(string-trim-right
+                            (shell-command-to-string "source ~/.profile; echo $CPATH")))
+                  (setq exec-path (split-string (getenv "PATH") ":")))
+               (current-buffer))
+        (save-buffer))
+    (error (message (error-message-string err)))))
+
+(defun luna-load-env ()
+  "Load PATH and CPATH from a file."
+  (interactive)
+  (condition-case err
+      (load (luna-f-join luna-cache-dir "env"))
+    (error (message (error-message-string err)))))

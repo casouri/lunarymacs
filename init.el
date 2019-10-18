@@ -166,3 +166,6 @@
   (xterm-mouse-mode t)
   ;; (defun track-mouse (e))
   (setq mouse-sel-mode t))
+;;;; ENV
+(luna-load-env)
+(add-hook 'kill-emacs-hook #'luna-save-env)
