@@ -18,11 +18,9 @@
 
 
 ;;;; Loadpath
-
 (cowboy-add-load-path)
 
 ;;;; Startup setting
-
 (add-hook 'after-init-hook
           ;; make it closure
           (let ()
@@ -41,7 +39,6 @@
       auto-window-vscroll nil)
 
 ;;; Package
-
 (setq luna-lsp 'eglot)
 (setq luna-company-manual t)
 (add-to-list 'luna-package-list 'use-package)
@@ -73,9 +70,7 @@
 
 
 ;;; Customize
-
 ;;;; Custom
-
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (luna-load-or-create custom-file)
 (add-hook 'kill-emacs-hook #'customize-save-customized)
@@ -83,6 +78,9 @@
 (setq-default bidi-display-reordering nil) ;; faster long line
 (setq scroll-margin 4)
 (setq ispell-program-name "aspell")
+(setq user-mail-address "casouri@gmail.com"
+      send-mail-function #'sendmail-send-it
+      message-send-mail-function #'message-send-mail-with-sendmail)
 
 ;;;; theme
 (when window-system
@@ -90,7 +88,7 @@
   (setq doom-cyberpunk-dark-mode-line nil)
   (luna-load-theme nil t))
 
- ;;;; Font
+;;;; Font
 (when window-system
   (luna-load-font)
   (luna-load-cjk-font))
@@ -131,18 +129,15 @@
   (toggle-frame-maximized))
 
 ;;;; Mac port
-
 (setq mac-option-modifier 'meta
-      mac-command-modifier 'super)
-
-(setq mac-pass-command-to-system nil ; fix cmd h
+      mac-command-modifier 'super
+      mac-pass-command-to-system nil ; fix cmd h
       mac-system-move-file-to-trash-use-finder t)
 
 (global-set-key (kbd "s-c") #'kill-ring-save)
 (global-set-key (kbd "s-v") #'yank)
 
 ;;;; UI element
-
 (when window-system
   (tool-bar-mode -1)
   (scroll-bar-mode -1))
@@ -155,7 +150,6 @@
   (menu-bar-mode -1))
 
 ;;;; Term mouse
-
 (unless window-system
   (require 'mouse)
   (xterm-mouse-mode t)
