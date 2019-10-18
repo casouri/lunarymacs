@@ -21,7 +21,8 @@
 (load-package ivy
   :config
   (ivy-mode)
-  (setq ivy-use-virtual-buffers t)
+  (setq ivy-use-virtual-buffers t
+        ivy-use-selectable-prompt t)
   (advice-add 'ivy-sort-function-buffer :before #'luna-ivy-sort-match-buffers)
   (advice-add 'ivy-switch-buffer :override #'luna-ivy-switch-buffer))
 
