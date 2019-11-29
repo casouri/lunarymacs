@@ -235,6 +235,7 @@ else return STR."
    buf-move-right))
 
 (load-package eyebrowse
+  :defer 3
   :commands
   (eyebrowse-switch-to-window-config-1
    eyebrowse-switch-to-window-config-2
@@ -242,9 +243,10 @@ else return STR."
    eyebrowse-switch-to-window-config-4
    eyebrowse-switch-to-window-config-5
    eyebrowse-switch-to-window-config-6)
+  :init
+  (setq eyebrowse-keymap-prefix (kbd "C-x C-w"))
   :config
-  (eyebrowse-mode 1)
-  ;; default was ", "
+  (eyebrowse-mode)
   (setq eyebrowse-mode-line-separator " "))
 
 
