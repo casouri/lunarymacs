@@ -164,7 +164,6 @@
 
 ;;;; ENV
 (luna-load-env)
-(add-hook 'kill-emacs-hook #'luna-save-env)
 
 ;;;; ghelp
 
