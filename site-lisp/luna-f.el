@@ -52,6 +52,10 @@ Return absolute path if ABSOLUTE is t."
   (with-current-buffer (find-file path)
     (buffer-substring-no-properties 1 (1+ (buffer-size)))))
 
+(defun luna-this-file-directory ()
+  "Return the directory of the file at where the code is."
+  (file-name-directory (or load-file-name buffer-file-name)))
+
 (provide 'luna-f)
 
 ;;; luna-f.el ends here
