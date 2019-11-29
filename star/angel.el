@@ -471,6 +471,6 @@ Set register CHAR to point if CHAR is uppercase."
       (insert-char ?\s))
     (forward-char)))
 
-(global-set-key " " #'luna-insert-space-or-expand-abbrev)
+;; (global-set-key " " #'luna-insert-space-or-expand-abbrev)
 (read-abbrev-file (luna-f-join user-emacs-directory "star/abbrev-file.el"))
 
