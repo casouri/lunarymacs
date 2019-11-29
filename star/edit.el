@@ -18,15 +18,18 @@
    :keymaps 'override
    ;; this is binded by default,
    ;; but flyspell mode shadows it
+
    "C-M-i" #'outshine-cycle-buffer)
 
   (general-define-key
    ;; Hungry delete
    [remap backward-delete-char-untabify] #'luna-hungry-delete
    ;; helpful
-   "C-h f" #'helpful-callable
-   "C-h v" #'helpful-variable
-   "C-h k" #'helpful-key)
+   "C-h C-h" #'ghelp-describe-symbol
+   "C-h C-r" #'ghelp-resume
+   "C-h k" #'helpful-key
+   "C-h e" #'ghelp-describe-as-in-emacs-lisp-mode
+   "C-h r" #'ghelp-resume-as-in-emacs-lisp-mode)
 
   (luna-cx-leader
     ;; C-y is too uncomfortable to reach
