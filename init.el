@@ -2,8 +2,6 @@
 
 ;;; Init
 
-(setq-default lexical-binding t)
-
 (add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
 (setq package-user-dir (expand-file-name "package" user-emacs-directory))
 (require 'lunary)
@@ -39,8 +37,7 @@
       auto-window-vscroll nil)
 
 ;;; Package
-(setq luna-lsp 'eglot)
-(setq luna-company-manual t)
+(setq luna-company-manual nil)
 (add-to-list 'luna-package-list 'use-package)
 
 (luna-message-error (require 'use-package))
@@ -127,7 +124,7 @@
 
 ;;;; Max
 (when window-system
-  (toggle-frame-maximized))
+  (add-hook 'after-init-hook #'toggle-frame-maximized))
 
 ;;;; Mac port
 (setq mac-option-modifier 'meta
