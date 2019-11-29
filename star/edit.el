@@ -305,14 +305,21 @@ buffer is not visiting a file."
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
 
+(defvar luna-autoinsert-template (luna-f-join (luna-this-file-directory)
+                                              "autoinsert-template.el")
+  "The template file.")
+
 (defun luna-autoinsert (description)
   "Autoinsert what auto-insert inserts."
   (interactive "MDescription: ")
   (let* ((filename (file-name-nondirectory (buffer-file-name)))
          (year (format-time-string "%Y"))
-         (feature (file-name-base (buffer-file-name))))
-    (insert (format (with-current-buffer (find-file "autoinsert-template.el")
-                      (buffer-string))
+         (feature (file-name-base (buffer-file-name)))
+         (buf (find-file luna-autoinsert-template))
+         (template (with-current-buffer buf
+                     (buffer-string))))
+    (kill-buffer buf)
+    (insert (format template
                     filename description feature filename))))
 
 (defvar luna-special-symbol-alist '(("(c)" . "©")
