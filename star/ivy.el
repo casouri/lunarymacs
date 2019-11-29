@@ -15,16 +15,18 @@
 ;;; Key
 (luna-with-eval-after-load 'key.general
   (luna-default-leader
-    "s s" #'swiper))
+    "s s" #'swiper)
+  (general-define-key
+   "M-y" #'counsel-yank-pop))
 
 ;;; Package
 (load-package ivy
   :config
-  (ivy-mode)
   (setq ivy-use-virtual-buffers t
         ivy-use-selectable-prompt t)
   (advice-add 'ivy-sort-function-buffer :before #'luna-ivy-sort-match-buffers)
-  (advice-add 'ivy-switch-buffer :override #'luna-ivy-switch-buffer))
+  (advice-add 'ivy-switch-buffer :override #'luna-ivy-switch-buffer)
+  )
 
 (load-package swiper
   :commands (swiper))
