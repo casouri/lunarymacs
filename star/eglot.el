@@ -16,9 +16,7 @@
     "l d" #'xref-find-definitions
     "l r" #'xref-find-references
     "l k" #'eldoc-box-quit-frame
-    "l s" #'eldoc-box-show-frame)
-  (general-define-key
-   "C-h C-h" #'eldoc-box-eglot-help-at-point))
+    "l s" #'eldoc-box-show-frame))
 
 ;;; Packages
 
