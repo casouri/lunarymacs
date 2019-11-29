@@ -118,4 +118,15 @@ ARGS is as same as in `load'."
   (unless (re-search-forward (format "(load-package %s" package) nil t)
     (message "Not found")))
 
+;;;; ENV
+
+(defun luna-load-env ()
+  "Load PATH and CPATH from a file."
+  (interactive)
+  (condition-case err
+      (progn (load "~/.emacsenv")
+             (setq exec-path (split-string (getenv "PATH") ":")))
+    (error (message (error-message-string err)))))
+
 (provide 'lunary)
+
