@@ -4,8 +4,8 @@
 
 (luna-with-eval-after-load 'key.general
   (general-define-key
-   "s-b" #'winner-undo
-   "s-f" #'winner-redo
+   "s-B" #'winner-undo
+   "s-F" #'winner-redo
 
    "s-y" #'luna-toggle-console
    "s-Y" #'luna-toggle-console-window
