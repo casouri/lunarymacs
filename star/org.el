@@ -61,7 +61,8 @@
   (add-to-list 'org-latex-packages-alist '("" "listings" nil))
   (setq org-latex-listings t)
   (setq org-latex-listings-options '(("breaklines" "true")))
-  (setq org-latex-compiler "xelatex"))
+  (setq org-latex-compiler "xelatex")
+  (setq org-hide-emphasis-markers t))
 
 (defun luna-org-hook ()
   "Configuration for Org Mode."
