@@ -6,11 +6,11 @@
 (load-package company
   :commands (company-mode)
   :config
-  (when luna-company-manual
-    (setq company-idle-delay nil
-          company-auto-complete t))
+  (if luna-company-manual
+      (setq company-idle-delay nil
+            company-auto-complete t)
+    (setq company-idle-delay 0.1))
   (setq company-minimum-prefix-length 1
-        company-idle-delay 0.1
         company-dabbrev-downcase nil
         company-tooltip-limit 15)
   (setq-default company-search-filtering t))
