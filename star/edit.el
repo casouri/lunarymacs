@@ -133,55 +133,7 @@
 ;;;; Help
 
 (load-package helpful
-  :commands (helpful-callable
-             helpful-variable
-             helpful-key
-             helpful-at-point)
-  :config
-  (add-to-list 'luna-buffer-bottom-list "*helpful")
-  (setq helpful-max-buffers 5)
-  ;; don't pop new window
-  (require 'subr-x)
-  (setq helpful-switch-buffer-function
-        (lambda (buf) (if-let ((window (display-buffer-reuse-mode-window buf '((mode . helpful-mode)))))
-                          ;; ensure the helpful window is selected for `helpful-update'.
-                          (select-window window)
-                        ;; line above returns nil if no available window is found
-                        (pop-to-buffer buf))))
-  (defvar luna-helpful-history () "History of helpful, a list of buffers.")
-  (advice-add #'helpful-update :around #'luna-helpful@helpful-update)
-  (advice-add #'helpful--buffer :around (lambda (oldfunc &rest _)
-                                          (let ((buf (apply oldfunc _)))
-                                            (push buf luna-helpful-history)
-                                            buf))))
-
-(defun luna-helpful@helpful-update (oldfunc)
-  "Insert back/forward buttons."
-  (funcall oldfunc)
-  (let ((inhibit-read-only t))
-    (goto-char (point-min))
-    (insert-text-button "Back"
-                        'action #'helpful-previous-helpful-buffer)
-    (insert " / ")
-    (insert-text-button "Forward"
-                        'action #'helpful-next-helpful-buffer)
-    (insert "\n\n")))
-
-(defun helpful-previous-helpful-buffer ()
-  (interactive)
-  (let ((buf (current-buffer)))
-    (previous-buffer)
-    (while (and (not (eq major-mode 'helpful-mode))
-                (not (eq (current-buffer) buf)))
-      (previous-buffer))))
-
-(defun helpful-next-helpful-buffer ()
-  (interactive)
-  (let ((buf (current-buffer)))
-    (next-buffer)
-    (while (and (not (eq major-mode 'helpful-mode))
-                (not (eq (current-buffer) buf)))
-      (next-buffer))))
+  :defer t)
 
 ;;; Config
 
@@ -220,6 +172,8 @@
 (setq xref-prompt-for-identifier
       '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame))
 
+;;;; config help
+(setq help-window-select t)
 
 ;;; smart-delete
 
