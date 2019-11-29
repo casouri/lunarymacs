@@ -13,4 +13,5 @@
         (snail . (:repo "manateelazycat/snails"))
         (gdb-mi . (:repo "weirdNox/emacs-gdb" :dependency (hydra)))
         (julia-emacs . (:repo "JuliaEditorSupport/julia-emacs"))
-        (yaoddmuse . (:fetcher url :url "https://www.emacswiki.org/emacs/download/yaoddmuse.el"))))
+        (yaoddmuse . (:fetcher url :url "https://www.emacswiki.org/emacs/download/yaoddmuse.el"))
+        (yasnippet . (:repo "joaotavora/yasnippet"))))
