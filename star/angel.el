@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 (require 'pause)
+(require 'cl-lib)
 
 ;;; Keys
 
@@ -332,12 +333,14 @@ Edit the underlined region and press C-c C-c to qurey-replace."
   "Switch buffer among those who have the same major mode as the current one."
   (interactive)
   (switch-to-buffer
-   (completing-read "Buffer: "
-                    (mapcar #'buffer-name
-                            (seq-filter (lambda (buf)
-                                          (eq (buffer-local-value 'major-mode buf)
-                                              major-mode))
-                                        (buffer-list))))))
+   (completing-read
+    "Buffer: "
+    (mapcar #'buffer-name
+            (cl-remove-if-not (lambda (buf)
+                                (provided-mode-derived-p
+                                 (buffer-local-value 'major-mode buf)
+                                 major-mode))
+                              (buffer-list))))))
 
 ;;; Inline replace (:s)
 
