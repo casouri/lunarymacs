@@ -10,6 +10,14 @@
     "ec" #'langtool-correct-buffer
     "is" #'synonyms))
 
+;;; flymake
+;;
+;; otherwise litters my directory with temp files
+(setq-default flymake-diagnostic-functions nil)
+;; require error
+;; (setq elisp-flymake-byte-compile-load-path
+;;       (append elisp-flymake-byte-compile-load-path load-path))
+
 ;;; flyspell
 ;;
 ;; install dictionaries: http://wordlist.aspell.net
