@@ -15,8 +15,8 @@
    :keymaps 'override
    "s-n"   #'luna-scroll-down-reserve-point
    "s-p"   #'luna-scroll-up-reserve-point
-   "s-a"   #'backward-sentence
-   "s-e"   #'forward-sentence
+   ;; "s-a"   #'backward-sentence
+   ;; "s-e"   #'forward-sentence
    "M-%"   #'query-replace+
    "C-,"   #'luna-jump-back
 
