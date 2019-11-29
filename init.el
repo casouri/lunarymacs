@@ -165,3 +165,10 @@
 ;;;; ENV
 (luna-load-env)
 (add-hook 'kill-emacs-hook #'luna-save-env)
+
+;;;; ghelp
+
+(add-to-list 'load-path "~/p/ghelp")
+(require 'ghelp)
+(ghelp-global-minor-mode)
+
