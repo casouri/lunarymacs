@@ -90,7 +90,9 @@
   (add-hook 'outline-minor-mode-hook 'outshine-mode)
   (add-hook 'prog-mode-hook 'outline-minor-mode)
   (defvar outline-minor-mode-prefix (kbd "C-c o"))
-  :config (define-key outshine-mode-map (kbd "TAB") nil))
+  :config
+  (define-key outshine-mode-map
+    (kbd "C-c i") #'outshine-cycle))
 
 
 (load-package color-rg
