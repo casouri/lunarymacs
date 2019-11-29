@@ -48,6 +48,15 @@ to load-path, use this key to specify a relative path to package-dir. No preceed
 
 ;;;; Userland
 
+(defun cowboy-ensure-refresh-content (&optional force)
+  "Make sure package list is refreshed.
+If FORCE non-nil, always refresh."
+  (package-initialize t)
+  (when (or force
+            (not (get 'package-refresh-contents 'cowboy-did)))
+    (package-refresh-contents)
+    (put 'package-refresh-contents 'cowboy-did t)))
+
 (defun cowboy-install (package &optional option-plist)
   "Install PACKAGE (a symbol, a recipe or a directory) by cloning it down.
 Do nothing else (no autoload, no byte compile). Return t if success, nil if fail.
@@ -56,6 +65,7 @@ OPTION-PLIST contains user options that each backend may use.
 
 If package is a directory string,
 the directory file name will be used as package name."
+  (interactive "SPackage: ")
   (cowboy--handle-error
    (cowboy--with-recipe (package recipe package-symbol)
      (if recipe
@@ -67,18 +77,20 @@ the directory file name will be used as package name."
            (funcall (intern (format "cowboy--%s-install"
                                     (symbol-name (or (plist-get recipe :fetcher) 'github))))
                     package-symbol recipe option-plist))
+       (cowboy-ensure-refresh-content)
        (package-install package-symbol)))))
 
 (defun cowboy-update (package)
   "Update PACKAGE from upstream. Return t if success, nil if fail.
 If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
+  (interactive "SPackage: ")
   (cowboy--handle-error
    (cowboy--with-recipe (package recipe package-symbol)
      (if recipe
          (progn
            ;; handle dependency
            (when-let ((dependency-list (plist-get recipe :dependency)))
-             (mapcar #'cowboy-update dependency-list))
+             (mapc #'cowboy-update dependency-list))
            ;; update this package
            (funcall
             (intern (format "cowboy--%s-update"
@@ -86,12 +98,14 @@ If PACKAGE is a symbol, treate as a package, if it is a string, treat as a dir."
                              (or (plist-get recipe :fetcher) 'github))))
             package-symbol recipe))
        ;; no cowboy recipe found, try with package.el
-       (package-delete (alist-get package package-alist))
+       (cowboy-ensure-refresh-content)
+       (package-delete (car (alist-get package package-alist)))
        (package-install package)))))
 
 (defun cowboy-delete (package)
   "Delete PACKAGE.  Return t if success, nil if fail.
 If PACKAGE is a symbol, treat as a package, if a string, treat as a dir."
+  (interactive "SPackage: ")
   (cowboy--handle-error
    (cowboy--with-recipe (package recipe package-symbol)
      (cond ((stringp package)
@@ -101,6 +115,7 @@ If PACKAGE is a symbol, treat as a package, if a string, treat as a dir."
            (recipe
             (luna-f-join cowboy-package-dir (symbol-name package-symbol)))
            ;; try to use package.el to delete
+           (cowboy-ensure-refresh-content)
            (t (package-delete (alist-get package package-alist)))))))
 
 (defun cowboy-reinstall (package)
