@@ -56,19 +56,17 @@
   (set-face-attribute 'hl-paren-face nil :weight 'bold)
   (global-highlight-parentheses-mode)
   ;; highlight only the most inner pair
-  (setq hl-paren-colors (lambda () (pcase luna-current-theme
-                                     ('doom-cyberpunk '("green"))
-                                     ('doom-one-light '("red"))
-                                     (_ '("cyan")))))
+  (defface hl-paren (let ((display t)
+                          (attr '(:foreground "blue")))
+                      (list (cons display attr)))
+    "Foreground attribute is used for highlight paren highlight.")
+  (setq hl-paren-colors
+        (lambda () (list (face-attribute 'hl-paren :foreground))))
   ;; to reflect changes in parentheses color
-  (add-hook 'luna-load-theme-hook (lambda ()
-                                    (global-highlight-parentheses-mode -1)
-                                    (global-highlight-parentheses-mode))))
-
-;;;; icons
-
-;; (load-package icons-in-terminal
-;;   :commands icons-in-terminal)
+  (add-hook 'luna-load-theme-hook
+            (lambda ()
+              (global-highlight-parentheses-mode -1)
+              (global-highlight-parentheses-mode))))
 
 ;;;; Mode-line
 
