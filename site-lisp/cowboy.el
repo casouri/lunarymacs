@@ -51,7 +51,7 @@ to load-path, use this key to specify a relative path to package-dir. No preceed
 (defun cowboy-ensure-refresh-content (&optional force)
   "Make sure package list is refreshed.
 If FORCE non-nil, always refresh."
-  (package-initialize t)
+  (package-initialize)
   (when (or force
             (not (get 'package-refresh-contents 'cowboy-did)))
     (package-refresh-contents)
