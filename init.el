@@ -1,5 +1,19 @@
 ;;; -*- lexical-binding: t -*-
 
+(when window-system
+  (add-hook 'after-init-hook #'toggle-frame-maximized))
+
+(when window-system
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1))
+
+(if (eq window-system 'mac)
+    ;; have to enable menu bar on mac port
+    ;; otherwise emacs lost focus
+    ;; https://bitbucket.org/mituharu/emacs-mac/src/892fa7b2501a403b4f0aea8152df9d60d63f391a/doc/emacs/macport.texi?at=master#macport.texi-529
+    (menu-bar-mode)
+  (menu-bar-mode -1))
+
 ;;; Init
 
 (add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
@@ -125,18 +139,6 @@
 
 (global-set-key (kbd "s-c") #'kill-ring-save)
 (global-set-key (kbd "s-v") #'yank)
-
-;;;; UI element
-(when window-system
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1))
-
-(if (eq window-system 'mac)
-    ;; have to enable menu bar on mac port
-    ;; otherwise emacs lost focus
-    ;; https://bitbucket.org/mituharu/emacs-mac/src/892fa7b2501a403b4f0aea8152df9d60d63f391a/doc/emacs/macport.texi?at=master#macport.texi-529
-    (menu-bar-mode)
-  (menu-bar-mode -1))
 
 ;;;; Term mouse
 (unless window-system
