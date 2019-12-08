@@ -28,20 +28,18 @@
 
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-
 ;;;; Loadpath
 (cowboy-add-load-path)
 
 ;;;; Startup setting
 (add-hook 'after-init-hook
-          ;; make it closure
-          (let ()
-            (lambda ()
-              (setq file-name-handler-alist file-name-handler-alist
-                    ;; gc-cons-threshold 800000
-                    gc-cons-threshold 8000000
-                    gc-cons-percentage 0.1)
-              (garbage-collect))) t)
+          (lambda ()
+            (setq file-name-handler-alist file-name-handler-alist
+                  ;; gc-cons-threshold 800000
+                  gc-cons-threshold 8000000
+                  gc-cons-percentage 0.1)
+            (garbage-collect))
+          t)
 
 (setq package-enable-at-startup nil
       file-name-handler-alist nil
@@ -79,7 +77,6 @@
 (luna-load-relative "star/term.el")
 ;; (luna-load-relative "star/shell.el")
 (luna-load-relative "star/simple-mode.el")
-
 
 ;;; Customize
 ;;;; Custom
@@ -125,11 +122,9 @@
 ;;;; server
 ;; checking whether server started can be slow
 ;; see emacs-horror
-(ignore-errors (server-start))
-
-;;;; Max
-(when window-system
-  (add-hook 'after-init-hook #'toggle-frame-maximized))
+(run-with-idle-timer
+ 3 nil
+ (lambda () (ignore-errors (server-start))))
 
 ;;;; Mac port
 (setq mac-option-modifier 'meta
