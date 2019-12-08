@@ -29,15 +29,6 @@
 
 (winner-mode)
 
-;;;; Display buffer alist
-
-(setq display-buffer-alist
-      (append display-buffer-alist
-              '(("^\\*tex-shell\\*$" . (luna-display-buffer-in-shell-window . nil))
-                ("^\\*MATLAB\\*$" . (luna-display-buffer-in-shell-window . nil))
-                ("^\\*sly-mrepl for sbcl\\*$" . (luna-display-buffer-in-shell-window . nil))
-                )))
-
 ;;; Package
 
 (load-package windman
