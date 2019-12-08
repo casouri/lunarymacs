@@ -103,6 +103,9 @@ e.g. :family :weight :size etc."
   :type 'string
   :group 'convenience)
 
+(defvar luna-cjk-font-scale 1.1
+  "The scale for CJK font. Used in ‘luna-scale-cjk’.")
+
 (defvar luna-font-alist
   '((sf-mono-13 . (:family "SF Mono" :size 13)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
@@ -157,6 +160,21 @@ Changes are saved to custom.el in a idle timer."
       (set-fontset-font t charset font-spec))
     (when (or arg (not (custom-variable-p 'luna-cjk-font)))
       (customize-set-variable 'luna-cjk-font font-name))))
+
+(defun luna-scale-cjk ()
+  "Rescale CJK font to align CJK font and ASCII font."
+  (make-local-variable 'face-font-rescale-alist)
+  (when luna-font
+    (setf (alist-get (plist-get (alist-get (intern luna-cjk-font)
+                                           luna-cjk-font-alist)
+                                :family)
+                     face-font-rescale-alist)
+          luna-cjk-font-scale)))
+
+(defun luna-enable-apple-emoji ()
+  "Enable Apple emoji display."
+  (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
+                    nil 'prepend))
 
 ;;; Color
 

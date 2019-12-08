@@ -91,25 +91,16 @@
   (luna-load-font)
   (luna-load-cjk-font))
 
+(setq luna-cjk-font-scale 1.1)
+
+(luna-enable-apple-emoji)
+
 ;; WenYue GuDianMingChaoTi (Non-Commercial Use) W5
 ;; WenYue XHGuYaSong (Non-Commercial Use)
 ;; WenyueType GutiFangsong (Non-Commercial Use)
 ;; SiaoyiWangMingBold
 ;; FZQingKeBenYueSongS-R-GB
 ;; FZSongKeBenXiuKaiS-R-GB
-
-;; | 对齐 |
-;; | good |
-
-(when luna-font
-  (add-to-list 'face-font-rescale-alist
-               (cons (plist-get (alist-get (intern luna-cjk-font)
-                                           luna-cjk-font-alist)
-                                :family)
-                     1.3)))
-
-;; (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
-;;                   nil 'prepend)
 
 ;;;; nyan
 ;; (nyan-lite-mode)
