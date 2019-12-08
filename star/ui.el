@@ -42,7 +42,6 @@
 (add-to-list 'luna-toggle-theme-list 'doom-one-light t)
 (add-to-list 'luna-toggle-theme-list 'doom-cyberpunk)
 
-
 (load-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode)
   :config (with-current-buffer (get-buffer-create "*scratch*")
@@ -228,8 +227,6 @@ else return STR."
   :config
   (eyebrowse-mode)
   (setq eyebrowse-mode-line-separator " "))
-
-
 
 ;;;; Desktop resume
 
