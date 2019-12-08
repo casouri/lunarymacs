@@ -201,16 +201,7 @@ else return STR."
 
 ;; form feed
 (load-package form-feed
-  :commands form-feed-mode
-  :config
-  (defface form-feed-line
-    `((((type graphic)
-        (background light)) :strike-through ,spacemacs-light-purple)
-      (((type graphic)
-        (background dark)) :strike-through ,doom-blue)
-      (((type tty)) :inherit font-lock-comment-face :underline t))
-    "Face for form-feed-mode lines."
-    :group 'form-feed))
+  :commands form-feed-mode)
 
 
 ;;;;
