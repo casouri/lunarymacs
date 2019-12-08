@@ -160,5 +160,6 @@
 
 (add-to-list 'load-path "~/p/ghelp")
 (require 'ghelp)
-(ghelp-global-minor-mode)
-
+(run-with-idle-timer
+ 3 nil
+ #'ghelp-global-minor-mode)
