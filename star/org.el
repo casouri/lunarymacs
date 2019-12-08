@@ -51,7 +51,8 @@
         (setq-local line-spacing 0.2)
         (electric-pair-local-mode -1)
         (ignore-errors (flyspell-mode 1))
-        (olivetti-mode))
+        (olivetti-mode)
+        (luna-scale-cjk))
     (message "Sorry, alea iacta est.")))
 
 ;; export code with line wrap
