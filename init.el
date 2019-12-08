@@ -145,6 +145,11 @@
   ;; (defun track-mouse (e))
   (setq mouse-sel-mode t))
 
+(define-key (kbd "mouse-4") #'mwheel-scroll)
+(define-key (kbd "mouse-5") #'mwheel-scroll)
+(define-key (kbd "mouse-6") #'mwheel-scroll)
+(define-key (kbd "mouse-7") #'mwheel-scroll)
+
 ;;;; notmuch
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/notmuch")
 (setq notmuch-init-file (luna-f-join user-emacs-directory "star/notmuch-config.el"))
