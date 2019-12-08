@@ -7,12 +7,10 @@
 
 (luna-with-eval-after-load 'key.general
   (general-define-key
-   :keymaps 'global-map
    "M-n"   #'scroll-up
    "M-p"   #'scroll-down
    "M-/"   #'hippie-expand)
   (general-define-key
-   :keymaps 'override
    "s-n"   #'luna-scroll-down-reserve-point
    "s-p"   #'luna-scroll-up-reserve-point
    ;; "s-a"   #'backward-sentence
@@ -51,6 +49,7 @@
    )
 
   (luna-cx-leader
+    "C-f" #'luna-find-file
     "C-u" #'undo-tree-visualize
     "C-v" #'cua-rectangle-mark-mode
     "`"   #'luna-expand-window
@@ -463,7 +462,7 @@ Set register CHAR to point if CHAR is uppercase."
 
 (add-hook 'pre-command-hook #'luna-maybe-set-marker-to-jump-back)
 
-;;;; Abbrev
+;;; Abbrev
 
 (defun luna-insert-space-or-expand-abbrev ()
   "Expand abbrev if previous char is a space, then insert space."
@@ -478,3 +477,13 @@ Set register CHAR to point if CHAR is uppercase."
 ;; (global-set-key " " #'luna-insert-space-or-expand-abbrev)
 (read-abbrev-file (luna-f-join user-emacs-directory "star/abbrev-file.el"))
 
+
+;;; find file project
+
+(defun luna-find-file (&optional arg)
+  "Find file. If called with ARG, find file in project."
+  (interactive "p")
+  (call-interactively
+   (if (eq arg 4)
+       #'project-find-file
+     #'find-file)))
