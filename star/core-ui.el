@@ -41,7 +41,7 @@ You need to load `luna-theme' somewhere (after loading custom.el)."
 (advice-add #'load-theme :before #'luna-set-current-theme)
 
 (defun luna-load-theme (&optional theme no-confirm no-enable)
-  "Disable `luna-currnt-theme' and oad THEME.
+  "Disable `luna-currnt-theme' and load THEME.
 Set `luna-theme' to THEME."
   (disable-theme luna-current-theme)
   (load-theme (or theme luna-theme (car luna-toggle-theme-list)) no-confirm no-enable)
