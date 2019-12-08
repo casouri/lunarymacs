@@ -273,61 +273,6 @@ and saveing desktop."
 
 
 
-;;;; Tab
-;;
-
-;; don't load it, it has performance issues
-;; (load-package awesome-tab
-;;   :defer 2
-;;   ;; to sync face
-;;   ;; TODO maybe fix this
-;;   :config (add-hook 'luna-load-theme-hook (lambda () (awesome-tab-mode -1) (awesome-tab-mode))))
-
-;;;; Syntax
-;;
-
-(defun luna-highlight-symbol ()
-  "Hightlight symbol at point."
-  (interactive)
-  (evil-ex-search-activate-highlight `(,(thing-at-point 'symbol) t t)))
-
-;;;; VC
-
-;; not autoloaded
-(load-package diff-hl
-  :config
-  (unless window-system
-    (diff-hl-margin-mode))
-  (diff-hl-mode)
-  (setq diff-hl-draw-borders nil)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
-
-;;; auto highlight
-
-(defvar luna-auto-highlight nil
-  "Wehther to highlight symbol at point after a delay.")
-
-(defun luna-auto-highlight ()
-  "Hightlight thing at point."
-  (evil-ex-search-activate-highlight `(,(thing-at-point 'symbol) t t))
-  (add-hook 'pre-command-hook #'luna-auto-highlight-hook))
-
-
-(defun luna-auto-highlight-hook ()
-  "Clean hightlight and remove self from `pre-command-hook'."
-  (evil-ex-nohighlight)
-  (remove-hook 'pre-command-hook #'luna-auto-highlight-hook))
-
-(defvar luna-auto-highlight-timer nil
-  "Idle timer of luna-auto-hightlight-mode.")
-
-(define-minor-mode luna-auto-highlight-mode
-  "Highlight symbol at point automatically after a delay."
-  :global
-  :lighter "AutoH"
-  (if luna-auto-highlight-mode
-      (setq luna-auto-highlight-timer (run-with-idle-timer 1 t #'luna-auto-highlight))
-    (cancel-timer luna-auto-highlight-timer)))
 
 ;;; Misc functions
 
