@@ -1,4 +1,4 @@
-;;; cowboy-remix.el --- Package manager      -*- lexical-binding: t; -*-
+;;; cowboy.el --- Package manager      -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018  Yuan Fu
 
@@ -237,4 +237,4 @@ In RECIPE, :repo is of form \"user/repo\"."
 
 (provide 'cowboy)
 
-;;; cowboy-remix.el ends here
+;;; cowboy.el ends here
