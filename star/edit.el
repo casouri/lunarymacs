@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
+(require 'luna-f)
+
 ;;; Key
 
 (luna-with-eval-after-load 'key.general
@@ -80,7 +82,8 @@
   (setq undo-tree-visualizer-timestamps t
         undo-tree-visualizer-diff t
         undo-tree-auto-save-history t
-        undo-tree-history-directory-alist `(("." . ,luna-cache-dir))))
+        undo-tree-history-directory-alist
+        `(("." . ,(luna-f-join luna-cache-dir "undo-tree")))))
 
 ;;;; Code Structure
 
