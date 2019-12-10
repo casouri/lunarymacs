@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
+(require 'luna-f)
+
 ;;; Config
 
 (fset #'yes-or-no-p #'y-or-n-p) ; y/n instead of yes/no
@@ -10,7 +12,6 @@
  compilation-always-kill             t                                     ; kill compilation process before starting another
  compilation-ask-about-save          nil                                   ; save all buffers on `compile'
  confirm-nonexistent-file-or-buffer  t
- enable-recursive-minibuffers        nil
  idle-update-delay                   2                                     ; update ui less often
 
  ;; keep the point out of the minibuffer
@@ -25,9 +26,8 @@
  history-length                      500
  make-backup-files                   t
  auto-save-default                   t
- backup-directory-alist              `((".*" . ,luna-cache-dir))
- auto-save-file-name-transforms      `((".*" ,luna-cache-dir t))
- auto-save-list-file-name            (expand-file-name "autosave" luna-cache-dir)
+ backup-directory-alist              `((".*" . ,(luna-f-join luna-cache-dir "backup")))
+ auto-save-list-file-prefix          (luna-f-join luna-cache-dir "auto-save-list/saves-")
  auto-save-timeout                   5
 
  ;; files
@@ -38,6 +38,9 @@
  bookmark-default-file               (expand-file-name "bookmarks" luna-cache-dir)
  delete-by-moving-to-trash           t
  savehist-file                       (expand-file-name "history" luna-cache-dir)
+ auto-save-file-name-transforms      (list (list ".*" (luna-f-join luna-cache-dir "auto-save/") t)
+                                           (list "\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
+                                                 (luna-f-join luna-cache-dir "auto-save-remote") t))
 
  ;; edit
  indent-tabs-mode                    nil
@@ -49,27 +52,23 @@
  use-dialog-box                      nil
  visible-cursor                      nil
  use-dialog-box                      nil
- ring-bell-function                  #'ignore
  visible-bell                        nil
- frame-title-format                  '("%f")                                 ; current file name
+ frame-title-format                  '("%f")                              ; current file name
  display-line-numbers-width          3
- ;; Popup window to right!
- split-height-threshold              nil
+ split-height-threshold              nil                                  ; Popup window to right
  split-width-threshold               80
- ns-use-proxy-icon                   nil
+ ns-pop-up-frames                    nil                                  ; no new frame when emacsclient connected
 
  ;; minibuffer
  enable-recursive-minibuffers        t
  )
 
+;;;; modes
 (blink-cursor-mode                   -1)
 
 ;;;; natural title bar
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
-
-;;;; don't open new frame
-(setq ns-pop-up-frames nil)
 
 ;;;; "Dangerous Commands"
 (put 'narrow-to-page 'disabled nil)

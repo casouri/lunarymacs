@@ -1,2 +1,5 @@
 *
 !.gitignore
+!auto-save
+!auto-save-remote
+!backup
