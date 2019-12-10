@@ -14,4 +14,5 @@
         (gdb-mi . (:repo "weirdNox/emacs-gdb" :dependency (hydra)))
         (julia-emacs . (:repo "JuliaEditorSupport/julia-emacs"))
         (yaoddmuse . (:fetcher url :url "https://www.emacswiki.org/emacs/download/yaoddmuse.el"))
-        (yasnippet . (:repo "joaotavora/yasnippet"))))
+        (yasnippet . (:repo "joaotavora/yasnippet"))
+        (comment-edit . (:repo "twlz0ne/comment-edit.el" :dependency (edit-indirect dash)))))
