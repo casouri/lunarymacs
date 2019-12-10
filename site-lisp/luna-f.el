@@ -48,9 +48,10 @@ Return absolute path if ABSOLUTE is t."
                       (apply #'luna-f-join (butlast path-list)))))
 
 (defun luna-f-content (path)
-  "Read text with PATH."
-  (with-current-buffer (find-file path)
-    (buffer-substring-no-properties 1 (1+ (buffer-size)))))
+  "Read text of file at PATH."
+  (with-temp-buffer
+    (insert-file-contents path)
+    (buffer-string)))
 
 (defun luna-this-file-directory ()
   "Return the directory of the file at where the code is."
