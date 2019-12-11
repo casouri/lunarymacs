@@ -20,7 +20,6 @@
    :keymaps 'override
    ;; this is binded by default,
    ;; but flyspell mode shadows it
-
    "C-M-i" #'outshine-cycle-buffer)
 
   (general-define-key
@@ -37,12 +36,7 @@
     ;; C-y is too uncomfortable to reach
     ;; so C-p here we go
     "C-p" #'luna-kill-ring-select
-    "i" #'luna-insert-special-symbol)
-
-  (general-define-key
-   :keymaps 'helpful-mode-map
-   "b" #'helpful-previous-helpful-buffer
-   "f" #'helpful-next-helpful-buffer))
+    "i" #'luna-insert-special-symbol))
 
 ;;; Package
 
