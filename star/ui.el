@@ -114,10 +114,11 @@
   (eyebrowse-mode)
   (setq eyebrowse-mode-line-separator " "))
 
-;;;; Desktop resume
 (use-package console-buffer
   :commands (luna-toggle-console
              luna-toggle-console-window))
+
+;;; Desktop resume
 
 (add-hook 'after-init-hook #'luna-setup-save-session)
 
