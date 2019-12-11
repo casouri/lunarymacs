@@ -18,7 +18,7 @@
    "M-%"   #'query-replace+
    "C-,"   #'luna-jump-back
 
-   "s-f"   #'find-char
+   "M-j"   #'find-char
 
    "C-'"   #'luna-set-mark
    "M-'"   #'luna-jump
