@@ -140,48 +140,7 @@
 
 ;;;; Help
 
-(load-package helpful
-  :defer t)
-
-;;; Config
-
-;;;; Default
-
-(electric-pair-mode)
-;; (push '(?< . ?>) electric-pair-pairs)
-(add-hook 'emacs-lisp-mode-hook
-          (lambda () (setq-local electric-pair-text-pairs
-                                 (append '((?` . ?'))
-                                         electric-pair-text-pairs))))
-
-(electric-quote-mode)
-(minibuffer-electric-default-mode)
-
-;; smooth scrolling
-(setq scroll-conservatively 101)
-;; diabled for emacs-mac port
-;; (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse t) ;; scroll window under mouse
-
-;; utf-8
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(setq-default buffer-file-coding-system 'utf-8)
-(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
-
-
-;;;; split screen vertically in ediff
-(setq ediff-split-window-function #'split-window-horizontally)
-
-;;;; Xref
-
-(setq xref-prompt-for-identifier
-      '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame))
-
-;;;; config help
-(setq help-window-select t)
+(add-to-list 'luna-package-list 'helpful)
 
 ;;; smart-delete
 

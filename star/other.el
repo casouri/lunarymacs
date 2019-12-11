@@ -65,6 +65,45 @@
 
 ;;;; modes
 (blink-cursor-mode                   -1)
+(electric-pair-mode)
+(electric-quote-mode)
+(minibuffer-electric-default-mode)
+
+;;;; smooth scrolling
+(setq scroll-conservatively 101)
+;; diabled for emacs-mac port
+;; (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse t) ;; scroll window under mouse
+
+;;;; utf-8
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq-default buffer-file-coding-system 'utf-8)
+(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+
+;;;; split screen vertically in ediff
+(setq ediff-split-window-function #'split-window-horizontally)
+
+;;;; help
+(setq help-window-select t)
+
+;;;; Xref
+(setq xref-prompt-for-identifier
+      '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame))
+
+;;;; Term mouse
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  ;; (defun track-mouse (e))
+  (setq mouse-sel-mode t))
+
+(global-set-key (kbd "<mouse-4>") #'mwheel-scroll)
+(global-set-key (kbd "<mouse-5>") #'mwheel-scroll)
+(global-set-key (kbd "<mouse-6>") #'mwheel-scroll)
+(global-set-key (kbd "<mouse-7>") #'mwheel-scroll)
 
 ;;;; natural title bar
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
