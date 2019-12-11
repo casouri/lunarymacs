@@ -1,27 +1,18 @@
-;;; -*- lexical-binding: t -*-
+;;-*- lexical-binding: t -*-
 
 (require 'luna-f)
-
-;;; Config
 
 (fset #'yes-or-no-p #'y-or-n-p) ; y/n instead of yes/no
 
 (setq-default
- ad-redefinition-action              'accept                               ; silence advised function warnings
- apropos-do-all                      t                                     ; make `apropos' more useful
- compilation-always-kill             t                                     ; kill compilation process before starting another
- compilation-ask-about-save          nil                                   ; save all buffers on `compile'
+ ad-redefinition-action              'accept     ; silence advised function warnings
+ apropos-do-all                      t           ; make `apropos' more useful
+ compilation-always-kill             t           ; kill compilation process before starting another
+ compilation-ask-about-save          nil         ; save all buffers on `compile'
  confirm-nonexistent-file-or-buffer  t
- idle-update-delay                   2                                     ; update ui less often
+ idle-update-delay                   2           ; update ui less often
 
- ;; keep the point out of the minibuffer
- minibuffer-prompt-properties        '(read-only
-                                       t
-                                       point-entered
-                                       minibuffer-avoid-prompt
-                                       face
-                                       minibuffer-prompt)
-
+ ;; auto-save
  create-lockfiles                    nil
  history-length                      500
  make-backup-files                   t
@@ -53,15 +44,19 @@
  visible-cursor                      nil
  use-dialog-box                      nil
  visible-bell                        nil
- frame-title-format                  '("%f")                              ; current file name
+ frame-title-format                  '("%f")               ; current file name
  display-line-numbers-width          3
- split-height-threshold              nil                                  ; Popup window to right
+ split-height-threshold              nil                   ; Popup window to right
  split-width-threshold               80
- ns-pop-up-frames                    nil                                  ; no new frame when emacsclient connected
-
- ;; minibuffer
- enable-recursive-minibuffers        t
+ ns-pop-up-frames                    nil                   ; no new frame when emacsclient connected
  )
+
+;;;; minibuffer
+(setq enable-recursive-minibuffers t
+      ;; keep the point out of the minibuffer
+      minibuffer-prompt-properties
+      '(read-only t point-entered minibuffer-avoid-prompt
+                  face minibuffer-prompt))
 
 ;;;; modes
 (blink-cursor-mode                   -1)
