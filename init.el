@@ -10,35 +10,18 @@
 (if (eq window-system 'mac)
     ;; have to enable menu bar on mac port
     ;; otherwise emacs lost focus
-    ;; https://bitbucket.org/mituharu/emacs-mac/src/892fa7b2501a403b4f0aea8152df9d60d63f391a/doc/emacs/macport.texi?at=master#macport.texi-529
     (menu-bar-mode)
   (menu-bar-mode -1))
 
 ;;; Init
 
-(add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
-(setq package-user-dir (expand-file-name "package" user-emacs-directory))
-(require 'lunary)
-(require 'cowboy)
-(require 'luna-f)
-
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-;; (setq package-archives '(("melpa" . "https://elpa.emacs-china.org/melpa/")
-;;                          ("gnu" . "https://elpa.emacs-china.org/gnu/")))
-
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-
-;;;; Loadpath
-(cowboy-add-load-path)
-
-;;;; Startup setting
 (add-hook 'after-init-hook
-          (lambda ()
-            (setq file-name-handler-alist file-name-handler-alist
-                  ;; gc-cons-threshold 800000
-                  gc-cons-threshold 8000000
-                  gc-cons-percentage 0.1)
-            (garbage-collect))
+          (let ((old-list file-name-handler-alist))
+            (lambda ()
+              (setq file-name-handler-alist old-list
+                    gc-cons-threshold 800000
+                    gc-cons-percentage 0.1)
+              (garbage-collect)))
           t)
 
 (setq package-enable-at-startup nil
@@ -49,6 +32,16 @@
       auto-window-vscroll nil)
 
 ;;; Package
+
+(add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
+(require 'lunary)
+(require 'cowboy)
+(require 'luna-f)
+(setq package-user-dir (expand-file-name "package" user-emacs-directory))
+(cowboy-add-load-path)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 (setq luna-company-manual nil)
 (add-to-list 'luna-package-list 'use-package)
 
@@ -56,7 +49,7 @@
 (luna-load-relative "star/core-edit.el")
 (luna-load-relative "star/core-ui.el")
 ;; core must load first because other configs depends on them
-(luna-load-relative "star/other.el")
+(luna-load-relative "star/builtin-config.el")
 (luna-load-relative "star/key.el")
 (luna-load-relative "star/recipe.el")
 (luna-load-relative "star/angel.el")
@@ -83,6 +76,7 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (luna-load-or-create custom-file)
 (add-hook 'kill-emacs-hook #'customize-save-customized)
+
 (setq-default luna-format-on-save t)
 (setq-default bidi-display-reordering nil) ;; faster long line
 (setq scroll-margin 4)
