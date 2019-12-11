@@ -67,6 +67,29 @@
               (global-highlight-parentheses-mode -1)
               (global-highlight-parentheses-mode))))
 
+(load-package nyan-lite
+  :init (setq nyan-lite-add-mode-line nil
+              nyan-lite-progress-bar nil
+              nyan-lite-animate t)
+  :commands nyan-lite-mode)
+
+(load-package hl-todo
+  :defer 5
+  :config
+  (push 'org-mode hl-todo-text-modes)
+  (push 'fundamental-mode hl-todo-text-modes)
+  (setq hl-todo-keyword-faces ; override
+        (append '(("FAIL" . "red1")
+                  ("TOTEST" . "#d0bf8f")
+                  ("UNSURE" . "#FE6266")
+                  ("TRY" . "#FFF100")
+                  ("GOOD" . "#52DEA1"))
+                hl-todo-keyword-faces))
+  (global-hl-todo-mode))
+
+(load-package form-feed
+  :commands form-feed-mode)
+
 ;;;; Mode-line
 
 (load-package minions
@@ -169,41 +192,7 @@ else return STR."
                                  mode-line-end-spaces))
 
 ;;;;
-;;;; Misc
 
-(load-package nyan-lite
-  :init (setq nyan-lite-add-mode-line nil
-              nyan-lite-progress-bar nil
-              nyan-lite-animate t)
-  :commands nyan-lite-mode)
-
-;; (load-package zone-nyan
-;;   :defer 5
-;;   :config
-;;   (require 'zone)
-;;   ;; (setq zone-programs [zone-nyan])
-;;   (zone-when-idle 120))
-
-(load-package hl-todo
-  :defer 5
-  :config
-  (push 'org-mode hl-todo-text-modes)
-  (push 'fundamental-mode hl-todo-text-modes)
-  (setq hl-todo-keyword-faces ; override
-        (append '(("FAIL" . "red1")
-                  ("TOTEST" . "#d0bf8f")
-                  ("UNSURE" . "#FE6266")
-                  ("TRY" . "#FFF100")
-                  ("GOOD" . "#52DEA1"))
-                hl-todo-keyword-faces))
-  (global-hl-todo-mode))
-
-;; form feed
-(load-package form-feed
-  :commands form-feed-mode)
-
-
-;;;;
 ;;;; Desktop, Windows & buffer
 
 (load-package buffer-move
@@ -267,9 +256,6 @@ and saveing desktop."
               (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))))
   ;; )
   )
-
-
-
 
 ;;; Misc functions
 
