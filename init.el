@@ -129,18 +129,6 @@
 (global-set-key (kbd "s-c") #'kill-ring-save)
 (global-set-key (kbd "s-v") #'yank)
 
-;;;; Term mouse
-(unless window-system
-  (require 'mouse)
-  (xterm-mouse-mode t)
-  ;; (defun track-mouse (e))
-  (setq mouse-sel-mode t))
-
-(global-set-key (kbd "<mouse-4>") #'mwheel-scroll)
-(global-set-key (kbd "<mouse-5>") #'mwheel-scroll)
-(global-set-key (kbd "<mouse-6>") #'mwheel-scroll)
-(global-set-key (kbd "<mouse-7>") #'mwheel-scroll)
-
 ;;;; notmuch
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/notmuch")
 (setq notmuch-init-file (luna-f-join user-emacs-directory "star/notmuch-config.el"))
