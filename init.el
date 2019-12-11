@@ -54,6 +54,7 @@
 (luna-load-relative "star/recipe.el")
 (luna-load-relative "star/angel.el")
 (luna-load-relative "star/ui.el")
+(luna-load-relative "star/mode-line.el")
 (luna-load-relative "star/edit.el")
 (luna-load-relative "star/homepage.el")
 ;; (luna-load-relative "star/helm.el")
