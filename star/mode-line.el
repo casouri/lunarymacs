@@ -4,7 +4,12 @@
   :config
   (minions-mode)
   (add-hook 'luna-load-theme-hook
-            (lambda () (minions-mode -1) (minions-mode))))
+            #'restart-minions-mode))
+
+(defun restart-minions-mode ()
+  (interactive)
+  (minions-mode -1)
+  (minions-mode))
 
 (defun luna-edit-lighter ()
   (if (buffer-modified-p)
