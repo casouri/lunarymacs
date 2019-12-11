@@ -4,7 +4,7 @@
 
 ;;; Key
 
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (luna-default-leader
     ;; Outshine
     "tl" #'luna-toggle-left-margin

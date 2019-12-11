@@ -113,7 +113,7 @@
    "s-s" #'save-buffer
    "s-w" #'delete-frame)
 
-  (luna-provide 'key.general))
+  (provide 'luna-general-config))
 
 ;;; which-key
 (load-package which-key

@@ -4,7 +4,7 @@
 
 ;;; Key
 
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (luna-default-leader
     "w e" #'luna-win-expand-to
     "w 2" #'split-window-below

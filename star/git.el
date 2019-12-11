@@ -7,7 +7,7 @@
   (add-to-list 'luna-buffer-bottom-list "magit:")
   (add-to-list 'luna-buffer-bottom-list "magit-process:"))
 
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (luna-default-leader
     "gs" #'magit-status
     "gf" '(:ignore t :which-key "file")

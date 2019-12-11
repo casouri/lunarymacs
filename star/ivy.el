@@ -13,7 +13,7 @@
 ;; M-y : counsel-yank-pop (list kill-ring)
 
 ;;; Key
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (luna-default-leader
     "s s" #'swiper)
   (general-define-key

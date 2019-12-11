@@ -1,6 +1,6 @@
 ;;; Keys
 
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (general-define-key
    :keymaps 'org-mode-map
    "C-c i" #'luna-insert-heading

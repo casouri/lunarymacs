@@ -2,7 +2,7 @@
 
 ;;; Key
 
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (luna-default-leader
     "ts" #'luna-toggle-spell-check
     "ef" #'flyspell-correct-previous
@@ -26,7 +26,7 @@
   :hook ((text-mode . flyspell-mode)
          (prog-mode . flyspell-prog-mode))
   :config
-  (luna-with-eval-after-load 'key.general
+  (with-eval-after-load 'luna-general-config
     (general-define-key
      :keymaps 'flyspell-mode-map
      "C-," nil

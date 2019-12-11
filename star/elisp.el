@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 ;;; Key
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (luna-cx-leader
     :keymaps 'emacs-lisp-mode-map
     ;; eval

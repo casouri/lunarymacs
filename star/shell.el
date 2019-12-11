@@ -10,7 +10,7 @@
 ;;; Code:
 ;;
 
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (luna-default-leader
     "y" '(:ignore t :which-key "fshell")
     "ys" #'fshell-switch-buffer

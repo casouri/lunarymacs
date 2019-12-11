@@ -10,7 +10,7 @@
   :init (add-to-list 'auto-mode-alist '("\\.sage\\'" . sage-shell:sage-mode))
   :commands (sage-shell-mode sage-shell:sage-mode))
 
-(luna-with-eval-after-load 'ui.console-buffer
+(with-eval-after-load 'console-buffer
   (add-to-list 'luna-console-buffer-alist '(sage-shell:sage-mode . "*Sage*"))
   (add-to-list 'luna-console-buffer-alist '(python-mode . "*Python*")))
 

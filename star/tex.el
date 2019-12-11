@@ -11,7 +11,7 @@
 ;;
 ;;;; Key
 
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (luna-default-leader
     :keymaps 'tex-mode-map
     "tp" #'latex-preview-pane-mode))

@@ -9,7 +9,7 @@
 
 ;;; Keys
 
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (luna-default-leader
     "l f" #'eglot-format-buffer
     "l R" #'eglot-rename

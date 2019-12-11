@@ -15,7 +15,7 @@
         company-tooltip-limit 15)
   (setq-default company-search-filtering t))
 
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (when luna-company-manual
     ;; we secretly swap tab and C-o so
     ;; default bindings of tab (folding, indent, etc) goes to C-o

@@ -4,7 +4,7 @@
 
 ;;; Keys
 
-(luna-with-eval-after-load 'key.general
+(with-eval-after-load 'luna-general-config
   (general-define-key "s-e" #'vterm-toggle))
 
 ;;; Package
