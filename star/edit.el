@@ -275,15 +275,15 @@ buffer is not visiting a file."
                                     ("ll" . "“")
                                     ("rr" . "”")
                                     (" " . " ") ; non-breaking space
-                                    ("hand" . "☞")
-                                    )
+                                    ("hand" . "☞"))
   "Alist used by `luna-insert-special-symbol'.")
 
 (defun luna-insert-special-symbol (surname)
   "Insert special symbol at point, SURNAME is used to search for symbol.
 E.g. SURNAME (c) to symbol ©."
   (interactive "MAbbrev: ")
-  (insert (catch 'ret (dolist (elt luna-special-symbol-alist)
-                        (when (equal (car elt) surname)
-                          (throw 'ret (cdr elt)))
-                        ""))))
+  (insert (catch 'ret
+            (dolist (elt luna-special-symbol-alist)
+              (when (equal (car elt) surname)
+                (throw 'ret (cdr elt)))
+              ""))))
