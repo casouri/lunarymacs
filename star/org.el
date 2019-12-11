@@ -6,7 +6,9 @@
    "C-c i" #'luna-insert-heading
    "C-c <tab>" #'outline-toggle-children))
 
-(defvar luna-todo-file "~/note/todo.org")
+;;; Blog
+
+(luna-load-relative "star/org/blogs.el")
 
 ;;; Packages
 
@@ -28,14 +30,7 @@
   :defer t
   :init (add-hook 'org-mode-hook #'org-download-enable))
 
-;;; Function
-
-(defun luna-open-album-dir ()
-  "Open ~/p/casouri/rock/day/album/."
-  (interactive)
-  (shell-command-to-string (format "open ~/p/casouri/rock/day/album/")))
-
-;;; Config
+;;; Org
 
 (define-minor-mode luna-prose-mode
   "A mode that optimizes for prose editing."
@@ -75,28 +70,9 @@
 
 (add-hook 'org-mode-hook #'luna-org-hook)
 
-;;;; 中文换行空格问题
-;;
-;; https://github.com/hick/emacs-chinese#中文断行
+;;; Org Agenda
 
-;; (defun clear-single-linebreak-in-cjk-string (string)
-;;   "clear single line-break between cjk characters that is usually soft line-breaks"
-;;   (let* ((regexp "\\([\u4E00-\u9FA5]\\)\n\\([\u4E00-\u9FA5]\\)")
-;;          (start (string-match regexp string)))
-;;     (while start
-;;       (setq string (replace-match "\\1\\2" nil nil string)
-;;             start (string-match regexp string start))))
-;;   string)
-
-;; (defun ox-html-clear-single-linebreak-for-cjk (string backend info)
-;;   (when (org-export-derived-backend-p backend 'html)
-;;     (clear-single-linebreak-in-cjk-string string)))
-
-;; (add-to-list 'org-export-filter-final-output-functions
-;;              #'ox-html-clear-single-linebreak-for-cjk)
-
-;;;; Org Agenda
-
+(defvar luna-todo-file "~/note/todo.org")
 (setq org-agenda-files (list luna-todo-file))
 (setq org-todo-keywords
       '((sequence "TODO"
@@ -123,7 +99,7 @@
       '(("DEFER" . (:inherit default :weight bold))))
 
 
-;;;; Org Capture
+;;; Org Capture
 
 (with-eval-after-load 'org-capture
   (setq org-default-notes-file "~/note/index.org")
@@ -137,6 +113,9 @@
                   ("tr" "Readlist" entry (file+olp "~/note/todo.org" "Readlist") "*** TODO %?")
                   ))))
 
-;;; Blog
+;;; Function
 
-(luna-load-relative "star/org/blogs.el")
+(defun luna-open-album-dir ()
+  "Open ~/p/casouri/rock/day/album/."
+  (interactive)
+  (shell-command-to-string (format "open ~/p/casouri/rock/day/album/")))
