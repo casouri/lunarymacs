@@ -134,11 +134,13 @@ OPTION-PLIST contains user options that each backend may use."
                    (message "Found dependencies: %s" dependency-list)
                    (mapc #'cowboy-update dependency-list))
                  ;; update this package
-                 (funcall (cowboy--update-fn package) package recipe))
+                 (funcall (cowboy--update-fn (or (plist-get recipe :fetcher)
+                                                 'github))
+                          package recipe))
         ;; no recipe
         (message "Recipe not found, updating with package.el")
         (cowboy-ensure-refresh-content)
-        (package-delete (car (alist-get package package-alist)))
+        (package-delete (car (alist-get package package-alist)) t)
         (package-install package))
       (message "Package %s updated" package))))
 
