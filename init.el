@@ -1,4 +1,4 @@
-;;; -*- lexical-binding: t -*-
+;;-*- lexical-binding: t -*-
 
 (when window-system
   (add-hook 'after-init-hook #'toggle-frame-maximized))
