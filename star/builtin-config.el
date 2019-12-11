@@ -111,6 +111,12 @@
 (savehist-mode)
 (add-to-list 'savehist-additional-variables 'extended-command-history)
 
+;;;; winner
+(winner-mode)
+
+;;;; hideshow
+(add-hook 'prog-mode-hook #'hs-minor-mode)
+
 ;;;; mirror function
 
 (defun change-mirror (mirror)
@@ -126,3 +132,4 @@ When called interactively, Prompt user to choose."
         ((eq mirror 'default)
          (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                                   ("melpa" . "http://melpa.org/packages/"))))))
+

@@ -21,14 +21,6 @@
     "ww" #'windman-select-window
     "ah" #'luna-highlight-symbol))
 
-;;; Config
-
-;; (global-hl-line-mode)
-
-(add-hook 'prog-mode-hook #'hs-minor-mode)
-
-(winner-mode)
-
 ;;; Package
 
 (load-package windman
