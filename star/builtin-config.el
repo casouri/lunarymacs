@@ -17,6 +17,7 @@
  history-length                      500
  make-backup-files                   t
  auto-save-default                   t
+ delete-auto-save-files              nil
  backup-directory-alist              `((".*" . ,(luna-f-join luna-cache-dir "backup")))
  auto-save-list-file-prefix          (luna-f-join luna-cache-dir "auto-save-list/saves-")
  auto-save-timeout                   5
@@ -35,9 +36,8 @@
 
  ;; edit
  indent-tabs-mode                    nil
- backup-inhibited                    t
  sentence-end-double-space           nil
- kill-ring-max                       200
+ kill-ring-max                       100
 
  ;; ui
  use-dialog-box                      nil
@@ -46,10 +46,11 @@
  visible-bell                        nil
  frame-title-format                  '("%f")               ; current file name
  display-line-numbers-width          3
- split-height-threshold              nil                   ; Popup window to right
- split-width-threshold               80
  ns-pop-up-frames                    nil                   ; no new frame when emacsclient connected
  )
+
+;;;; start up screen
+(setq inhibit-startup-screen t)
 
 ;;;; minibuffer
 (setq enable-recursive-minibuffers t
@@ -59,7 +60,7 @@
                   face minibuffer-prompt))
 
 ;;;; modes
-(blink-cursor-mode                   -1)
+(blink-cursor-mode -1)
 (electric-pair-mode)
 (electric-quote-mode)
 (minibuffer-electric-default-mode)
@@ -116,20 +117,4 @@
 
 ;;;; hideshow
 (add-hook 'prog-mode-hook #'hs-minor-mode)
-
-;;;; mirror function
-
-(defun change-mirror (mirror)
-  "Change mirror for ELPA and MELPA to MIRROR (symbol).
-MIRROR can be ’emacs-china or ’default.
-
-When called interactively, Prompt user to choose."
-  (interactive (list (intern (completing-read "Choose mirror: "
-                                              '("emacs-china" "default")))))
-  (cond ((eq mirror 'emacs-china)
-         (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-                                  ("melpa" . "http://elpa.emacs-china.org/melpa/"))))
-        ((eq mirror 'default)
-         (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                                  ("melpa" . "http://melpa.org/packages/"))))))
 

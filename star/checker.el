@@ -7,8 +7,7 @@
     "ts" #'luna-toggle-spell-check
     "ef" #'flyspell-correct-previous
     "eg" #'langtool-check
-    "ec" #'langtool-correct-buffer
-    "is" #'synonyms))
+    "ec" #'langtool-correct-buffer))
 
 ;;; flymake
 ;;
@@ -35,12 +34,7 @@
      "C-c $" nil))
   ;; right click on mac touchpad
   (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
-  (setq flyspell-issue-message-flag nil)
-  ;; (when (executable-find "hunspell")
-  ;;   (setq-default ispell-program-name "hunspell")
-  ;;   (setq ispell-really-hunspell t)
-  ;;   (setq ispell-dictionary "en_US"))
-  )
+  (setq flyspell-issue-message-flag nil))
 
 (load-package writegood-mode
   :hook ((fundamental-mode org-mode) . writegood-mode))
