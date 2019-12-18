@@ -2,14 +2,15 @@
 
 ;;; Key
 (with-eval-after-load 'luna-general-config
-  (luna-cx-leader
-    :keymaps 'emacs-lisp-mode-map
-    ;; eval
-    "w" '(:ignore t :which-key "eval")
-    "w e" #'eval-last-sexp
-    "w r" #'eval-region
-    "w f" #'eval-defun
-    "w b" #'eval-buffer))
+  (general-define-key
+   :prefix "C-x"
+   :keymaps 'emacs-lisp-mode-map
+   ;; eval
+   "w" '(:ignore t :which-key "eval")
+   "w e" #'eval-last-sexp
+   "w r" #'eval-region
+   "w f" #'eval-defun
+   "w b" #'eval-buffer))
 
 ;;; Package
 ;; (load-package lispyville
