@@ -2,6 +2,7 @@
 
 (require 'pause)
 (require 'cl-lib)
+(require 'utility)
 
 ;;; Keys
 
@@ -322,21 +323,6 @@ Edit the underlined region and press C-c C-c to qurey-replace."
 (load-package find-char
   :commands (find-char find-char-backward-cmd))
 
-;;; Switch buffer same major mode
-
-(defun switch-buffer-same-major-mode ()
-  "Switch buffer among those who have the same major mode as the current one."
-  (interactive)
-  (switch-to-buffer
-   (completing-read
-    "Buffer: "
-    (mapcar #'buffer-name
-            (cl-remove-if-not (lambda (buf)
-                                (provided-mode-derived-p
-                                 (buffer-local-value 'major-mode buf)
-                                 major-mode))
-                              (buffer-list))))))
-
 ;;; Inline replace (:s)
 
 (defvar inline-replace-last-input "")
@@ -468,12 +454,3 @@ Set register CHAR to point if CHAR is uppercase."
 ;; (global-set-key " " #'luna-insert-space-or-expand-abbrev)
 (read-abbrev-file (luna-f-join user-emacs-directory "star/abbrev-file.el"))
 
-;;; find file project
-
-(defun luna-find-file (&optional arg)
-  "Find file. If called with ARG, find file in project."
-  (interactive "p")
-  (call-interactively
-   (if (eq arg 4)
-       #'project-find-file
-     #'find-file)))
