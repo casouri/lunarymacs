@@ -21,8 +21,6 @@
     "si" #'helm-imenu
     "sI" #'helm-imenu-in-all-buffers
     "ip" #'helm-yas-complete)
-  ;; (luna-cx-leader
-  ;;   "C-r" #'helm-resume)
   (general-define-key
    :keymaps 'helm-buffer-map
    "M-k" #'helm-buffer-run-kill-persistent)
