@@ -1,19 +1,6 @@
 ;;-*- lexical-binding: t -*-
 
-(when window-system
-  (add-hook 'after-init-hook #'toggle-frame-maximized))
-
-(when window-system
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1))
-
-(if (eq window-system 'mac)
-    ;; have to enable menu bar on mac port
-    ;; otherwise emacs lost focus
-    (menu-bar-mode)
-  (menu-bar-mode -1))
-
-;;; Init
+;;; Setup
 
 (add-hook 'after-init-hook
           (let ((old-list file-name-handler-alist))
@@ -31,12 +18,28 @@
       gc-cons-percentage 0.6
       auto-window-vscroll nil)
 
-;;; Package
+;;; Early init
 
 (add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
-(require 'lunary)
-(require 'cowboy)
 (require 'luna-f)
+
+;; (when window-system
+;;   (add-hook 'after-init-hook #'toggle-frame-maximized))
+
+(when window-system
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1))
+
+(if (eq window-system 'mac)
+    ;; have to enable menu bar on mac port
+    ;; otherwise emacs lost focus
+    (menu-bar-mode)
+  (menu-bar-mode -1))
+
+;;; Package
+
+(require 'cowboy)
+
 (setq package-user-dir (expand-file-name "package" user-emacs-directory))
 (cowboy-add-load-path)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
@@ -45,11 +48,11 @@
 (setq luna-company-manual nil)
 (add-to-list 'luna-package-list 'use-package)
 
+(require 'lunary)
 (luna-message-error (require 'use-package))
-(luna-load-relative "star/core-edit.el")
-(luna-load-relative "star/core-ui.el")
 ;; core must load first because other configs depends on them
 (luna-load-relative "star/builtin-config.el")
+(luna-load-relative "star/utility.el")
 (luna-load-relative "star/key.el")
 (luna-load-relative "star/recipe.el")
 (luna-load-relative "star/angel.el")
@@ -73,11 +76,13 @@
 (luna-load-relative "star/simple-mode.el")
 
 ;;; Customize
+
 ;;;; Custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (luna-load-or-create custom-file)
 (add-hook 'kill-emacs-hook #'customize-save-customized)
 
+;;;; Misc
 (setq-default luna-format-on-save t)
 (setq-default bidi-display-reordering nil) ;; faster long line
 (setq scroll-margin 4)
@@ -85,6 +90,8 @@
 (setq user-mail-address "casouri@gmail.com"
       send-mail-function #'sendmail-send-it
       message-send-mail-function #'message-send-mail-with-sendmail)
+(setq split-height-threshold nil ; Popup window to right
+      split-width-threshold 80)
 
 ;;;; theme
 (when window-system
@@ -131,12 +138,12 @@
 (global-set-key (kbd "s-v") #'yank)
 
 ;;;; notmuch
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/notmuch")
-(setq notmuch-init-file (luna-f-join user-emacs-directory "star/notmuch-config.el"))
-(setq message-auto-save-directory "~/mail/draft")
-(setq message-kill-buffer-on-exit t)
-(setq notmuch-search-oldest-first nil)
-(require 'notmuch)
+;; (add-to-list 'load-path "/opt/local/share/emacs/site-lisp/notmuch")
+;; (setq notmuch-init-file (luna-f-join user-emacs-directory "star/notmuch-config.el"))
+;; (setq message-auto-save-directory "~/mail/draft")
+;; (setq message-kill-buffer-on-exit t)
+;; (setq notmuch-search-oldest-first nil)
+;; (require 'notmuch)
 
 ;;;; ENV
 (luna-load-env)
@@ -148,3 +155,13 @@
 (run-with-idle-timer
  3 nil
  #'ghelp-global-minor-mode)
+
+;;;; trivial-copy
+(add-to-list 'load-path "~/p/trivial-copy")
+(require 'trivial-copy)
+
+;;;; erc
+(setq erc-nick "casouri")
+
+;;;; notdeft
+(add-to-list 'load-path "~/attic/notdeft")
