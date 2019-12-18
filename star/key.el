@@ -24,14 +24,6 @@
     :prefix "C-SPC"
     :keymaps 'override)
 
-  (general-create-definer luna-cc-leader
-    :keymaps 'override
-    :prefix "C-c")
-
-  (general-create-definer luna-cx-leader
-    :keymaps 'override
-    :prefix "C-x")
-
   (luna-default-leader
     "f" '(:ignore t :which-key "file")
     "F" '(:ignore t :which-key "Frame")
@@ -91,8 +83,8 @@
     "tf"  #'luna-toggle-format-on-save
     "td"  #'toggle-debug-on-error
     ;; search
-    "si"  #'imenu
-    )
+    "si"  #'imenu)
+
   (general-define-key
    :keymaps 'smerge-mode-map
    "C-c n" #'smerge-next
@@ -101,10 +93,12 @@
    "C-c m" #'smerge-keep-upper ; mine
    "C-c l" #'smerge-keep-lower
    "C-c u" #'smerge-keep-upper)
+
   (general-define-key
    :keymaps 'comint-mode
    "<up>" #'comint-previous-input
    "<down>" #'comint-next-input)
+
   (general-define-key
    "s-h" #'windmove-left
    "s-j" #'windmove-down
