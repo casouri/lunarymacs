@@ -32,11 +32,12 @@
    "C-h e" #'ghelp-describe-as-in-emacs-lisp-mode
    "C-h r" #'ghelp-resume-as-in-emacs-lisp-mode)
 
-  (luna-cx-leader
-    ;; C-y is too uncomfortable to reach
-    ;; so C-p here we go
-    "C-p" #'luna-kill-ring-select
-    "i" #'luna-insert-special-symbol))
+  (general-define-key
+   :prefix "C-x"
+   ;; C-y is too uncomfortable to reach
+   ;; so C-p here we go
+   "C-p" #'luna-kill-ring-select
+   "i" #'luna-insert-special-symbol))
 
 ;;; Package
 
