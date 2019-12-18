@@ -1,6 +1,12 @@
 ;;; -*- lexical-binding: t -*-
+;;
+;; Variables, functions and macros that are needed for config files
 
-;;; Variables
+;;; UI
+(require 'lunary-ui)
+
+;;; Package
+;;;; Variable
 
 (defvar luna-autoload-file (expand-file-name "autoload.el" user-emacs-directory)
   "The path of autoload file which has all the autoload functions.")
@@ -14,7 +20,7 @@
 (defvar luna-package-list nil
   "List of package symbols. Added by ‘load-package’.")
 
-;;; Functions
+;;;; Functions
 
 (defmacro luna-message-error (&rest body)
   "Eval BODY and print error message if any."
@@ -76,25 +82,31 @@ ARGS is as same as in `load'."
      ('lsp ,lsp)
      ('eglot ,eglot)))
 
-;;; Convienient
+;;; Format on save
 
-(defun luna-jump-to-package (package)
-  "Jump to the configuration of package string."
-  (interactive (list (completing-read "Package: " (mapcar #'symbol-name luna-package-list))))
-  (find-file user-init-file)
-  (goto-char (point-min))
-  (unless (re-search-forward (format "(load-package %s" package) nil t)
-    (message "Not found")))
+(defvar luna-smart-format-alist ()
+  "Alist of format functions of each major mode.
+Each element should be a con cell of major mode symbol and function symbol.
+For example, '(python-mode . format-python)")
 
-;;;; ENV
+(defvar-local luna-format-on-save nil
+  "Whether to format on save.")
 
-(defun luna-load-env ()
-  "Load PATH and CPATH from a file."
+(defun luna-smart-format-buffer ()
+  "Only format buffer when `luna-format-on-save' is non-nil."
   (interactive)
-  (condition-case err
-      (progn (load "~/.emacsenv")
-             (setq exec-path (split-string (getenv "PATH") ":")))
-    (error (message (error-message-string err)))))
+  (when luna-format-on-save
+    (let ((format-func (alist-get major-mode luna-smart-format-alist)))
+      (when format-func
+        (funcall format-func)))))
+
+(add-hook 'after-save-hook #'luna-smart-format-buffer)
+
+;;; buffer ordering
+
+(defvar luna-buffer-bottom-list nil
+  "Buffer name patterns that stays at the bottom of buffer list in helm.
+Each pattern is the beginning of the buffer name, e.g., *Flymake, magit:, etc.")
 
 (provide 'lunary)
 

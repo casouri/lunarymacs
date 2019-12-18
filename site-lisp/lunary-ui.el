@@ -1,29 +1,26 @@
 ;;; -*- lexical-binding: t -*-
 
-
-;;; Homepage
-
-(setq inhibit-startup-screen t)
-
-(defvar luna-homepage-buffer "HOME"
-  "The buffer name of the homepage")
-
 ;;; Theme
 
 (defvar luna-load-theme-hook ()
-  "Hook ran after `load-theme'")
+  "Hook ran after `load-theme'.")
 
 (defvar luna-current-theme nil
   "The last loaded theme (symbol) in string.")
 
 (defvar luna-toggle-theme-list ()
-  "Themes that you can toggle bwtween by `luna-switch-theme'")
+  "Themes that you can toggle bwtween by `luna-switch-theme'.")
 
 (defcustom luna-theme nil
   "The theme used on startup.
 This way luanrymacs remembers the theme.
 You need to load `luna-theme' somewhere (after loading custom.el)."
   :type 'symbol
+  :group 'convenience)
+
+(defcustom luna-bg nil
+  "Save bg to avoid flicker on startup."
+  :type 'string
   :group 'convenience)
 
 (defun luna-set-current-theme (theme &rest _)
@@ -42,11 +39,12 @@ You need to load `luna-theme' somewhere (after loading custom.el)."
 
 (defun luna-load-theme (&optional theme no-confirm no-enable)
   "Disable `luna-currnt-theme' and load THEME.
-Set `luna-theme' to THEME."
+For NO-CONFIRM and NO-ENABLE see ‘load-theme’."
   (disable-theme luna-current-theme)
   (load-theme (or theme luna-theme (car luna-toggle-theme-list)) no-confirm no-enable)
   (when (or theme (not (custom-variable-p 'luna-theme)))
-    (customize-set-variable 'luna-theme theme)))
+    (customize-set-variable 'luna-theme theme))
+  (customize-set-variable 'luna-bg (face-attribute 'default :background)))
 
 (defun luna-quit-window (arg)
   "Quit current window and bury it's buffer.
@@ -200,4 +198,4 @@ Changes are saved to custom.el in a idle timer."
 
   "Colors.")
 
-(provide 'core-ui)
+(provide 'lunary-ui)
