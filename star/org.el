@@ -54,11 +54,13 @@
 ;; https://emacs.stackexchange.com/questions/33010/how-to-word-wrap-within-code-blocks
 ;;
 (with-eval-after-load 'org-mode
+  (setq org-hide-emphasis-markers t))
+
+(with-eval-after-load 'org-latex
   (add-to-list 'org-latex-packages-alist '("" "listings" nil))
   (setq org-latex-listings t)
   (setq org-latex-listings-options '(("breaklines" "true")))
-  (setq org-latex-compiler "xelatex")
-  (setq org-hide-emphasis-markers t))
+  (setq org-latex-compiler "xelatex"))
 
 (defun luna-org-hook ()
   "Configuration for Org Mode."
