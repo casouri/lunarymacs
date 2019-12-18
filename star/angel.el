@@ -9,8 +9,8 @@
   (general-define-key
    "M-n"   #'scroll-up
    "M-p"   #'scroll-down
-   "M-/"   #'hippie-expand)
-  (general-define-key
+   "M-/"   #'hippie-expand
+
    "s-n"   #'luna-scroll-down-reserve-point
    "s-p"   #'luna-scroll-up-reserve-point
    ;; "s-a"   #'backward-sentence
@@ -38,41 +38,36 @@
 
    "C-v"   #'set-mark-command
 
-   ;; "C-h" (general-simulate-key "C-b")
-   ;; "C-l" (general-simulate-key "C-f")
-   ;; "C-j" (general-simulate-key "C-n")
-   ;; "C-k" (general-simulate-key "C-p")
-   ;; "M-h" (general-simulate-key "M-b")
-   ;; "M-l" (general-simulate-key "M-f")
-   ;; "M-j" (general-simulate-key "M-n")
-   ;; "M-k" (general-simulate-key "M-p")
-   )
+   "s-D"   '((lambda () (interactive)
+               (shell-command-to-string
+                (format "open dict://%s"
+                        (if (not (region-active-p))
+                            (symbol-at-point)
+                          (buffer-substring-no-properties
+                           (region-beginning)
+                           (region-end))))))
+             :wk "search in Dictionary"))
 
-  (luna-cx-leader
-    "C-f" #'luna-find-file
-    "C-u" #'undo-tree-visualize
-    "C-v" #'cua-rectangle-mark-mode
-    "`"   #'luna-expand-window
-    "k"   '((lambda (&optional arg) (interactive)
-              (if (eq arg 4)
-                  (call-interactively #'kill-buffer)
-                (kill-buffer (current-buffer))))
-            :which-key "kill-buffer")
-    "C-," #'beginning-of-buffer ; as of <
-    "C-." #'end-of-buffer ; as of >
-    "C-b" #'switch-to-buffer
-    "C-d" '((lambda () (interactive) (dired default-directory)) :which-key "open default directory")
-    "j" #'luna-jump-or-set)
+  (general-define-key
+   :prefix "C-x"
+   "C-f" #'luna-find-file
+   "C-u" #'undo-tree-visualize
+   "C-v" #'cua-rectangle-mark-mode
+   "`"   #'luna-expand-window
+   "k"   '((lambda (&optional arg) (interactive)
+             (if (eq arg 4)
+                 (call-interactively #'kill-buffer)
+               (kill-buffer (current-buffer))))
+           :which-key "kill-buffer")
+   "C-," #'beginning-of-buffer ; as of <
+   "C-." #'end-of-buffer ; as of >
+   "C-b" #'switch-to-buffer
+   "C-d" '((lambda () (interactive) (dired default-directory)) :which-key "open default directory")
+   "j" #'luna-jump-or-set)
 
-  (luna-cc-leader
-    "C-b" #'switch-buffer-same-major-mode))
-
-(defun luna-up-list-backward ()
-  "`up-list' but up to the beginning instead of the end."
-  (interactive)
-  (up-list)
-  (backward-list))
-
+  (general-define-key
+   :prefix "C-c"
+   "C-b" #'switch-buffer-same-major-mode))
 
 (defvar luna-scroll-map (let ((map (make-sparse-keymap)))
                           (define-key map (kbd "n") #'luna-scroll-down-reserve-point)
@@ -119,7 +114,6 @@ chars in it will be used as white space char (to be skipped over when rolling bc
          (forward-char))
        (throw 'return nil))
      (backward-char)))
-
 
 (defsubst next-of (charset &optional stop-charset whitespace-charset)
   "Forward until hit char from CHARSET. Or before a char from STOP-CHARSET.
@@ -174,7 +168,6 @@ chars in it will be used as white space char (to be skipped over when rolling ba
   (interactive)
   (last-of '(?\s ?\n ?\t))
   (backward-char))
-
 
 (defvar punc-list '(?` ?` ?! ?@ ?# ?$ ?% ?^ ?& ?* ?\( ?\)
                        ?- ?_ ?= ?+ ?\[ ?\] ?{ ?} ?\\ ?| ?\;
@@ -324,7 +317,6 @@ Edit the underlined region and press C-c C-c to qurey-replace."
 (add-to-list 'emulation-mode-map-alists
              'angel-transient-mode-map-alist t)
 
-
 ;;; Jump char (f)
 
 (load-package find-char
@@ -346,7 +338,6 @@ Edit the underlined region and press C-c C-c to qurey-replace."
                               (buffer-list))))))
 
 ;;; Inline replace (:s)
-
 
 (defvar inline-replace-last-input "")
 (defvar inline-replace-history nil)
@@ -476,7 +467,6 @@ Set register CHAR to point if CHAR is uppercase."
 
 ;; (global-set-key " " #'luna-insert-space-or-expand-abbrev)
 (read-abbrev-file (luna-f-join user-emacs-directory "star/abbrev-file.el"))
-
 
 ;;; find file project
 
