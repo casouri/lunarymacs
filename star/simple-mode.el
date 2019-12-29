@@ -13,6 +13,7 @@
   :init (add-hook 'haskell-mode-hook #'company-mode)
   :config
   ;; http://haskell.github.io/haskell-mode/manual/latest/Interactive-Haskell.html#Interactive-Haskell
+  (require 'console-buffer)
   (add-to-list 'luna-console-buffer-alist '(haskell-mode . "*haskell*"))
   (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
   (define-key haskell-mode-map (kbd "C-c `") 'haskell-interactive-bring)
