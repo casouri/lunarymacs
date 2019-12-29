@@ -26,11 +26,9 @@
    ;; Hungry delete
    [remap backward-delete-char-untabify] #'luna-hungry-delete
    ;; helpful
-   "C-h C-h" #'ghelp-describe-symbol
-   "C-h C-r" #'ghelp-resume
+   "C-h C-h" #'ghelp-describe
    "C-h k" #'helpful-key
-   "C-h e" #'ghelp-describe-as-in-emacs-lisp-mode
-   "C-h r" #'ghelp-resume-as-in-emacs-lisp-mode)
+   "C-h e" #'ghelp-describe-as-in-emacs-lisp-mode)
 
   (general-define-key
    :prefix "C-x"
