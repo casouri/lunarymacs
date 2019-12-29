@@ -168,17 +168,17 @@ E.g. SURNAME (c) to symbol ©."
 (defun luna-scroll-down-reserve-point ()
   (interactive)
   (scroll-up 2)
-  (next-line 2))
-
+  (forward-line 2))
 
 (defun luna-scroll-up-reserve-point ()
   (interactive)
   (scroll-down 2)
-  (previous-line 2))
+  (forward-line -2))
 
 ;;; Auto insert
 
-(defvar luna-autoinsert-template (luna-f-join (luna-this-file-directory)
+(defvar luna-autoinsert-template (luna-f-join user-emacs-directory
+                                              "star"
                                               "autoinsert-template.el")
   "The template file.")
 
@@ -188,10 +188,7 @@ E.g. SURNAME (c) to symbol ©."
   (let* ((filename (file-name-nondirectory (buffer-file-name)))
          (year (format-time-string "%Y"))
          (feature (file-name-base (buffer-file-name)))
-         (buf (find-file luna-autoinsert-template))
-         (template (with-current-buffer buf
-                     (buffer-string))))
-    (kill-buffer buf)
+         (template (luna-f-content luna-autoinsert-template)))
     (insert (format template
                     filename description feature filename))))
 
