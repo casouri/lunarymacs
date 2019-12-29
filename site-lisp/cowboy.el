@@ -117,7 +117,10 @@ OPTION-PLIST contains user options that each backend may use."
               (let ((fetcher (or (plist-get recipe :fetcher) 'github)))
                 (message "Installing package with %s backend." fetcher)
                 (funcall (cowboy--install-fn fetcher)
-                         package recipe option-plist))))
+                         package recipe option-plist)))
+            (add-to-list 'load-path (luna-f-join cowboy-package-dir
+                                                 (symbol-name package)))
+            (require (intern-soft package) nil t))
         (message "Recipe not found, installing with package.el")
         (cowboy-ensure-refresh-content)
         (package-install package))
