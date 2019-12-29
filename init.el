@@ -37,7 +37,7 @@
   (menu-bar-mode -1))
 
 ;;; Package
-
+(require 'lunary)
 (require 'cowboy)
 
 (setq package-user-dir (expand-file-name "package" user-emacs-directory))
@@ -48,7 +48,6 @@
 (setq luna-company-manual nil)
 (add-to-list 'luna-package-list 'use-package)
 
-(require 'lunary)
 (luna-message-error (require 'use-package))
 ;; core must load first because other configs depends on them
 (luna-load-relative "star/builtin-config.el")
