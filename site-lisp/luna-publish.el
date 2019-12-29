@@ -52,7 +52,7 @@ LINK is the web link for the post in dir.
 Categories in CATEGORY-LIST are strings."
   (let ((org-file (expand-file-name "index.org" dir))
         (rss-file (expand-file-name "css-item.xml" dir))
-        (auto-save-interval 99999999999999))
+        (auto-save-interval 1.0e+INF))
     (when (file-exists-p org-file)
       (if (or force ; force export
               (not (file-exists-p rss-file)) ; rss doesn’t exist
