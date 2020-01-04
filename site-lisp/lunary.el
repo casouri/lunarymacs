@@ -82,6 +82,16 @@ ARGS is as same as in `load'."
      ('lsp ,lsp)
      ('eglot ,eglot)))
 
+(defmacro luna-when-mac (&rest body)
+  "Evaluate BODY when in a Mac system."
+  `(when (eq system-type 'darwin)
+     ,@body))
+
+(defmacro luna-when-mac (&rest body)
+  "Evaluate BODY when in a GNU/Linux system."
+  `(when (eq system-type 'gnu/linux)
+     ,@body))
+
 ;;; Format on save
 
 (defvar luna-smart-format-alist ()
