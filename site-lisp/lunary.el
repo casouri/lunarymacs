@@ -87,7 +87,7 @@ ARGS is as same as in `load'."
   `(when (eq system-type 'darwin)
      ,@body))
 
-(defmacro luna-when-mac (&rest body)
+(defmacro luna-when-linux (&rest body)
   "Evaluate BODY when in a GNU/Linux system."
   `(when (eq system-type 'gnu/linux)
      ,@body))
