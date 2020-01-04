@@ -156,8 +156,9 @@
  #'ghelp-global-minor-mode)
 
 ;;;; trivial-copy
-(add-to-list 'load-path "~/p/trivial-copy")
-(require 'trivial-copy)
+(luna-when-mac
+ (add-to-list 'load-path "~/p/trivial-copy")
+ (require 'trivial-copy))
 
 ;;;; erc
 (setq erc-nick "casouri")
