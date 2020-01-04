@@ -51,7 +51,6 @@
 (luna-message-error (require 'use-package))
 ;; core must load first because other configs depends on them
 (luna-load-relative "star/builtin-config.el")
-(luna-load-relative "star/utility.el")
 (luna-load-relative "star/key.el")
 (luna-load-relative "star/recipe.el")
 (luna-load-relative "star/angel.el")
@@ -73,6 +72,7 @@
 (luna-load-relative "star/term.el")
 ;; (luna-load-relative "star/shell.el")
 (luna-load-relative "star/simple-mode.el")
+(require 'utility)
 
 ;;; Customize
 
