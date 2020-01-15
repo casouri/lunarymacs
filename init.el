@@ -160,8 +160,5 @@
  (add-to-list 'load-path "~/p/trivial-copy")
  (require 'trivial-copy))
 
-;;;; erc
-(setq erc-nick "casouri")
-
 ;;;; notdeft
 (add-to-list 'load-path "~/attic/notdeft")
