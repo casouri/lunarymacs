@@ -21,7 +21,7 @@
   (general-override-mode)
 
   (general-create-definer luna-default-leader
-    :prefix "s-x"
+    :prefix "C-SPC"
     :keymaps 'override)
 
   (luna-default-leader
