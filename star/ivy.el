@@ -23,7 +23,9 @@
 (load-package ivy
   :config
   (setq ivy-use-virtual-buffers t
-        ivy-use-selectable-prompt t)
+        ivy-use-selectable-prompt t
+        ;; use full path for virtual buffer
+        ivy-virtual-abbreviate 'full)
   (advice-add 'ivy-sort-function-buffer :before #'luna-ivy-sort-match-buffers)
   (advice-add 'ivy-switch-buffer :override #'luna-ivy-switch-buffer)
   )
