@@ -30,7 +30,8 @@
 
 (add-hook 'python-mode-hook
           (lambda ()
-            (unless (string-match "\.sage$" (buffer-file-name))
+            (when (and buffer-file-name
+                       (not (string-match "\.sage$" (buffer-file-name))))
               (eglot-ensure))))
 (add-to-list 'luna-smart-format-alist '(python-mode . eglot-format-buffer))
 
