@@ -118,3 +118,14 @@
 ;;;; hideshow
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 
+;;;; ERC
+;;
+;; remember to enable “services” in erc-modules
+(setq erc-nick "casouri"
+      erc-nickserv-passwords
+      '((freenode (("casouri" . "XF234567ic"))))
+      erc-prompt-for-nickserv-password nil)
+
+(with-eval-after-load 'erc
+  (require 'erc-services)
+  (erc-services-mode))
