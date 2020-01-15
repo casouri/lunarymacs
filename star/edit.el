@@ -15,6 +15,7 @@
     "tm" #'minimap-mode
     ;; avy
     "k" #'avy-goto-char-timer)
+  ;; M-y for yank pop
 
   (general-define-key
    :keymaps 'override
@@ -32,10 +33,11 @@
 
   (general-define-key
    :prefix "C-x"
-   ;; C-y is too uncomfortable to reach
-   ;; so C-p here we go
-   "C-p" #'luna-kill-ring-select
-   "i" #'luna-insert-special-symbol))
+   "i" #'luna-insert-special-symbol)
+
+  (general-define-key
+   :keymaps '(c-mode c++-mode)
+   "M-RET" #'srefactor-refactor-at-point))
 
 ;;; Package
 
@@ -107,6 +109,11 @@
              vr/query-replace
              vr/mc-mark))
 
+
+
+(load-package srefactor
+  :hook ((c-mode . semantic-mode)
+         (c++-mode . semantic-mode)))
 
 ;;;; Help
 
