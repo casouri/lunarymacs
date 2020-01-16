@@ -90,7 +90,7 @@
   (defvar outline-minor-mode-prefix (kbd "C-c o"))
   :config
   ;; outshine-mode has all kinds of weird bindings
-  (setq outshine-mode-map nil)
+  (setq outshine-mode-map (make-sparse-keymap))
   (define-key outshine-mode-map
     (kbd "C-c i") #'outshine-cycle))
 
