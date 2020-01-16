@@ -98,20 +98,28 @@
 (setq js-indent-level 2)
 
 ;; C/C++
-(add-hook 'c-mode-hook (lambda ()
-                         (eglot-ensure)
-                         ;; ccls has a fuzzy matching algorithm to order candidates according to your query.
-                         (setq-local company-transformers nil)
-                         (setq-local comment-multi-line t)))
-(add-hook 'c++-mode-hook (lambda ()
-                           (eglot-ensure)
-                           ;; ccls has a fuzzy matching algorithm to order candidates according to your query.
-                           (setq-local company-transformers nil)
-                           (setq-local comment-multi-line t)))
 
-(add-hook 'c-mode-hook #'company-mode)
-(add-hook 'c++-mode-hook #'company-mode)
+(defvar luna-c-local-style nil
+  "Local C style. You have to use ‘c-set-style’ instead of a local variable.")
 
+(defvar luna-c-local-offset 4
+  "Local C offset. ‘c-basic-offset’ will be changed by style so
+setting it locally doesn’t really work.")
+
+(defun luna-c-set-local-style ()
+  (when luna-c-local-style
+    (c-set-style luna-c-local-style)
+    (setq c-basic-offset luna-c-local-offset)))
+
+(dolist (hook '(c-mode-hook c++-mode-hook))
+  (add-hook hook #'company-mode)
+  (add-hook hook #'luna-c-set-local-style)
+  (add-hook hook (lambda ()
+                   (eglot-ensure)
+                   ;; ccls has a fuzzy matching algorithm to order
+                   ;; candidates according to your query.
+                   (setq-local company-transformers nil)
+                   (setq-local comment-multi-line t))))
 
 ;; Debugger
 
