@@ -24,4 +24,4 @@
   (require package))
 (load-theme 'doom-one-light t t)
 
-(dump-emacs-portable "~/.emacs.d/emacs.pdmp")
+(dump-emacs-portable luna-dump-file)

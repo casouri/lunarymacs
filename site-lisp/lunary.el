@@ -30,6 +30,9 @@ We need to manually save and restore it. See manual for more info.")
 (defvar luna-in-esup nil
   "Non-nil if we are in a esup child session.")
 
+(defvar luna-dump-file (expand-file-name luna-cache-dir "emacs.pdmp")
+  "Location of dump file.")
+
 ;;;; Functions
 
 (defmacro luna-message-error (&rest body)
@@ -108,6 +111,18 @@ ARGS is as same as in `load'."
   `(if luna-dumped
        ,then
      ,@else))
+
+;;; Dump
+
+(defun luna-dump ()
+  "Dump Emacs."
+  (interactive)
+  (make-process
+   :name "dump"
+   :buffer "*dump process*"
+   :command (list "emacs" "--batch" "-q"
+                  "-l" (luna-f-join user-emacs-directory
+                                    "dump.el"))))
 
 ;;; Format on save
 
