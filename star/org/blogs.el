@@ -71,7 +71,9 @@ If FORCE is non-nil, only export when org file is newer than html file."
       (luna-publish-with-tmp-buffers
        (let ((org-html-postamble-format luna-org-html-postamble-format)
              (org-html-postamble t)
-             (org-html-home/up-format luna-org-html-home/up-format))
+             (org-html-home/up-format luna-org-html-home/up-format)
+             (org-html-head-include-scripts nil)
+             (org-export-use-babel nil))
          ;; export posts
          ;; for each year
          (dolist (dir (luna-f-list-directory luna-publish-note-dir t))
@@ -90,13 +92,14 @@ If FORCE is non-nil, only export when org file is newer than html file."
   (interactive "MTitle: ")
   (let* ((year (substring (current-time-string) 20))
          (dir-file-name (downcase (replace-regexp-in-string " " "-" title)))
-         (dir-path (luna-f-join luna-publish-note-dir
-                                year
+         (year-path (luna-f-join luna-publish-note-dir year))
+         (dir-path (luna-f-join year-path
                                 dir-file-name))
          (file-path (luna-f-join dir-path
                                  "index.org")))
     ;; create post’s dir and org file,
     ;; insert basic information
+    (mkdir year-path)
     (mkdir dir-path)
     (find-file file-path)
     (insert (format "#+SETUPFILE: ../../setup.org
