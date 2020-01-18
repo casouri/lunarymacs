@@ -15,14 +15,14 @@
                     general helpful use-package general which-key
                     recentf-ext swiper ivy-prescient find-char
                     aggressive-indent windman doom-themes winner
-                    elec-pair doom-one-light-theme
+                    elec-pair doom-one-light-theme undo-tree
                     doom-cyberpunk-theme rainbow-delimiters
                     highlight-parentheses hl-todo buffer-move
                     savehist eyebrowse minions ws-butler
                     expand-region isolate outshine flyspell magit
-                    eglot))
+                    eglot minibuf-eldef))
   (require package))
 (load-theme 'doom-one-light t t)
-(load-theme 'doom-cyberbunk t t)
+(load-theme 'doom-cyberpunk t t)
 
 (dump-emacs-portable luna-dump-file)

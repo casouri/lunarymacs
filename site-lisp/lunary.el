@@ -30,7 +30,7 @@ We need to manually save and restore it. See manual for more info.")
 (defvar luna-in-esup nil
   "Non-nil if we are in a esup child session.")
 
-(defvar luna-dump-file (expand-file-name luna-cache-dir "emacs.pdmp")
+(defvar luna-dump-file (expand-file-name "emacs.pdmp" luna-cache-dir)
   "Location of dump file.")
 
 ;;;; Functions
@@ -117,12 +117,14 @@ ARGS is as same as in `load'."
 (defun luna-dump ()
   "Dump Emacs."
   (interactive)
-  (make-process
-   :name "dump"
-   :buffer "*dump process*"
-   :command (list "emacs" "--batch" "-q"
-                  "-l" (luna-f-join user-emacs-directory
-                                    "dump.el"))))
+  (let ((buf "*dump process*"))
+    (make-process
+     :name "dump"
+     :buffer buf
+     :command (list "emacs" "--batch" "-q"
+                    "-l" (luna-f-join luna-cache-dir
+                                      "dump.el")))
+    (display-buffer buf)))
 
 ;;; Format on save
 
