@@ -28,10 +28,10 @@
 
 (load-package doom-themes
   :config
-  ;; (add-to-list 'luna-toggle-theme-list 'doom-one)
+  (setq doom-cyberpunk-dark-mode-line nil)
   (setq doom-cyberpunk-bg 'light))
 
-(add-to-list 'luna-toggle-theme-list 'doom-one-light t)
+(add-to-list 'luna-toggle-theme-list 'doom-one-light)
 (add-to-list 'luna-toggle-theme-list 'doom-cyberpunk)
 
 (load-package rainbow-delimiters
