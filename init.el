@@ -1,30 +1,5 @@
 ;;-*- lexical-binding: t -*-
 
-;;; Setup
-
-(add-hook 'after-init-hook
-          (let ((old-list file-name-handler-alist))
-            (lambda ()
-              (setq file-name-handler-alist old-list
-                    gc-cons-threshold 800000
-                    gc-cons-percentage 0.1)
-              (garbage-collect)))
-          t)
-
-(setq package-enable-at-startup nil
-      file-name-handler-alist nil
-      message-log-max 16384
-      gc-cons-threshold 402653184
-      gc-cons-percentage 0.6
-      auto-window-vscroll nil)
-
-;;; Early init
-
-(add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
-(require 'luna-f)
-
-;; (when window-system
-;;   (add-hook 'after-init-hook #'toggle-frame-maximized))
 
 (when window-system
   (tool-bar-mode -1)
