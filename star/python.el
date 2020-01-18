@@ -47,9 +47,8 @@
 
 ;;;; Exec path
 
-;; set this to a absolute path then pyvenv won't work
-;; because it sets environment, but this variable
-(customize-set-value 'python-shell-interpreter "python3")
+;; if you set this to a absolute path, pyvenv won't work
+(setq python-shell-interpreter "python3")
 
 ;;;; Quickrun
 ;;
