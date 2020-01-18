@@ -32,10 +32,3 @@
   (general-define-key
    :keymaps 'company-search-map
    "<escape>" #'company-abort))
-
-(load-package company-box
-  ;; don't enable by default
-  :config
-  (setq company-box-enable-icon nil)
-  (setq company-box-doc-delay 0.3)
-  :commands company-box-mode)
