@@ -23,5 +23,6 @@
                     eglot))
   (require package))
 (load-theme 'doom-one-light t t)
+(load-theme 'doom-cyberbunk t t)
 
 (dump-emacs-portable luna-dump-file)
