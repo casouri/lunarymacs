@@ -27,8 +27,7 @@
         ;; use full path for virtual buffer
         ivy-virtual-abbreviate 'full)
   (advice-add 'ivy-sort-function-buffer :before #'luna-ivy-sort-match-buffers)
-  (advice-add 'ivy-switch-buffer :override #'luna-ivy-switch-buffer)
-  )
+  (advice-add 'ivy-switch-buffer :override #'luna-ivy-switch-buffer))
 
 (load-package swiper
   :commands (swiper))
@@ -46,7 +45,9 @@
   (ivy-prescient-mode)
   (prescient-persist-mode))
 
-(load-package recentf-ext)
+;; use the forked version in site-lisp
+(use-package recentf-ext
+  :config (recentf-mode))
 
 ;;; Sort function
 

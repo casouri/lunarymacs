@@ -23,11 +23,9 @@
 ;;      additional-motions
 ;;      slurp/barf-cp)))
 
-
 ;;; Config
 
-(add-hook 'emacs-lisp-mode-hook #'flymake-mode)
-
-(add-hook 'emacs-lisp-mode-hook #'company-mode)
-
-(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+(dolist (hook '(emacs-lisp-mode-hook lisp-interaction-mode-hook))
+  (add-hook hook #'flymake-mode)
+  (add-hook hook #'company-mode)
+  (add-hook hook #'aggressive-indent-mode))

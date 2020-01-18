@@ -20,6 +20,16 @@
 (defvar luna-package-list nil
   "List of package symbols. Added by ‘load-package’.")
 
+(defvar luna-dumped nil
+  "non-nil when a dump file is loaded (because dump.el sets this variable).")
+
+(defvar luna-dumped-load-path nil
+  "By default dump files doesn’t save ‘load-path’.
+We need to manually save and restore it. See manual for more info.")
+
+(defvar luna-in-esup nil
+  "Non-nil if we are in a esup child session.")
+
 ;;;; Functions
 
 (defmacro luna-message-error (&rest body)
@@ -91,6 +101,13 @@ ARGS is as same as in `load'."
   "Evaluate BODY when in a GNU/Linux system."
   `(when (eq system-type 'gnu/linux)
      ,@body))
+
+(defmacro luna-if-dump (then &rest else)
+  "Evaluate IF if running with a dump file, else evaluate ELSE."
+  (declare (indent 1))
+  `(if luna-dumped
+       ,then
+     ,@else))
 
 ;;; Format on save
 

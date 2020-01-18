@@ -37,14 +37,15 @@ You need to load `luna-theme' somewhere (after loading custom.el)."
 
 (advice-add #'load-theme :before #'luna-set-current-theme)
 
-(defun luna-load-theme (&optional theme no-confirm no-enable)
+(defun luna-load-theme (&optional theme)
   "Disable `luna-currnt-theme' and load THEME.
 For NO-CONFIRM and NO-ENABLE see ‘load-theme’."
   (disable-theme luna-current-theme)
-  (load-theme (or theme luna-theme (car luna-toggle-theme-list)) no-confirm no-enable)
-  (when (or theme (not (custom-variable-p 'luna-theme)))
-    (customize-set-variable 'luna-theme theme))
-  (customize-set-variable 'luna-bg (face-attribute 'default :background)))
+  (let ((theme (or theme luna-theme (car luna-toggle-theme-list))))
+    (if (featurep (intern-soft (format "%s-theme" theme)))
+        (enable-theme theme)
+      (load-theme theme t))
+    (customize-set-variable 'luna-theme theme)))
 
 (defun luna-quit-window (arg)
   "Quit current window and bury it's buffer.

@@ -1,22 +1,38 @@
 ;;-*- lexical-binding: t -*-
 
+;; (require 'profiler)
+;; (profiler-start 'cpu)
 
-(when window-system
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1))
-
-(if (eq window-system 'mac)
-    ;; have to enable menu bar on mac port
-    ;; otherwise emacs lost focus
-    (menu-bar-mode)
-  (menu-bar-mode -1))
+(when (eq window-system 'mac)
+  ;; have to enable menu bar on mac port
+  ;; otherwise emacs lost focus
+  (menu-bar-mode))
 
 ;;; Package
+
+(add-to-list 'load-path
+             (expand-file-name "site-lisp"
+                               user-emacs-directory))
+(require 'luna-f)
 (require 'lunary)
 (require 'cowboy)
+(require 'package)
 
-(setq package-user-dir (expand-file-name "package" user-emacs-directory))
-(cowboy-add-load-path)
+(luna-if-dump
+    (progn
+      (setq load-path luna-dumped-load-path)
+      (global-font-lock-mode)
+      (transient-mark-mode)
+      (add-hook 'after-init-hook
+                (lambda ()
+                  (save-excursion
+                    (switch-to-buffer "*scratch*")
+                    (lisp-interaction-mode)))))
+  (setq package-user-dir (expand-file-name "package" user-emacs-directory))
+  ;; add load-path’s and load autoload files
+  (package-initialize)
+  (cowboy-add-load-path))
+
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
@@ -44,7 +60,7 @@
 (luna-load-relative "star/dir.el")
 (luna-load-relative "star/org.el")
 (luna-load-relative "star/tex.el")
-(luna-load-relative "star/term.el")
+;; (luna-load-relative "star/term.el")
 ;; (luna-load-relative "star/shell.el")
 (luna-load-relative "star/simple-mode.el")
 (require 'utility)
@@ -69,17 +85,13 @@
 
 ;;;; theme
 (when window-system
-  ;; (setq doom-cyberpunk-bg 'violet)
-  (setq doom-cyberpunk-dark-mode-line nil)
-  (luna-load-theme nil t))
+  (luna-load-theme))
 
 ;;;; Font
 (when window-system
   (luna-load-font)
   (luna-load-cjk-font))
-
 (setq luna-cjk-font-scale 1.1)
-
 (luna-enable-apple-emoji)
 
 ;; WenYue GuDianMingChaoTi (Non-Commercial Use) W5
@@ -98,9 +110,10 @@
 ;;;; server
 ;; checking whether server started can be slow
 ;; see emacs-horror
-(run-with-idle-timer
- 3 nil
- (lambda () (ignore-errors (server-start))))
+(unless luna-in-esup
+  (run-with-idle-timer
+   3 nil
+   (lambda () (ignore-errors (server-start)))))
 
 ;;;; Mac port
 (setq mac-option-modifier 'meta
@@ -126,9 +139,7 @@
 
 (add-to-list 'load-path "~/p/ghelp")
 (require 'ghelp)
-(run-with-idle-timer
- 3 nil
- #'ghelp-global-minor-mode)
+(ghelp-global-minor-mode)
 
 ;;;; trivial-copy
 (luna-when-mac
@@ -137,3 +148,8 @@
 
 ;;;; notdeft
 (add-to-list 'load-path "~/attic/notdeft")
+
+;; (profiler-report)
+
+(when luna-in-esup
+  (remove-hook 'kill-emacs-hook #'customize-save-customized))

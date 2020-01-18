@@ -176,11 +176,11 @@ OPTION-PLIST contains user options that each backend may use."
 (defun cowboy-add-load-path ()
   "Add packages to `load-path'."
   ;; add first and second level directories to load-path
+  ;; this is usually enough
   (dolist (package-dir-path (luna-f-list-directory cowboy-package-dir t))
     (add-to-list 'load-path package-dir-path)
     (dolist (package-subdir-path (luna-f-list-directory package-dir-path t))
-      (add-to-list 'load-path package-subdir-path)))
-  (package-initialize))
+      (add-to-list 'load-path package-subdir-path))))
 
 ;;; Fetchers
 
