@@ -1,6 +1,8 @@
 *
 !README.org
 !init.el
+!early-init.el
+!dump.el
 !site-lisp/
 !site-lisp/**/*
 !star/
