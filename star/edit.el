@@ -44,7 +44,6 @@
 ;;;; Edit
 
 (load-package ws-butler
-  :defer 3
   :config (ws-butler-global-mode))
 
 (load-package expand-region
