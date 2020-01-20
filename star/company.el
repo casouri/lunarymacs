@@ -1,4 +1,4 @@
-;;; -*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
 
 (defvar luna-company-manual nil
   "If t, invoke company manually.")

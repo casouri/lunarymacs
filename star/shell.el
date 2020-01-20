@@ -1,14 +1,6 @@
-;;; shell.el --- Shell      -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
 
-;; Author: Yuan Fu <casouri@gmail.com>
-
-;;; This file is NOT part of GNU Emacs
-
-;;; Commentary:
-;;
-
-;;; Code:
-;;
+;;; deprecated
 
 (with-eval-after-load 'luna-general-config
   (luna-default-leader

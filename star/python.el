@@ -1,8 +1,10 @@
-;;; -*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
 
 ;;; Config
 
 (setq python-indent-offset 4)
+
+;;; Packages
 
 ;;;; Sagemath
 

@@ -1,4 +1,4 @@
-;;; ivy.el --- Ivy config      -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
 
 (require 'luna-f)
 
@@ -12,14 +12,18 @@
 ;; In global map:
 ;; M-y : counsel-yank-pop (list kill-ring)
 
+
 ;;; Key
+
 (with-eval-after-load 'luna-general-config
   (luna-default-leader
     "s s" #'swiper)
   (general-define-key
    "M-y" #'counsel-yank-pop))
 
+
 ;;; Package
+
 (load-package ivy
   :config
   (setq ivy-use-virtual-buffers t
@@ -48,6 +52,7 @@
 ;; use the forked version in site-lisp
 (use-package recentf-ext
   :config (recentf-mode))
+
 
 ;;; Sort function
 
@@ -88,5 +93,3 @@ Higher the score, higher in the buffer list (in front)."
             :action #'ivy--switch-buffer-action
             :matcher #'ivy--switch-buffer-matcher
             :caller 'ivy-switch-buffer))
-
-;;; ivy.el ends here

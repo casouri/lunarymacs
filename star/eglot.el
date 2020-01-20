@@ -1,11 +1,4 @@
-;;; eglot.el --- Eglot Config      -*- lexical-binding: t; -*-
-
-
-;;; Commentary:
-;;
-
-;;; Code:
-;;
+;; -*- lexical-binding: t; -*-
 
 ;;; Keys
 

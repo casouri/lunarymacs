@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; Keys
 
 (with-eval-after-load 'luna-general-config

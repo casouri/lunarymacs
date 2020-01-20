@@ -1,12 +1,14 @@
-;;; -*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
 
 (load-package markdown-mode
   :mode ("\\.md$" "\\.markdown$" "\\.mk$")
   :init (add-hook 'markdown-mode-hook #'company-mode))
 
+
 (load-package yaml-mode
   :mode "\\.yaml$"
   :init (add-hook 'yaml-mode-hook #'company-mode))
+
 
 (load-package haskell-mode
   :mode "\\.hs$"
@@ -25,6 +27,7 @@
   (with-eval-after-load 'haskell-interactive-mode
     (define-key haskell-interactive-mode-map (kbd "C-a") #'haskell-interactive-mode-beginning)))
 
+
 (load-package matlab-emacs
   :init
   (add-hook 'matlab-mode-hook #'company-mode)
@@ -33,10 +36,12 @@
   ;; don’t enable company in matlab-shell-mode
   :commands (matlab-shell))
 
+
 (load-package mips-mode
   :mode "\\.mips$"
   :init (with-eval-after-load 'company
           (add-hook 'mips-mode-hook #'company-mode)))
+
 
 (load-package web-mode
   :init
@@ -58,6 +63,7 @@
   :config (setq web-mode-markup-indent-offset 2
                 web-mode-auto-close-style 2))
 
+
 ;; common lisp
 (load-package sly
   :commands sly
@@ -67,53 +73,44 @@
   (add-hook 'common-lisp-mode-hook #'sly-mode)
   (setq inferior-lisp-program "ccl64"))
 
+
+
 (load-package lua-mode
   :init (add-hook 'lua-mode-hook #'company-mode)
   :mode "\\.lua$"
   :interpreter "lua")
+
+
 
 (load-package pdf-tools
   :mode "\\.pdf%"
   :init (setq doc-view-resolution 320)
   :commands pdf-view-mode)
 
-;; Javascript
-(load-package tide
-  :init
-  (defun setup-tide-mode ()
-    (interactive)
-    (tide-setup)
-    (company-mode)
-    (flycheck-mode)
-    (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-    (setq-local flycheck-check-syntax-automatically '(save mode-enabled))
-    (setq-local company-tooltip-align-annotations t)
-    (tide-hl-identifier-mode +1)
-    (add-to-list 'luna-smart-format-alist '(typescript-mode . tide-format-before-save))
-    (add-to-list 'luna-smart-format-alist '(js-mode . tide-format-before-save)))
-  (add-hook 'typescript-mode-hook #'setup-tide-mode)
-  (add-hook 'js-mode-hook #'setup-tide-mode)
-  :commands (setup-tide-mode))
 
+;; Javascript
 (setq js-indent-level 2)
 
+(load-package tide
+  :hook ((typescript-mode-hook . setup-tide-mode)
+         (js-mode-hook . setup-tide-mode)))
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (company-mode)
+  (flycheck-mode)
+  (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+  (setq-local flycheck-check-syntax-automatically '(save mode-enabled))
+  (setq-local company-tooltip-align-annotations t)
+  (tide-hl-identifier-mode +1)
+  (add-to-list 'luna-smart-format-alist '(typescript-mode . tide-format-before-save))
+  (add-to-list 'luna-smart-format-alist '(js-mode . tide-format-before-save)))
+
+
 ;; C/C++
-
-(defvar luna-c-local-style nil
-  "Local C style. You have to use ‘c-set-style’ instead of a local variable.")
-
-(defvar luna-c-local-offset 4
-  "Local C offset. ‘c-basic-offset’ will be changed by style so
-setting it locally doesn’t really work.")
-
-(defun luna-c-set-local-style ()
-  (when luna-c-local-style
-    (c-set-style luna-c-local-style)
-    (setq c-basic-offset luna-c-local-offset)))
-
 (dolist (hook '(c-mode-hook c++-mode-hook))
   (add-hook hook #'company-mode)
-  (add-hook hook #'luna-c-set-local-style)
   (add-hook hook (lambda ()
                    (eglot-ensure)
                    ;; ccls has a fuzzy matching algorithm to order
@@ -126,15 +123,17 @@ setting it locally doesn’t really work.")
 (load-package realgud
   :commands (realgud:gdb realgud:lldb))
 
+;; Makefile
 (add-hook 'makefile-mode-hook
           (lambda ()
             (setq-local whitespace-style '(tab-mark))
             (whitespace-mode)))
 
-;;; Genarl package
 
+;;; Genarl package
 (load-package aggressive-indent
   :commands (aggressive-indent-mode))
+
 
 (load-package quickrun
   :commands (quickrun

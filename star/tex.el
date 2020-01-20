@@ -1,22 +1,13 @@
-;;; tex.el --- Tex      -*- lexical-binding: t; -*-
+;; lexical-binding: t; -*-
 
-;; Author: Yuan Fu <casouri@gmail.com>
-
-;;; This file is NOT part of GNU Emacs
-
-;;; Commentary:
-;;
-
-;;; Code:
-;;
-;;;; Key
+;;; Key
 
 (with-eval-after-load 'luna-general-config
   (luna-default-leader
     :keymaps 'tex-mode-map
     "tp" #'latex-preview-pane-mode))
 
-;;;; Packages
+;;; Packages
 
 (load-package latex-preview-pane
   :commands (latex-preview-pane-mode))
@@ -66,14 +57,3 @@
 ;;   (require 'texmathp)
 ;;   (require 'preview)
 ;;   (TeX-latex-mode))
-
-;;;; Config
-
-
-
-
-
-
-
-
-;;; config.el ends here

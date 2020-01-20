@@ -1,6 +1,7 @@
-;;; -*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
 
 ;;; Key
+
 (with-eval-after-load 'luna-general-config
   (general-define-key
    :prefix "C-x"
@@ -12,16 +13,6 @@
    "w f" #'eval-defun
    "w b" #'eval-buffer))
 
-;;; Package
-;; (load-package lispyville
-;;   :hook (emacs-lisp-mode . lispyville-mode)
-;;   :config
-;;   (lispyville-set-key-theme
-;;    '(operators
-;;      prettify
-;;      text-objects
-;;      additional-motions
-;;      slurp/barf-cp)))
 
 ;;; Config
 

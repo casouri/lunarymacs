@@ -1,4 +1,6 @@
-;;; term.el --- Terminal      -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
+
+;;; deprecated
 
 (require 'cl-lib)
 

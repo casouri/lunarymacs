@@ -1,7 +1,7 @@
-;;; -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
 
 ;;; Translation
-;;
+
 ;; separate C-i from TAB
 (when window-system
   ;; use as (kbd "<C-i>")
@@ -14,7 +14,7 @@
 (cl-loop for char from ?a to ?z
          do (define-key input-decode-map (format "\e[1;P%c" char) (kbd (format "s-%c" char))))
 
-;;; general
+;;; Key
 
 (load-package general
   :config
@@ -109,7 +109,6 @@
 
   (provide 'luna-general-config))
 
-;;; which-key
 (load-package which-key
   :after general
   :config (which-key-mode))

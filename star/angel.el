@@ -1,4 +1,4 @@
-;;; -*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
 
 (require 'pause)
 (require 'cl-lib)
@@ -86,7 +86,7 @@
 (advice-add #'luna-scroll-up-reserve-point :after (lambda () (luna-scroll-mode)))
 
 ;;; Navigation (w W e E b B)
-;;
+
 ;; Overall behavior:
 ;;
 ;; last-char goes back a word, stops at beginning of line and parenthesis
