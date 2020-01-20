@@ -45,6 +45,7 @@ For NO-CONFIRM and NO-ENABLE see ‘load-theme’."
     (if (featurep (intern-soft (format "%s-theme" theme)))
         (enable-theme theme)
       (load-theme theme t))
+    (setq luna-current-theme theme)
     (customize-set-variable 'luna-theme theme)))
 
 (defun luna-quit-window (arg)
@@ -82,7 +83,7 @@ If run with prefix argument (ARG), kill buffer."
   (let ((index (or (cl-position luna-current-theme luna-toggle-theme-list)
                    (progn (message "`luna-current-theme' is not in `luna-toggle-theme-list', default to the first one") 0)))
         (len (length luna-toggle-theme-list)))
-    (luna-load-theme (nth (% (1+ index) len) luna-toggle-theme-list) t)))
+    (luna-load-theme (nth (% (1+ index) len) luna-toggle-theme-list))))
 
 ;;; Font
 
