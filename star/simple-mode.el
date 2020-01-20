@@ -138,8 +138,5 @@
              quickrun-shell
              quickrun-compile-only
              quickrun-replace-region
-             quickrun-autorun-mode)
-  ;; from evil-collection
-  :init (with-eval-after-load 'evil
-          (evil-define-key 'normal quickrun--mode-map
-                           "q" 'quit-window)))
+             quickrun-autorun-mode))
+
