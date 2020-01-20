@@ -53,6 +53,25 @@ Return absolute path if ABSOLUTE is t."
     (insert-file-contents path)
     (buffer-string)))
 
+(defun luna-f-write (path string)
+  "Write STRING into file at PATH."
+  (with-temp-buffer
+    (insert string)
+    (write-file path)))
+
+(defun luna-f-read (path)
+  "Read file at PATH as a Lisp object."
+  (with-temp-buffer
+    (insert-file-contents path)
+    (goto-char (point-min))
+    (read (current-buffer))))
+
+(defun luna-f-write-obj (path obj)
+  "Write OBJ to file at PATH."
+  (with-temp-buffer
+    (prin1 obj (current-buffer))
+    (write-file path)))
+
 (defun luna-f-content-literally (path)
   "Read text of file at PATH."
   (with-temp-buffer
