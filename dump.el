@@ -20,7 +20,7 @@
                     highlight-parentheses hl-todo buffer-move
                     savehist eyebrowse minions ws-butler
                     expand-region isolate outshine flyspell magit
-                    eglot minibuf-eldef))
+                    eglot minibuf-eldef form-feed all-the-icons))
   (require package))
 (load-theme 'doom-one-light t t)
 (load-theme 'doom-cyberpunk t t)
