@@ -24,13 +24,11 @@
   org-html-export-as-html)
 
 (load-package olivetti
-  :init
-  (setq olivetti-body-width 80)
+  :init (setq olivetti-body-width 80)
   :commands olivetti-mode)
 
 (load-package org-download
-  :defer t
-  :init (add-hook 'org-mode-hook #'org-download-enable))
+  :hook (org-mode-hook . org-download-enable))
 
 ;;; Org
 

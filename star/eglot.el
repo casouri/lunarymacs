@@ -14,8 +14,8 @@
 ;;; Packages
 
 (load-package eglot
-  :defer t
-  :config
+  :commands (eglot eglot-ensure)
+  ;; :config
   ;; (add-to-list 'eglot-ignored-server-capabilites :hoverProvider)
   )
 

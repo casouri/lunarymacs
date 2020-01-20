@@ -24,8 +24,7 @@
                          company-backends)))))
 
 (load-package cdlatex
-  :defer t
-  :init (add-hook 'LaTeX-mode-hook #'cdlatex-mode))
+  :hook (LaTeX-mode-hook . cdlatex-mode))
 
 ;; (load-package webkit-katex-render
 ;;   :commands webkit-katex-render-mode)
