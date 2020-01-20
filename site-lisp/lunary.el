@@ -122,7 +122,7 @@ ARGS is as same as in `load'."
      :name "dump"
      :buffer buf
      :command (list "emacs" "--batch" "-q"
-                    "-l" (luna-f-join luna-cache-dir
+                    "-l" (luna-f-join user-emacs-directory
                                       "dump.el")))
     (display-buffer buf)))
 
