@@ -18,4 +18,5 @@
         (comment-edit . (:repo "twlz0ne/comment-edit.el" :dependency (edit-indirect dash)))
         (magit-patch-changelog . (:repo "dickmao/magit-patch-changelog"))
         (key-chord . (:repo "emacsorphanage/key-chord"))
-        (package-demo . (:repo "vermiculus/package-demo"))))
+        (package-demo . (:repo "vermiculus/package-demo"))
+        (ghelp . (:repo "casouri/ghelp"))))
