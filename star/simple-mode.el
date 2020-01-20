@@ -118,10 +118,6 @@
                    (setq-local company-transformers nil)
                    (setq-local comment-multi-line t))))
 
-;; Debugger
-
-(load-package realgud
-  :commands (realgud:gdb realgud:lldb))
 
 ;; Makefile
 (add-hook 'makefile-mode-hook
