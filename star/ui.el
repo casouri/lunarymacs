@@ -66,7 +66,6 @@
   :commands nyan-lite-mode)
 
 (load-package hl-todo
-  :defer 5
   :config
   (push 'org-mode hl-todo-text-modes)
   (push 'fundamental-mode hl-todo-text-modes)
@@ -80,7 +79,7 @@
   (global-hl-todo-mode))
 
 (load-package form-feed
-  :commands form-feed-mode)
+  :config (add-hook 'prog-mode-hook #'form-feed-mode))
 
 ;;;; Desktop, Windows & buffer
 
@@ -92,7 +91,6 @@
    buf-move-right))
 
 (load-package eyebrowse
-  :defer 3
   :commands
   (eyebrowse-switch-to-window-config-1
    eyebrowse-switch-to-window-config-2
