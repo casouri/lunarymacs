@@ -1,15 +1,6 @@
-;;; config.el --- Helm completion      -*- lexical-binding: t; -*-
-
-;; Author: Yuan Fu <casouri@gmail.com>
-
-;;; This file is NOT part of GNU Emacs
-
-
-;;; Commentary:
+;; -*- lexical-binding: t; -*-
 ;;
-
-;;; Code:
-;;
+;;; deprecated
 
 ;;; Keys
 
@@ -207,6 +198,3 @@ Its element is a pair of `buffer-name' and `mode-line-format'.")
 (load-package helm-xref
   :commands helm-xref-show-xrefs
   :init (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
-
-
-;;; config.el ends here
