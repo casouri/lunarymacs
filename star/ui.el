@@ -35,7 +35,7 @@
 (add-to-list 'luna-toggle-theme-list 'doom-cyberpunk)
 
 (load-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode)
+  :hook (prog-mode-hook . rainbow-delimiters-mode)
   :config (with-current-buffer (get-buffer-create "*scratch*")
             (rainbow-delimiters-mode)))
 

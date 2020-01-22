@@ -22,8 +22,8 @@
 ;; install dictionaries: http://wordlist.aspell.net
 ;;
 (load-package flyspell
-  :hook ((text-mode . flyspell-mode)
-         (prog-mode . flyspell-prog-mode))
+  :hook ((text-mode-hook . flyspell-mode)
+         (prog-mode-hook . flyspell-prog-mode))
   :config
   (with-eval-after-load 'luna-general-config
     (general-define-key
@@ -37,4 +37,4 @@
   (setq flyspell-issue-message-flag nil))
 
 (load-package writegood-mode
-  :hook ((fundamental-mode org-mode) . writegood-mode))
+  :hook ((fundamental-mode-hook org-mode-hook) . writegood-mode))

@@ -93,7 +93,7 @@
 
 (load-package tide
   :hook ((typescript-mode-hook . setup-tide-mode)
-         (js-mode-hook . setup-tide-mode)))
+         (js-mode-hook. setup-tide-mode)))
 
 (defun setup-tide-mode ()
   (interactive)

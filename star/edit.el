@@ -82,16 +82,9 @@
 ;;;; Code Structure
 
 (load-package outshine
-  :commands outshine-cycle-buffer
-  :init
-  (add-hook 'outline-minor-mode-hook 'outshine-mode)
-  (add-hook 'prog-mode-hook 'outline-minor-mode)
-  (defvar outline-minor-mode-prefix (kbd "C-c o"))
+  :hook (prog-mode-hook . outshine-mode)
   :config
-  ;; outshine-mode has all kinds of weird bindings
-  (setq outshine-mode-map (make-sparse-keymap))
-  (define-key outshine-mode-map
-    (kbd "C-c i") #'outshine-cycle))
+  (setq outshine-mode-map (make-sparse-keymap)))
 
 
 (load-package color-rg
@@ -113,8 +106,8 @@
 
 
 (load-package srefactor
-  :hook ((c-mode . semantic-mode)
-         (c++-mode . semantic-mode)))
+  :hook ((c-mode-hook . semantic-mode)
+         (c++-mode-hook . semantic-mode)))
 
 ;;;; Help
 

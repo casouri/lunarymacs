@@ -40,6 +40,7 @@
 (add-to-list 'luna-package-list 'use-package)
 
 (luna-message-error (require 'use-package))
+(setq use-package-hook-name-suffix "")
 ;; core must load first because other configs depends on them
 (luna-load-relative "star/builtin-config.el")
 (luna-load-relative "star/key.el")
