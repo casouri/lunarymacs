@@ -40,6 +40,11 @@ project."
                                  major-mode))
                               (buffer-list))))))
 
+(defun show-line-number ()
+  "Show current line’s line number."
+  (interactive)
+  (message "Line %s" (1+ (current-line))))
+
 ;;; File
 
 (defun luna-rename-file ()
