@@ -82,8 +82,8 @@
   (if luna-scroll-mode
       (set-transient-map luna-scroll-map t)))
 
-(advice-add #'luna-scroll-down-reserve-point :after (lambda () (luna-scroll-mode)))
-(advice-add #'luna-scroll-up-reserve-point :after (lambda () (luna-scroll-mode)))
+(advice-add #'luna-scroll-down-reserve-point :after #'luna-scroll-mode)
+(advice-add #'luna-scroll-up-reserve-point :after #'luna-scroll-mode)
 
 ;;; Navigation (w W e E b B)
 
