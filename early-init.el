@@ -2,7 +2,7 @@
 
 (add-hook 'emacs-startup-hook
           (let ((old-list file-name-handler-alist)
-                (threshold gc-cons-threshold)
+                (threshold (* 10 gc-cons-threshold))
                 (percentage gc-cons-percentage))
             (lambda ()
               (message "Emacs ready in %s with %d garbage collections."
