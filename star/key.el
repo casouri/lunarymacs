@@ -79,7 +79,7 @@
             :which-key "goto scratch buffer")
     ;; toggle
     "tt"  #'luna-switch-theme
-    "tM"  #'toggle-frame-maximized
+    "tm"  #'toggle-frame-maximized
     "tf"  #'luna-toggle-format-on-save
     "td"  #'toggle-debug-on-error
     ;; search
@@ -98,14 +98,6 @@
    :keymaps 'comint-mode
    "<up>" #'comint-previous-input
    "<down>" #'comint-next-input)
-
-  (general-define-key
-   "s-h" #'windmove-left
-   "s-j" #'windmove-down
-   "s-k" #'windmove-up
-   "s-l" #'windmove-right
-   "s-s" #'save-buffer
-   "s-w" #'delete-frame)
 
   (provide 'luna-general-config))
 

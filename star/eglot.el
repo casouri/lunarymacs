@@ -4,12 +4,12 @@
 
 (with-eval-after-load 'luna-general-config
   (luna-default-leader
-    "l f" #'eglot-format-buffer
-    "l R" #'eglot-rename
-    "l d" #'xref-find-definitions
-    "l r" #'xref-find-references
-    "l k" #'eldoc-box-quit-frame
-    "l s" #'eldoc-box-show-frame))
+    "lf" #'eglot-format-buffer
+    "lR" #'eglot-rename
+    "ld" #'xref-find-definitions
+    "lr" #'xref-find-references
+    "lk" #'eldoc-box-quit-frame
+    "ls" #'eldoc-box-show-frame))
 
 ;;; Packages
 

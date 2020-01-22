@@ -10,18 +10,7 @@
     "tl" #'luna-toggle-left-margin
     "iu" #'insert-char
     "sr" #'color-rg-search-input
-    "C-o" #'outline-toggle-children
-    ;; minimap
-    "tm" #'minimap-mode
-    ;; avy
-    "k" #'avy-goto-char-timer)
-  ;; M-y for yank pop
-
-  (general-define-key
-   :keymaps 'override
-   ;; this is binded by default,
-   ;; but flyspell mode shadows it
-   "C-M-i" #'outshine-cycle-buffer)
+    "C-o" #'outline-toggle-children)
 
   (general-define-key
    ;; Hungry delete

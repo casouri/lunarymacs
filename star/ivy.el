@@ -17,7 +17,7 @@
 
 (with-eval-after-load 'luna-general-config
   (luna-default-leader
-    "s s" #'swiper)
+    "ss" #'swiper)
   (general-define-key
    "M-y" #'counsel-yank-pop))
 

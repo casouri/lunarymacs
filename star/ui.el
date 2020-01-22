@@ -14,12 +14,17 @@
    "s-J" #'buf-move-down
    "s-H" #'buf-move-left
    "s-L" #'buf-move-right
-   )
+
+   "s-h" #'windmove-left
+   "s-j" #'windmove-down
+   "s-k" #'windmove-up
+   "s-l" #'windmove-right
+   "s-s" #'save-buffer
+   "s-w" #'delete-frame)
+
   (luna-default-leader
-    "tb" #'awesome-tab-mode
     "wr" #'luna-desktop-read
-    "ww" #'windman-select-window
-    "ah" #'luna-highlight-symbol))
+    "ww" #'windman-select-wilndow))
 
 ;;; Package
 

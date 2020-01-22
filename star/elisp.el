@@ -8,10 +8,10 @@
    :keymaps 'emacs-lisp-mode-map
    ;; eval
    "w" '(:ignore t :which-key "eval")
-   "w e" #'eval-last-sexp
-   "w r" #'eval-region
-   "w f" #'eval-defun
-   "w b" #'eval-buffer))
+   "we" #'eval-last-sexp
+   "wr" #'eval-region
+   "wf" #'eval-defun
+   "wb" #'eval-buffer))
 
 
 ;;; Config
