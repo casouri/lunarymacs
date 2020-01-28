@@ -99,7 +99,8 @@ If FORCE is non-nil, only export when org file is newer than html file."
                                  "index.org")))
     ;; create post’s dir and org file,
     ;; insert basic information
-    (mkdir year-path)
+    (unless (file-exists-p year-path)
+      (mkdir year-path))
     (mkdir dir-path)
     (find-file file-path)
     (insert (format "#+SETUPFILE: ../../setup.org
