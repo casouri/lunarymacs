@@ -211,12 +211,14 @@ In RECIPE, :repo is of form \"user/repo\"."
            ;; return non-nil if true (shallow), nil if false (not shallow)
            (search-backward "true" nil t)))))
 
-(defun cowboy--github-update (package _)
-  "Pull PACKAGE (a symbol) with RECIPE from upstream. Return t if success, nil if fail."
-  (cowboy--command "git" (luna-f-join cowboy-package-dir (symbol-name package))
-                   "fetch"
-                   (if (cowboy--github-shallowp package)
-                       "--depth=1")))
+(defun cowboy--github-update (package recipe)
+  "Pull PACKAGE (a symbol) with RECIPE from upstream."
+  (if (cowboy--github-shallowp package)
+      (progn
+        (cowboy-delete package)
+        (cowboy--github-install package recipe))
+    (cowboy--command "git" (luna-f-join cowboy-package-dir (symbol-name package))
+                     "pull" "--rebase" "origin" "master")))
 
 
 
