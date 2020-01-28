@@ -154,3 +154,7 @@
 
 (when luna-in-esup
   (remove-hook 'kill-emacs-hook #'customize-save-customized))
+
+;;;; Local unsynced customization
+
+(luna-load-or-create "local-config.el")
