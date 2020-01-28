@@ -68,6 +68,10 @@
         undo-tree-history-directory-alist
         `(("." . ,(luna-f-join luna-cache-dir "undo-tree")))))
 
+(load-package diff-hl
+  :hook (prog-mode-hook . diff-hl-mode)
+  :config (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+
 ;;;; Code Structure
 
 (load-package outshine
