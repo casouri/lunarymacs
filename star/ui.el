@@ -52,12 +52,8 @@
   (set-face-attribute 'hl-paren-face nil :weight 'bold)
   (global-highlight-parentheses-mode)
   ;; highlight only the most inner pair
-  (defface hl-paren (let ((display t)
-                          (attr '(:foreground "blue")))
-                      (list (cons display attr)))
-    "Foreground attribute is used for highlight paren highlight.")
   (setq hl-paren-colors
-        (lambda () (list (face-attribute 'hl-paren :foreground))))
+        (lambda () (list (face-attribute 'hl-paren-face :foreground))))
   ;; to reflect changes in parentheses color
   (add-hook 'luna-load-theme-hook
             (lambda ()
