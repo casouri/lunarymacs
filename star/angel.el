@@ -70,21 +70,6 @@
    :prefix "C-c"
    "C-b" #'switch-buffer-same-major-mode))
 
-(defvar luna-scroll-map (let ((map (make-sparse-keymap)))
-                          (define-key map (kbd "n") #'luna-scroll-down-reserve-point)
-                          (define-key map (kbd "p") #'luna-scroll-up-reserve-point)
-                          map)
-  "Transient map for `luna-scroll-mode'.")
-
-(define-minor-mode luna-scroll-mode
-  "Scroll and not insert n/p accidentally when switching between C-n/p and M-n/p."
-  :lighter ""
-  (if luna-scroll-mode
-      (set-transient-map luna-scroll-map t)))
-
-(advice-add #'luna-scroll-down-reserve-point :after #'luna-scroll-mode)
-(advice-add #'luna-scroll-up-reserve-point :after #'luna-scroll-mode)
-
 ;;; Navigation (w W e E b B)
 
 ;; Overall behavior:
