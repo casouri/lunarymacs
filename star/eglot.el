@@ -11,6 +11,9 @@
     "lk" #'eldoc-box-quit-frame
     "ls" #'eldoc-box-show-frame))
 
+;;; Config
+(setq read-process-output-max (* 1024 1024))
+
 ;;; Packages
 
 (load-package eglot
