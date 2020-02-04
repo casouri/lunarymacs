@@ -82,6 +82,16 @@ Return absolute path if ABSOLUTE is t."
   "Return the directory of the file at where the code is."
   (file-name-directory (or load-file-name buffer-file-name)))
 
+(defmacro luna-f-with-file (file &rest form)
+  "Open a temp buffer, insert FILE’s content, eval FORM. "
+  (declare (indent 1))
+  `(with-temp-buffer
+     (insert-file-contents ,file)
+     (goto-char (point-min))
+     ,@form))
+
+(defalias 'luna-f-with-write-file #'with-temp-file)
+
 (provide 'luna-f)
 
 ;;; luna-f.el ends here
