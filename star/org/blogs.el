@@ -61,31 +61,40 @@
   (with-current-buffer (find-file-noselect post-file-name)
     (buffer-string)))
 
+(defun luna-publish-note-process ()
+  "Run another Emacs and publish blog."
+  (interactive)
+  (start-process "Publish Notes"
+                 "*publish*"
+                 "~/bin/emacs"
+                 "-q"
+                 "-l" "~/.emacs.d/star/org/blog-init.el"
+                 "--eval" "(progn (luna-publish-note) (save-buffers-kill-terminal))"))
+
 (defun luna-publish-note (&optional force)
   "Publish my blog.
 If FORCE is non-nil, only export when org file is newer than html file."
   (interactive)
   ;; so the syntax color is good for light background
   (save-excursion
-    (luna-publish-with-theme 'doom-one-light
-      (luna-publish-with-tmp-buffers
-       (let ((org-html-postamble-format luna-org-html-postamble-format)
-             (org-html-postamble t)
-             (org-html-home/up-format luna-org-html-home/up-format)
-             (org-html-head-include-scripts nil)
-             (org-export-use-babel nil))
-         ;; export posts
-         ;; for each year
-         (dolist (dir (luna-f-list-directory luna-publish-note-dir t))
-           ;; for each post
-           (dolist (post-dir (luna-f-list-directory dir t))
-             ;; publish each post
-             (luna-publish-html-export post-dir force)))
+    (let ((org-html-postamble-format luna-org-html-postamble-format)
+          (org-html-postamble t)
+          (org-html-home/up-format luna-org-html-home/up-format)
+          (org-html-head-include-scripts nil)
+          (org-export-use-babel nil))
+      ;; export posts
+      ;; for each year
+      (dolist (dir (luna-f-list-directory luna-publish-note-dir t))
+        ;; for each post
+        (dolist (post-dir (luna-f-list-directory dir t))
+          ;; publish each post
+          (luna-publish-html-export post-dir force)))
 
-         ;; publish index page
-         (let ((org-html-postamble nil)
-               (org-html-home/up-format luna-org-html-home/up-format-for-note-index))
-           (luna-publish-html-export luna-publish-note-dir force)))))))
+      ;; publish index page
+      (let ((org-html-postamble nil)
+            (org-html-home/up-format
+             luna-org-html-home/up-format-for-note-index))
+        (luna-publish-html-export luna-publish-note-dir force)))))
 
 (defun luna-new-note-blog (title)
   "Make a new blog post with TITLE."
@@ -106,20 +115,10 @@ If FORCE is non-nil, only export when org file is newer than html file."
     (insert (format "#+SETUPFILE: ../../setup.org
 #+TITLE: %s
 #+DATE:
+#+TAGS:
 "
                     title))
-    (save-buffer)
-    ;; edit index page, add new post’s header to it.
-    (let ((post-header-info (format "{{{post(%s,%s/%s/)}}}"
-                                    title
-                                    year
-                                    dir-file-name)))
-      (find-file (luna-f-join luna-publish-note-dir "index.org"))
-      (goto-char (point-min))
-      (if (re-search-forward (regexp-quote "# post-insert-anchor") nil t)
-          (insert (concat "\n\n" post-header-info))
-        (kill-new post-header-info)
-        (message "Cannot find post header anchor, please yank header information manually")))))
+    (save-buffer)))
 
 (defvar luna-note-rss-template "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <rss version=\"2.0\">
@@ -137,13 +136,9 @@ If FORCE is non-nil, only export when org file is newer than html file."
 If FORCE non-nil, re-export every post."
   (interactive "P")
   (let* ((default-directory luna-publish-note-dir)
-         (auto-save-interval 999999999999)
-         (inhibit-file-name-handlers t)
+         (auto-save-default nil)
          (undo-inhibit-record-point t)
-         (str (with-current-buffer (find-file (luna-f-join luna-publish-note-dir "index.org"))
-                (buffer-string)))
-         (rss (with-temp-buffer
-                (insert str)
+         (rss (luna-f-with-file (luna-f-join luna-publish-note-dir "index.org")
                 (org-mode)
                 (org-macro-initialize-templates)
                 (org-macro-replace-all org-macro-templates)
@@ -154,14 +149,50 @@ If FORCE non-nil, re-export every post."
                                  (luna-publish-rss-export
                                   (org-element-property :RSS_LINK hl)
                                   nil
-                                  (message (org-element-property :RSS_DIR hl))
+                                  (org-element-property :RSS_DIR hl)
                                   force)))))))
-    (with-current-buffer (find-file "./rss.xml")
-      (erase-buffer)
+    (with-temp-file (luna-f-join luna-publish-note-dir "rss.xml")
       (insert (format luna-note-rss-template
                       (format-time-string "%a, %d %b %Y %H:%M:%S %z")
-                      rss))
-      (save-buffer))))
+                      rss)))))
+
+
+(defun luna-note-export-headers ()
+  "Generate org headers for each post."
+  (let (header-list)
+    (dolist (year-dir (luna-f-list-directory luna-publish-note-dir t))
+      (dolist (post-dir (luna-f-list-directory year-dir t))
+        (let ((org-file (luna-f-join post-dir "index.org"))
+              (org-export-options-alist (append '((:tags . ("TAGS" "tags" "" space))
+                                                  (:hide . ("HIDE" "hide" "" nil)))
+                                                org-export-options-alist)))
+          (luna-f-with-file org-file
+            (let* ((env (org-export-get-environment))
+                   (tag-list (split-string (plist-get env :tags)))
+                   (title (plist-get env :title))
+                   (date (plist-get env :date))
+                   (hide (plist-get env :hide)))
+              (unless (equal hide "true")
+                (push (list :title (car title)
+                            :date date
+                            :tags (concat ":" (string-join tag-list ":") ":")
+                            :path (format "%s/%s"
+                                          (file-name-base year-dir)
+                                          (file-name-base post-dir)))
+                      header-list)))))))
+    (substring-no-properties
+     (string-join
+      (mapcar (lambda (header)
+                (format "* [[./%s][%s]] %s\n :PROPERTIES:\n :RSS_LINK: %s\n :RSS_DIR: %s\n :END:\n\n"
+                        (concat (plist-get header :path) "/index.html")
+                        (plist-get header :title)
+                        (plist-get header :tags)
+                        (concat "https://archive.casouri.cat/note/" (plist-get header :path))
+                        (luna-f-join luna-publish-note-dir
+                                     (plist-get header :path))))
+              (seq-sort-by (lambda (x) (plist-get x :date))
+                           #'org-time>=
+                           header-list))))))
 
 ;;; Rock/day
 
@@ -181,33 +212,32 @@ If FORCE is non-nil, only export when org file is newer than html file."
   (interactive)
   ;; so the syntax color is good for light background
   (save-excursion
-    (luna-publish-with-theme 'doom-one-light
-      (luna-publish-with-tmp-buffers
-       ;; publish each post
-       (let ((org-html-postamble-format luna-org-html-postamble-format)
-             (org-html-postamble t)
-             (day-num (length (luna-f-directory-files (luna-f-join luna-publish-rock/day-dir "src") t))))
-         (defvar --luna-blog-rock-day-- nil)
-         (cl-loop for day-idx from 1 to day-num
-                  do (let* ((file-path (luna-f-join luna-publish-rock/day-dir "src" (format "day-%d.org" day-idx)))
-                            ;; (eval-env `((luna-blog-rock-day . ,day-idx))) ; used by macros in org files
-                            (html-dir (luna-f-join luna-publish-rock/day-dir
-                                                   (format "day-%d" day-idx)))
-                            (html-path (luna-f-join html-dir "index.html"))
-                            (org-html-head-include-scripts nil)
-                            (org-export-with-toc nil)
-                            (org-export-use-babel nil))
-                       (unless (file-exists-p html-dir)
-                         (mkdir html-dir))
-                       (with-current-buffer (find-file file-path)
-                         (when (or force (file-newer-than-file-p file-path html-path))
-                           (setq --luna-blog-rock-day-- day-idx)
-                           (org-export-to-file 'html html-path))))))
-       ;; publish index page
-       (let ((org-html-postamble nil))
-         ;; always force because the index is automatically generated now
-         ;; so there normally won’t be changes
-         (luna-publish-html-export luna-publish-rock/day-dir t))))))
+    ;; publish each post
+    (let ((org-html-postamble-format luna-org-html-postamble-format)
+          (org-html-postamble t)
+          (day-num (length (luna-f-directory-files (luna-f-join luna-publish-rock/day-dir "src") t))))
+      (defvar --luna-blog-rock-day-- nil)
+      (cl-loop for day-idx from 1 to day-num
+               do (let* ((file-path (luna-f-join luna-publish-rock/day-dir "src" (format "day-%d.org" day-idx)))
+                         ;; (eval-env `((luna-blog-rock-day . ,day-idx))) ; used by macros in org files
+                         (html-dir (luna-f-join luna-publish-rock/day-dir
+                                                (format "day-%d" day-idx)))
+                         (html-path (luna-f-join html-dir "index.html"))
+                         (org-html-head-include-scripts nil)
+                         (org-export-with-toc nil)
+                         (org-export-use-babel nil))
+                    (unless (file-exists-p html-dir)
+                      (mkdir html-dir))
+                    (luna-f-with-file (find-file file-path)
+                      (when (or force (file-newer-than-file-p file-path html-path))
+                        (org-mode)
+                        (setq --luna-blog-rock-day-- day-idx)
+                        (org-export-to-file 'html html-path))))))
+    ;; publish index page
+    (let ((org-html-postamble nil))
+      ;; always force because the index is automatically generated now
+      ;; so there normally won’t be changes
+      (luna-publish-html-export luna-publish-rock/day-dir t))))
 
 (defun luna-new-rock/day ()
   "Make a new blog post of rock/day of DAY."
