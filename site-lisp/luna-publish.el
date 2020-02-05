@@ -18,6 +18,8 @@
 If FORCE is non-nil, only export when org file is newer than html file."
   (let ((org-file (expand-file-name "index.org" dir))
         (html-file (expand-file-name "index.html" dir))
+        (org-html-head-include-scripts nil)
+        (org-export-use-babel nil)
         (default-directory dir)) ; for relative links in org file
     (when (and (file-exists-p org-file)
                (or force (file-newer-than-file-p org-file html-file)))
