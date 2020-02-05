@@ -77,10 +77,7 @@ If FORCE is non-nil, only export when org file is newer than html file."
   (interactive)
   ;; so the syntax color is good for light background
   (save-excursion
-    (let ((org-html-postamble-format luna-org-html-postamble-format)
-          (org-html-postamble t)
-          (org-html-home/up-format luna-org-html-home/up-format)
-          (org-html-head-include-scripts nil)
+    (let ((org-html-head-include-scripts nil)
           (org-export-use-babel nil))
       ;; export posts
       ;; for each year
@@ -88,8 +85,12 @@ If FORCE is non-nil, only export when org file is newer than html file."
         ;; for each post
         (dolist (post-dir (luna-f-list-directory dir t))
           ;; publish each post
-          (luna-publish-html-export post-dir force)))
-
+          ;; for some reason the let bindings only work here
+          ;; move it up there and it doesn’t work anymore...
+          (let ((org-html-postamble-format luna-org-html-postamble-format)
+                (org-html-postamble t)
+                (org-html-home/up-format luna-org-html-home/up-format))
+            (luna-publish-html-export post-dir force))))
       ;; publish index page
       (let ((org-html-postamble nil)
             (org-html-home/up-format

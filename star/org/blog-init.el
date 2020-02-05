@@ -13,6 +13,7 @@
 (load-theme 'doom-one-light t)
 (luna-load-relative "star/org/blogs.el")
 (require 'htmlize)
-(setq auto-save-default nil)
+(setq auto-save-default nil
+      make-backup-files nil)
 
 (toggle-debug-on-error)
