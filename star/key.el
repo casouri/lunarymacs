@@ -71,6 +71,7 @@
     ;; search
     "si"  #'imenu)
 
+  ;;;; other builtin keymaps
   (general-define-key
    :keymaps 'smerge-mode-map
    "C-c n" #'smerge-next
@@ -81,7 +82,7 @@
    "C-c u" #'smerge-keep-upper)
 
   (general-define-key
-   :keymaps 'comint-mode
+   :keymaps 'comint-mode-map
    "<up>" #'comint-previous-input
    "<down>" #'comint-next-input)
 
