@@ -51,13 +51,6 @@
     "Fd" #'delete-frame
     ;; align
     "="  #'align-regexp
-    ;; open
-    "o t"  #'luna-open-in-iterm
-    "o f"  #'luna-open-in-finder
-    "o p"  '((lambda () (interactive) (find-file "~/p")) :which-key "open ~/p")
-    "o d"  '((lambda () (interactive) (find-file "~/Downloads")) :which-key "open ~/Downloads")
-    "o D"  '((lambda () (interactive) (find-file "~/Desktop/")) :which-key "open ~/Desktop")
-    "o h"  '((lambda () (interactive) (find-file "~/")) :which-key "open home dir")
     ;; file
     "fR"  #'luna-rename-file
     "fs"  #'save-buffer
@@ -65,16 +58,9 @@
     "feD" #'luna-compare-init-to-example
     "fD"  '(:ignore t :which-key "delete file")
     "fDD" #'luna-delete-file-and-buffer
-    ;; quit
-    "qq"  #'save-buffers-kill-emacs
     ;; buffer
     "bm"  '((lambda () (interactive) (switch-to-buffer "*Messages*"))
             :which-key "goto message buffer")
-    "bd"  #'kill-buffer-and-window
-    "bh"  #'luna-close-help
-    "bo"  #'luna-kill-other-buffer
-    "bh"  #'luna-kill-helper
-    "bb"  #'list-buffers
     "bs"  '((lambda () (interactive) (switch-to-buffer "*scratch*"))
             :which-key "goto scratch buffer")
     ;; toggle
