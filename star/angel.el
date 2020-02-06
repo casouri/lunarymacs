@@ -37,6 +37,18 @@
 
    "C-v"   #'set-mark-command
 
+   ;; s -> M
+   "s-/"   (kbd "M-/")
+   "s-<backspace>" (kbd "M-<backspace>")
+   "s-d"   (kbd "M-d")
+   "s-f"   (kbd "M-f")
+   "s-b"   (kbd "M-b")
+   "C-s-p" (kbd "C-M-p")
+   "C-s-n" (kbd "C-M-n")
+   "C-s-f" (kbd "C-M-f")
+   "C-s-b" (kbd "C-M-b")
+   "s-."   (kbd "M-.")
+   "s-,"   (kbd "M-?"))
 
   (general-define-key
    :prefix "C-x"
