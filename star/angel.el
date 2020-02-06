@@ -32,22 +32,11 @@
    "M-v"   #'select-line
    "C-="   #'er/expand-region
 
-   "C-M-0" #'forward-sexp ; \)
-   "C-M-9" #'backward-sexp ; ;\(
    "C-M-p" #'luna-up-list-backward
    "C-M-n" #'down-list
 
    "C-v"   #'set-mark-command
 
-   "s-D"   '((lambda () (interactive)
-               (shell-command-to-string
-                (format "open dict://%s"
-                        (if (not (region-active-p))
-                            (symbol-at-point)
-                          (buffer-substring-no-properties
-                           (region-beginning)
-                           (region-end))))))
-             :wk "search in Dictionary"))
 
   (general-define-key
    :prefix "C-x"
