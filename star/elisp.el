@@ -20,3 +20,10 @@
   (add-hook hook #'flymake-mode)
   (add-hook hook #'company-mode)
   (add-hook hook #'aggressive-indent-mode))
+
+
+;;; Package
+
+(load-package sly-el-indent
+  :commands sly-el-indent-setup
+  :hook (emacs-lisp-mode-hook . sly-el-indent-setup))

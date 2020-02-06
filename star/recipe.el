@@ -19,4 +19,5 @@
         (magit-patch-changelog . (:repo "dickmao/magit-patch-changelog"))
         (key-chord . (:repo "emacsorphanage/key-chord"))
         (package-demo . (:repo "vermiculus/package-demo"))
-        (ghelp . (:repo "casouri/ghelp"))))
+        (ghelp . (:repo "casouri/ghelp"))
+        (sly-el-indent . (:repo "cireu/sly-el-indent"))))
