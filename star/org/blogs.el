@@ -11,10 +11,14 @@
 ;;
 
 (require 'luna-publish)
+(require 'luna-f)
 (require 'cl-lib)
 (require 'subr-x)
 
 ;;; Common
+
+(defvar luna-org-html-footnote-format
+  "<sup>%s</sup>")
 
 (defvar luna-org-html-postamble-format
   '(("en" "<p class=\"author\">Written by %a <%e></p>
@@ -69,7 +73,8 @@
                  "~/bin/emacs"
                  "-q"
                  "-l" "~/.emacs.d/star/org/blog-init.el"
-                 "--eval" "(progn (luna-publish-note) (save-buffers-kill-terminal))"))
+                 "-f" "luna-publish-note"
+                 "-f" "save-buffers-kill-terminal"))
 
 (defun luna-publish-note (&optional force)
   "Publish my blog.
@@ -89,13 +94,16 @@ If FORCE is non-nil, only export when org file is newer than html file."
           ;; move it up there and it doesn’t work anymore...
           (let ((org-html-postamble-format luna-org-html-postamble-format)
                 (org-html-postamble t)
-                (org-html-home/up-format luna-org-html-home/up-format))
+                (org-html-home/up-format luna-org-html-home/up-format)
+                (org-html-footnote-format luna-org-html-footnote-format))
             (luna-publish-html-export post-dir force))))
       ;; publish index page
       (let ((org-html-postamble nil)
             (org-html-home/up-format
-             luna-org-html-home/up-format-for-note-index))
-        (luna-publish-html-export luna-publish-note-dir force)))))
+              luna-org-html-home/up-format-for-note-index))
+        ;; like rock/day, we are automatically generating headers now
+        ;; force update every time
+        (luna-publish-html-export luna-publish-note-dir t)))))
 
 (defun luna-new-note-blog (title)
   "Make a new blog post with TITLE."

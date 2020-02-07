@@ -12,20 +12,24 @@
 
 (require 'luna-f)
 (require 'subr-x)
+;; remove this and ‘org-html-home/up-format’ won’t work right
+(require 'ox-html)
 
 (defun luna-publish-html-export (dir &optional force)
   "Export index.org to index.html in DIR if the latter is older.
 If FORCE is non-nil, only export when org file is newer than html file."
   (let ((org-file (expand-file-name "index.org" dir))
-        (html-file (expand-file-name "index.html" dir))
-        (org-html-head-include-scripts nil)
-        (org-export-use-babel nil)
-        (default-directory dir)) ; for relative links in org file
+        (html-file (expand-file-name "index.html" dir)))
     (when (and (file-exists-p org-file)
                (or force (file-newer-than-file-p org-file html-file)))
-      (with-current-buffer (find-file org-file)
-        (org-html-export-to-html)
-        (kill-buffer)))))
+      (luna-f-with-file org-file
+        (org-mode)
+        (let ((org-html-head-include-scripts nil)
+              (org-export-use-babel nil)
+              ;; for relative links in org file
+              (default-directory dir)
+              (org-export-coding-system org-html-coding-system))
+          (org-export-to-file 'html html-file))))))
 
 ;;; RSS
 
