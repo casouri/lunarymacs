@@ -151,7 +151,7 @@ OPTION-PLIST contains user options that each backend may use."
                      (funcall (cowboy--install-fn fetcher)
                               package recipe option-plist))
                    (cowboy--add-package-load-path package)
-                   (require (intern package) nil t))
+                   (require package nil t))
           (message "Recipe not found, installing with package.el")
           (cowboy-ensure-refresh-content)
           (package-install package))
@@ -251,7 +251,7 @@ In RECIPE, :repo is of form \"user/repo\"."
         (cowboy-delete package)
         (cowboy--github-install package recipe))
     (cowboy--command "git" (luna-f-join cowboy-package-dir (symbol-name package))
-                     "pull" "--rebase" "origin" "master")))
+                     "pull" "--rebase")))
 
 
 
