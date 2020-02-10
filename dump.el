@@ -19,7 +19,7 @@
                    doom-cyberpunk-theme rainbow-delimiters
                    highlight-parentheses hl-todo buffer-move
                    savehist eyebrowse minions ws-butler
-                   expand-region isolate outshine flyspell magit
+                   expand-region isolate outshine flyspell ;; magit
                    eglot minibuf-eldef form-feed all-the-icons
                    sly-el-indent))
   (require package))
