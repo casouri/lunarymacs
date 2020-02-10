@@ -51,7 +51,7 @@ TODO :load-path is for additional load-path entries. By default cowboy adds pack
 and subdir under that into load-path, if the package needs to add subdirs that are deeper
 to load-path, use this key to specify a relative path to package-dir. No preceeding slash or dot.")
 
-;;;; Backstage
+;;; Backstage
 
 (defun cowboy--install-fn (backend)
   "Return the install function of BACKEND (symbol) or nil."
@@ -86,7 +86,21 @@ to load-path, use this key to specify a relative path to package-dir. No preceed
                               args)))
         (error (buffer-string))))))
 
-;;;; Userland
+(defun cowboy--avaliable-package-list ()
+  "Return a list of available packages as string."
+  (cowboy-ensure-refresh-content)
+  (append (mapcar (lambda (pkg) (symbol-name (car pkg)))
+                  package-archive-contents)
+          (mapcar (lambda (recipe) (symbol-name (car recipe)))
+                  cowboy-recipe-alist)))
+
+(defun cowboy--installed-package-list ()
+  "Return a list of installed packages as string."
+  (append (mapcar (lambda (pkg) (symbol-name pkg))
+                  package-activated-list)
+          (luna-f-list-directory cowboy-package-dir)))
+
+;;; Userland
 
 (defun cowboy-ensure-refresh-content (&optional force)
   "Make sure package list is refreshed.
@@ -101,34 +115,37 @@ If FORCE non-nil, always refresh."
   "Install PACKAGE (symbol).
 
 OPTION-PLIST contains user options that each backend may use."
-  (interactive "SPackage: ")
+  (interactive (list (intern
+                      (completing-read "Package: "
+                                       (cowboy--avaliable-package-list)))))
   (cowboy--message-error package
-    (message "Installing %s" package)
     (let ((recipe (alist-get package cowboy-recipe-alist)))
-      (if recipe
-          (progn
-            (message "Found recipe")
-            (if (cowboy-installedp package)
-                (message "%s is already installed" package)
-              (when-let ((dependency-list (plist-get recipe :dependency)))
-                (message "Found dependencies: %s" dependency-list)
-                (dolist (dep dependency-list)
-                  (cowboy-install dep option-plist)))
-              (let ((fetcher (or (plist-get recipe :fetcher) 'github)))
-                (message "Installing package with %s backend." fetcher)
-                (funcall (cowboy--install-fn fetcher)
-                         package recipe option-plist)))
-            (add-to-list 'load-path (luna-f-join cowboy-package-dir
-                                                 (symbol-name package)))
-            (require (intern-soft package) nil t))
-        (message "Recipe not found, installing with package.el")
-        (cowboy-ensure-refresh-content)
-        (package-install package))
-      (message "Package %s installed" package))))
+      (if (cowboy-installedp package)
+          (message "%s is already installed" package)
+        (message "Installing %s" package)
+        (if recipe
+            (progn (message "Found recipe")
+                   (when-let ((dependency-list (plist-get recipe :dependency)))
+                     (message "Found dependencies: %s" dependency-list)
+                     (dolist (dep dependency-list)
+                       (cowboy-install dep option-plist)))
+                   (let ((fetcher (or (plist-get recipe :fetcher) 'github)))
+                     (message "Installing package with %s backend." fetcher)
+                     (funcall (cowboy--install-fn fetcher)
+                              package recipe option-plist))
+                   (add-to-list 'load-path (luna-f-join cowboy-package-dir
+                                                        (symbol-name package)))
+                   (require (intern-soft package) nil t))
+          (message "Recipe not found, installing with package.el")
+          (cowboy-ensure-refresh-content)
+          (package-install package))
+        (message "Package %s installed" package)))))
 
 (defun cowboy-update (package)
   "Update PACKAGE."
-  (interactive "SPackage: ")
+  (interactive (list (intern
+                      (completing-read "Package: "
+                                       (cowboy--installed-package-list)))))
   (cowboy--message-error package
     (message "Updating %s" package)
     (let ((recipe (alist-get package cowboy-recipe-alist)))
@@ -153,7 +170,9 @@ OPTION-PLIST contains user options that each backend may use."
 
 (defun cowboy-delete (package)
   "Delete PACKAGE."
-  (interactive "SPackage: ")
+  (interactive (list (intern
+                      (completing-read "Package: "
+                                       (cowboy--installed-package-list)))))
   (cowboy--message-error package
     (message "Deleting %s" package)
     (let ((recipe (alist-get package cowboy-recipe-alist)))
