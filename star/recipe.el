@@ -20,4 +20,5 @@
         (key-chord . (:repo "emacsorphanage/key-chord"))
         (package-demo . (:repo "vermiculus/package-demo"))
         (ghelp . (:repo "casouri/ghelp"))
-        (sly-el-indent . (:repo "cireu/sly-el-indent"))))
+        (sly-el-indent . (:repo "cireu/sly-el-indent"))
+        (cowboy-test . (:repo "casouri/cowboy-test"))))
