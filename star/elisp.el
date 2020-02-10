@@ -24,6 +24,6 @@
 
 ;;; Package
 
-(load-package sly-el-indent
-  :commands sly-el-indent-setup
-  :hook (emacs-lisp-mode-hook . sly-el-indent-setup))
+;; (load-package sly-el-indent
+;;   :commands sly-el-indent-setup
+;;   :hook (emacs-lisp-mode-hook . sly-el-indent-setup))
