@@ -5,7 +5,8 @@
 (require 'luna-f)
 (require 'lunary)
 (require 'cowboy)
-
+;; recipe.el is needed for adding subdir’s to load-path
+(luna-load-relative "star/recipe.el")
 (setq package-user-dir (expand-file-name "package" user-emacs-directory))
 (package-initialize)
 (cowboy-add-load-path)
