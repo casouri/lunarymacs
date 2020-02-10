@@ -1,7 +1,7 @@
 (setq cowboy-recipe-alist
       '((isolate . (:repo "casouri/isolate"))
         (aweshell . (:repo "casouri/aweshell"))
-        (doom-themes . (:repo "casouri/emacs-doom-themes"))
+        (doom-themes . (:repo "casouri/emacs-doom-themes" :subdir ("themes")))
         (nyan-lite . (:repo "casouri/nyan-lite"))
         (pp+ . (:fetcher url :url "https://www.emacswiki.org/emacs/download/pp%2b.el"))
         (color-rg . (:repo "manateelazycat/color-rg" :dependency (exec-path-from-shell)))

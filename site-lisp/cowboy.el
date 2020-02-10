@@ -32,24 +32,28 @@ recipe-list and optionally option-plist.")
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
-package is a symbol, properties is a plist.
-Avaliable keywords: :fetcher, :repo, :dependency, :pseudo.
+package is a symbol, properties is a plist. Avaliable keywords:
+:fetcher, :repo, :dependency, :pseudo.
 
-:fetcher is a symbol representing the source, available options are 'github, 'url.
-If none specified, default to 'github.
+:fetcher is a symbol representing the source, available options
+are 'github, 'url. If none specified, default to 'github.
 
-:repo is a string representing a repository from github, it should be like \"user/repo\".
+:repo is a string representing a repository from github, it
+should be like \"user/repo\".
 
 TODO :branch fetch a particular branch of repo.
 
-:dependency is a list of symbols of packages thar this package depends on.
+:dependency is a list of symbols of packages thar this package
+depends on.
 
-:pseudo is for pseudo packages. for example, ivy, counsel & swiper are in one repo,
-then you only need one recipe. The other two can be configured as pseudo packages.
+:pseudo is for pseudo packages. for example, ivy, counsel &
+swiper are in one repo, then you only need one recipe. The other
+two can be configured as pseudo packages.
 
-TODO :load-path is for additional load-path entries. By default cowboy adds package dir
-and subdir under that into load-path, if the package needs to add subdirs that are deeper
-to load-path, use this key to specify a relative path to package-dir. No preceeding slash or dot.")
+:subdir is for additional load-path entries. By default cowboy
+adds package dir into load-path, if the package needs to add
+subdirs to load-path, use this key to specify a
+relative path to package-dir. No preceding slash or dot.")
 
 ;;; Backstage
 
@@ -100,6 +104,19 @@ to load-path, use this key to specify a relative path to package-dir. No preceed
                   package-activated-list)
           (luna-f-list-directory cowboy-package-dir)))
 
+(defun cowboy--add-package-load-path (package)
+  "Add PACKAGE (symbol) to `load-path'."
+  (let* ((package-dir-path (luna-f-join cowboy-package-dir (symbol-name package)))
+         (recipe (alist-get package cowboy-recipe-alist))
+         (subdir-list (when recipe
+                        (plist-get recipe :subdir))))
+    ;; add main dir
+    (add-to-list 'load-path package-dir-path)
+    ;; add sub dir
+    (when subdir-list
+      (dolist (subdir subdir-list)
+        (add-to-list 'load-path (luna-f-join package-dir-path subdir))))))
+
 ;;; Userland
 
 (defun cowboy-ensure-refresh-content (&optional force)
@@ -133,9 +150,8 @@ OPTION-PLIST contains user options that each backend may use."
                      (message "Installing package with %s backend." fetcher)
                      (funcall (cowboy--install-fn fetcher)
                               package recipe option-plist))
-                   (add-to-list 'load-path (luna-f-join cowboy-package-dir
-                                                        (symbol-name package)))
-                   (require (intern-soft package) nil t))
+                   (cowboy--add-package-load-path package)
+                   (require (intern package) nil t))
           (message "Recipe not found, installing with package.el")
           (cowboy-ensure-refresh-content)
           (package-install package))
@@ -196,10 +212,8 @@ OPTION-PLIST contains user options that each backend may use."
   "Add packages to `load-path'."
   ;; add first and second level directories to load-path
   ;; this is usually enough
-  (dolist (package-dir-path (luna-f-list-directory cowboy-package-dir t))
-    (add-to-list 'load-path package-dir-path)
-    (dolist (package-subdir-path (luna-f-list-directory package-dir-path t))
-      (add-to-list 'load-path package-subdir-path))))
+  (dolist (package (luna-f-list-directory cowboy-package-dir))
+    (cowboy--add-package-load-path (intern package))))
 
 ;;; Fetchers
 
