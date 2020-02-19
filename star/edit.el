@@ -63,6 +63,7 @@
 (load-package undo-tree
   :config (global-undo-tree-mode)
   (setq undo-tree-visualizer-timestamps t
+        undo-tree-enable-undo-in-region nil
         undo-tree-visualizer-diff t
         undo-tree-auto-save-history t
         undo-tree-history-directory-alist
