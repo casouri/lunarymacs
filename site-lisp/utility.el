@@ -1,6 +1,7 @@
 ;;; utility.el --- Utilities      -*- lexical-binding: t; -*-
 
 (require 'lunary)
+(require 'luna-f)
 
 ;;; Buffer
 
@@ -275,6 +276,20 @@ and moves point to the previous line."
           ;; not at beginning of text, just do normal delete
           (normal-delete))))))
 
+;;; Cheat sheet
+
+(defvar cheatsheet-file-dir (expand-file-name "cheatsheet" user-emacs-directory)
+  "Under where you put the cheat sheets.")
+
+(defvar cheatsheet-display-fn (lambda (txt) (message "%s" txt))
+  "Function for displaying cheat sheet.")
+
+(defun cheatsheet-display ()
+  "Display cheat sheet for this major mode."
+  (interactive)
+  (let* ((mode-name (symbol-name major-mode))
+         (file-path (expand-file-name mode-name cheatsheet-file-dir)))
+    (funcall cheatsheet-display-fn (luna-f-content file-path))))
 
 (provide 'utility)
 
