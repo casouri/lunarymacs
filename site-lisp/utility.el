@@ -171,11 +171,7 @@ E.g. SURNAME (c) to symbol ©."
                                       (format "%s\t%s" (car c) (cdr c)))
                                     luna-special-symbol-alist))
                            "\t"))))
-  (insert (catch 'ret
-            (dolist (elt luna-special-symbol-alist)
-              (when (equal (car elt) surname)
-                (throw 'ret (cdr elt)))
-              ""))))
+  (insert (alist-get surname luna-special-symbol-alist "" nil #'equal)))
 
 ;;; Navigation
 
