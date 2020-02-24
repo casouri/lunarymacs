@@ -53,6 +53,7 @@
 
   (general-define-key
    :prefix "C-x"
+   "c"   #'cheatsheet-display
    "C-f" #'luna-find-file
    "C-u" #'undo-tree-visualize
    "C-v" #'cua-rectangle-mark-mode
