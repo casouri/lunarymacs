@@ -162,7 +162,13 @@ buffer is not visiting a file."
 (defun luna-insert-special-symbol (surname)
   "Insert special symbol at point, SURNAME is used to search for symbol.
 E.g. SURNAME (c) to symbol ©."
-  (interactive "MAbbrev: ")
+  (interactive (list (car (split-string
+                           (completing-read
+                            "MAbbrev: "
+                            (mapcar (lambda (c)
+                                      (format "%s\t%s" (car c) (cdr c)))
+                                    luna-special-symbol-alist))
+                           "\t"))))
   (insert (catch 'ret
             (dolist (elt luna-special-symbol-alist)
               (when (equal (car elt) surname)
