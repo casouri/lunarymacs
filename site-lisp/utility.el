@@ -139,8 +139,8 @@ buffer is not visiting a file."
                                     ("tm" . "™")
                                     ("p" . " ")
                                     ("s" . "§")
-                                    ("---" . "—") ; em dash
-                                    ("--" . "–") ; en dash
+                                    ("--" . "—") ; em dash
+                                    ("-" . "–") ; en dash
                                     ("..." . "…")
                                     ("<" . "⃖")
                                     (">" . "⃗")
