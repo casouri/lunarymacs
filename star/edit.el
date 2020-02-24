@@ -22,7 +22,8 @@
 
   (general-define-key
    :prefix "C-x"
-   "i" #'luna-insert-special-symbol)
+   "i" #'luna-insert-special-symbol
+   "C-i" #'insert-char)
 
   (general-define-key
    :keymaps '(c-mode c++-mode)
