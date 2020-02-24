@@ -48,7 +48,8 @@
    "C-s-f" (kbd "C-M-f")
    "C-s-b" (kbd "C-M-b")
    "s-."   (kbd "M-.")
-   "s-,"   (kbd "M-?"))
+   "s-,"   (kbd "M-?")
+   "C-s-t" (kbd "C-M-t"))
 
   (general-define-key
    :prefix "C-x"
