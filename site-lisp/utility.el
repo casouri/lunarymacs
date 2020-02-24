@@ -157,6 +157,8 @@ buffer is not visiting a file."
                                     ("rr" . "”")
                                     (" " . " ") ; non-breaking space
                                     ("hand" . "☞"))
+  ;; don’t use tab character because we use that for splitting
+  ;; in ‘luna-insert-special-symbol’
   "Alist used by `luna-insert-special-symbol'.")
 
 (defun luna-insert-special-symbol (surname)
