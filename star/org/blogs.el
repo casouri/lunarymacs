@@ -100,10 +100,12 @@ If FORCE is non-nil, only export when org file is newer than html file."
       ;; publish index page
       (let ((org-html-postamble nil)
             (org-html-home/up-format
-              luna-org-html-home/up-format-for-note-index))
-        ;; like rock/day, we are automatically generating headers now
+             luna-org-html-home/up-format-for-note-index))
+        ;; like rock/day, we are automatically generating headers now,
         ;; force update every time
-        (luna-publish-html-export luna-publish-note-dir t)))))
+        (luna-publish-html-export luna-publish-note-dir t))
+      ;; rss
+      (luna-note-export-rss))))
 
 (defun luna-new-note-blog (title)
   "Make a new blog post with TITLE."
@@ -140,8 +142,8 @@ If FORCE is non-nil, only export when org file is newer than html file."
   </channel>
 </rss>")
 
-(defun luna-note-export-rss (force)
-  "Export RSS for current buffer.
+(defun luna-note-export-rss (&optional force)
+  "Export RSS for notes.
 If FORCE non-nil, re-export every post."
   (interactive "P")
   (let* ((default-directory luna-publish-note-dir)
