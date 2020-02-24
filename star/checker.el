@@ -5,9 +5,7 @@
 (with-eval-after-load 'luna-general-config
   (luna-default-leader
     "ts" #'luna-toggle-spell-check
-    "ef" #'flyspell-correct-previous
-    "eg" #'langtool-check
-    "ec" #'langtool-correct-buffer))
+    "ef" #'flyspell-correct-previous))
 
 ;;; flymake
 ;;
@@ -25,7 +23,7 @@
   :hook ((text-mode-hook . flyspell-mode)
          (prog-mode-hook . flyspell-prog-mode))
   :config
-  (with-eval-after-load 'luna-general-config
+  (with-eval-after-load 'general
     (general-define-key
      :keymaps 'flyspell-mode-map
      "C-," nil
@@ -38,3 +36,26 @@
 
 (load-package writegood-mode
   :hook ((fundamental-mode-hook org-mode-hook) . writegood-mode))
+
+;;; Grammly
+
+;; (load-package flycheck-grammarly
+;;   :hook ((org-mode-hook . flycheck-mode)
+;;          (text-mode . flycheck-mode)))
+
+
+;;; proselint
+
+(load-package flycheck
+  :hook ((text-mode org-mode) . flycheck-mode))
+
+(with-eval-after-load flycheck-mode
+  (flycheck-define-checker proselint
+    "A linter for prose."
+    :command ("proselint" source-inplace)
+    :error-patterns
+    ((warning line-start (file-name) ":" line ":" column ": "
+	      (id (one-or-more (not (any " "))))
+	      (message) line-end))
+    :modes (text-mode org-mode))
+  (add-to-list 'flycheck-checkers 'proselint))
