@@ -1,4 +1,11 @@
-;;; -*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
+
+(with-eval-after-load 'luna-general-config
+  (luna-default-leader
+    "gs" #'magit-status
+    "gf" '(:ignore t :which-key "file")
+    "gfc" #'magit-file-checkout
+    "gfl" #'magit-log-buffer-file))
 
 (load-package magit
   :commands magit-status
@@ -7,12 +14,8 @@
   (add-to-list 'luna-buffer-bottom-list "magit:")
   (add-to-list 'luna-buffer-bottom-list "magit-process:"))
 
-(with-eval-after-load 'luna-general-config
-  (luna-default-leader
-    "gs" #'magit-status
-    "gf" '(:ignore t :which-key "file")
-    "gfc" #'magit-file-checkout
-    "gfl" #'magit-log-buffer-file))
+(load-package magit-patch-changelog
+  :after magit)
 
 (load-package magit-todos
   :hook (magit-mode . magit-todos-mode))
