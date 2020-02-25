@@ -37,8 +37,9 @@
 
    "C-v"   #'set-mark-command
 
+   "s-/"   #'transform-previous-char
+
    ;; s -> M
-   "s-/"   (kbd "M-/")
    "s-<backspace>" (kbd "M-<backspace>")
    "s-d"   (kbd "M-d")
    "s-f"   (kbd "M-f")
