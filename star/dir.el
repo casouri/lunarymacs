@@ -7,7 +7,6 @@
    :keymaps 'dired-mode-map
    "b" #'dired-up-directory
    "q" #'luna-quit-window
-   "C-c C-s" #'dired-narrow
    "C-c C-o" #'luna-dired-open-file-at-point))
 
 ;;; Config
