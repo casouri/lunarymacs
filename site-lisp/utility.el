@@ -302,8 +302,8 @@ and moves point to the previous line."
   (mapcar (lambda (x) (mapcar #'char-to-string x))
           (split-string (string-join
                          '("*×·⊗⊙ +⊕ |⊦⊨ /÷ \\∖"
-                           "<≤∈∉⊂⊆⊏⊑ >≥∋∌⊃⊇⊐⊒ =≈≠"
-                           "v∨⌄ ^∧⌃ 0∅"
+                           "<∈⊂⊏ >∋⊃⊐ =≈"
+                           "v∨ ^∧ 0∅"
                            "Rℝ Zℤ Qℚ Nℕ Cℂ"
                            "aαΑ∀ bβΒ gγΓ dδΔ eεΕ∃ zζΖ hηΗ qθΘ"
                            "iιΙ kκΚ lλΛ mμΜ nνΝ∩ xξΞ oοΟ pπΠ"
@@ -357,23 +357,60 @@ Highlight the one marked by INDEX."
                " "))
 
 (defun transform-previous-char ()
-  "Transform char before point."
+  "Transform char before point.
+
+If previous char is “/” or “_”, apply ‘accent-previous-char’
+instead."
   (interactive)
-  (when-let ((c (transform-get-variant-list (char-to-string
+  (if (member (char-before) '(?/ ?_))
+      (accent-previous-char)
+    (if-let ((c (transform-get-variant-list (char-to-string
                                              (char-before)))))
-    (let* ((index (car c))
-           (variant-list (cdr c))
-           (step-fn (transform--make-step-fn variant-list index))
-           (map (let ((map (make-sparse-keymap)))
-                  (define-key map (kbd "C-n")
-                    (lambda () (interactive) (funcall step-fn 1)))
-                  (define-key map (kbd "C-p")
-                    (lambda () (interactive) (funcall step-fn -1)))
-                  (define-key map (this-command-keys)
-                    (lambda () (interactive) (funcall step-fn 1)))
-                  map)))
-      (funcall step-fn 1)
-      (set-transient-map map t))))
+        (let* ((index (car c))
+               (variant-list (cdr c))
+               (step-fn (transform--make-step-fn variant-list index))
+               (map (let ((map (make-sparse-keymap)))
+                      (define-key map (kbd "C-n")
+                        (lambda () (interactive) (funcall step-fn 1)))
+                      (define-key map (kbd "C-p")
+                        (lambda () (interactive) (funcall step-fn -1)))
+                      (define-key map (this-command-keys)
+                        (lambda () (interactive) (funcall step-fn 1)))
+                      map)))
+          (funcall step-fn 1)
+          (set-transient-map map t))
+      (user-error "No possible transformation"))))
+
+(defvar accent-list
+  '((?_ . "<≤ ⊂⊆ ⊏⊑ >≥ ⊃⊇ ⊐⊒")
+    (?/ . "=≠ <≮ ≤≰ ∈∉ ⊂⊄ ⊆⊈ >≯ ≥≱ ∋∌ ⊃⊅ ⊇⊉")))
+
+(defun accent-previous-char ()
+  "Accent previous char by its trailing accent modifier."
+  (interactive)
+  (let ((modifier-list (mapcar #'car accent-list)))
+    (if (not (member (char-before) modifier-list))
+        ;; base case, prev char is normal char
+        nil
+      ;; recursion case  <char><mod>|
+      (let ((modifier (char-before))
+            old-char new-char)
+        (atomic-change-group
+          (delete-char -1)
+          (accent-previous-char)
+          (setq old-char (char-before))
+          ;; find accented char
+          (setq new-char (condition-case nil
+                             (with-temp-buffer
+                               (insert (alist-get modifier accent-list))
+                               (goto-char (point-min))
+                               (search-forward (char-to-string old-char))
+                               (char-after))
+                           (search-failed nil)))
+          (if (not new-char)
+              (user-error "Accent doesn’t exist")
+            (delete-char -1)
+            (insert new-char)))))))
 
 ;;; Provide
 
