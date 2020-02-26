@@ -367,7 +367,7 @@ Highlight the one marked by INDEX."
                         if (eq idx index)
                         collect (propertize (char-to-string variant)
                                             'face 'highlight)
-                        else collect variant)
+                        else collect (char-to-string variant))
                " "))
 
 (defun transform-previous-char ()
