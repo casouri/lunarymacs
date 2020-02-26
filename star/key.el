@@ -45,6 +45,8 @@
     "p" '(:ignore t :which-key "project")
     "u" '(:ignore t :which-key "utility")
     "o" '(:ignore t :which-key "open")
+    ;; insert
+    "ii" #'insert-char
     ;; Themes
     "Tc" #'customize-themes
     ;; Frame

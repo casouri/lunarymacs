@@ -8,7 +8,6 @@
   (luna-default-leader
     ;; Outshine
     "tl" #'luna-toggle-left-margin
-    "iu" #'insert-char
     "sr" #'color-rg-search-input
     "C-o" #'outline-toggle-children)
 
