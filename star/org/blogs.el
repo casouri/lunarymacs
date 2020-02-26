@@ -185,7 +185,7 @@ If FORCE non-nil, re-export every post."
                    (hide (plist-get env :hide)))
               (unless (equal hide "true")
                 (push (list :title (car title)
-                            :date date
+                            :date (org-timestamp-to-time (car date))
                             :tags (concat ":" (string-join tag-list ":") ":")
                             :path (format "%s/%s"
                                           (file-name-base year-dir)
@@ -202,7 +202,8 @@ If FORCE non-nil, re-export every post."
                         (luna-f-join luna-publish-note-dir
                                      (plist-get header :path))))
               (seq-sort-by (lambda (x) (plist-get x :date))
-                           #'org-time>=
+                           ;; greater than
+                           (lambda (a b) (time-less-p b a))
                            header-list))))))
 
 ;;; Rock/day
