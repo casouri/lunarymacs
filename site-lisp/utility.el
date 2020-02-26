@@ -3,6 +3,7 @@
 (require 'lunary)
 (require 'luna-f)
 (require 'cl-lib)
+(require 'subr-x)
 
 ;;; Buffer
 
@@ -299,26 +300,36 @@ and moves point to the previous line."
 ;;; Transform
 
 (defvar transform-list
-  (mapcar (lambda (x) (mapcar #'char-to-string x))
+  (mapcar (lambda (x) (mapcar #'identity x))
           (split-string (string-join
                          '("*×·⊗⊙ +⊕ |⊦⊨ /÷ \\∖"
                            "<∈⊂⊏ >∋⊃⊐ =≈"
-                           "v∨ ^∧ 0∅"
+                           "v∨∪ ^∧∩ 0∅"
                            "Rℝ Zℤ Qℚ Nℕ Cℂ"
                            "aαΑ∀ bβΒ gγΓ dδΔ eεΕ∃ zζΖ hηΗ qθΘ"
                            "iιΙ kκΚ lλΛ mμΜ nνΝ∩ xξΞ oοΟ pπΠ"
                            "rρΡ sσΣ tτΤ yυΥ fφΦ cχΧ uψΨ∪ wωΩ")
                          " ")))
-  "Each car is a starting char, cdr is a list of transformations.")
+  "Each element of the list is a list of related variants.")
 
-(defun transform-get-variant-list (char)
+(defvar accent-list
+  (mapcar (lambda (c) (cons (car c)
+                            (mapcar (lambda (s)
+                                      (mapcar #'identity s))
+                                    (split-string (cdr c)))))
+          '((?_ . "<≤ ⊂⊆ ⊏⊑ >≥ ⊃⊇ ⊐⊒")
+            (?/ . "=≠ <≮ ≤≰ ∈∉ ⊂⊄ ⊆⊈ >≯ ≥≱ ∋∌ ⊃⊅ ⊇⊉")))
+  
+  "Each car is the accent modifier, cdr is a list ((ORIGINAL ACCENT) ...).")
+
+(defun transform--get-variant-list (char)
   "Find CHAR in ‘transform-list’, return (index . variant-list).
-Return nil if none found. CHAR should be a string."
+Return nil if none found. CHAR is a character."
   (catch 'ret
     (dolist (variant-list transform-list nil)
       (cl-loop for variant in variant-list
                for idx from 0 to (1- (length variant-list))
-               if (equal variant char)
+               if (eq variant char)
                do (throw 'ret (cons idx variant-list))))))
 
 (defun transform--make-step-fn (variant-list init-idx)
@@ -334,25 +345,28 @@ The step function with step across the variant list and change
 the character before point to the current variant."
   (let ((variant-index (or init-idx 0)))
     (lambda (step)
+      ;; step
       (setq variant-index (+ step variant-index))
+      ;; manage ring
       (when (eq variant-index (length variant-list))
         (setq variant-index 0))
       (when (< variant-index 0)
         (setq variant-index (1- (length variant-list))))
+      ;; edit & message
       (atomic-change-group
         (delete-char -1)
         (insert (nth variant-index variant-list)))
-      (message "%s" (transform-make-message variant-list
-                                            variant-index))
-      variant-index)))
+      (message "%s" (transform--make-message variant-list
+                                             variant-index)))))
 
-(defun transform-make-message (variant-list index)
+(defun transform--make-message (variant-list index)
   "Make a string that displays each variant in VARIANT-LIST.
 Highlight the one marked by INDEX."
   (string-join (cl-loop for variant in variant-list
                         for idx from 0 to (1- (length variant-list))
                         if (eq idx index)
-                        collect (propertize variant 'face 'highlight)
+                        collect (propertize (char-to-string variant)
+                                            'face 'highlight)
                         else collect variant)
                " "))
 
@@ -362,10 +376,9 @@ Highlight the one marked by INDEX."
 If previous char is “/” or “_”, apply ‘accent-previous-char’
 instead."
   (interactive)
-  (if (member (char-before) '(?/ ?_))
+  (if (member (char-before) (mapcar #'car accent-list))
       (accent-previous-char)
-    (if-let ((c (transform-get-variant-list (char-to-string
-                                             (char-before)))))
+    (if-let ((c (transform--get-variant-list (char-before))))
         (let* ((index (car c))
                (variant-list (cdr c))
                (step-fn (transform--make-step-fn variant-list index))
@@ -379,11 +392,7 @@ instead."
                       map)))
           (funcall step-fn 1)
           (set-transient-map map t))
-      (user-error "No possible transformation"))))
-
-(defvar accent-list
-  '((?_ . "<≤ ⊂⊆ ⊏⊑ >≥ ⊃⊇ ⊐⊒")
-    (?/ . "=≠ <≮ ≤≰ ∈∉ ⊂⊄ ⊆⊈ >≯ ≥≱ ∋∌ ⊃⊅ ⊇⊉")))
+      (user-error "No variant found"))))
 
 (defun accent-previous-char ()
   "Accent previous char by its trailing accent modifier."
@@ -400,15 +409,11 @@ instead."
           (accent-previous-char)
           (setq old-char (char-before))
           ;; find accented char
-          (setq new-char (condition-case nil
-                             (with-temp-buffer
-                               (insert (alist-get modifier accent-list))
-                               (goto-char (point-min))
-                               (search-forward (char-to-string old-char))
-                               (char-after))
-                           (search-failed nil)))
-          (if (not new-char)
-              (user-error "Accent doesn’t exist")
+          (setq new-char (car (alist-get
+                               old-char
+                               (alist-get modifier accent-list))))
+          (if (or (not new-char) (eq new-char 32))
+              (user-error "No accent found")
             (delete-char -1)
             (insert new-char)))))))
 
