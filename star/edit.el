@@ -32,7 +32,8 @@
 ;;;; Edit
 
 (load-package ws-butler
-  :config (ws-butler-global-mode))
+  ;; global mode interferes with magit
+  :hook (prog-mode . ws-butler-mode))
 
 (load-package expand-region
   :config
