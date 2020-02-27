@@ -47,13 +47,13 @@ Categories in CATEGORY-LIST are strings."
               (file-newer-than-file-p org-file rss-file)) ; org newer
           (let* ((intro (or (string-remove-suffix
                              "\n"
-                             (with-current-buffer (find-file org-file)
+                             (luna-f-with-file org-file
                                (org-element-map
                                    (org-element-parse-buffer)
                                    'plain-text #'identity
                                    nil t)))
                             "No intro."))
-                 (html (with-current-buffer (find-file org-file)
+                 (html (luna-f-with-file org-file
                          (let ((org-html-style-default "")
                                (org-html-head "")
                                (org-html-head-extra "")
@@ -64,10 +64,11 @@ Categories in CATEGORY-LIST are strings."
                                (org-html-htmlize-output-type nil))
                            ;; org-export-as doesn’t seem to respect above settings
                            ;; body only
-                           (org-html-export-as-html nil nil nil t)
+                           (org-export-to-buffer 'html (current-buffer)
+                             nil nil nil t)
                            (buffer-substring-no-properties
                             1 (1+ (buffer-size))))))
-                 (env (with-current-buffer (find-file org-file)
+                 (env (luna-f-with-file org-file
                         (org-export-get-environment)))
                  (date (let ((time (cadar (plist-get env :date))))
                          (format-time-string
@@ -82,7 +83,7 @@ Categories in CATEGORY-LIST are strings."
                  (title (or (car (plist-get env :title))
                             "No title"))
                  (link (url-encode-url link)))
-            (with-temp-buffer
+            (luna-f-with-write-file rss-file
               (insert (string-join
                        (list "<item>"
                              (format "<title>%s</title>" title)
@@ -93,7 +94,6 @@ Categories in CATEGORY-LIST are strings."
                              (format "<pubDate>%s</pubDate>" date)
                              "</item>\n")
                        "\n"))
-              (write-file rss-file)
               (buffer-substring-no-properties (point-min) (point-max))))
         ;; if not newer
         (luna-f-content rss-file)))))
