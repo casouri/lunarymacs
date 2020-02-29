@@ -295,7 +295,9 @@ and moves point to the previous line."
   (interactive)
   (let* ((mode-name (symbol-name major-mode))
          (file-path (expand-file-name mode-name cheatsheet-file-dir)))
-    (funcall cheatsheet-display-fn (luna-f-content file-path))))
+    (condition-case nil
+        (funcall cheatsheet-display-fn (luna-f-content file-path))
+      (error (user-error "Cannot find cheat sheet for %s" major-mode)))))
 
 ;;; Transform
 
