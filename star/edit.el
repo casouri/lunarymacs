@@ -6,7 +6,6 @@
 
 (with-eval-after-load 'luna-general-config
   (luna-default-leader
-    ;; Outshine
     "tl" #'luna-toggle-left-margin
     "sr" #'color-rg-search-input
     "C-o" #'outline-toggle-children)
@@ -75,12 +74,6 @@
 
 ;;;; Code Structure
 
-(load-package outshine
-  :hook (prog-mode-hook . outshine-mode)
-  :config
-  (setq outshine-mode-map (make-sparse-keymap)))
-
-
 (load-package color-rg
   :init
   (define-key isearch-mode-map (kbd "M-s M-s") 'isearch-toggle-color-rg)
@@ -103,13 +96,14 @@
              color-rg-search-project-rails))
 
 
+(load-package color-outline
+  :hook (prog-mode-hook . color-outline-mode))
+
 
 (load-package visual-regexp
   :commands (vr/replace
              vr/query-replace
              vr/mc-mark))
-
-
 
 (load-package srefactor
   :hook ((c-mode-hook . semantic-mode)
