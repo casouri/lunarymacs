@@ -53,21 +53,22 @@ Categories in CATEGORY-LIST are strings."
                                    'plain-text #'identity
                                    nil t)))
                             "No intro."))
-                 (html (luna-f-with-file org-file
-                         (let ((org-html-style-default "")
-                               (org-html-head "")
-                               (org-html-head-extra "")
-                               (org-html-postamble nil)
-                               (org-html-head-include-scripts nil)
-                               (org-export-with-toc nil)
-                               (org-export-use-babel nil)
-                               (org-html-htmlize-output-type nil))
-                           ;; org-export-as doesn’t seem to respect above settings
-                           ;; body only
-                           (org-export-to-buffer 'html (current-buffer)
-                             nil nil nil t)
-                           (buffer-substring-no-properties
-                            1 (1+ (buffer-size))))))
+                 (html (with-temp-buffer
+                         (let ((buf (current-buffer)))
+                           (luna-f-with-file org-file
+                             (let ((org-html-style-default "")
+                                   (org-html-head "")
+                                   (org-html-head-extra "")
+                                   (org-html-postamble nil)
+                                   (org-html-head-include-scripts nil)
+                                   (org-export-with-toc nil)
+                                   (org-export-use-babel nil)
+                                   (org-html-htmlize-output-type nil))
+                               ;; org-export-as doesn’t seem to respect
+                               ;; above settings
+                               (org-export-to-buffer 'html buf
+                                 nil nil nil t))))
+                         (buffer-string)))
                  (env (luna-f-with-file org-file
                         (org-export-get-environment)))
                  (date (let ((time (cadar (plist-get env :date))))
@@ -94,7 +95,7 @@ Categories in CATEGORY-LIST are strings."
                              (format "<pubDate>%s</pubDate>" date)
                              "</item>\n")
                        "\n"))
-              (buffer-substring-no-properties (point-min) (point-max))))
+              (buffer-string)))
         ;; if not newer
         (luna-f-content rss-file)))))
 
