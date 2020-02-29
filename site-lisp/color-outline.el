@@ -113,7 +113,8 @@ COMMENT-CHAR (char) is the comment character of this mode."
                  (hi-lock-set-file-patterns (cadr config))
                  (outline-minor-mode)
                  (hi-lock-mode))
-        (user-error "No rule configured for %s" major-mode))
+        (user-error "No color-outline pattern configured for %s"
+                    major-mode))
     (outline-minor-mode -1)
     (hi-lock-mode -1)))
 
