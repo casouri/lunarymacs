@@ -419,8 +419,25 @@ instead."
             (delete-char -1)
             (insert new-char)))))))
 
+;;; Toggle dash
+
+(defvar dash-underscore-mode-map (make-sparse-keymap))
+
+(define-minor-mode dash-underscore-mode
+  "Remaps “-” to “_”."
+  :lighter " (-_)"
+  :keymap 'dash-underscore-mode-map
+  (if dash-underscore-mode
+      ;; not sure how does remap works for swapping
+      (progn  (define-key dash-underscore-mode-map "-"
+                (lambda () (interactive) (insert "_")))
+              (define-key dash-underscore-mode-map "_"
+                (lambda () (interactive) (insert "-"))))
+    (setq dash-underscore-mode-map (make-sparse-keymap))))
+
 ;;; Provide
 
 (provide 'utility)
 
 ;;; utility.el ends here
+
