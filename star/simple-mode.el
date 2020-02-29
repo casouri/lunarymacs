@@ -126,6 +126,12 @@
             (setq-local whitespace-style '(tab-mark))
             (whitespace-mode)))
 
+;; Scheme
+(load-package geiser
+  :commands (run-geiser)
+  :config (add-hook 'geiser-repl-mode
+                    (lambda ()
+                      (setq-local company-idle-delay nil))))
 
 ;;; Genarl package
 (load-package aggressive-indent
