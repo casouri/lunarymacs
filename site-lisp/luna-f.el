@@ -78,7 +78,7 @@ Return absolute path if ABSOLUTE is t."
     (insert-file-contents-literally path)
     (buffer-string)))
 
-(defun luna-this-file-directory ()
+(defun luna-f-this-file-directory ()
   "Return the directory of the file at where the code is."
   (file-name-directory (or load-file-name buffer-file-name)))
 
