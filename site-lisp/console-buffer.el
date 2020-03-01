@@ -6,6 +6,18 @@
 
 ;;; Commentary:
 ;;
+;; This package lets you toggle your interactive console for any major
+;; mode. You can:
+;;
+;;   1. Switch back and forth between main buffer and console buffer
+;;   2. Toggle a console window a the bottom
+;;   3. Switch between the console window and the main window
+;;
+;; There are two commands ‘luna-toggle-console’ (1 & 3) and
+;; ‘luna-toggle-console-window’ (2). See their doc string for more
+;; info. Edit ‘luna-console-buffer-alist’ to add buffer name pattern
+;; for each major mode. Use ‘luna-set-console-buffer’ to quickly set a
+;; console buffer for current buffer.
 
 ;;; Code:
 ;;
@@ -19,10 +31,10 @@
 (defvar luna-console-window nil
   "A window at bottom dedicated to console buffer.")
 
-(defun luna--get-console-buffer (major-mode)
-  "Return the console buffer corresponding to MAJOR-MODE.
+(defun luna--get-console-buffer (mode)
+  "Return the console buffer corresponding to MODE.
 Return nil if none exists."
-  (if-let ((console-buffer (alist-get major-mode luna-console-buffer-alist)))
+  (if-let ((console-buffer (alist-get mode luna-console-buffer-alist)))
       console-buffer
     (message "No console buffer, use `luna-set-console-buffer' to set one")
     nil))
