@@ -2,8 +2,6 @@
 
 This is my Emacs configuration.
 
-[[https://github.com/casouri/lunarymacs/tree/68d7fb14ac258cc700022c13d43821e148c346a9][☞ Lunarymacs Before redesign]]
-
 * Usage
 #+BEGIN_SRC commandline
 git clone https://github.com/casouri/lunarymacs.git
