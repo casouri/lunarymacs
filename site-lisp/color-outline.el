@@ -41,15 +41,7 @@
 
 (require 'cl-lib)
 (require 'subr-x)
-
-(defvar color-outline-mode-alist (mapcar (lambda (cell)
-                               (cons (car cell)
-                                     (color-outline--create-pattern (cadr cell))))
-                             '((emacs-lisp-mode ";")
-                               (python-mode "#")
-                               (scheme-mode ";")
-                               (c-mode "/")))
-  "Stores the header patterns for each major mode.")
+(require 'hi-lock)
 
 (defvar color-outline-face-list '(info-title-1 info-title-2 info-title-3)
   "Face for each level.")
@@ -119,6 +111,14 @@ COMMENT-CHAR (char) is the comment character of this mode."
     (outline-minor-mode -1)
     (hi-lock-mode -1)))
 
+(defvar color-outline-mode-alist (mapcar (lambda (cell)
+                               (cons (car cell)
+                                     (color-outline--create-pattern (cadr cell))))
+                             '((emacs-lisp-mode ";")
+                               (python-mode "#")
+                               (scheme-mode ";")
+                               (c-mode "/")))
+  "Stores the header patterns for each major mode.")
 
 (provide 'color-outline)
 
