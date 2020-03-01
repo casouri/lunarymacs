@@ -11,6 +11,13 @@
 
 ;;; Package
 
+;; Add this to your zshrc
+;;
+;; if [ "$INSIDE_EMACS" = "vterm" ]
+;;    then setopt PROMPT_SUBST
+;;         PROMPT=$PROMPT'$(vterm_prompt_end)'
+;; fi
+
 (use-package vterm
   :load-path  "~/attic/emacs-libvterm"
   :config
