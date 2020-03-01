@@ -195,6 +195,10 @@ E.g. SURNAME (c) to symbol ©."
   (forward-line -2)
   (set-transient-map luna-scroll-map t))
 
+(defun up-list-backward ()
+  (interactive)
+  (up-list -1))
+
 ;;; Auto insert
 
 (defvar luna-autoinsert-template (luna-f-join user-emacs-directory

@@ -33,7 +33,7 @@
    "M-v"   #'select-line
    "C-="   #'er/expand-region
 
-   "C-M-p" #'luna-up-list-backward
+   "C-M-p" #'up-list-backward
    "C-M-n" #'down-list
 
    "C-v"   #'set-mark-command
