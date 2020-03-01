@@ -40,10 +40,11 @@
 ;;
 
 (require 'cl-lib)
+(require 'subr-x)
 
 (defvar color-outline-mode-alist (mapcar (lambda (cell)
                                (cons (car cell)
-                                     (apply #'color-outline--create-pattern cell)))
+                                     (color-outline--create-pattern (cadr cell))))
                              '((emacs-lisp-mode ";")
                                (python-mode "#")
                                (scheme-mode ";")
