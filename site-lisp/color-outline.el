@@ -107,9 +107,9 @@ COMMENT-CHAR (char) is the comment character of this mode."
   :lighter ""
   :keymap 'color-outline-mode-map
   (if color-outline-mode
-      (if-let* ((comment-char (or comment-start
-                                  (alist-get major-mode
-                                             color-outline-comment-char-alist)))
+      (if-let* ((comment-char (or (alist-get major-mode
+                                             color-outline-comment-char-alist)
+                                  comment-start))
                 (config (color-outline--create-pattern comment-char)))
           (progn (setq outline-regexp (car config))
                  (hi-lock-set-file-patterns (cadr config))
