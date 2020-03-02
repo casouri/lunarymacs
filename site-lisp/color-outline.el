@@ -43,6 +43,12 @@
 (require 'subr-x)
 (require 'hi-lock)
 
+(defvar color-outline-comment-char-alist '((c-mode . "/")
+                               (python-mode . "#")
+                               (javascript-mode . "/"))
+  "Stores custom comment character each major mode.
+For most major modes ‘comment-start’ is enough.")
+
 (defvar color-outline-face-list '(info-title-1 info-title-2 info-title-3)
   "Face for each level.")
 
@@ -101,7 +107,10 @@ COMMENT-CHAR (char) is the comment character of this mode."
   :lighter ""
   :keymap 'color-outline-mode-map
   (if color-outline-mode
-      (if-let (config (alist-get major-mode color-outline-mode-alist))
+      (if-let* ((comment-char (or comment-start
+                                  (alist-get major-mode
+                                             color-outline-comment-char-alist)))
+                (config (color-outline--create-pattern comment-char)))
           (progn (setq outline-regexp (car config))
                  (hi-lock-set-file-patterns (cadr config))
                  (outline-minor-mode)
@@ -110,15 +119,6 @@ COMMENT-CHAR (char) is the comment character of this mode."
                     major-mode))
     (outline-minor-mode -1)
     (hi-lock-mode -1)))
-
-(defvar color-outline-mode-alist (mapcar (lambda (cell)
-                               (cons (car cell)
-                                     (color-outline--create-pattern (cadr cell))))
-                             '((emacs-lisp-mode ";")
-                               (python-mode "#")
-                               (scheme-mode ";")
-                               (c-mode "/")))
-  "Stores the header patterns for each major mode.")
 
 (provide 'color-outline)
 
