@@ -16,11 +16,9 @@
    ;; helpful
    "C-h C-h" #'ghelp-describe
    "C-h k" #'helpful-key
-   "C-h e" #'ghelp-describe-as-in-emacs-lisp-mode)
-
-  (general-define-key
-   :prefix "C-x"
-   "i" #'luna-insert-special-symbol)
+   "C-h e" #'ghelp-describe-as-in-emacs-lisp-mode
+   "C-x i" #'luna-insert-special-symbol
+   "C-c ’" #'separedit)
 
   (general-define-key
    :keymaps '(c-mode c++-mode)
@@ -51,6 +49,7 @@
   er/mark-outside-pairs
   er/contract-region)
 
+
 (load-package isolate
   :commands (isolate-quick-add
              isolate-quick-change
@@ -58,6 +57,7 @@
              isolate-long-add
              isolate-long-change
              isolate-long-delete))
+
 
 (load-package undo-tree
   :config (global-undo-tree-mode)
