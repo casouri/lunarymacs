@@ -22,7 +22,8 @@
                     savehist eyebrowse minions ws-butler
                     expand-region isolate outshine flyspell
                     flycheck eglot minibuf-eldef form-feed
-                    all-the-icons sly-el-indent))
+                    all-the-icons sly-el-indent yasnippet
+                    transform utility pause))
   (require package))
 (load-theme 'doom-one-light t t)
 (load-theme 'doom-cyberpunk t t)
