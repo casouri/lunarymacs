@@ -68,9 +68,21 @@
         undo-tree-history-directory-alist
         `(("." . ,(luna-f-join luna-cache-dir "undo-tree")))))
 
+
 (load-package diff-hl
   :hook (prog-mode-hook . diff-hl-mode)
   :config (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+
+
+(load-package separedit
+  :commands separedit
+  :config
+  (setq separedit-default-mode 'text-mode
+        separedit-remove-trailing-spaces-in-comment t))
+
+
+(load-package yasnippet
+  :config (yas-global-mode))
 
 ;;;; Code Structure
 
