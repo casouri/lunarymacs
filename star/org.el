@@ -10,7 +10,10 @@
 
 ;;; Blog
 
-(luna-load-relative "star/org/blogs.el")
+(defun luna-load-blogs ()
+  "Enable blog helpers."
+  (interactive)
+  (luna-load-relative "star/org/blogs.el"))
 
 ;;; Packages
 
