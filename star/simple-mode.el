@@ -131,7 +131,10 @@
   :commands (run-geiser)
   :config (add-hook 'geiser-repl-mode
                     (lambda ()
-                      (setq-local company-idle-delay nil))))
+                      (setq-local company-idle-delay nil)))
+  (require 'console-buffer)
+  (setf (alist-get 'scheme-mode luna-console-buffer-alist)
+        "* Guile REPL *"))
 
 ;;; Genarl package
 (load-package aggressive-indent
