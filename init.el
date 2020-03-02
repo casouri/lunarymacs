@@ -1,8 +1,5 @@
 ;;-*- lexical-binding: t -*-
 
-;; (require 'profiler)
-;; (profiler-start 'cpu)
-
 (when (eq window-system 'mac)
   ;; have to enable menu bar on mac port
   ;; otherwise emacs lost focus
@@ -28,10 +25,15 @@
                   (save-excursion
                     (switch-to-buffer "*scratch*")
                     (lisp-interaction-mode)))))
-  (setq package-user-dir (expand-file-name "package" user-emacs-directory))
+  (setq package-user-dir (expand-file-name
+                          "package" user-emacs-directory))
   ;; add load-path’s and load autoload files
   (package-initialize)
   (cowboy-add-load-path))
+
+;; (require 'benchmark-init)
+;; (add-hook 'after-init-hook 'benchmark-init/deactivate)
+;; (benchmark-init/activate)
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
@@ -61,7 +63,7 @@
 (luna-load-relative "star/dir.el")
 (luna-load-relative "star/org.el")
 (luna-load-relative "star/tex.el")
-;; (luna-load-relative "star/term.el")
+;; (luna-when-mac (luna-load-relative "star/term.el"))
 ;; (luna-load-relative "star/shell.el")
 (luna-load-relative "star/simple-mode.el")
 (require 'utility)
@@ -95,19 +97,6 @@
 (setq luna-cjk-font-scale 1.1)
 (luna-enable-apple-emoji)
 
-;; WenYue GuDianMingChaoTi (Non-Commercial Use) W5
-;; WenYue XHGuYaSong (Non-Commercial Use)
-;; WenyueType GutiFangsong (Non-Commercial Use)
-;; SiaoyiWangMingBold
-;; FZQingKeBenYueSongS-R-GB
-;; FZSongKeBenXiuKaiS-R-GB
-
-;;;; nyan
-;; (nyan-lite-mode)
-;; (setq nyan-wavy-trail t)
-;; enabling this makes highlight on buttons blink
-;; (nyan-start-animation)
-
 ;;;; server
 ;; checking whether server started can be slow
 ;; see emacs-horror
@@ -125,19 +114,10 @@
 (global-set-key (kbd "s-c") #'kill-ring-save)
 (global-set-key (kbd "s-v") #'yank)
 
-;;;; notmuch
-;; (add-to-list 'load-path "/opt/local/share/emacs/site-lisp/notmuch")
-;; (setq notmuch-init-file (luna-f-join user-emacs-directory "star/notmuch-config.el"))
-;; (setq message-auto-save-directory "~/mail/draft")
-;; (setq message-kill-buffer-on-exit t)
-;; (setq notmuch-search-oldest-first nil)
-;; (require 'notmuch)
-
 ;;;; ENV
 (luna-load-env)
 
 ;;;; ghelp
-
 (add-to-list 'load-path "~/p/ghelp")
 (require 'ghelp)
 (ghelp-global-minor-mode)
@@ -146,14 +126,6 @@
 (luna-when-mac
  (add-to-list 'load-path "~/p/trivial-copy")
  (require 'trivial-copy))
-
-;;;; notdeft
-(add-to-list 'load-path "~/attic/notdeft")
-
-;; (profiler-report)
-
-(when luna-in-esup
-  (remove-hook 'kill-emacs-hook #'customize-save-customized))
 
 ;;;; Local unsynced customization
 
