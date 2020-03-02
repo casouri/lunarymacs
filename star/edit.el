@@ -109,7 +109,8 @@
 
 
 (load-package color-outline
-  :hook (prog-mode-hook . color-outline-mode))
+  :hook (prog-mode-hook . color-outline-mode)
+  :config (define-key hi-lock-map (kbd "C-x w b") nil))
 
 
 (load-package visual-regexp
