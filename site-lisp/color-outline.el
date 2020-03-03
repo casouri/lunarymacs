@@ -45,7 +45,8 @@
 
 (defvar color-outline-comment-char-alist '((c-mode . "/")
                                (python-mode . "#")
-                               (javascript-mode . "/"))
+                               (javascript-mode . "/")
+                               (css-mode . "/"))
   "Stores custom comment character each major mode.
 For most major modes ‘comment-start’ is enough.")
 
