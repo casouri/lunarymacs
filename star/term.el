@@ -4,6 +4,9 @@
 
 (require 'cl-lib)
 
+(defvar luna-vterm-path "~/attic/emacs-libvterm"
+  "Path to libvterm package.")
+
 ;;; Keys
 
 (with-eval-after-load 'luna-general-config
@@ -19,7 +22,7 @@
 ;; fi
 
 (use-package vterm
-  :load-path  "~/attic/emacs-libvterm"
+  :load-path  luna-vterm-path
   :config
   (setq vterm-shell "zsh")
   (add-hook 'vterm-set-title-functions 'vterm--rename-buffer-as-title))
