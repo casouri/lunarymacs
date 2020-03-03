@@ -234,12 +234,12 @@ In OPTION-PLIST, if :full-clone is t, full clone.
 In RECIPE, :repo is of form \"user/repo\"."
   (let ((full-clone (plist-get option-plist :full-clone)))
     (cowboy--command "git" cowboy-package-dir "clone"
-                     (unless full-clone "--depth=1")
-                     (if (plist-get recipe :repo)
-                         (format "https://github.com/%s.git" (plist-get recipe :repo))
-                       (if (plist-get recipe :http)
-                           (error "No :repo nor :http in recipe: %s" recipe)))
-                     (symbol-name package))))
+                (unless full-clone "--depth=1")
+                (if (plist-get recipe :repo)
+                    (format "https://github.com/%s.git" (plist-get recipe :repo))
+                  (if (plist-get recipe :http)
+                      (error "No :repo nor :http in recipe: %s" recipe)))
+                (symbol-name package))))
 
 (defun cowboy--github-shallowp (package)
   "Return t if PACKAGE (a symbol) is shallow cloned, nil if not."
