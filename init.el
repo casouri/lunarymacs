@@ -138,4 +138,5 @@
 
 ;;;; Local unsynced customization
 
-(luna-load-or-create "local-config.el")
+(luna-load-or-create (luna-f-join user-emacs-directory
+                                  "local-config.el"))
