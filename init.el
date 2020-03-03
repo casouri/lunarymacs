@@ -110,6 +110,10 @@
    3 nil
    (lambda () (ignore-errors (server-start)))))
 
+;;;; ghelp
+(add-to-list 'load-path "~/p/ghelp")
+(require 'ghelp)
+(ghelp-global-minor-mode)
 
 (luna-when-mac
 ;;;; Mac port
@@ -120,11 +124,6 @@
 
  (global-set-key (kbd "s-c") #'kill-ring-save)
  (global-set-key (kbd "s-v") #'yank)
-
-;;;; ghelp
- (add-to-list 'load-path "~/p/ghelp")
- (require 'ghelp)
- (ghelp-global-minor-mode)
 
 ;;;; ENV
  (luna-load-env)
