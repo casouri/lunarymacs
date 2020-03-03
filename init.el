@@ -69,7 +69,6 @@
 (luna-load-relative "star/dir.el")
 (luna-load-relative "star/org.el")
 (luna-load-relative "star/tex.el")
-;; (luna-when-mac (luna-load-relative "star/term.el"))
 ;; (luna-load-relative "star/shell.el")
 (luna-load-relative "star/simple-mode.el")
 (require 'utility)
@@ -101,7 +100,7 @@
   (luna-load-font)
   (luna-load-cjk-font))
 (setq luna-cjk-font-scale 1.1)
-(luna-enable-apple-emoji)
+(luna-when-mac (luna-enable-apple-emoji))
 
 ;;;; server
 ;; checking whether server started can be slow
@@ -111,27 +110,32 @@
    3 nil
    (lambda () (ignore-errors (server-start)))))
 
+
+(luna-when-mac
 ;;;; Mac port
-(setq mac-option-modifier 'meta
-      mac-command-modifier 'super
-      mac-pass-command-to-system nil ; fix cmd h
-      mac-system-move-file-to-trash-use-finder t)
+ (setq mac-option-modifier 'meta
+       mac-command-modifier 'super
+       mac-pass-command-to-system nil ; fix cmd h
+       mac-system-move-file-to-trash-use-finder t)
 
-(global-set-key (kbd "s-c") #'kill-ring-save)
-(global-set-key (kbd "s-v") #'yank)
-
-;;;; ENV
-(luna-load-env)
+ (global-set-key (kbd "s-c") #'kill-ring-save)
+ (global-set-key (kbd "s-v") #'yank)
 
 ;;;; ghelp
-(add-to-list 'load-path "~/p/ghelp")
-(require 'ghelp)
-(ghelp-global-minor-mode)
+ (add-to-list 'load-path "~/p/ghelp")
+ (require 'ghelp)
+ (ghelp-global-minor-mode)
+
+;;;; ENV
+ (luna-load-env)
+
+;;;; vterm
+ (luna-load-relative "star/term.el")
 
 ;;;; trivial-copy
-(luna-when-mac
- (add-to-list 'load-path "~/p/trivial-copy")
- (require 'trivial-copy))
+ (luna-when-mac
+  (add-to-list 'load-path "~/p/trivial-copy")
+  (require 'trivial-copy)))
 
 ;;;; Local unsynced customization
 
