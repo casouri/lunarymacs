@@ -123,10 +123,16 @@ relative path to package-dir. No preceding slash or dot.")
   "Make sure package list is refreshed.
 If FORCE non-nil, always refresh."
   (package-initialize)
-  (when (or force
-            (not (get 'package-refresh-contents 'cowboy-did)))
-    (package-refresh-contents)
-    (put 'package-refresh-contents 'cowboy-did t)))
+  (let ((last-time (get 'package-refresh-contents 'cowboy-last-refresh-time)))
+    (when (or force
+              (not last-time)
+              ;; haven’t update for more than 1 week
+              (> (time-to-number-of-days
+                  (time-since last-time))
+                 7))
+      (package-refresh-contents)
+      (put 'package-refresh-contents 'cowboy-last-refresh-time
+           (current-time)))))
 
 (defun cowboy-install (package &optional option-plist)
   "Install PACKAGE (symbol).
