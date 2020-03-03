@@ -115,6 +115,9 @@
 (require 'ghelp)
 (ghelp-global-minor-mode)
 
+;;;; vterm
+(luna-load-relative "star/term.el")
+
 (luna-when-mac
 ;;;; Mac port
  (setq mac-option-modifier 'meta
@@ -127,9 +130,6 @@
 
 ;;;; ENV
  (luna-load-env)
-
-;;;; vterm
- (luna-load-relative "star/term.el")
 
 ;;;; trivial-copy
  (luna-when-mac

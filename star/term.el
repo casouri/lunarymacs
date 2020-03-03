@@ -1,11 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
-;;; deprecated
-
 (require 'cl-lib)
-
-(defvar luna-vterm-path "~/attic/emacs-libvterm"
-  "Path to libvterm package.")
 
 ;;; Keys
 
@@ -22,7 +17,7 @@
 ;; fi
 
 (use-package vterm
-  :load-path  luna-vterm-path
+  :load-path "~/attic/emacs-libvterm"
   :config
   (setq vterm-shell "zsh")
   (add-hook 'vterm-set-title-functions 'vterm--rename-buffer-as-title))
