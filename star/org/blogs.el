@@ -154,19 +154,21 @@ If FORCE non-nil, re-export every post."
                 (org-macro-initialize-templates)
                 (org-macro-replace-all org-macro-templates)
                 (string-join
+                 ;; for each header (post), (maybe) export rss to local cache file
+                 ;; and return the text
                  (org-element-map
                      (org-element-parse-buffer)
-                     'headline (lambda (hl)
-                                 (luna-publish-rss-export
-                                  (org-element-property :RSS_LINK hl)
-                                  nil
-                                  (org-element-property :RSS_DIR hl)
-                                  force)))))))
+                     'headline
+                   (lambda (hl)
+                     (let ((link (org-element-property :RSS_LINK hl))
+                           (dir (org-element-property :RSS_DIR hl)))
+                       (luna-publish-rss-export link nil dir
+                                                luna-publish-note-dir
+                                                force))))))))
     (with-temp-file (luna-f-join luna-publish-note-dir "rss.xml")
       (insert (format luna-note-rss-template
                       (format-time-string "%a, %d %b %Y %H:%M:%S %z")
                       rss)))))
-
 
 (defun luna-note-export-headers ()
   "Generate org headers for each post."

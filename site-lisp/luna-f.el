@@ -92,6 +92,19 @@ Return absolute path if ABSOLUTE is t."
 
 (defalias 'luna-f-with-write-file #'with-temp-file)
 
+(defun luna-f-subtract (base path)
+  "Subtract BASE from PATH.
+
+For exampple, if BASE is “~/p”, PATH is “/home/user/p/a”, return
+“/a”. The returned path could have trailing “/” or not, depending
+on whether PATH have one. Return nil if BASE is not a proper
+prefix of PATH."
+  ;; expand both to absolute path
+  (let ((base (file-truename base))
+        (path (file-truename path)))
+    (when (string-prefix-p base path)
+      (string-remove-prefix base path))))
+
 (provide 'luna-f)
 
 ;;; luna-f.el ends here
