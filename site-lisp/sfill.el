@@ -52,7 +52,7 @@
 (defvar-local sfill-variable-pitch-column 70
   "Column used for variable pitch filling.")
 
-(defvar-local sfill-variale-pitch t
+(defvar-local sfill-variable-pitch t
   "Set to non-nil and sfill will assume variable pitch when filling.")
 
 (defface sfill-debug-face (let ((spec '(:inherit default))
@@ -139,7 +139,7 @@ desired position is not in window or it is beyond BOUND."
           ;; We cannot use ‘move-to-column’ as fill.el does. Because we
           ;; break lines with overlays, so if we are at a fake newline,
           ;; ‘move-to-column’ doesn’t really go forward.
-          (if sfill-variale-pitch
+          (if sfill-variable-pitch
               (progn
                 (unless (pos-visible-in-window-p)
                   ;; ‘recenter’ in Emacs 26 only accepts one argument.
