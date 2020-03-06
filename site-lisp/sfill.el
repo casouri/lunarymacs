@@ -9,15 +9,17 @@
 ;; This package gives you word wrapping with more precision than the
 ;; default one. The default word wrapping (‘toggle-word-wrap’) can
 ;; only wrap on white spaces and tabs, thus is unable to wrap text
-;; with both CJK character and latin character properly. Also it can’t
-;; wrap on arbitrary columns. On the other hand, ‘fill-paragraph’ can
-;; only work with mono spaced fonts, filling variable pitch font
-;; usually gives sub optimal result.
+;; with both CJK characters and latin characters properly. Also it
+;; can’t wrap on arbitrary columns. On the other hand,
+;; ‘fill-paragraph’ can only work with mono spaced fonts, filling
+;; variable pitch font usually gives sub-optimal result. (And, of
+;; course, it destructively insert newlines, which may not be what you
+;; want.)
 ;;
 ;; This package solves above problems. It wraps lines correctly no
-;; matter the text is latin or CJK or both, no matter it’s mono spaces
-;; or variable pitch. It wraps on arbitrary columns and it handles
-;; kinsoku correctly (thanks to kinsoku.el).
+;; matter the text is latin or CJK or both, and no matter it’s mono
+;; spaces or variable pitch. It wraps on arbitrary columns and it
+;; handles kinsoku correctly (thanks to kinsoku.el).
 ;;
 ;;   Usage
 ;;
@@ -140,7 +142,9 @@ desired position is not in window or it is beyond BOUND."
           (if sfill-variale-pitch
               (progn
                 (unless (pos-visible-in-window-p)
-                  (recenter 1 t))
+                  ;; ‘recenter’ in Emacs 26 only accepts one argument.
+                  (recenter 1)
+                  (redisplay))
                 (goto-char (or (sfill-point-at-column-variable-pitch
                                 sfill-variable-pitch-column end)
                                end)))
