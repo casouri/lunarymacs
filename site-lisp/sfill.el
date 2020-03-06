@@ -142,9 +142,7 @@ desired position is not in window or it is beyond BOUND."
           (if sfill-variable-pitch
               (progn
                 (unless (pos-visible-in-window-p)
-                  ;; ‘recenter’ in Emacs 26 only accepts one argument.
-                  (recenter 1)
-                  (redisplay))
+                  (recenter 1))
                 (goto-char (or (sfill-point-at-column-variable-pitch
                                 sfill-variable-pitch-column end)
                                end)))
