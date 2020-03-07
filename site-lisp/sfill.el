@@ -27,19 +27,7 @@
 ;;
 ;;   Customization
 ;;
-;; Customize ‘sfill-column’ and ‘sfill-variable-pitch-column’. The
-;; former is used in mono spaced wrapping mode and the latter is used
-;; in variable pitch wrapping mode.
-;;
-;;   Two wrapping modes
-;;
-;; Sfill has two wrapping modes: mono spaced mode and variable pitched
-;; mode. As their name suggests, you should use the mono spaced mode
-;; for mono spaced text and variable pitched mode for variable pitched
-;; font. Variable pitched mode can correctly wrap mono spaced text,
-;; but slower (than mono spaced mode). Set ‘sfill-variable-pitch’ to
-;; nil to enable mono spaced mode, and set it to t for variable
-;; pitched mode. By default the variable is set to t.
+;; ‘sfill-column’.
 
 ;;; Code:
 ;;
@@ -53,18 +41,16 @@
 (defvar-local sfill-column 70
   "Fill Column for sfill.")
 
-(defvar-local sfill-variable-pitch t
-  "Set to non-nil and sfill will assume variable pitch when filling.")
-
 (defface sfill-debug-face (let ((spec '(:inherit default))
-                            (display t))
-                        `((,display . ,spec)))
+                                (display t))
+                            `((,display . ,spec)))
   "Face for highlighting sfill overlays."
   :group 'sfill)
 
 (define-minor-mode sfill-debug-mode
   "Toggle debug mode for sfill."
   :lighter ""
+  :global t
   (if sfill-debug-mode
       (set-face-attribute 'sfill-debug-face nil :inherit 'highlight)
     (set-face-attribute 'sfill-debug-face nil :inherit 'default)))
@@ -190,8 +176,7 @@ FORCE is non-nil, update the whole line."
                             prev-break (line-beginning-position)))
                next-existing-break
                (beg prev-break)
-               (match-count 0)
-               (monop (not buffer-face-mode)))
+               (match-count 0))
           (goto-char beg)
           (while (< (point) end)
             (setq next-existing-break (sfill-next-break (point) end))
@@ -200,9 +185,6 @@ FORCE is non-nil, update the whole line."
             (unless (>= (point) end)
               (sfill-insert-newline))
             (if (eq next-existing-break (point))
-                ;; (or (and monop (eq next-existing-break (point)))
-                ;;     (and (not monop)
-                ;;          (< (abs (- next-existing-break (point))) 7)))
                 (setq match-count (1+ match-count)))
             (if (and (not force) (>= match-count 2))
                 (throw 'early-termination (cons beg end))))
@@ -244,37 +226,35 @@ If FORCE is non-nil, update the whole line. BEG and END default
 to beginning and end of the buffer."
   (save-excursion
     (goto-char (or beg (point-min)))
+    (sfill-line (point) force)
     (while (re-search-forward "\n" (or end (point-max)) t)
-      (sfill-line (point) force))))
+      (sfill-line (point) force))
+    (cons (or beg (point-min)) (or end (point-max)))))
 
-(defun sfill-paragraph ()
-  "Fill current paragraph."
-  (interactive)
-  (let (beg end)
-    (save-excursion
-      (backward-paragraph)
-      (skip-chars-forward "\n")
-      (setq beg (point))
-      (forward-paragraph)
-      (skip-chars-backward "\n")
-      (setq end (point))
-      (sfill-region-destructive beg end))))
+;; (defun sfill-paragraph ()
+;;   "Fill current paragraph."
+;;   (interactive)
+;;   (let (beg end)
+;;     (save-excursion
+;;       (backward-paragraph)
+;;       (skip-chars-forward "\n")
+;;       (setq beg (point))
+;;       (forward-paragraph)
+;;       (skip-chars-backward "\n")
+;;       (setq end (point))
+;;       (sfill-region-destructive beg end))))
 
 (defun sfill-unfill (&optional beg end)
   "Un-fill region from BEG to END, default to whole buffer."
   (sfill-clear-overlay (or beg (point-min)) (or end (point-max))))
 
 (defun sfill-jit-lock-fn (beg end)
-  "Fill line at where BEG is."
+  "Fill line in region between BEG and END."
   (cons 'jit-lock-bounds (sfill-region beg end)))
 
-(defun sfill-after-change-fn (beg _ _)
-  "Fill line at where BEG is."
-  (sfill-line beg))
-
 (defvar sfill-mode-map (let ((map (make-sparse-keymap)))
-                         (define-key map (kbd "C-a") #'backward-sentence)
-                         (define-key map (kbd "C-e") #'forward-sentence)
+                         ;; (define-key map (kbd "C-a") #'backward-sentence)
+                         ;; (define-key map (kbd "C-e") #'forward-sentence)
                          map)
   "The keymap for minor mode ‘sfill-mode’.")
 
