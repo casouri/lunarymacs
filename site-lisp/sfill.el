@@ -264,9 +264,9 @@ to beginning and end of the buffer."
   "Un-fill region from BEG to END, default to whole buffer."
   (sfill-clear-overlay (or beg (point-min)) (or end (point-max))))
 
-(defun sfill-jit-lock-fn (beg _)
+(defun sfill-jit-lock-fn (beg end)
   "Fill line at where BEG is."
-  (cons 'jit-lock-bounds (sfill-line beg)))
+  (cons 'jit-lock-bounds (sfill-region beg end)))
 
 (defun sfill-after-change-fn (beg _ _)
   "Fill line at where BEG is."
