@@ -33,10 +33,7 @@
 ;;
 
 (require 'subr-x)
-;; Require solely for ‘buffer-face-mode’, so that we can guess we are
-;; in variable pitch setting or mono space setting. This is necessary
-;; because we can use a much faster function in mono space setting.
-(require 'face-remap)
+(require 'cl-lib)
 
 (defvar-local sfill-column 70
   "Fill Column for sfill.")
@@ -103,42 +100,39 @@ This only works correctly in mono space setting."
         (setq column (- column (char-width (char-before)))))
     ('end-of-buffer nil)))
 
-(defun sfill-move-to-column (column bound)
-  "Go to COLUMN and return (point).
+(defun sfill-forward-column-visual (column)
+  "Forward COLUMN columns and return point.
 
-BOUND is point where we shouldn’t go beyond. So if the point at COLUMN
-is beyond BOUND, stop at BOUND. If we go outside the visible portion of
-the window before reaching BOUND, don’t move and return nil."
+Works for both mono space and variable pitch."
   ;; ‘column-x-pos’ is the x offset from widow’s left edge in pixels.
   ;; We want to break around this position.
-  (when-let* ((column-x-pos (* column (window-font-width)))
-              (initial-y (cadr (pos-visible-in-window-p nil nil t)))
-              (point (posn-point (posn-at-x-y column-x-pos initial-y))))
-    (if (eq point nil)
-        nil
-      (goto-char (min point bound)))))
+  (condition-case nil
+      (let ((column-x-pos (* column (window-font-width))))
+        (while (>= column-x-pos 0)
+          (forward-char)
+          (setq column-x-pos
+                (- column-x-pos
+                   (car (mapcar (lambda (glyph) (aref glyph 4))
+                                (font-get-glyphs (font-at (1- (point)))
+                                                 (1- (point))(point)))))))
+        (point))
+    ('end-of-buffer (point))))
 
 (defun sfill-go-to-break-point (linebeg bound)
   "Move to the position where the line should be broken.
 LINEBEG is the beginning of current visual line.
 We don’t go beyond BOUND."
-  (let ((break-point nil)
-        (monop (not buffer-face-mode)))
-    (if monop
-        (sfill-forward-column sfill-column)
-      (while (not break-point)
-        (when (not (setq break-point
-                         (sfill-move-to-column
-                          sfill-column bound)))
-          ;; If we moved out of the visible window,
-          ;; ‘sfill-move-to-column’ returns nil. Recenter and try again.
-          (recenter))))
-    ;; If this (visual) line is the last line of the (visual) paragraph,
-    ;; (point) would be equal to bound, and we want to stay there, so
-    ;; that later we don’t insert newline incorrectly.
-    (unless (>= (point) bound)
-      (fill-move-to-break-point linebeg)
-      (skip-chars-forward " \t"))))
+  (if (display-multi-font-p)
+      (sfill-forward-column-visual sfill-column)
+    (sfill-forward-column sfill-column))
+  (if (> (point) bound)
+      (goto-char bound))
+  ;; If this (visual) line is the last line of the (visual) paragraph,
+  ;; (point) would be equal to bound, and we want to stay there, so
+  ;; that later we don’t insert newline incorrectly.
+  (unless (>= (point) bound)
+    (fill-move-to-break-point linebeg)
+    (skip-chars-forward " \t")))
 
 (defsubst sfill-next-break (point bound)
   "Return the position of the first line break after POINT.
