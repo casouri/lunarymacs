@@ -38,7 +38,7 @@
 (defvar-local sfill-column 70
   "Fill Column for sfill.")
 
-(defface sfill-debug-face (let ((spec '(:inherit default))
+(defface sfill-debug-face (let ((spec '(:inherit highlight))
                                 (display t))
                             `((,display . ,spec)))
   "Face for highlighting sfill overlays."
@@ -48,9 +48,7 @@
   "Toggle debug mode for sfill."
   :lighter ""
   :global t
-  (if sfill-debug-mode
-      (set-face-attribute 'sfill-debug-face nil :inherit 'highlight)
-    (set-face-attribute 'sfill-debug-face nil :inherit 'default)))
+  (sfill-region nil nil t))
 
 (defun sfill-insert-newline ()
   "Insert newline at point by overlay."
@@ -63,7 +61,8 @@
       (overlay-put ov 'sfill t)
       (overlay-put ov 'before-string "\n")
       (overlay-put ov 'evaporate t)
-      (overlay-put ov 'face 'sfill-debug-face))))
+      (when sfill-debug-mode
+        (overlay-put ov 'face 'sfill-debug-face)))))
 
 (defun sfill-clear-overlay (beg end)
   "Clear overlays that `soft-insert' made between BEG and END."
