@@ -237,6 +237,18 @@ to beginning and end of the buffer."
   "Fill line in region between BEG and END."
   (cons 'jit-lock-bounds (flywrap-region beg end)))
 
+;; Currently not used.
+(defun flywrap-after-change-fn (beg _ _)
+  "Hook called after buffer content change.
+See ‘after-change-functions’ for explanation on BEG END LEN."
+  (flywrap-region beg (line-end-position))
+  ;; (if (eq (- end beg) 1)
+  ;;     ;; Self insert command, only wrap on space
+  ;;     (when (member (char-after beg) '(?\s ?， ?。 ?、))
+  ;;       (flywrap-region beg (line-end-position)))
+  ;;   (flywrap-region beg (line-end-position)))
+  )
+
 ;;; Userland
 
 (defun flywrap-move-end-of-line (&optional arg)
@@ -282,7 +294,11 @@ With argument ARG not nil, move to the previous ARG line beginning."
   :keymap 'flywrap-mode-map
   (if flywrap-mode
       (progn
-        (jit-lock-register #'flywrap-jit-lock-fn)
+        ;; We want to control the depth of ‘flywrap-jit-lock-fn’
+        ;; so it runs hopefully after other functions. For example,
+        ;; that let Org mode’s fortifier to add invisible property before
+        ;; we wrap lines.
+        (add-hook 'jit-lock-functions #'flywrap-jit-lock-fn 90 t)
         (jit-lock-refontify))
     (jit-lock-unregister #'flywrap-jit-lock-fn)
     (flywrap-unwrap)))
