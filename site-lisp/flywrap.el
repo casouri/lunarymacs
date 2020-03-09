@@ -156,7 +156,9 @@ Don’t go beyond BOUND."
       point
     (next-single-char-property-change
      (1+ point)
-     'flywrap nil bound)))
+     ;; If we pass a bound larger than point-max,
+     ;; Emacs hangs.
+     'flywrap nil (min bound (point-max)))))
 
 (defsubst flywrap-at-break (point)
   "Return non-nil if POINT is at a line break."
@@ -169,7 +171,7 @@ Don’t go beyond BOUND."
 Don’t go beyond BOUND."
   (max (1- (previous-single-char-property-change
             point 'flywrap nil
-            (1+ bound)))
+            (min (1+ bound) (poin-min))))
        (point-min)))
 
 (defun flywrap-line (point &optional force)
@@ -294,11 +296,16 @@ With argument ARG not nil, move to the previous ARG line beginning."
   :keymap 'flywrap-mode-map
   (if flywrap-mode
       (progn
-        ;; We want to control the depth of ‘flywrap-jit-lock-fn’
-        ;; so it runs hopefully after other functions. For example,
-        ;; that let Org mode’s fortifier to add invisible property before
-        ;; we wrap lines.
+        ;; We want to control the depth of ‘flywrap-jit-lock-fn’ so it
+        ;; runs hopefully after other functions. For example, let Org
+        ;; mode’s fortifier to add invisible property (for links, etc)
+        ;; before we wrap lines.
         (add-hook 'jit-lock-functions #'flywrap-jit-lock-fn 90 t)
+        ;; Fix problem with incorrect wrapping when unfold a org
+        ;; header.
+        (advice-add #'org-flag-region :after
+                    (lambda (from to _ _1) (when flywrap-mode
+                                             (flywrap-region from to))))
         (jit-lock-refontify))
     (jit-lock-unregister #'flywrap-jit-lock-fn)
     (flywrap-unwrap)))
