@@ -186,13 +186,13 @@ E.g. SURNAME (c) to symbol ©."
 (defun luna-scroll-down-reserve-point ()
   (interactive)
   (scroll-up 2)
-  (forward-line 2)
+  (next-line 2)
   (set-transient-map luna-scroll-map t))
 
 (defun luna-scroll-up-reserve-point ()
   (interactive)
   (scroll-down 2)
-  (forward-line -2)
+  (next-line -2)
   (set-transient-map luna-scroll-map t))
 
 (defun up-list-backward ()
