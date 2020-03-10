@@ -40,7 +40,7 @@
                  (insert text))
         (error "Could find matched region")))))
 
-(defun commentary-import-from-org ()
+(defun commentary-import-readme ()
   "Import commentary from README.org file in the same directory."
   (interactive)
   (let* ((org-source (luna-f-content
