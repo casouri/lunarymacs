@@ -40,6 +40,12 @@ You need to load `luna-theme' somewhere (after loading custom.el)."
 (defun luna-load-theme (&optional theme)
   "Disable `luna-currnt-theme' and load THEME.
 For NO-CONFIRM and NO-ENABLE see ‘load-theme’."
+  (interactive
+   (list
+    (intern (completing-read "Load custom theme: "
+                             (mapcar #'symbol-name
+				     (custom-available-themes))))
+    nil nil))
   (disable-theme luna-current-theme)
   (let ((theme (or theme luna-theme (car luna-toggle-theme-list))))
     (if (featurep (intern-soft (format "%s-theme" theme)))
