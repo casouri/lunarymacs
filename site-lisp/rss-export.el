@@ -10,15 +10,15 @@
 ;;; Code:
 ;;
 
-(require 'org)
 (require 'ox-html)
+(require 'ox-cjk-html)
 
 (defvar rss-export-html-relative-dir ""
   "E.g., “/2020/insert-math-symbol”. 
 This is used to fix relative link under a post. So “./file” becomes
 “./2020/insert-math-symbol/file”.")
 
-(org-export-define-derived-backend 'rss-html 'html
+(org-export-define-derived-backend 'rss-html 'cjk-html
   :translate-alist '((link . rss-export-link))
   ;;                                       keyword option default
   :options-alist '((:rss-html-relative-dir nil nil rss-export-html-relative-dir)))
