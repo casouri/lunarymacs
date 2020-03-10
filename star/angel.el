@@ -45,6 +45,8 @@
    "s-d"   (kbd "M-d")
    "s-f"   (kbd "M-f")
    "s-b"   (kbd "M-b")
+   "s-a"   (kbd "M-a")
+   "s-e"   (kbd "M-e")
    "C-s-p" (kbd "C-M-p")
    "C-s-n" (kbd "C-M-n")
    "C-s-f" (kbd "C-M-f")
