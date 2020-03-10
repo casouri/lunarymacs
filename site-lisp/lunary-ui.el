@@ -107,14 +107,15 @@ e.g. :family :weight :size etc."
   "The scale for CJK font. Used in ‘luna-scale-cjk’.")
 
 (defvar luna-font-alist
-  '((sf-mono-13 . (:family "SF Mono" :size 13)))
+  '((sf-mono-13 . (:family "SF Mono" :size 13))
+    (gnu-unifont-15 . (:family "Unifont" :size 15)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
 Key is a symbol as the name, value is a plist specifying the font spec.
 More info about spec in `font-spec'.")
 
 (defvar luna-cjk-font-alist
-  '((soure-han-serif-13 . (:family "Source Han Serif SC"
-                                   :size 13)))
+  '((soure-han-serif-14 . (:family "Source Han Serif SC" :size 14))
+    (gnu-unifont-16 . (:family "Unifont" :size 16)))
   "Similar to `luna-font-alist' but used for CJK scripts.
 Use `luna-load-cjk-font' to load them.")
 
