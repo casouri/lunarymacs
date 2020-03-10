@@ -29,6 +29,6 @@
 ;;   :commands sly-el-indent-setup
 ;;   :hook (emacs-lisp-mode-hook . sly-el-indent-setup))
 
-(load-package nameless
-  :config (setq nameless-prefix "::")
-  :hook (emacs-lisp-mode-hook . nameless-mode))
+;; (load-package nameless
+;;   :config (setq nameless-prefix "::")
+;;   :hook (emacs-lisp-mode-hook . nameless-mode))
