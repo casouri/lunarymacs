@@ -162,15 +162,19 @@ Changes are saved to custom.el in a idle timer."
     (when (or arg (not (custom-variable-p 'luna-cjk-font)))
       (customize-set-variable 'luna-cjk-font font-name))))
 
-(defun luna-scale-cjk ()
-  "Rescale CJK font to align CJK font and ASCII font."
-  (make-local-variable 'face-font-rescale-alist)
-  (when luna-font
-    (setf (alist-get (plist-get (alist-get (intern luna-cjk-font)
-                                           luna-cjk-font-alist)
-                                :family)
-                     face-font-rescale-alist)
-          luna-cjk-font-scale)))
+(define-minor-mode luna-scale-cjk-mode
+  "Scale CJK font to align CJK font and ASCII font."
+  :lighter ""
+  (if luna-scale-cjk-mode
+      (progn
+        (make-local-variable 'face-font-rescale-alist)
+        (when luna-font
+          (setf (alist-get (plist-get (alist-get (intern luna-cjk-font)
+                                                 luna-cjk-font-alist)
+                                      :family)
+                           face-font-rescale-alist)
+                luna-cjk-font-scale)))
+    (kill-local-variable 'face-font-rescale-alist)))
 
 (defun luna-enable-apple-emoji ()
   "Enable Apple emoji display."
