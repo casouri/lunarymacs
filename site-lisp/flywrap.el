@@ -171,7 +171,7 @@ Don’t go beyond BOUND."
 Don’t go beyond BOUND."
   (max (1- (previous-single-char-property-change
             point 'flywrap nil
-            (min (1+ bound) (poin-min))))
+            (max (1+ bound) (point-min))))
        (point-min)))
 
 (defun flywrap-line (point &optional force)
