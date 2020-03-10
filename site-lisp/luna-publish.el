@@ -16,21 +16,23 @@
 (require 'ox-html)
 (require 'rss-export)
 
-(defun luna-publish-html-export (dir &optional force)
+(defun luna-publish-html-export (dir option-list &optional force)
   "Export index.org to index.html in DIR if the latter is older.
-If FORCE is non-nil, only export when org file is newer than html file."
+If FORCE is non-nil, only export when org file is newer than html file.
+OPTION-LIST is passed to export funtion."
   (let ((org-file (expand-file-name "index.org" dir))
         (html-file (expand-file-name "index.html" dir)))
     (when (and (file-exists-p org-file)
                (or force (file-newer-than-file-p org-file html-file)))
       (luna-f-with-file org-file
         (org-mode)
-        (let ((org-html-head-include-scripts nil)
-              (org-export-use-babel nil)
+        (let ((org-export-use-babel nil)
               ;; for relative links in org file
               (default-directory dir)
               (org-export-coding-system org-html-coding-system))
-          (org-export-to-file 'html html-file))))))
+          (org-export-to-file 'cjk-html html-file nil nil nil nil
+                              (append '(:html-head-include-scripts nil)
+                                      option-list)))))))
 
 ;;; RSS
 
