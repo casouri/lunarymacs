@@ -21,4 +21,6 @@
         (package-demo . (:repo "vermiculus/package-demo"))
         (ghelp . (:repo "casouri/ghelp"))
         (sly-el-indent . (:repo "cireu/sly-el-indent"))
-        (cowboy-test . (:repo "casouri/cowboy-test"))))
+        (cowboy-test . (:repo "casouri/cowboy-test"))
+        (binder . (:repo "rnkn/binder"))
+        (wgrep . (:repo "mhayashi1120/Emacs-wgrep"))))
