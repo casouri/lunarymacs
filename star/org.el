@@ -33,6 +33,10 @@
 (load-package org-download
   :hook (org-mode-hook . org-download-enable))
 
+(load-package flywrap
+  :commands (flywrap-mode)
+  :init (setq flywrap-column 80))
+
 ;;; Org
 
 (define-minor-mode luna-prose-mode
@@ -43,15 +47,25 @@
         ;; This should be used with `doom-cyberpunk-theme' or `doom-one-light-theme'(modified)
         ;; see casouri/doom-themes repo for more
         (variable-pitch-mode)
+        (setq-local sfill-column 80)
+        (flywrap-mode)
+        (olivetti-mode)
+        (luna-scale-cjk-mode)
+        (ignore-errors (flyspell-mode 1))
+        (electric-pair-local-mode -1)
         (setq-local cursor-type 'bar)
         ;; (setq-local blink-cursor-interval 0.6)
         ;; (blink-cursor-mode)
-        (setq-local line-spacing 0.2)
-        (electric-pair-local-mode -1)
-        (ignore-errors (flyspell-mode 1))
-        (olivetti-mode)
-        (luna-scale-cjk))
-    (message "Sorry, alea iacta est.")))
+        (setq-local line-spacing 0.2))
+    (variable-pitch-mode -1)
+    (olivetti-mode -1)
+    (kill-local-variable 'sfill-column)
+    (flywrap-mode)
+    (luna-scale-cjk-mode -1)
+    (flyspell-mode -1)
+    (electric-pair-local-mode)
+    (kill-local-variable 'line-spacing)
+    (kill-local-variable 'cursor-type)))
 
 ;; export code with line wrap
 ;; https://emacs.stackexchange.com/questions/33010/how-to-word-wrap-within-code-blocks
