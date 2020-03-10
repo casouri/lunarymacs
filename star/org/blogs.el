@@ -92,18 +92,22 @@ If FORCE is non-nil, only export when org file is newer than html file."
           ;; publish each post
           ;; for some reason the let bindings only work here
           ;; move it up there and it doesn’t work anymore...
-          (let ((org-html-postamble-format luna-org-html-postamble-format)
-                (org-html-postamble t)
-                (org-html-home/up-format luna-org-html-home/up-format)
-                (org-html-footnote-format luna-org-html-footnote-format))
-            (luna-publish-html-export post-dir force))))
+          (let ((option-list `(:html-postamble-format
+                               ,luna-org-html-postamble-format
+                               :html-postamble t
+                               :html-home/up-format
+                               ,luna-org-html-home/up-format
+                               :html-footnote-format
+                               ,luna-org-html-footnote-format)))
+            (luna-publish-html-export post-dir option-list force))))
       ;; publish index page
-      (let ((org-html-postamble nil)
-            (org-html-home/up-format
-             luna-org-html-home/up-format-for-note-index))
+      (let ((option-list `(:html-postamble
+                           nil
+                           :html-home/up-format
+                           ,luna-org-html-home/up-format-for-note-index)))
         ;; like rock/day, we are automatically generating headers now,
         ;; force update every time
-        (luna-publish-html-export luna-publish-note-dir t))
+        (luna-publish-html-export luna-publish-note-dir option-list t))
       ;; rss
       (luna-note-export-rss))))
 
@@ -237,21 +241,24 @@ If FORCE is non-nil, only export when org file is newer than html file."
                          (html-dir (luna-f-join luna-publish-rock/day-dir
                                                 (format "day-%d" day-idx)))
                          (html-path (luna-f-join html-dir "index.html"))
-                         (org-html-head-include-scripts nil)
-                         (org-export-with-toc nil)
-                         (org-export-use-babel nil))
+                         (org-export-use-babel nil)
+                         (option-list `(:with-toc
+                                        nil
+                                        :html-head-include-scripts nil)))
                     (unless (file-exists-p html-dir)
                       (mkdir html-dir))
-                    (luna-f-with-file (find-file file-path)
-                      (when (or force (file-newer-than-file-p file-path html-path))
-                        (org-mode)
-                        (setq --luna-blog-rock-day-- day-idx)
-                        (org-export-to-file 'html html-path))))))
+                    (luna-f-with-file file-path
+                      ;; set default-directory so the relative link to setupfile works
+                      (let ((default-directory (luna-f-join luna-publish-rock/day-dir "src")))
+                        (when (or force (file-newer-than-file-p file-path html-path))
+                          (org-mode)
+                          (setq --luna-blog-rock-day-- day-idx)
+                          (org-export-to-file 'html html-path nil nil nil nil option-list)))))))
     ;; publish index page
-    (let ((org-html-postamble nil))
+    (let ((option-list '(:html-postamble nil)))
       ;; always force because the index is automatically generated now
       ;; so there normally won’t be changes
-      (luna-publish-html-export luna-publish-rock/day-dir t))))
+      (luna-publish-html-export luna-publish-rock/day-dir option-list t))))
 
 (defun luna-new-rock/day ()
   "Make a new blog post of rock/day of DAY."
