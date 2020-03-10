@@ -85,9 +85,8 @@
 (setq-default bidi-display-reordering nil) ;; faster long line
 (setq scroll-margin 4)
 (setq ispell-program-name "aspell")
-(setq user-mail-address "casouri@gmail.com"
-      send-mail-function #'sendmail-send-it
-      message-send-mail-function #'message-send-mail-with-sendmail)
+(setq user-full-name "Yuan Fu"
+      user-mail-address "casouri@gmail.com")
 (setq split-height-threshold nil ; Popup window to right
       split-width-threshold 80)
 
