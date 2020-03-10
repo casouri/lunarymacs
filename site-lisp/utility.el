@@ -303,6 +303,8 @@ and moves point to the previous line."
         (funcall cheatsheet-display-fn (luna-f-content file-path))
       (error (user-error "Cannot find cheat sheet for %s" major-mode)))))
 
+(defalias 'helpme 'cheatsheet-display)
+
 ;;; Toggle dash
 
 (defvar dash-underscore-mode-map (make-sparse-keymap))
