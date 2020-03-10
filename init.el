@@ -119,6 +119,8 @@
 (luna-load-relative "star/term.el")
 
 (luna-when-mac
+ ;; macports
+ (add-to-list 'load-path "/opt/local/share/emacs/site-lisp")
 ;;;; Mac port
  (setq mac-option-modifier 'meta
        mac-command-modifier 'super
