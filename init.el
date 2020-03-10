@@ -113,7 +113,6 @@
 ;;;; ghelp
 (add-to-list 'load-path "~/p/ghelp")
 (require 'ghelp)
-(ghelp-global-minor-mode)
 
 ;;;; vterm
 (luna-load-relative "star/term.el")
