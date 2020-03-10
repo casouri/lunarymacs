@@ -319,6 +319,16 @@ and moves point to the previous line."
                 (lambda () (interactive) (insert "-"))))
     (setq dash-underscore-mode-map (make-sparse-keymap))))
 
+;;; Flywrap
+
+(defun flywrap-prettify ()
+  "Prettify current buffer. That means remove hard line breaks
+and turn on variable pitch and flywrap mode."
+  (interactive)
+  (flywrap-unfill (point-min) (point-max))
+  (variable-pitch-mode)
+  (flywrap-mode))
+
 ;;; Provide
 
 (provide 'utility)
