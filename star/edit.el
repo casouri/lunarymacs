@@ -18,7 +18,8 @@
    "C-h k" #'helpful-key
    "C-h e" #'ghelp-describe-as-in-emacs-lisp-mode
    "C-x i" #'luna-insert-special-symbol
-   "C-c ’" #'separedit)
+   "C-c '" #'separedit
+   "C-s-i" #'color-outline-toggle-all)
 
   (general-define-key
    :keymaps '(c-mode c++-mode)
