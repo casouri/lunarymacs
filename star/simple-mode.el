@@ -113,7 +113,6 @@
   (add-hook hook (lambda ()
                    (company-mode)
                    (eglot-ensure)
-                   (dash-underscore-mode)
                    ;; ccls has a fuzzy matching algorithm to order
                    ;; candidates according to your query.
                    (setq-local company-transformers nil)
