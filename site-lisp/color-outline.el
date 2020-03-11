@@ -72,6 +72,50 @@ For most major modes ‘comment-start’ is enough.")
     (outline-hide-body)
     (setq color-outline--folded t)))
 
+(defun color-outine--has-children ()
+  "Return t if this header has children.
+Assumes point is at the beginning of a header."
+  (save-excursion
+    (let ((count 0))
+      (outline-map-region (lambda () (setq count (1+ count)))
+                          (point)
+                          (condition-case nil
+                              (progn (outline-forward-same-level
+                                      (outline-level))
+                                     (point))
+                            (error (point-max))))
+      (> count 1))))
+
+(defun color-outline-toggle-heading ()
+  "Toggle visibility of children.
+Toggle between “only header”, “header and sub-header”, “everything”."
+  (interactive)
+  ;; go to a header
+  (save-excursion
+    (outline-back-to-heading)
+    (let ((prop (plist-get (text-properties-at (point))
+                           'color-outline-state)))
+      (when (and (eq prop 'header) (not (color-outine--has-children)))
+        (put-text-property (point) (1+ (point))
+                           'color-outline-state
+                           'sub-header))
+      (pcase prop
+        ('header (outline-show-children)
+                 (put-text-property (point) (1+ (point))
+                                    'color-outline-state
+                                    'sub-header)
+                 (message "Sub-headers"))
+        ('sub-header (outline-show-subtree)
+                     (put-text-property (point) (1+ (point))
+                                        'color-outline-state
+                                        'all)
+                     (message "All"))
+        (_ (outline-hide-subtree)
+           (put-text-property (point) (1+ (point))
+                              'color-outline-state
+                              'header)
+           (message "Header"))))))
+
 (defun color-outline-* (number string)
   "Return NUMBER of STRINGs sticked together."
   (string-join (cl-loop for i from 1 to number
