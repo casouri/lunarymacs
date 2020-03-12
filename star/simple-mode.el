@@ -128,8 +128,8 @@
              quickrun-autorun-mode))
 
 (load-package lsp-mode
+  :init (setq lsp-keymap-prefix "C-SPC l")
   :config
-  (setq lsp-keymap-prefix "C-SPC l")
   (dolist (hook '(c-mode-hook c++-mode-hook))
     (add-hook hook #'lsp))
   :commands (lsp))
