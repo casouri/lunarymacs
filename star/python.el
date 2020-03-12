@@ -34,10 +34,7 @@
           (lambda ()
             (when (and buffer-file-name
                        (not (string-match "\.sage$" (buffer-file-name))))
-              (eglot-ensure))))
-(add-to-list 'luna-smart-format-alist '(python-mode . eglot-format-buffer))
-
-(add-hook 'python-mode-hook #'company-mode)
+              (lsp))))
 
 ;;;; Virtual env
 

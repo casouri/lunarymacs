@@ -6,6 +6,7 @@
 (load-package company
   :commands (company-mode)
   :config
+  (add-hook 'prog-mode-hook #'company-mode)
   (if luna-company-manual
       (setq company-idle-delay nil
             company-auto-complete t)

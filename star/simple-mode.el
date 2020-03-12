@@ -1,18 +1,15 @@
 ;; -*- lexical-binding: t -*-
 
 (load-package markdown-mode
-  :mode ("\\.md$" "\\.markdown$" "\\.mk$")
-  :init (add-hook 'markdown-mode-hook #'company-mode))
+  :mode ("\\.md$" "\\.markdown$" "\\.mk$"))
 
 
 (load-package yaml-mode
-  :mode "\\.yaml$"
-  :init (add-hook 'yaml-mode-hook #'company-mode))
+  :mode "\\.yaml$")
 
 
 (load-package haskell-mode
   :mode "\\.hs$"
-  :init (add-hook 'haskell-mode-hook #'company-mode)
   :config
   ;; http://haskell.github.io/haskell-mode/manual/latest/Interactive-Haskell.html#Interactive-Haskell
   (require 'console-buffer)
@@ -30,7 +27,6 @@
 
 (load-package matlab-emacs
   :init
-  (add-hook 'matlab-mode-hook #'company-mode)
   (setq matlab-shell-command "/Applications/MATLAB_R2018b.app/Contents/MacOS/MATLAB")
   (setq matlab-shell-command-switches (list "-nodesktop"))
   ;; don’t enable company in matlab-shell-mode
@@ -38,15 +34,12 @@
 
 
 (load-package mips-mode
-  :mode "\\.mips$"
-  :init (with-eval-after-load 'company
-          (add-hook 'mips-mode-hook #'company-mode)))
+  :mode "\\.mips$")
 
 
 (load-package web-mode
   :init
   (add-to-list 'luna-package-list 'flycheck t)
-  (add-hook 'web-mode-hook #'company-mode)
   (with-eval-after-load 'flycheck
     (flycheck-add-mode 'html-tidy 'web-mode))
   (add-hook 'web-mode-hook #'flycheck-mode)
@@ -68,7 +61,6 @@
 (load-package sly
   :commands sly
   :init
-  (add-hook 'common-lisp-mode-hook #'company-mode)
   (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'common-lisp-mode-hook #'sly-mode)
   (setq inferior-lisp-program "ccl64"))
@@ -76,7 +68,6 @@
 
 
 (load-package lua-mode
-  :init (add-hook 'lua-mode-hook #'company-mode)
   :mode "\\.lua$"
   :interpreter "lua")
 
@@ -98,7 +89,6 @@
 (defun setup-tide-mode ()
   (interactive)
   (tide-setup)
-  (company-mode)
   (flycheck-mode)
   (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
   (setq-local flycheck-check-syntax-automatically '(save mode-enabled))
@@ -106,18 +96,6 @@
   (tide-hl-identifier-mode +1)
   (add-to-list 'luna-smart-format-alist '(typescript-mode . tide-format-before-save))
   (add-to-list 'luna-smart-format-alist '(js-mode . tide-format-before-save)))
-
-
-;; C/C++
-(dolist (hook '(c-mode-hook c++-mode-hook))
-  (add-hook hook (lambda ()
-                   (company-mode)
-                   (eglot-ensure)
-                   ;; ccls has a fuzzy matching algorithm to order
-                   ;; candidates according to your query.
-                   (setq-local company-transformers nil)
-                   (setq-local comment-multi-line t))))
-
 
 ;; Makefile
 (add-hook 'makefile-mode-hook
@@ -149,3 +127,9 @@
              quickrun-replace-region
              quickrun-autorun-mode))
 
+(load-package lsp-mode
+  :config
+  (setq lsp-keymap-prefix "C-SPC l")
+  (dolist (hook '(c-mode-hook c++-mode-hook))
+    (add-hook hook #'lsp))
+  :commands (lsp))
