@@ -1,0 +1,6 @@
+p       previous node           n       next node
+[       previous node           ]       next node
+^       up node                 d       go to top
+r       forward history         l       back history
+s/S     search                  i       search index
+m       pick menu               f       follow reference

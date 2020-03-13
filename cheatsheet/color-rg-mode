@@ -1,0 +1,4 @@
+r       replace all     f       filter          d       change dir
+D       remove line     c       toggle case     x       filter file
+
+C-c C-r recover line    C-c C-R recover buffer  C-c C-v view mode
