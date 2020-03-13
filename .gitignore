@@ -8,5 +8,7 @@
 !star/
 !star/**/*
 !cheatsheet/
-!snippet/
+!cheatsheet/**/*
+!snippets/
+!snippets/**/*
 .DS_Store
