@@ -7,4 +7,6 @@
 !site-lisp/**/*
 !star/
 !star/**/*
+!cheatsheet/
+!snippet/
 .DS_Store
