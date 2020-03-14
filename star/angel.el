@@ -27,6 +27,7 @@
    "C-M-;" #'inline-replace
    "M-f"   #'next-char
    "M-b"   #'last-char
+   "C-'"   #'angel-until
 
    "C-."   #'undo-tree-redo
 
@@ -62,7 +63,7 @@
    "C-u" #'undo-tree-visualize
    "C-v" #'cua-rectangle-mark-mode
    "`"   #'luna-expand-window
-   "k"   '((lambda (&optional arg) (interactive)
+   "k"   '((lambda (&optional arg) (interactive "p")
              (if (eq arg 4)
                  (call-interactively #'kill-buffer)
                (kill-buffer (current-buffer))))
@@ -75,14 +76,27 @@
 
   (general-define-key
    :prefix "C-c"
-   "C-b" #'switch-buffer-same-major-mode))
+   "C-b" #'switch-buffer-same-major-mode)
+
+  (general-define-key
+   :keymaps 'prog-mode-map
+   "M-a"   #'beginning-of-defun
+   "M-e"   #'end-of-defun
+   "C-M-f" #'forward-sexp
+   "C-M-b" #'backward-sexp)
+  
+  (general-define-key
+   :keymaps '(fundamental-mode-map text-mode-map)
+   "M-a"   #'backward-paragraph
+   "M-e"   #'forward-paragraph
+   "C-M-f" #'forward-sentence
+   "C-M-b" #'backward-sentence))
 
 ;;; Navigation (w W e E b B)
-
-;; Overall behavior:
 ;;
-;; last-char goes back a word, stops at beginning of line and parenthesis
-;; next-char goes foward a wrod, stops at end of line and parenthesis
+;; Basically: forward/backward and stop at next occurrence of a
+;; character (word beginning), but also stop at line end/beginning and
+;; closing/opening parenthesis.
 
 (defmacro forward-char-while (condition &optional whitespace-charset)
   "Go forward while CONDITION evaluate to t.
@@ -121,7 +135,7 @@ chars in it will be used as white space char (to be skipped over when rolling ba
       (forward-char-while (member (char-after) stop-charset)))
     ;; skip over charset car if you are already on one
     (forward-char-while (member (char-after) charset))
-    ;; go forwarduntill hit a char not from charset
+    ;; go forward until hit a char not from charset
     (unless (member (char-after) stop-charset)
       (forward-char-while (not (member (char-after) charset))))))
 
@@ -232,9 +246,10 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;;; Query Replace+ (cgn)
 
-(defun query-replace+ (beg end)
-  "Select a region and invoke this function.
-Edit the underlined region and press C-c C-c to qurey-replace."
+(defun query-replace+ (beg end &optional delete)
+  "Select region between BEG and END and query replace it.
+Edit the underlined region and press C-c C-c to qurey-replace. If
+DELETE non-nil, delete region when invoked."
   (interactive "r")
   (if (not (region-active-p))
       (message "Select the text to be replaced first")
@@ -280,6 +295,10 @@ Edit the underlined region and press C-c C-c to qurey-replace."
                                (interactive "r")
                                (kill-new (buffer-substring b e))
                                (message "Region saved")))
+         (define-key map "r" #'query-replace+)
+         (define-key map "R" (lambda (b e)
+                               (interactive "r")
+                               (query-replace+ b e t)))
          ;; isolate
          (define-key map "s" #'isolate-quick-add)
          (define-key map "S" #'isolate-long-add)
@@ -287,20 +306,6 @@ Edit the underlined region and press C-c C-c to qurey-replace."
          (define-key map "D" #'isolate-long-delete)
          (define-key map "c" #'isolate-quick-change)
          (define-key map "C" #'isolate-long-change)
-         ;; mark things
-         (define-key map "f" #'er/mark-defun)
-         (define-key map "w" #'er/mark-word)
-         (define-key map "W" #'er/mark-symbol)
-         (define-key map "P" #'mark-paragraph)
-         ;; inner & outer
-         ;; (define-key map "C-i" inner-map)
-         ;; (define-key map "C-a" outer-map)
-         ;; (define-key inner-map "q" #'er/mark-inside-quotes)
-         ;; (define-key outer-map "q" #'er/mark-outside-quotes)
-         ;; (define-key inner-map "b" #'er/mark-inside-pairs)
-         ;; (define-key outer-map "b" #'er/mark-outside-pairs)
-         (define-key map "q" #'er/mark-inside-quotes)
-         (define-key map "b" #'er/mark-inside-pairs)
 
          ;; expand-region
          (define-key map (kbd "C--") #'er/contract-region)
@@ -310,10 +315,67 @@ Edit the underlined region and press C-c C-c to qurey-replace."
 (add-to-list 'emulation-mode-map-alists
              'angel-transient-mode-map-alist t)
 
-;;; Jump char (f)
+;;; Do-until (f d)
 
-(load-package find-char
-  :commands (find-char find-char-backward-cmd))
+(defvar angel--until-char nil
+  "Remember character used last time.")
+
+(defvar angel--until-history nil
+  "Records (until-function command char) for repeat.")
+
+(defun angel-forward-do-until (command)
+  "Return a command that prompts for CHAR, go to next CHAR and call COMMAND.
+
+COMMAND is called with two arguments: current point and beginning
+position of CHAR. If CHAR is not found, do nothing."
+  (lambda ()
+    (interactive)
+    (let* ((char (or angel--until-char (read-char "Forward: ")))
+           (beg (point)))
+      (forward-char) ; so we don’t get stuck when repeating command
+      (when (search-forward (char-to-string char) nil t)
+        (setq angel--until-char char)
+        (setq angel--until-history (list #'angel-forward-do-until command char))
+        (goto-char (match-beginning 0))
+        (funcall command beg (match-beginning 0))))))
+
+(defun angel-backward-do-until (command)
+  "Return a command that prompts for CHAR, go to previous CHAR and call COMMAND.
+
+COMMAND is called with two arguments: end position of CHAR and
+current point. If CHAR is not found, do nothing."
+  (lambda ()
+    (interactive)
+    (let* ((char (or angel--until-char (read-char "backward: ")))
+           (beg (point)))
+      (backward-char) ; so we don’t get stuck when repeating command
+      (when (search-backward (char-to-string char) nil t)
+        (setq angel--until-char char)
+        (setq angel--until-history (list #'angel-backward-do-until command char))
+        (goto-char (match-end 0))
+        (funcall command (match-end 0) beg)))))
+
+(defun angel-repeat-last-command ()
+  "Repeat last do-until command."
+  (interactive)
+  (setq angel--until-char (nth 2 angel--until-history))
+  (funcall (funcall (car angel--until-history) (cadr angel--until-history))))
+
+(defvar angel-until-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "f") (angel-forward-do-until #'ignore))
+    (define-key map (kbd "b") (angel-backward-do-until #'ignore))
+    ;; for the record, I know there is ‘zap-to-char’.
+    (define-key map (kbd "d") (angel-forward-do-until #'kill-region))
+    (define-key map (kbd "DEL") (angel-backward-do-until #'kill-region))
+    (define-key map (kbd "C-'") #'angel-repeat-last-command)
+    map)
+  "Map activated by ‘angel-until’.")
+
+(defun angel-until ()
+  (interactive)
+  (setq angel--until-char nil)
+  (set-transient-map angel-until-map t))
 
 ;;; Inline replace (:s)
 
