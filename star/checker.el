@@ -1,19 +1,16 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; Key
-
-(with-eval-after-load 'luna-general-config
-  (luna-default-leader
-    "ts" #'luna-toggle-spell-check
-    "ef" #'flyspell-correct-previous))
+;;
+;; C-; correct previous word
 
 ;;; flymake
 ;;
 ;; otherwise litters my directory with temp files
 (setq-default flymake-diagnostic-functions nil)
 ;; require error
-;; (setq elisp-flymake-byte-compile-load-path
-;;       (append elisp-flymake-byte-compile-load-path load-path))
+(setq elisp-flymake-byte-compile-load-path
+      (append elisp-flymake-byte-compile-load-path load-path))
 
 ;;; flyspell
 ;;
@@ -44,10 +41,15 @@
 ;;          (text-mode . flycheck-mode)))
 
 
-;;; proselint
+;;; Flycheck
 
 (load-package flycheck
-  :hook ((text-mode org-mode) . flycheck-mode))
+  :hook ((text-mode-hook
+          org-mode-hook
+          prog-mode-hook)
+         . flycheck-mode))
+
+;;; proselint
 
 (with-eval-after-load flycheck-mode
   (flycheck-define-checker proselint
