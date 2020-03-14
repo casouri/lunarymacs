@@ -12,15 +12,13 @@
     "ls" #'eldoc-box-show-frame))
 
 ;;; Config
+;; speed up IPC
 (setq read-process-output-max (* 1024 1024))
 
 ;;; Packages
 
 (load-package eglot
-  :commands (eglot eglot-ensure)
-  ;; :config
-  ;; (add-to-list 'eglot-ignored-server-capabilites :hoverProvider)
-  )
+  :commands (eglot eglot-ensure))
 
 ;; (load-package eldoc-box
 ;;   :commands (eldoc-box-hover-mode

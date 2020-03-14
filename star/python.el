@@ -34,7 +34,7 @@
           (lambda ()
             (when (and buffer-file-name
                        (not (string-match "\.sage$" (buffer-file-name))))
-              (lsp))))
+              (eglot-ensure))))
 
 ;;;; Virtual env
 

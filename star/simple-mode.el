@@ -113,9 +113,20 @@
   (setf (alist-get 'scheme-mode luna-console-buffer-alist)
         "* Guile REPL *"))
 
+;; C/C++
+
+(dolist (hook '(c-mode-hook c++-mode-hook))
+  (add-hook hook (lambda ()
+                   (setq-local company-transformers nil)
+                   (setq-local comment-multi-line t)
+                   (eglot-ensure))))
 ;;; Genarl package
 (load-package aggressive-indent
-  :commands (aggressive-indent-mode))
+  :commands (aggressive-indent-mode)
+  :hook ((emacs-lisp-mode-hook
+          lisp-interaction-mode-hook
+          scheme-mode-hook lisp-mode-hook)
+         . aggressive-indent-mode))
 
 
 (load-package quickrun
@@ -127,9 +138,7 @@
              quickrun-replace-region
              quickrun-autorun-mode))
 
-(load-package lsp-mode
-  :init (setq lsp-keymap-prefix "C-SPC l")
-  :config
-  (dolist (hook '(c-mode-hook c++-mode-hook))
-    (add-hook hook #'lsp))
-  :commands (lsp))
+;; (load-package lsp-mode
+;;   :init (setq lsp-keymap-prefix "C-SPC l")
+;;   :config (setq lsp-auto-guess-root t)
+;;   :commands (lsp))
