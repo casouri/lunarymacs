@@ -8,6 +8,7 @@
 (define-minor-mode helpful-html-manual-mode
   "View HTML manuals in helpful."
   :lighter ""
+  :global t
   (if helpful-html-manual-mode
       (advice-add #'helpful--manual :override #'helpful--html-manual)
     (advice-remove #'helpful--manual #'helpful--html-manual)))
@@ -26,3 +27,6 @@
         (message "%s" (setq manual-page (expand-file-name
                                          (match-string 1) helpful-html-manual-dir)))
         (shell-command-to-string (format "open 'file://%s'" manual-page))))))
+
+(with-eval-after-load 'helpful
+  (helpful-html-manual-mode))
