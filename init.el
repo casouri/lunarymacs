@@ -116,7 +116,7 @@
 (require 'ghelp)
 
 ;;;; vterm
-(luna-load-relative "star/term.el")
+;; (luna-load-relative "star/term.el")
 
 (luna-when-mac
  ;; macports
