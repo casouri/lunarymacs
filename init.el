@@ -72,6 +72,7 @@
 (luna-load-relative "star/tex.el")
 ;; (luna-load-relative "star/shell.el")
 (luna-load-relative "star/simple-mode.el")
+(luna-load-relative "star/hacks.el")
 (require 'utility)
 
 ;;; Customize
