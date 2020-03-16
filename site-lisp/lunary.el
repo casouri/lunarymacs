@@ -106,7 +106,7 @@ ARGS is as same as in `load'."
      ,@body))
 
 (defmacro luna-if-dump (then &rest else)
-  "Evaluate IF if running with a dump file, else evaluate ELSE."
+  "Evaluate THEN if running with a dump file, else evaluate ELSE."
   (declare (indent 1))
   `(if luna-dumped
        ,then
@@ -153,4 +153,3 @@ For example, '(python-mode . format-python)")
 Each pattern is the beginning of the buffer name, e.g., *Flymake, magit:, etc.")
 
 (provide 'lunary)
-
