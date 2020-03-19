@@ -386,7 +386,8 @@ current point. If CHAR is not found, do nothing."
 (defvar inline-replace-overlay nil)
 (defvar inline-replace-beg nil)
 
-(defvar inline-replace-minibuffer-map (let ((map minibuffer-local-map))
+(defvar inline-replace-minibuffer-map (let ((map (make-sparse-keymap)))
+                                        (set-keymap-parent map minibuffer-local-map)
                                         (define-key map (kbd "C-p") #'inline-replace-previous)
                                         (define-key map (kbd "C-n") #'inline-replace-next)
                                         map))
@@ -395,12 +396,12 @@ current point. If CHAR is not found, do nothing."
   "Previous match."
   (interactive)
   (when (> inline-replace-count 1)
-    (decf inline-replace-count)))
+    (cl-decf inline-replace-count)))
 
 (defun inline-replace-next ()
   "Next match."
   (interactive)
-  (incf inline-replace-count))
+  (cl-incf inline-replace-count))
 
 (defun inline-replace ()
   "Search for the matching REGEXP COUNT times before END.
