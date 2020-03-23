@@ -48,7 +48,7 @@
         ;; see casouri/doom-themes repo for more
         (variable-pitch-mode)
         (setq-local sfill-column 80)
-        ;; (flywrap-mode)
+        (flywrap-mode)
         (olivetti-mode)
         (luna-scale-cjk-mode)
         (ignore-errors (flyspell-mode 1))
@@ -60,7 +60,7 @@
     (variable-pitch-mode -1)
     (olivetti-mode -1)
     (kill-local-variable 'sfill-column)
-    ;; (flywrap-mode)
+    (flywrap-mode -1)
     (luna-scale-cjk-mode -1)
     (flyspell-mode -1)
     (electric-pair-local-mode)
