@@ -303,12 +303,15 @@ With argument ARG not nil, move to the previous ARG line beginning."
         (add-hook 'jit-lock-functions #'flywrap-jit-lock-fn 90 t)
         ;; Fix problem with incorrect wrapping when unfold a org
         ;; header.
-        (advice-add #'org-flag-region :after
-                    (lambda (from to _ _1) (when flywrap-mode
-                                             (flywrap-region from to))))
+        
         (jit-lock-refontify))
     (jit-lock-unregister #'flywrap-jit-lock-fn)
     (flywrap-unwrap)))
+
+(with-eval-after-load 'org-macs
+  (advice-add #'org-flag-region :after
+              (lambda (from to _ _1) (when flywrap-mode
+                                       (flywrap-region from to)))))
 
 (provide 'flywrap)
 
