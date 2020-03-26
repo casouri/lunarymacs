@@ -88,29 +88,64 @@ Highlight the one marked by INDEX."
                         else collect (char-to-string variant))
                " "))
 
+(defun transform-previous-char-1 ()
+  "Transform char before point."
+  (interactive)
+  (if-let ((c (transform--get-variant-list (char-before))))
+      (let* ((index (car c))
+             (variant-list (cdr c))
+             (step-fn (transform--make-step-fn variant-list index))
+             (map (let ((map (make-sparse-keymap)))
+                    (define-key map (kbd "C-n")
+                      (lambda () (interactive) (funcall step-fn 1)))
+                    (define-key map (kbd "C-p")
+                      (lambda () (interactive) (funcall step-fn -1)))
+                    (define-key map (this-command-keys)
+                      (lambda () (interactive) (funcall step-fn 1)))
+                    map)))
+        (funcall step-fn 1)
+        (set-transient-map map t))
+    (user-error "No variant found")))
+
+(defvar transform--number-spelling-plist '(?0 "ZERO"
+                                              ?1 "ONE"
+                                              ?2 "TWO"
+                                              ?3 "THREE"
+                                              ?4 "FOUR"
+                                              ?5 "FIVE"
+                                              ?6 "SIX"
+                                              ?7 "SEVEN"
+                                              ?8 "EIGHT"
+                                              ?9 "NINE"))
+
+(defun transform-supsub-previous-char ()
+  "Apply superscript / subscript transformation."
+  (if-let* ((number (plist-get transform--number-spelling-plist
+                               (char-before)))
+            (control (pcase (char-before (1- (point)))
+                       (?_ "SUBSCRIPT ")
+                       (?^ "SUPERSCRIPT ")))
+            (name (concat control number)))
+      (progn (backward-delete-char 2)
+             (insert (char-from-name name)))
+    (user-error "Invalid superscript/subscript expansion")))
+
+
 (defun transform-previous-char ()
   "Transform char before point.
 
 If previous char is “/” or “_”, apply ‘transform-accent-previous-char’
-instead."
+instead.
+
+If previous previous char is “_” or “^” and previous char is a number,
+apply transform ‘transform-supsub-previous-char’ instead."
   (interactive)
-  (if (member (char-before) (mapcar #'car transform-accent-list))
-      (transform-accent-previous-char)
-    (if-let ((c (transform--get-variant-list (char-before))))
-        (let* ((index (car c))
-               (variant-list (cdr c))
-               (step-fn (transform--make-step-fn variant-list index))
-               (map (let ((map (make-sparse-keymap)))
-                      (define-key map (kbd "C-n")
-                        (lambda () (interactive) (funcall step-fn 1)))
-                      (define-key map (kbd "C-p")
-                        (lambda () (interactive) (funcall step-fn -1)))
-                      (define-key map (this-command-keys)
-                        (lambda () (interactive) (funcall step-fn 1)))
-                      map)))
-          (funcall step-fn 1)
-          (set-transient-map map t))
-      (user-error "No variant found"))))
+  (cond ((member (char-before) (mapcar #'car transform-accent-list))
+         (transform-accent-previous-char))
+        ((and (member (char-before) (mapcar #'identity "0123456789"))
+              (member (char-before (1- (point))) '(?_ ?^)))
+         (transform-supsub-previous-char))
+        (t (transform-previous-char-1))))
 
 (defun transform-accent-previous-char ()
   "Accent previous char by its trailing accent modifier."
