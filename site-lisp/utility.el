@@ -175,6 +175,13 @@ E.g. SURNAME (c) to symbol ©."
                            "\t"))))
   (insert (alist-get surname luna-special-symbol-alist "" nil #'equal)))
 
+(defun luna-make-accent-fn (name)
+  "Return a command that insert “COMBINDING NAME” unicode char."
+  (lambda () (interactive)
+    (insert (char-from-name (concat "COMBINING " name)))))
+
+(global-set-key (kbd "C-x 9 -") (luna-make-accent-fn "MACRON"))
+
 ;;; Navigation
 
 (defvar luna-scroll-map (let ((map (make-sparse-keymap)))
