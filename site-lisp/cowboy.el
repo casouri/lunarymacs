@@ -206,7 +206,7 @@ OPTION-PLIST contains user options that each backend may use."
         ;; try to use package.el to delete
         (message "Recipe not found, deleting with package.el")
         (cowboy-ensure-refresh-content)
-        (package-delete (alist-get package package-alist)))
+        (package-delete (car (alist-get package package-alist))))
       (message "Package %s deleted" package))))
 
 (defun cowboy-reinstall (package)
