@@ -104,6 +104,8 @@
             (whitespace-mode)))
 
 ;; Scheme
+;;
+;; Note: C-c C-a to activate a #lang operation in a racket file.
 (load-package geiser
   :commands (run-geiser)
   :config (add-hook 'geiser-repl-mode
