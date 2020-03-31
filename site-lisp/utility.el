@@ -338,6 +338,14 @@ and turn on variable pitch and flywrap mode."
   (variable-pitch-mode)
   (flywrap-mode))
 
+;;; Customize
+
+(defun kill-emacs-no-save-customize ()
+  "Kill Emacs and don’t save customization."
+  (interactive)
+  (remove-hook 'kill-emacs-hook #'customize-save-customized)
+  (save-buffers-kill-emacs))
+
 ;;; Provide
 
 (provide 'utility)
