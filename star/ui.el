@@ -79,8 +79,10 @@
                 hl-todo-keyword-faces))
   (global-hl-todo-mode))
 
-(load-package form-feed
-  :config (add-hook 'prog-mode-hook #'form-feed-mode))
+;; interfere with 'display text property
+;;
+;; (load-package form-feed
+;;   :config (add-hook 'prog-mode-hook #'form-feed-mode))
 
 ;;;; Desktop, Windows & buffer
 
