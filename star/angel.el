@@ -257,6 +257,7 @@ DELETE non-nil, delete region when invoked."
                    beg end))
           (ov (make-overlay beg end nil nil t)))
       (deactivate-mark)
+      (when delete (delete-region beg end))
       (overlay-put ov 'face '(:underline t))
       (pause
         (query-replace string (buffer-substring-no-properties
