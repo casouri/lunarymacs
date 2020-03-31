@@ -12,7 +12,7 @@
 
 (require 'pcase)
 
-(defvar pause--stack nil
+(defvar-local pause--stack nil
   "A stack of continue and quit functions.
 Each element is an alist that looks like ((continue . fn) (quit . fn)).")
 
