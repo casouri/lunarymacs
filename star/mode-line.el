@@ -95,9 +95,4 @@ else return STR."
                                  luna-many-space
                                  "%p"
                                  ;; "  %l:%c"
-                                 ;; makes mode line higher
-                                 (:eval (propertize " "
-                                                    'display '(height 1.4)))
-                                 ;; makes other text in the middle
-                                 (:eval (propertize " " 'display '(raise -0.3)))
                                  mode-line-end-spaces))
