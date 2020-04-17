@@ -36,7 +36,9 @@
   (setq doom-cyberpunk-dark-mode-line nil)
   (setq doom-cyberpunk-bg 'light))
 
-(add-to-list 'luna-toggle-theme-list 'doom-one-light)
+(add-to-list 'custom-theme-load-path
+             (expand-file-name "site-lisp" user-emacs-directory))
+(add-to-list 'luna-toggle-theme-list 'light-theme)
 (add-to-list 'luna-toggle-theme-list 'doom-cyberpunk)
 
 (load-package rainbow-delimiters
