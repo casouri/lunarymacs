@@ -52,13 +52,11 @@
   (set-face-attribute 'hl-paren-face nil :weight 'bold)
   (global-highlight-parentheses-mode)
   ;; highlight only the most inner pair
-  (setq hl-paren-colors
-        (lambda () (list (face-attribute 'hl-paren-face :foreground))))
-  ;; to reflect changes in parentheses color
-  (add-hook 'luna-load-theme-hook
-            (lambda ()
-              (global-highlight-parentheses-mode -1)
-              (global-highlight-parentheses-mode))))
+  (advice-add
+   #'enable-theme :after
+   (lambda (&rest _) (setq hl-paren-colors
+                           (list (face-attribute
+                                  'hl-paren-face :foreground))))))
 
 (load-package nyan-lite
   :init (setq nyan-lite-add-mode-line nil

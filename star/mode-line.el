@@ -2,9 +2,7 @@
 
 (load-package minions
   :config
-  (minions-mode)
-  (add-hook 'luna-load-theme-hook
-            #'restart-minions-mode))
+  (minions-mode))
 
 (defun restart-minions-mode ()
   (interactive)

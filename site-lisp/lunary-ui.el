@@ -2,12 +2,6 @@
 
 ;;; Theme
 
-(defvar luna-load-theme-hook ()
-  "Hook ran after `load-theme'.")
-
-(defvar luna-current-theme nil
-  "The last loaded theme (symbol) in string.")
-
 (defvar luna-toggle-theme-list ()
   "Themes that you can toggle bwtween by `luna-switch-theme'.")
 
@@ -23,20 +17,6 @@ You need to load `luna-theme' somewhere (after loading custom.el)."
   :type 'string
   :group 'convenience)
 
-(defun luna-set-current-theme (theme &rest _)
-  "Adveiced before `load-theme', set `luna-current-theme' to THEME."
-  (setq luna-current-theme theme))
-
-(defun luna-run-load-theme-hook (&rest _)
-  "Run `luna-load-theme-hook'."
-  (condition-case err
-      (run-hook-with-args 'luna-load-theme-hook)
-    ((error (message (error-message-string err))))))
-
-(advice-add #'load-theme :after #'luna-run-load-theme-hook)
-
-(advice-add #'load-theme :before #'luna-set-current-theme)
-
 (defun luna-load-theme (&optional theme)
   "Disable `luna-currnt-theme' and load THEME.
 For NO-CONFIRM and NO-ENABLE see ‘load-theme’."
@@ -44,14 +24,15 @@ For NO-CONFIRM and NO-ENABLE see ‘load-theme’."
    (list
     (intern (completing-read "Load custom theme: "
                              (mapcar #'symbol-name
-				     (custom-available-themes))))
-    nil nil))
-  (disable-theme luna-current-theme)
+				     (custom-available-themes))))))
+  (dolist (theme custom-enabled-themes)
+    (disable-theme theme))
   (let ((theme (or theme luna-theme (car luna-toggle-theme-list))))
+    ;; We can save a lot of time by enabling the theme instead of
+    ;; loading it
     (if (featurep (intern-soft (format "%s-theme" theme)))
         (enable-theme theme)
       (load-theme theme t))
-    (setq luna-current-theme theme)
     (customize-set-variable 'luna-theme theme)))
 
 (defun luna-quit-window (arg)
