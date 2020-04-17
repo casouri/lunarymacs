@@ -25,7 +25,7 @@
                     all-the-icons sly-el-indent yasnippet flywrap
                     transform utility pause))
   (require package))
-(load-theme 'doom-one-light t t)
+(load-theme 'light t t)
 (load-theme 'doom-cyberpunk t t)
 
 (dump-emacs-portable luna-dump-file)
