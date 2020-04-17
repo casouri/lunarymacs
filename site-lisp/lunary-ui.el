@@ -17,6 +17,12 @@ You need to load `luna-theme' somewhere (after loading custom.el)."
   :type 'string
   :group 'convenience)
 
+(defvar luna-load-theme-hook nil
+  "Hook run after Emacs loads a theme.")
+
+(advice-add #'enable-theme :after (lambda (&rest _)
+                                    (run-hooks 'luna-load-theme-hook)))
+
 (defun luna-load-theme (&optional theme)
   "Disable `luna-currnt-theme' and load THEME.
 For NO-CONFIRM and NO-ENABLE see ‘load-theme’."
@@ -67,10 +73,10 @@ If run with prefix argument (ARG), kill buffer."
   "Switch between themes in `luna-toggle-theme-list'"
   (interactive)
   ;; move the fist element to last
-  (let ((index (or (cl-position luna-current-theme luna-toggle-theme-list)
-                   (progn (message "`luna-current-theme' is not in `luna-toggle-theme-list', default to the first one") 0)))
-        (len (length luna-toggle-theme-list)))
-    (luna-load-theme (nth (% (1+ index) len) luna-toggle-theme-list))))
+  (luna-load-theme (car luna-toggle-theme-list))
+  (setq luna-toggle-theme-list
+        (append (cdr luna-toggle-theme-list)
+                (list (car luna-toggle-theme-list)))))
 
 ;;; Font
 
