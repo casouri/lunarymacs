@@ -36,10 +36,11 @@
   (setq doom-cyberpunk-dark-mode-line nil)
   (setq doom-cyberpunk-bg 'light))
 
-(add-to-list 'custom-theme-load-path
-             (expand-file-name "site-lisp" user-emacs-directory))
-(add-to-list 'luna-toggle-theme-list 'light-theme)
+
+(add-to-list 'luna-toggle-theme-list 'light)
 (add-to-list 'luna-toggle-theme-list 'doom-cyberpunk)
+(setq custom-theme-directory
+      (expand-file-name "site-lisp" user-emacs-directory))
 
 (load-package rainbow-delimiters
   :hook (prog-mode-hook . rainbow-delimiters-mode)
@@ -54,11 +55,13 @@
   (set-face-attribute 'hl-paren-face nil :weight 'bold)
   (global-highlight-parentheses-mode)
   ;; highlight only the most inner pair
-  (advice-add
-   #'enable-theme :after
-   (lambda (&rest _) (setq hl-paren-colors
-                           (list (face-attribute
-                                  'hl-paren-face :foreground))))))
+  (add-hook 'luna-load-theme-hook
+            (lambda ()
+              (setq hl-paren-colors
+                    (list (face-attribute
+                           'hl-paren-face :foreground)))
+              (global-highlight-parentheses-mode -1)
+              (global-highlight-parentheses-mode))))
 
 (load-package nyan-lite
   :init (setq nyan-lite-add-mode-line nil
