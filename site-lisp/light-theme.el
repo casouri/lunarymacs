@@ -27,7 +27,7 @@
     (let* ((bg        "#fefefc")
            ;; lighter than region
            (bg-alt    (darken bg 0.05))
-           (fg        "#1b2229")
+           (fg        "#2b3239")
            (fg-weak   "#9ca0a4")
            (fg-strong "#0e0e0e")
            (blue1     "#a0bcf8")
@@ -55,7 +55,7 @@
         (variable-pitch () (:family "Source Serif Pro" :height 150))
         (fixed-pitch () (:family "SF Mono" :height 130))
         (vertical-border                     (nil nil "black"))
-        (lazy-highlight                      (nil "black" nil t bold))
+        (lazy-highlight                      (nil "black" nil nil bold))
         (highlight-fg-only-1                 (nil ,blue2))
         (highlight-fg-only-2                 (nil ,violet1))
         (minibuffer-prompt                   (highlight-fg-only-1))
@@ -213,7 +213,7 @@
         (which-key-command-description-face   (nil ,blue2))
         (which-key-local-map-description-face (nil ,violet2))
 
-        (hl-paren-face (nil ,red nil nil bold))
+        (hl-paren-face (nil ,(darken red 0.1) nil nil bold))
 
         (outline-1 (info-title-2))
         (outline-2 (info-title-3))
@@ -242,7 +242,9 @@
         
         (helpful-heading (info-title-3))
 
-        (ghelp-entry-title (info-title-2))))))
+        (ghelp-entry-title (info-title-2))
+
+        (diff-hl-change (nil ,orange ,(overlay bg orange 0.1)))))))
 
 (provide-theme 'light)
 
