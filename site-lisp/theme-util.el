@@ -14,57 +14,82 @@
 (require 'seq)
 (require 'cl-lib)
 
-;;;; Define theme
+;;; Define theme
 
-(defun theme-util--make-spec (lst &optional display)
-  "Return (FACE SPEC)
-LST := (FACE {ATTS}*)
-SPEC := ((DISPLAY . ATTS))
-DISPLAY := t | DISPLAY specified in `defface'
-ATTS is property list"
-  (let ((face (car lst))
-        (attr (cdr lst))
-        (display (or display t)))
-    ;;         | SPEC
-    (list face (list (cons display (mapcar (lambda (x) (eval x t)) attr))))))
+(defmacro theme-util-deffaces (&rest face-list)
+  "FACE-LIST is a list of (FACE DOC)."
+  (cons 'progn
+        (mapcar (lambda (arg)
+                  `(defface ,(car arg) '((t . (:inherit default))) ,(cadr arg)))
+                face-list)))
 
-(defun theme-util-set-faces (theme display face-lst)
-  "Wrapper around `custom-theme-set-faces'.
-THEME is theme name (symbol), DISPLAY is DISPLAY spec (see `defface').
-FACE-LST is a list made of (FACE KEY VAL KEY VAL ...),
-where each pair of KEY & VAL is a face attribute."
-  (declare (indent 2))
-  (apply #'custom-theme-set-faces theme
-         (mapcar (lambda (face)
-                   (theme-util--make-spec face display))
-                 face-lst)))
+(defun theme-util-set-faces (name spec)
+  "Define theme of NAME with SPEC on DISPLAY.
+SPEC is as in ‘theme-util-make-face-spec’.
+COLOR-ENV is color environment."
+  (declare (indent 1))
+  (apply #'custom-theme-set-faces
+         name
+         (mapcar #'theme-util-make-face-spec
+                 spec)))
 
-;;;; Theme viewing
+(defun theme-util-make-face-spec (spec)
+  "Convert SPEC into actual spec used in ‘custom-theme-set-faces’.
+
+SPEC is a list
+\(FACE INHERIT FOREGROUND BACKGROUND UNDERLINE WEIGHT SLANT REST-ATTR),
+REST-ATTR is a plist (:key :value ...).
+
+For example,
+\(default nil \"white\" \"black\" nil 'bold nil (:height 10))."
+  (let* ((face (nth 0 spec))
+         (attr (nth 1 spec))
+         (rest-attr (nth 2 spec))
+         (inherit (nth 0 attr))
+         (fg (nth 1 attr))
+         (bg (nth 2 attr))
+         (underline (nth 3 attr))
+         (weight (nth 4 attr))
+         (slant (nth 5 attr)))
+    `(,face ((t . ,(remove
+                    nil
+                    (append (if inherit (list :inherit inherit))
+                            (if fg (list :foreground fg))
+                            (if bg (list :background bg))
+                            (if underline (list :underline underline))
+                            (if weight (list :weight weight))
+                            (if slant (list :slant slant))
+                            rest-attr)))))))
+
+;;; Inspect theme
 
 (defun theme-util-top-level-face-to-kill-ring (regexp)
   (interactive "sRegexp: ")
   (kill-new
-   (string-join (mapcar (lambda (face)
-                          (format "(%s :inherit 'default)\n" face))
-                        (sort (seq-filter (lambda (face)
-                                            (and (string-match regexp (face-name face))
-                                                 (not (face-attribute face :inherit nil 'default))))
-                                          (face-list))
-                              (lambda (f1 f2)
-                                (string-lessp (face-name f1) (face-name f2))))))))
+   (string-join
+    (mapcar
+     (lambda (face)
+       (format "(%s :inherit 'default)\n" face))
+     (sort (seq-filter (lambda (face)
+                         (and (string-match regexp (face-name face))
+                              (not (face-attribute face :inherit nil 'default))))
+                       (face-list))
+           (lambda (f1 f2)
+             (string-lessp (face-name f1) (face-name f2))))))))
 
 (defun theme-util-show-face-tree (&optional regexp)
   (interactive)
   (switch-to-buffer
    (let ((tree (hierarchy-new))
-         (parent-fn (lambda (face)
-                      (let ((parent-face (if (eq face 'root-face)
-                                             nil ;; the root has no parent
-                                           (or (face-attribute face :inherit nil 'default)
-                                               'root-face ))))
-                        (cond ((facep parent-face) parent-face)
-                              ((null parent-face) nil)
-                              (t 'root-face)))))
+         (parent-fn
+          (lambda (face)
+            (let ((parent-face (if (eq face 'root-face)
+                                   nil ;; the root has no parent
+                                 (or (face-attribute face :inherit nil 'default)
+                                     'root-face ))))
+              (cond ((facep parent-face) parent-face)
+                    ((null parent-face) nil)
+                    (t 'root-face)))))
          (face-list (seq-filter (lambda (face)
                                   (if (not regexp)
                                       t
@@ -73,7 +98,7 @@ where each pair of KEY & VAL is a face attribute."
      (hierarchy-add-trees tree face-list parent-fn)
      (hierarchy-tree-display tree (lambda (face _) (insert (format "%s" face)))))))
 
-;;;; Color util
+;;; Color util
 
 (defvar theme-util-color-distance-fn
   (lambda (c1 c2)
@@ -145,11 +170,19 @@ Both COLOR’S are like ”#RRGGBB”, ALPHA is a float between 0 and 1."
 
 (defun theme-util-adjust-brightness (color brightness)
   "Adjust the BRIGHTNESS of COLOR.
-Basically min(255, R/G/B * brightness).
+Basically minmax(0, R/G/B * brightness, 255).
 COLOR is like ”#RRGGBB”."
   (theme-util-color-list-to-str
    (mapcar (lambda (channel) (min 255 (* brightness channel)))
            (theme-util-color-str-to-list color))))
+
+(defun theme-util-darken (color degree)
+  "Darken COLOR by DEGREE (float between 0 and 1)."
+  (theme-util-color-overlay color "#000000" degree))
+
+(defun theme-util-brighten (color degree)
+  "Brighten COLOR by DEGREE (float between 0 and 1)."
+  (theme-util-color-overlay color "#ffffff" ))
 
 (defvar theme-util--8-bit-color-list
   '("#000000"
