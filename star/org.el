@@ -35,7 +35,7 @@
 
 (load-package flywrap
   :commands (flywrap-mode)
-  :init (setq flywrap-column 80))
+  :init (setq-default flywrap-column 80))
 
 ;;; Org
 
