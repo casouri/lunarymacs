@@ -182,7 +182,7 @@ COLOR is like ”#RRGGBB”."
 
 (defun theme-util-brighten (color degree)
   "Brighten COLOR by DEGREE (float between 0 and 1)."
-  (theme-util-color-overlay color "#ffffff" ))
+  (theme-util-color-overlay color "#ffffff" degree))
 
 (defvar theme-util--8-bit-color-list
   '("#000000"
