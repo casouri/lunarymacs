@@ -157,7 +157,7 @@ Don’t go beyond BOUND."
     (next-single-char-property-change
      (1+ point)
      ;; If we pass a bound larger than point-max,
-     ;; Emacs hangs.
+     ;; Emacs hangs. (#40000)
      'flywrap nil (min bound (point-max)))))
 
 (defsubst flywrap-at-break (point)
@@ -180,31 +180,30 @@ Return (BEG END) where the text is filled. BEG is the visual
 beginning of current live. END is the actual end of line. If
 FORCE is non-nil, update the whole line."
   (catch 'early-termination
-    (save-window-excursion
-      (save-excursion
-        (if (eq point (point-max))
-            (throw 'early-termination (cons point point)))
-        (let* ((end (line-end-position))
-               (prev-break (if (flywrap-at-break point) point
-                             (flywrap-prev-break
-                              point (line-beginning-position))))
-               (prev-break (flywrap-prev-break
-                            prev-break (line-beginning-position)))
-               next-existing-break
-               (beg prev-break)
-               (match-count 0))
-          (goto-char beg)
-          (while (< (point) end)
-            (setq next-existing-break (flywrap-next-break (point) end))
-            (flywrap-delete-overlay-at next-existing-break)
-            (flywrap-go-to-break-point (point) end)
-            (unless (>= (point) end)
-              (flywrap-insert-newline))
-            (if (eq next-existing-break (point))
-                (setq match-count (1+ match-count)))
-            (if (and (not force) (>= match-count 2))
-                (throw 'early-termination (cons beg end))))
-          (cons beg end))))))
+    (save-excursion
+      (if (eq point (point-max))
+          (throw 'early-termination (cons point point)))
+      (let* ((end (line-end-position))
+             (prev-break (if (flywrap-at-break point) point
+                           (flywrap-prev-break
+                            point (line-beginning-position))))
+             (prev-break (flywrap-prev-break
+                          prev-break (line-beginning-position)))
+             next-existing-break
+             (beg prev-break)
+             (match-count 0))
+        (goto-char beg)
+        (while (< (point) end)
+          (setq next-existing-break (flywrap-next-break (point) end))
+          (flywrap-delete-overlay-at next-existing-break)
+          (flywrap-go-to-break-point (point) end)
+          (unless (>= (point) end)
+            (flywrap-insert-newline))
+          (if (eq next-existing-break (point))
+              (setq match-count (1+ match-count)))
+          (if (and (not force) (>= match-count 2))
+              (throw 'early-termination (cons beg end))))
+        (cons beg end)))))
 
 (defun flywrap-region (&optional beg end force)
   "Fill each line in the region from BEG to END.
@@ -303,7 +302,6 @@ With argument ARG not nil, move to the previous ARG line beginning."
         (add-hook 'jit-lock-functions #'flywrap-jit-lock-fn 90 t)
         ;; Fix problem with incorrect wrapping when unfold a org
         ;; header.
-        
         (jit-lock-refontify))
     (jit-lock-unregister #'flywrap-jit-lock-fn)
     (flywrap-unwrap)))
