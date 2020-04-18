@@ -53,6 +53,9 @@
 (load-package highlight-parentheses
   :config
   (set-face-attribute 'hl-paren-face nil :weight 'bold)
+  (setq hl-paren-colors
+        (list (face-attribute
+               'hl-paren-face :foreground)))
   (global-highlight-parentheses-mode)
   ;; highlight only the most inner pair
   (add-hook 'luna-load-theme-hook
