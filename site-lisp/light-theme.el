@@ -24,11 +24,11 @@
   (cl-flet ((darken #'theme-util-darken)
             (brighten #'theme-util-brighten)
             (overlay #'theme-util-color-overlay))
-    (let* ((bg        "#fefefc")
+    (let* ((bg        "#fafafa")
            ;; lighter than region
            (bg-alt    (darken bg 0.05))
            (fg        "#2b3239")
-           (fg-weak   "#9ca0a4")
+           (fg-weak   "#9a9ea2")
            (fg-strong "#0e0e0e")
            (blue1     "#a0bcf8")
            (blue2     "#4078f2")
@@ -40,7 +40,7 @@
            (violet2   "#a626a4"))
       `(;; builtin faces
         (default     (nil ,fg ,bg))
-        (region      (nil nil ,(overlay bg blue1 0.2)))
+        (region      (nil nil ,(overlay bg violet1 0.1)))
         (highlight   (nil "white" ,blue2))
         (cursor      (nil "white" "black"))
         (link        (nil ,blue2 nil t))
