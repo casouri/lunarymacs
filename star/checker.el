@@ -12,6 +12,12 @@
 (setq elisp-flymake-byte-compile-load-path
       (append elisp-flymake-byte-compile-load-path load-path))
 
+(dolist (hook '(emacs-lisp-mode-hook
+                c-mode-hook
+                c++-mode-hook
+                python-mode-hook))
+  (add-hook hook #'flymake-mode))
+
 ;;; flyspell
 ;;
 ;; install dictionaries: http://wordlist.aspell.net
@@ -45,8 +51,7 @@
 
 (load-package flycheck
   :hook ((text-mode-hook
-          org-mode-hook
-          prog-mode-hook)
+          org-mode-hook)
          . flycheck-mode))
 
 ;;; proselint
