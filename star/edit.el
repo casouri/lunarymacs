@@ -29,7 +29,7 @@
 
 ;;; Config
 
-(which-function-mode)
+;; (which-function-mode)
 
 ;;; Package
 
