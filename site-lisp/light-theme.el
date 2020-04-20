@@ -80,7 +80,7 @@
 
         (mode-line            (nil nil ,(darken bg 0.07))
                               (:font ,(font-spec :family "SF Pro Text" :size 13.0 :weight 'light)
-                                     :box (:line-width 2 :color ,(darken bg 0.07))))
+                                     :box (:line-width 3 :color ,(darken bg 0.07))))
         (mode-line-inactive   (mode-line nil ,(darken bg 0.04) nil nil nil)
                               (:box (:line-width 2 :color ,(darken bg 0.04))))
 
