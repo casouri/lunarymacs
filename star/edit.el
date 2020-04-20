@@ -19,7 +19,9 @@
    "C-h e" #'ghelp-describe-as-in-emacs-lisp-mode
    "C-x i" #'luna-insert-special-symbol
    "C-c '" #'separedit
-   "C-s-i" #'color-outline-toggle-all)
+   "C-s-i" #'color-outline-toggle-all
+   "C-/"   #'undo-only
+   "C-."   #'undo-redo)
 
   (general-define-key
    :keymaps '(c-mode c++-mode)
@@ -60,14 +62,14 @@
              isolate-long-delete))
 
 
-(load-package undo-tree
-  :config (global-undo-tree-mode)
-  (setq undo-tree-visualizer-timestamps t
-        undo-tree-enable-undo-in-region nil
-        undo-tree-visualizer-diff t
-        undo-tree-auto-save-history t
-        undo-tree-history-directory-alist
-        `(("." . ,(luna-f-join luna-cache-dir "undo-tree")))))
+;; (load-package undo-tree
+;;   :config (global-undo-tree-mode)
+;;   (setq undo-tree-visualizer-timestamps t
+;;         undo-tree-enable-undo-in-region nil
+;;         undo-tree-visualizer-diff t
+;;         undo-tree-auto-save-history t
+;;         undo-tree-history-directory-alist
+;;         `(("." . ,(luna-f-join luna-cache-dir "undo-tree")))))
 
 
 (load-package diff-hl
