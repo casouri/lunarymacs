@@ -27,9 +27,11 @@
    :keymaps '(c-mode c++-mode)
    "M-RET" #'srefactor-refactor-at-point))
 
-;;; Package
+;;; Config
 
-;;;; Edit
+(which-function-mode)
+
+;;; Package
 
 (load-package ws-butler
   ;; global mode interferes with magit
