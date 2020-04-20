@@ -37,6 +37,7 @@
   ;; global mode interferes with magit
   :hook (prog-mode . ws-butler-mode))
 
+
 (load-package expand-region
   :config
   ;; it interferes angel.el's region transient map
@@ -89,7 +90,6 @@
 (load-package yasnippet
   :config (yas-global-mode))
 
-;;;; Code Structure
 
 (load-package color-rg
   :init
@@ -123,10 +123,10 @@
              vr/query-replace
              vr/mc-mark))
 
+
 (load-package srefactor
   :hook ((c-mode-hook . semantic-mode)
          (c++-mode-hook . semantic-mode)))
 
-;;;; Help
 
 (add-to-list 'luna-package-list 'helpful)
