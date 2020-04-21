@@ -24,7 +24,7 @@
       auto-window-vscroll nil)
 
 ;; from centaur
-(push '(vertical-scroll-bars) default-frame-alist)
+(push '(vertical-scroll-bars . nil) default-frame-alist)
 (when (featurep 'ns)
   (push '(ns-transparent-titlebar . t) default-frame-alist))
 
