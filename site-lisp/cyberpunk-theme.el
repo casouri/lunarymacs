@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (require 'theme-util)
 
 (deftheme cyberpunk
@@ -20,7 +22,7 @@
  'magit-heading-selection
  'magit-heading-highlight)
 
-(theme-util-set-faces 'light
+(theme-util-set-faces 'cyberpunk
   (cl-flet ((darken #'theme-util-darken)
             (brighten #'theme-util-brighten)
             (overlay #'theme-util-color-overlay))
@@ -98,7 +100,6 @@
 
         ;; package faces
 
-        
         (company-tooltip                     (tooltip))
         (company-tooltip-annotation          (company-tooltip))
         (company-tooltip-common              ((comp-common company-tooltip)))
@@ -117,7 +118,7 @@
         ;; (ivy-minibuffer-match-face-3      (nil ,yellow))
         ;; (ivy-minibuffer-match-face-4      (nil ,violet2))
 
-        (magit-heading-highlight (nil nil ,(brighten bg 0.15)))
+        (magit-heading-highlight (nil nil ,(brighten bg 0.08)))
         (magit-heading-selection (nil ,bg ,(overlay bg yellow 0.8)))
         (magit-bisect-bad (nil ,red))
         (magit-bisect-good (nil ,green))
@@ -142,7 +143,7 @@
         (magit-diff-base-highlight (nil ,orange ,(overlay bg orange 0.2)))
 
         (magit-diff-context (default))
-        (magit-diff-context-highlight (nil nil ,bg-alt))
+        (magit-diff-context-highlight (nil nil ,(brighten bg 0.05)))
         
         (magit-diff-file-heading (default))
         (magit-diff-file-heading-highlight (magit-heading-highlight))
@@ -242,7 +243,9 @@
         
         (helpful-heading (info-title-3))
 
-        (ghelp-entry-title (info-title-2))))))
+        (ghelp-entry-title (info-title-2))
+
+        (diff-hl-change (nil ,orange ,(overlay bg orange 0.1)))))))
 
 (provide-theme 'cyberpunk)
 

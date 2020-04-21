@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (require 'theme-util)
 
 (deftheme light
