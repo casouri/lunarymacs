@@ -52,16 +52,23 @@
         (sucess      (nil ,green))
         (tooltip     (nil nil ,(darken bg 0.03)))
         (fringe      (default))
-        (trailing-whitespace (nil nil ,red))
         (shadow      (nil nil ,bg-alt))
+
         (variable-pitch () (:family "Source Serif Pro" :height 150))
         (fixed-pitch () (:family "SF Mono" :height 130))
-        (vertical-border                     (nil nil "black"))
-        (lazy-highlight                      (nil "black" nil nil bold))
-        (highlight-fg-only-1                 (nil ,blue2))
-        (highlight-fg-only-2                 (nil ,violet1))
-        (minibuffer-prompt                   (highlight-fg-only-1))
-        (secondary-selection                 (nil nil ,(overlay bg blue1 0.3)))
+
+        (vertical-border     (nil nil "black"))
+        (lazy-highlight      (nil "black" nil nil bold))
+        (highlight-fg-only-1 (nil ,blue2))
+        (highlight-fg-only-2 (nil ,violet1))
+        (minibuffer-prompt   (highlight-fg-only-1))
+        (secondary-selection (nil nil ,(overlay bg blue1 0.3)))
+        (custom-face-tag     (nil ,blue2))
+        (isearch             (bold))
+        (isearch-fail        (error))
+        (show-paren-match    (bold))
+        (trailing-whitespace (nil nil ,red))
+
 
         (font-lock-builtin-face              (nil ,violet2))
         (font-lock-comment-face              (nil ,fg-weak))
@@ -80,27 +87,22 @@
         (font-lock-regexp-grouping-backslash (nil ,blue2))
         (font-lock-regexp-grouping-construct (nil ,blue2))
 
-        (mode-line            (nil nil ,(darken bg 0.07))
-                              (:font ,(font-spec :family "SF Pro Text" :size 13.0 :weight 'light)
-                                     :box (:line-width 3 :color ,(darken bg 0.07))))
-        (mode-line-inactive   (mode-line nil ,(darken bg 0.04) nil nil nil)
-                              (:box (:line-width 3 :color ,(darken bg 0.04))))
+        (mode-line
+         (nil nil ,(darken bg 0.07))
+         (:font ,(font-spec :family "SF Pro Text" :size 13.0 :weight 'light)
+                :box (:line-width 3 :color ,(darken bg 0.07))))
+        (mode-line-inactive
+         (mode-line nil ,(darken bg 0.04) nil nil nil)
+         (:box (:line-width 3 :color ,(darken bg 0.04))))
         (mode-line-highlight () (:box (:line-width 2 :color fg)))
 
         ;; completion
-        (current-selection                   (nil ,bg ,blue2))
-        (comp-common                         (nil ,violet1))
-        (selection-common                    (current-selection ,bg))
-        (comp-mouse                          (nil ,bg ,violet2))
+        (current-selection (nil ,bg ,blue2))
+        (comp-common       (nil ,violet1))
+        (selection-common  (current-selection ,bg))
+        (comp-mouse        (nil ,bg ,violet2))
         
-        (custom-face-tag (nil ,blue2))
-
-        (isearch          (bold))
-        (isearch-fail     (error))
-        (show-paren-match (bold))
-
         ;; package faces
-
         
         (company-tooltip                     (tooltip))
         (company-tooltip-annotation          (company-tooltip))
@@ -115,10 +117,14 @@
         (company-preview-search              (company-preview))
         
         (ivy-current-match                   (current-selection))
-        (ivy-minibuffer-match-face-1         (nil ,blue2))
-        ;; (ivy-minibuffer-match-face-2      (nil ,green))
-        ;; (ivy-minibuffer-match-face-3      (nil ,yellow))
-        ;; (ivy-minibuffer-match-face-4      (nil ,violet2))
+        (ivy-minibuffer-match-face-1         (nil ,bg ,green))
+        (ivy-minibuffer-match-face-2         (nil ,bg ,orange))
+        (ivy-minibuffer-match-face-3         (nil ,bg ,orange))
+        (ivy-minibuffer-match-face-4         (nil ,bg ,orange))
+        (ivy-minibuffer-match-highlight      (ivy-current-match))
+        (ivy-virtual                         (default))
+        (ivy-subdir                          (default))
+        (ivy-remote                          (default))
 
         (magit-heading-highlight (nil nil ,bg-alt))
         (magit-heading-selection (nil ,bg ,(overlay bg orange 0.8)))
@@ -219,7 +225,7 @@
         (which-key-command-description-face   (nil ,blue2))
         (which-key-local-map-description-face (nil ,violet2))
 
-        (hl-paren-face (nil ,(darken red 0.1) nil nil bold))
+        (hl-paren-face (nil "red" nil nil bold))
 
         (outline-1 (info-title-2))
         (outline-2 (info-title-3))
