@@ -85,6 +85,7 @@
                                      :box (:line-width 3 :color ,(darken bg 0.07))))
         (mode-line-inactive   (mode-line nil ,(darken bg 0.04) nil nil nil)
                               (:box (:line-width 3 :color ,(darken bg 0.04))))
+        (mode-line-highlight () (:box (:line-width 2 :color fg)))
 
         ;; completion
         (current-selection                   (nil ,bg ,blue2))

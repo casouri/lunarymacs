@@ -85,6 +85,7 @@
                                                     :box (:line-width 3 :color ,violet2)))
         (mode-line-inactive                  (mode-line nil ,(overlay bg violet2 0.7) nil nil nil)
                                              (:box (:line-width 3 :color ,(overlay bg violet2 0.7))))
+        (mode-line-highlight () (:box (:line-width 2 :color fg)))
 
         ;; completion
         (current-selection                   (nil ,bg ,blue2))
