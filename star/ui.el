@@ -31,14 +31,8 @@
 (load-package windman
   :commands windman-select-window)
 
-(load-package doom-themes
-  :config
-  (setq doom-cyberpunk-dark-mode-line nil)
-  (setq doom-cyberpunk-bg 'light))
-
-
 (add-to-list 'luna-toggle-theme-list 'light)
-(add-to-list 'luna-toggle-theme-list 'doom-cyberpunk)
+(add-to-list 'luna-toggle-theme-list 'cyberpunk)
 (setq custom-theme-directory
       (expand-file-name "site-lisp" user-emacs-directory))
 
