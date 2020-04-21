@@ -20,8 +20,14 @@ You need to load `luna-theme' somewhere (after loading custom.el)."
 (defvar luna-load-theme-hook nil
   "Hook run after Emacs loads a theme.")
 
-(advice-add #'enable-theme :after (lambda (&rest _)
-                                    (run-hooks 'luna-load-theme-hook)))
+(advice-add #'enable-theme :after
+            (lambda (&rest _)
+              (run-hooks 'luna-load-theme-hook)
+              ;; Otherwise title bar’s text’s color doesn’t look right
+              (when (featurep 'ns)
+                (set-frame-parameter
+                 nil 'ns-appearance
+                 (frame-parameter nil 'background-mode)))))
 
 (defun luna-load-theme (&optional theme)
   "Disable `luna-currnt-theme' and load THEME.
