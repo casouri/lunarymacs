@@ -114,10 +114,11 @@
         (company-preview-search              (company-preview))
         
         (ivy-current-match                   (current-selection))
-        (ivy-minibuffer-match-face-1         (nil ,blue2))
+        (ivy-minibuffer-match-face-1         (nil ,yellow))
         ;; (ivy-minibuffer-match-face-2      (nil ,green))
         ;; (ivy-minibuffer-match-face-3      (nil ,yellow))
         ;; (ivy-minibuffer-match-face-4      (nil ,violet2))
+        (ivy-virtual                         (nil ,violet1))
 
         (magit-heading-highlight (nil nil ,(brighten bg 0.08)))
         (magit-heading-selection (nil ,bg ,(overlay bg yellow 0.8)))
