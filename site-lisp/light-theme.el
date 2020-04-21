@@ -4,21 +4,21 @@
   "Light theme.")
 
 (theme-util-deffaces
- (highlight-fg-only-2 "Base face.")
- (highlight-fg-only-1 "Base face.")
- (red-bg-hl "Base face.")
- (red-bg "Base face.")
- (yellow-bg-hl "Base face.")
- (yellow-bg "Base face.")
- (green-bg-hl "Base face.")
- (green-bg "Base face.")
- (comp-scroll-bar "Base face.")
- (comp-mouse "Base face.")
- (selection-common "Base face.")
- (comp-common "Base face.")
- (current-selection "Base face.")
- (magit-heading-selection "Base face.")
- (magit-heading-highlight "Base face."))
+ 'highlight-fg-only-2
+ 'highlight-fg-only-1
+ 'red-bg-hl
+ 'red-bg
+ 'yellow-bg-hl
+ 'yellow-bg
+ 'green-bg-hl
+ 'green-bg
+ 'comp-scroll-bar
+ 'comp-mouse
+ 'selection-common
+ 'comp-common
+ 'current-selection
+ 'magit-heading-selection
+ 'magit-heading-highlight)
 
 (theme-util-set-faces 'light
   (cl-flet ((darken #'theme-util-darken)
@@ -82,7 +82,7 @@
                               (:font ,(font-spec :family "SF Pro Text" :size 13.0 :weight 'light)
                                      :box (:line-width 3 :color ,(darken bg 0.07))))
         (mode-line-inactive   (mode-line nil ,(darken bg 0.04) nil nil nil)
-                              (:box (:line-width 2 :color ,(darken bg 0.04))))
+                              (:box (:line-width 3 :color ,(darken bg 0.04))))
 
         ;; completion
         (current-selection                   (nil ,bg ,blue2))

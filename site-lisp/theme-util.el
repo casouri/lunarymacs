@@ -16,12 +16,11 @@
 
 ;;; Define theme
 
-(defmacro theme-util-deffaces (&rest face-list)
+(defun theme-util-deffaces (&rest face-list)
   "FACE-LIST is a list of (FACE DOC)."
-  (cons 'progn
-        (mapcar (lambda (arg)
-                  `(defface ,(car arg) '((t . (:inherit default))) ,(cadr arg)))
-                face-list)))
+  (dolist (face face-list)
+    (face-spec-set face '((t . (:inherit default)))
+                   'face-defface-spec)))
 
 (defun theme-util-set-faces (name spec)
   "Define theme of NAME with SPEC on DISPLAY.
