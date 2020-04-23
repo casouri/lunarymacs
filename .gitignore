@@ -11,4 +11,5 @@
 !cheatsheet/**/*
 !snippets/
 !snippets/**/*
+!custom.el
 .DS_Store
