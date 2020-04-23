@@ -50,7 +50,7 @@
         (match       (nil ,green nil nil bold))
         (error       (nil ,red))
         (warning     (nil ,yellow))
-        (sucess      (nil ,green))
+        (success     (nil ,green))
         (tooltip     (nil nil ,(darken bg 0.03)))
         (fringe      (default))
         (shadow      (nil nil ,bg-alt))
