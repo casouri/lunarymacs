@@ -2,7 +2,7 @@
 
 (load-package minions
   :config
-  (minions-mode))
+  (add-hook #'after-init-hook #'minions-mode 90))
 
 (defun restart-minions-mode ()
   (interactive)
