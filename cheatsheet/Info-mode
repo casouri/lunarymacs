@@ -4,3 +4,4 @@ p       previous node           n       next node
 r       forward history         l       back history
 s/S     search                  i       search index
 m       pick menu               f       follow reference
+g       goto node
