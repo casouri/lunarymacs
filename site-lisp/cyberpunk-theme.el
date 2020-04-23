@@ -277,6 +277,7 @@
         (org-block ((org-verbatim org-meta-line) nil ,bg-alt) (:extend t))
         (org-block-begin-line (org-block))
         (org-block-end-line (org-block))
+        (org-formula        (fixed-pitch))
 
         (org-table (fixed-pitch))
         (org-todo (highlight-fg-only-1))
