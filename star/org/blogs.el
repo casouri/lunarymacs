@@ -166,9 +166,16 @@ If FORCE non-nil, re-export every post."
                    (lambda (hl)
                      (let ((link (org-element-property :RSS_LINK hl))
                            (dir (org-element-property :RSS_DIR hl)))
-                       (luna-publish-rss-export link nil dir
-                                                luna-publish-note-dir
-                                                force))))))))
+                       (luna-publish-rss-export
+                        link nil dir
+                        ;; we actually want the real root
+                        ;; (~/p/casouri) instead of the note root
+                        ;; (~/p/casouri/note), because the root we
+                        ;; need here is the site root
+                        ;; (archive.caouri.cat/). This is used for
+                        ;; absolute image path for RSS.
+                        (luna-f-trim luna-publish-note-dir "note")
+                        force))))))))
     (with-temp-file (luna-f-join luna-publish-note-dir "rss.xml")
       (insert (format luna-note-rss-template
                       (format-time-string "%a, %d %b %Y %H:%M:%S %z")

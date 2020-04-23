@@ -16,7 +16,11 @@
 (defvar rss-export-html-relative-dir ""
   "E.g., “/2020/insert-math-symbol”. 
 This is used to fix relative link under a post. So “./file” becomes
-“./2020/insert-math-symbol/file”.")
+“/note/2020/insert-math-symbol/file”.
+
+Always use absolute paths from site root, don’t use relative
+links (although the name of the variable is “relative”), because
+offline RSS readers can’t interpret relative image paths.")
 
 (org-export-define-derived-backend 'rss-html 'cjk-html
   :translate-alist '((link . rss-export-link))
@@ -34,7 +38,9 @@ RELATIVE-DIR is the relative path to the post directory. E.g.,
                                        "\""))
                               nil t)
       (replace-match
-       (format "\".%s\"" (luna-f-join relative-dir (match-string 1)))))
+       ;; Absolute path, no dot, see ‘rss-export-html-relative-dir’
+       ;; for more info.
+       (format "\"%s\"" (luna-f-join relative-dir (match-string 1)))))
     (buffer-string)))
 
 (defun rss-export-link (link desc info)
