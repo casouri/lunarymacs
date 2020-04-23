@@ -66,7 +66,10 @@
 (minibuffer-electric-default-mode)
 
 ;;;; smooth scrolling
-(setq scroll-conservatively 101)
+(setq scroll-conservatively 101
+      mouse-wheel-scroll-amount '(2)
+      mouse-wheel-flip-direction t
+      mouse-wheel-tilt-scroll t)
 ;; diabled for emacs-mac port
 ;; (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse t) ;; scroll window under mouse
