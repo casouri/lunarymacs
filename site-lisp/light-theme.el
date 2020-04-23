@@ -6,6 +6,7 @@
   "Light theme.")
 
 (theme-util-deffaces
+ 'custom-default
  'highlight-fg-only-2
  'highlight-fg-only-1
  'red-bg-hl
@@ -63,12 +64,44 @@
         (highlight-fg-only-2 (nil ,violet1))
         (minibuffer-prompt   (highlight-fg-only-1))
         (secondary-selection (nil nil ,(overlay bg blue1 0.3)))
-        (custom-face-tag     (nil ,blue2))
         (isearch             (bold))
         (isearch-fail        (error))
         (show-paren-match    (bold))
         (trailing-whitespace (nil nil ,red))
 
+        (widget-field        (nil nil ,bg-alt))
+        
+        ;; see also builin-config.el (Customize) where I increase line
+        ;; spacing and default face.
+        (custom-default        () (:family "SF Pro Text" :height 140))
+        (custom-button
+         (custom-default ,(brighten fg 0.2) ,bg-alt)
+         (:box (:line-width 3 :color ,bg-alt)))
+        (custom-button-mouse
+         (custom-button nil ,(darken bg-alt 0.1 ))
+         (:box (:line-width 3 :color ,(darken bg-alt 0.1 ))))
+        (custom-button-pressed
+         (custom-button "black" ,(darken bg-alt 0.1 ))
+         (:box (:line-width 3 :color ,(darken bg-alt 0.1 ))))
+
+        (custom-button-unraised (link))
+        (custom-button-pressed-unraised (link ,violet2))
+        (custom-changed        (custom-default ,orange))
+        (custom-comment-tag    ((custom-default font-lock-comment-face)))
+        (custom-documentation  (custom-default))
+        (custom-face-tag       (custom-default ,blue2))
+        (custom-group-subtitle (custom-default))
+        (custom-group-tag      ((custom-default info-title-3)))
+        (custom-group-tag-1    (custom-group-tag))
+        (custom-invalid        (custom-default ,red))
+        (custom-modified       (custom-default ,orange))
+        (custom-rogue          (custom-default ,orange))
+        (custom-set            (custom-default ,green))
+        (custom-state          (custom-default ,green))
+        (custom-themed         (custom-default ,blue2))
+        (custom-variable-button   (custom-default))
+        (custom-variable-obsolete (custom-default))
+        (custom-variable-tag      (custom-default))
 
         (font-lock-builtin-face              (nil ,violet2))
         (font-lock-comment-face              (nil ,fg-weak))
