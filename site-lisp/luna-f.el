@@ -59,12 +59,15 @@ Return absolute path if ABSOLUTE is t."
     (insert string)
     (write-file path)))
 
-(defun luna-f-read (path)
-  "Read file at PATH as a Lisp object."
+(defun luna-f-read (path &optional default)
+  "Read file at PATH as a Lisp object.
+If the file is empty, return DEFAULT."
   (with-temp-buffer
     (insert-file-contents path)
     (goto-char (point-min))
-    (read (current-buffer))))
+    (condition-case err
+        (read (current-buffer))
+      (end-of-file default))))
 
 (defun luna-f-write-obj (path obj)
   "Write OBJ to file at PATH."
@@ -92,6 +95,13 @@ Return absolute path if ABSOLUTE is t."
 
 (defalias 'luna-f-with-write-file #'with-temp-file)
 
+(defun luna-f-touch (path)
+  "Touch PATH."
+  (if (file-exists-p path)
+      (set-file-times path)
+    (with-temp-buffer
+      (write-file path ))))
+
 (defun luna-f-subtract (base path)
   "Subtract BASE from PATH.
 
@@ -104,6 +114,18 @@ prefix of PATH."
         (path (file-truename path)))
     (when (string-prefix-p base path)
       (string-remove-prefix base path))))
+
+(defun luna-f-trim (path suffix)
+  "Trim SUFFIX from PATH.
+
+For example, if PATH is “~/p/casouri/”, SUFFIX is “/casouri”,
+return “~/p/”. If SUFFIX has a preceding “/”, then the returned
+path doesn’t have a trailing “/” and vice versa. Return nil if
+PATH doesn’t have SUFFIX as proper suffix."
+  (let ((path (file-name-as-directory path))
+        (suffix (file-name-as-directory suffix)))
+    (when (string-suffix-p suffix path)
+      (string-remove-suffix suffix path))))
 
 (provide 'luna-f)
 
