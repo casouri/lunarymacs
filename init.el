@@ -14,6 +14,7 @@
 (require 'lunary)
 (require 'cowboy)
 (require 'package)
+(require 'luna-local)
 
 (luna-if-dump
     (progn
@@ -80,7 +81,7 @@
 ;;;; Custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (luna-load-or-create custom-file)
-(add-hook 'kill-emacs-hook #'customize-save-customized)
+(luna-local-load)
 
 ;;;; Misc
 (setq-default luna-format-on-save t)

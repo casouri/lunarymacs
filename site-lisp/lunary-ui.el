@@ -1,21 +1,14 @@
 ;;; -*- lexical-binding: t -*-
 
+(require 'luna-local)
+
 ;;; Theme
 
 (defvar luna-toggle-theme-list ()
   "Themes that you can toggle bwtween by `luna-switch-theme'.")
 
-(defcustom luna-theme nil
-  "The theme used on startup.
-This way luanrymacs remembers the theme.
-You need to load `luna-theme' somewhere (after loading custom.el)."
-  :type 'symbol
-  :group 'convenience)
-
-(defcustom luna-bg nil
-  "Save bg to avoid flicker on startup."
-  :type 'string
-  :group 'convenience)
+(defvar luna-theme nil
+  "The theme applied on startup (by ‘luna-load-theme’ in init.el).")
 
 (defvar luna-load-theme-hook nil
   "Hook run after Emacs loads a theme.")
@@ -45,7 +38,7 @@ For NO-CONFIRM and NO-ENABLE see ‘load-theme’."
     (if (featurep (intern-soft (format "%s-theme" theme)))
         (enable-theme theme)
       (load-theme theme t))
-    (customize-set-variable 'luna-theme theme)))
+    (luna-local-set 'luna-theme theme)))
 
 (defun luna-quit-window (arg)
   "Quit current window and bury it's buffer.
@@ -92,15 +85,11 @@ If run with prefix argument (ARG), kill buffer."
 e.g. :family :weight :size etc."
   `(set-frame-font (font-spec ,@config-list) nil t))
 
-(defcustom luna-font nil
-  "Like `luna-theme', used to cache configuration across sessions."
-  :type 'string
-  :group 'convenience)
+(defvar luna-font nil
+  "Font name (string) used by me. Cached by ‘luna-local’.")
 
-(defcustom luna-cjk-font nil
-  "Like `luna-font'."
-  :type 'string
-  :group 'convenience)
+(defvar luna-cjk-font nil
+  "CJK font name (string) used by me. Cached by ‘luna-local’.")
 
 (defvar luna-cjk-font-scale 1.1
   "The scale for CJK font. Used in ‘luna-scale-cjk’.")
@@ -137,8 +126,7 @@ Changes are saved to custom.el in a idle timer."
     (set-frame-font font nil t)
     ;; seems that there isn't a good way to get font-object directly
     (add-to-list 'default-frame-alist `(font . ,(face-attribute 'default :font)))
-    (when (or arg (not (custom-variable-p 'luna-font)))
-      (customize-set-variable 'luna-font font-name))))
+    (luna-local-set 'luna-font font-name)))
 
 (defun luna-load-cjk-font (&optional font-name)
   "Prompt for a font and set it.
@@ -158,8 +146,7 @@ Changes are saved to custom.el in a idle timer."
                              (cdar luna-cjk-font-alist)))))
     (dolist (charset '(kana han cjk-misc))
       (set-fontset-font t charset font-spec))
-    (when (or arg (not (custom-variable-p 'luna-cjk-font)))
-      (customize-set-variable 'luna-cjk-font font-name))))
+    (luna-local-set 'luna-cjk-font font-name)))
 
 (define-minor-mode luna-scale-cjk-mode
   "Scale CJK font to align CJK font and ASCII font."
