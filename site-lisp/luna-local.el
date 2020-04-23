@@ -53,9 +53,10 @@ frames, windows, etc."
 
 (defun luna-local-load ()
   "Load ‘luna-local-file’."
-  (let ((var-list (luna-f-read luna-local-file)))
-    (dolist (elt var-list)
-      (set (car elt) (cdr elt)))))
+  (when (file-exists-p luna-local-file)
+    (let ((var-list (luna-f-read luna-local-file)))
+      (dolist (elt var-list)
+        (set (car elt) (cdr elt))))))
 
 (provide 'luna-local)
 
