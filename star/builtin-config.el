@@ -125,3 +125,11 @@
 (with-eval-after-load 'erc
   (require 'erc-services)
   (erc-services-mode))
+
+;;;; Customize
+
+(defface custom-default nil "")
+(add-hook 'Custom-mode-hook
+          (lambda ()
+            (setq-local line-spacing 0.3)
+            (buffer-face-set 'custom-default)))
