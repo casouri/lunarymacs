@@ -5,7 +5,7 @@
 (with-eval-after-load 'luna-general-config
   (general-define-key
    :prefix "C-x"
-   :keymaps 'emacs-lisp-mode-map
+   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
    ;; eval
    "w" '(:ignore t :which-key "eval")
    "we" #'eval-last-sexp
