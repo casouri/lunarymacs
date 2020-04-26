@@ -48,8 +48,12 @@ frames, windows, etc."
                               (mapcar #'car luna-local--pending-alist)
                               :initial-value val-list))
                (save-list (append luna-local--pending-alist cleaned-list)))
-          (luna-f-write-obj luna-local-file save-list)))
+          (luna-f-write luna-local-file (pp-to-string save-list))))
     (setq luna-local--pending-alist nil)))
+
+(defmacro luna-local-setq (var)
+  "Expand to (luna-local-set 'VAR VAR)."
+  `(luna-local-set ',var ,var))
 
 (defun luna-local-load ()
   "Load ‘luna-local-file’."
