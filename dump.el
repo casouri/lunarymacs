@@ -21,9 +21,8 @@
                     highlight-parentheses hl-todo buffer-move
                     savehist eyebrowse minions ws-butler
                     expand-region isolate outshine flyspell
-                    flycheck eglot minibuf-eldef form-feed
-                    all-the-icons sly-el-indent yasnippet flywrap
-                    transform utility pause))
+                    flycheck eglot minibuf-eldef sly-el-indent
+                    yasnippet flywrap transform utility pause))
   (require package))
 (add-to-list 'custom-theme-load-path
              (expand-file-name "site-lisp" user-emacs-directory))
