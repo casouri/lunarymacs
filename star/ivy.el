@@ -30,8 +30,8 @@
         ivy-use-selectable-prompt t
         ;; use full path for virtual buffer
         ivy-virtual-abbreviate 'full)
-  (advice-add 'ivy-sort-function-buffer :before #'luna-ivy-sort-match-buffers)
-  (advice-add 'ivy-switch-buffer :override #'luna-ivy-switch-buffer)
+  (add-to-list 'ivy-sort-functions-alist
+               '(luna-ivy-switch-buffer . luna-ivy-sort-buffer))
   (ivy-mode))
 
 (load-package swiper
@@ -93,4 +93,5 @@ Higher the score, higher in the buffer list (in front)."
             :preselect 1
             :action #'ivy--switch-buffer-action
             :matcher #'ivy--switch-buffer-matcher
-            :caller 'ivy-switch-buffer))
+            :caller 'luna-ivy-switch-buffer
+            :sort t))
