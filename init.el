@@ -16,6 +16,10 @@
 (require 'package)
 (require 'luna-local)
 
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(luna-load-or-create custom-file)
+(luna-local-load)
+
 (luna-if-dump
     (progn
       (setq load-path luna-dumped-load-path)
@@ -75,11 +79,6 @@
 (require 'utility)
 
 ;;; Customize
-
-;;;; Custom
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(luna-load-or-create custom-file)
-(luna-local-load)
 
 ;;;; Misc
 (setq-default luna-format-on-save t)
