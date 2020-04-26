@@ -42,14 +42,12 @@
 ;; (add-hook 'after-init-hook 'benchmark-init/deactivate)
 ;; (benchmark-init/activate)
 
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (setq luna-company-manual nil)
 (add-to-list 'luna-package-list 'use-package)
 
 (luna-message-error (require 'use-package))
-(setq use-package-hook-name-suffix "")
 ;; core must load first because other configs depends on them
 (luna-load-relative "star/builtin-config.el")
 (luna-load-relative "star/key.el")

@@ -37,8 +37,11 @@
  '(mouse-wheel-scroll-amount '(2))
  '(mouse-wheel-tilt-scroll t)
  '(ns-pop-up-frames nil nil nil "This way emacsclient doesn't open new frames.")
+ '(package-archives
+   '(("melpa" . "http://melpa.org/packages/")
+     ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(icomplete-vertical git-timemachine realgud-lldb debbugs magit benchmark-init yasnippet expand-region xr geiser magit-todos magit-patch-changelog proof-general "eglot" ivy-xref srefactor helpful imenu-list eglot racket-mode gnu-apl-mode ivy-prescient counsel swiper yaoddomuse matlab-mode ivy cdlatex tide realgud ccls flycheck hierarchy snail ztree lua-mode sly web-mode quickrun mips-mode yaml-mode markdown-mode company flyspell hl-todo f haskell-mode ws-butler writegood-mode which-key visual-regexp use-package sage-shell-mode rainbow-mode rainbow-delimiters pyvenv org-download olivetti minions latex-preview-pane htmlize highlight-parentheses general eyebrowse diff-hl buffer-move auctex aggressive-indent))
+   '(magit icomplete-vertical git-timemachine realgud-lldb debbugs benchmark-init yasnippet expand-region xr geiser magit-todos magit-patch-changelog proof-general "eglot" ivy-xref srefactor helpful imenu-list eglot racket-mode gnu-apl-mode ivy-prescient counsel swiper yaoddomuse matlab-mode ivy cdlatex tide realgud ccls flycheck hierarchy snail ztree lua-mode sly web-mode quickrun mips-mode yaml-mode markdown-mode company flyspell hl-todo f haskell-mode ws-butler writegood-mode which-key visual-regexp use-package sage-shell-mode rainbow-mode rainbow-delimiters pyvenv org-download olivetti minions latex-preview-pane htmlize highlight-parentheses general eyebrowse diff-hl buffer-move auctex aggressive-indent))
  '(recentf-max-saved-items 300)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values '((git-commit-major-mode . git-commit-elisp-text-mode)))
@@ -48,6 +51,7 @@
  '(send-mail-function 'mailclient-send-it)
  '(sentence-end-double-space nil)
  '(use-dialog-box nil)
+ '(use-package-hook-name-suffix "")
  '(vc-annotate-background "#fafafa")
  '(vc-annotate-color-map
    (list
