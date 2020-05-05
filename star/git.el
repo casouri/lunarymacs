@@ -13,7 +13,7 @@
   (define-key magit-mode-map (kbd "<tab>") 'magit-section-toggle)
   (add-to-list 'luna-buffer-bottom-list "magit:")
   (add-to-list 'luna-buffer-bottom-list "magit-process:")
-  (define-transient-command magit-patch-apply-buffer (buffer &rest args)
+  (defun magit-patch-apply-buffer (buffer &rest args)
     "Apply the patch buffer BUFFER."
     (interactive
      (list (read-buffer "Apply patch in buffer: " nil t)
