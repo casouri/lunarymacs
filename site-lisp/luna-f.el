@@ -127,6 +127,12 @@ PATH doesn’t have SUFFIX as proper suffix."
     (when (string-suffix-p suffix path)
       (string-remove-suffix suffix path))))
 
+(defun luna-f-change-extension (file extension)
+  "Change the extension of FILE to EXTENSION."
+  (let ((base (file-name-base file))
+        (dir (or (file-name-directory file) "")))
+    (format "%s%s.%s" dir base extension)))
+
 (provide 'luna-f)
 
 ;;; luna-f.el ends here
