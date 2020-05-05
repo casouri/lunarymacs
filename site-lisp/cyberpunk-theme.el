@@ -278,6 +278,7 @@
         (org-block-begin-line (org-block))
         (org-block-end-line (org-block))
         (org-formula        (fixed-pitch))
+        (org-quote            (nil nil ,bg-alt) (:extend t))
 
         (org-table (fixed-pitch))
         (org-todo (highlight-fg-only-1))
