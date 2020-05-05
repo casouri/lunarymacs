@@ -63,7 +63,7 @@
   :init
   (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'common-lisp-mode-hook #'sly-mode)
-  (setq inferior-lisp-program "ccl64"))
+  (setq inferior-lisp-program "sbcl"))
 
 
 
