@@ -5,6 +5,32 @@
 (require 'cl-lib)
 (require 'subr-x)
 
+;;; Emacs 28 back port
+
+(defun undo--last-change-was-undo-p (undo-list)
+  (while (and (consp undo-list) (eq (car undo-list) nil))
+    (setq undo-list (cdr undo-list)))
+  (gethash undo-list undo-equiv-table))
+
+(defun undo-redo (&optional arg)
+  "Undo the last ARG undos."
+  (interactive "*p")
+  (cond
+   ((not (undo--last-change-was-undo-p buffer-undo-list))
+    (user-error "No undo to undo"))
+   (t
+    (let* ((ul buffer-undo-list)
+           (new-ul
+            (let ((undo-in-progress t))
+              (while (and (consp ul) (eq (car ul) nil))
+                (setq ul (cdr ul)))
+              (primitive-undo arg ul)))
+           (new-pul (undo--last-change-was-undo-p new-ul)))
+      (message "Redo%s" (if undo-in-region " in region" ""))
+      (setq this-command 'undo)
+      (setq pending-undo-list new-pul)
+      (setq buffer-undo-list new-ul)))))
+
 ;;; Buffer
 
 (defun luna-kill-other-buffer ()
@@ -47,6 +73,11 @@ project."
   "Show current line’s line number."
   (interactive)
   (message "Line %s" (1+ (current-line))))
+
+(defun open-in-finder ()
+  "Open ‘default-directory’ in Finder."
+  (interactive)
+  (shell-command-to-string (format "open %s" default-directory)))
 
 ;;; File
 
