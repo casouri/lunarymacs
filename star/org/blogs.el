@@ -296,4 +296,29 @@ If FORCE is non-nil, only export when org file is newer than html file."
       (message "Cannot find anchor, please paste manually")
       )))
 
+;;; goldfish
+
+(defvar luna-publish-goldfish-dir "~/p/casouri/goldfish")
+
+(defun luna-publish-goldfish (&optional force)
+  "Publish goldfish blog.
+If FORCE is non-nil, only export when org file is newer than html file."
+  (interactive)
+  (save-excursion
+    ;; publish each post
+    (dolist (file (luna-f-directory-files luna-publish-goldfish-dir t))
+      (luna-f-with-file file
+        (org-mode)
+        (let ((org-export-use-babel nil)
+              (html-file (luna-f-change-extension file "html"))
+              ;; for relative links in org file
+              (default-directory luna-publish-goldfish-dir)
+              (org-export-coding-system org-html-coding-system)
+              (org-html-postamble-format luna-org-html-postamble-format)
+              (org-html-postamble nil)
+              (org-export-use-babel nil)
+              (org-html-head-include-scripts nil))
+          (if (or force (file-newer-than-file-p file html-file))
+              (org-export-to-file 'cjk-html html-file nil nil nil nil)))))))
+
 ;;; blogs.el ends here
