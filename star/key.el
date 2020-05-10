@@ -70,6 +70,7 @@
     "tm"  #'toggle-frame-maximized
     "tf"  #'luna-toggle-format-on-save
     "td"  #'toggle-debug-on-error
+    "tn"  #'treemacs
     ;; search
     "si"  #'imenu)
 

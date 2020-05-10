@@ -19,7 +19,7 @@
                     elec-pair doom-one-light-theme undo-tree
                     doom-cyberpunk-theme rainbow-delimiters
                     highlight-parentheses hl-todo buffer-move
-                    savehist eyebrowse minions ws-butler
+                    treemacs savehist eyebrowse minions ws-butler
                     expand-region isolate outshine flyspell
                     flycheck eglot minibuf-eldef sly-el-indent
                     yasnippet flywrap transform utility pause))
