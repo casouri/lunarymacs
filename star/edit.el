@@ -1,6 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 (require 'luna-f)
+(require 'outline+)
 
 ;;; Key
 
@@ -8,7 +9,7 @@
   (luna-default-leader
     "tl" #'luna-toggle-left-margin
     "sr" #'color-rg-search-input
-    "C-o" #'outline-toggle-children)
+    "C-o" #'outline-cycle)
 
   (general-define-key
    ;; Hungry delete
@@ -21,7 +22,8 @@
    "C-c '" #'separedit
    "C-s-i" #'color-outline-toggle-all
    "C-/"   #'undo-only
-   "C-."   #'undo-redo)
+   "C-."   #'undo-redo
+   "C-s-i" #'outline-cycle-buffer)
 
   (general-define-key
    :keymaps '(c-mode c++-mode)

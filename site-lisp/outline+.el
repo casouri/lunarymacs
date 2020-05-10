@@ -1,0 +1,80 @@
+;;; outline+.el --- Outline improvements      -*- lexical-binding: t; -*-
+
+;; Author: Yuan Fu <casouri@gmail.com>
+
+;;; This file is NOT part of GNU Emacs
+
+;;; Commentary:
+;;
+
+;;; Code:
+;;
+
+(defun outline--cycle-state ()
+  "Return the cycle state of current heading.
+Return either 'hide-all, 'headings-only, or 'show-all."
+  (save-excursion
+    (let (start end ov-list)
+      (outline-back-to-heading)
+      (setq start (point))
+      (outline-end-of-subtree)
+      (setq end (point))
+      (setq ov-list (cl-remove-if-not
+                     (lambda (o) (eq (overlay-get o 'invisible) 'outline))
+                     (overlays-in start end)))
+      (cond ((eq ov-list nil) 'show-all)
+            ((eq (length ov-list) 1) 'hide-all)
+            (t 'headings-only)))))
+
+(defun outline-has-subheading-p ()
+  "Return t if this heading has subheadings, nil otherwise."
+  (save-excursion
+    (outline-back-to-heading)
+    (< (save-excursion (outline-next-heading) (point))
+       (save-excursion (outline-end-of-subtree) (point)))))
+
+(defun outline-cycle ()
+  "Cycle between “hide all”, “headings only” and “show all”.
+
+“Hide all” means hide all subheadings and their bodies.
+“Headings only” means show sub headings but not their bodies.
+“Show all” means show all subheadings and their bodies."
+  (interactive)
+  (pcase (outline--cycle-state)
+    ('hide-all (if (outline-has-subheading-p)
+                   (progn (outline-show-children)
+                          (message "Only headings"))
+                 (outline-show-subtree)
+                 (message "Show all")))
+    ('headings-only (outline-show-subtree)
+                    (message "Show all"))
+    ('show-all (outline-hide-subtree)
+               (message "Hide all"))))
+
+(defvar-local outline--cycle-buffer-state 'show-all
+  "Interval variable used for tracking buffer cycle state.")
+
+(defun outline-cycle-buffer ()
+  "Cycle the whole buffer like in ‘outline-cycle’."
+  (interactive)
+  (pcase outline--cycle-buffer-state
+    ('show-all (save-excursion
+                 (let ((start-point (point)))
+                   (while (not (eq (point) start-point))
+                     (outline-up-heading 1))
+                   (outline-hide-sublevels
+                    (progn (outline-back-to-heading)
+                           (funcall 'outline-level)))))
+               (setq outline--cycle-buffer-state 'top-level)
+               (message "Top level headings"))
+    ('top-level (outline-show-all)
+                (outline-hide-region-body (point-min) (point-max))
+                (setq outline--cycle-buffer-state 'all-heading)
+                (message "All headings"))
+    ('all-heading (outline-show-all)
+                  (setq outline--cycle-buffer-state 'show-all)
+                  (message "Show all"))))
+
+(provide 'outline+)
+
+;;; outline+.el ends here
