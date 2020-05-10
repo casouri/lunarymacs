@@ -79,8 +79,8 @@
                 hl-todo-keyword-faces))
   (global-hl-todo-mode))
 
-;; local-config sets icon size
-(load-package treemacs)
+(load-package treemacs
+  :config (treemacs-resize-icons 11))
 
 ;; interfere with 'display text property
 ;;
