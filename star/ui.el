@@ -20,7 +20,10 @@
    "s-k" #'windmove-up
    "s-l" #'windmove-right
    "s-s" #'save-buffer
-   "s-w" #'delete-frame)
+   "s-w" #'delete-frame
+
+   "<M-up>" #'outline-previous-visible-heading
+   "<M-down>" #'outline-next-visible-heading)
 
   (luna-default-leader
     "wr" #'luna-desktop-read
