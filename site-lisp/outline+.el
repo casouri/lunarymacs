@@ -6,6 +6,9 @@
 
 ;;; Commentary:
 ;;
+;; Provide heading cycling commands for outline.
+;; - outline-cycle
+;; - outline-cycle-buffer
 
 ;;; Code:
 ;;
@@ -14,16 +17,22 @@
   "Return the cycle state of current heading.
 Return either 'hide-all, 'headings-only, or 'show-all."
   (save-excursion
-    (let (start end ov-list)
+    (let (start end ov-list heading-end)
       (outline-back-to-heading)
       (setq start (point))
+      (outline-end-of-heading)
+      (setq heading-end (point))
       (outline-end-of-subtree)
       (setq end (point))
       (setq ov-list (cl-remove-if-not
                      (lambda (o) (eq (overlay-get o 'invisible) 'outline))
                      (overlays-in start end)))
       (cond ((eq ov-list nil) 'show-all)
-            ((eq (length ov-list) 1) 'hide-all)
+            ;; (eq (length ov-list) 1) wouldn’t work: what if there is
+            ;; one folded subheading?
+            ((and (eq (overlay-end (car ov-list)) end)
+                  (eq (overlay-start (car ov-list)) heading-end))
+             'hide-all)
             (t 'headings-only)))))
 
 (defun outline-has-subheading-p ()
