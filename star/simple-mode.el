@@ -122,6 +122,7 @@
                    (setq-local company-transformers nil)
                    (setq-local comment-multi-line t)
                    (eglot-ensure))))
+
 ;;; Genarl package
 (load-package aggressive-indent
   :commands (aggressive-indent-mode)
