@@ -96,7 +96,9 @@ e.g. :family :weight :size etc."
 
 (defvar luna-font-alist
   '((sf-mono-13 . (:family "SF Mono" :size 13))
-    (gnu-unifont-15 . (:family "Unifont" :size 15)))
+    (sf-mono-14 . (:family "SF Mono" :size 14))
+    (gnu-unifont-15 . (:family "Unifont" :size 15))
+    (sf-mono-light-13 . (:family "SF Mono" :size 13 :weight light)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
 Key is a symbol as the name, value is a plist specifying the font spec.
 More info about spec in `font-spec'.")
