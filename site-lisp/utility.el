@@ -79,6 +79,12 @@ project."
   (interactive)
   (shell-command-to-string (format "open %s" default-directory)))
 
+(defun open-in-iterm ()
+  "Open ‘default-directory’ iTerm."
+  (interactive)
+  (shell-command-to-string
+   (format "open -a /Applications/iTerm.app %s" default-directory)))
+
 ;;; File
 
 (defun luna-rename-file ()
