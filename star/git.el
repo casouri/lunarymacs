@@ -22,8 +22,9 @@
       (insert-buffer-substring-no-properties buffer)
       (magit-run-git-with-input "apply" args "-")
       (magit-refresh)))
+  (require 'magit-patch)
   (transient-append-suffix 'magit-patch-apply "a"
-    '("b"  "Apply patch in buffer" magit-patch-apply-buffer)))
+    '("b" "Apply patch in buffer" magit-patch-apply-buffer)))
 
 (load-package magit-patch-changelog
   :after magit)
