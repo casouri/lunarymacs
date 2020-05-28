@@ -1,4 +1,4 @@
-;;-*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
 (add-to-list 'load-path
              (expand-file-name "site-lisp"
                                user-emacs-directory))
@@ -14,14 +14,13 @@
       luna-dumped t)
 (dolist (package '(use-package company ivy counsel org helpful
                     general helpful use-package general which-key
-                    recentf-ext swiper ivy-prescient find-char
-                    aggressive-indent windman doom-themes winner
-                    elec-pair doom-one-light-theme undo-tree
-                    doom-cyberpunk-theme rainbow-delimiters
+                    recentf-ext swiper ivy-prescient
+                    aggressive-indent winner elec-pair
+                    rainbow-delimiters
                     highlight-parentheses hl-todo buffer-move
                     treemacs savehist eyebrowse minions ws-butler
-                    expand-region isolate outshine flyspell
-                    flycheck eglot minibuf-eldef sly-el-indent
+                    expand-region isolate flyspell
+                    flycheck eglot minibuf-eldef ;; sly-el-indent
                     yasnippet flywrap transform utility pause))
   (require package))
 (add-to-list 'custom-theme-load-path
@@ -29,4 +28,6 @@
 (load-theme 'light t t)
 (load-theme 'cyberpunk t t)
 
+(setq luna-dump-file "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp")
+(message "Dumping to %s" luna-dump-file)
 (dump-emacs-portable luna-dump-file)
