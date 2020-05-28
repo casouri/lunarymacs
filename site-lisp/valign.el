@@ -125,6 +125,12 @@ But we don’t skip over chars with display property."
                           (not (eq (car display) 'space))))))
     (forward-char)))
 
+(defun valign--sperator-p ()
+  "If the current cell is actually a separator.
+Assume point is after the left bar (“|”)."
+  (and (eq (char-before) ?|)
+       (eq (char-after) ?-)))
+
 (defmacro valign--do-table (column-idx-sym limit &rest body)
   "Go to each cell of a table and evaluate BODY.
 In each cell point stops after the left “|”.
@@ -154,11 +160,12 @@ Start from point, stop at LIMIT."
         ;;
         ;; Calculate this column’s pixel width, record it if it
         ;; is the largest one for this column.
-        (let ((oldmax (alist-get column-idx column-width-alist))
-              (column-width (valign--cell-width)))
-          (if (> column-width (or oldmax 0))
-              (setf (alist-get column-idx column-width-alist)
-                    column-width)))))
+        (unless (valign--sperator-p)
+          (let ((oldmax (alist-get column-idx column-width-alist))
+                (column-width (valign--cell-width)))
+            (if (> column-width (or oldmax 0))
+                (setf (alist-get column-idx column-width-alist)
+                      column-width))))))
     ;; Turn alist into a list.
     (let ((inc 0) return-list)
       (while (alist-get inc column-width-alist)
@@ -231,47 +238,49 @@ Supposed to be called from jit-lock."
                 (valign--calculate-column-width-list end))
           ;; Iterate each line and apply tab stops.
           (valign--do-table column-idx end
-            (save-excursion
-              (when (save-excursion (search-forward "|" nil t))
-                ;; We are after the left bar (“|”).
-                ;; Start aligning this cell.
-                (let* ((col-width (nth column-idx column-width-list))
-                       (cell-width (valign--cell-width))
-                       ;; single-space-width
-                       (ssw (or ssw (valign--glyph-width-at-point)))
-                       (bar-width (or bar-width
-                                      (valign--glyph-width-at-point
-                                       (1- (point)))))
-                       tab-width tab-start tab-end)
-                  ;; Initialize some numbers.
-                  (if (eq column-idx 0)
-                      (setq pos (valign--glyph-width-from-to
-                                 (line-beginning-position) (point))))
-                  ;; Align an empty cell.
-                  (if (eq cell-width 0)
-                      (progn
-                        (setq tab-start (point))
-                        (valign--skip-space-forward)
-                        (valign--put-text-property
-                         tab-start (point) (+ pos col-width ssw)))
-                    ;; Align a left-aligned cell.
-                    (pcase (valign--cell-alignment)
-                      ('left (search-forward "|" nil t)
-                             (backward-char)
-                             (setq tab-end (point))
-                             (valign--skip-space-backward)
-                             (valign--put-text-property
-                              (point) tab-end
-                              (+ pos col-width ssw)))
-                      ;; Align a right-aligned cell.
-                      ('right (setq tab-width
-                                    (- col-width cell-width))
-                              (setq tab-start (point))
-                              (valign--skip-space-forward)
-                              (valign--put-text-property
-                               tab-start (point)
-                               (+ pos tab-width)))))
-                  (setq pos (+ pos col-width bar-width ssw))))))))
+            (unless (valign--sperator-p)
+              (save-excursion
+                (when (save-excursion (search-forward "|" nil t))
+                  ;; We are after the left bar (“|”).
+                  ;; Start aligning this cell.
+                  (let* ((col-width (or (nth column-idx column-width-list)
+                                        0))
+                         (cell-width (valign--cell-width))
+                         ;; single-space-width
+                         (ssw (or ssw (valign--glyph-width-at-point)))
+                         (bar-width (or bar-width
+                                        (valign--glyph-width-at-point
+                                         (1- (point)))))
+                         tab-width tab-start tab-end)
+                    ;; Initialize some numbers.
+                    (if (eq column-idx 0)
+                        (setq pos (valign--glyph-width-from-to
+                                   (line-beginning-position) (point))))
+                    ;; Align an empty cell.
+                    (if (eq cell-width 0)
+                        (progn
+                          (setq tab-start (point))
+                          (valign--skip-space-forward)
+                          (valign--put-text-property
+                           tab-start (point) (+ pos col-width ssw)))
+                      ;; Align a left-aligned cell.
+                      (pcase (valign--cell-alignment)
+                        ('left (search-forward "|" nil t)
+                               (backward-char)
+                               (setq tab-end (point))
+                               (valign--skip-space-backward)
+                               (valign--put-text-property
+                                (point) tab-end
+                                (+ pos col-width ssw)))
+                        ;; Align a right-aligned cell.
+                        ('right (setq tab-width
+                                      (- col-width cell-width))
+                                (setq tab-start (point))
+                                (valign--skip-space-forward)
+                                (valign--put-text-property
+                                 tab-start (point)
+                                 (+ pos tab-width)))))
+                    (setq pos (+ pos col-width bar-width ssw)))))))))
     
     (valign-bad-cell (message (error-message-string err)))
     (valign-werid-alignment (message (error-message-string err)))))
@@ -284,8 +293,8 @@ Supposed to be called from jit-lock."
               (lambda ()
                 (add-hook 'jit-lock-functions
                           #'valign-initial-alignment 90 t)))
-    (advice-add #'org-table-justify-field-maybe
-                :after (lambda (&optional _) (valign-table)))))
+    (advice-add #'org-table-next-field :after #'valign-table)
+    (advice-add #'org-table-previous-field :after #'valign-table)))
 
 (provide 'valign)
 
