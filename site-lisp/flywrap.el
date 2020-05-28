@@ -3,6 +3,9 @@
 ;; Author: Yuan Fu <casouri@gmail.com>
 
 ;;; This file is NOT part of GNU Emacs
+;;; This package is obsolete.
+;;
+;; Emacs has added support for proper word wraps.
 
 ;;; Commentary:
 ;;
@@ -251,6 +254,14 @@ See ‘after-change-functions’ for explanation on BEG END LEN."
   )
 
 ;;; Userland
+
+(defun flywrap-next-line ()
+  "Move to the next line."
+  (interactive)
+  (let ((col (current-column)))
+    (goto-char (flywrap-next-break (point) (save-excursion (re-search-forward "\n")
+                                                           (point))))))
+
 
 (defun flywrap-move-end-of-line (&optional arg)
   "Move to the end of current visual line.
