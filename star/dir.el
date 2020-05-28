@@ -10,12 +10,19 @@
    "C-c C-o" #'luna-dired-open-file-at-point
    "s-v" #'trivial-copy-paste
    "s-c" #'trivial-copy-copy
-   "s-M-v" #'trivial-copy-move))
+   "s-M-v" #'trivial-copy-move
+   ;; command+shift+.
+   "s->" #'dired-omit-mode
+   "C-/" #'dired-undo))
 
 ;;; Config
 
 (add-hook 'dired-mode-hook #'auto-revert-mode)
+(with-eval-after-load 'dired
+  (require 'dired-x))
 (setq dired-dwim-target t)
+(advice-add #'dired-maybe-insert-subdir :after
+            (lambda (&rest _) (recenter-top-bottom)))
 
 ;;; Function
 
