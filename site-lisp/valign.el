@@ -222,6 +222,27 @@ Supposed to be called from jit-lock."
         (put-text-property beg (point) 'valign-init t)))
   (cons 'jit-lock-bounds (cons beg end)))
 
+(defun valign--align-separator-row (total-width)
+  "Align the separator row (|---+---|).
+Assumes the point is after the left bar (“|”). TOTAL-WIDTH is the
+pixel width counting from the left of the left bar to the left of
+the right bar."
+  (let ((p (point)))
+    (when (search-forward "|" nil t)
+      (valign--put-text-property
+       p (1- (point)) total-width)
+      ;; Why do we have to add an overlay? Because text property
+      ;; doens’t work. First, font-lock overwrites what ever face
+      ;; property you add; second, even if you are sneaky and added a
+      ;; font-lock-face property, it is overwritten by the face
+      ;; property (org-table, in this case).
+      (dolist (ov (overlays-in p (1- (point))))
+        (if (overlay-get ov 'valign)
+            (delete-overlay ov)))
+      (let ((ov (make-overlay p (1- (point)))))
+        (overlay-put ov 'face '(:strike-through t))
+        (overlay-put ov 'valign t)))))
+
 ;;; Userland
 
 (defun valign-table ()
@@ -229,7 +250,8 @@ Supposed to be called from jit-lock."
   (interactive)
   (condition-case err
       (save-excursion
-        (let (end column-width-list column-idx pos ssw bar-width)
+        (let (end column-width-list column-idx pos ssw bar-width
+                  separator-row-point separator-row-end-pos)
           (if (not (valign--end-of-table))
               (user-error "Not on a table"))
           (setq end (point))
@@ -238,7 +260,8 @@ Supposed to be called from jit-lock."
                 (valign--calculate-column-width-list end))
           ;; Iterate each line and apply tab stops.
           (valign--do-table column-idx end
-            (unless (valign--sperator-p)
+            (if (valign--sperator-p)
+                (setq separator-row-point (point))
               (save-excursion
                 (when (save-excursion (search-forward "|" nil t))
                   ;; We are after the left bar (“|”).
@@ -280,7 +303,11 @@ Supposed to be called from jit-lock."
                                 (valign--put-text-property
                                  tab-start (point)
                                  (+ pos tab-width)))))
-                    (setq pos (+ pos col-width bar-width ssw)))))))))
+                    (setq pos (+ pos col-width bar-width ssw))
+                    (setq separator-row-end-pos (- pos bar-width)))))))
+          ;; After aligning all rows, align the separator row.
+          (goto-char separator-row-point)
+          (valign--align-separator-row separator-row-end-pos)))
     
     (valign-bad-cell (message (error-message-string err)))
     (valign-werid-alignment (message (error-message-string err)))))
