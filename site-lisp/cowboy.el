@@ -3,6 +3,7 @@
 ;; Copyright (C) 2018  Yuan Fu
 
 ;; Author: Yuan Fu <casouri@gmail.com>
+;; With code form auto-package-update.el
 
 ;;; This file is NOT part of GNU Emacs
 
@@ -76,11 +77,16 @@ relative path to package-dir. No preceding slash or dot.")
                  ,(symbol-name package)
                  (error-message-string ,err-sym))))))
 
-(defun cowboy-installedp (package)
+(defun cowgirl-installed-p (package)
   "Return t if PACKAGE (symbol) is installed, nil if not."
-  (or (package-installed-p package)
-      (member (symbol-name package)
-              (directory-files cowboy-package-dir))))
+  (if (cowgirl-use-cowboy package)
+      (cowboy-installed-p package)
+    (package-installed-p package)))
+
+(defun cowboy-installed-p (package)
+  "Return t if PACKAGE (symbol) is installed, nil if not."
+  (member (symbol-name package)
+          (directory-files cowboy-package-dir)))
 
 (defun cowboy--command (command dir &rest args)
   "Call process with COMMAND and ARGS in DIR."
@@ -90,19 +96,45 @@ relative path to package-dir. No preceding slash or dot.")
                               args)))
         (error (buffer-string))))))
 
-(defun cowboy--avaliable-package-list ()
+(defun cowgirl--avaliable-package-list ()
   "Return a list of available packages as string."
-  (cowboy-ensure-refresh-content)
+  (cowgirl-ensure-refresh-content)
   (append (mapcar (lambda (pkg) (symbol-name (car pkg)))
                   package-archive-contents)
-          (mapcar (lambda (recipe) (symbol-name (car recipe)))
-                  cowboy-recipe-alist)))
+          (cowboy--avaliable-package-list)))
 
-(defun cowboy--installed-package-list ()
+;; From auto-package-update.el
+(defun cowgirl--up-to-date-p (package)
+  "Return t if PACKAGE (symbol) is up-to-date."
+  (when (and (package-installed-p package)
+             (cadr (assq package package-archive-contents)))
+    (let* ((newest-desc (cadr (assq package package-archive-contents)))
+           (installed-desc (cadr (or (assq package package-alist)
+                                     (assq package package--builtins))))
+           (newest-version  (package-desc-version newest-desc))
+           (installed-version (package-desc-version installed-desc)))
+      (version-list-<= newest-version installed-version))))
+
+(defun cowboy--avaliable-package-list ()
+  "Return a list of available packages as string."
+  
+  (mapcar (lambda (recipe) (symbol-name (car recipe)))
+          cowboy-recipe-alist))
+
+(defun cowgirl--installed-package-list ()
   "Return a list of installed packages as string."
   (append (mapcar (lambda (pkg) (symbol-name pkg))
                   package-activated-list)
-          (luna-f-list-directory cowboy-package-dir)))
+          (cowboy--installed-package-list)))
+
+(defun cowboy-delete-1 (package)
+  "Delete PACKAGE (symbol)."
+  (delete-directory
+   (luna-f-join cowboy-package-dir (symbol-name package)) t t))
+
+(defun cowboy--installed-package-list ()
+  "Return a list of installed packages as string."
+  (luna-f-list-directory cowboy-package-dir))
 
 (defun cowboy--add-package-load-path (package)
   "Add PACKAGE (symbol) to `load-path'."
@@ -119,7 +151,16 @@ relative path to package-dir. No preceding slash or dot.")
 
 ;;; Userland
 
-(defun cowboy-ensure-refresh-content (&optional force)
+;;;; Cowgirl
+
+(defun cowgirl-use-cowboy (package)
+  "Return t if this PACKAGE (string) is handled by cowboy."
+  (and (member package (mapcar (lambda (e) (symbol-name (car e)))
+                               cowboy-recipe-alist))
+       ;; ‘member’ doesn’t return t.
+       t))
+
+(defun cowgirl-ensure-refresh-content (&optional force)
   "Make sure package list is refreshed.
 If FORCE non-nil, always refresh."
   (package-initialize)
@@ -134,80 +175,92 @@ If FORCE non-nil, always refresh."
       (put 'package-refresh-contents 'cowboy-last-refresh-time
            (current-time)))))
 
-(defun cowboy-install (package &optional option-plist)
+(defun cowgirl-install (package &optional option-plist)
   "Install PACKAGE (symbol).
 
 OPTION-PLIST contains user options that each backend may use."
   (interactive (list (intern
                       (completing-read "Package: "
-                                       (cowboy--avaliable-package-list)))))
-  (cowboy--message-error package
-    (let ((recipe (alist-get package cowboy-recipe-alist)))
-      (if (cowboy-installedp package)
-          (message "%s is already installed" package)
-        (message "Installing %s" package)
-        (if recipe
-            (progn (message "Found recipe")
-                   (when-let ((dependency-list (plist-get recipe :dependency)))
-                     (message "Found dependencies: %s" dependency-list)
-                     (dolist (dep dependency-list)
-                       (cowboy-install dep option-plist)))
-                   (let ((fetcher (or (plist-get recipe :fetcher) 'github)))
-                     (message "Installing package with %s backend." fetcher)
-                     (funcall (cowboy--install-fn fetcher)
-                              package recipe option-plist))
-                   (cowboy--add-package-load-path package)
-                   (require package nil t))
-          (message "Recipe not found, installing with package.el")
-          (cowboy-ensure-refresh-content)
-          (package-install package))
-        (message "Package %s installed" package)))))
+                                       (cowgirl--avaliable-package-list)))))
+  (if (cowgirl-use-cowboy package)
+      (cowboy-install package option-plist)
+    (package-install-from-archive
+     (cadr (assoc package package-archive-contents)))))
 
-(defun cowboy-update (package)
-  "Update PACKAGE."
-  (interactive (list (intern
-                      (completing-read "Package: "
-                                       (cowboy--installed-package-list)))))
-  (cowboy--message-error package
-    (message "Updating %s" package)
-    (let ((recipe (alist-get package cowboy-recipe-alist)))
-      (if recipe
-          (progn (message "Found recipe")
-                 ;; handle dependency
-                 (when-let ((dependency-list (plist-get recipe :dependency)))
-                   (message "Found dependencies: %s" dependency-list)
-                   (mapc #'cowboy-update dependency-list))
-                 ;; update this package
-                 (let ((fetcher (or (plist-get recipe :fetcher)
-                                    'github)))
-                   (message "Updating package with %s backend" fetcher)
-                   (funcall (cowboy--update-fn fetcher)
-                            package recipe)))
-        ;; no recipe
-        (message "Recipe not found, updating with package.el")
-        (cowboy-ensure-refresh-content)
-        (package-delete (car (alist-get package package-alist)) t)
-        (package-install package))
-      (message "Package %s updated" package))))
-
-(defun cowboy-delete (package)
+(defun cowgirl-delete (package)
   "Delete PACKAGE."
   (interactive (list (intern
                       (completing-read "Package: "
-                                       (cowboy--installed-package-list)))))
+                                       (cowgirl--installed-package-list)))))
+  (if (cowgirl-use-cowboy package)
+      (cowboy-delete package)
+    (package-delete package)))
+
+;;;; Cowboy
+
+(defun cowboy-install (package &optional option-plist)
+  "Install PACKAGE (symbol).
+
+OPTION-PLIST contains user options that each backend may use."
+  (interactive (list
+                (intern
+                 (completing-read "Package: "
+                                  (cowboy--avaliable-package-list)))))
   (cowboy--message-error package
-    (message "Deleting %s" package)
     (let ((recipe (alist-get package cowboy-recipe-alist)))
-      (if recipe
-          (progn (message "Found recipe")
-                 (delete-directory
-                  (luna-f-join cowboy-package-dir (symbol-name package))
-                  t t))
-        ;; try to use package.el to delete
-        (message "Recipe not found, deleting with package.el")
-        (cowboy-ensure-refresh-content)
-        (package-delete (car (alist-get package package-alist))))
+      (if (cowboy-installed-p package)
+          (message "%s is already installed" package)
+        (if (not recipe)
+            (message "No recipe for %s" package)
+          (when-let ((dependency-list (plist-get recipe :dependency)))
+            (message "Found dependencies: %s" dependency-list)
+            (dolist (dep dependency-list)
+              (cowgirl-install dep option-plist)))
+          (let ((fetcher (or (plist-get recipe :fetcher) 'github)))
+            (funcall (cowboy--install-fn fetcher)
+                     package recipe option-plist)
+            (cowboy--add-package-load-path package)
+            (require package nil t)
+            (message "%s installed with %s backend" package fetcher)))))))
+
+(defun cowboy-update (package)
+  "Update PACKAGE (symbol)."
+  (interactive (list
+                (intern
+                 (completing-read "Package: "
+                                  (cowboy--installed-package-list)))))
+  (cowboy--message-error package
+    (let ((recipe (alist-get package cowboy-recipe-alist)))
+      (if (not recipe)
+          (message "No recipe for %s" package)
+        ;; handle dependency
+        (when-let ((dependency-list (plist-get recipe :dependency)))
+          (message "Found dependencies: %s" dependency-list)
+          (mapc #'cowgirl-update dependency-list))
+        ;; update this package
+        (let ((fetcher (or (plist-get recipe :fetcher)
+                           'github)))
+          (funcall (cowboy--update-fn fetcher)
+                   package recipe)
+          (message "Package %s updated with %s backend" package fetcher))))))
+
+(defun cowboy-delete (package)
+  "Delete PACKAGE (symbol)."
+  (interactive (list
+                (intern
+                 (completing-read "Package: "
+                                  (cowboy--installed-package-list)))))
+  (cowboy--message-error package
+    (if (not (member (symbol-name package) (cowboy--installed-package-list)))
+        (message "Package %s is not installed" package)
+      (cowboy-delete-1 package)
       (message "Package %s deleted" package))))
+
+(defun cowboy-update-all ()
+  "Update all packages."
+  (interactive)
+  (dolist (package (luna-f-list-directory cowboy-package-dir))
+    (cowboy-update (intern package))))
 
 (defun cowboy-reinstall (package)
   "Reinstall PACKAGE."
@@ -218,8 +271,26 @@ OPTION-PLIST contains user options that each backend may use."
   "Add packages to `load-path'."
   ;; add first and second level directories to load-path
   ;; this is usually enough
-  (dolist (package (luna-f-list-directory cowboy-package-dir))
-    (cowboy--add-package-load-path (intern package))))
+  (dolist (package-name (luna-f-list-directory cowboy-package-dir))
+    (cowboy--add-package-load-path (intern package-name))))
+
+(defun cowboy-prune ()
+  "Delete installed packages that don’t have recipe."
+  (interactive)
+  (let ((package-list
+         (cl-loop for package-name in (cowboy--installed-package-list)
+                  if (not (alist-get
+                           (intern package-name) cowboy-recipe-alist))
+                  collect package-name)))
+    (if package-list
+        (when (yes-or-no-p
+               (format "Deleting these packages: %sproceed?"
+                       (cl-reduce
+                        (lambda (str name) (concat str name ", "))
+                        package-list :initial-value "")))
+          (dolist (package-name package-list)
+            (cowboy-delete (intern package-name))))
+      (message "No packages to prune"))))
 
 ;;; Fetchers
 
@@ -234,12 +305,12 @@ In OPTION-PLIST, if :full-clone is t, full clone.
 In RECIPE, :repo is of form \"user/repo\"."
   (let ((full-clone (plist-get option-plist :full-clone)))
     (cowboy--command "git" cowboy-package-dir "clone"
-                (unless full-clone "--depth=1")
-                (if (plist-get recipe :repo)
-                    (format "https://github.com/%s.git" (plist-get recipe :repo))
-                  (if (plist-get recipe :http)
-                      (error "No :repo nor :http in recipe: %s" recipe)))
-                (symbol-name package))))
+                     (unless full-clone "--depth=1")
+                     (if (plist-get recipe :repo)
+                         (format "https://github.com/%s.git" (plist-get recipe :repo))
+                       (if (plist-get recipe :http)
+                           (error "No :repo nor :http in recipe: %s" recipe)))
+                     (symbol-name package))))
 
 (defun cowboy--github-shallowp (package)
   "Return t if PACKAGE (a symbol) is shallow cloned, nil if not."
@@ -254,7 +325,7 @@ In RECIPE, :repo is of form \"user/repo\"."
   "Pull PACKAGE (a symbol) with RECIPE from upstream."
   (if (cowboy--github-shallowp package)
       (progn
-        (cowboy-delete package)
+        (cowboy-delete-1 package)
         (cowboy--github-install package recipe))
     (cowboy--command "git" (luna-f-join cowboy-package-dir (symbol-name package))
                      "pull" "--rebase")))
