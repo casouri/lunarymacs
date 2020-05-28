@@ -8,8 +8,7 @@
 (with-eval-after-load 'luna-general-config
   (luna-default-leader
     "tl" #'luna-toggle-left-margin
-    "sr" #'color-rg-search-input
-    "C-o" #'outline-cycle)
+    "sr" #'grep)
 
   (general-define-key
    ;; Hungry delete
@@ -27,7 +26,15 @@
 
   (general-define-key
    :keymaps '(c-mode c++-mode)
-   "M-RET" #'srefactor-refactor-at-point))
+   "M-RET" #'srefactor-refactor-at-point)
+
+  (general-define-key
+   :keymaps 'outline-minor-mode-map
+   "S-<return>" #'outline-cycle)
+
+  (general-define-key
+   :keymaps '(text-mode fundamental-mode)
+   "TAB" #'self-insert-command))
 
 ;;; Config
 
