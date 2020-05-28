@@ -6,17 +6,23 @@
 
 ;;; flymake
 ;;
-;; otherwise litters my directory with temp files
-(setq-default flymake-diagnostic-functions nil)
-;; require error
-(setq elisp-flymake-byte-compile-load-path
-      (append elisp-flymake-byte-compile-load-path load-path))
+(with-eval-after-load 'flymake
+  ;; require error
+  (setq elisp-flymake-byte-compile-load-path
+        (append elisp-flymake-byte-compile-load-path
+                load-path)))
 
 (dolist (hook '(emacs-lisp-mode-hook
                 c-mode-hook
                 c++-mode-hook
                 python-mode-hook))
   (add-hook hook #'flymake-mode))
+
+(defun flymake-clean ()
+  "Clean flymake temp files in current directory."
+  (interactive)
+  (shell-command-to-string
+   "rm *flymake.o"))
 
 ;;; flyspell
 ;;
