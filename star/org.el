@@ -47,8 +47,6 @@
         ;; This should be used with `doom-cyberpunk-theme' or `doom-one-light-theme'(modified)
         ;; see casouri/doom-themes repo for more
         (variable-pitch-mode)
-        (setq-local sfill-column 80)
-        (flywrap-mode)
         (olivetti-mode)
         (luna-scale-cjk-mode)
         (ignore-errors (flyspell-mode 1))
@@ -59,8 +57,6 @@
         (setq-local line-spacing 0.2))
     (variable-pitch-mode -1)
     (olivetti-mode -1)
-    (kill-local-variable 'sfill-column)
-    (flywrap-mode -1)
     (luna-scale-cjk-mode -1)
     (flyspell-mode -1)
     (electric-pair-local-mode)
