@@ -73,28 +73,34 @@ Return nil if not in a cell."
 
 (defun valign--glyph-width-at-point (&optional point)
   "Return the pixel width of the glyph at POINT.
-The buffer has to be visible."
-  (let* ((p (or point (point)))
-         (display (plist-get (text-properties-at (1+ p))
-                             'display)))
-    (if (and (consp display)
-             (eq (car display) 'image))
-        (car (image-size display 'pixel))
-      ;; car + mapcar to translate the vector to a list.
-      (aref (car (mapcar
-                  #'identity (font-get-glyphs (font-at p) p (1+ p))))
-            4))))
+The buffer has to be visible. If point is at an image, this
+function doens’t return the image’s width, but the underlining
+character’s glyph width."
+  (let* ((p (or point (point))))
+    ;; car + mapcar to translate the vector to a list.
+    (aref (car (mapcar
+                #'identity (font-get-glyphs (font-at p) p (1+ p))))
+          4)))
 
-(defun valign--glyph-width-from-to (from to)
+(defun valign--pixel-width-from-to (from to)
   "Return the width of the glyphs from FROM (inclusive) to TO (exclusive).
-The buffer has to be visible.
-FROM has to be less than TO."
+The buffer has to be visible. FROM has to be less than TO. Unlike
+‘valign--glyph-width-at-point’, this function can properly
+calculate images pixel width."
   (let ((width 0))
     (save-excursion
       (goto-char from)
       (while (< (point) to)
-        (setq width (+ width (valign--glyph-width-at-point)))
-        (forward-char)))
+        (let ((display (plist-get (text-properties-at (point))
+                                  'display)))
+          ;; This is an image, add image width.
+          (if (and (consp display) (eq (car display) 'image))
+              (progn (setq width (+ width (car (image-size display t))))
+                     (goto-char
+                      (next-single-property-change (point) 'display)))
+            ;; This is a normal character, add glyph width.
+            (setq width (+ width (valign--glyph-width-at-point)))
+            (forward-char)))))
     width))
 
 (defun valign--skip-space-backward ()
@@ -162,10 +168,10 @@ Start from point, stop at LIMIT."
         ;; is the largest one for this column.
         (unless (valign--sperator-p)
           (let ((oldmax (alist-get column-idx column-width-alist))
-                (column-width (valign--cell-width)))
-            (if (> column-width (or oldmax 0))
+                (cell-width (valign--cell-width)))
+            (if (> cell-width (or oldmax 0))
                 (setf (alist-get column-idx column-width-alist)
-                      column-width))))))
+                      cell-width))))))
     ;; Turn alist into a list.
     (let ((inc 0) return-list)
       (while (alist-get inc column-width-alist)
@@ -277,7 +283,7 @@ the right bar."
                          tab-width tab-start tab-end)
                     ;; Initialize some numbers.
                     (if (eq column-idx 0)
-                        (setq pos (valign--glyph-width-from-to
+                        (setq pos (valign--pixel-width-from-to
                                    (line-beginning-position) (point))))
                     ;; Align an empty cell.
                     (if (eq cell-width 0)
