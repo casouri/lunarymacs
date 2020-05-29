@@ -261,13 +261,13 @@
         (hl-paren-face (nil "red" nil nil bold))
 
         (outline-1 (info-title-2))
-        (outline-2 (info-title-3))
+        (outline-2 (info-title-3 ,fg-weak))
         (outline-3 (info-title-4))
-        (outline-4 (outline-3))
+        (outline-4 (outline-3 ,fg-weak))
         (outline-5 (outline-3))
-        (outline-6 (outline-3))
+        (outline-6 (outline-3 ,fg-weak))
         (outline-7 (outline-3))
-        (outline-8 (outline-3))
+        (outline-8 (outline-3 ,fg-weak))
 
         (org-document-title (info-title-1))
         (org-meta-line      (font-lock-comment-face nil nil nil nil italic))
@@ -282,7 +282,7 @@
         (org-formula          (fixed-pitch))
         (org-quote            (nil nil ,bg-alt) (:extend t))
 
-        (org-table             (fixed-pitch))
+        (org-table             (default))
         (org-todo              (highlight-fg-only-1))
         (org-time-grid         (nil ,yellow))
         (org-upcoming-deadline (nil ,red))
