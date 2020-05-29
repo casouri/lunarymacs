@@ -123,6 +123,23 @@
                    (setq-local comment-multi-line t)
                    (eglot-ensure))))
 
+;; XML
+
+(defun setup-xml ()
+  "Setup hideshow for XML file."
+  (require 'hideshow)
+  (add-to-list 'hs-special-modes-alist
+               '(nxml-mode
+                 "<!--\\|<[^/>]*[^/]>"
+                 "-->\\|</[^/>]*[^/]>"
+
+                 "<!--"
+                 sgml-skip-tag-forward
+                 nil))
+  (hs-minor-mode))
+(add-hook 'nxml-mode-hook #'setup-xml)
+(add-hook 'sgml-mode-hook #'setup-xml)
+
 ;;; Genarl package
 (load-package aggressive-indent
   :commands (aggressive-indent-mode)

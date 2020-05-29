@@ -37,6 +37,9 @@
   :commands (flywrap-mode)
   :init (setq-default flywrap-column 80))
 
+;; (load-package valign
+;;   :config (valign-setup))
+
 ;;; Org
 
 (define-minor-mode luna-prose-mode
