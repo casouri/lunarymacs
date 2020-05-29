@@ -124,7 +124,10 @@ ARGS is as same as in `load'."
      :command (list "emacs" "--batch" "-q"
                     "-l" (luna-f-join user-emacs-directory
                                       "dump.el")))
-    (display-buffer buf)))
+    (display-buffer buf)
+    (run-with-timer
+     1.5 nil (lambda () (with-current-buffer buf
+                          (goto-char (point-min)))))))
 
 ;;; Format on save
 
