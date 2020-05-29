@@ -22,7 +22,8 @@
    "C-s-i" #'color-outline-toggle-all
    "C-/"   #'undo-only
    "C-."   #'undo-redo
-   "C-s-i" #'outline-cycle-buffer)
+   "C-s-i" #'outline-cycle-buffer
+   "C-c h" #'hs-toggle-hiding)
 
   (general-define-key
    :keymaps '(c-mode c++-mode)
@@ -30,7 +31,7 @@
 
   (general-define-key
    :keymaps 'outline-minor-mode-map
-   "S-<return>" #'outline-cycle)
+   "s-<return>" #'outline-cycle)
 
   (general-define-key
    :keymaps '(text-mode fundamental-mode)
