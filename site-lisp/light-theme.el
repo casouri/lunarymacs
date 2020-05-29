@@ -260,6 +260,8 @@
 
         (hl-paren-face (nil "red" nil nil bold))
 
+        ;; If we use the same color, it’s hard to distinguish between
+        ;; levels...
         (outline-1 (info-title-2))
         (outline-2 (info-title-3 ,fg-weak))
         (outline-3 (info-title-4))
