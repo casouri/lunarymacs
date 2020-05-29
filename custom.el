@@ -13,10 +13,11 @@
  '(confirm-nonexistent-file-or-buffer t)
  '(create-lockfiles nil)
  '(custom-safe-themes
-   '("30586f34ae8756de509ae2a2cd0aae7964170ec7658fc7efd84ab5d8c99dd2e1" "357443d3b3f9e14012de578043a09f21f805d6552460379eaddad64fbfe63473" "c4c5b06bf9d73a26db5ff24b932dae54adc3884db4fe40b60b02c3f7ba135060" "e97ccbf976047cbd775beb0673f5a8ece7a742037346825eba5aa4763c47c80d" "3c85b5da3b92c1cdd2246691b5526f863dbeba3d5387997a119aa9a28cc20540" "2eb66b8818a410a3f7ff8ea03efb8418aef485c7f58d6ece02be12b329a4e13a"))
- '(debug-on-error nil)
+   '())
+ '(debug-on-error t)
  '(delete-auto-save-files nil)
  '(delete-by-moving-to-trash t)
+ '(dired-omit-files "\\`[.]?#\\|\\`[.][.]?" nil nil "Hide all dot files")
  '(display-line-numbers-width 3)
  '(ediff-split-window-function 'split-window-horizontally)
  '(ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -43,7 +44,7 @@
    '(("melpa" . "http://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(treemacs tree-sitter-lang-c tree-sitter tuareg magit icomplete-vertical git-timemachine realgud-lldb debbugs benchmark-init yasnippet expand-region xr geiser magit-todos magit-patch-changelog proof-general "eglot" ivy-xref srefactor helpful imenu-list eglot racket-mode gnu-apl-mode ivy-prescient counsel swiper yaoddomuse matlab-mode ivy cdlatex tide realgud ccls flycheck hierarchy snail ztree lua-mode sly web-mode quickrun mips-mode yaml-mode markdown-mode company flyspell hl-todo f haskell-mode ws-butler writegood-mode which-key visual-regexp use-package sage-shell-mode rainbow-mode rainbow-delimiters pyvenv org-download olivetti minions latex-preview-pane htmlize highlight-parentheses general eyebrowse diff-hl buffer-move auctex aggressive-indent))
+   '(memory-usage auto-package-update auto-pause magit ob-mermaid dash edit-indirect treemacs tree-sitter-lang-c tree-sitter tuareg icomplete-vertical git-timemachine realgud-lldb debbugs benchmark-init yasnippet expand-region xr geiser magit-todos magit-patch-changelog proof-general "eglot" ivy-xref srefactor helpful imenu-list eglot racket-mode gnu-apl-mode ivy-prescient counsel swiper yaoddomuse matlab-mode ivy cdlatex tide realgud ccls flycheck hierarchy snail ztree lua-mode sly web-mode quickrun mips-mode yaml-mode markdown-mode company flyspell hl-todo f haskell-mode ws-butler writegood-mode which-key visual-regexp use-package sage-shell-mode rainbow-mode rainbow-delimiters pyvenv org-download olivetti minions latex-preview-pane htmlize highlight-parentheses general eyebrowse diff-hl buffer-move auctex aggressive-indent))
  '(recentf-max-saved-items 300)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values '((git-commit-major-mode . git-commit-elisp-text-mode)))
@@ -56,6 +57,7 @@
  '(sentence-end-double-space nil)
  '(use-dialog-box nil)
  '(use-package-hook-name-suffix "")
+ '(valign-mode t nil (valign))
  '(vc-annotate-background "#fafafa")
  '(vc-annotate-color-map
    (list
@@ -79,6 +81,7 @@
     (cons 360 "#383a42")))
  '(vc-annotate-very-old-color nil)
  '(visible-cursor nil)
+ '(which-function-mode t)
  '(winner-mode t)
  '(xref-prompt-for-identifier
    '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame)))
