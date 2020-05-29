@@ -16,12 +16,12 @@
                     general helpful use-package general which-key
                     recentf-ext swiper ivy-prescient
                     aggressive-indent winner elec-pair
-                    rainbow-delimiters
+                    rainbow-delimiters valign
                     highlight-parentheses hl-todo buffer-move
                     treemacs savehist eyebrowse minions ws-butler
-                    expand-region isolate flyspell
-                    flycheck eglot minibuf-eldef ;; sly-el-indent
-                    yasnippet flywrap transform utility pause))
+                    expand-region isolate flyspell flycheck eglot
+                    minibuf-eldef yasnippet transform utility
+                    pause))
   (require package))
 (add-to-list 'custom-theme-load-path
              (expand-file-name "site-lisp" user-emacs-directory))
