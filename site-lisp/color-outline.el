@@ -50,7 +50,7 @@
   "Stores custom comment character each major mode.
 For most major modes ‘comment-start’ is enough.")
 
-(defvar color-outline-face-list '(info-title-1 info-title-2 info-title-3)
+(defvar color-outline-face-list '(outline-1 outline-2 outline-3 outline-4)
   "Face for each level.")
 
 (defvar color-outline-mode-map
