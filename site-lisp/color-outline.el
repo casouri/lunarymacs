@@ -43,10 +43,11 @@
 (require 'subr-x)
 (require 'hi-lock)
 
-(defvar color-outline-comment-char-alist '((c-mode . "/")
-                               (python-mode . "#")
-                               (javascript-mode . "/")
-                               (css-mode . "/"))
+(defvar color-outline-comment-char-alist '((c-mode "/" nil)
+                                           (python-mode "#" nil)
+                                           (javascript-mode "/" nil)
+                                           (css-mode "/" nil)
+                                           (tuareg-mode "*" "("))
   "Stores custom comment character each major mode.
 For most major modes ‘comment-start’ is enough.")
 
@@ -65,41 +66,52 @@ For most major modes ‘comment-start’ is enough.")
   (string-join (cl-loop for i from 1 to number
                         collect string)))
 
-(defun color-outline--create-pattern (comment-char)
+(defun color-outline--create-pattern (comment-char comment-begin)
   "Return the header pattern for major mode MODE.
-COMMENT-CHAR (string) is the comment character of this mode."
+COMMENT-CHAR (string) is the comment character of this mode.
+COMMENT-BEGIN is string pattern starting a comment.
+The result pattern is “COMMENT-START(COMMENT-CHAR){3}”."
   (let* ((header-level (length color-outline-face-list))
-         (outline-re (format "%s%s* [^\t\n]"
-                             (color-outline-* header-level comment-char)
-                             comment-char))
+         (outline-re (format "%s%s%s* [^\t\n]"
+                             (regexp-quote comment-begin)
+                             (regexp-quote
+                              (color-outline-* header-level comment-char))
+                             (regexp-quote comment-char)))
          (hi-re-list (cl-loop
                       for level from 0 to (1- header-level)
                       collect
-                      (format "^%s%s .*"
+                      (format "^%s%s%s [^\t\n]*"
+                              (regexp-quote comment-begin)
                               ;; base (3)
-                              (color-outline-* 3 comment-char)
+                              (regexp-quote
+                               (color-outline-* 3 comment-char))
                               ;; determined level
-                              (color-outline-* level comment-char))))
+                              (regexp-quote
+                               (color-outline-* level comment-char)))))
          (hi-pattern-list (cl-loop for re in hi-re-list
                                    for face in color-outline-face-list
                                    collect `(,re (0 ',face t)))))
     (list outline-re hi-pattern-list)))
 
-(defun color-outline-define-header (mode comment-char)
+(defun color-outline-define-header (mode comment-char comment-begin)
   "Define the header pattern for major mode MODE.
-COMMENT-CHAR (char) is the comment character of this mode."
-  (setf (alist-get mode color-outline-mode-alist)
-        (color-outline--create-pattern comment-char)))
+COMMENT-CHAR (char) is the comment character of this mode.
+COMMENT-BEGIN is string pattern starting a comment."
+  (setf (alist-get mode color-outline-comment-char-alist)
+        (color-outline--create-pattern comment-char comment-begin)))
 
 (define-minor-mode color-outline-mode
   "Color outline."
   :lighter ""
   :keymap 'color-outline-mode-map
   (if color-outline-mode
-      (if-let* ((comment-char (or (alist-get major-mode
-                                             color-outline-comment-char-alist)
-                                  comment-start))
-                (config (color-outline--create-pattern comment-char)))
+      (if-let* ((rule (or (alist-get major-mode
+                                     color-outline-comment-char-alist)
+                          (list comment-start "")))
+                (comment-char (or (car rule) comment-start))
+                (comment-begin (or (cadr rule) ""))
+                (config (color-outline--create-pattern
+                         comment-char comment-begin)))
           (progn (setq outline-regexp (car config))
                  (hi-lock-set-file-patterns (cadr config))
                  (outline-minor-mode)
