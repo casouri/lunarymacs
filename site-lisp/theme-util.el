@@ -10,7 +10,6 @@
 ;;; Code:
 ;;
 
-(require 'hierarchy)
 (require 'seq)
 (require 'cl-lib)
 
@@ -62,41 +61,42 @@ For example,
 
 ;;; Inspect theme
 
-(defun theme-util-top-level-face-to-kill-ring (regexp)
-  (interactive "sRegexp: ")
-  (kill-new
-   (string-join
-    (mapcar
-     (lambda (face)
-       (format "(%s :inherit 'default)\n" face))
-     (sort (seq-filter (lambda (face)
-                         (and (string-match regexp (face-name face))
-                              (not (face-attribute face :inherit nil 'default))))
-                       (face-list))
-           (lambda (f1 f2)
-             (string-lessp (face-name f1) (face-name f2))))))))
+(when (featurep 'hierarchy)
+  (defun theme-util-top-level-face-to-kill-ring (regexp)
+    (interactive "sRegexp: ")
+    (kill-new
+     (string-join
+      (mapcar
+       (lambda (face)
+         (format "(%s :inherit 'default)\n" face))
+       (sort (seq-filter (lambda (face)
+                           (and (string-match regexp (face-name face))
+                                (not (face-attribute face :inherit nil 'default))))
+                         (face-list))
+             (lambda (f1 f2)
+               (string-lessp (face-name f1) (face-name f2))))))))
 
-(defun theme-util-show-face-tree (&optional regexp)
-  (interactive)
-  (switch-to-buffer
-   (let ((tree (hierarchy-new))
-         (parent-fn
-          (lambda (face)
-            (let ((parent-face (if (eq face 'root-face)
-                                   nil ;; the root has no parent
-                                 (or (face-attribute face :inherit nil 'default)
-                                     'root-face ))))
-              (cond ((facep parent-face) parent-face)
-                    ((null parent-face) nil)
-                    (t 'root-face)))))
-         (face-list (seq-filter (lambda (face)
-                                  (if (not regexp)
-                                      t
-                                    (string-match regexp (face-name face))))
-                                (face-list))))
-     (hierarchy-add-trees tree face-list parent-fn)
-     (hierarchy-tree-display tree (lambda (face _) (insert (format "%s" face)))))))
-
+  (defun theme-util-show-face-tree (&optional regexp)
+    (interactive)
+    (switch-to-buffer
+     (let ((tree (hierarchy-new))
+           (parent-fn
+            (lambda (face)
+              (let ((parent-face (if (eq face 'root-face)
+                                     nil ;; the root has no parent
+                                   (or (face-attribute face :inherit nil 'default)
+                                       'root-face ))))
+                (cond ((facep parent-face) parent-face)
+                      ((null parent-face) nil)
+                      (t 'root-face)))))
+           (face-list (seq-filter (lambda (face)
+                                    (if (not regexp)
+                                        t
+                                      (string-match regexp (face-name face))))
+                                  (face-list))))
+       (hierarchy-add-trees tree face-list parent-fn)
+       (hierarchy-tree-display tree (lambda (face _) (insert (format "%s" face)))))))
+  )
 ;;; Color util
 
 (defvar theme-util-color-distance-fn
