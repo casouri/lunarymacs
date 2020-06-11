@@ -6,7 +6,7 @@
 
 ;;; flymake
 ;;
-(with-eval-after-load 'flymake
+(with-eval-after-load 'elisp-mode
   ;; require error
   (setq elisp-flymake-byte-compile-load-path
         (append elisp-flymake-byte-compile-load-path
@@ -29,19 +29,23 @@
 ;; install dictionaries: http://wordlist.aspell.net
 ;;
 (load-package flyspell
-  :hook ((text-mode-hook . flyspell-mode)
-         (prog-mode-hook . flyspell-prog-mode))
+  ;; :hook ((text-mode-hook . flyspell-mode)
+  ;;        (prog-mode-hook . flyspell-prog-mode))
   :config
-  (with-eval-after-load 'general
-    (general-define-key
-     :keymaps 'flyspell-mode-map
-     "C-," nil
-     "C-M-i" nil
-     "C-." nil
-     "C-c $" nil))
+  ;; (with-eval-after-load 'general
+  ;;   (general-define-key
+  ;;    :keymaps 'flyspell-mode-map
+  ;;    "C-," nil
+  ;;    "C-M-i" nil
+  ;;    "C-." nil
+  ;;    "C-c $" nil))
   ;; right click on mac touchpad
   (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
   (setq flyspell-issue-message-flag nil))
+
+(load-package wucuo
+  :hook ((text-mode-hook . wucuo-start)
+         (prog-mode-hook . wucuo-start)))
 
 (load-package writegood-mode
   :hook ((fundamental-mode-hook org-mode-hook) . writegood-mode))
