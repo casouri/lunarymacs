@@ -110,7 +110,6 @@
    (lambda () (ignore-errors (server-start)))))
 
 ;;;; ghelp
-(add-to-list 'load-path "~/p/ghelp")
 (require 'ghelp)
 
 ;;;; vterm
