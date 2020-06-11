@@ -12,9 +12,8 @@
  '(compilation-ask-about-save nil)
  '(confirm-nonexistent-file-or-buffer t)
  '(create-lockfiles nil)
- '(custom-safe-themes
-   '())
- '(debug-on-error t)
+ '(custom-safe-themes 'nil)
+ '(debug-on-error nil)
  '(delete-auto-save-files nil)
  '(delete-by-moving-to-trash t)
  '(dired-omit-files "\\`[.]?#\\|\\`[.][.]?" nil nil "Hide all dot files")
@@ -40,11 +39,12 @@
  '(ns-pop-up-frames nil nil nil "This way emacsclient doesn't open new frames.")
  '(org-fontify-quote-and-verse-blocks t)
  '(org-hide-emphasis-markers t)
+ '(org-image-actual-width '(300))
  '(package-archives
    '(("melpa" . "http://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(memory-usage auto-package-update auto-pause magit ob-mermaid dash edit-indirect treemacs tree-sitter-lang-c tree-sitter tuareg icomplete-vertical git-timemachine realgud-lldb debbugs benchmark-init yasnippet expand-region xr geiser magit-todos magit-patch-changelog proof-general "eglot" ivy-xref srefactor helpful imenu-list eglot racket-mode gnu-apl-mode ivy-prescient counsel swiper yaoddomuse matlab-mode ivy cdlatex tide realgud ccls flycheck hierarchy snail ztree lua-mode sly web-mode quickrun mips-mode yaml-mode markdown-mode company flyspell hl-todo f haskell-mode ws-butler writegood-mode which-key visual-regexp use-package sage-shell-mode rainbow-mode rainbow-delimiters pyvenv org-download olivetti minions latex-preview-pane htmlize highlight-parentheses general eyebrowse diff-hl buffer-move auctex aggressive-indent))
+   '(company-posframe dumb-jump memory-usage auto-package-update auto-pause magit ob-mermaid dash edit-indirect treemacs tree-sitter-lang-c tree-sitter tuareg icomplete-vertical git-timemachine realgud-lldb debbugs benchmark-init yasnippet expand-region xr geiser magit-todos magit-patch-changelog proof-general "eglot" ivy-xref srefactor helpful imenu-list eglot racket-mode gnu-apl-mode ivy-prescient counsel swiper yaoddomuse matlab-mode ivy cdlatex tide realgud ccls flycheck hierarchy snail ztree lua-mode sly web-mode quickrun mips-mode yaml-mode markdown-mode company flyspell hl-todo f haskell-mode ws-butler writegood-mode which-key visual-regexp use-package sage-shell-mode rainbow-mode rainbow-delimiters pyvenv org-download olivetti minions latex-preview-pane htmlize highlight-parentheses general eyebrowse diff-hl buffer-move auctex aggressive-indent))
  '(recentf-max-saved-items 300)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values '((git-commit-major-mode . git-commit-elisp-text-mode)))
@@ -55,9 +55,9 @@
  '(scroll-margin 4)
  '(send-mail-function 'mailclient-send-it)
  '(sentence-end-double-space nil)
+ '(tool-bar-mode t)
  '(use-dialog-box nil)
  '(use-package-hook-name-suffix "")
- '(valign-mode t nil (valign))
  '(vc-annotate-background "#fafafa")
  '(vc-annotate-color-map
    (list
