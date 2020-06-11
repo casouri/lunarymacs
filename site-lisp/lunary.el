@@ -87,7 +87,7 @@ ARGS is as same as in `load'."
   (unless luna-prepared-p
     (luna-before-install-package))
   (dolist (package luna-package-list)
-    (cowboy-install package)))
+    (cowgirl-install package)))
 
 (defmacro luna-lsp/eglot (lsp eglot)
   "Run LSP or EGLOT based on `luna-lsp'."
