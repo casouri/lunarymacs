@@ -37,6 +37,8 @@
   :commands (flywrap-mode)
   :init (setq-default flywrap-column 80))
 
+(require 'org-tempo)
+
 ;; (load-package valign
 ;;   :config (valign-setup))
 
