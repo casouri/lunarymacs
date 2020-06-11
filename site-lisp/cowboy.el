@@ -184,8 +184,10 @@ OPTION-PLIST contains user options that each backend may use."
                                        (cowgirl--avaliable-package-list)))))
   (if (cowgirl-use-cowboy package)
       (cowboy-install package option-plist)
-    (package-install-from-archive
-     (cadr (assoc package package-archive-contents)))))
+    (if-let ((pkg-list (assoc package package-archive-contents)))
+        (package-install-from-archive
+         (cadr pkg-list))
+      (message "Package not found: %s" package))))
 
 (defun cowgirl-delete (package)
   "Delete PACKAGE."
