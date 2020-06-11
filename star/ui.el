@@ -26,13 +26,9 @@
    "<M-down>" #'outline-next-visible-heading)
 
   (luna-default-leader
-    "wr" #'luna-desktop-read
-    "ww" #'windman-select-wilndow))
+    "wr" #'luna-desktop-read))
 
 ;;; Package
-
-(load-package windman
-  :commands windman-select-window)
 
 (add-to-list 'luna-toggle-theme-list 'light)
 (add-to-list 'luna-toggle-theme-list 'cyberpunk)
