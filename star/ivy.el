@@ -41,7 +41,7 @@
   :config (counsel-mode))
 
 (load-package ivy-prescient
-  :after ivy
+  :after (ivy counsel)
   :init
   (setq prescient-save-file
         (luna-f-join user-emacs-directory
@@ -54,6 +54,10 @@
 (use-package recentf-ext
   :config (recentf-mode))
 
+(use-package ivy-xref
+  :config
+  (setq xref-show-definitions-function #'ivy-xref-show-defs)
+  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 ;;; Sort function
 
