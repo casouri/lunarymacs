@@ -6,11 +6,11 @@
 
 ;;; flymake
 ;;
-(with-eval-after-load 'elisp-mode
-  ;; require error
-  (setq elisp-flymake-byte-compile-load-path
-        (append elisp-flymake-byte-compile-load-path
-                load-path)))
+;; (with-eval-after-load 'elisp-mode
+;;   ;; require error
+;;   (setq elisp-flymake-byte-compile-load-path
+;;         (append elisp-flymake-byte-compile-load-path
+;;                 load-path)))
 
 (dolist (hook '(emacs-lisp-mode-hook
                 c-mode-hook
