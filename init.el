@@ -107,10 +107,7 @@
 (unless luna-in-esup
   (run-with-idle-timer
    3 nil
-   (lambda () (ignore-errors (server-start)))))
-
-;;;; ghelp
-(require 'ghelp)
+   (lambda () (server-start t t))))
 
 ;;;; vterm
 ;; (luna-load-relative "star/term.el")
@@ -118,6 +115,7 @@
 (luna-when-mac
  ;; macports
  (add-to-list 'load-path "/opt/local/share/emacs/site-lisp")
+
 ;;;; Mac port
  (setq mac-option-modifier 'meta
        mac-command-modifier 'super
@@ -133,14 +131,13 @@
 ;;;; trivial-copy
  (luna-when-mac
   (add-to-list 'load-path "~/p/trivial-copy")
-  (require 'trivial-copy)))
+  (require 'trivial-copy))
+
+ ;; Because Apple.
+ (when (equal default-directory "/") (cd "~/")))
 
 ;;;; Local unsynced customization
 
 (luna-load-or-create (luna-f-join user-emacs-directory
                                   "local-config.el"))
 
-;; Because Apple.
-(when (equal default-directory "/") (cd "~/"))
-
-(load "kinsoku.el")
