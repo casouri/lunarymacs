@@ -366,16 +366,6 @@ and moves point to the previous line."
                 (lambda () (interactive) (insert "-"))))
     (setq dash-underscore-mode-map (make-sparse-keymap))))
 
-;;; Flywrap
-
-(defun flywrap-prettify ()
-  "Prettify current buffer. That means remove hard line breaks
-and turn on variable pitch and flywrap mode."
-  (interactive)
-  (flywrap-unfill (point-min) (point-max))
-  (variable-pitch-mode)
-  (flywrap-mode))
-
 ;;; Customize
 
 (defun kill-emacs-no-save-customize ()
@@ -383,6 +373,21 @@ and turn on variable pitch and flywrap mode."
   (interactive)
   (remove-hook 'kill-emacs-hook #'customize-save-customized)
   (save-buffers-kill-emacs))
+
+;;; ChangeLog
+
+(defun copy-change-log ()
+  (interactive)
+  (let* ((fileset (cadr (vc-deduce-fileset t)))
+         (changelog (cl-loop for file in fileset
+                             do (progn (find-file file)
+                                       (add-change-log-entry))
+                             collect (buffer-string))))
+    (when (string-match-p "changes to" (buffer-name)) (kill-buffer))
+    (with-temp-buffer
+      (dolist (log changelog)
+        (insert log))
+      (kill-ring-save (point-min) (point-max)))))
 
 ;;; Provide
 
