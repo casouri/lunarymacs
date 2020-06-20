@@ -23,4 +23,6 @@
         (sly-el-indent . (:repo "cireu/sly-el-indent"))
         (cowboy-test . (:repo "casouri/cowboy-test"))
         (binder . (:repo "rnkn/binder"))
-        (wgrep . (:repo "mhayashi1120/Emacs-wgrep"))))
+        (wgrep . (:repo "mhayashi1120/Emacs-wgrep"))
+        (ghelp . (:repo "casouri/ghelp"))
+        (valign . (:repo "casouri/valign"))))
