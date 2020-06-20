@@ -118,16 +118,15 @@ ARGS is as same as in `load'."
   "Dump Emacs."
   (interactive)
   (let ((buf "*dump process*"))
+    (delete-file "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp")
     (make-process
      :name "dump"
      :buffer buf
-     :command (list "emacs" "--batch" "-q"
+     :command (list "/Applications/Emacs.app/Contents/MacOS/Emacs"
+                    "--batch" "-Q"
                     "-l" (luna-f-join user-emacs-directory
                                       "dump.el")))
-    (display-buffer buf)
-    (run-with-timer
-     1.5 nil (lambda () (with-current-buffer buf
-                          (goto-char (point-min)))))))
+    (display-buffer buf)))
 
 ;;; Format on save
 
