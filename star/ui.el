@@ -8,12 +8,12 @@
    "s-F" #'winner-redo
 
    "s-y" #'luna-toggle-console
-   "s-Y" #'luna-toggle-console-window
+   "C-s-y" #'luna-toggle-console-window
 
-   "s-K" #'buf-move-up
-   "s-J" #'buf-move-down
-   "s-H" #'buf-move-left
-   "s-L" #'buf-move-right
+   "C-s-k" #'buf-move-up
+   "C-s-j" #'buf-move-down
+   "C-s-h" #'buf-move-left
+   "C-s-l" #'buf-move-right
 
    "s-h" #'windmove-left
    "s-j" #'windmove-down
