@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
 
 ;;; Key
 ;;
@@ -45,7 +45,9 @@
 
 (load-package wucuo
   :hook ((text-mode-hook . wucuo-start)
-         (prog-mode-hook . wucuo-start)))
+         (prog-mode-hook . wucuo-start))
+  ;; :config (setq wucuo-spell-check-buffer-max 442177)
+  )
 
 (load-package writegood-mode
   :hook ((fundamental-mode-hook org-mode-hook) . writegood-mode))
