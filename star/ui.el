@@ -78,8 +78,8 @@
                 hl-todo-keyword-faces))
   (global-hl-todo-mode))
 
-(load-package treemacs
-  :config (treemacs-resize-icons 11))
+;; (load-package treemacs
+;;   :config (treemacs-resize-icons 11))
 
 ;; interfere with 'display text property
 ;;
