@@ -138,5 +138,6 @@
   :hook ((c-mode-hook . semantic-mode)
          (c++-mode-hook . semantic-mode)))
 
+(load-package ghelp)
 
 (add-to-list 'luna-package-list 'helpful)
