@@ -6,7 +6,11 @@
   (general-define-key
    :keymaps 'org-mode-map
    "C-c i" #'luna-insert-heading
-   "C-c <tab>" #'outline-toggle-children))
+   "C-c <tab>" #'outline-toggle-children)
+  (luna-default-leader
+    "rf" #'org-roam-find-file
+    "ri" #'org-roam-insert
+    "rb" #'org-roam-buffer-toggle-display))
 
 ;;; Blog
 
@@ -39,8 +43,18 @@
 
 (require 'org-tempo)
 
-;; (load-package valign
-;;   :config (valign-setup))
+(load-package valign
+  :config (valign-mode))
+
+(load-package quanjiao
+  :hook (org-mode-hook quanjiao-mode))
+
+(use-package org-roam
+  :hook
+  (after-init-hook . org-roam-mode)
+  :config
+  (setq org-roam-directory "~/roam/"
+        org-roam-buffer-width 0.2))
 
 ;;; Org
 
