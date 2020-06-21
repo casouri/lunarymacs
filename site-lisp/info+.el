@@ -85,8 +85,10 @@ Moves point."
              '(MenuEntry 0)))
           ;; Definition
           ((progn (goto-char beg)
-                  (skip-chars-forward " ")
-                  (eq (char-after) ?-))
+                  (looking-at (rx (seq " -- "
+                                       (or "Function" "Variable" "Macro"
+                                           "Special Form" "Command")
+                                       ": "))))
            (re-search-forward "\n +")
            `(Definition ,(indent)))
           ;; Body
@@ -94,7 +96,9 @@ Moves point."
                   (skip-chars-forward " ")
                   (or (looking-at "[0-9]\\.")
                       (looking-at "•")
-                      (looking-at "[[:upper:]]")))
+                      (looking-at "[[:upper:]]")
+                      (looking-at "‘")
+                      (looking-at (rx (seq "(" (or digit letter) ")")))))
            (goto-char beg)
            (let (indent1 indent2)
              (skip-chars-forward " ")
@@ -110,7 +114,7 @@ Moves point."
                    ((progn (goto-char beg)
                            (looking-at (rx (seq (* " ")
                                                 (or digit upper)
-                                                "."))))
+                                                ". "))))
                     `(BulletBody ,indent1 ,(+ 3 indent1)))
                    ;; Detail list
                    ((and indent2 (< indent1 indent2))
@@ -211,22 +215,23 @@ Moves point."
     (`(MenuHeader))
 
     (`(MenuEntry ,align)
-     (let (pixel-align)
-       ;; First, align first line’s detail.
-       (when (Info--menu-entry-detail-beg end)
-         ;; matched range is the white space between subject and detail.
-         (put-text-property
-          (match-beginning 1) (match-end 1)
-          'display `(space :align-to ,align))
-         ;; We skip over the stars. Because info-menu-star is monospaced
-         ;; and we want to keep the stars consistent.
-         (put-text-property
-          (match-end 1) end 'font-lock-face 'info-body)
-         ;; Add 1 to end so the newline can get the property.
-         (put-text-property beg (1+ end) 'line-spacing 0.3)
-         (put-text-property
-          (match-end 1) (1+ end) 'wrap-prefix `(space :width ,align))
-         (Info--remove-line-breaks (match-end 1) end))))
+     ;; First, align first line’s detail.
+     (when (Info--menu-entry-detail-beg end)
+       ;; matched range is the white space between subject and detail.
+       (put-text-property
+        (match-beginning 1) (match-end 1)
+        'display `(space :align-to ,align))
+       ;; We skip over the stars. Because info-menu-star is monospaced
+       ;; and we want to keep the stars consistent.
+       (put-text-property
+        (match-end 1) end 'font-lock-face 'info-body)
+       ;; Add 1 to end so the newline can get the property.
+       (put-text-property beg (min (1+ end) (point-max))
+                          'line-spacing 0.3)
+       (put-text-property
+        (match-end 1) (min (1+ end) (point-max))
+        'wrap-prefix `(space :width ,align))
+       (Info--remove-line-breaks (match-end 1) end)))
 
     (`(DetailList ,indent1 ,indent2)
      (Info--remove-indent)
@@ -254,28 +259,28 @@ Moves point."
 (defun Info--prettify-buffer ()
   "Prettify Info buffer."
   (interactive)
-  (when (not (equal "Top" Info-current-node))
-    (save-excursion
-      (let ((buffer-read-only nil))
-        (goto-char (point-min))
-        (re-search-forward "[=-\\*]$")
-        (let (region)
-          (while (setq region (Info--next-block))
-            (let ((beg (car region))
-                  (end (cdr region))
-                  end-mark)
-              (setq end-mark (make-marker))
-              (set-marker end-mark end)
-              (condition-case nil
-                  (progn
-                    (Info--fontify-block
-                     beg end (Info--block-type beg end))
-                    (Info--unfontify-quote beg end-mark))
-                ((debug search-failed)
-                 (message "Failed to fontify block %d %d" beg end)))
-              (goto-char end-mark))))
-        (Info-fontify-node)
-        (visual-line-mode)))))
+  (save-excursion
+    (let ((buffer-read-only nil))
+      (goto-char (point-min))
+      (re-search-forward "[=-\\*]$")
+      (let (region)
+        (while (setq region (Info--next-block))
+          (let ((beg (car region))
+                (end (cdr region))
+                end-mark)
+            (setq end-mark (make-marker))
+            (set-marker end-mark end)
+            (condition-case nil
+                (progn
+                  (Info--fontify-block
+                   beg end (Info--block-type beg end))
+                  (Info--unfontify-quote beg end-mark))
+              ((debug search-failed)
+               (message "Failed to fontify block %d %d" beg end)))
+            (goto-char end-mark))))
+      (Info-fontify-node)
+      (visual-line-mode)
+      (face-remap-add-relative 'link '(:inherit info-body)))))
 
 (define-minor-mode info-pretty-mode
   "Prettified Info."
