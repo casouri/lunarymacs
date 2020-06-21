@@ -34,7 +34,7 @@
 ;; | Definition indent
 ;; | Code
 
-(defface info-body `((t . (:inherit variable-pitch)))
+(defface info-body `((t . (:inherit variable-pitch :height 1.2)))
   "Face for body text in Info buffer."
   :group 'info)
 
@@ -52,25 +52,22 @@ If search failed, return nil."
         (re-search-forward "^[^\n]+$")
         (setq beg (match-beginning 0))
         (if (re-search-forward
-             (rx (or "\n\n" (seq "\n" (* " ") digit "." (+ " "))))
+             (rx (or "\n\n"
+                     (seq "\n" (* " ") digit "." (+ " "))
+                     (seq "\n* ")))
              nil t)
             (setq end (match-beginning 0))
           (setq end (point-max)))
         (cons beg end))
     (search-failed nil)))
 
-(defsubst Info--menu-entry-detail-beg ()
-  "Go to the beginning of the entry detail.
-Assumes the point is at BOL."
+(defsubst Info--menu-entry-detail-beg (limit)
+  "Go to the beginning of the entry detail before LIMIT.
+Assumes the point is at BOL.
+Return nil if not found"
   (re-search-forward
-   (rx (seq "*" " " (+ (not (any "\n"))) (group (>= 2 " "))))))
-
-(defsubst Info--single-line-p (beg end)
-  (save-excursion
-    (goto-char beg)
-    (forward-line)
-    (< (point) end)))
-
+   (rx (seq "*" " " (+ (not (any "\n"))) (group (>= 2 " "))))
+   limit t))
 
 (defun Info--block-type (beg end)
   "Return the type of the block between BEG and END.
@@ -80,16 +77,12 @@ Moves point."
     (cond ((progn (goto-char beg)
                   (looking-at "* Menu:"))
            '(MenuHeader))
-          ;; ((progn (goto-char beg)
-          ;;         (looking-at " *\\*"))
-          ;;  (search-forward "*")
-          ;;  (backward-char)
-          ;;  `(List ,(indent)))
           ;; Menu (header or entry)
           ((progn (goto-char beg)
                   (looking-at "\\*"))
-           (Info--menu-entry-detail-beg)
-           `(MenuEntry ,(indent)))
+           (if (Info--menu-entry-detail-beg (line-end-position))
+               `(MenuEntry ,(indent))
+             '(MenuEntry 0)))
           ;; Definition
           ((progn (goto-char beg)
                   (skip-chars-forward " ")
@@ -137,14 +130,11 @@ The type of the block should be (MenuEntry ALIGN)."
   (cl-labels
       ((glyph-width-at
         (p) (aref (aref (font-get-glyphs (font-at p) p (1+ p)) 0) 4)))
-
-    (while (<= (point) end)
-      (Info--menu-entry-detail-beg)
+    (when (Info--menu-entry-detail-beg end)
       (put-text-property
        (match-beginning 1) (match-end 1)
        'display `(space :align-to
-                        (,(* align (glyph-width-at (1- (point)))))))
-      (search-forward "\n"))))
+                        (,(* align (glyph-width-at (1- (point))))))))))
 
 (defun Info--remove-indent ()
   "Remove the spaces at the beginning of this line."
@@ -221,15 +211,22 @@ Moves point."
     (`(MenuHeader))
 
     (`(MenuEntry ,align)
-     (Info--align-menu-entry beg end align)
-     ;; We skip over the stars. Because info-menu-star is monospaced
-     ;; and we want to keep the stars consistent.
-     (goto-char beg)
-     (while (re-search-forward (rx (seq bol "*" (group (+ (not (any ?\n))))))
-                               end t)
-       (put-text-property (match-beginning 1) (match-end 1)
-                          'font-lock-face 'info-body))
-     (put-text-property beg (1+ end) 'line-spacing 0.3))
+     (let (pixel-align)
+       ;; First, align first line’s detail.
+       (when (Info--menu-entry-detail-beg end)
+         ;; matched range is the white space between subject and detail.
+         (put-text-property
+          (match-beginning 1) (match-end 1)
+          'display `(space :align-to ,align))
+         ;; We skip over the stars. Because info-menu-star is monospaced
+         ;; and we want to keep the stars consistent.
+         (put-text-property
+          (match-end 1) end 'font-lock-face 'info-body)
+         ;; Add 1 to end so the newline can get the property.
+         (put-text-property beg (1+ end) 'line-spacing 0.3)
+         (put-text-property
+          (match-end 1) (1+ end) 'wrap-prefix `(space :width ,align))
+         (Info--remove-line-breaks (match-end 1) end))))
 
     (`(DetailList ,indent1 ,indent2)
      (Info--remove-indent)
@@ -271,11 +268,12 @@ Moves point."
               (set-marker end-mark end)
               (condition-case nil
                   (progn
-                    (Info--fontify-block beg end (Info--block-type beg end))
-                    (Info--unfontify-quote beg end-mark)
-                    (goto-char end-mark))
+                    (Info--fontify-block
+                     beg end (Info--block-type beg end))
+                    (Info--unfontify-quote beg end-mark))
                 ((debug search-failed)
-                 (message "Failed to fontify block %d %d" beg end))))))
+                 (message "Failed to fontify block %d %d" beg end)))
+              (goto-char end-mark))))
         (Info-fontify-node)
         (visual-line-mode)))))
 
