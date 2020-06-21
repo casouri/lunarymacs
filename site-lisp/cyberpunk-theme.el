@@ -55,7 +55,7 @@
         (fringe      (default))
         (shadow      (nil nil ,bg-alt))
         
-        (variable-pitch () (:family "Source Serif Pro" :height 150))
+        (variable-pitch () (:family "Charter" :height 150))
         (fixed-pitch    () (:family "SF Mono" :height 130))
         
         (vertical-border      (nil nil "black"))
