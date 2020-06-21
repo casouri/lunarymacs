@@ -82,7 +82,6 @@
 
 ;;;; Misc
 (setq-default luna-format-on-save t)
-(setq-default bidi-display-reordering nil) ;; faster long line
 (setq scroll-margin 4)
 (setq ispell-program-name "aspell")
 (setq user-full-name "Yuan Fu"
