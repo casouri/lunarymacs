@@ -44,10 +44,10 @@
 (require 'org-tempo)
 
 (load-package valign
-  :config (valign-mode))
+  :hook (org-mode-hook . valign-mode))
 
 (load-package quanjiao
-  :hook (org-mode-hook quanjiao-mode))
+  :hook (org-mode-hook . quanjiao-mode))
 
 (use-package org-roam
   :hook
