@@ -71,6 +71,7 @@
     "tf"  #'luna-toggle-format-on-save
     "td"  #'toggle-debug-on-error
     "tn"  #'treemacs
+    "tl"  #'display-line-numbers-mode
     ;; search
     "si"  #'imenu)
 
