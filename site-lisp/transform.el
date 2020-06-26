@@ -9,7 +9,8 @@
 ;; Usage: Bind ‘transform-previous-char’ to a key (say s-/). hit s-/
 ;; after any of the characters in ‘transform-list’ to go through
 ;; variants. Use C-n/p to go back and forth. Add accent modifier “_”
-;; or “/” and hit s-/ to accent previous char.
+;; or “/” and hit s-/ to accent previous char. You can add supperscript
+;; and subscript by “^” and “_” following a number.
 
 ;;; Code:
 ;;
@@ -170,6 +171,13 @@ apply transform ‘transform-supsub-previous-char’ instead."
               (user-error "No accent found")
             (delete-char -1)
             (insert new-char)))))))
+
+(defun greek-help ()
+  "Show help for Latin–greek mapping."
+  (interactive)
+  (message (concat "aαΑ   bβΒ   gγΓ   dδΔ   eεΕ   zζΖ   hηΗ   qθΘ\n"
+                   "iιΙ   kκΚ   lλΛ   mμΜ   nνΝ   xξΞ   oοΟ   pπΠ\n"
+                   "rρΡ   sσΣ   tτΤ   yυΥ   fφΦ   cχΧ   uψΨ   wωΩ")))
 
 (provide 'transform)
 
