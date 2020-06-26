@@ -28,5 +28,5 @@
         (browse-url
          (format "%s/%s" helpful-html-manual-base-url (match-string 1)))))))
 
-(with-eval-after-load 'helpful
-  (helpful-html-manual-mode))
+;; (with-eval-after-load 'helpful
+;;   (helpful-html-manual-mode))
