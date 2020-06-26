@@ -7,8 +7,9 @@
 
 (with-eval-after-load 'luna-general-config
   (luna-default-leader
-    "tl" #'luna-toggle-left-margin
-    "sr" #'grep)
+    "sr" #'grep
+    "hha" #'hs-hide-all
+    "hsa" #'hs-show-all)
 
   (general-define-key
    ;; Hungry delete
@@ -23,7 +24,7 @@
    "C-/"   #'undo-only
    "C-."   #'undo-redo
    "C-s-i" #'outline-cycle-buffer
-   "C-c h" #'hs-toggle-hiding)
+   "C-c C-h" #'hs-toggle-hiding)
 
   (general-define-key
    :keymaps '(c-mode c++-mode)
