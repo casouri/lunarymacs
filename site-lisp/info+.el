@@ -6,19 +6,26 @@
 
 ;;; Commentary:
 ;;
+;; Enable by M-x Info-pretty-mode. This mode prettifies Info buffers
+;; by using word wrap and variable pitch font, among other things.
+;; Since we use a very ad-hoc “parser” to parse the buffer content.
+;; There are breakages where some part of the text are rendered
+;; incorrectly. You have to live with it.
 
 ;;; Scratch
 ;;
-;; (let ((reg (Info--next-block)))
-;;   (Info--block-type (car reg) (cdr reg)))
 
-;; (defun highlight-region (reg)
-;;   (set-mark (car reg))
-;;   (goto-char (cdr reg))
-;;   (transient-mark-mode))
+(when nil
+  (let ((reg (Info--next-block)))
+    (Info--block-type (car reg) (cdr reg)))
 
-;; (highlight-region (Info--next-block))
+  (defun highlight-region (reg)
+    (set-mark (car reg))
+    (goto-char (cdr reg))
+    (transient-mark-mode))
 
+  (highlight-region (Info--next-block))
+  )
 ;;; Code:
 ;;
 
@@ -34,7 +41,8 @@
 ;; | Definition indent
 ;; | Code
 
-(defface info-body `((t . (:inherit variable-pitch :height 1.2)))
+(defface info-body `((t . (:inherit (variable-pitch default)
+                                    :height 1.2)))
   "Face for body text in Info buffer."
   :group 'info)
 
@@ -54,7 +62,8 @@ If search failed, return nil."
         (if (re-search-forward
              (rx (or "\n\n"
                      (seq "\n" (* " ") digit "." (+ " "))
-                     (seq "\n* ")))
+                     (seq "\n* ")
+                     (seq "\n" (* " ") "•")))
              nil t)
             (setq end (match-beginning 0))
           (setq end (point-max)))
@@ -73,7 +82,10 @@ Return nil if not found"
   "Return the type of the block between BEG and END.
 Moves point."
   ;;       Code block
-  (cl-labels ((indent () (- (point) (line-beginning-position))))
+  (cl-labels ((indent () (- (point) (line-beginning-position)))
+              (visual-indent
+               () (car (window-text-pixel-size
+                        nil (line-beginning-position) (point)))))
     (cond ((progn (goto-char beg)
                   (looking-at "* Menu:"))
            '(MenuHeader))
@@ -81,24 +93,29 @@ Moves point."
           ((progn (goto-char beg)
                   (looking-at "\\*"))
            (if (Info--menu-entry-detail-beg (line-end-position))
-               `(MenuEntry ,(indent))
+               `(MenuEntry ,(visual-indent))
              '(MenuEntry 0)))
           ;; Definition
           ((progn (goto-char beg)
                   (looking-at (rx (seq " -- "
                                        (or "Function" "Variable" "Macro"
-                                           "Special Form" "Command")
+                                           "Special Form" "Command"
+                                           "User Option")
                                        ": "))))
            (re-search-forward "\n +")
            `(Definition ,(indent)))
           ;; Body
-          ((progn (goto-char beg)
-                  (skip-chars-forward " ")
-                  (or (looking-at "[0-9]\\.")
+          ((let ((case-fold-search nil))
+             (goto-char beg)
+             (skip-chars-forward " ")
+             (and (or (looking-at "[0-9]\\.")
                       (looking-at "•")
                       (looking-at "[[:upper:]]")
-                      (looking-at "‘")
-                      (looking-at (rx (seq "(" (or digit letter) ")")))))
+                      (looking-at (rx (or ?‘ ?“ (seq ?\( upper))))
+                      (looking-at (rx (seq "(" (or digit letter) ")"))))
+                  ;; No weird spaces.  Rules out table headers.
+                  (not (re-search-forward (rx (>= 3 " "))
+                                          (line-end-position) t))))
            (goto-char beg)
            (let (indent1 indent2)
              (skip-chars-forward " ")
@@ -111,10 +128,11 @@ Moves point."
                                 (looking-at " +•")))
                     `(BulletBody ,indent1 ,(+ 2 indent1)))
                    ;; List
-                   ((progn (goto-char beg)
-                           (looking-at (rx (seq (* " ")
-                                                (or digit upper)
-                                                ". "))))
+                   ((let ((case-fold-search nil))
+                      (goto-char beg)
+                      (looking-at (rx (seq (* " ")
+                                           (or digit upper)
+                                           ". "))))
                     `(BulletBody ,indent1 ,(+ 3 indent1)))
                    ;; Detail list
                    ((and indent2 (< indent1 indent2))
@@ -127,19 +145,6 @@ Moves point."
              (skip-chars-forward " ")
              `(Code)))))
 
-(defun Info--align-menu-entry (beg end align)
-  "Align menu entries between BEG and END.
-The type of the block should be (MenuEntry ALIGN)."
-  (goto-char beg)
-  (cl-labels
-      ((glyph-width-at
-        (p) (aref (aref (font-get-glyphs (font-at p) p (1+ p)) 0) 4)))
-    (when (Info--menu-entry-detail-beg end)
-      (put-text-property
-       (match-beginning 1) (match-end 1)
-       'display `(space :align-to
-                        (,(* align (glyph-width-at (1- (point))))))))))
-
 (defun Info--remove-indent ()
   "Remove the spaces at the beginning of this line."
   (goto-char (line-beginning-position))
@@ -148,7 +153,7 @@ The type of the block should be (MenuEntry ALIGN)."
   (put-text-property (line-beginning-position) (point) 'display ""))
 
 (defun Info--remove-line-breaks (beg end)
-  "Remove hard line braks between BEG and END.
+  "Remove hard line breaks between BEG and END.
 Moves point."
   (goto-char end)
   (let ((end-mark (point-marker)))
@@ -175,7 +180,8 @@ Moves point."
                        (group "'" (+? (not (any "\n"))) "'"))))
           end t)
     ;; Only unfontify inline quote.
-    (when (plist-get (text-properties-at (point)) 'font-lock-face)
+    (when (plist-get (text-properties-at (match-beginning 0))
+                     'font-lock-face)
       (put-text-property (or (match-beginning 1) (match-beginning 0))
                          (or (match-end 1) (match-end 0))
                          'font-lock-face 'info-inline-code))))
@@ -199,10 +205,11 @@ Moves point."
      (Info--remove-line-breaks beg end))
 
     (`(BulletBody ,indent1 ,indent2)
-     (re-search-forward (rx (seq (* " ")
-                                 (or "•"
-                                     (seq digit ". ")
-                                     (seq upper ". ")))))
+     (let ((case-fold-search nil))
+       (re-search-forward (rx (seq (* " ")
+                                   (or "•"
+                                       (seq digit ". ")
+                                       (seq upper ". "))))))
      ;; We want to keep the bullet in default font.
      (put-text-property (point) end 'font-lock-face 'info-body)
      (when (not (eq indent1 0))
@@ -218,9 +225,9 @@ Moves point."
      ;; First, align first line’s detail.
      (when (Info--menu-entry-detail-beg end)
        ;; matched range is the white space between subject and detail.
-       (put-text-property
-        (match-beginning 1) (match-end 1)
-        'display `(space :align-to ,align))
+       ;; (put-text-property
+       ;;  (match-beginning 1) (match-end 1)
+       ;;  'display `(space :align-to (,(* align (window-font-width)))))
        ;; We skip over the stars. Because info-menu-star is monospaced
        ;; and we want to keep the stars consistent.
        (put-text-property
@@ -230,7 +237,7 @@ Moves point."
                           'line-spacing 0.3)
        (put-text-property
         (match-end 1) (min (1+ end) (point-max))
-        'wrap-prefix `(space :width ,align))
+        'wrap-prefix `(space :align-to (,align)))
        (Info--remove-line-breaks (match-end 1) end)))
 
     (`(DetailList ,indent1 ,indent2)
@@ -288,7 +295,9 @@ Moves point."
   :lighter ""
   (if info-pretty-mode
       (add-hook 'Info-selection-hook #'Info--prettify-buffer)
-    (remove-hook 'Info-selection-hook #'Info--prettify-buffer)))
+    (remove-hook 'Info-selection-hook #'Info--prettify-buffer))
+  (when (derived-mode-p 'Info-mode)
+    (revert-buffer)))
 
 
 
