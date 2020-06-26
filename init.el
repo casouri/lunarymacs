@@ -111,6 +111,11 @@
 ;;;; vterm
 ;; (luna-load-relative "star/term.el")
 
+;;;; Info
+(require 'info+)
+(info-pretty-mode)
+
+;;;; Mac specific config starts here
 (luna-when-mac
  ;; macports
  (add-to-list 'load-path "/opt/local/share/emacs/site-lisp")
@@ -134,6 +139,8 @@
 
  ;; Because Apple.
  (when (equal default-directory "/") (cd "~/")))
+
+;;;; Mac specific config ends here
 
 ;;;; Local unsynced customization
 
