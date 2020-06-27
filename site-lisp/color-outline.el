@@ -74,18 +74,18 @@ The result pattern is “COMMENT-START(COMMENT-CHAR){3}”."
   (let* ((header-level (length color-outline-face-list))
          (outline-re (rx-to-string `(seq ,comment-begin
                                          (= 3 ,comment-char)
-                                         (group (* ,comment-char)))))
+                                         (group (* ,comment-char))
+                                         " "
+                                         (* (not (any ?\t ?\n))))))
          (hi-re-list (cl-loop
                       for level from 0 to (1- header-level)
                       collect
-                      (format "^%s%s%s [^\t\n]*"
-                              (regexp-quote comment-begin)
-                              ;; base (3)
-                              (regexp-quote
-                               (color-outline-* 3 comment-char))
-                              ;; determined level
-                              (regexp-quote
-                               (color-outline-* level comment-char)))))
+                      (rx-to-string `(seq bol
+                                          ,comment-begin
+                                          (= 3 ,comment-char)
+                                          (= ,level ,comment-char)
+                                          " "
+                                          (* (not (any ?\t ?\n)))))))
          (hi-pattern-list (cl-loop for re in hi-re-list
                                    for face in color-outline-face-list
                                    collect `(,re (0 ',face t)))))
@@ -110,8 +110,8 @@ COMMENT-BEGIN is string pattern starting a comment."
                 (comment-begin (or (cadr rule) ""))
                 (config (color-outline--create-pattern
                          comment-char comment-begin)))
-          (progn (setq outline-regexp (car config))
-                 (setq outline-level
+          (progn (setq-local outline-regexp (car config))
+                 (setq-local outline-level
                        (lambda () (1+ (/ (length (match-string 1))
                                          (length comment-char)))))
                  (hi-lock-set-file-patterns (cadr config))
@@ -119,6 +119,9 @@ COMMENT-BEGIN is string pattern starting a comment."
                  (hi-lock-mode))
         (user-error "No color-outline pattern configured for %s"
                     major-mode))
+    (kill-local-variable 'outline-regexp)
+    (kill-local-variable 'outline-level)
+    ;; Just leave file pattern be.
     (outline-minor-mode -1)
     (hi-lock-mode -1)))
 
