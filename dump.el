@@ -20,11 +20,14 @@
                     hl-todo buffer-move savehist eyebrowse
                     minions ws-butler expand-region isolate
                     flyspell flycheck eglot minibuf-eldef
-                    yasnippet wucuo
+                    yasnippet wucuo ivy-xref dired-x subr-x pcase
+                    cl-lib seq olivetti org-download
                     ;; site-lisp
                     transform utility pause info+ color-outline
-                    commentary quanjiao))
+                    commentary quanjiao ghelp outline+ luna-publish
+                    ox-rss ox-cjk-html htmlize valign))
   (require package))
+(luna-load-relative "star/org/blogs.el")
 (add-to-list 'custom-theme-load-path
              (expand-file-name "site-lisp" user-emacs-directory))
 (load-theme 'light t t)
