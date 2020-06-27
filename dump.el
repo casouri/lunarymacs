@@ -20,7 +20,10 @@
                     hl-todo buffer-move savehist eyebrowse
                     minions ws-butler expand-region isolate
                     flyspell flycheck eglot minibuf-eldef
-                    yasnippet transform utility pause))
+                    yasnippet wucuo
+                    ;; site-lisp
+                    transform utility pause info+ color-outline
+                    commentary quanjiao))
   (require package))
 (add-to-list 'custom-theme-load-path
              (expand-file-name "site-lisp" user-emacs-directory))
