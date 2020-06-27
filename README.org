@@ -3,7 +3,7 @@
 This is my Emacs configuration.
 
 * Usage
-#+BEGIN_SRC commandline
+#+BEGIN_SRC shell
 git clone https://github.com/casouri/lunarymacs.git
 emacs
 #+END_SRC
