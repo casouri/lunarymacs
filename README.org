@@ -13,5 +13,13 @@ In Emacs:
 M-x luna-install-all-package RET
 #+END_SRC
 
+* Site-lisp packages
+- transform.el :: TeXmacs-like symbol insertion.
+- info+.el :: Prettify Info buffers.
+- color-outline.el :: Outline for programming modes.
+- commentary.el :: Sync README.org and Commentary.
+- quanjiao.el :: 智能全角引号。
+- outline+.el :: Cycle outline headers like in Org mode.
+
 * License
 Everything in this repository is GPLv3 licensed unless otherwise specified.
