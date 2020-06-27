@@ -1,4 +1,4 @@
-;; color-outline.el --- Outline w/ color      -*- lexical-binding: t; -*-
+;;; color-outline.el --- Outline w/ color      -*- lexical-binding: t; -*-
 
 ;; Author: Yuan Fu <casouri@gmail.com>
 
@@ -27,14 +27,19 @@
 ;;     #### Header 2
 ;;     ##### Header 3
 ;;
-;; To toggle evah header, use outline commands. We also provide a
-;; command to toggle the whole buffer: ‘color-outline-toggle-all’.
+;; To toggle each header, use outline commands. Outline+
+;; provides two nice ones.
 ;;
 ;; Add support for new major modes by
 ;;
-;;     (color-outline-define-header MODE COMMENT-CHAR)
+;;     (color-outline-define-header MODE COMMENT-CHAR COMMENT-BEGIN)
 ;;
-;; COMMENT-CHAR for ‘python-mode’ is "#", for example.
+;; COMMENT-CHAR for ‘python-mode’ is “#”, for example. It can be more
+;; than one character. COMMENT-BEGIN is the (possibly empty) beginning
+;; of the header. For example, in OCaml, comments are (* ... *). Then
+;; COMMENT-BEGIN is “(” and COMMENT-CHAR is “*”.
+;;
+;; You can also just edit ‘color-outline-comment-char-alist’.
 
 ;;; Code:
 ;;
@@ -61,22 +66,15 @@ For most major modes ‘comment-start’ is enough.")
     map)
   "Mode map for ‘color-outline-mode’.")
 
-(defun color-outline-* (number string)
-  "Return NUMBER of STRINGs sticked together."
-  (string-join (cl-loop for i from 1 to number
-                        collect string)))
-
 (defun color-outline--create-pattern (comment-char comment-begin)
   "Return the header pattern for major mode MODE.
 COMMENT-CHAR (string) is the comment character of this mode.
 COMMENT-BEGIN is string pattern starting a comment.
 The result pattern is “COMMENT-START(COMMENT-CHAR){3}”."
   (let* ((header-level (length color-outline-face-list))
-         (outline-re (format "%s%s%s* [^\t\n]"
-                             (regexp-quote comment-begin)
-                             (regexp-quote
-                              (color-outline-* header-level comment-char))
-                             (regexp-quote comment-char)))
+         (outline-re (rx-to-string `(seq ,comment-begin
+                                         (= 3 ,comment-char)
+                                         (group (* ,comment-char)))))
          (hi-re-list (cl-loop
                       for level from 0 to (1- header-level)
                       collect
@@ -113,6 +111,9 @@ COMMENT-BEGIN is string pattern starting a comment."
                 (config (color-outline--create-pattern
                          comment-char comment-begin)))
           (progn (setq outline-regexp (car config))
+                 (setq outline-level
+                       (lambda () (1+ (/ (length (match-string 1))
+                                         (length comment-char)))))
                  (hi-lock-set-file-patterns (cadr config))
                  (outline-minor-mode)
                  (hi-lock-mode))
