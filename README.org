@@ -20,6 +20,7 @@ M-x luna-install-all-package RET
 - commentary.el :: Sync README.org and Commentary.
 - quanjiao.el :: 智能全角引号。
 - outline+.el :: Cycle outline headers like in Org mode.
+- sidebar.el :: Show an outline sidebar.
 
 * License
 Everything in this repository is GPLv3 licensed unless otherwise specified.
