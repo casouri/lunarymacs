@@ -49,13 +49,6 @@
 (load-package quanjiao
   :hook (org-mode-hook . quanjiao-mode))
 
-(use-package org-roam
-  :hook
-  (after-init-hook . org-roam-mode)
-  :config
-  (setq org-roam-directory "~/roam/"
-        org-roam-buffer-width 0.2))
-
 ;;; Org
 
 (define-minor-mode luna-prose-mode
