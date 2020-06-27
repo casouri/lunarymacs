@@ -6,6 +6,19 @@
 
 ;;; Commentary:
 ;;
+;; Display a sidebar showing the outline for this buffer.
+;; In the sidebar, type TAB to toggle heading, RET to jump to
+;; the heading in the base buffer.
+;;
+;; Enable sidebar for the current buffer with by
+;;
+;;     M-x sidebar-mode RET.
+;;
+;; Enable sidebar globally (for certain major modes) by
+;;
+;;     M-x global-sidebar-mode RET.
+;;
+;; See ‘sidebar-enabled-mode-list’ for more.
 
 ;;; Code:
 ;;
@@ -15,7 +28,8 @@
 
 (defvar sidebar-enabled-mode-list
   '(org-mode markdown-mode)
-  "A list of major modes where sidebar is enabled.")
+  "A list of major modes where sidebar is enabled.
+This variable only has effect in ‘global-sidebar-mode’.")
 
 (defvar-local sidebar--overlay nil
   "Overlay put over sidebar buffer.")
@@ -100,7 +114,8 @@ EVENT is the mouse click event."
          '((side . left) (window-width . 20)))))
 
 (define-minor-mode global-sidebar-mode
-  "Show sidebar globally."
+  "Show sidebar globally.
+Which buffer gets a sidebar depends on ‘sidebar-enabled-mode-list’."
   :global t
   :lighter ""
   ;; Enable outline+ if possible.
@@ -113,7 +128,8 @@ EVENT is the mouse click event."
     (sidebar--hide)))
 
 (define-minor-mode sidebar-mode
-  "Show sidebar for this buffer."
+  "Show sidebar for this buffer.
+This mode doesn’t care about ‘sidebar-enabled-mode-list’."
   :lighter ""
   (if sidebar-mode
       (progn (add-hook 'window-state-change-hook
