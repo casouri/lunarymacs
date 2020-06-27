@@ -12,13 +12,6 @@
     "ri" #'org-roam-insert
     "rb" #'org-roam-buffer-toggle-display))
 
-;;; Blog
-
-(defun luna-load-blogs ()
-  "Enable blog helpers."
-  (interactive)
-  (luna-load-relative "star/org/blogs.el"))
-
 ;;; Packages
 
 (load-package toc-org
@@ -36,12 +29,6 @@
 
 (load-package org-download
   :hook (org-mode-hook . org-download-enable))
-
-(load-package flywrap
-  :commands (flywrap-mode)
-  :init (setq-default flywrap-column 80))
-
-(require 'org-tempo)
 
 (load-package valign
   :hook (org-mode-hook . valign-mode))
@@ -79,7 +66,8 @@
 ;; https://emacs.stackexchange.com/questions/33010/how-to-word-wrap-within-code-blocks
 ;;
 (with-eval-after-load 'org-mode
-  (setq org-hide-emphasis-markers t))
+  (setq org-hide-emphasis-markers t)
+  (require 'org-tempo))
 
 (with-eval-after-load 'org-latex
   (add-to-list 'org-latex-packages-alist '("" "listings" nil))
