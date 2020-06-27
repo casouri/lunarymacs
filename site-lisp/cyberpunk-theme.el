@@ -267,6 +267,7 @@
         (outline-7 (outline-3))
         (outline-8 (outline-3 ,fg-weak))
 
+        (org-level-1 (info-title-3))
         (org-document-title (info-title-1))
         (org-meta-line (font-lock-comment-face nil nil nil nil italic))
         (org-document-info (org-meta-line))

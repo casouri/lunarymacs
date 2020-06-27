@@ -263,7 +263,7 @@
         ;; If we use the same color, it’s hard to distinguish between
         ;; levels...
         (outline-1 (info-title-2))
-        (outline-2 (info-title-3 ,fg-weak))
+        (outline-2 (info-title-3 ,(darken fg-weak 0.25)))
         (outline-3 (info-title-4))
         (outline-4 (outline-3 ,fg-weak))
         (outline-5 (outline-3))
@@ -271,6 +271,7 @@
         (outline-7 (outline-3))
         (outline-8 (outline-3 ,fg-weak))
 
+        (org-level-1 (info-title-3))
         (org-document-title (info-title-1))
         (org-meta-line      (font-lock-comment-face nil nil nil nil italic))
         (org-document-info  (org-meta-line))
