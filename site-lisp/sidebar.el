@@ -10,7 +10,7 @@
 ;; In the sidebar, type TAB to toggle heading, RET to jump to
 ;; the heading in the base buffer.
 ;;
-;; Enable sidebar for the current buffer with by
+;; Enable sidebar for the current buffer by
 ;;
 ;;     M-x sidebar-mode RET.
 ;;
