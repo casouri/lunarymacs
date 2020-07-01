@@ -40,15 +40,17 @@
 (load-package counsel
   :config (counsel-mode))
 
-(load-package ivy-prescient
-  :after (ivy counsel)
-  :init
-  (setq prescient-save-file
-        (luna-f-join user-emacs-directory
-                     "cache/prescient-save.el"))
-  :config
-  (ivy-prescient-mode)
-  (prescient-persist-mode))
+;; ivy-prescient doesn’t support ivy anymore.
+;;
+;; (load-package ivy-prescient
+;;   :after (ivy counsel)
+;;   :init
+;;   (setq prescient-save-file
+;;         (luna-f-join user-emacs-directory
+;;                      "cache/prescient-save.el"))
+;;   :config
+;;   (ivy-prescient-mode)
+;;   (prescient-persist-mode))
 
 ;; use the forked version in site-lisp
 (use-package recentf-ext
