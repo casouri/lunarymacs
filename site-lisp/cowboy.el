@@ -197,6 +197,14 @@ OPTION-PLIST contains user options that each backend may use."
 
 ;;;; Cowboy
 
+(defun cowboy-install-full-clone (package)
+  "Install PACKAGE and make it a full clone."
+  (interactive (list
+                (intern
+                 (completing-read "Package: "
+                                  (cowboy--avaliable-package-list)))))
+  (cowboy-install package '(:full-clone t)))
+
 (defun cowboy-install (package &optional option-plist)
   "Install PACKAGE (symbol).
 
@@ -304,7 +312,7 @@ In OPTION-PLIST, if :full-clone is t, full clone.
 In RECIPE, :repo is of form \"user/repo\"."
   (let ((full-clone (plist-get option-plist :full-clone)))
     (cowboy--command "git" cowboy-package-dir "clone"
-                     (unless full-clone "--depth=1")
+                     (if full-clone "--depth=1" "")
                      (if (plist-get recipe :repo)
                          (format "https://github.com/%s.git" (plist-get recipe :repo))
                        (if (plist-get recipe :http)
