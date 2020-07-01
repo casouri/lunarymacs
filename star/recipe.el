@@ -25,4 +25,5 @@
         (binder . (:repo "rnkn/binder"))
         (wgrep . (:repo "mhayashi1120/Emacs-wgrep"))
         (ghelp . (:repo "casouri/ghelp"))
-        (valign . (:repo "casouri/valign"))))
+        (valign . (:repo "casouri/valign"))
+        (expand-region . (:repo "casouri/expand-region.el"))))
