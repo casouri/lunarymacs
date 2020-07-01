@@ -14,18 +14,18 @@
       luna-dumped t)
 (dolist (package '(use-package company ivy counsel org helpful
                     general helpful use-package general which-key
-                    recentf-ext swiper ivy-prescient
-                    aggressive-indent winner elec-pair
-                    rainbow-delimiters highlight-parentheses
-                    hl-todo buffer-move savehist eyebrowse
-                    minions ws-butler expand-region isolate
-                    flyspell flycheck eglot minibuf-eldef
-                    yasnippet wucuo ivy-xref dired-x subr-x pcase
-                    cl-lib seq olivetti org-download
+                    recentf-ext swiper aggressive-indent winner
+                    elec-pair rainbow-delimiters
+                    highlight-parentheses hl-todo buffer-move
+                    savehist eyebrowse minions ws-butler
+                    expand-region isolate flyspell flycheck eglot
+                    minibuf-eldef yasnippet wucuo ivy-xref
+                    dired-x subr-x pcase cl-lib seq olivetti
+                    org-download
                     ;; site-lisp
                     transform utility pause info+ color-outline
                     commentary quanjiao ghelp outline+ luna-publish
-                    ox-rss ox-cjk-html htmlize valign))
+                    ox-rss ox-cjk-html htmlize valign sidebar))
   (require package))
 (luna-load-relative "star/org/blogs.el")
 (add-to-list 'custom-theme-load-path
@@ -34,6 +34,10 @@
 (load-theme 'cyberpunk t t)
 
 (load "kinsoku.el")
+
+;; Agda
+(load-file (let ((coding-system-for-read 'utf-8))
+             (shell-command-to-string "~/.cabal/bin/agda-mode locate")))
 
 (setq luna-dump-file "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp")
 (message "Dumping to %s" luna-dump-file)
