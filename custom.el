@@ -4,6 +4,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ad-redefinition-action 'accept)
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#f0f0f0" "#e45649" "#50a14f" "#986801" "#4078f2" "#a626a4" "#0184bc" "#1b2229"])
  '(apropos-do-all t)
@@ -12,8 +14,7 @@
  '(compilation-ask-about-save nil)
  '(confirm-nonexistent-file-or-buffer t)
  '(create-lockfiles nil)
- '(custom-safe-themes 'nil)
- '(debug-on-error nil)
+ '(custom-safe-themes nil)
  '(delete-auto-save-files nil)
  '(delete-by-moving-to-trash t)
  '(dired-omit-files "\\`[.]?#\\|\\`[.][.]?" nil nil "Hide all dot files")
@@ -38,13 +39,13 @@
  '(mouse-wheel-tilt-scroll t)
  '(ns-pop-up-frames nil nil nil "This way emacsclient doesn't open new frames.")
  '(org-fontify-quote-and-verse-blocks t)
- '(org-hide-emphasis-markers t)
+ '(org-hide-emphasis-markers nil)
  '(org-image-actual-width '(300))
  '(package-archives
    '(("melpa" . "http://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(restclient php-mode all-the-icons-dired yasnippet yaml-mode xr wucuo ws-butler writegood-mode which-key web-mode visual-regexp use-package tuareg tree-sitter-lang-c tide srefactor sly sage-shell-mode rainbow-mode rainbow-delimiters racket-mode quickrun pyvenv proof-general org-download orderless olivetti ob-mermaid mips-mode minions memory-usage matlab-mode magit-todos magit-patch-changelog lua-mode latex-preview-pane ivy-xref ivy-prescient imenu-list icomplete-vertical htmlize highlight-parentheses hierarchy helpful haskell-mode gnu-apl-mode git-timemachine general geiser eyebrowse expand-region eglot edit-indirect dumb-jump diff-hl debbugs counsel company-posframe cdlatex ccls buffer-move benchmark-init auto-pause auctex aggressive-indent))
+   '(exec-path-from-shell restclient php-mode all-the-icons-dired yasnippet yaml-mode xr wucuo ws-butler writegood-mode which-key web-mode visual-regexp use-package tuareg tree-sitter-lang-c tide srefactor sly sage-shell-mode rainbow-mode rainbow-delimiters racket-mode quickrun pyvenv proof-general org-download orderless olivetti ob-mermaid mips-mode minions memory-usage matlab-mode magit-todos magit-patch-changelog lua-mode latex-preview-pane ivy-xref imenu-list icomplete-vertical htmlize highlight-parentheses hierarchy helpful haskell-mode gnu-apl-mode git-timemachine general geiser eyebrowse eglot edit-indirect dumb-jump diff-hl debbugs counsel company-posframe cdlatex ccls buffer-move benchmark-init auto-pause auctex aggressive-indent))
  '(recentf-max-saved-items 300)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values '((git-commit-major-mode . git-commit-elisp-text-mode)))
@@ -93,4 +94,5 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "SF Mono" :foundry "nil" :slant normal :weight normal :height 130 :width normal))))
  '(ghelp-entry ((t :inherit nil)))
- '(info-body ((t (:inherit variable-pitch :height 1.1 :family "Charter")))))
+ '(info-body ((t (:inherit variable-pitch :height 1.1 :family "Charter"))))
+ '(org-table ((t nil))))
