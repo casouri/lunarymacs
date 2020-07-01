@@ -23,6 +23,7 @@
  'magit-heading-selection
  'magit-heading-highlight)
 
+;; (FACE INHERIT FOREGROUND BACKGROUND UNDERLINE WEIGHT SLANT REST-ATTR)
 (theme-util-set-faces 'light
   (cl-flet ((darken #'theme-util-darken)
             (brighten #'theme-util-brighten)
@@ -203,7 +204,6 @@
         (magit-section-heading           (nil ,blue2))
         (magit-section-highlight         (magit-heading-highlight))
         (magit-section-heading-selection (magit-heading-selection))
-
         
         (magit-diffstat-added            (nil ,green))
         (magit-diffstat-removed          (nil ,red))
@@ -263,15 +263,16 @@
         ;; If we use the same color, it’s hard to distinguish between
         ;; levels...
         (outline-1 (info-title-2))
-        (outline-2 (info-title-3 ,(darken fg-weak 0.25)))
+        (outline-2 (info-title-3 ,(brighten fg 0.3)))
         (outline-3 (info-title-4))
-        (outline-4 (outline-3 ,fg-weak))
+        (outline-4 (outline-3 ,(brighten fg 0.3)))
         (outline-5 (outline-3))
-        (outline-6 (outline-3 ,fg-weak))
+        (outline-6 (outline-4))
         (outline-7 (outline-3))
-        (outline-8 (outline-3 ,fg-weak))
+        (outline-8 (outlint-4))
 
         (org-level-1 (info-title-3))
+        (org-level-2 (info-title-4 ,(brighten fg 0.3)) (:height 1.1))
         (org-document-title (info-title-1))
         (org-meta-line      (font-lock-comment-face nil nil nil nil italic))
         (org-document-info  (org-meta-line))
@@ -285,7 +286,7 @@
         (org-formula          (fixed-pitch))
         (org-quote            (nil nil ,bg-alt) (:extend t))
 
-        (org-table             (default))
+        ;; (org-table             (default))
         (org-todo              (highlight-fg-only-1))
         (org-time-grid         (nil ,yellow))
         (org-upcoming-deadline (nil ,red))
