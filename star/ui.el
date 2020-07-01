@@ -26,7 +26,8 @@
    "<M-down>" #'outline-next-visible-heading)
 
   (luna-default-leader
-    "wr" #'luna-desktop-read))
+    "wr" #'luna-desktop-read
+    "tsb" #'sidebar-mode))
 
 ;;; Package
 
@@ -77,6 +78,9 @@
                   ("GOOD" . "#52DEA1"))
                 hl-todo-keyword-faces))
   (global-hl-todo-mode))
+
+(load-package sidebar
+  :commands (sidebar-mode global-sidebar-mode))
 
 ;; (load-package treemacs
 ;;   :config (treemacs-resize-icons 11))
