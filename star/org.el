@@ -51,6 +51,8 @@
         (ignore-errors (flyspell-mode 1))
         (electric-pair-local-mode -1)
         (setq-local cursor-type 'bar)
+        (require 'delicate-click)
+        (delicate-click-mode)
         ;; (setq-local blink-cursor-interval 0.6)
         ;; (blink-cursor-mode)
         (setq-local line-spacing 0.2))
