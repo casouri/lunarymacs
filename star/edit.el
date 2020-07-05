@@ -31,7 +31,7 @@
    "M-RET" #'srefactor-refactor-at-point)
 
   (general-define-key
-   :keymaps 'outline-minor-mode-map
+   :keymaps '(outline-minor-mode-map org-mode-map)
    "s-<return>" #'outline-cycle)
 
   (general-define-key
