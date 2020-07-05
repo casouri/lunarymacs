@@ -34,7 +34,7 @@
   :lighter ""
   :global t
   (if accent-char-mode
-      (add-hook 'post-self-insert-hook #'accent-char-before)
+      (add-hook 'post-self-insert-hook #'accent-char-before -50)
     (remove-hook 'post-self-insert-hook #'accent-char-before)))
 
 (provide 'accent-char)
