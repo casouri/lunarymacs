@@ -38,6 +38,10 @@
 
 (add-to-list 'luna-package-list 'wucuo)
 
+(add-to-list 'load-path "~/p/OrgMark")
+(load-package orgmark
+  :commands (orgmark-insert orgmark-edit orgmark-abort))
+
 ;;; Org config
 
 (define-minor-mode luna-prose-mode
