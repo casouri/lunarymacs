@@ -296,6 +296,11 @@ If FORCE is non-nil, only export when org file is newer than html file."
       (message "Cannot find anchor, please paste manually")
       )))
 
+(defun luna-open-album-dir ()
+  "Open ~/p/casouri/rock/day/album/."
+  (interactive)
+  (shell-command-to-string (format "open ~/p/casouri/rock/day/album/")))
+
 ;;; goldfish
 
 (defvar luna-publish-goldfish-dir "~/p/casouri/goldfish")
