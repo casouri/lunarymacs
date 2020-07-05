@@ -27,9 +27,6 @@
   "By default dump files doesn’t save ‘load-path’.
 We need to manually save and restore it. See manual for more info.")
 
-(defvar luna-in-esup nil
-  "Non-nil if we are in a esup child session.")
-
 (defvar luna-dump-file (expand-file-name "emacs.pdmp" luna-cache-dir)
   "Location of dump file.")
 

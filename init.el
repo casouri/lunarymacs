@@ -103,10 +103,9 @@
 ;;;; server
 ;; checking whether server started can be slow
 ;; see emacs-horror
-(unless luna-in-esup
-  (run-with-idle-timer
-   3 nil
-   (lambda () (server-start t t))))
+(run-with-idle-timer
+ 3 nil
+ (lambda () (server-start t t)))
 
 ;;;; vterm
 ;; (luna-load-relative "star/term.el")
