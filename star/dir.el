@@ -15,6 +15,14 @@
    "s->" #'dired-omit-mode
    "C-/" #'dired-undo))
 
+;;; Package
+
+(add-to-list 'load-path "~/p/trivial-copy")
+(load-package trivial-copy
+  :commands (trivial-copy-copy
+             trivial-copy-move
+             trivial-copy-paste))
+
 ;;; Config
 
 (add-hook 'dired-mode-hook #'auto-revert-mode)

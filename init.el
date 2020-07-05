@@ -110,10 +110,6 @@
 ;;;; vterm
 ;; (luna-load-relative "star/term.el")
 
-;;;; Info
-(require 'info+)
-(info-pretty-mode)
-
 ;;;; Mac specific config starts here
 (luna-when-mac
  ;; macports
@@ -130,11 +126,6 @@
 
 ;;;; ENV
  (luna-load-env)
-
-;;;; trivial-copy
- (luna-when-mac
-  (add-to-list 'load-path "~/p/trivial-copy")
-  (require 'trivial-copy))
 
  ;; Because Apple.
  (when (equal default-directory "/") (cd "~/")))

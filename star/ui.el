@@ -82,11 +82,14 @@
 (load-package sidebar
   :commands (sidebar-mode global-sidebar-mode))
 
+(with-eval-after-load 'info
+  (require 'info+)
+  (info-pretty-mode))
+
 ;; (load-package treemacs
 ;;   :config (treemacs-resize-icons 11))
 
 ;; interfere with 'display text property
-;;
 ;; (load-package form-feed
 ;;   :config (add-hook 'prog-mode-hook #'form-feed-mode))
 
