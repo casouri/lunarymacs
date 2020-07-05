@@ -39,6 +39,9 @@
 (load-file (let ((coding-system-for-read 'utf-8))
              (shell-command-to-string "~/.cabal/bin/agda-mode locate")))
 
+(message "Setting ENV")
+(luna-set-env)
+
 (setq luna-dump-file "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp")
 (message "Dumping to %s" luna-dump-file)
 (dump-emacs-portable luna-dump-file)

@@ -174,6 +174,12 @@ buffer is not visiting a file."
              (setq exec-path (split-string (getenv "PATH") ":")))
     (error (message (error-message-string err)))))
 
+(defun luna-set-env ()
+  "Set PATH and CPATH."
+  (interactive)
+  (shell-command-to-string
+   "source ~/.profile; ~/.emacs.d/site-lisp/setemacsenv"))
+
 ;;; Insert
 
 (defvar luna-special-symbol-alist '(("(c)" . "©")
@@ -388,6 +394,37 @@ and moves point to the previous line."
       (dolist (log changelog)
         (insert log))
       (kill-ring-save (point-min) (point-max)))))
+
+;;; Variable pitch font in code
+
+(define-minor-mode global-variable-prog-mode
+  "Global ‘variable-prog-mode’."
+  :lighter ""
+  :global t
+  (if global-variable-prog-mode
+      (progn (dolist (buf (buffer-list))
+               (with-current-buffer buf
+                 (when (derived-mode-p 'prog-mode)
+                   (variable-prog-mode))))
+             (add-hook 'prog-mode-hook #'variable-prog-mode))
+    (dolist (buf (buffer-list))
+      (with-current-buffer buf
+        (when (derived-mode-p 'prog-mode)
+          (variable-prog-mode -1))))
+    (remove-hook 'prog-mode-hook #'variable-prog-mode)))
+
+(define-minor-mode variable-prog-mode
+  "Variable-pitch font in code."
+  :lighter ""
+  (if variable-prog-mode
+      (progn (variable-pitch-mode)
+             (font-lock-add-keywords nil '(("^ *" . 'fixed-pitch)
+                                           ("[()'\"]" . 'fixed-pitch))))
+    (variable-pitch-mode -1)
+    (font-lock-remove-keywords nil '(("^ *" . 'fixed-pitch)
+                                     ("[()'\"]" . 'fixed-pitch))))
+  (font-lock-mode -1)
+  (font-lock-mode))
 
 ;;; Provide
 
