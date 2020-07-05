@@ -1,4 +1,7 @@
 ;; -*- lexical-binding: t -*-
+
+;;; Packages
+
 (add-to-list 'load-path
              (expand-file-name "site-lisp"
                                user-emacs-directory))
@@ -12,6 +15,7 @@
 (cowboy-add-load-path)
 (setq luna-dumped-load-path load-path
       luna-dumped t)
+
 (dolist (package '(use-package company ivy counsel org helpful
                     general helpful use-package general which-key
                     recentf-ext swiper aggressive-indent winner
@@ -27,20 +31,28 @@
                     commentary quanjiao ghelp outline+ luna-publish
                     ox-rss ox-cjk-html htmlize valign sidebar))
   (require package))
-(luna-load-relative "star/org/blogs.el")
+
+;;; Theme
+
 (add-to-list 'custom-theme-load-path
              (expand-file-name "site-lisp" user-emacs-directory))
 (load-theme 'light t t)
 (load-theme 'cyberpunk t t)
 
-(load "kinsoku.el")
+;;; Other files
 
+(load "kinsoku.el")
+(luna-load-relative "star/org/blogs.el")
 ;; Agda
 (load-file (let ((coding-system-for-read 'utf-8))
              (shell-command-to-string "~/.cabal/bin/agda-mode locate")))
 
+;;; Env
+
 (message "Setting ENV")
 (luna-set-env)
+
+;;; Dump
 
 (setq luna-dump-file "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp")
 (message "Dumping to %s" luna-dump-file)
