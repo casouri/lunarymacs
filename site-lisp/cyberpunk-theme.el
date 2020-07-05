@@ -293,7 +293,7 @@
 
         (diff-hl-change (nil ,orange ,(overlay bg orange 0.1)))
 
-        (line-number              (default))
+        (line-number              ((fixed-pitch default)))
         (line-number-current-line (shadow))
         (line-number-major-tick   (line-number))
         (line-number-minor-tick   (line-number))))))
