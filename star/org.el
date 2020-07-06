@@ -129,4 +129,4 @@
 
 ;;; Patch
 
-(load "org-patch.el")
+(luna-load-relative "star/org/org-patch.el")
