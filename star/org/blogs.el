@@ -82,34 +82,32 @@ If FORCE is non-nil, only export when org file is newer than html file."
   (interactive)
   ;; so the syntax color is good for light background
   (save-excursion
-    (let ((org-html-head-include-scripts nil)
-          (org-export-use-babel nil))
-      ;; export posts
-      ;; for each year
-      (dolist (dir (luna-f-list-directory luna-publish-note-dir t))
-        ;; for each post
-        (dolist (post-dir (luna-f-list-directory dir t))
-          ;; publish each post
-          ;; for some reason the let bindings only work here
-          ;; move it up there and it doesn’t work anymore...
-          (let ((option-list `(:html-postamble-format
-                               ,luna-org-html-postamble-format
-                               :html-postamble t
-                               :html-home/up-format
-                               ,luna-org-html-home/up-format
-                               :html-footnote-format
-                               ,luna-org-html-footnote-format)))
-            (luna-publish-html-export post-dir option-list force))))
-      ;; publish index page
-      (let ((option-list `(:html-postamble
-                           nil
-                           :html-home/up-format
-                           ,luna-org-html-home/up-format-for-note-index)))
-        ;; like rock/day, we are automatically generating headers now,
-        ;; force update every time
-        (luna-publish-html-export luna-publish-note-dir option-list t))
-      ;; rss
-      (luna-note-export-rss))))
+    ;; export posts
+    ;; for each year
+    (dolist (dir (luna-f-list-directory luna-publish-note-dir t))
+      ;; for each post
+      (dolist (post-dir (luna-f-list-directory dir t))
+        ;; publish each post
+        ;; for some reason the let bindings only work here
+        ;; move it up there and it doesn’t work anymore...
+        (let ((option-list `(:html-postamble-format
+                             ,luna-org-html-postamble-format
+                             :html-postamble t
+                             :html-home/up-format
+                             ,luna-org-html-home/up-format
+                             :html-footnote-format
+                             ,luna-org-html-footnote-format)))
+          (luna-publish-html-export post-dir option-list force))))
+    ;; publish index page
+    (let ((option-list `(:html-postamble
+                         nil
+                         :html-home/up-format
+                         ,luna-org-html-home/up-format-for-note-index)))
+      ;; like rock/day, we are automatically generating headers now,
+      ;; force update every time
+      (luna-publish-html-export luna-publish-note-dir option-list t))
+    ;; rss
+    (luna-note-export-rss)))
 
 (defun luna-new-note-blog (title)
   "Make a new blog post with TITLE."
@@ -182,20 +180,26 @@ If FORCE non-nil, re-export every post."
                       rss)))))
 
 (defun luna-note-export-headers ()
-  "Generate org headers for each post."
+  "Generate org headers for each post.
+This is used as a local macro in index page of the note blog."
   (let (header-list)
+    ;; For each year.
     (dolist (year-dir (luna-f-list-directory luna-publish-note-dir t))
+      ;; For each post
       (dolist (post-dir (luna-f-list-directory year-dir t))
         (let ((org-file (luna-f-join post-dir "index.org"))
+              ;; Our custom options.
               (org-export-options-alist (append '((:tags . ("TAGS" "tags" "" space))
                                                   (:hide . ("HIDE" "hide" "" nil)))
                                                 org-export-options-alist)))
           (luna-f-with-file org-file
+            ;; Some document level information.
             (let* ((env (org-export-get-environment))
                    (tag-list (split-string (plist-get env :tags)))
                    (title (plist-get env :title))
                    (date (plist-get env :date))
                    (hide (plist-get env :hide)))
+              ;; Collect those information.
               (unless (equal hide "true")
                 (push (list :title (car title)
                             :date (org-timestamp-to-time (car date))
@@ -204,6 +208,7 @@ If FORCE non-nil, re-export every post."
                                           (file-name-base year-dir)
                                           (file-name-base post-dir)))
                       header-list)))))))
+    ;; Now we have a list of document-info, format them into headers.
     (substring-no-properties
      (string-join
       (mapcar (lambda (header)

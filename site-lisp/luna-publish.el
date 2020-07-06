@@ -16,10 +16,14 @@
 (require 'ox-html)
 (require 'rss-export)
 
-(defun luna-publish-html-export (dir option-list &optional force)
+(defun luna-publish-html-export (dir option-list &optional force before-export-fn)
   "Export index.org to index.html in DIR if the latter is older.
 If FORCE is non-nil, only export when org file is newer than html file.
-OPTION-LIST is passed to export funtion."
+OPTION-LIST is passed to export function.
+
+Run hooks in BEFORE-EXPORT-FN before export in the temp buffer.
+
+Set use-babel and include-scripts to nil when export."
   (let ((org-file (expand-file-name "index.org" dir))
         (html-file (expand-file-name "index.html" dir)))
     (when (and (file-exists-p org-file)
@@ -30,15 +34,35 @@ OPTION-LIST is passed to export funtion."
               ;; for relative links in org file
               (default-directory dir)
               (org-export-coding-system org-html-coding-system))
+          (run-hooks before-export-fn)
+          (luna-publish-populate-header-id)
           (org-export-to-file 'cjk-html html-file nil nil nil nil
                               (append '(:html-head-include-scripts nil)
                                       option-list)))))))
+
+(defun luna-publish-populate-header-id ()
+  "Add CUSTOM_ID property to each header in current buffer."
+  (let (id-list)
+    (cl-labels ((get-id ()
+                        (let ((id (url-encode-url
+                                   (replace-regexp-in-string
+                                    " " "-"
+                                    (org-get-heading t t t t))))
+                              (dup-counter 1))
+                          (while (member id id-list)
+                            (setq id (format "%s-%d" id dup-counter))
+                            (cl-incf dup-counter))
+                          (push id id-list)
+                          id)))
+      (org-map-entries
+       (lambda ()
+         (org-entry-put (point) "CUSTOM_ID" (get-id)))))))
 
 ;;; RSS
 
 (defun luna-publish-rss-export (link category-list dir root &optional force)
   "Export index.html to css-item.xml in DIR if the latter is older.
-If FORCE is non-nil, only export when org file is newer than html file.
+If FORCE is nil, only export when org file is newer than html file.
 
 LINK is the web link for the post in dir.
 DIR is the absolute path to the directory containing the post (index.org).
