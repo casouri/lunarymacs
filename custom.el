@@ -14,6 +14,7 @@
  '(compilation-ask-about-save nil)
  '(confirm-nonexistent-file-or-buffer t)
  '(create-lockfiles nil)
+ '(cursor-in-non-selected-windows nil)
  '(custom-safe-themes nil)
  '(delete-auto-save-files nil)
  '(delete-by-moving-to-trash t)
