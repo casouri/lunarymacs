@@ -99,7 +99,11 @@
 
 
 (load-package yasnippet
-  :config (yas-global-mode))
+  :config
+  (yas-global-mode)
+  (yas--define-parents 'minibuffer-inactive-mode '(emacs-lisp-mode))
+  (with-eval-after-load 'hippie-exp
+    (add-to-list 'hippie-expand-try-functions-list #'yas-expand)))
 
 
 (load-package color-rg
@@ -140,9 +144,5 @@
          (c++-mode-hook . semantic-mode)))
 
 (load-package ghelp)
-
-(with-eval-after-load 'hippie-expand
-  (with-eval-after-load 'yasnippet
-    (add-to-list 'hippie-expand-try-functions-list #'yas-expand)))
 
 (add-to-list 'luna-package-list 'helpful)
