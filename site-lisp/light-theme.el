@@ -140,6 +140,7 @@
         
         (company-tooltip                     (tooltip))
         (company-tooltip-annotation          (company-tooltip))
+        (company-tooltip-annotation-selection (company-tooltip-selection))
         (company-tooltip-common              ((comp-common company-tooltip)))
         (company-tooltip-common-selection    ((selection-common company-tooltip)))
         (company-tooltip-mouse               ((comp-mouse company-tooltip)))
