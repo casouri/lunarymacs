@@ -141,4 +141,8 @@
 
 (load-package ghelp)
 
+(with-eval-after-load 'hippie-expand
+  (with-eval-after-load 'yasnippet
+    (add-to-list 'hippie-expand-try-functions-list #'yas-expand)))
+
 (add-to-list 'luna-package-list 'helpful)

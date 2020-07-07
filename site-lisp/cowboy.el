@@ -221,8 +221,7 @@ OPTION-PLIST contains user options that each backend may use."
             (message "No recipe for %s" package)
           (when-let ((dependency-list (plist-get recipe :dependency)))
             (message "Found dependencies: %s" dependency-list)
-            (dolist (dep dependency-list)
-              (cowgirl-install dep option-plist)))
+            (mapc #'cowgirl-install dependency-list))
           (let ((fetcher (or (plist-get recipe :fetcher) 'github)))
             (funcall (cowboy--install-fn fetcher)
                      package recipe option-plist)
@@ -243,7 +242,9 @@ OPTION-PLIST contains user options that each backend may use."
         ;; handle dependency
         (when-let ((dependency-list (plist-get recipe :dependency)))
           (message "Found dependencies: %s" dependency-list)
-          (mapc #'cowgirl-update dependency-list))
+          ;; If cowboy doesn’t have recipe for the dependency,
+          ;; we don’t update it.
+          (mapc #'cowboy-update dependency-list))
         ;; update this package
         (let ((fetcher (or (plist-get recipe :fetcher)
                            'github)))
@@ -312,10 +313,10 @@ In OPTION-PLIST, if :full-clone is t, full clone.
 In RECIPE, :repo is of form \"user/repo\"."
   (let ((full-clone (plist-get option-plist :full-clone)))
     (cowboy--command "git" cowboy-package-dir "clone"
-                     (if full-clone "--depth=1" "")
+                     (if full-clone "" "--depth=1")
                      (if (plist-get recipe :repo)
                          (format "https://github.com/%s.git" (plist-get recipe :repo))
-                       (if (plist-get recipe :http)
+                       (or (plist-get recipe :http)
                            (error "No :repo nor :http in recipe: %s" recipe)))
                      (symbol-name package))))
 
