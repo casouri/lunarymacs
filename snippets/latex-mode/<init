@@ -1,0 +1,27 @@
+# -*- mode: snippet -*-
+# name: <init
+# key: <init
+# --
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{alphabeta}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\author{Yuan Fu}
+\date{$1}
+\title{$2}
+\hypersetup{$3}
+\begin{document}
+$0
+\end{document}

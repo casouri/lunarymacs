@@ -1,0 +1,6 @@
+(no toc)	#+OPTIONS: toc:nil
+(hide blog)	#+HIDE: true
+(macro)		#+MACRO: hi (eval "$1\nsomething")
+		#+MACRO: hi some text $1 $2
+(use macro)	{{{hi(arg1, arg2)}}}
+                
