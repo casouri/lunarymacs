@@ -7,10 +7,8 @@
 (load-package cdlatex
   :hook (LaTeX-mode-hook . cdlatex-mode))
 
-(load-package eglot
-  :hook (tex-mode-hook . eglot-ensure)
-  :init (add-to-list 'eglot-server-programs
-                     '(latex-mode . ("digestif"))))
+(add-to-list 'luna-package-list 'eglot)
+(add-to-list 'eglot-server-programs '(latex-mode . ("digestif")))
 
 ;;; Config
 
@@ -18,10 +16,14 @@
   (prettify-symbols-mode)
   ;; (variable-pitch-mode)
   (olivetti-mode)
-  (olivetti-set-width 90))
+  (olivetti-set-width 90)
+  (company-mode)
+  (eglot-ensure))
 
-(with-eval-after-load 'tex-mode
-  (add-hook 'tex-mode-hook #'tex-mode-setup))
+;; This is AuCTex hooks and library.
+;; The built-in ones are tex-mode and tex-mode-hook.
+(with-eval-after-load 'latex
+  (add-hook 'LaTeX-mode-hook #'tex-mode-setup))
 
 (with-eval-after-load 'tex
   (add-to-list 'TeX-command-list
