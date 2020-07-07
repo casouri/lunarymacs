@@ -57,8 +57,9 @@ when console window is not live, switch between console buffer and previous buff
     ;; switch between console buffer and previous buffer
     (if luna-console-buffer-p
         (previous-buffer)
-      (switch-to-buffer (luna--get-console-buffer major-mode))
-      (setq-local luna-console-buffer-p t))))
+      (when-let ((buf (luna--get-console-buffer major-mode)))
+        (switch-to-buffer buf)
+        (setq-local luna-console-buffer-p t)))))
 
 (defun luna-set-console-buffer (buffer)
   "Set current console buffer to BUFFER."
