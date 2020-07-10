@@ -95,17 +95,19 @@ e.g. :family :weight :size etc."
   "The scale for CJK font. Used in ‘luna-scale-cjk’.")
 
 (defvar luna-font-alist
-  '((sf-mono-13 . (:family "SF Mono" :size 13))
-    (sf-mono-14 . (:family "SF Mono" :size 14))
-    (gnu-unifont-15 . (:family "Unifont" :size 15))
-    (sf-mono-light-13 . (:family "SF Mono" :size 13 :weight light)))
+  '(("SF Mono 13" . (:family "SF Mono" :size 13))
+    ("SF Mono 14" . (:family "SF Mono" :size 14))
+    ("GNU Unifont 15" . (:family "Unifont" :size 15))
+    ("SF Mono Light 13" . (:family "SF Mono" :size 13 :weight light))
+    ("PragmataPro 13" . (:family "Essential PragmataPro" :size 13))
+    ("PragmataPro 14" . (:family "Essential PragmataPro" :size 14)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
 Key is a symbol as the name, value is a plist specifying the font spec.
 More info about spec in `font-spec'.")
 
 (defvar luna-cjk-font-alist
-  '((soure-han-serif-14 . (:family "Source Han Serif SC" :size 14))
-    (gnu-unifont-16 . (:family "Unifont" :size 16)))
+  '(("Srouce Han Serif 14" . (:family "Source Han Serif SC" :size 14))
+    ("GNU Unifont 16" . (:family "Unifont" :size 16)))
   "Similar to `luna-font-alist' but used for CJK scripts.
 Use `luna-load-cjk-font' to load them.")
 
@@ -114,20 +116,23 @@ Use `luna-load-cjk-font' to load them.")
 Fonts are specified in `luna-font-alist'.
 
 Changes are saved to custom.el in a idle timer."
-  (interactive (list
-                (completing-read "Choose a font: "
-                                 (mapcar (lambda (cons) (symbol-name (car cons)))
-                                         luna-font-alist))))
-
-  (let* ((arg font-name)
-         (font-name (or font-name luna-font))
+  (interactive
+   (list (completing-read
+          "Choose a font: "
+          (mapcar #'car luna-font-alist))))
+  (let* ((font-name (or font-name luna-font))
          (font (apply #'font-spec
-                      (if font-name (alist-get (intern font-name)
-                                               luna-font-alist)
+                      (if font-name
+                          (alist-get font-name luna-font-alist
+                                     nil nil #'equal)
+                        ;; If font-name is nil (loading from local
+                        ;; file and don’t have it saved), use first
+                        ;; font spec.
                         (cdar luna-font-alist)))))
     (set-frame-font font nil t)
     ;; seems that there isn't a good way to get font-object directly
-    (add-to-list 'default-frame-alist `(font . ,(face-attribute 'default :font)))
+    (add-to-list 'default-frame-alist
+                 `(font . ,(face-attribute 'default :font)))
     (luna-local-set 'luna-font font-name)))
 
 (defun luna-load-cjk-font (&optional font-name)
@@ -135,16 +140,18 @@ Changes are saved to custom.el in a idle timer."
 Fonts are specified in `luna-font-alist'.
 
 Changes are saved to custom.el in a idle timer."
-  (interactive (list
-                (completing-read "Choose a font: "
-                                 (mapcar (lambda (cons) (symbol-name (car cons)))
-                                         luna-cjk-font-alist))))
-  (let* ((arg font-name)
-         (font-name (or font-name luna-cjk-font))
+  (interactive
+   (list (completing-read
+          "Choose a font: "
+          (mapcar #'car luna-cjk-font-alist))))
+  (let* ((font-name (or font-name luna-cjk-font))
          (font-spec (apply #'font-spec
                            (if font-name
-                               (alist-get (intern font-name)
-                                          luna-cjk-font-alist)
+                               ;; If font-name is nil (loading from
+                               ;; local file and don’t have it saved),
+                               ;; use first font spec.
+                               (alist-get font-name luna-cjk-font-alist
+                                          nil nil #'equal)
                              (cdar luna-cjk-font-alist)))))
     (dolist (charset '(kana han cjk-misc))
       (set-fontset-font t charset font-spec))
