@@ -1,0 +1,4 @@
+PDF:	W/H	fit to width/height
+	cv/ch	center vertically/horizontally
+	cV/cH	toggle auto center
+	n/p	next/previous page
