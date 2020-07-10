@@ -46,7 +46,7 @@
    '(("melpa" . "http://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(auctex company-math restclient php-mode all-the-icons-dired yasnippet yaml-mode xr wucuo ws-butler writegood-mode which-key web-mode visual-regexp use-package tuareg tree-sitter-lang-c tide srefactor sly sage-shell-mode rainbow-mode rainbow-delimiters racket-mode quickrun pyvenv proof-general org-download orderless olivetti ob-mermaid mips-mode minions memory-usage matlab-mode magit-todos magit-patch-changelog lua-mode ivy-xref imenu-list icomplete-vertical htmlize highlight-parentheses hierarchy helpful haskell-mode gnu-apl-mode git-timemachine general geiser eyebrowse eglot edit-indirect dumb-jump diff-hl debbugs counsel company-posframe cdlatex ccls buffer-move benchmark-init auto-pause aggressive-indent))
+   '(latex-preview-pane auctex company-math restclient php-mode all-the-icons-dired yasnippet yaml-mode xr wucuo ws-butler writegood-mode which-key web-mode visual-regexp use-package tuareg tree-sitter-lang-c tide srefactor sly sage-shell-mode rainbow-mode rainbow-delimiters racket-mode quickrun pyvenv proof-general org-download orderless olivetti ob-mermaid mips-mode minions memory-usage matlab-mode magit-todos magit-patch-changelog lua-mode ivy-xref imenu-list icomplete-vertical htmlize highlight-parentheses hierarchy helpful haskell-mode gnu-apl-mode git-timemachine general geiser eyebrowse eglot edit-indirect dumb-jump diff-hl debbugs counsel company-posframe cdlatex ccls buffer-move benchmark-init auto-pause aggressive-indent))
  '(recentf-max-saved-items 300)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values '((git-commit-major-mode . git-commit-elisp-text-mode)))
