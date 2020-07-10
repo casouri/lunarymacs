@@ -29,7 +29,7 @@
                     ;; site-lisp
                     transform utility pause info+ color-outline
                     commentary quanjiao ghelp outline+ luna-publish
-                    ox-rss ox-cjk-html htmlize valign sidebar))
+                    ox-cjk-html htmlize valign sidebar))
   (require package))
 
 ;;; Theme
