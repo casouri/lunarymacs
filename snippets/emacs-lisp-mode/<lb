@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: <lb
+# key: <lb
+# --
+(line-beginning-position)
