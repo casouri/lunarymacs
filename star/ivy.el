@@ -40,6 +40,9 @@
 (load-package counsel
   :config (counsel-mode))
 
+;; For M-x history.
+(add-to-list 'luna-package-list 'smex)
+
 ;; ivy-prescient doesn’t support ivy anymore.
 ;;
 ;; (load-package ivy-prescient
