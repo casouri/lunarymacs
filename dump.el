@@ -22,14 +22,16 @@
                     elec-pair rainbow-delimiters
                     highlight-parentheses hl-todo buffer-move
                     savehist eyebrowse minions ws-butler
-                    expand-region isolate flyspell flycheck eglot
+                    expand-region flyspell flycheck eglot
                     minibuf-eldef yasnippet wucuo ivy-xref
                     dired-x subr-x pcase cl-lib seq olivetti
                     org-download
                     ;; site-lisp
                     transform utility pause info+ color-outline
-                    commentary quanjiao ghelp outline+ luna-publish
-                    ox-cjk-html htmlize valign sidebar))
+                    commentary quanjiao outline+ luna-publish
+                    ox-cjk-html htmlize sidebar
+                    ;; ranch
+                    valign ghelp isolate))
   (require package))
 
 ;;; Theme
