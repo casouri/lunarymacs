@@ -49,10 +49,8 @@ ARGS is as same as in `load'."
 ARGS is as same as in `load'."
   (if (file-exists-p file)
       (apply #'luna-safe-load file args)
-    (save-excursion
-      (find-file file)
-      (save-buffer)
-      (kill-buffer))))
+    ;; Create FILE.
+    (write-region "" nil file)))
 
 (defun luna-load-relative (file &rest args)
   "Load FILE relative to user-emacs-directory. ARGS are applied to ‘load'."

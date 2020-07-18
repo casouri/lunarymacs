@@ -25,8 +25,8 @@
    "C-'"   #'luna-set-mark
    "M-'"   #'luna-jump
    "C-M-;" #'inline-replace
-   "M-f"   #'next-char
-   "M-b"   #'last-char
+   ;; "M-f"   #'next-char
+   ;; "M-b"   #'last-char
    "C-'"   #'angel-until
 
    "C-."   #'undo-tree-redo
@@ -248,8 +248,9 @@ point reaches the beginning or end of the buffer, stop there."
 
 (defun query-replace+ (beg end &optional delete)
   "Select region between BEG and END and query replace it.
-Edit the underlined region and press C-c C-c to qurey-replace. If
-DELETE non-nil, delete region when invoked."
+Edit the underlined region and type C-c C-c to start
+`query-replace'. Type C-g to abort. If DELETE non-nil, delete
+region when invoked."
   (interactive "r")
   (if (not (region-active-p))
       (message "Select the text to be replaced first")
