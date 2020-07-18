@@ -57,8 +57,8 @@
          ;; add semicolon to each line beginning
          ;; (commented-source (commentary--commented org-source))
          (commented-export (commentary--commented ascii-export)))
-    (commentary--replace-match "^;;; Commentary:" "^;;; Commentary end"
-                      (format ";;; Commentary:\n;;\n%s\n;;\n;;; Commentary end"
+    (commentary--replace-match "^;;; Commentary:" "^;;;* Commentary end"
+                      (format ";;; Commentary:\n;;\n%s\n;;\n;; Commentary end"
                               (string-remove-suffix "\n"
                                                     commented-export)))
     ))
