@@ -27,8 +27,7 @@
 ;;     #### Header 2
 ;;     ##### Header 3
 ;;
-;; To toggle each header, use outline commands. Outline+
-;; provides two nice ones.
+;; To toggle each header, use outline commands.
 ;;
 ;; Add support for new major modes by
 ;;
@@ -46,25 +45,22 @@
 
 (require 'cl-lib)
 (require 'subr-x)
-(require 'hi-lock)
 
-(defvar color-outline-comment-char-alist '((c-mode "/" nil)
-                                           (python-mode "#" nil)
-                                           (javascript-mode "/" nil)
-                                           (css-mode "/" nil)
+(defvar color-outline-comment-char-alist '((c-mode "/")
+                                           (python-mode "#")
+                                           (javascript-mode "/")
+                                           (css-mode "/")
                                            (tuareg-mode "*" "("))
   "Stores custom comment character each major mode.
-For most major modes ‘comment-start’ is enough.")
+For some major modes ‘comment-start’ is enough.")
 
 (defvar color-outline-face-list '(outline-1 outline-2 outline-3 outline-4)
   "Face for each level.")
 
-(defvar color-outline-mode-map
-  (let ((map (make-sparse-keymap)))
-    ;; (define-key map (kbd "<C-tab>") #'outline-toggle-children)
-    ;; (define-key map (kbd "C-M-i") #'color-outline-toggle-hide-show)
-    map)
-  "Mode map for ‘color-outline-mode’.")
+(defvar-local color-outline--keywords nil
+  "We store font-lock keywords in this variable.
+This is used to remove font-lock rules when ‘color-outline-mode’
+is turned off.")
 
 (defun color-outline--create-pattern (comment-char comment-begin)
   "Return the header pattern for major mode MODE.
@@ -77,19 +73,19 @@ The result pattern is “COMMENT-START(COMMENT-CHAR){3}”."
                                          (group (* ,comment-char))
                                          " "
                                          (* (not (any ?\t ?\n))))))
-         (hi-re-list (cl-loop
-                      for level from 0 to (1- header-level)
-                      collect
-                      (rx-to-string `(seq bol
-                                          ,comment-begin
-                                          (= 3 ,comment-char)
-                                          (= ,level ,comment-char)
-                                          " "
-                                          (* (not (any ?\t ?\n)))))))
-         (hi-pattern-list (cl-loop for re in hi-re-list
-                                   for face in color-outline-face-list
-                                   collect `(,re (0 ',face t)))))
-    (list outline-re hi-pattern-list)))
+         (re-list (cl-loop
+                   for level from 0 to (1- header-level)
+                   collect
+                   (rx-to-string `(seq bol
+                                       ,comment-begin
+                                       (= 3 ,comment-char)
+                                       (= ,level ,comment-char)
+                                       " "
+                                       (* (not (any ?\t ?\n)))))))
+         (font-lock-list (cl-loop for re in re-list
+                                  for face in color-outline-face-list
+                                  collect `(,re (0 ',face t t)))))
+    (cons outline-re font-lock-list)))
 
 (defun color-outline-define-header (mode comment-char comment-begin)
   "Define the header pattern for major mode MODE.
@@ -101,7 +97,6 @@ COMMENT-BEGIN is string pattern starting a comment."
 (define-minor-mode color-outline-mode
   "Color outline."
   :lighter ""
-  :keymap 'color-outline-mode-map
   (if color-outline-mode
       (if-let* ((rule (or (alist-get major-mode
                                      color-outline-comment-char-alist)
@@ -112,19 +107,20 @@ COMMENT-BEGIN is string pattern starting a comment."
                          comment-char comment-begin)))
           (progn (setq-local outline-regexp (car config))
                  (setq-local outline-level
-                       (lambda () (1+ (/ (length (match-string 1))
-                                         (length comment-char)))))
-                 (hi-lock-set-file-patterns (cadr config))
-                 (outline-minor-mode)
-                 (hi-lock-mode))
+                             (lambda () (1+ (/ (length (match-string 1))
+                                               (length comment-char)))))
+                 (font-lock-add-keywords nil (cdr config))
+                 (setq color-outline--keywords (cdr config))
+                 (outline-minor-mode))
         (user-error "No color-outline pattern configured for %s"
                     major-mode))
     (kill-local-variable 'outline-regexp)
     (kill-local-variable 'outline-level)
-    ;; Just leave file pattern be.
-    (outline-minor-mode -1)
-    (hi-lock-mode -1)))
+    (font-lock-remove-keywords nil color-outline--keywords)
+    (outline-minor-mode -1))
+  (jit-lock-refontify))
 
 (provide 'color-outline)
 
 ;;; color-outline.el ends here
+
