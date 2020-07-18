@@ -100,22 +100,25 @@ e.g. :family :weight :size etc."
     ("GNU Unifont 15" . (:family "Unifont" :size 15))
     ("SF Mono Light 13" . (:family "SF Mono" :size 13 :weight light))
     ("PragmataPro 13" . (:family "Essential PragmataPro" :size 13))
-    ("PragmataPro 14" . (:family "Essential PragmataPro" :size 14)))
+    ("PragmataPro 14" . (:family "Essential PragmataPro" :size 14))
+    ("Iosevka 13" . (:family "Iosevka" :size 14)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
 Key is a symbol as the name, value is a plist specifying the font spec.
 More info about spec in `font-spec'.")
 
 (defvar luna-cjk-font-alist
-  '(("Srouce Han Serif 14" . (:family "Source Han Serif SC" :size 14))
-    ("GNU Unifont 16" . (:family "Unifont" :size 16)))
+  ;; We don’t set font size, so the font size changes with default
+  ;; font.
+  '(("Srouce Han Serif" . (:family "Source Han Serif SC"))
+    ("GNU Unifont" . (:family "Unifont")))
   "Similar to `luna-font-alist' but used for CJK scripts.
 Use `luna-load-cjk-font' to load them.")
 
 (defun luna-load-font (&optional font-name)
   "Prompt for a font and set it.
-Fonts are specified in `luna-font-alist'.
-
-Changes are saved to custom.el in a idle timer."
+Fonts are specified in `luna-font-alist'. If FONT-NAME non-nil,
+use it instead. The font is saved to local file (see
+luna-local.el)."
   (interactive
    (list (completing-read
           "Choose a font: "
@@ -137,9 +140,9 @@ Changes are saved to custom.el in a idle timer."
 
 (defun luna-load-cjk-font (&optional font-name)
   "Prompt for a font and set it.
-Fonts are specified in `luna-font-alist'.
-
-Changes are saved to custom.el in a idle timer."
+Fonts are specified in `luna-cjk-font-alist'. If FONT-NAME non-nil,
+use it instead. The font is saved to local file (see
+luna-local.el)."
   (interactive
    (list (completing-read
           "Choose a font: "
