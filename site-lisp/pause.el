@@ -11,54 +11,35 @@
 ;;
 
 (require 'pcase)
-
-(defvar-local pause--stack nil
-  "A stack of continue and quit functions.
-Each element is an alist that looks like ((continue . fn) (quit . fn)).")
+(require 'cl-lib)
 
 (define-minor-mode pause-minor-mode
   "Minor mode for pause facility."
   :keymap (let ((map (make-sparse-keymap)))
-            (define-key map (kbd "C-c C-c") #'pause-continue)
-            (define-key map (kbd "C-g") #'pause-quit)
+            (define-key map (kbd "C-c C-c") #'exit-recursive-edit)
+            (define-key map (kbd "C-g") #'abort-recursive-edit)
             map))
 
-(defun pause--control-minor-mode ()
-  "Turn on/off `pause-minor-mode'.
-Call after modified ‘pause--stack’."
-  (when (eql (length pause--stack) 0)
-    (pause-minor-mode -1))
-  (when (and (> (length pause--stack) 0)
-             (not pause-minor-mode))
-    (pause-minor-mode)))
-
-(defun pause-continue ()
-  "Continue pause."
-  (interactive)
-  (unwind-protect
-      (funcall (alist-get 'continue (pop pause--stack)))
-    (pause--control-minor-mode)))
-
-(defun pause-quit ()
-  "Quit pause."
-  (interactive)
-  (unwind-protect
-      (funcall (alist-get 'quit (pop pause--stack)))
-    (pause--control-minor-mode)
-    (keyboard-quit)))
+(defvar pause--level 0
+  "Level of nested pause calls.")
 
 (defmacro pause (continue &optional quit finally)
   "”Pause” the execution.
-So the user can do arbitrary actions and continue from where one left.
+So the user can do arbitrary actions and continue from where they left.
 Return immediately, run CONTINUE & FINALLY if user press C-c C-c,
 run QUIT & FINALLY if user press C-g."
   (declare (indent 0))
   `(progn
-     ;; save lexical environment
-     (push (list (cons 'continue (lambda () (unwind-protect ,continue ,finally)))
-                 (cons 'quit (lambda () (unwind-protect ,quit ,finally))))
-           pause--stack)
-     (pause--control-minor-mode)))
+     (pause-minor-mode)
+     (cl-incf pause--level)
+     (condition-case nil
+         (progn (recursive-edit)
+                ,continue)
+       (quit ,quit))
+     ,finally
+     (cl-decf pause--level)
+     (if (eq pause--level 0)
+         (pause-minor-mode -1))))
 
 (provide 'pause)
 
