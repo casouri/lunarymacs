@@ -16,8 +16,9 @@
    [remap backward-delete-char-untabify] #'luna-hungry-delete
    ;; helpful
    "C-h C-h" #'ghelp-describe
-   "C-h k" #'helpful-key
-   "C-h e" #'ghelp-describe-as-in-emacs-lisp-mode
+   "C-h r"   #'ghelp-resume
+   "C-h k" #'ghelp-helpful-key
+   "C-h e" #'ghelp-describe-elisp
    "C-x i" #'luna-insert-special-symbol
    "C-c '" #'separedit
    "C-s-i" #'color-outline-toggle-all
@@ -32,7 +33,7 @@
 
   (general-define-key
    :keymaps '(outline-minor-mode-map org-mode-map)
-   "s-<return>" #'outline-cycle)
+   "s-i" #'outline-cycle)
 
   (general-define-key
    :keymaps '(text-mode fundamental-mode)
@@ -129,8 +130,7 @@
 
 
 (load-package color-outline
-  :hook (prog-mode-hook . color-outline-mode)
-  :config (define-key hi-lock-map (kbd "C-x w b") nil))
+  :hook (prog-mode-hook . color-outline-mode))
 
 
 (load-package visual-regexp
