@@ -34,25 +34,20 @@ We need to manually save and restore it. See manual for more info.")
 
 (defun luna-safe-load (file &rest args)
   "Load FILE and don’t error out.
-ARGS is as same as in `load'."
-  (condition-case err
-      (apply #'load file args)
-    ((debug error)
-     (message (format "Error occurred:\n%s\n"
-                      (error-message-string err))))))
-
-(defun luna-load-or-create (file &rest args)
-  "Load FILE if file exists, otherwise create it.
+If FILE doesn’t exist, create it.
 ARGS is as same as in `load'."
   (if (file-exists-p file)
-      (apply #'luna-safe-load file args)
-    ;; Create FILE.
+      (condition-case err
+          (apply #'load file args)
+        ((debug error) (warn "Error when loading %s: %s" file
+                             (error-message-string err))))
+    ;; Create file.
     (write-region "" nil file)))
 
 (defun luna-load-relative (file &rest args)
   "Load FILE relative to user-emacs-directory.
 ARGS are applied to ‘load'."
-  (apply #'luna-load-or-create
+  (apply #'luna-safe-load
          (expand-file-name file user-emacs-directory) args))
 
 ;;; Load package

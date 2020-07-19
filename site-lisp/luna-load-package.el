@@ -6,17 +6,19 @@
 
 ;;; Commentary:
 ;;
+;; ‘use-pacakage’ copycat. Advantages:
+;;   1) home brew, custom made
+;;   2) short
 
 ;;; Code:
 ;;
 
 (require 'pcase)
-(require 'cl-lib)
 
 (defun luna-split-command-args (args)
   "Split args into commands and args.
-ARGS: (:command args args args :command args)
-Return: ((:command . (args args args)) (:command . (args)))."
+If ARGS is (:command args args args :command args),
+return: ((:command . (args args args)) (:command . (args)))."
   (let (ret-list arg-list command)
     (dolist (token (append args '(:finish)))
       (if (keywordp token)
@@ -28,8 +30,6 @@ Return: ((:command . (args args args)) (:command . (args)))."
                  (setq command token))
         (push token arg-list)))
     (reverse ret-list)))
-
-;; test: (luna-split-command-args '(:command1 arg1 arg2 arg3 :command2 arg1 arg2))
 
 (defun luna-load-package--handle-hook (arg-list package)
   "Handle hook arguments.
@@ -70,7 +70,7 @@ Available commands:
   :after        Require after this package loads.
   :defer        Don’t require the package.
 
-Each command can take 0–n arguments."
+Each command can take zero or more arguments."
   (declare (indent 1))
   ;; Group commands and arguments together.
   (let* ((arg-list (luna-split-command-args args))
@@ -117,10 +117,13 @@ Each command can take 0–n arguments."
                         (memq :after commands)
                         (memq :mode commands)
                         (memq :hook commands)))))
-    `(progn
-       (add-to-list 'luna-package-list ',package)
-       ,@body
-       ,(unless defer-p `(require ',package)))))
+    `(condition-case err
+         (progn
+           (add-to-list 'luna-package-list ',package)
+           ,@body
+           ,(unless defer-p `(require ',package)))
+       ((debug error) (warn "Error when loading %s: %s" ',package
+                            (error-message-string err))))))
 
 (defalias 'load-package 'luna-load-package)
 

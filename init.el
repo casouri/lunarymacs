@@ -17,7 +17,7 @@
 (require 'luna-local)
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(luna-load-or-create custom-file)
+(luna-safe-load custom-file)
 (luna-local-load)
 
 (luna-if-dump
@@ -132,6 +132,6 @@
 
 ;;;; Local unsynced customization
 
-(luna-load-or-create (luna-f-join user-emacs-directory
+(luna-safe-load (luna-f-join user-emacs-directory
                                   "local-config.el"))
 
