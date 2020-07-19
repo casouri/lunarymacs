@@ -1,11 +1,6 @@
 ;;-*- lexical-binding: t -*-
 
-(when (eq window-system 'mac)
-  ;; have to enable menu bar on mac port
-  ;; otherwise emacs lost focus
-  (menu-bar-mode))
-
-;;; Package
+;;; Init
 
 (add-to-list 'load-path
              (expand-file-name "site-lisp"
@@ -16,9 +11,13 @@
 (require 'package)
 (require 'luna-local)
 
+;;; Custom & local
+
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (luna-safe-load custom-file)
 (luna-local-load)
+
+;;; Dump
 
 (luna-if-dump
     (progn
@@ -40,12 +39,17 @@
   (setq package-user-dir (expand-file-name
                           "package" user-emacs-directory))
   ;; add load-path’s and load autoload files
+  (luna-load-relative "star/recipe.el")
   (package-initialize)
   (cowboy-add-load-path))
+
+;;; Benchmark
 
 ;; (require 'benchmark-init)
 ;; (add-hook 'after-init-hook 'benchmark-init/deactivate)
 ;; (benchmark-init/activate)
+
+;;; Configs
 
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (setq luna-company-manual nil)
@@ -53,7 +57,6 @@
 ;; core must load first because other configs depends on them
 (luna-load-relative "star/builtin-config.el")
 (luna-load-relative "star/key.el")
-(luna-load-relative "star/recipe.el")
 (luna-load-relative "star/angel.el")
 (luna-load-relative "star/ui.el")
 (luna-load-relative "star/mode-line.el")
@@ -80,12 +83,6 @@
 
 ;;;; Misc
 (setq-default luna-format-on-save t)
-(setq scroll-margin 4)
-(setq ispell-program-name "aspell")
-(setq user-full-name "Yuan Fu"
-      user-mail-address "casouri@gmail.com")
-(setq split-height-threshold nil ; Popup window to right
-      split-width-threshold 80)
 
 ;;;; theme
 (when window-system
@@ -95,20 +92,17 @@
 (when window-system
   (luna-load-font)
   (luna-load-cjk-font))
-(setq luna-cjk-font-scale 1.1)
 (luna-when-mac (luna-enable-apple-emoji))
 
 ;;;; server
 ;; checking whether server started can be slow
 ;; see emacs-horror
-(run-with-idle-timer
- 3 nil
- (lambda () (server-start t t)))
+(run-with-idle-timer 3 nil (lambda () (server-start t t)))
 
 ;;;; vterm
 ;; (luna-load-relative "star/term.el")
 
-;;;; Mac specific config starts here
+;; Mac specific config starts here
 (luna-when-mac
  ;; macports
  (add-to-list 'load-path "/opt/local/share/emacs/site-lisp")
@@ -128,10 +122,9 @@
  ;; Because Apple.
  (when (equal default-directory "/") (cd "~/")))
 
-;;;; Mac specific config ends here
+;; Mac specific config ends here
 
 ;;;; Local unsynced customization
 
-(luna-safe-load (luna-f-join user-emacs-directory
-                                  "local-config.el"))
+(luna-safe-load (luna-f-join user-emacs-directory "local-config.el"))
 

@@ -34,7 +34,7 @@ recipe-list and optionally option-plist.")
   "Contains the recopies for each package.
 This is an alist of form: ((package . properties)).
 
-package is a symbol, properties is a plist. Avaliable keywords:
+package is a symbol, properties is a plist. Available keywords:
 :fetcher, :repo, :dependency, :pseudo.
 
 :fetcher is a symbol representing the source, available options
@@ -43,10 +43,8 @@ are 'github, 'url. If none specified, default to 'github.
 :repo is a string representing a repository from github, it
 should be like \"user/repo\".
 
-TODO :branch fetch a particular branch of repo.
-
-:dependency is a list of symbols of packages thar this package
-depends on.
+:dependency is a list of symbols representing packages that this
+package depends on.
 
 :pseudo is for pseudo packages. for example, ivy, counsel &
 swiper are in one repo, then you only need one recipe. The other
@@ -55,7 +53,9 @@ two can be configured as pseudo packages.
 :subdir is for additional load-path entries. By default cowboy
 adds package dir into load-path, if the package needs to add
 subdirs to load-path, use this key to specify a
-relative path to package-dir. No preceding slash or dot.")
+relative path to package-dir. No preceding slash or dot.
+
+:option is a plist of options.")
 
 ;;; Backstage
 
@@ -100,7 +100,7 @@ FORMAT and BODY is the same as in ‘with-demoted-errors’."
   (cowgirl-ensure-refresh-content)
   (append (mapcar (lambda (pkg) (symbol-name (car pkg)))
                   package-archive-contents)
-          (cowboy--avaliable-package-list)))
+          (cowboy--available-package-list)))
 
 (defun cowgirl--package-desc-list (package)
   "Return package descriptions of PACKAGE, a symbol."
@@ -336,6 +336,12 @@ OPTION-PLIST contains user options that each backend may use."
           (dolist (package-name package-list)
             (cowboy-delete (intern package-name))))
       (message "No packages to prune"))))
+
+(defun cowboy-add-load-path ()
+  "Add load path for each package."
+  (interactive)
+  (dolist (pkg (cowboy--installed-package-list))
+    (cowboy--add-package-load-path (intern pkg))))
 
 ;;; Fetchers
 

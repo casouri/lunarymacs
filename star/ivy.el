@@ -56,10 +56,10 @@
 ;;   (prescient-persist-mode))
 
 ;; use the forked version in site-lisp
-(use-package recentf-ext
+(load-package recentf-ext
   :config (recentf-mode))
 
-(use-package ivy-xref
+(load-package ivy-xref
   :config
   (setq xref-show-definitions-function #'ivy-xref-show-defs)
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))

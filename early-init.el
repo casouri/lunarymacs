@@ -28,10 +28,15 @@
 (when (featurep 'ns)
   (push '(ns-transparent-titlebar . t) default-frame-alist))
 
-(ignore-errors
+(when window-system
   ;; (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (menu-bar-mode -1))
+
+(when (eq window-system 'mac)
+  ;; have to enable menu bar on mac port
+  ;; otherwise emacs lost focus
+  (menu-bar-mode))
 
 ;; (when window-system
 ;;   (add-hook 'after-init-hook #'toggle-frame-maximized))

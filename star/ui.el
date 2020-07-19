@@ -116,9 +116,10 @@
   (eyebrowse-mode)
   (setq eyebrowse-mode-line-separator " "))
 
-(use-package console-buffer
-  :commands (luna-toggle-console
-             luna-toggle-console-window))
+(load-package console-buffer
+  :commands
+  luna-toggle-console
+  luna-toggle-console-window)
 
 ;;; Desktop resume
 
