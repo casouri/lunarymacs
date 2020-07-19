@@ -59,15 +59,18 @@ PACKAGE is the package you are loading.
 ARGS contains commands and arguments.
 Available commands:
 
-  :init        Same as use-package
-  :config      Same as use-package
-  :hook        Each arguments is (HOOK . FUNC)
-               HOOK and FUNC can be a symbol or a list of symbols.
-  :load-path   Load paths to add.
-  :mode        Same as use-package
-  :commands    Same as use-package
-  :interpreter Same as use-package
-  :after       Same as use-package"
+  :init         Run right away.
+  :config       Run after package loads.
+  :hook         Each arguments is (HOOK . FUNC)
+                HOOK and FUNC can be a symbol or a list of symbols.
+  :load-path    Add load paths.
+  :mode         Add to ‘auto-mode-alist’
+  :commands     Add autoload for this command.
+  :interpreter  Add to ‘interpreter-mode-alist’.
+  :after        Require after this package loads.
+  :defer        Don’t require the package.
+
+Each command can take 0–n arguments."
   (declare (indent 1))
   ;; Group commands and arguments together.
   (let* ((arg-list (luna-split-command-args args))
