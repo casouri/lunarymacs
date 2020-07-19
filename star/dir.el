@@ -19,9 +19,10 @@
 
 (add-to-list 'load-path "~/p/trivial-copy")
 (load-package trivial-copy
-  :commands (trivial-copy-copy
-             trivial-copy-move
-             trivial-copy-paste))
+  :commands
+  trivial-copy-copy
+  trivial-copy-move
+  trivial-copy-paste)
 
 ;;; Config
 

@@ -9,8 +9,9 @@
 ;;;; Sagemath
 
 (load-package sage-shell-mode
-  :init (add-to-list 'auto-mode-alist '("\\.sage\\'" . sage-shell:sage-mode))
-  :commands (sage-shell-mode sage-shell:sage-mode))
+  :init (add-to-list 'auto-mode-alist
+                     '("\\.sage\\'" . sage-shell:sage-mode))
+  :commands sage-shell-mode sage-shell:sage-mode)
 
 (with-eval-after-load 'console-buffer
   (add-to-list 'luna-console-buffer-alist '(sage-shell:sage-mode . "*Sage*"))

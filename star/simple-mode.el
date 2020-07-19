@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 (load-package markdown-mode
-  :mode ("\\.md$" "\\.markdown$" "\\.mk$"))
+  :mode "\\.md$" "\\.markdown$" "\\.mk$")
 
 
 (load-package yaml-mode
@@ -30,7 +30,7 @@
   (setq matlab-shell-command "/Applications/MATLAB_R2018b.app/Contents/MacOS/MATLAB")
   (setq matlab-shell-command-switches (list "-nodesktop"))
   ;; don’t enable company in matlab-shell-mode
-  :commands (matlab-shell))
+  :commands matlab-shell)
 
 
 (load-package mips-mode
@@ -83,8 +83,7 @@
 (setq js-indent-level 2)
 
 (load-package tide
-  :hook ((typescript-mode-hook . setup-tide-mode)
-         (js-mode-hook. setup-tide-mode)))
+  :hook ((js-mode-hook. typescript-mode-hook) . setup-tide-mode))
 
 (defun setup-tide-mode ()
   (interactive)
@@ -107,7 +106,7 @@
 ;;
 ;; Note: C-c C-a to activate a #lang operation in a racket file.
 (load-package geiser
-  :commands (run-geiser)
+  :commands run-geiser
   :config (add-hook 'geiser-repl-mode
                     (lambda ()
                       (setq-local company-idle-delay nil)))
@@ -142,7 +141,7 @@
 
 ;;; Genarl package
 (load-package aggressive-indent
-  :commands (aggressive-indent-mode)
+  :commands aggressive-indent-mode
   :hook ((emacs-lisp-mode-hook
           lisp-interaction-mode-hook
           scheme-mode-hook lisp-mode-hook)
@@ -150,13 +149,14 @@
 
 
 (load-package quickrun
-  :commands (quickrun
-             quickrun-region
-             quickrun-with-arg
-             quickrun-shell
-             quickrun-compile-only
-             quickrun-replace-region
-             quickrun-autorun-mode))
+  :commands
+  quickrun
+  quickrun-region
+  quickrun-with-arg
+  quickrun-shell
+  quickrun-compile-only
+  quickrun-replace-region
+  quickrun-autorun-mode)
 
 ;; (load-package lsp-mode
 ;;   :init (setq lsp-keymap-prefix "C-SPC l")

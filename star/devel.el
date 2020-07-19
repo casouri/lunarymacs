@@ -2,6 +2,5 @@
 
 ;;; Packages
 
-(load-package benchmark-init
-  :defer t)
+(load-package benchmark-init :defer)
 

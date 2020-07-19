@@ -15,8 +15,7 @@
 ;;; Packages
 
 (load-package toc-org
-  :commands (toc-org-enable
-             toc-org-insert-toc))
+  :commands toc-org-enable toc-org-insert-toc)
 
 (load-package htmlize
   :commands
@@ -38,9 +37,9 @@
 
 (add-to-list 'luna-package-list 'wucuo)
 
-(add-to-list 'load-path "~/p/OrgMark")
 (load-package orgmark
-  :commands (orgmark-insert orgmark-edit orgmark-abort))
+  :load-path "~/p/OrgMark"
+  :commands orgmark-insert orgmark-edit orgmark-abort)
 
 ;;; Org config
 

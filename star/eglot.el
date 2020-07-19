@@ -18,7 +18,7 @@
 ;;; Packages
 
 (load-package eglot
-  :commands (eglot eglot-ensure))
+  :commands eglot eglot-ensure)
 
 ;; (load-package eldoc-box
 ;;   :commands (eldoc-box-hover-mode

@@ -35,8 +35,7 @@
   (setq flyspell-issue-message-flag nil))
 
 (load-package wucuo
-  :hook ((text-mode-hook . wucuo-start)
-         (prog-mode-hook . wucuo-start)))
+  :hook ((text-mode-hook prog-mode-hook) . wucuo-start))
 
 (load-package writegood-mode
   :hook ((fundamental-mode-hook org-mode-hook) . writegood-mode))
@@ -51,9 +50,7 @@
 ;;; Flycheck
 
 (load-package flycheck
-  :hook ((text-mode-hook
-          org-mode-hook)
-         . flycheck-mode))
+  :hook ((text-mode-hook org-mode-hook) . flycheck-mode))
 
 ;;; proselint
 

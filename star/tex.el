@@ -8,8 +8,8 @@
   :hook (LaTeX-mode-hook . cdlatex-mode))
 
 (add-to-list 'luna-package-list 'eglot)
-(add-to-list 'eglot-server-programs '(latex-mode . ("digestif")))
-
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs '(latex-mode . ("digestif"))))
 ;;; Config
 
 (defun tex-mode-setup ()

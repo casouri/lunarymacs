@@ -35,7 +35,7 @@
   (ivy-mode))
 
 (load-package swiper
-  :commands (swiper))
+  :commands swiper)
 
 (load-package counsel
   :config (counsel-mode))

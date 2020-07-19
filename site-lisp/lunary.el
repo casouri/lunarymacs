@@ -1,12 +1,12 @@
 ;;; -*- lexical-binding: t -*-
 ;;
-;; Variables, functions and macros that are needed for config files
+;; Variables, functions and macros used by for config files
 
 ;;; UI
+
 (require 'lunary-ui)
 
-;;; Package
-;;;; Variable
+;;; Variables
 
 (defvar luna-autoload-file (expand-file-name "autoload.el" user-emacs-directory)
   "The path of autoload file which has all the autoload functions.")
@@ -30,19 +30,16 @@ We need to manually save and restore it. See manual for more info.")
 (defvar luna-dump-file (expand-file-name "emacs.pdmp" luna-cache-dir)
   "Location of dump file.")
 
-;;;; Functions
-
-(defmacro luna-message-error (&rest body)
-  "Eval BODY and print error message if any."
-  `(condition-case err
-       (progn ,@body)
-     (error (message (format "Error occured:\n%s\n" (error-message-string err))))))
+;;; Loading functions
 
 (defun luna-safe-load (file &rest args)
   "Load FILE and don’t error out.
 ARGS is as same as in `load'."
-  (luna-message-error
-   (apply #'load file args)))
+  (condition-case err
+      (apply #'load file args)
+    ((debug error)
+     (message (format "Error occurred:\n%s\n"
+                      (error-message-string err))))))
 
 (defun luna-load-or-create (file &rest args)
   "Load FILE if file exists, otherwise create it.
@@ -53,15 +50,16 @@ ARGS is as same as in `load'."
     (write-region "" nil file)))
 
 (defun luna-load-relative (file &rest args)
-  "Load FILE relative to user-emacs-directory. ARGS are applied to ‘load'."
-  (apply #'luna-load-or-create (expand-file-name file user-emacs-directory) args))
+  "Load FILE relative to user-emacs-directory.
+ARGS are applied to ‘load'."
+  (apply #'luna-load-or-create
+         (expand-file-name file user-emacs-directory) args))
 
-(defmacro load-package (package &rest body)
-  "Thin wrapper around ‘use-package’."
-  (declare (indent 1))
-  `(luna-message-error (add-to-list 'luna-package-list ',package t)
-                       (use-package ,package
-                         ,@body)))
+;;; Load package
+
+(require 'luna-load-package)
+
+;;; Package functions
 
 (defvar luna-prepared-p nil
   "T if ‘luna-before-install-package’ has ran.")
@@ -83,6 +81,8 @@ ARGS is as same as in `load'."
     (luna-before-install-package))
   (dolist (package luna-package-list)
     (cowgirl-install package)))
+
+;;; Convenience macros
 
 (defmacro luna-lsp/eglot (lsp eglot)
   "Run LSP or EGLOT based on `luna-lsp'."

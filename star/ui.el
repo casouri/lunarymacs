@@ -80,7 +80,7 @@
   (global-hl-todo-mode))
 
 (load-package sidebar
-  :commands (sidebar-mode global-sidebar-mode))
+  :commands sidebar-mode global-sidebar-mode)
 
 (with-eval-after-load 'info
   (require 'info+)
@@ -97,19 +97,19 @@
 
 (load-package buffer-move
   :commands
-  (buf-move-up
-   buf-move-dowan
-   buf-move-left
-   buf-move-right))
+  buf-move-up
+  buf-move-dowan
+  buf-move-left
+  buf-move-right)
 
 (load-package eyebrowse
   :commands
-  (eyebrowse-switch-to-window-config-1
-   eyebrowse-switch-to-window-config-2
-   eyebrowse-switch-to-window-config-3
-   eyebrowse-switch-to-window-config-4
-   eyebrowse-switch-to-window-config-5
-   eyebrowse-switch-to-window-config-6)
+  eyebrowse-switch-to-window-config-1
+  eyebrowse-switch-to-window-config-2
+  eyebrowse-switch-to-window-config-3
+  eyebrowse-switch-to-window-config-4
+  eyebrowse-switch-to-window-config-5
+  eyebrowse-switch-to-window-config-6
   :init
   (setq eyebrowse-keymap-prefix (kbd "C-x C-w"))
   :config

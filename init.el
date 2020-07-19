@@ -48,11 +48,8 @@
 ;; (benchmark-init/activate)
 
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-
 (setq luna-company-manual nil)
-(add-to-list 'luna-package-list 'use-package)
 
-(luna-message-error (require 'use-package))
 ;; core must load first because other configs depends on them
 (luna-load-relative "star/builtin-config.el")
 (luna-load-relative "star/key.el")
