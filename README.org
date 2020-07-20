@@ -39,6 +39,3 @@ M-x luna-install-all RET
 ├── snippets            yasnippet snippets
 └── star                configuration files
 #+end_example
-
-** Install package
-~load-package~ adds the package to ~luna-package-list~, ~luna-install-all~ will install all packages in that list.
