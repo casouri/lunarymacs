@@ -56,26 +56,12 @@ ARGS are applied to ‘load'."
 
 ;;; Package functions
 
-(defvar luna-prepared-p nil
-  "T if ‘luna-before-install-package’ has ran.")
-
-(defun luna-before-install-package ()
-  "Setup for installing packages."
-  (interactive)
-  (require 'cowboy)
-  (require 'package)
-  (package-initialize t)
-  (package-refresh-contents)
-  (setq luna-prepared-p t))
-
 (defun luna-install-all-package ()
   "Install  packages."
   (interactive)
-  (display-buffer "*Messages*")
-  (unless luna-prepared-p
-    (luna-before-install-package))
   (dolist (package luna-package-list)
-    (cowgirl-install package)))
+    (unless (cowgirl-installed-p package)
+      (cowgirl-install package))))
 
 ;;; Convenience macros
 
