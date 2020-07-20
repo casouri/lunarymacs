@@ -80,12 +80,17 @@ FORMAT and BODY is the same as in ‘with-demoted-errors’."
   "Return t if PACKAGE (symbol) is installed, nil if not."
   (if (cowgirl-use-cowboy package)
       (cowboy-installed-p package)
-    (package-installed-p package)))
+    (and (or (package-installed-p package)
+             (condition-case nil
+                 (find-library-name (symbol-name package))
+               (error nil)))
+         t)))
 
 (defun cowboy-installed-p (package)
   "Return t if PACKAGE (symbol) is installed, nil if not."
-  (member (symbol-name package)
-          (directory-files cowboy-package-dir)))
+  (and (member (symbol-name package)
+               (directory-files cowboy-package-dir))
+       t))
 
 (defun cowboy--command (command dir &rest args)
   "Call process with COMMAND and ARGS in DIR."
