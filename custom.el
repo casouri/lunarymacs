@@ -44,7 +44,8 @@
  '(org-image-actual-width '(300))
  '(package-archives
    '(("melpa" . "http://melpa.org/packages/")
-     ("gnu" . "https://elpa.gnu.org/packages/")))
+     ("gnu" . "https://elpa.gnu.org/packages/")
+     ("org" . "https://orgmode.org/elpa/")))
  '(recentf-max-saved-items 300)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values '((git-commit-major-mode . git-commit-elisp-text-mode)))
