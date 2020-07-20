@@ -45,8 +45,6 @@
  '(package-archives
    '(("melpa" . "http://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")))
- '(package-selected-packages
-   '(ccls company valign separedit ghelp yasnippet wucuo tree-sitter tree-sitter-lang-c transient tide sly projectile markdown-mode lsp-mode geiser eglot debbugs magit smex latex-preview-pane auctex restclient php-mode yaml-mode xr ws-butler writegood-mode which-key web-mode visual-regexp tuareg srefactor sage-shell-mode rainbow-mode rainbow-delimiters racket-mode quickrun pyvenv proof-general org-download olivetti mips-mode minions memory-usage matlab-mode magit-todos magit-patch-changelog lua-mode ivy-xref htmlize highlight-parentheses hierarchy helpful haskell-mode gnu-apl-mode git-timemachine general eyebrowse edit-indirect diff-hl counsel cdlatex buffer-move benchmark-init auto-pause aggressive-indent))
  '(recentf-max-saved-items 300)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values '((git-commit-major-mode . git-commit-elisp-text-mode)))

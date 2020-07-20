@@ -56,8 +56,8 @@ ARGS are applied to ‘load'."
 
 ;;; Package functions
 
-(defun luna-install-all-package ()
-  "Install  packages."
+(defun luna-install-all ()
+  "Install all required packages."
   (interactive)
   (dolist (package luna-package-list)
     (unless (cowgirl-installed-p package)
