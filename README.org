@@ -14,13 +14,13 @@ M-x luna-install-all RET
 #+END_SRC
 
 * Site-lisp packages
-- transform.el :: TeXmacs-like symbol insertion.
-- info+.el :: Prettify Info buffers.
-- color-outline.el :: Outline for programming modes.
-- commentary.el :: Sync README.org and Commentary.
-- quanjiao.el :: 智能全角引号。
-- outline+.el :: Cycle outline headers like in Org mode.
-- sidebar.el :: Show an outline sidebar.
+| transform.el     | TeXmacs-like symbol insertion.          |
+| info+.el         | Prettify Info buffers.                  |
+| color-outline.el | Outline for programming modes.          |
+| commentary.el    | Sync README.org and Commentary.         |
+| quanjiao.el      | 智能全角引号。                          |
+| outline+.el      | Cycle outline headers like in Org mode. |
+| sidebar.el       | Show an outline sidebar.                |
 
 * Structure
 #+begin_example
