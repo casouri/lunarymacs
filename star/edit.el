@@ -108,29 +108,6 @@
     (add-to-list 'hippie-expand-try-functions-list #'yas-expand)))
 
 
-(load-package color-rg
-  :init
-  (define-key isearch-mode-map (kbd "M-s M-s") 'isearch-toggle-color-rg)
-  :config
-  (let ((map color-rg-mode-map))
-    (define-key map "p" #'color-rg-jump-prev-keyword)
-    (define-key map "n" #'color-rg-jump-next-keyword)
-    (define-key map "f" #'color-rg-jump-next-file)
-    (define-key map "b" #'color-rg-jump-prev-file))
-  (let ((map color-rg-mode-edit-map))
-    (define-key map (kbd "C-c C-f") #'color-rg-jump-next-file)
-    (define-key map (kbd "C-c C-n") #'color-rg-jump-next-keyword)
-    (define-key map (kbd "C-c C-p") #'color-rg-jump-prev-keyword)
-    (define-key map (kbd "C-c C-b") #'color-rg-jump-prev-file)
-    (define-key map (kbd "C-c C-k") #'color-rg-switch-to-view-mode))
-  :commands
-  isearch-toggle-color-rg
-  color-rg-search-input
-  color-rg-search-symbol
-  color-rg-search-project
-  color-rg-search-project-rails)
-
-
 (load-package color-outline
   :hook (prog-mode-hook . color-outline-mode))
 
