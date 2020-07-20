@@ -10,7 +10,7 @@ emacs
 
 In Emacs:
 #+BEGIN_SRC elisp
-M-x luna-install-all-package RET
+M-x luna-install-all RET
 #+END_SRC
 
 * Site-lisp packages
@@ -22,5 +22,23 @@ M-x luna-install-all-package RET
 - outline+.el :: Cycle outline headers like in Org mode.
 - sidebar.el :: Show an outline sidebar.
 
-* License
-Everything in this repository is GPLv3 licensed unless otherwise specified.
+* Structure
+#+begin_example
+~/.emacs.d/
+├── cache               cache files
+├── cheatsheet          cheatsheet files
+├── custom.el           custom file
+├── dump.el             init file for dumping
+├── early-init.el
+├── init.el
+├── local-config.el     machine-local configuration
+├── local.el            stores session persistent data
+├── package             downlaoded packages
+├── ranch               package downloaded by cowboy.el
+├── site-lisp           local packages
+├── snippets            yasnippet snippets
+└── star                configuration files
+#+end_example
+
+** Install package
+~load-package~ adds the package to ~luna-package-list~, ~luna-install-all~ will install all packages in that list.
