@@ -37,9 +37,10 @@
 
 (add-to-list 'luna-package-list 'wucuo)
 
-(load-package orgmark
-  :load-path "~/p/OrgMark"
-  :commands orgmark-insert orgmark-edit orgmark-abort)
+(luna-on "Brown"
+  (load-package orgmark
+    :load-path "~/p/OrgMark"
+    :commands orgmark-insert orgmark-edit orgmark-abort))
 
 ;;; Org config
 

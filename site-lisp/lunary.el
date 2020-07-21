@@ -90,6 +90,22 @@ ARGS are applied to ‘load'."
        ,then
      ,@else))
 
+(defmacro luna-on (host &rest body)
+  "Evaluate BODY when running on HOST.
+HOST can be a string or a list of strings.
+You can see your host name by
+
+    $ hostname
+
+and change it with
+
+    $ hostname <new name>"
+  (declare (indent 1))
+  `(when (if (stringp ,host)
+             (equal ,host (system-name))
+           (member (system-name) ,host))
+     ,@body))
+
 ;;; Dump
 
 (defun luna-dump ()
