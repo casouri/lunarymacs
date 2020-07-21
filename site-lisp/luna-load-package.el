@@ -37,9 +37,8 @@ return: ((:command . (args args args)) (:command . (args)))."
         (push token arg-list)))
     (reverse ret-list)))
 
-(defun luna-load-package--handle-hook (arg-list package)
+(defun luna-load-package--handle-hook (arg-list)
   "Handle hook arguments.
-PACKAGE is the package you are loading.
 Each ARG in ARG-LIST is a cons (HOOK . FUNCTION).
 HOOK can be either a single hook or a list of hooks.
 FUNCTION can also be either a single function or a list of them."
@@ -54,10 +53,38 @@ FUNCTION can also be either a single function or a list of them."
               (if (symbolp func) (list func) func)))
       ;; Produce add-hook forms.
       (dolist (func func-list)
-        (push `(autoload #',func ,(symbol-name package) nil t) ret-list)
         (dolist (hook hook-list)
           (push `(add-hook ',hook #',func) ret-list))))
     (reverse ret-list)))
+
+(defun luna-load-package--collect-autoload (arg-list package)
+  "Collect functions that needs autoload from ARG-LIST.
+PACKAGE is the package we are loading.
+Return a list of (autoload ...) forms."
+  (let ((autoload
+          (mapcan (lambda (arg)
+                    (let ((command (car arg))
+                          (arg-list (cdr arg)))
+                      (pcase command
+                        ;; ARG is either (hook . fn) or
+                        ;;               ((hook ...) . fn) or
+                        ;;               (hook . (fn ...))
+                        (:hook (mapcan (lambda (arg)
+                                         (let ((fn (cdr arg)))
+                                           (if (symbolp fn)
+                                               (list fn)
+                                             fn)))
+                                       arg-list))
+                        ;; ARG is either ".xxx" or (".xxx" . mode)
+                        (:mode (mapcar (lambda (arg)
+                                         (if (stringp arg)
+                                             package
+                                           (cdr arg)))
+                                       arg-list)))))
+                  arg-list)))
+    (mapcar (lambda (fn)
+              `(autoload #',fn ,(symbol-name package) nil t))
+            autoload)))
 
 (defmacro luna-load-package (package &rest args)
   "Like ‘use-package’.
@@ -70,9 +97,9 @@ Available commands:
   :hook         Each arguments is (HOOK . FUNC)
                 HOOK and FUNC can be a symbol or a list of symbols.
   :load-path    Add load paths.
-  :mode         Add to ‘auto-mode-alist’
+  :mode         Add (ARG . PACKAGE) to ‘auto-mode-alist’. If ARG is
+                already a cons, add ARG to ‘auto-mode-alist’.
   :commands     Add autoload for this command.
-  :interpreter  Add to ‘interpreter-mode-alist’.
   :after        Require after this package loads.
   :defer        Don’t require the package.
 
@@ -91,17 +118,16 @@ Each command can take zero or more arguments."
                  (:init arg-list)
                  (:config `((with-eval-after-load ',package
                               ,@arg-list)))
-                 (:hook (luna-load-package--handle-hook
-                         arg-list package))
+                 (:hook (luna-load-package--handle-hook arg-list))
                  (:mode
-                  (mapcar (lambda (pattern)
-                            `(add-to-list 'auto-mode-alist ,pattern))
-                          arg-list))
-                 (:interpreter
-                  (mapcar (lambda (pattern)
-                            `(add-to-list 'interpreter-mode-alist
-                                          ,pattern))
-                          arg-list))
+                  ;; ARG is either ".xxx" or (".xxx" . mode)
+                  (mapcar
+                   (lambda (arg)
+                     (let ((pattern (if (consp arg) (car arg) arg))
+                           (mode-fn (if (consp arg) (cdr arg) package)))
+                       `(add-to-list 'auto-mode-alist
+                                     ',(cons pattern mode-fn))))
+                   arg-list))
                  (:commands
                   (mapcar (lambda (cmd)
                             `(autoload ',cmd ,(symbol-name package) nil t))
@@ -115,6 +141,8 @@ Each command can take zero or more arguments."
          (load-path-form (mapcar (lambda (path)
                                    `(add-to-list 'load-path ,path))
                                  (alist-get :load-path arg-list)))
+         (autoload-list (luna-load-package--collect-autoload arg-list
+                                                             package))
          ;; In which case we don’t require the package.
          (defer-p (let ((commands (mapcar #'car arg-list)))
                     (or (memq :defer commands)
@@ -128,6 +156,7 @@ Each command can take zero or more arguments."
            (add-to-list 'luna-package-list ',package)
            (when (not (luna-installed-p ',package))
              (error "%s not installed" ',package))
+           ,@autoload-list
            ,@body
            ,(unless defer-p `(require ',package)))
        ((debug error) (warn "Error when loading %s: %s" ',package

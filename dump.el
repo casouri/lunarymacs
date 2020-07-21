@@ -46,9 +46,6 @@
 
 (load "kinsoku.el")
 (luna-load-relative "star/org/blogs.el")
-;; Agda
-(load-file (let ((coding-system-for-read 'utf-8))
-             (shell-command-to-string "~/.cabal/bin/agda-mode locate")))
 
 ;;; Env
 

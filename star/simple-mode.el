@@ -24,6 +24,13 @@
   (with-eval-after-load 'haskell-interactive-mode
     (define-key haskell-interactive-mode-map (kbd "C-a") #'haskell-interactive-mode-beginning)))
 
+(defun load-agda ()
+  (interactive)
+  (let ((coding-system-for-read 'utf-8))
+    (load-file (shell-command-to-string "~/.cabal/bin/agda-mode locate"))
+    (agda2-mode)))
+
+(add-to-list 'auto-mode-alist '("\\.l?agda\\'" . load-agda))
 
 (load-package matlab
   :init
