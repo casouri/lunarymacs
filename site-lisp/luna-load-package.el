@@ -17,9 +17,8 @@
 
 (defun luna-installed-p (package)
   "Return t if PACKAGE is installed."
-  (and (condition-case nil
-           (find-library-name (symbol-name package))
-         (error nil))
+  (and (locate-file (symbol-name package) load-path
+                    '(".el" ".el.gz" ".so" ".so.gz"))
        t))
 
 (defun luna-split-command-args (args)
@@ -127,9 +126,10 @@ Each command can take zero or more arguments."
          (progn
            ,@load-path-form
            (add-to-list 'luna-package-list ',package)
-           (when (luna-installed-p ',package)
-             ,@body
-             ,(unless defer-p `(require ',package))))
+           (when (not (luna-installed-p ',package))
+             (error "%s not installed" ',package))
+           ,@body
+           ,(unless defer-p `(require ',package)))
        ((debug error) (warn "Error when loading %s: %s" ',package
                             (error-message-string err))))))
 
