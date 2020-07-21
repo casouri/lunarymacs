@@ -83,6 +83,11 @@
 
 ;;;; Misc
 (setq-default luna-format-on-save t)
+(luna-on "Brown"
+  (setq luna-dump-file
+        "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp"
+        luna-dump-emacs-file
+        "/Applications/Emacs.app/Contents/MacOS/Emacs"))
 
 ;;;; theme
 (when window-system

@@ -54,8 +54,5 @@
 
 ;;; Dump
 
-(luna-on "Brown"
-  (setq luna-dump-file
-        "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp"))
 (message "Dumping to %s" luna-dump-file)
 (dump-emacs-portable luna-dump-file)
