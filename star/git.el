@@ -16,9 +16,8 @@
   (add-to-list 'luna-buffer-bottom-list "magit-process:")
 
   ;; recenter
-  (defun recenter-advice (&rest _) (interactive) (recenter))
-  (advice-add 'magit-section-forward :after #'recenter-advice)
-  (advice-add 'magit-section-backward :after #'recenter-advice)
+  (add-hook 'magit-status-mode-hook
+            (lambda () (add-hook 'post-command-hook #'recenter 70 t)))
 
   ;; Patch
   (defun magit-patch-apply-buffer (buffer &rest args)
