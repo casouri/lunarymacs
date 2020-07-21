@@ -25,7 +25,7 @@
     (define-key haskell-interactive-mode-map (kbd "C-a") #'haskell-interactive-mode-beginning)))
 
 
-(load-package matlab-emacs
+(load-package matlab
   :init
   (setq matlab-shell-command "/Applications/MATLAB_R2018b.app/Contents/MacOS/MATLAB")
   (setq matlab-shell-command-switches (list "-nodesktop"))

@@ -1,7 +1,7 @@
 (setq cowboy-recipe-alist
       '((isolate . (:repo "casouri/isolate" :option (:full-clone t)))
         (nyan-lite . (:repo "casouri/nyan-lite" :option (:full-clone t)))
-        (matlab-emacs . (:http "https://git.code.sf.net/p/matlab-emacs/src" :feature matlab))
+        (matlab . (:http "https://git.code.sf.net/p/matlab-emacs/src"))
         (nerd-font . (:repo "twlz0ne/nerd-fonts.el"))
         (julia-emacs . (:repo "JuliaEditorSupport/julia-emacs"))
         (separedit . (:repo "twlz0ne/separedit.el" :dependency (edit-indirect dash)))
