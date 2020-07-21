@@ -194,6 +194,7 @@ OPTION-PLIST contains user options that each backend may use."
   (if (cowgirl-use-cowboy package)
       (cowboy-install package option-plist)
     (cowboy--with-warning (format "Error when installing %s: %%s" package)
+      (cowgirl-ensure-refresh-content)
       (package-install package)
       (message "Installed %s" package))))
 
