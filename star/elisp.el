@@ -2,16 +2,15 @@
 
 ;;; Key
 
-(with-eval-after-load 'luna-general-config
-  (general-define-key
-   :prefix "C-x"
-   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
-   ;; eval
-   "w" '(:ignore t :which-key "eval")
-   "we" #'eval-last-sexp
-   "wr" #'eval-region
-   "wf" #'eval-defun
-   "wb" #'eval-buffer))
+(luna-def-key
+ :prefix "C-x"
+ :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
+ ;; eval
+ "w" '("eval")
+ "we" #'eval-last-sexp
+ "wr" #'eval-region
+ "wf" #'eval-defun
+ "wb" #'eval-buffer)
 
 ;;; Package
 

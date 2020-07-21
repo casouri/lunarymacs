@@ -25,6 +25,9 @@ We need to manually save and restore it. See manual for more info.")
 (defvar luna-dump-file (expand-file-name "emacs.pdmp" luna-cache-dir)
   "Location of dump file.")
 
+(defvar luna-dump-emacs-file "emacs"
+  "Emacs executable used when dumping.")
+
 ;;; Loading functions
 
 (defun luna-safe-load (file &rest args)
@@ -48,6 +51,14 @@ ARGS are applied to ‘load'."
 ;;; Load package
 
 (require 'luna-load-package)
+
+;;; Define key
+
+(require 'luna-key)
+
+(luna-key-def-preset :leader
+  :keymaps 'override
+  :prefix "C-SPC")
 
 ;;; Package functions
 
@@ -93,7 +104,11 @@ You can see your host name by
 
 and change it with
 
-    $ hostname <new name>"
+    $ hostname <new name>
+
+To make the change persist reboot, use
+
+    $ scutil --set HostName <new name>"
   (declare (indent 1))
   `(when (if (stringp ,host)
              (equal ,host (system-name))
@@ -106,14 +121,18 @@ and change it with
   "Dump Emacs."
   (interactive)
   (let ((buf "*dump process*"))
-    (delete-file "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp")
+    (delete-file luna-dump-file)
     (make-process
      :name "dump"
      :buffer buf
-     :command (list "/Applications/Emacs.app/Contents/MacOS/Emacs"
-                    "--batch" "-Q"
-                    "-l" (luna-f-join user-emacs-directory
-                                      "dump.el")))
+     :command
+     (list luna-dump-emacs-file
+           "--batch" "-Q"
+           "--eval"
+           ;; Don’t add quote around!
+           (format "(setq luna-dump-file \"%s\")" luna-dump-file)
+           "-l" (luna-f-join user-emacs-directory
+                             "dump.el")))
     (display-buffer buf)))
 
 ;;; Format on save

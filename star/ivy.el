@@ -15,12 +15,10 @@
 
 ;;; Key
 
-(with-eval-after-load 'luna-general-config
-  (luna-default-leader
-    "ss" #'swiper)
-  (general-define-key
-   "M-y" #'counsel-yank-pop))
-
+(luna-def-key
+ "M-y" #'counsel-yank-pop
+ :leader
+ "ss" #'swiper)
 
 ;;; Package
 

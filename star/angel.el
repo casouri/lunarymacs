@@ -7,90 +7,80 @@
 
 ;;; Keys
 
-(with-eval-after-load 'luna-general-config
-  (general-define-key
-   "M-n"   #'scroll-up
-   "M-p"   #'scroll-down
-   "M-/"   #'hippie-expand
+(when (not window-system)
+  (luna-def-key
+   "M-n"   #'luna-scroll-down-reserve-point
+   "M-p"   #'luna-scroll-up-reserve-point))
+(luna-def-key
+ "M-n"   #'scroll-up
+ "M-p"   #'scroll-down
+ "M-/"   #'hippie-expand
 
-   "s-n"   #'luna-scroll-down-reserve-point
-   "s-p"   #'luna-scroll-up-reserve-point
-   ;; "s-a"   #'backward-sentence
-   ;; "s-e"   #'forward-sentence
-   "M-%"   #'query-replace+
-   "C-,"   #'luna-jump-back
+ "s-n"   #'luna-scroll-down-reserve-point
+ "s-p"   #'luna-scroll-up-reserve-point
+ ;; "s-a"   #'backward-sentence
+ ;; "s-e"   #'forward-sentence
+ "C-,"   #'luna-jump-back
+ "C-M-;" #'inline-replace
+ ;; "M-f"   #'next-char
+ ;; "M-b"   #'last-char
+ "C-'"   #'angel-until
+ "C-="   #'er/expand-region
+ "C-v"   #'set-mark-command
+ 
+ "C-M-p" #'up-list-backward
+ "C-M-n" #'down-list
 
-   "M-j"   #'find-char
+ "s-/"   #'transform-previous-char
 
-   "C-'"   #'luna-set-mark
-   "M-'"   #'luna-jump
-   "C-M-;" #'inline-replace
-   ;; "M-f"   #'next-char
-   ;; "M-b"   #'last-char
-   "C-'"   #'angel-until
+ ;; s -> M
+ "s-<backspace>" (kbd "M-<backspace>")
+ "s-d"   (kbd "M-d")
+ "s-f"   (kbd "M-f")
+ "s-b"   (kbd "M-b")
+ "s-a"   (kbd "M-a")
+ "s-e"   (kbd "M-e")
+ "C-s-p" (kbd "C-M-p")
+ "C-s-n" (kbd "C-M-n")
+ "C-s-f" (kbd "C-M-f")
+ "C-s-b" (kbd "C-M-b")
+ "s-."   (kbd "M-.")
+ "s-,"   (kbd "M-?")
+ "C-s-t" (kbd "C-M-t")
 
-   "C-."   #'undo-tree-redo
+ :prefix "C-x"
+ "c"   #'cheatsheet-display
+ "C-f" #'luna-find-file
+ "C-u" #'undo-tree-visualize
+ "C-v" #'cua-rectangle-mark-mode
+ "`"   #'luna-expand-window
+ "k"   '("kill-buffer" .
+         (lambda (&optional arg) (interactive "p")
+           (if (eq arg 4)
+               (call-interactively #'kill-buffer)
+             (kill-buffer (current-buffer)))))
+ "C-," #'beginning-of-buffer ; as of <
+ "C-." #'end-of-buffer ; as of >
+ "C-b" #'switch-to-buffer
+ "C-d" '("open-default-dir" .
+         (lambda () (interactive) (dired default-directory)))
+ "j" #'luna-jump-or-set
+ 
+ :prefix "C-c"
+ "C-b" #'switch-buffer-same-major-mode
 
-   "M-v"   #'select-line
-   "C-="   #'er/expand-region
-
-   "C-M-p" #'up-list-backward
-   "C-M-n" #'down-list
-
-   "C-v"   #'set-mark-command
-
-   "s-/"   #'transform-previous-char
-
-   ;; s -> M
-   "s-<backspace>" (kbd "M-<backspace>")
-   "s-d"   (kbd "M-d")
-   "s-f"   (kbd "M-f")
-   "s-b"   (kbd "M-b")
-   "s-a"   (kbd "M-a")
-   "s-e"   (kbd "M-e")
-   "C-s-p" (kbd "C-M-p")
-   "C-s-n" (kbd "C-M-n")
-   "C-s-f" (kbd "C-M-f")
-   "C-s-b" (kbd "C-M-b")
-   "s-."   (kbd "M-.")
-   "s-,"   (kbd "M-?")
-   "C-s-t" (kbd "C-M-t"))
-
-  (general-define-key
-   :prefix "C-x"
-   "c"   #'cheatsheet-display
-   "C-f" #'luna-find-file
-   "C-u" #'undo-tree-visualize
-   "C-v" #'cua-rectangle-mark-mode
-   "`"   #'luna-expand-window
-   "k"   '((lambda (&optional arg) (interactive "p")
-             (if (eq arg 4)
-                 (call-interactively #'kill-buffer)
-               (kill-buffer (current-buffer))))
-           :which-key "kill-buffer")
-   "C-," #'beginning-of-buffer ; as of <
-   "C-." #'end-of-buffer ; as of >
-   "C-b" #'switch-to-buffer
-   "C-d" '((lambda () (interactive) (dired default-directory)) :which-key "open default directory")
-   "j" #'luna-jump-or-set)
-
-  (general-define-key
-   :prefix "C-c"
-   "C-b" #'switch-buffer-same-major-mode)
-
-  (general-define-key
-   :keymaps 'prog-mode-map
-   "M-a"   #'beginning-of-defun
-   "M-e"   #'end-of-defun
-   "C-M-f" #'forward-sexp
-   "C-M-b" #'backward-sexp)
-  
-  (general-define-key
-   :keymaps '(fundamental-mode-map text-mode-map)
-   "M-a"   #'backward-paragraph
-   "M-e"   #'forward-paragraph
-   "C-M-f" #'forward-sentence
-   "C-M-b" #'backward-sentence))
+ :clear
+ :keymaps 'prog-mode-map
+ "M-a"   #'beginning-of-defun
+ "M-e"   #'end-of-defun
+ "C-M-f" #'forward-sexp
+ "C-M-b" #'backward-sexp
+ 
+ :keymaps 'text-mode-map
+ "M-a"   #'backward-paragraph
+ "M-e"   #'forward-paragraph
+ "C-M-f" #'forward-sentence
+ "C-M-b" #'backward-sentence)
 
 ;;; Navigation (w W e E b B)
 ;;

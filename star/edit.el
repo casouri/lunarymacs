@@ -5,39 +5,32 @@
 
 ;;; Key
 
-(with-eval-after-load 'luna-general-config
-  (luna-default-leader
-    "sr" #'grep
-    "hha" #'hs-hide-all
-    "hsa" #'hs-show-all)
-
-  (general-define-key
-   ;; Hungry delete
-   [remap backward-delete-char-untabify] #'luna-hungry-delete
-   ;; helpful
-   "C-h C-h" #'ghelp-describe
-   "C-h r"   #'ghelp-resume
-   "C-h k" #'ghelp-helpful-key
-   "C-h e" #'ghelp-describe-elisp
-   "C-x i" #'luna-insert-special-symbol
-   "C-c '" #'separedit
-   "C-s-i" #'color-outline-toggle-all
-   "C-/"   #'undo-only
-   "C-."   #'undo-redo
-   "C-s-i" #'outline-cycle-buffer
-   "C-c C-h" #'hs-toggle-hiding)
-
-  (general-define-key
-   :keymaps '(c-mode c++-mode)
-   "M-RET" #'srefactor-refactor-at-point)
-
-  (general-define-key
-   :keymaps '(outline-minor-mode-map org-mode-map)
-   "s-i" #'outline-cycle)
-
-  (general-define-key
-   :keymaps '(text-mode fundamental-mode)
-   "TAB" #'self-insert-command))
+(luna-def-key
+ :leader
+ "sr" #'grep
+ "hha" #'hs-hide-all
+ "hsa" #'hs-show-all
+ :clear
+ ;; Hungry delete
+ [remap backward-delete-char-untabify] #'luna-hungry-delete
+ ;; helpful
+ "C-h C-h" #'ghelp-describe
+ "C-h r"   #'ghelp-resume
+ "C-h k" #'ghelp-helpful-key
+ "C-h e" #'ghelp-describe-elisp
+ "C-x i" #'luna-insert-special-symbol
+ "C-c '" #'separedit
+ "C-s-i" #'color-outline-toggle-all
+ "C-/"   #'undo-only
+ "C-."   #'undo-redo
+ "C-s-i" #'outline-cycle-buffer
+ "C-c C-h" #'hs-toggle-hiding
+ :keymaps '(c-mode-map c++-mode-map)
+ "M-RET" #'srefactor-refactor-at-point
+ :keymaps '(outline-minor-mode-map org-mode-map)
+ "s-i" #'outline-cycle
+ :keymaps 'text-mode-map
+ "TAB" #'self-insert-command)
 
 ;;; Config
 

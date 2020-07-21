@@ -2,32 +2,40 @@
 
 ;;; Key
 
-(with-eval-after-load 'luna-general-config
-  (general-define-key
-   "s-B" #'winner-undo
-   "s-F" #'winner-redo
+(when (not window-system)
+  (luna-def-key
+   "M-h" windmove-left
+   "M-j" windmove-down
+   "M-k" windmove-up
+   "M-l" windmove-right))
 
-   "s-y" #'luna-toggle-console
-   "C-s-y" #'luna-toggle-console-window
+(luna-def-key
+ :leader
+ "w" '("display")
+ "wr" #'luna-desktop-read
+ "tsb" #'sidebar-mode
 
-   "C-s-k" #'buf-move-up
-   "C-s-j" #'buf-move-down
-   "C-s-h" #'buf-move-left
-   "C-s-l" #'buf-move-right
+ :clear
+ "s-y" #'luna-toggle-console
+ "C-s-y" #'luna-toggle-console-window
 
-   "s-h" #'windmove-left
-   "s-j" #'windmove-down
-   "s-k" #'windmove-up
-   "s-l" #'windmove-right
-   "s-s" #'save-buffer
-   "s-w" #'delete-frame
+ "C-s-b" #'winner-undo
+ "C-s-f" #'winner-redo
 
-   "<M-up>" #'outline-previous-visible-heading
-   "<M-down>" #'outline-next-visible-heading)
+ "C-s-k" #'buf-move-up
+ "C-s-j" #'buf-move-down
+ "C-s-h" #'buf-move-left
+ "C-s-l" #'buf-move-right
 
-  (luna-default-leader
-    "wr" #'luna-desktop-read
-    "tsb" #'sidebar-mode))
+ "s-h" #'windmove-left
+ "s-j" #'windmove-down
+ "s-k" #'windmove-up
+ "s-l" #'windmove-right
+ "s-s" #'save-buffer
+ "s-w" #'delete-frame
+
+ "<M-up>" #'outline-previous-visible-heading
+ "<M-down>" #'outline-next-visible-heading)
 
 ;;; Package
 
