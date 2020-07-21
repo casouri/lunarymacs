@@ -126,8 +126,8 @@ Each command can take zero or more arguments."
     `(condition-case err
          (progn
            ,@load-path-form
+           (add-to-list 'luna-package-list ',package)
            (when (luna-installed-p ',package)
-             (add-to-list 'luna-package-list ',package)
              ,@body
              ,(unless defer-p `(require ',package))))
        ((debug error) (warn "Error when loading %s: %s" ',package

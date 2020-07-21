@@ -5,6 +5,7 @@
 ;;; UI
 
 (require 'lunary-ui)
+(require 'cowboy)
 
 ;;; Variables
 
@@ -59,6 +60,7 @@ ARGS are applied to ‘load'."
 (defun luna-install-all ()
   "Install all required packages."
   (interactive)
+  (display-buffer "*Messages*")
   (dolist (package luna-package-list)
     (unless (cowgirl-installed-p package)
       (cowgirl-install package))))
