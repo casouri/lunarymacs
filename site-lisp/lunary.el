@@ -9,12 +9,6 @@
 
 ;;; Variables
 
-(defvar luna-autoload-file (expand-file-name "autoload.el" user-emacs-directory)
-  "The path of autoload file which has all the autoload functions.")
-
-(defvar luna-star-enable-alist nil
-  "((star1 . t) (star2 . nil)), then start1 is enabled and star2 is not.")
-
 (defvar luna-cache-dir (expand-file-name "cache" user-emacs-directory)
   "The dir for cache files.")
 
