@@ -15,6 +15,13 @@
 
 (require 'pcase)
 
+(defun luna-installed-p (package)
+  "Return t if PACKAGE is installed."
+  (and (condition-case nil
+           (find-library-name (symbol-name package))
+         (error nil))
+       t))
+
 (defun luna-split-command-args (args)
   "Split args into commands and args.
 If ARGS is (:command args args args :command args),
@@ -87,10 +94,6 @@ Each command can take zero or more arguments."
                               ,@arg-list)))
                  (:hook (luna-load-package--handle-hook
                          arg-list package))
-                 (:load-path
-                  (mapcar (lambda (path)
-                            `(add-to-list 'load-path ,path))
-                          arg-list))
                  (:mode
                   (mapcar (lambda (pattern)
                             `(add-to-list 'auto-mode-alist ,pattern))
@@ -110,6 +113,9 @@ Each command can take zero or more arguments."
                                (require ',package)))
                           arg-list)))))
            arg-list))
+         (load-path-form (mapcar (lambda (path)
+                                   `(add-to-list 'load-path ,path))
+                                 (alist-get :load-path arg-list)))
          ;; In which case we don’t require the package.
          (defer-p (let ((commands (mapcar #'car arg-list)))
                     (or (memq :defer commands)
@@ -119,9 +125,11 @@ Each command can take zero or more arguments."
                         (memq :hook commands)))))
     `(condition-case err
          (progn
-           (add-to-list 'luna-package-list ',package)
-           ,@body
-           ,(unless defer-p `(require ',package)))
+           ,@load-path-form
+           (when (luna-installed-p ,package)
+             (add-to-list 'luna-package-list ',package)
+             ,@body
+             ,(unless defer-p `(require ',package))))
        ((debug error) (warn "Error when loading %s: %s" ',package
                             (error-message-string err))))))
 
