@@ -69,7 +69,7 @@
  :prefix "C-c"
  "C-b" #'switch-buffer-same-major-mode
 
- :clear
+ :---
  :keymaps 'prog-mode-map
  "M-a"   #'beginning-of-defun
  "M-e"   #'end-of-defun

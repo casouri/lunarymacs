@@ -10,7 +10,7 @@
  "sr" #'grep
  "hha" #'hs-hide-all
  "hsa" #'hs-show-all
- :clear
+ :---
  ;; Hungry delete
  [remap backward-delete-char-untabify] #'luna-hungry-delete
  ;; helpful

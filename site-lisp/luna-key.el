@@ -82,12 +82,12 @@ However, if KEY is [remap ...] or [t], don’t prepend PREFIX to it."
   (if (stringp key) (setq key (kbd key)))
   (if (and prefix (stringp prefix)) (setq prefix (kbd prefix)))
   ;; Result of ‘kbd’ can be either string or vector,
-  ;; new we normalize KEY and PREFIX to vectors.
+  ;; now we normalize KEY and PREFIX to vectors.
   (if (stringp key) (setq key (string-to-vector key)))
   (if (and prefix (stringp prefix))
       (setq prefix (string-to-vector prefix)))
   ;; When do we simply return KEY without PREFIX: either PREFIX is
-  ;; nil, or KEY is has special meaning ([remap ...] or [t]).
+  ;; nil, or KEY has special meaning ([remap ...] or [t]).
   (if (or (not prefix) (and (vectorp key) (memq (aref key 0) '(t remap))))
       key
     (vconcat prefix key)))
@@ -95,7 +95,8 @@ However, if KEY is [remap ...] or [t], don’t prepend PREFIX to it."
 (defun luna-key-define (key def map-list prefix)
   "Define KEY to DEF.
 Define KEY in all the maps in MAP-LIST, using PREFIX as prefix. 
-MAP-LIST and PREFIX can be nil."
+MAP-LIST and PREFIX can be nil.
+If MAP-LIST is nil, only define in `global-map'."
   (let ((map-list (or map-list (list 'global-map)))
         (key (luna-key-normalize prefix key))
         ;; If DEF is (STRING . DEFN), we use STRING as it’s description.
@@ -128,17 +129,17 @@ KEY2 in MAP2:
    :keymaps 'MAP2n
    KEY2 DEF2)
 
-Unlike in `define-key', MAP is a symbol of a keymap, rather than
+Unlike in `define-key', MAP is the symbol of a keymap, rather than
 the keymap itself. MAP can also be nil, which is interpreted as
-`global-map', or 'override, which is interpreted as a override
+`global-map', or 'override, which is interpreted as the override
 keymap defined by luna-key, or a list of these three forms. KEY
 and DEF can be anything that `define-key' accepts. `kbd' is
-automatically added to KEY but now DEF.
+automatically added to KEY but not DEF.
 
 You can also use preset modifiers defined by `luna-key-def-preset'.
 They are basically macros that expand to other modifiers.
 
-Use :clear to reset all modifier effects.
+Use :clear to reset all modifier effects. :--- is an alias for :clear.
 
 ARGS.
 
@@ -157,8 +158,8 @@ ARGS.
                                map)))))
             (:prefix
              (setq prefix (pop args)))
-            (:clear (setq prefix nil
-                          map-list nil))
+            ((or :clear :---) (setq prefix nil
+                                    map-list nil))
             ((pred keywordp)
              (when-let ((preset (alist-get arg luna-key-preset-alist)))
                (setq args (append preset args))))

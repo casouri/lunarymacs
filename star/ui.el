@@ -15,12 +15,9 @@
  "wr" #'luna-desktop-read
  "tsb" #'sidebar-mode
 
- :clear
+ :---
  "s-y" #'luna-toggle-console
  "C-s-y" #'luna-toggle-console-window
-
- "C-s-b" #'winner-undo
- "C-s-f" #'winner-redo
 
  "C-s-k" #'buf-move-up
  "C-s-j" #'buf-move-down

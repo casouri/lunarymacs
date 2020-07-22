@@ -8,7 +8,7 @@
  "ri" #'org-roam-insert
  "rb" #'org-roam-buffer-toggle-display
  
- :clear
+ :---
  :keymaps 'org-mode-map
  "C-c i" #'luna-insert-heading
  "C-c <tab>" #'outline-toggle-children)

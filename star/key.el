@@ -41,7 +41,7 @@
  "s" '("search")
  "si"  #'imenu
  
- :clear
+ :---
  :keymaps 'smerge-mode-map
  "C-c n" #'smerge-next
  "C-c p" #'smerge-prev
