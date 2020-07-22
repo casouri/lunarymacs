@@ -3,9 +3,10 @@
 ;; Copyright (C) 2014 Vasilij Schneidermann <mail@vasilij.de>
 
 ;; Author: Vasilij Schneidermann <mail@vasilij.de>
+;; Maintainer: Yuan Fu <casouri@gmail.com>
 ;; URL: https://depp.brause.cc/form-feed
 ;; Keywords: faces
-;; Version: 0.2.2
+;; Version: 0.2.3
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -34,7 +35,11 @@
 ;;
 ;;     (add-hook 'emacs-lisp-mode-hook 'form-feed-mode)
 
-;; See the README for more info: https://depp.brause.cc/form-feed
+;;; Note:
+;;
+;; Yuan: I removed a bunch of functions and variables and changed
+;; font-lock to jit-lock.
+
 
 ;;; Code:
 
@@ -84,17 +89,6 @@ columns.  A value of -1 would leave the last column empty."
     `(,form-feed-line-width . text))
    (t 'text)))
 
-(defcustom form-feed-extra-properties nil
-  "List of additional text properties to add to form feeds."
-  :type '(plist)
-  :group 'form-feed)
-
-(defvar form-feed--font-lock-face
-  ;; NOTE see (info "(elisp) Search-based fontification") and the
-  ;; `(MATCHER . FACESPEC)' section
-  `(face form-feed-line display (space :width ,form-feed--line-width)
-         ,@form-feed-extra-properties))
-
 (defvar form-feed--font-lock-keywords
   ;; NOTE see (info "(elisp) Search-based fontification") and the
   ;; `(MATCHER . SUBEXP-HIGHLIGHTER)' section
@@ -109,20 +103,14 @@ columns.  A value of -1 would leave the last column empty."
 
 ;;; Functions
 
-(defun form-feed--add-font-lock-keywords ()
-  "Add buffer-local keywords to display page delimiter lines.
-Make sure the special properties involved get cleaned up on
-removal of the keywords via
-`form-feed-remove-font-lock-keywords'."
-  (font-lock-add-keywords nil form-feed--font-lock-keywords)
-  (make-local-variable 'font-lock-extra-managed-props)
-  (dolist (prop `(display ,@form-feed-extra-properties))
-    (unless (memq prop font-lock-extra-managed-props)
-      (push prop font-lock-extra-managed-props))))
-
-(defun form-feed--remove-font-lock-keywords ()
-  "Remove buffer-local keywords displaying page delimiter lines."
-  (font-lock-remove-keywords nil form-feed--font-lock-keywords))
+(defun form-feed-fontify (beg end)
+  "Fonfity page breaks."
+  (goto-char beg)
+  (while (re-search-forward "" end t)
+    (put-text-property (match-beginning 0) (match-end 0)
+                       'font-lock-face 'form-feed-line)
+    (put-text-property (match-beginning 0) (match-end 0)
+                       'display `(space :width ,form-feed--line-width))))
 
 ;;;###autoload
 (define-minor-mode form-feed-mode
@@ -133,13 +121,9 @@ glyphs on a single line as horizontal lines spanning the entire
 window."
   :lighter form-feed-lighter
   (if form-feed-mode
-      (form-feed--add-font-lock-keywords)
-    (form-feed--remove-font-lock-keywords))
-
-  (when (called-interactively-p 'interactive)
-    (if (fboundp 'font-lock-flush)
-        (font-lock-flush)
-      (font-lock-fontify-buffer))))
+      (jit-lock-register #'form-feed-fontify)
+    (jit-lock-unregister #'form-feed-fontify))
+  (jit-lock-refontify))
 
 (provide 'form-feed)
 ;;; form-feed.el ends here
