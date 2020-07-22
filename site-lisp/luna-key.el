@@ -6,7 +6,7 @@
 
 ;;; Commentary:
 ;;
-;; General.el copycat. Though `luna-def-key' has some differences with
+;; Home-brewed general.el. Though `luna-def-key' has some differences with
 ;; `general-define-key'. First, its modifiers (:keymaps, etc) are
 ;; stateful, meaning that it only affects definitions comes after it,
 ;; and the effect lasts until another modifiers overrides it. Second,

@@ -6,9 +6,9 @@
 
 ;;; Commentary:
 ;;
-;; ‘use-pacakage’ copycat. Advantages:
-;;   1) home brew, custom made
-;;   2) short
+;; Home-brewed ‘use-pacakage’. Advantages:
+;;   1) some customization for lunarymacs.
+;;   2) straightforward and lightweight.
 
 ;;; Code:
 ;;
