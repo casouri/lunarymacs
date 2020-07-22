@@ -6,6 +6,12 @@
 
 ;;; Commentary:
 ;;
+;; General.el copycat. Though `luna-def-key' has some differences with
+;; `general-define-key'. First, its modifiers (:keymaps, etc) are
+;; stateful, meaning that it only affects definitions comes after it,
+;; and the effect lasts until another modifiers overrides it. Second,
+;; it implements “definers” feature in general by “preset” modifiers.
+;; Lastly, of course, this package is much lighter than general.el.
 
 ;;; Code:
 ;;
@@ -110,9 +116,10 @@ MAP-LIST and PREFIX can be nil."
 (defun luna-def-key (&rest args)
   "Define key.
 
-The :keymaps and :prefix command specifies the keymaps and prefix
-key for KEY DEF pairs below them. It is also possible to specify
-different maps for different keys. To define KEY1 in MAP1 and
+The :keymaps and :prefix modifiers specifies the keymaps and
+prefix key for KEY DEF pairs below them. Modifiers only affect
+the definitions after them, and their effect lasts until another
+modifier overrides them. For example, to define KEY1 in MAP1 and
 KEY2 in MAP2:
 
   (luna-def-key
@@ -125,12 +132,13 @@ Unlike in `define-key', MAP is a symbol of a keymap, rather than
 the keymap itself. MAP can also be nil, which is interpreted as
 `global-map', or 'override, which is interpreted as a override
 keymap defined by luna-key, or a list of these three forms. KEY
-and DEF can be anything that `define-key' accepts.
+and DEF can be anything that `define-key' accepts. `kbd' is
+automatically added to KEY but now DEF.
 
-You can also define presets with `luna-key-def-preset' and use it
-here. They are basically macros that expand to commands.
+You can also use preset modifiers defined by `luna-key-def-preset'.
+They are basically macros that expand to other modifiers.
 
-Use :clear to reset all :keymap and :prefix settings in-effect.
+Use :clear to reset all modifier effects.
 
 ARGS.
 
