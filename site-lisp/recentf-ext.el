@@ -5,6 +5,7 @@
 ;; Copyright (C) 2009  rubikitch
 
 ;; Author: rubikitch <rubikitch@ruby-lang.org>
+;; Maintainer: Yuan Fu <casouri@gmail.com>
 ;; Keywords: convenience, files
 ;; Package-Version: 20170926.35
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/download/recentf-ext.el
@@ -84,6 +85,7 @@
 
 ;;; History:
 
+;; - Add directory tracking - Yuan, 2020/7/22
 ;; - remove (eval-when-compile (require 'cl)), turns out it’s not used - Yuan, 2020/1/17
 ;; - remove (recentf-mode 1) - Yuan, 2020/1/17
 ;; $Log: recentf-ext.el,v $
@@ -107,6 +109,15 @@
   "recentf-ext"
   :group 'emacs)
 (require 'recentf)
+
+;;; [2020/07/22] (@ "Also add file’s directory")
+(defun recentf-push-buffer-directory ()
+  (when default-directory
+    (recentf-add-file default-directory))
+  ;; Must return nil because it is run from `write-file-functions'.
+  nil)
+(add-hook 'find-file-hook #'recentf-push-buffer-directory)
+(add-hook 'write-file-functions #'recentf-push-buffer-directory)
 
 ;;; [2009/03/01] (@* "`recentf' as most recently USED files")
 (defun recentf-push-buffers-in-frame ()
