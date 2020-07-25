@@ -16,19 +16,19 @@
 (setq luna-dumped-load-path load-path
       luna-dumped t)
 
-(dolist (package '(ivy counsel org helpful company general
-                       which-key recentf-ext swiper
-                       aggressive-indent winner elec-pair
-                       rainbow-delimiters highlight-parentheses
-                       hl-todo buffer-move savehist eyebrowse
-                       minions ws-butler expand-region flyspell
-                       flycheck eglot minibuf-eldef yasnippet
-                       wucuo ivy-xref dired-x subr-x pcase cl-lib
-                       seq olivetti org-download htmlize
+(dolist (package '(ivy counsel org helpful company which-key
+                       recentf-ext swiper aggressive-indent
+                       winner elec-pair rainbow-delimiters
+                       highlight-parentheses hl-todo buffer-move
+                       savehist eyebrowse minions ws-butler
+                       expand-region flyspell flycheck eglot
+                       minibuf-eldef yasnippet wucuo ivy-xref
+                       dired-x subr-x pcase cl-lib seq olivetti
+                       org-download htmlize
                        ;; site-lisp
                        transform utility pause info+ color-outline
                        commentary quanjiao outline+ luna-publish
-                       ox-cjk-html sidebar
+                       ox-cjk-html sidebar form-feed
                        ;; ranch
                        valign ghelp isolate
                        ;; built-in
