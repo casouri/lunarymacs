@@ -7,11 +7,16 @@
  "rf" #'org-roam-find-file
  "ri" #'org-roam-insert
  "rb" #'org-roam-buffer-toggle-display
+ "d"  #'deft
  
  :---
  :keymaps 'org-mode-map
  "C-c i" #'luna-insert-heading
- "C-c <tab>" #'outline-toggle-children)
+ "C-c <tab>" #'outline-toggle-children
+
+ :---
+ :keymaps 'bklink-minor-mode-map
+ "C-c l" #'bklink-toggle-back-link)
 
 ;;; Packages
 
@@ -38,6 +43,19 @@
 
 (add-to-list 'luna-package-list 'wucuo)
 
+(load-package org-backtick
+  :hook (org-mode-hook . org-backtick-mode))
+
+(load-package deft
+  :commands deft
+  :config
+  (setq deft-directory (expand-file-name "~/deft/")
+        deft-use-filter-string-for-filename t)
+  (push '(nospace . "-") deft-file-naming-rules))
+
+(load-package bklink
+  :hook (deft-open-file-hook . bklink-minor-mode))
+
 (luna-on "Brown"
   (load-package orgmark
     :load-path "~/p/OrgMark"
@@ -56,8 +74,9 @@
         (wucuo-start)
         (electric-pair-local-mode -1)
         (setq-local cursor-type 'bar)
-        (require 'delicate-click)
-        (delicate-click-mode)
+        ;; This is a global mode!
+        ;; (require 'delicate-click)
+        ;; (delicate-click-mode)
         ;; (setq-local blink-cursor-interval 0.6)
         ;; (blink-cursor-mode)
         (setq-local line-spacing 0.2))
@@ -130,4 +149,4 @@
 
 ;;; Patch
 
-(luna-load-relative "star/org/org-patch.el")
+;; (luna-load-relative "star/org/org-patch.el")
