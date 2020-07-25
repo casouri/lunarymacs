@@ -87,6 +87,10 @@
 (load-package sidebar
   :commands sidebar-mode global-sidebar-mode)
 
+(load-package form-feed
+  :hook ((emacs-lisp-mode-hook text-mode-hook special-mode-hook)
+         . form-feed-mode))
+
 (with-eval-after-load 'info
   (require 'info+)
   (info-pretty-mode))
