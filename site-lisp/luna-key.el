@@ -47,7 +47,14 @@ each map and see if we can now define the bindings for that map.")
   "Minor mode used to activate our override keymap."
   :global t
   :lighter ""
-  :keymap 'luna-key-override-mode-map)
+  :keymap 'luna-key-override-mode-map
+  (if luna-key-override-mode
+      (unless (memq 'luna-key-override-map-alist
+                    emulation-mode-map-alists)
+        (push 'luna-key-override-map-alist emulation-mode-map-alists))
+    (setq emulation-mode-map-alists
+          (remove 'luna-key-override-map-alist
+                  emulation-mode-map-alists))))
 
 (defun luna-key-def-preset (preset &rest args)
   "Define PRESET as ARGS.
