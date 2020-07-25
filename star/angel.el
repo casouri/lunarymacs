@@ -44,8 +44,6 @@
  "C-s-n" (kbd "C-M-n")
  "C-s-f" (kbd "C-M-f")
  "C-s-b" (kbd "C-M-b")
- "s-."   (kbd "M-.")
- "s-,"   (kbd "M-?")
  "C-s-t" (kbd "C-M-t")
 
  :prefix "C-x"
