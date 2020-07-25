@@ -4,10 +4,10 @@
 
 (when (not window-system)
   (luna-def-key
-   "M-h" windmove-left
-   "M-j" windmove-down
-   "M-k" windmove-up
-   "M-l" windmove-right))
+   "M-h" #'windmove-left
+   "M-j" #'windmove-down
+   "M-k" #'windmove-up
+   "M-l" #'windmove-right))
 
 (luna-def-key
  :leader
