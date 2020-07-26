@@ -31,7 +31,6 @@ M-x luna-install-all RET
 ├── dump.el             init file for dumping
 ├── early-init.el
 ├── init.el
-├── local-config.el     machine-local configuration
 ├── local.el            stores session persistent data
 ├── package             downlaoded packages
 ├── ranch               package downloaded by cowboy.el
