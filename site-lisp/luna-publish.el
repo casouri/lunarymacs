@@ -60,53 +60,49 @@ Set use-babel and include-scripts to nil when export."
 
 ;;; RSS
 
-(defun luna-publish-rss-export (link category-list dir root &optional force)
-  "Export index.html to css-item.xml in DIR if the latter is older.
+(defun luna-publish-rss-export
+    (link category-list path root &optional force)
+  "Export index.html to css-item.xml in PATH if the latter is older.
 If FORCE is nil, only export when org file is newer than html file.
 
-LINK is the web link for the post in dir.
-DIR is the absolute path to the directory containing the post (index.org).
+LINK is the web link for the post in path.
+PATH is the absolute path to the directory containing the post (index.org).
 ROOT is the root directory of the site, where the rss file resides.
 Categories in CATEGORY-LIST are strings."
-  (let ((org-file (expand-file-name "index.org" dir))
-        (rss-file (expand-file-name "rss-item.xml" dir)))
+  (ignore category-list)
+  (let ((org-file (expand-file-name "index.org" path))
+        (rss-file (expand-file-name "rss-item.xml" path)))
     (when (file-exists-p org-file)
       (if (or force ; force export
               (not (file-exists-p rss-file)) ; rss doesn’t exist
               (file-newer-than-file-p org-file rss-file)) ; org newer
-          (let* ((intro (or (string-remove-suffix
-                             "\n"
-                             (luna-f-with-file org-file
-                               (org-element-map
-                                   (org-element-parse-buffer)
-                                   'plain-text #'identity
-                                   nil t)))
-                            "No intro."))
-                 (html (with-temp-buffer
-                         (let ((buf (current-buffer)))
-                           (luna-f-with-file org-file
-                             (let ((org-export-use-babel nil)
-                                   ;; construct the relative path
-                                   ;; from root to dir for relative
-                                   ;; links in the post
-                                   (path (concat "/"
-                                                 (luna-f-subtract root
-                                                                  dir))))
-                               ;; org-export-as doesn’t seem to respect
-                               ;; above settings.
-                               ;; use my rss-export backend
-                               (org-export-to-buffer 'rss-html buf
-                                 nil nil nil t
-                                 `(:html-style-default
-                                   ""
-                                   :html-head ""
-                                   :html-head-extra ""
-                                   :html-postamble nil
-                                   :html-head-include-scripts ""
-                                   :with-toc nil
-                                   :html-htmlize-output-type nil
-                                   :rss-html-relative-dir ,path)))))
-                         (buffer-string)))
+          (let* ((html
+                  (with-temp-buffer
+                    (let ((buf (current-buffer)))
+                      (luna-f-with-file org-file
+                        (let ((org-export-use-babel nil)
+                              ;; construct the relative path
+                              ;; from root to dir for relative
+                              ;; links in the post
+                              (path
+                               (concat "/" (luna-f-subtract root path)))
+                              (default-directory path))
+                          ;; org-export-as doesn’t seem to respect
+                          ;; above settings.
+                          (org-mode)
+                          ;; use my rss-export backend
+                          (org-export-to-buffer 'rss-html buf
+                            nil nil nil t
+                            `(:html-style-default
+                              ""
+                              :html-head ""
+                              :html-head-extra ""
+                              :html-postamble nil
+                              :html-head-include-scripts ""
+                              :with-toc nil
+                              :html-htmlize-output-type nil
+                              :rss-html-relative-dir ,path)))))
+                    (buffer-string)))
                  (env (luna-f-with-file org-file
                         (org-export-get-environment)))
                  (date (let ((time (cadar (plist-get env :date))))
@@ -119,8 +115,13 @@ Categories in CATEGORY-LIST are strings."
                            (or (plist-get time :day-start)    0)
                            (or (plist-get time :month-start)  0)
                            (or (plist-get time :year-start)   0)))))
-                 (title (or (car (plist-get env :title))
-                            "No title"))
+                 (title (let ((title (car (plist-get env :title))))
+                          (pcase title
+                            (`(macro . ,_)
+                             (org-macro-expand
+                              title (org-macro-initialize-templates)))
+                            ('nil "Untitled")
+                            (_ title))))
                  (link (url-encode-url link)))
             (luna-f-with-write-file rss-file
               (insert (string-join
@@ -136,6 +137,88 @@ Categories in CATEGORY-LIST are strings."
               (buffer-string)))
         ;; if not newer
         (luna-f-content rss-file)))))
+
+(defun luna-publish-rss
+    (out-file post-list template root host &optional force)
+  "Export RSS to OUT-FILE.
+
+POST-LIST is a list of plists. Each plist contains the information
+of a post. Each plist should have the form:
+
+    (:date DATE :path PATH)
+
+DATE should be comparable by `time-less-p'.
+PATH is the absolute path to the directory containing the Org file.
+You can get such a list from `luna-publish-post-info'.
+
+
+ROOT is the root directory of the static site.
+HOST is the root url of the website.
+
+TEMPLATE is the RSS template. See `luna-blog-note-rss-template'.
+
+Normally only export outdated RSS, if FORCE non-nil, always export."
+  (with-temp-file out-file
+    (insert
+     (format
+      template
+      (format-time-string "%a, %d %b %Y %H:%M:%S %z")
+      (string-join
+       (mapcar (lambda (post)
+                 (let* ((path (plist-get post :path))
+                        (link (concat host (luna-f-subtract root path))))
+                   (luna-publish-rss-export link nil path root force)))
+               post-list))))))
+
+;;; Post info
+
+(defun luna-publish-post-info (dir-list)
+  "Return a list of info plists for each post.
+
+DIR-LIST is a list of absolute paths to post directory.
+
+Each plist is of form
+
+    (:title TITLE :date DATE :tags TAGS :path PATH).
+
+TAGS is a colon-separated string.
+PATH is the absolute path of each post directory.
+
+We look at these environment variables:
+
+    #+TITLE:
+    #+DATE: (org timestamp)
+    #+TAGS: (space separated)
+    #+HIDE: (true or false)
+
+The list is sorted by date, hidden posts are ignored."
+  (let (header-list)
+    (dolist (dir dir-list)
+      (let ((org-file (luna-f-join dir "index.org"))
+            ;; Our custom options.
+            (org-export-options-alist
+             (append '((:tags . ("TAGS" "tags" "" space))
+                       (:hide . ("HIDE" "hide" "" nil)))
+                     org-export-options-alist)))
+        (luna-f-with-file org-file
+          ;; Some document level information.
+          (let* ((env (org-export-get-environment))
+                 (tag-list (split-string (plist-get env :tags)))
+                 (title (plist-get env :title))
+                 (date (plist-get env :date))
+                 (hide (plist-get env :hide)))
+            ;; Collect those information.
+            (unless (equal hide "true")
+              (push (list
+                     :title (car title)
+                     :date (org-timestamp-to-time (car date))
+                     :tags (concat ":" (string-join tag-list ":") ":")
+                     :path dir)
+                    header-list))))))
+    (seq-sort-by (lambda (x) (plist-get x :date))
+                 ;; greater than
+                 (lambda (a b) (time-less-p b a))
+                 header-list)))
 
 (provide 'luna-publish)
 

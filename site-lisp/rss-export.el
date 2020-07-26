@@ -23,7 +23,8 @@ links (although the name of the variable is “relative”), because
 offline RSS readers can’t interpret relative image paths.")
 
 (org-export-define-derived-backend 'rss-html 'cjk-html
-  :translate-alist '((link . rss-export-link))
+  :translate-alist '((link . rss-export-link)
+                     (export-block . rss-export-block))
   ;;                                       keyword option default
   :options-alist '((:rss-html-relative-dir nil nil rss-export-html-relative-dir)))
 
@@ -34,7 +35,9 @@ RELATIVE-DIR is the relative path to the post directory. E.g.,
   (with-temp-buffer
     (insert text)
     (goto-char (point-min))
-    (while (re-search-forward (rx (seq "\"./" (group (+? nonl))
+    (while (re-search-forward (rx (seq (or "href="
+                                           "src=")
+                                       "\"./" (group (+? nonl))
                                        "\""))
                               nil t)
       (replace-match
@@ -47,7 +50,11 @@ RELATIVE-DIR is the relative path to the post directory. E.g.,
   (rss-export-fix-relative-link (org-html-link link desc info)
                                 (plist-get info :rss-html-relative-dir)))
 
-
+(defun rss-export-block (export-block _contents info)
+  (when (string= (org-element-property :type export-block) "HTML")
+    (rss-export-fix-relative-link
+     (org-remove-indentation (org-element-property :value export-block))
+     (plist-get info :rss-html-relative-dir))))
 
 (provide 'rss-export)
 
