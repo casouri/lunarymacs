@@ -14,13 +14,28 @@ M-x luna-install-all RET
 #+END_SRC
 
 * Site-lisp packages
-| transform.el     | TeXmacs-like symbol insertion.          |
-| info+.el         | Prettify Info buffers.                  |
-| color-outline.el | Outline for programming modes.          |
-| commentary.el    | Sync README.org and Commentary.         |
-| quanjiao.el      | 智能全角引号。                          |
-| outline+.el      | Cycle outline headers like in Org mode. |
-| sidebar.el       | Show an outline sidebar.                |
+| transform.el         | TeXmacs-like symbol insertion.               |
+| info+.el             | Prettify Info buffers.                       |
+| color-outline.el     | Outline for programming modes.               |
+| commentary.el        | Sync README.org and Commentary.              |
+| quanjiao.el          | 智能全角引号。                               |
+| outline+.el          | Cycle outline headers like in Org mode.      |
+| sidebar.el           | Show an outline sidebar.                     |
+| org-backtick.el      | Render =~= and ~=~ as backticks.             |
+| bklink.el            | Simple and primitive Roam back-links.        |
+| face-attr.el         | Set/get face attributes from face text prop. |
+| form-feed.el         | My fork of form-feed.el                      |
+| recentf-ext.el       | My fork of recentf-ext.el                    |
+| delicate-click.el    | More accurate mouse clicks.                  |
+| light-theme.el       | A light custom color theme                   |
+| cyberpunk-theme.el   | A dark custom color them.                    |
+| theme-util.el        | Some utilities for defining themes.          |
+| pause.el             | Light wrapper around recursive edit.         |
+| ox-cjk-html.el       | HTML export enhanced for CJK text.           |
+| luna-load-package.el | Home-brew use-package.el.                    |
+| luna-key.el          | Home-brew general.el.                        |
+| cowboy.el            | Home-brew package manager.                   |
+| luna-local.el        | Session-persistent storage.                  |
 
 * Structure
 #+begin_example
