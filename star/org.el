@@ -11,12 +11,12 @@
  
  :---
  :keymaps 'org-mode-map
- "C-c i" #'luna-insert-heading
  "C-c <tab>" #'outline-toggle-children
 
  :---
  :keymaps 'bklink-minor-mode-map
- "C-c l" #'bklink-toggle-back-link)
+ "C-c l" #'bklink-toggle-back-link
+ "C-c i" #'bklink-insert)
 
 ;;; Packages
 
@@ -54,12 +54,19 @@
   (push '(nospace . "-") deft-file-naming-rules))
 
 (load-package bklink
-  :hook (deft-open-file-hook . bklink-minor-mode))
+  :hook (text-mode-hook . bklink-minor-mode))
 
 (luna-on "Brown"
   (load-package orgmark
     :load-path "~/p/OrgMark"
     :commands orgmark-insert orgmark-edit orgmark-abort))
+
+(with-eval-after-load 'org-latex
+  (add-to-list 'org-latex-packages-alist '("" "listings" nil))
+  (setq org-latex-listings t)
+  (setq org-latex-listings-options '(("breaklines" "true")))
+  (setq org-latex-compiler "xelatex"))
+
 
 ;;; Org config
 
@@ -87,12 +94,6 @@
     (electric-pair-local-mode)
     (kill-local-variable 'line-spacing)
     (kill-local-variable 'cursor-type)))
-
-(with-eval-after-load 'org-latex
-  (add-to-list 'org-latex-packages-alist '("" "listings" nil))
-  (setq org-latex-listings t)
-  (setq org-latex-listings-options '(("breaklines" "true")))
-  (setq org-latex-compiler "xelatex"))
 
 (defun luna-org-hook ()
   "Configuration for Org Mode."

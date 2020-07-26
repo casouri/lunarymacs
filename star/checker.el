@@ -2,36 +2,32 @@
 
 ;;; Key
 ;;
-;; C-; correct previous word
 
-;;; flymake
-;;
-;; (with-eval-after-load 'elisp-mode
-;;   ;; require error
-;;   (setq elisp-flymake-byte-compile-load-path
-;;         (append elisp-flymake-byte-compile-load-path
-;;                 load-path)))
+(luna-def-key
+ :keymaps 'flyspell-mode-map
+ "C-;" #'flyspell-auto-correct-previous-word
+ [down-mouse-3] #'flyspell-correct-word
+ "C-." nil
+ 
+ :leader
+ "lcc" #'langtool-check
+ "lcd" #'langtool-check-done)
 
-(dolist (hook '(emacs-lisp-mode-hook
-                c-mode-hook
-                c++-mode-hook
-                python-mode-hook))
-  (add-hook hook #'flymake-mode))
+;;; Packages
+
+(load-package flymake
+  :hook ((emacs-lisp-mode-hook c-mode-hook c++-mode-hook python-mode-hook)
+         . flymake-mode))
 
 (defun flymake-clean ()
   "Clean flymake temp files in current directory."
   (interactive)
-  (shell-command-to-string
-   "rm *flymake.o"))
+  (shell-command-to-string "rm *flymake.o"))
 
-;;; flyspell
-;;
 ;; install dictionaries: http://wordlist.aspell.net
-;;
+;; or by macports
 (load-package flyspell
   :config
-  (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
-  (define-key flyspell-mode-map (kbd "C-.") nil)
   (setq flyspell-issue-message-flag nil))
 
 (load-package wucuo
@@ -40,19 +36,12 @@
 (load-package writegood-mode
   :hook ((fundamental-mode-hook org-mode-hook) . writegood-mode))
 
-;;; Grammly
-
 ;; (load-package flycheck-grammarly
 ;;   :hook ((org-mode-hook . flycheck-mode)
 ;;          (text-mode . flycheck-mode)))
 
-
-;;; Flycheck
-
 (load-package flycheck
-  :hook ((text-mode-hook org-mode-hook) . flycheck-mode))
-
-;;; proselint
+  :hook (text-mode-hook . flycheck-mode))
 
 (with-eval-after-load flycheck-mode
   (flycheck-define-checker proselint
@@ -64,3 +53,12 @@
 	      (message) line-end))
     :modes (text-mode org-mode))
   (add-to-list 'flycheck-checkers 'proselint))
+
+(load-package langtool
+  :config
+  (setq langtool-language-tool-server-jar
+        "/Users/yuan/attic/LanguageTool-5.0/languagetool-server.jar")
+  :commands
+  langtool-check
+  langtool-check-done
+  langtool-switch-default-buffer)
