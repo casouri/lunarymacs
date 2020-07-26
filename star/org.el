@@ -7,7 +7,7 @@
  "rf" #'org-roam-find-file
  "ri" #'org-roam-insert
  "rb" #'org-roam-buffer-toggle-display
- "d"  #'deft
+ "df"  #'deft
  
  :---
  :keymaps 'org-mode-map
