@@ -2,14 +2,16 @@
 
 (require 'windmove)
 
+;;; Package obsolete
+
 ;;; Key
 
 (with-eval-after-load 'luna-general-config
   (luna-default-leader
-    "w e" #'luna-win-expand-to
-    "w 2" #'split-window-below
-    "w 3" #'split-window-right
-    "w d" #'delete-window))
+   "w e" #'luna-win-expand-to
+   "w 2" #'split-window-below
+   "w 3" #'split-window-right
+   "w d" #'delete-window))
 
 ;;; Functions
 

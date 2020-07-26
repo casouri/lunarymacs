@@ -3,6 +3,7 @@
 ;; Author: Yuan Fu <casouri@gmail.com>
 
 ;;; This file is NOT part of GNU Emacs
+;;
 ;;; This package is obsolete.
 ;;
 ;; Emacs has added support for proper word wraps.
