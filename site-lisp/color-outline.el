@@ -50,7 +50,9 @@
                                            (python-mode "#")
                                            (javascript-mode "/")
                                            (css-mode "/")
-                                           (tuareg-mode "*" "("))
+                                           (tuareg-mode "*" "(")
+                                           (shell-script-mode "#")
+                                           (sh-mode "#"))
   "Stores custom comment character each major mode.
 For some major modes ‘comment-start’ is enough.")
 
