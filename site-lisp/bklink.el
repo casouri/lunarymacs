@@ -18,6 +18,7 @@
 ;;  2. There is no sub-directories.
 ;;  3. There aren’t a ton of files. We use grep to search for links,
 ;;     no caching.
+;;  4. filenames don’t contain “]]”.
 ;;
 ;; Advantages:
 ;;
@@ -53,21 +54,30 @@
 
 ;;; Backstage
 
-(defvar bklink-regexp (rx (seq "(§ "
-                               (group (+ (not (any "/\n"))))
-                               " /)"))
+(defvar bklink-regexp (rx (seq (group "[[")
+                               (group (+? (not (any "/\n"))))
+                               (group (? (or ".txt" ".org" ".md")))
+                               (group "]]")))
   "Regular expression that matches a bklink.
-The first group contains the file path.")
+
+Group 1 is opening delimiter.
+Group 2 is base filename.
+Group 3 is filename extension (if exists).
+Group 4 is ending delimiter.
+
+Change this variable and
+`bklink--format-link' to change link format.")
+
+(defsubst bklink--format-link (file)
+  "Format FILE into a bklink. Basically [[FILE]]."
+  (format "[[%s]]" file))
 
 (defun bklink--get-file-list (file)
   "Return a list of files that’s in the same project with FILE.
-Ignore dotfiles."
-  (cl-remove-if (lambda (f) (string-prefix-p "." f))
+Ignore dotfiles and directories."
+  (cl-remove-if (lambda (f) (or (string-prefix-p "." f)
+                                (file-directory-p f)))
                 (directory-files (file-name-directory file))))
-
-(defsubst bklink--format-link (file)
-  "Format FILE into a bklink. Basically (§ FILE /)."
-  (format "(§ %s /)" file))
 
 (defsubst bklink--format-back-link-buffer (buffer)
   "Format buffer name for the back-link for BUFFER."
@@ -120,10 +130,20 @@ Ignore dotfiles."
   (goto-char beg)
   ;; FIXME: What if END is in the middle of a link?
   (while (re-search-forward bklink-regexp end t)
+    ;; Hide opening and closing delimiters and file extension.
+    (put-text-property (match-beginning 1) (match-end 1)
+                       'display "“")
+    (put-text-property (match-beginning 4) (match-end 4)
+                       'display "”")
+    (when (match-beginning 3)
+      (put-text-property (match-beginning 3) (match-end 3) 'invisible t))
+    ;; Highlight link.
     (make-text-button (match-beginning 0)
                       (match-end 0)
                       :type 'bklink
-                      'filename (match-string-no-properties 1))))
+                      'filename (concat (match-string-no-properties 2)
+                                        (or (match-string-no-properties 3)
+                                            "")))))
 
 ;;;; Back-links
 
