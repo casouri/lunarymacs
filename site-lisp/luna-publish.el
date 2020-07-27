@@ -30,6 +30,7 @@ Set use-babel and include-scripts to nil when export."
                (or force (file-newer-than-file-p org-file html-file)))
       (luna-f-with-file org-file
         (org-mode)
+        (org-macro-replace-all (org-macro-initialize-templates))
         (let ((org-export-use-babel nil)
               ;; for relative links in org file
               (default-directory dir)
@@ -81,11 +82,6 @@ Categories in CATEGORY-LIST are strings."
                     (let ((buf (current-buffer)))
                       (luna-f-with-file org-file
                         (let ((org-export-use-babel nil)
-                              ;; construct the relative path
-                              ;; from root to dir for relative
-                              ;; links in the post
-                              (path
-                               (concat "/" (luna-f-subtract root path)))
                               (default-directory path))
                           ;; org-export-as doesn’t seem to respect
                           ;; above settings.
@@ -101,7 +97,8 @@ Categories in CATEGORY-LIST are strings."
                               :html-head-include-scripts ""
                               :with-toc nil
                               :html-htmlize-output-type nil
-                              :rss-html-relative-dir ,path)))))
+                              :rss-html-relative-dir ,path
+                              :rss-html-root-dir ,root)))))
                     (buffer-string)))
                  (env (luna-f-with-file org-file
                         (org-export-get-environment)))

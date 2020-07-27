@@ -283,13 +283,13 @@ If FORCE is non-nil, only export when org file is newer than html file."
                (setq --luna-blog-rock-day-- day-idx)
                (org-export-to-file 'html html-path nil nil nil nil
                                    option-list)
-               (copy-file file-path duplicate-org-path t)
-               ;; Replace title macro with title, so RSS can work right.
-               (luna-f-with-file duplicate-org-path
-                 (goto-char (point-min))
-                 (when (search-forward "{{{day_title}}}" nil t)
-                   (replace-match title))
-                 (write-file duplicate-org-path))))))))
+               ;; Expand macros and write to index.org for RSS export.
+               (goto-char (point-min))
+               ;; Title macro is not properly expanded...
+               (when (search-forward "{{{day_title}}}" nil t)
+                 (replace-match title))
+               (org-macro-replace-all (org-macro-initialize-templates))
+               (write-file duplicate-org-path)))))))
     ;; publish index page
     (let ((option-list `(:html-home/up-format
                          ,luna-blog-index-home/up-format
