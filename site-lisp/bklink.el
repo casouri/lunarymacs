@@ -17,8 +17,8 @@
 ;;     to uniquely identify files.
 ;;  2. There is no sub-directories.
 ;;  3. There aren’t a ton of files. We use grep to search for links,
-;;     no caching.
-;;  4. filenames don’t contain “]]”.
+;;     no caching (though not hard to add one).
+;;  4. filenames don’t contain “}]”.
 ;;
 ;; Advantages:
 ;;
@@ -33,6 +33,9 @@
 ;;     (setq deft-use-filter-string-for-filename t)
 ;;
 ;; Usage:
+;;
+;; Links’ format is [{filename.ext}]. Extension is optional.
+;; Links are displayed as “filename” with 'link face.
 ;;
 ;; Insert a link to another file:
 ;;
@@ -54,10 +57,10 @@
 
 ;;; Backstage
 
-(defvar bklink-regexp (rx (seq (group "[[")
+(defvar bklink-regexp (rx (seq (group "[{")
                                (group (+? (not (any "/\n"))))
                                (group (? (or ".txt" ".org" ".md")))
-                               (group "]]")))
+                               (group "}]")))
   "Regular expression that matches a bklink.
 
 Group 1 is opening delimiter.
@@ -70,7 +73,7 @@ Change this variable and
 
 (defsubst bklink--format-link (file)
   "Format FILE into a bklink. Basically [[FILE]]."
-  (format "[[%s]]" file))
+  (format "[{%s}]" file))
 
 (defun bklink--get-file-list (file)
   "Return a list of files that’s in the same project with FILE.
@@ -121,7 +124,8 @@ Ignore dotfiles and directories."
   :keymap (make-sparse-keymap)
   (if bklink-minor-mode
       (jit-lock-register #'bklink-fontify)
-    (jit-lock-unregister #'bklink-fontify))
+    (jit-lock-unregister #'bklink-fontify)
+    (put-text-property (point-min) (point-max) 'display nil))
   (bklink-managed-mode)
   (jit-lock-refontify))
 
