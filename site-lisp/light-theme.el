@@ -47,7 +47,7 @@
         (region      (nil nil ,(overlay bg violet1 0.1)))
         (highlight   (nil "white" ,blue2))
         (cursor      (nil "white" "black"))
-        (link        (nil ,blue2 nil t))
+        (link        (nil ,blue2 nil nil))
         (match       (nil ,green nil nil bold))
         (error       (nil ,red))
         (warning     (nil ,yellow))
