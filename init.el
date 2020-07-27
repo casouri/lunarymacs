@@ -75,6 +75,7 @@
 (luna-load-relative "star/dir.el")
 (luna-load-relative "star/org.el")
 (luna-load-relative "star/org/blogs.el")
+(luna-load-relative "star/writing.el")
 (luna-load-relative "star/tex.el")
 ;; (luna-load-relative "star/shell.el")
 (luna-load-relative "star/simple-mode.el")

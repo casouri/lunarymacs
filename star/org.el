@@ -11,12 +11,7 @@
  
  :---
  :keymaps 'org-mode-map
- "C-c <tab>" #'outline-toggle-children
-
- :---
- :keymaps 'bklink-minor-mode-map
- "C-c l" #'bklink-toggle-back-link
- "C-c i" #'bklink-insert)
+ "C-c <tab>" #'outline-toggle-children)
 
 ;;; Packages
 
@@ -45,16 +40,6 @@
 
 (load-package org-backtick
   :hook (org-mode-hook . org-backtick-mode))
-
-(load-package deft
-  :commands deft
-  :config
-  (setq deft-directory (expand-file-name "~/deft/")
-        deft-use-filter-string-for-filename t)
-  (push '(nospace . "-") deft-file-naming-rules))
-
-(load-package bklink
-  :hook (text-mode-hook . bklink-minor-mode))
 
 (luna-on "Brown"
   (load-package orgmark
