@@ -96,6 +96,12 @@ COMMENT-BEGIN is string pattern starting a comment."
   (setf (alist-get mode color-outline-comment-char-alist)
         (color-outline--create-pattern comment-char comment-begin)))
 
+(defun color-outline-mode-maybe ()
+  "Enable `color-outline-mode' but not in Org Mode."
+  (interactive)
+  (unless (derived-mode-p 'org-mode)
+    (color-outline-mode)))
+
 (define-minor-mode color-outline-mode
   "Color outline."
   :lighter ""
