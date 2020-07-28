@@ -23,16 +23,16 @@
                        savehist eyebrowse minions ws-butler
                        expand-region flyspell flycheck eglot
                        minibuf-eldef yasnippet wucuo ivy-xref
-                       dired-x subr-x pcase cl-lib seq olivetti
-                       org-download htmlize
+                       olivetti
                        ;; site-lisp
                        transform utility pause info+ color-outline
                        commentary quanjiao outline+ luna-publish
                        ox-cjk-html sidebar form-feed
                        ;; ranch
                        valign ghelp isolate
-                       ;; built-in
-                       pcase cl-lib which-func savehist winner elec-pair))
+                       ;; built-in dired-x subr-x cl-lib seq
+                       pcase cl-lib which-func savehist winner
+                       elec-pair))
   (require package))
 
 ;;; Theme
