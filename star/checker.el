@@ -24,26 +24,19 @@
   (interactive)
   (shell-command-to-string "rm *flymake.o"))
 
-;; install dictionaries: http://wordlist.aspell.net
-;; or by macports
+;; Install dictionaries: http://wordlist.aspell.net
+;; or by macports.
 (load-package flyspell
-  :config
-  (setq flyspell-issue-message-flag nil))
-
-(load-package wucuo
-  :hook ((text-mode-hook prog-mode-hook) . wucuo-start))
+  :hook (text-mode-hook . flyspell-mode-hook)
+  :config (setq flyspell-issue-message-flag nil))
 
 (load-package writegood-mode
   :hook ((fundamental-mode-hook org-mode-hook) . writegood-mode))
 
-;; (load-package flycheck-grammarly
-;;   :hook ((org-mode-hook . flycheck-mode)
-;;          (text-mode . flycheck-mode)))
-
+;; Install proselint by macports.
 (load-package flycheck
-  :hook (text-mode-hook . flycheck-mode))
-
-(with-eval-after-load flycheck-mode
+  :hook (text-mode-hook . flycheck-mode)
+  :config
   (flycheck-define-checker proselint
     "A linter for prose."
     :command ("proselint" source-inplace)
