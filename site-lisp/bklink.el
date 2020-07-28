@@ -34,7 +34,7 @@
 ;;
 ;; Usage:
 ;;
-;; Links’ format is [{filename.ext}]. Extension is optional.
+;; Link format is [{filename.ext}]. Extension is optional.
 ;; Links are displayed as “filename” with 'link face.
 ;;
 ;; Insert a link to another file:
@@ -116,6 +116,16 @@ Ignore dotfiles and directories."
         (find-file file)))
     (bklink-minor-mode)))
 
+(define-button-type 'bklink-url
+  'action #'bklink-browse-url
+  'url nil
+  'follow-link t
+  'help-echo "Open URL")
+
+(defun bklink-browse-url (button)
+  "Open URL in BUTTON."
+  (browse-url (button-get button 'url)))
+
 ;;;; Highlight links
 
 (define-minor-mode bklink-minor-mode
@@ -123,8 +133,11 @@ Ignore dotfiles and directories."
   :lighter ""
   :keymap (make-sparse-keymap)
   (if bklink-minor-mode
-      (jit-lock-register #'bklink-fontify)
+      (progn (jit-lock-register #'bklink-fontify)
+             (unless (derived-mode-p 'org-mode 'markdown-mode)
+               (jit-lock-register #'bklink-fontify-url)))
     (jit-lock-unregister #'bklink-fontify)
+    (jit-lock-unregister #'bklink-fontify-url)
     (put-text-property (point-min) (point-max) 'display nil))
   (bklink-managed-mode)
   (jit-lock-refontify))
@@ -148,6 +161,18 @@ Ignore dotfiles and directories."
                       'filename (concat (match-string-no-properties 2)
                                         (or (match-string-no-properties 3)
                                             "")))))
+
+(defun bklink-fontify-url (beg end)
+  "Add clickable buttons to URLs between BEG and END.
+Everything that matches `browse-url-button-regexp' will be made
+clickable and will use `browse-url' to open the URLs in question."
+  ;; Change face to font-lock-face.
+  (goto-char beg)
+  (while (re-search-forward browse-url-button-regexp end t)
+    (make-text-button (match-beginning 0)
+                      (match-end 0)
+                      :type 'bklink-url
+                      'url (match-string-no-properties 0))))
 
 ;;;; Back-links
 
