@@ -27,8 +27,11 @@
 ;; Install dictionaries: http://wordlist.aspell.net
 ;; or by macports.
 (load-package flyspell
-  :hook (text-mode-hook . flyspell-mode-hook)
   :config (setq flyspell-issue-message-flag nil))
+
+(load-package wucuo
+  :hook ((prog-mode-hook text-mode-hook) . wucuo-start)
+  :config (setq wucuo-update-interval 0.5 ))
 
 (load-package writegood-mode
   :hook (text-mode . writegood-mode))
