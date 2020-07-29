@@ -28,6 +28,9 @@
 Of course, you can only save printable objects like string.
 Non-printable object includes buffers, window configurations,
 frames, windows, etc."
+  ;; Make sure there is no duplicate variable settings.
+  (setq luna-local--pending-alist
+        (assq-delete-all var luna-local--pending-alist))
   (push (cons var val) luna-local--pending-alist)
   (unless luna-local--save-timer
     (run-with-idle-timer 1 nil #'luna-local-save)))
