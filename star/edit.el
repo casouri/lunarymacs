@@ -11,9 +11,6 @@
  "hha" #'hs-hide-all
  "hsa" #'hs-show-all
  :---
- ;; Hungry delete
- [remap backward-delete-char-untabify] #'luna-hungry-delete
- ;; helpful
  "C-h C-h" #'ghelp-describe
  "C-h r"   #'ghelp-resume
  "C-h k" #'ghelp-helpful-key
@@ -118,3 +115,8 @@
 (load-package ghelp)
 
 (add-to-list 'luna-package-list 'helpful)
+
+(dolist (fn '(c-electric-backspace
+              backward-delete-char-untabify
+              delete-indentation))
+  (advice-add fn :after #'luna-hungry-delete-advice))

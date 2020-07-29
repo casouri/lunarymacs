@@ -269,77 +269,35 @@ E.g. SURNAME (c) to symbol ©."
 
 ;;; smart-delete
 
-(defvar luna-hungry-delete-black-list '(org-mode text-mode fundamental-mode markdown-mode)
-  "A list of major mode in where `luna-hungry-delete' should behave like normal delete.")
-
-(defun luna-hungry-delete ()
-  "Smart and clean delete.
-If we are at the beginning of a line, backspace
-deletes all whitespace before and after point
-and moves point to the previous line."
-  (interactive)
-  (require 'cl-lib)
-  (cl-labels ((normal-delete () (if (region-active-p)
-                                    (delete-region (region-beginning) (region-end))
-                                  (if (and (not (eql (point) (point-max)))
-                                           (eql (alist-get (char-before) '((?{ . ?}) (?\[ . ?\])
-                                                                           (?\( . ?\)) (?\" . ?\")
-                                                                           (?\' . ?\') (?“ . ?”) (?‘ . ?’)))
-                                                (char-after)))
-                                      ;; if we are in the middle of a empty pair, i.e., "|" or (|)
-                                      ;; delete both
-                                      (progn (forward-char)
-                                             (backward-delete-char 2))
-                                    (call-interactively #'backward-delete-char-untabify)))))
-    (if (or (region-active-p)
-            (<= (car (syntax-ppss)) 0)
-            (minibufferp (current-buffer)))
-        ;; if we are at top-level
-        ;; do normal delete
-        (normal-delete)
-      ;; if the point is not before the line but inside it, do normal delete
-      ;; otherwise do hungry delete
-      ;;
-      ;; 1. we first delete all white spaces, then insert newline and indent properly
-      ;; 2. but if there is only a closing delimiter, i.e., } or ),
-      ;;    we don't insert new line.
-      ;; 3. if we ends up in the same place before hungry delete,
-      ;;    that means the user is trying to delete back to the previous line,
-      ;;    then do that.
-      (let* ((point (point)) ; staring point
-             (bolt (save-excursion
-                     ;; `beginning-of-line-text' seems to ignore comment for some reason,
-                     (beginning-of-line)
-                     (skip-chars-forward " \t")
-                     (point)))
-             ;; beginning of the region that we are to delete
-             (beg (save-excursion (while (member (char-before) '(?\n ?\s ?\t))
-                                    (backward-char))
-                                  (point)))
-             ;; end of that region
-             (end (save-excursion (goto-char bolt)
-                                  (while (member (char-after) '(?\n ?\s ?\t))
-                                    (forward-char))
-                                  (point))))
-        (if (<= point bolt)
-            ;; actually decide to delete stuff
-            (progn
-              (delete-region beg end)
-              (unless (eql (char-after) ?\))
-                (call-interactively #'newline))
-              ;; so we did all this and ends up not changing anything
-              ;; why? because the user doesn't want to delete excess white space and add newline
-              ;; but to delete back to previous line! do that.
-              (when (eql (point) end)
-                (delete-region beg end)
-                (unless (eql (char-before) ?\()
-                  (insert ?\s))))
-          ;; not at beginning of text, just do normal delete
-          (normal-delete))))))
+(defun luna-hungry-delete-advice (&rest _)
+  (catch 'end
+    (let ((p (point)) beg end newline-count)
+      (skip-chars-backward " \t")
+      (if (not (eq (char-before) ?\n))
+          (throw 'end nil))
+      (skip-chars-backward " \t\n")
+      (setq beg (point))
+      (goto-char p)
+      (skip-chars-forward " \t\n")
+      (setq end (point))
+      (setq newline-count
+            (cl-count ?\n (buffer-substring-no-properties beg end)))
+      (delete-region beg end)
+      (cond ((eq (char-after) ?})
+             (insert "\n")
+             (indent-for-tab-command))
+            ((eq (char-after) ?\))
+             nil)
+            ((> newline-count 1)
+             (insert "\n")
+             (indent-for-tab-command))
+            ((> newline-count 0)
+             (insert " "))))))
 
 ;;; Cheat sheet
 
-(defvar cheatsheet-file-dir (expand-file-name "cheatsheet" user-emacs-directory)
+(defvar cheatsheet-file-dir (expand-file-name "cheatsheet"
+                                              user-emacs-directory)
   "Under where you put the cheat sheets.")
 
 (defvar cheatsheet-display-fn (lambda (txt) (message "%s" txt))
