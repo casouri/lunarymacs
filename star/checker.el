@@ -31,7 +31,7 @@
   :config (setq flyspell-issue-message-flag nil))
 
 (load-package writegood-mode
-  :hook ((fundamental-mode-hook org-mode-hook) . writegood-mode))
+  :hook (text-mode . writegood-mode))
 
 ;; Install proselint by macports.
 (load-package flycheck
