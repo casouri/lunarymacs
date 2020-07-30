@@ -1,0 +1,3 @@
+C-c C-q      quit       C-c C-d      delete
+C-c C-c      clear      C-c C-r      rename
+C-c C-g      refresh
