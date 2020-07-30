@@ -272,14 +272,15 @@ E.g. SURNAME (c) to symbol ©."
 (defun luna-hungry-delete-advice (&rest _)
   (catch 'end
     (let ((p (point)) beg end newline-count)
-      (skip-chars-backward " \t")
-      (if (not (eq (char-before) ?\n))
-          (throw 'end nil))
-      (skip-chars-backward " \t\n")
-      (setq beg (point))
-      (goto-char p)
-      (skip-chars-forward " \t\n")
-      (setq end (point))
+      (save-excursion
+        (skip-chars-backward " \t")
+        (if (not (eq (char-before) ?\n))
+            (throw 'end nil))
+        (skip-chars-backward " \t\n")
+        (setq beg (point))
+        (goto-char p)
+        (skip-chars-forward " \t\n")
+        (setq end (point)))
       (setq newline-count
             (cl-count ?\n (buffer-substring-no-properties beg end)))
       (delete-region beg end)
