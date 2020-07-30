@@ -1,6 +1,9 @@
 #+TITLE: Lunarymacs
 
-This is my Emacs configuration.
+This is my Emacs configuration. Features:
+- home-brew ~use-package~ and key-binding macros.
+- A simple package manager cowboy.el that can install by package.el, git or by url.
+- Some on-site packages included in =site-lisp=.
 
 * Usage
 #+BEGIN_SRC shell
@@ -8,7 +11,7 @@ git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
 emacs
 #+END_SRC
 
-In Emacs:
+While Emacs starts, a lot of warning will appear saying package xxx is not installed. To install all the missing packages, type
 #+BEGIN_SRC elisp
 M-x luna-install-all RET
 #+END_SRC
