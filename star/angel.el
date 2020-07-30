@@ -33,6 +33,8 @@
 
  "s-/"   #'transform-previous-char
 
+ "C-x 9" (kbd "C-x 1 C-x 3")
+
  ;; s -> M
  "s-<backspace>" (kbd "M-<backspace>")
  "s-d"   (kbd "M-d")
