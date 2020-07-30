@@ -13,9 +13,16 @@
                      '("\\.sage\\'" . sage-shell:sage-mode))
   :commands sage-shell-mode sage-shell:sage-mode)
 
-(with-eval-after-load 'console-buffer
-  (add-to-list 'luna-console-buffer-alist '(sage-shell:sage-mode . "*Sage*"))
+(load-package
+    :config
+  (add-to-list 'luna-console-buffer-alist
+               '(sage-shell:sage-mode . "*Sage*"))
   (add-to-list 'luna-console-buffer-alist '(python-mode . "*Python*")))
+
+;; Install pyright with npm install -g pyright.
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(python-mode . ("pyright-langserver" "--stdio"))))
 
 ;;;; IDE
 
