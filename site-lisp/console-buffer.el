@@ -22,7 +22,9 @@
 ;;; Code:
 ;;
 
-(defvar luna-console-buffer-alist '((emacs-lisp-mode . "*scratch*"))
+(defvar luna-console-buffer-alist '((emacs-lisp-mode . "*scratch*")
+                                    (python-mode . "*Python*")
+                                    (sage-shell:sage-mode . "*Sage*"))
   "An alist with element (major-mode . console buffer).")
 
 (defvar-local luna-console-buffer-p nil
