@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: <video
+# key: <video
+# --
+#+begin_export html
+<video controls width="100%">
+<source src="$0" type="video/mp4">
+</video>
+#+end_export
