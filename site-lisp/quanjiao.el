@@ -26,8 +26,10 @@
   "Display full width quotation marks."
   :lighter ""
   (if quanjiao-mode
-      (font-lock-add-keywords nil '((quanjiao-matcher . 'quanjiao-quote)))
-    (font-lock-remove-keywords nil '((quanjiao-matcher . 'quanjiao-quote))))
+      (font-lock-add-keywords
+       nil '((quanjiao-matcher . 'quanjiao-quote)))
+    (font-lock-remove-keywords
+     nil '((quanjiao-matcher . 'quanjiao-quote))))
   (jit-lock-refontify))
 
 (provide 'quanjiao)
