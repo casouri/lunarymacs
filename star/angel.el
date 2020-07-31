@@ -10,33 +10,34 @@
 ;;; Keys
 
 (luna-def-key
+ ;; Meta bindings
  "M-n"   #'scroll-up
  "M-p"   #'scroll-down
  "M-/"   #'hippie-expand
-
- "s-n"   #'luna-scroll-down-reserve-point
- "s-p"   #'luna-scroll-up-reserve-point
- "C-,"   #'luna-jump-back
- "C-M-;" #'inline-replace
  "M-f"   #'luna-forward-word
  "M-b"   #'luna-backward-word
 
- "C-'"   #'angel-until
+ ;; Control bindings
  "C-="   #'er/expand-region
  "C-v"   #'set-mark-command
- 
+ "C-,"   #'luna-jump-back
+
+ ;; Super bindings
+ "s-n"   #'luna-scroll-down-reserve-point
+ "s-p"   #'luna-scroll-up-reserve-point
+ "s-/"   #'transform-previous-char
+
+ ;; Etc
+ "C-M-;" #'inline-replace
  "C-M-p" #'up-list-backward
  "C-M-n" #'down-list
 
- "s-/"   #'transform-previous-char
-
- "C-x 9" (kbd "C-x 1 C-x 3")
-
+ ;; Remaps
  [remap backward-delete-char-untabify] #'luna-hungry-delete
  [remap delete-indentation] #'luna-hungry-delete
  [remap c-electric-backspace] #'luna-hungry-delete
 
- ;; s -> M
+ ;; Super -> Meta
  "s-<backspace>" (kbd "M-<backspace>")
  "s-d"   (kbd "M-d")
  "s-f"   (kbd "M-f")
@@ -50,6 +51,7 @@
  "C-s-t" (kbd "C-M-t")
 
  :prefix "C-x"
+ "9"   (kbd "C-x 1 C-x 3")
  "c"   #'cheatsheet-display
  "C-f" #'luna-find-file
  "C-u" #'undo-tree-visualize
