@@ -152,6 +152,8 @@ Each command can take zero or more arguments."
                         (memq :hook commands)))))
     `(condition-case err
          (progn
+           ;; We need to add load-path before checking
+           ;; if the package is installed or not.
            ,@load-path-form
            (add-to-list 'luna-package-list ',package)
            (when (not (luna-installed-p ',package))
