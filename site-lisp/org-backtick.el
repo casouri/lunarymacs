@@ -10,20 +10,34 @@
 (defun org-backtick-fontify (beg end)
   "Fontify ~ and = between BEG and END."
   (goto-char beg)
-  (while (re-search-forward (rx (or "~" "=")) end t)
-    (let* ((text-props (text-properties-at (match-beginning 0)))
-           (face (plist-get text-props 'face)))
-      ;; Make it display backtick if the face indicates that
-      ;; it’s a code/verbatim delimiter.
-      (if (or (equal face '(org-code))
-              (equal face '(org-verbatim)))
-          (put-text-property
-           (match-beginning 0) (match-end 0) 'display "`")
-        ;; Clean up our face if it’s not a code/verbatim
-        ;; delimiter anymore.
-        (when (equal (plist-get text-props 'display) "`")
-          (put-text-property
-           (match-beginning 0) (match-end 0) 'display nil)))))
+  (cl-labels ((varbatim-p (face)
+                          (and (consp face)
+                               (or (memq 'org-code face)
+                                   (memq 'org-verbatim face))))
+              (face-at (point)
+                       (plist-get (text-properties-at point)
+                                  'face)))
+    (while (re-search-forward (rx (or "~" "=")) end t)
+      (let* ((face (face-at (match-beginning 0)))
+             (face-before (face-at (max (1- (match-beginning 0))
+                                        (point-min))))
+             (face-after (face-at (min (1+ (match-beginning 0))
+                                       (point-max)))))
+        ;; Make it display backtick if the face indicates that
+        ;; it’s a code/verbatim delimiter.
+        (if (and (verbatim-p face)
+                 ;; If any of (face-before face-after) is not
+                 ;; verbatim, this character is at the edge,
+                 ;; thus is an delimiter.
+                 (or (verbatim-p face-before)
+                     (verbatim-p face-after)))
+            (put-text-property
+             (match-beginning 0) (match-end 0) 'display "`")
+          ;; Clean up our face if it’s not a code/verbatim
+          ;; delimiter anymore.
+          (when (equal (plist-get text-props 'display) "`")
+            (put-text-property
+             (match-beginning 0) (match-end 0) 'display nil))))))
   (cons 'jit-lock-bounds (cons beg end)))
 
 (define-minor-mode org-backtick-mode
