@@ -1,4 +1,6 @@
 ;; -*- lexical-binding: t -*-
+;;
+;; In the end, good defeats Evil.
 
 (require 'pause)
 (require 'cl-lib)
@@ -7,10 +9,6 @@
 
 ;;; Keys
 
-(when (not window-system)
-  (luna-def-key
-   "M-n"   #'luna-scroll-down-reserve-point
-   "M-p"   #'luna-scroll-up-reserve-point))
 (luna-def-key
  "M-n"   #'scroll-up
  "M-p"   #'scroll-down
@@ -18,12 +16,11 @@
 
  "s-n"   #'luna-scroll-down-reserve-point
  "s-p"   #'luna-scroll-up-reserve-point
- ;; "s-a"   #'backward-sentence
- ;; "s-e"   #'forward-sentence
  "C-,"   #'luna-jump-back
  "C-M-;" #'inline-replace
- ;; "M-f"   #'next-char
- ;; "M-b"   #'last-char
+ "M-f"   #'luna-forward-word
+ "M-b"   #'luna-backward-word
+
  "C-'"   #'angel-until
  "C-="   #'er/expand-region
  "C-v"   #'set-mark-command
@@ -34,6 +31,10 @@
  "s-/"   #'transform-previous-char
 
  "C-x 9" (kbd "C-x 1 C-x 3")
+
+ [remap backward-delete-char-untabify] #'luna-hungry-delete
+ [remap delete-indentation] #'luna-hungry-delete
+ [remap c-electric-backspace] #'luna-hungry-delete
 
  ;; s -> M
  "s-<backspace>" (kbd "M-<backspace>")
@@ -84,125 +85,65 @@
 
 ;;; Navigation (w W e E b B)
 ;;
-;; Basically: forward/backward and stop at next occurrence of a
-;; character (word beginning), but also stop at line end/beginning and
-;; closing/opening parenthesis.
+;; Forward/backward stop at the beginning of the next word and also
+;; line end/beginning. For CJK characters, move by four characters.
 
-(defmacro forward-char-while (condition &optional whitespace-charset)
-  "Go forward while CONDITION evaluate to t.
-But if hit newline, stop,  rollback (skipping spaces) and throw 'return.
-If WHITESPACE-CHARSET is non-nil,
-chars in it will be used as white space char (to be skipped over when rolling bck)."
-  `(while ,condition
-     (when (eq (char-after) ?\n)
-       (while (member (char-after) (or ,whitespace-charset '(?\s)))
-         (backword-char))
-       (throw 'return nil))
-     (forward-char)))
-
-(defmacro backward-char-while (condition &optional whitespace-charset)
-  "Go backward while CONDITION evaluate to t.
-But if hit newline, stop,  rollback (skipping spaces) and throw 'return.
-If WHITESPACE-CHARSET is non-nil,
-chars in it will be used as white space char (to be skipped over when rolling bck)."
-  `(while ,condition
-     (when (eq (char-before) ?\n)
-       (while (member (char-after) (or ,whitespace-charset '(?\s)))
-         (forward-char))
-       (throw 'return nil))
-     (backward-char)))
-
-(defsubst next-of (charset &optional stop-charset whitespace-charset)
-  "Forward until hit char from CHARSET. Or before a char from STOP-CHARSET.
-But if hit newline, stop,  rollback (skipping spaces) and throw 'return.
-If WHITESPACE-CHARSET is non-nil,
-chars in it will be used as white space char (to be skipped over when rolling back)."
-  ;; skip over stop-charset char if you are already on one
-  (catch 'return
-    ;; skip over eol if already on it
-    (when (eq (char-after) ?\n) (forward-char))
-    (when stop-charset
-      (forward-char-while (member (char-after) stop-charset)))
-    ;; skip over charset car if you are already on one
-    (forward-char-while (member (char-after) charset))
-    ;; go forward until hit a char not from charset
-    (unless (member (char-after) stop-charset)
-      (forward-char-while (not (member (char-after) charset))))))
-
-(defsubst last-of (charset &optional stop-charset)
-  "Backward until hit char from CHARSET. Or before a char from STOP-CHARSET.
-But if hit newline, stop, rollback (skipping spaces) and throw 'return.
-If WHITESPACE-CHARSET is non-nil,
-chars in it will be used as white space char (to be skipped over when rolling back)."
-  (catch 'return
-    ;; skip over eol if already on it
-    (when (eq (save-excursion (back-to-indentation) (point)) (point))
-      (beginning-of-line) (backward-char) (throw 'return nil))
-    (when stop-charset
-      (backward-char-while (member (char-before) stop-charset)))
-    (backward-char-while (member (char-before) charset))
-    (unless (member (char-before) stop-charset)
-      (backward-char-while (not (member (char-before) charset))))))
-
-(defun next-space ()
-  "Go to next space."
+(defun luna-forward-word ()
   (interactive)
-  (next-of '(?\s ?\n ?\t) '(?\( ?\))))
+  (cl-labels ((ideograph-p (ch) (aref (char-category-set ch) ?|)))
+    (cond ((ideograph-p (char-after))
+           (dotimes (_ 4)
+             (when (ideograph-p (char-after))
+               (forward-char))))
+          ((looking-at "\n")
+           (skip-chars-forward "\n"))
+          ((looking-at "[[:alpha:]]")
+           (progn (while (and (looking-at "[[:alpha:]]")
+                              (not (ideograph-p (char-after))))
+                    (forward-char))
+                  (skip-chars-forward "^[:alpha:]\n")))
+          (t (skip-chars-forward "^[:alpha:]\n")))))
 
-(defun last-space ()
-  "Go to last space."
+(defun luna-backward-word ()
   (interactive)
-  (last-of '(?\s ?\n ?\t) '(?\( ?\))))
+  (cl-labels ((ideograph-p (ch) (aref (char-category-set ch) ?|)))
+    (cond ((ideograph-p (char-before))
+           (dotimes (_ 4)
+             (when (ideograph-p (char-before))
+               (backward-char))))
+          ((looking-back "\n" 1)
+           (skip-chars-backward "\n"))
+          ((looking-back "[[:alpha:]\n]" 1)
+           (progn (while (and (looking-back "[[:alpha:]]" 1)
+                              (not (ideograph-p (char-before))))
+                    (backward-char))
+                  (skip-chars-backward "^[:alpha:]\n")))
+          (t (skip-chars-backward "^[:alpha:]\n")))))
 
-(defun next-space-char ()
-  "Go to next char after space."
+;;; Scrolling
+
+(defvar luna-scroll-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "n") #'luna-scroll-down-reserve-point)
+    (define-key map (kbd "p") #'luna-scroll-up-reserve-point)
+    map)
+  "Transient map for `luna-scroll-mode'.")
+
+(defun luna-scroll-down-reserve-point ()
   (interactive)
-  (next-of '(?\s ?\n ?\t))
-  (forward-char))
+  (scroll-up 2)
+  (forward-line 2)
+  (set-transient-map luna-scroll-map t))
 
-(defun last-space-char ()
-  "Go to last char before space."
+(defun luna-scroll-up-reserve-point ()
   (interactive)
-  (last-of '(?\s ?\n ?\t))
-  (backward-char))
+  (scroll-down 2)
+  (forward-line -2)
+  (set-transient-map luna-scroll-map t))
 
-(defvar punc-list '(?` ?` ?! ?@ ?# ?$ ?% ?^ ?& ?* ?\( ?\)
-                       ?- ?_ ?= ?+ ?\[ ?\] ?{ ?} ?\\ ?| ?\;
-                       ?: ?' ?\" ?, ?< ?. ?> ?/ ??))
-
-(defun next-punc ()
-  "Go to next punctuation."
+(defun up-list-backward ()
   (interactive)
-  (next-of punc-list))
-
-(defun last-punc ()
-  "Go to next punctuation. Do ARG times."
-  (interactive)
-  (last-of punc-list))
-
-(defvar char-list '(?Q ?q ?W ?w ?E ?e ?R ?r ?T ?t ?Y ?y
-                       ?U ?u ?I ?i ?O ?o ?P ?p ?A ?a ?S
-                       ?s ?D ?d ?F ?f ?G ?g ?H ?h ?J ?j
-                       ?K ?k ?L ?l ?Z ?z ?X ?x ?C ?c ?V
-                       ?v ?B ?b ?N ?n ?M ?m ?1 ?2 ?3 ?4
-                       ?5 ?6 ?7 ?8 ?9 ?0))
-
-(defun next-char (&optional arg)
-  "Go to next character. Do ARG times."
-  (interactive "p")
-  (next-of char-list '(?\( ?\))))
-
-(defun last-char (&optional arg)
-  "Go to next character. Do ARG times."
-  (interactive "p")
-  (last-of char-list '(?\( ?\))))
-
-(defun select-line ()
-  "Select whole line."
-  (interactive)
-  (beginning-of-line)
-  (set-mark-command nil)
-  (end-of-line))
+  (up-list -1))
 
 ;;; Better C-a
 
@@ -501,3 +442,34 @@ Set register CHAR to point if CHAR is uppercase."
 ;; (global-set-key " " #'luna-insert-space-or-expand-abbrev)
 (read-abbrev-file (luna-f-join user-emacs-directory "star/abbrev-file.el"))
 
+;;; Hungrey delete
+
+(defun luna-hungry-delete (&rest _)
+  (interactive)
+  (if (region-active-p)
+      (delete-region (region-beginning) (region-end))
+    (catch 'end
+      (let ((p (point)) beg end line-count)
+        (save-excursion
+          (skip-chars-backward " \t\n")
+          (setq beg (point))
+          (goto-char p)
+          (skip-chars-forward " \t\n")
+          (setq end (point)))
+        (setq line-count
+              (cl-count ?\n (buffer-substring-no-properties beg end)))
+        (if (or (eq beg end)
+                (eq (ppss-depth (syntax-ppss)) 0)
+                (save-excursion (skip-chars-backward " \t")
+                                (not (eq (char-before) ?\n))))
+            (backward-delete-char-untabify 1)
+          (delete-region beg end)
+          (cond ((eq (char-after) ?})
+                 (insert "\n")
+                 (indent-for-tab-command))
+                ((eq (char-after) ?\))
+                 nil)
+                ((> line-count 1)
+                 (insert "\n")
+                 (indent-for-tab-command))
+                (t (insert " "))))))))

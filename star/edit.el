@@ -115,8 +115,3 @@
 (load-package ghelp)
 
 (add-to-list 'luna-package-list 'helpful)
-
-(dolist (fn '(c-electric-backspace
-              backward-delete-char-untabify
-              delete-indentation))
-  (advice-add fn :after #'luna-hungry-delete-advice))
