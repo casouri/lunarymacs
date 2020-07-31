@@ -47,7 +47,7 @@
      ("gnu" . "https://elpa.gnu.org/packages/")
      ("org" . "https://orgmode.org/elpa/")))
  '(package-selected-packages nil)
- '(recentf-max-saved-items 300)
+ '(recentf-max-saved-items 1000)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values '((git-commit-major-mode . git-commit-elisp-text-mode)))
  '(savehist-additional-variables '(tablist-named-filter extended-command-history))
