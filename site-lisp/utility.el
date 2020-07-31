@@ -226,30 +226,6 @@ E.g. SURNAME (c) to symbol ©."
 
 (global-set-key (kbd "C-x 9 -") (luna-make-accent-fn "MACRON"))
 
-;;; Navigation
-
-(defvar luna-scroll-map (let ((map (make-sparse-keymap)))
-                          (define-key map (kbd "n") #'luna-scroll-down-reserve-point)
-                          (define-key map (kbd "p") #'luna-scroll-up-reserve-point)
-                          map)
-  "Transient map for `luna-scroll-mode'.")
-
-(defun luna-scroll-down-reserve-point ()
-  (interactive)
-  (scroll-up 2)
-  (next-line 2)
-  (set-transient-map luna-scroll-map t))
-
-(defun luna-scroll-up-reserve-point ()
-  (interactive)
-  (scroll-down 2)
-  (next-line -2)
-  (set-transient-map luna-scroll-map t))
-
-(defun up-list-backward ()
-  (interactive)
-  (up-list -1))
-
 ;;; Auto insert
 
 (defvar luna-autoinsert-template (luna-f-join user-emacs-directory
@@ -266,34 +242,6 @@ E.g. SURNAME (c) to symbol ©."
          (template (luna-f-content luna-autoinsert-template)))
     (insert (format template
                     filename description feature filename))))
-
-;;; smart-delete
-
-(defun luna-hungry-delete-advice (&rest _)
-  (catch 'end
-    (let ((p (point)) beg end newline-count)
-      (save-excursion
-        (skip-chars-backward " \t")
-        (if (not (eq (char-before) ?\n))
-            (throw 'end nil))
-        (skip-chars-backward " \t\n")
-        (setq beg (point))
-        (goto-char p)
-        (skip-chars-forward " \t\n")
-        (setq end (point)))
-      (setq newline-count
-            (cl-count ?\n (buffer-substring-no-properties beg end)))
-      (delete-region beg end)
-      (cond ((eq (char-after) ?})
-             (insert "\n")
-             (indent-for-tab-command))
-            ((eq (char-after) ?\))
-             nil)
-            ((> newline-count 1)
-             (insert "\n")
-             (indent-for-tab-command))
-            ((> newline-count 0)
-             (insert " "))))))
 
 ;;; Cheat sheet
 
