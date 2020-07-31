@@ -250,68 +250,6 @@ region when invoked."
 (add-to-list 'emulation-mode-map-alists
              'angel-transient-mode-map-alist t)
 
-;;; Do-until (f d)
-
-(defvar angel--until-char nil
-  "Remember character used last time.")
-
-(defvar angel--until-history nil
-  "Records (until-function command char) for repeat.")
-
-(defun angel-forward-do-until (command)
-  "Return a command that prompts for CHAR, go to next CHAR and call COMMAND.
-
-COMMAND is called with two arguments: current point and beginning
-position of CHAR. If CHAR is not found, do nothing."
-  (lambda ()
-    (interactive)
-    (let* ((char (or angel--until-char (read-char "Forward: ")))
-           (beg (point)))
-      (forward-char) ; so we don’t get stuck when repeating command
-      (when (search-forward (char-to-string char) nil t)
-        (setq angel--until-char char)
-        (setq angel--until-history (list #'angel-forward-do-until command char))
-        (goto-char (match-beginning 0))
-        (funcall command beg (match-beginning 0))))))
-
-(defun angel-backward-do-until (command)
-  "Return a command that prompts for CHAR, go to previous CHAR and call COMMAND.
-
-COMMAND is called with two arguments: end position of CHAR and
-current point. If CHAR is not found, do nothing."
-  (lambda ()
-    (interactive)
-    (let* ((char (or angel--until-char (read-char "backward: ")))
-           (beg (point)))
-      (backward-char) ; so we don’t get stuck when repeating command
-      (when (search-backward (char-to-string char) nil t)
-        (setq angel--until-char char)
-        (setq angel--until-history (list #'angel-backward-do-until command char))
-        (goto-char (match-end 0))
-        (funcall command (match-end 0) beg)))))
-
-(defun angel-repeat-last-command ()
-  "Repeat last do-until command."
-  (interactive)
-  (setq angel--until-char (nth 2 angel--until-history))
-  (funcall (funcall (car angel--until-history) (cadr angel--until-history))))
-
-(defvar angel-until-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "f") (angel-forward-do-until #'ignore))
-    (define-key map (kbd "b") (angel-backward-do-until #'ignore))
-    ;; for the record, I know there is ‘zap-to-char’.
-    (define-key map (kbd "d") (angel-forward-do-until #'kill-region))
-    (define-key map (kbd "DEL") (angel-backward-do-until #'kill-region))
-    (define-key map (kbd "C-'") #'angel-repeat-last-command)
-    map)
-  "Map activated by ‘angel-until’.")
-
-(defun angel-until ()
-  (interactive)
-  (setq angel--until-char nil)
-  (set-transient-map angel-until-map t))
-
 ;;; Inline replace (:s)
 
 (defvar inline-replace-last-input "")
