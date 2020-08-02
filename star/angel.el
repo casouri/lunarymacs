@@ -29,8 +29,6 @@
 
  ;; Etc
  "C-M-;" #'inline-replace
- "C-M-p" #'up-list-backward
- "C-M-n" #'down-list
 
  ;; Remaps
  [remap backward-delete-char-untabify] #'luna-hungry-delete
@@ -49,12 +47,11 @@
  "C-s-f" (kbd "C-M-f")
  "C-s-b" (kbd "C-M-b")
  "C-s-t" (kbd "C-M-t")
+ "C-s-;" (kbd "C-M-;")
 
  :prefix "C-x"
  "9"   (kbd "C-x 1 C-x 3")
- "c"   #'cheatsheet-display
  "C-f" #'luna-find-file
- "C-u" #'undo-tree-visualize
  "C-v" #'cua-rectangle-mark-mode
  "`"   #'luna-expand-window
  "k"   '("kill-buffer" .
@@ -65,8 +62,7 @@
  "C-," #'beginning-of-buffer ; as of <
  "C-." #'end-of-buffer ; as of >
  "C-b" #'switch-to-buffer
- "C-d" '("open-default-dir" .
-         (lambda () (interactive) (dired default-directory)))
+ "C-d" #'dired-jump
  "j" #'luna-jump-or-set
  
  :prefix "C-c"
@@ -83,7 +79,10 @@
  "M-a"   #'backward-paragraph
  "M-e"   #'forward-paragraph
  "C-M-f" #'forward-sentence
- "C-M-b" #'backward-sentence)
+ "C-M-b" #'backward-sentence
+
+ :leader
+ "j" #'luna-jump-or-set)
 
 ;;; Navigation (w W e E b B)
 ;;
@@ -324,37 +323,39 @@ You can use \\&, \\N to refer matched text."
 
 ;;; Jump back
 
-(defvar luna-marker-alist nil
-  "An alist of (char . marker).")
+;; (defvar luna-marker-alist nil
+;;   "An alist of (char . marker).")
 
-(defun luna-jump-or-set (char)
-  "Jump to register CHAR if CHAR is lowercase.
-Set register CHAR to point if CHAR is uppercase."
-  (interactive "cRegister <- Char(a/A)")
-  (let ((lower-char (downcase char)))
-    (if (eql lower-char char)
-        ;; lower case, jump
-        (if-let ((marker (alist-get lower-char luna-marker-alist)))
-            (goto-char marker)
-          (message "Register %c unset" char))
-      ;; upper case, set
-      (setf (alist-get lower-char luna-marker-alist)
-            (point-marker)))))
+;; (defun luna-jump-or-set (char)
+;;   "Jump to register CHAR if CHAR is lowercase.
+;; Set register CHAR to point if CHAR is uppercase."
+;;   (interactive "cRegister <- Char(a/A)")
+;;   (let ((lower-char (downcase char)))
+;;     (if (eql lower-char char)
+;;         ;; lower case, jump
+;;         (if-let ((marker (alist-get lower-char luna-marker-alist)))
+;;             (goto-char marker)
+;;           (message "Register %c unset" char))
+;;       ;; upper case, set
+;;       (setf (alist-get lower-char luna-marker-alist)
+;;             (point-marker)))))
 
 (defvar luna-jump-back-marker nil
   "Marker set for `luna-jump-back'.")
 
 (defvar luna-jump-back-monitored-command-list
-  '(isearch-forward helm-swoop isearch-backward end-of-buffer beginning-of-buffer query-replace replace-string)
-  "Commands in this list sets mark before execution for jumping back later.")
+  '(swiper helm-swoop isearch-forward  isearch-backward
+           end-of-buffer beginning-of-buffer query-replace
+           replace-string counsel-imenu)
+  "Set mark before running these commands.")
 
 (defun luna-jump-back ()
   "Jump back to previous position."
   (interactive)
   (if (not luna-jump-back-marker)
       (message "No marker set")
-    ;; set `luna-jump-back-marker' to point and jump back
-    ;; so we can keep jumping back and forth
+    ;; Set `luna-jump-back-marker' to point and jump so we can jump
+    ;; back.
     (let ((here (point-marker))
           (there luna-jump-back-marker))
       (setq luna-jump-back-marker here)
@@ -366,21 +367,6 @@ Set register CHAR to point if CHAR is uppercase."
     (setq luna-jump-back-marker (point-marker))))
 
 (add-hook 'pre-command-hook #'luna-maybe-set-marker-to-jump-back)
-
-;;; Abbrev
-
-(defun luna-insert-space-or-expand-abbrev ()
-  "Expand abbrev if previous char is a space, then insert space."
-  (interactive)
-  (if (not (equal (char-before) ?\s))
-      (insert-char ?\s)
-    (backward-char)
-    (unless (expand-abbrev)
-      (insert-char ?\s))
-    (forward-char)))
-
-;; (global-set-key " " #'luna-insert-space-or-expand-abbrev)
-(read-abbrev-file (luna-f-join user-emacs-directory "star/abbrev-file.el"))
 
 ;;; Hungrey delete
 
