@@ -18,27 +18,27 @@
 
 (luna-def-key
  :leader
- "p" '("project")
+ "p" '("Project")
  ;; align
  "="  #'align-regexp
  ;; file
- "f" '("file")
+ "f" '("File")
  "fR"  #'luna-rename-file
  ;; buffer
- "b" '("buffer")
+ "b" '("Buffer")
  "bm"  '("goto message buffer" .
          (lambda () (interactive) (switch-to-buffer "*Messages*")))
  "bs"  '("goto scratch buffer" .
          (lambda () (interactive) (switch-to-buffer "*scratch*")))
  ;; toggle
- "t" '("toggle")
+ "t" '("Toggle")
  "tt"  #'luna-switch-theme
  "tm"  #'toggle-frame-maximized
  "tf"  #'luna-toggle-format-on-save
  "td"  #'toggle-debug-on-error
  "tl"  #'display-line-numbers-mode
  ;; search
- "s" '("search")
+ "s" '("Search")
  "si"  #'imenu
  
  :---

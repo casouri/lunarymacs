@@ -82,7 +82,9 @@
  "C-M-b" #'backward-sentence
 
  :leader
- "j" #'luna-jump-or-set)
+ "j"  '("Jumping")
+ "js" #'point-to-register
+ "jj" #'jump-to-register)
 
 ;;; Navigation (w W e E b B)
 ;;
@@ -322,23 +324,6 @@ You can use \\&, \\N to refer matched text."
         (overlay-put inline-replace-overlay 'after-string (propertize replace 'face '(:background "#078A00")))))))
 
 ;;; Jump back
-
-;; (defvar luna-marker-alist nil
-;;   "An alist of (char . marker).")
-
-;; (defun luna-jump-or-set (char)
-;;   "Jump to register CHAR if CHAR is lowercase.
-;; Set register CHAR to point if CHAR is uppercase."
-;;   (interactive "cRegister <- Char(a/A)")
-;;   (let ((lower-char (downcase char)))
-;;     (if (eql lower-char char)
-;;         ;; lower case, jump
-;;         (if-let ((marker (alist-get lower-char luna-marker-alist)))
-;;             (goto-char marker)
-;;           (message "Register %c unset" char))
-;;       ;; upper case, set
-;;       (setf (alist-get lower-char luna-marker-alist)
-;;             (point-marker)))))
 
 (defvar luna-jump-back-marker nil
   "Marker set for `luna-jump-back'.")
