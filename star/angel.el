@@ -79,12 +79,7 @@
  "M-a"   #'backward-paragraph
  "M-e"   #'forward-paragraph
  "C-M-f" #'forward-sentence
- "C-M-b" #'backward-sentence
-
- :leader
- "j"  '("Jumping")
- "js" #'point-to-register
- "jj" #'jump-to-register)
+ "C-M-b" #'backward-sentence)
 
 ;;; Navigation (w W e E b B)
 ;;

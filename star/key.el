@@ -40,6 +40,10 @@
  ;; search
  "s" '("Search")
  "si"  #'imenu
+ ;; jumping
+ "j"  '("Jumping")
+ "js" #'point-to-register
+ "jj" #'jump-to-register
  
  :---
  :keymaps 'smerge-mode-map
