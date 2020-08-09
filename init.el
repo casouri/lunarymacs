@@ -109,29 +109,33 @@
 ;;;; vterm
 ;; (luna-load-relative "star/term.el")
 
-;; Mac specific config starts here
-(luna-when-mac
- ;; macports
- (add-to-list 'load-path "/opt/local/share/emacs/site-lisp")
+;;;; Macports
+(luna-on "Brown"
+  ;; macports
+  (add-to-list 'load-path "/opt/local/share/emacs/site-lisp"))
 
-;;;; Mac port
- (setq mac-option-modifier 'meta
-       mac-command-modifier 'super
-       mac-pass-command-to-system nil ; fix cmd h
-       mac-system-move-file-to-trash-use-finder t)
+;;;; Emacs Mac port
+(luna-on "Brown"
+  (setq mac-option-modifier 'meta
+        mac-command-modifier 'super
+        mac-pass-command-to-system nil ; fix cmd h
+        mac-system-move-file-to-trash-use-finder t)
 
- (global-set-key (kbd "s-c") #'kill-ring-save)
- (global-set-key (kbd "s-v") #'yank)
+  (global-set-key (kbd "s-c") #'kill-ring-save)
+  (global-set-key (kbd "s-v") #'yank))
 
 ;;;; ENV
- (luna-load-env)
-
- ;; Because Apple.
- (when (equal default-directory "/") (cd "~/")))
-
-;; Mac specific config ends here
+(luna-on "Brown"
+  (luna-load-env)
+  ;; Because Apple.
+  (when (equal default-directory "/") (cd "~/")))
 
 ;;;; Local unsynced customization
-
 (luna-safe-load (luna-f-join user-emacs-directory "local-config.el"))
 
+;;;; Smooth scrolling
+(luna-on "Brown"
+  (setq scroll-up-aggressively 0.01
+        scroll-down-aggressively 0.01
+        scroll-margin 0
+        scroll-conservatively 101))
