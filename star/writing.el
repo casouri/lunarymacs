@@ -30,6 +30,9 @@
 (load-package bklink
   :hook (text-mode-hook . bklink-minor-mode))
 
+(load-package iimg
+  :hook (text-mode-hook . iimg-minor-mode))
+
 (load-package multi-translate
   :commands multi-translate-at-point
   :config (push 'youdao multi-translate-word-backends)
