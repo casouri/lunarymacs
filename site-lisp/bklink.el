@@ -138,7 +138,8 @@ Ignore dotfiles and directories."
                (jit-lock-register #'bklink-fontify-url)))
     (jit-lock-unregister #'bklink-fontify)
     (jit-lock-unregister #'bklink-fontify-url)
-    (put-text-property (point-min) (point-max) 'display nil))
+    (with-silent-modifications
+      (put-text-property (point-min) (point-max) 'display nil)))
   (bklink-managed-mode)
   (jit-lock-refontify))
 
@@ -148,12 +149,13 @@ Ignore dotfiles and directories."
   ;; FIXME: What if END is in the middle of a link?
   (while (re-search-forward bklink-regexp end t)
     ;; Hide opening and closing delimiters and file extension.
-    (put-text-property (match-beginning 1) (match-end 1)
-                       'display "“")
-    (put-text-property (match-beginning 4) (match-end 4)
-                       'display "”")
-    (when (match-beginning 3)
-      (put-text-property (match-beginning 3) (match-end 3) 'invisible t))
+    (with-silent-modifications
+      (put-text-property (match-beginning 1) (match-end 1)
+                         'display "“")
+      (put-text-property (match-beginning 4) (match-end 4)
+                         'display "”")
+      (when (match-beginning 3)
+        (put-text-property (match-beginning 3) (match-end 3) 'invisible t)))
     ;; Highlight link.
     (make-text-button (match-beginning 0)
                       (match-end 0)
