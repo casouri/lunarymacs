@@ -27,11 +27,17 @@
 ;; Install dictionaries: http://wordlist.aspell.net
 ;; or by macports.
 (load-package flyspell
-  :config (setq flyspell-issue-message-flag nil))
+  :config (setq flyspell-issue-message-flag nil)
+  :hooks
+  (text-mode-hook . flyspell-mode)
+  (prog-mode-hook . flyspell-prog-mode))
 
-(load-package wucuo
-  :hook ((prog-mode-hook text-mode-hook) . wucuo-start)
-  :config (setq wucuo-update-interval 0.5 ))
+;; Too many edge cases when you check buffer on a region on save,
+;; and checking on post-command-hook is also more convenient.
+;;
+;; (load-package wucuo
+;;   :hook ((prog-mode-hook text-mode-hook) . wucuo-start)
+;;   :config (setq wucuo-update-interval 0.5 ))
 
 (load-package writegood-mode
   :hook (text-mode . writegood-mode))
