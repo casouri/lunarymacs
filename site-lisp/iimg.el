@@ -253,7 +253,8 @@ image. See Commentary for the format of NAME, THUMBNAIL, and SIZE."
          (data-string (iimg--format
                        'data (list :name name :data data)))
          (link-string (iimg--format
-                       'link (list :name name :size '(width pixel 0.6)))))
+                       'link (list :name name :size '(width pixel 0.6)
+                                   :ext (file-name-extension file)))))
     ;; Insert data.
     (save-excursion
       (goto-char (point-max))
@@ -326,6 +327,22 @@ Also refresh the image at point."
   (let ((inhibit-read-only t))
     (delete-region beg end)))
 
+(defun iimg-export ()
+  "Export image at point."
+  (interactive)
+  (if-let ((img-props (iimg--link-at-point)))
+      (let ((path (concat (read-file-name "Export to (w/o extension): ")
+                          (or (plist-get img-props :ext) ".png")))
+            (data (iimg--data-of (plist-get img-props :name))))
+        (when (file-exists-p path)
+          (user-error "File exists, can’t export to it"))
+        (when (not (file-writable-p path))
+          (user-error "File not wraiteble, can’t export to it"))
+        (with-temp-file path
+          (insert data))
+        (message "Exported to %s" path))
+    (user-error "There is no image at point")))
+
 ;;; Minor mode
 
 (define-minor-mode iimg-minor-mode
@@ -350,7 +367,6 @@ Also refresh the image at point."
                 (if (equal name "")
                     (format-time-string "%s")
                   name))))))
-
 
 (provide 'iimg)
 
