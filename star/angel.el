@@ -14,8 +14,8 @@
  "M-n"   #'scroll-up
  "M-p"   #'scroll-down
  "M-/"   #'hippie-expand
- "M-f"   #'luna-forward-word
- "M-b"   #'luna-backward-word
+ ;; "M-f"   #'luna-forward-word
+ ;; "M-b"   #'luna-backward-word
 
  ;; Control bindings
  "C-="   #'er/expand-region
@@ -26,6 +26,7 @@
  "s-n"   #'luna-scroll-down-reserve-point
  "s-p"   #'luna-scroll-up-reserve-point
  "s-/"   #'transform-previous-char
+ "s-u"   #'revert-buffer
 
  ;; Etc
  "C-M-;" #'inline-replace
@@ -34,6 +35,7 @@
  [remap backward-delete-char-untabify] #'luna-hungry-delete
  [remap delete-indentation] #'luna-hungry-delete
  [remap c-electric-backspace] #'luna-hungry-delete
+ [remap move-beginning-of-line] #'smarter-move-beginning-of-line
 
  ;; Super -> Meta
  "s-<backspace>" (kbd "M-<backspace>")
@@ -83,6 +85,8 @@
 
 ;;; Navigation (w W e E b B)
 ;;
+;; Obsolete
+;;
 ;; Forward/backward stop at the beginning of the next word and also
 ;; line end/beginning. For CJK characters, move by four characters.
 
@@ -131,17 +135,15 @@
   (interactive)
   (scroll-up 2)
   (forward-line 2)
+  ;; Prevent me from accidentally inserting n and p.
   (set-transient-map luna-scroll-map t))
 
 (defun luna-scroll-up-reserve-point ()
   (interactive)
   (scroll-down 2)
   (forward-line -2)
+  ;; Prevent me from accidentally inserting n and p.
   (set-transient-map luna-scroll-map t))
-
-(defun up-list-backward ()
-  (interactive)
-  (up-list -1))
 
 ;;; Better C-a
 
@@ -169,10 +171,6 @@ point reaches the beginning or end of the buffer, stop there."
     (when (= orig-point (point))
       (move-beginning-of-line 1))))
 
-;; remap C-a to `smarter-move-beginning-of-line'
-(global-set-key [remap move-beginning-of-line]
-                'smarter-move-beginning-of-line)
-
 ;;; Query Replace+ (cgn)
 
 (defun query-replace+ (beg end &optional delete)
@@ -195,6 +193,13 @@ region when invoked."
                                (overlay-end ov)))
         nil
         (delete-overlay ov)))))
+
+(defun query-replace+delete (beg end)
+  "Delete region between BEG and END and query replace it.
+Edit the underlined region and type C-c C-c to start
+`query-replace'. Type C-g to abort."
+  (interactive "r")
+  (query-replace+ beg end t))
 
 ;;; Better isearch
 
@@ -227,9 +232,7 @@ region when invoked."
                                (kill-new (buffer-substring b e))
                                (message "Region saved")))
          (define-key map "r" #'query-replace+)
-         (define-key map "R" (lambda (b e)
-                               (interactive "r")
-                               (query-replace+ b e t)))
+         (define-key map "R" #'query-replace+delete)
          ;; isolate
          (define-key map "s" #'isolate-quick-add)
          (define-key map "S" #'isolate-long-add)
@@ -255,11 +258,12 @@ region when invoked."
 (defvar inline-replace-overlay nil)
 (defvar inline-replace-beg nil)
 
-(defvar inline-replace-minibuffer-map (let ((map (make-sparse-keymap)))
-                                        (set-keymap-parent map minibuffer-local-map)
-                                        (define-key map (kbd "C-p") #'inline-replace-previous)
-                                        (define-key map (kbd "C-n") #'inline-replace-next)
-                                        map))
+(defvar inline-replace-minibuffer-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map minibuffer-local-map)
+    (define-key map (kbd "C-p") #'inline-replace-previous)
+    (define-key map (kbd "C-n") #'inline-replace-next)
+    map))
 
 (defun inline-replace-previous ()
   "Previous match."
@@ -283,10 +287,14 @@ You can use \\&, \\N to refer matched text."
         (add-hook 'post-command-hook #'inline-replace-highlight)
 
         (let* ((minibuffer-local-map inline-replace-minibuffer-map)
-               (input (read-string "regexp/replacement: " nil 'inline-replace-history))
+               (input (read-string "regexp/replacement: " nil
+                                   'inline-replace-history))
                (replace (or (nth 1 (split-string input "/")) "")))
           (goto-char inline-replace-beg)
-          (ignore-errors (re-search-forward (car (split-string input "/")) (line-end-position) t inline-replace-count))
+          (ignore-errors
+            (re-search-forward
+             (car (split-string input "/"))
+             (line-end-position) t inline-replace-count))
 
           (unless (equal input inline-replace-last-input)
             (push input inline-replace-history)
@@ -305,18 +313,25 @@ You can use \\&, \\N to refer matched text."
   (when inline-replace-overlay
     (delete-overlay inline-replace-overlay))
   (when (>= (point-max) (length "regexp/replacement: "))
-    (let* ((input (buffer-substring-no-properties (1+ (length "regexp/replacement: ")) (point-max)))
+    (let* ((input (buffer-substring-no-properties
+                   (1+ (length "regexp/replacement: ")) (point-max)))
            (replace (or (nth 1 (split-string input "/")) "")))
       (with-current-buffer inline-replace-original-buffer
         (goto-char inline-replace-beg)
         ;; if no match and count is greater than 1, try to decrease count
         ;; this way if there are only 2 match, you can't increase count to anything greater than 2
-        (while (and (not (ignore-errors (re-search-forward (car (split-string input "/")) (line-end-position) t inline-replace-count)))
+        (while (and (not (ignore-errors
+                           (re-search-forward
+                            (car (split-string input "/"))
+                            (line-end-position) t inline-replace-count)))
                     (> inline-replace-count 1))
           (decf inline-replace-count))
-        (setq inline-replace-overlay (make-overlay (match-beginning 0) (match-end 0)))
-        (overlay-put inline-replace-overlay 'face '(:strike-through t :background "#75000F"))
-        (overlay-put inline-replace-overlay 'after-string (propertize replace 'face '(:background "#078A00")))))))
+        (setq inline-replace-overlay
+              (make-overlay (match-beginning 0) (match-end 0)))
+        (overlay-put inline-replace-overlay
+                     'face '(:strike-through t :background "#75000F"))
+        (overlay-put inline-replace-overlay 'after-string
+                     (propertize replace 'face '(:background "#078A00")))))))
 
 ;;; Jump back
 
@@ -324,9 +339,10 @@ You can use \\&, \\N to refer matched text."
   "Marker set for `luna-jump-back'.")
 
 (defvar luna-jump-back-monitored-command-list
-  '(swiper helm-swoop isearch-forward  isearch-backward
+  '(swiper helm-swoop isearch-forward isearch-backward
            end-of-buffer beginning-of-buffer query-replace
-           replace-string counsel-imenu)
+           replace-string counsel-imenu query-replace+
+           query-replace+delete)
   "Set mark before running these commands.")
 
 (defun luna-jump-back ()
