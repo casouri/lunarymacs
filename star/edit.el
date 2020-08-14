@@ -33,6 +33,9 @@
 
 ;; (which-function-mode)
 
+(add-hook 'after-save-hook
+          #'executable-make-buffer-file-executable-if-script-p)
+
 ;;; Package
 
 (load-package ws-butler
