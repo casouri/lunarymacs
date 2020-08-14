@@ -8,6 +8,7 @@
  "C-;" #'flyspell-auto-correct-previous-word
  [down-mouse-3] #'flyspell-correct-word
  "C-." nil
+ "C-," nil
  
  :leader
  "lcc" #'langtool-check
@@ -27,17 +28,21 @@
 ;; Install dictionaries: http://wordlist.aspell.net
 ;; or by macports.
 (load-package flyspell
-  :config (setq flyspell-issue-message-flag nil)
-  :hooks
+  :config
+  (setq flyspell-issue-message-flag nil)
+  ;; Add curely quotes so words like “didn’t” are proeprly handled.
+  (push '(nil "[[:alpha:]]" "[^[:alpha:]]" "['’]" nil
+              ("-B")
+              nil utf-8)
+        ispell-dictionary-alist)
+  :hook
   (text-mode-hook . flyspell-mode)
   (prog-mode-hook . flyspell-prog-mode))
 
-;; Too many edge cases when you check buffer on a region on save,
-;; and checking on post-command-hook is also more convenient.
-;;
-;; (load-package wucuo
-;;   :hook ((prog-mode-hook text-mode-hook) . wucuo-start)
-;;   :config (setq wucuo-update-interval 0.5 ))
+;; Why no wucuo: Too many edge cases when you check buffer on a region
+;; on save, and checking on post-command-hook is also more convenient.
+;; For example, iimg doesn’t work with wucuo: it checks the base64
+;; strings and hangs Emacs on save.
 
 (load-package writegood-mode
   :hook (text-mode . writegood-mode))
