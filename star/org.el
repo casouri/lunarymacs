@@ -36,8 +36,6 @@
 (load-package quanjiao
   :hook (org-mode-hook . quanjiao-mode))
 
-(add-to-list 'luna-package-list 'wucuo)
-
 (load-package org-backtick
   :hook (org-mode-hook . org-backtick-mode))
 
@@ -63,7 +61,6 @@
         (variable-pitch-mode)
         (olivetti-mode)
         (luna-scale-cjk-mode)
-        (wucuo-start)
         (electric-pair-local-mode -1)
         (setq-local cursor-type 'bar)
         ;; This is a global mode!
@@ -75,7 +72,6 @@
     (variable-pitch-mode -1)
     (olivetti-mode -1)
     (luna-scale-cjk-mode -1)
-    (wucuo-stop)
     (electric-pair-local-mode)
     (kill-local-variable 'line-spacing)
     (kill-local-variable 'cursor-type)))
