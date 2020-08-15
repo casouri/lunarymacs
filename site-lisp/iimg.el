@@ -85,7 +85,7 @@ NAME (string) is the name of the image.
 IMAGE-DATA is the image binary data.")
 
 (defvar iimg--data-regexp (rx (seq "({iimg-data "
-                                   (group (+? anychar))
+                                   (group (+? anything))
                                    "})"))
   "Regular expression for inline image data.
 The first group is the plist containing data.")
