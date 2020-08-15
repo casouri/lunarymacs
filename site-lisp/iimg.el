@@ -91,7 +91,7 @@ IMAGE-DATA is the image binary data.")
 The first group is the plist containing data.")
 
 (defvar iimg--link-regexp (rx (seq "({iimg-link "
-                                   (group (+? anychar))
+                                   (group (+? anything))
                                    "})"))
   "Regular expression for inline image link.
 The first group is the plist containing data.")
