@@ -21,7 +21,8 @@
   ;; Defined as local variable because `quanjiao-mode' is local.
   "The face used for quanjiao quotes.
 This variable is automatically set when `quanjiao-mode' is enabled.
-Instead of changing this variable, customize `quanjiao-font-family'.")
+Instead of changing this variable, customize `quanjiao-font-family'
+and restart `quanjiao-mode'.")
 
 (defun quanjiao-matcher (limit)
   "Matcher for font-lock."
@@ -36,7 +37,7 @@ Instead of changing this variable, customize `quanjiao-font-family'.")
   :lighter ""
   (if quanjiao-mode
       (progn
-        (setq quanjiao-quote-face `((t . (:family ,quanjiao-font-family))))
+        (setq quanjiao--quote-face `((t . (:family ,quanjiao-font-family))))
         (font-lock-add-keywords
          nil '((quanjiao-matcher . quanjiao--quote-face))))
     (font-lock-remove-keywords
