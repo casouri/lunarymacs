@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: <rg
+# name: region beginning and end
 # key: <rg
 # --
 (region-beginning) (region-end)

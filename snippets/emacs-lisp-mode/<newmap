@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: <newmap
+# name: new keymap
 # key: <newmap
 # --
 (let ((map (make-sparse-keymap)))

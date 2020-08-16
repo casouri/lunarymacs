@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: <le
+# name: line end position
 # key: <le
 # --
 (line-end-position)
