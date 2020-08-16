@@ -110,6 +110,15 @@
   :group 'emacs)
 (require 'recentf)
 
+;;; [2020/08/16] (@ "Add convenient functions")
+(defun recentf-add-direcoty-files (directory)
+  "Add files in DIRECTORY to recentf list."
+  (interactive "DDirectory: ")
+  (dolist (path (directory-files-recursively
+                 directory (rx (seq bol (not "."))) t t))
+    (recentf-add-file path)
+    (recentf-save-list)))
+
 ;;; [2020/07/22] (@ "Also add file’s directory")
 (defun recentf-push-buffer-directory ()
   (when default-directory
