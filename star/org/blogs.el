@@ -27,9 +27,12 @@
   "<sup>%s</sup>")
 
 (defvar luna-blog-postamble-format
-  '(("en" "<p class=\"author\">Written by %a <%e></p>
+  '(("en" "<p class=\"author\">Written by %a</p>
 <p class=\"first-publish\">First Published on %d</p>
-<p class-\"last-modified\">Last modified on %C</p>")))
+<p class-\"last-modified\">Last modified on %C</p>
+<p>Send your comment to 
+<a href=\"mailto:archive.casouri.cat@gmail.com\">
+archive.casouri.cat@gmail.com</a></p>")))
 
 (defvar luna-blog-home/up-format
   "<div id=\"org-div-home-and-up-index-page\">
