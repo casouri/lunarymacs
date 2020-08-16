@@ -5,17 +5,24 @@
 (fset #'yes-or-no-p #'y-or-n-p) ; y/n instead of yes/no
 
 (setq-default
- backup-directory-alist `((".*" . ,(luna-f-join luna-cache-dir "backup")))
- auto-save-list-file-prefix (luna-f-join luna-cache-dir "auto-save-list/saves-")
+ backup-directory-alist
+ `((".*" . ,(luna-f-join luna-cache-dir "backup")))
+
+ auto-save-list-file-prefix
+ (luna-f-join luna-cache-dir "auto-save-list/saves-")
+
 
  abbrev-file-name (expand-file-name "abbrev.el" luna-cache-dir)
  recentf-save-file (expand-file-name "recentf" luna-cache-dir)
  tramp-persistency-file-name (expand-file-name "tramp" luna-cache-dir)
  bookmark-default-file (expand-file-name "bookmarks" luna-cache-dir)
  savehist-file (expand-file-name "history" luna-cache-dir)
- auto-save-file-name-transforms (list (list ".*" (luna-f-join luna-cache-dir "auto-save/") t)
-                                      (list "\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
-                                            (luna-f-join luna-cache-dir "auto-save-remote") t))
+ project-list-file (expand-file-name "projects" luna-cache-dir)
+
+ auto-save-file-name-transforms
+ (list (list ".*" (luna-f-join luna-cache-dir "auto-save/") t)
+       (list "\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
+             (luna-f-join luna-cache-dir "auto-save-remote") t))
 
  ;; current file name
  frame-title-format '("%f"))

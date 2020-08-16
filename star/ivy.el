@@ -39,7 +39,10 @@
   :config (counsel-mode))
 
 ;; For M-x history.
-(add-to-list 'luna-package-list 'smex)
+(load-package smex
+  :defer
+  :config
+  (setq smex-save-file (luna-f-join luna-cache-dir "smex-items")))
 
 ;; ivy-prescient doesn’t support ivy anymore.
 ;;
