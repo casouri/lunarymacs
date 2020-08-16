@@ -33,11 +33,8 @@
 (load-package valign
   :hook (org-mode-hook . valign-mode))
 
-(load-package quanjiao
-  :hook (org-mode-hook . quanjiao-mode))
-
-(load-package org-backtick
-  :hook (org-mode-hook . org-backtick-mode))
+;; (load-package org-backtick
+;;   :hook (org-mode-hook . org-backtick-mode))
 
 (luna-on "Brown"
   (load-package orgmark

@@ -33,6 +33,9 @@
 (load-package iimg
   :hook (text-mode-hook . iimg-minor-mode))
 
+(load-package quanjiao
+  :hook (text-mode-hook . quanjiao-mode))
+
 (load-package multi-translate
   :commands multi-translate-at-point
   :config (push 'youdao multi-translate-word-backends)
