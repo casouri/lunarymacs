@@ -131,8 +131,8 @@
   (setf (alist-get 'scheme-mode luna-console-buffer-alist)
         "* Guile REPL *"))
 
-;; C/C++
 
+;; C/C++
 (dolist (hook '(c-mode-hook c++-mode-hook))
   (add-hook hook (lambda ()
                    (setq-local company-transformers nil)
@@ -140,7 +140,6 @@
                    (eglot-ensure))))
 
 ;; XML
-
 (defun setup-xml ()
   "Setup hideshow for XML file."
   (require 'hideshow)
@@ -156,7 +155,8 @@
 (add-hook 'nxml-mode-hook #'setup-xml)
 (add-hook 'sgml-mode-hook #'setup-xml)
 
-;;; Genarl package
+;;; General package
+
 (load-package aggressive-indent
   :commands aggressive-indent-mode
   :hook ((emacs-lisp-mode-hook
@@ -174,6 +174,7 @@
   quickrun-compile-only
   quickrun-replace-region
   quickrun-autorun-mode)
+
 
 ;; (load-package lsp-mode
 ;;   :init (setq lsp-keymap-prefix "C-SPC l")
