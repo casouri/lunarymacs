@@ -19,10 +19,18 @@
 
 (load-package deft
   :commands deft
-  :hook (deft-open-file-hook . (color-outline-mode-maybe
-                                bklink-minor-mode
-                                auto-fill-mode))
+  :hook
+  (deft-open-file-hook . (color-outline-mode-maybe
+                          bklink-minor-mode
+                          auto-fill-mode))
+  (deft-cache-file-hook . iimg-clean-data)
   :config
+  (defun iimg-clean-data ()
+    "Clear any iimg-data in current buffer."
+    (goto-char (point-min))
+    (while (re-search-forward iimg--data-regexp nil t)
+      (let ((inhibit-read-only t))
+        (delete-region (match-beginning 0) (match-end 0)))))
   (push '(text-mode "#") color-outline-comment-char-alist)
   (setq deft-directory (expand-file-name "~/deft/")
         deft-use-filter-string-for-filename t))

@@ -20,4 +20,5 @@
                                   :dependency (bing-dict
                                                google-translate
                                                youdao-dictionary
-                                               sdcv)))))
+                                               sdcv)))
+        (deft . (:repo "casouri/deft" :option (:full-clone t)))))
