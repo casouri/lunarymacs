@@ -102,13 +102,11 @@
 (luna-when-mac (luna-enable-apple-emoji))
 
 ;;;; server
-;; checking whether server started can be slow
-;; see emacs-horror
 (run-with-idle-timer
- 3 nil
- (lambda ()
-   (with-demoted-errors "Server failed to start: %s"
-     (server-start t t))))
+ 3 nil (lambda ()
+         (require 'server)
+         (unless (eq (server-running-p) t)
+           (server-start t t))))
 
 ;;;; vterm
 ;; (luna-load-relative "star/term.el")
