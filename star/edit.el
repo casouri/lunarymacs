@@ -24,7 +24,7 @@
  "C-c C-h" #'hs-toggle-hiding
  :keymaps '(c-mode-map c++-mode-map)
  "M-RET" #'srefactor-refactor-at-point
- :keymaps '(outline-minor-mode-map org-mode-map)
+ :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
  "s-i" #'outline-cycle
  :keymaps 'text-mode-map
  "TAB" #'self-insert-command)
