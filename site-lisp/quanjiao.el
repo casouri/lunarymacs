@@ -14,6 +14,15 @@
   "Face for full width quotation marks."
   :group 'convenience)
 
+(defvar quanjiao-font-family "Source Han Serif SC"
+  "Font family used for quanjiao quotes.")
+
+(defvar-local quanjiao--quote-face `((t . (:family ,quanjiao-font-family)))
+  ;; Defined as local variable because `quanjiao-mode' is local.
+  "The face used for quanjiao quotes.
+This variable is automatically set when `quanjiao-mode' is enabled.
+Instead of changing this variable, customize `quanjiao-font-family'.")
+
 (defun quanjiao-matcher (limit)
   "Matcher for font-lock."
   (and (re-search-forward "[‘’“”]" limit t)
@@ -26,10 +35,12 @@
   "Display full width quotation marks."
   :lighter ""
   (if quanjiao-mode
-      (font-lock-add-keywords
-       nil '((quanjiao-matcher . 'quanjiao-quote)))
+      (progn
+        (setq quanjiao-quote-face `((t . (:family ,quanjiao-font-family))))
+        (font-lock-add-keywords
+         nil '((quanjiao-matcher . quanjiao--quote-face))))
     (font-lock-remove-keywords
-     nil '((quanjiao-matcher . 'quanjiao-quote))))
+     nil '((quanjiao-matcher . quanjiao--quote-face))))
   (jit-lock-refontify))
 
 (provide 'quanjiao)
