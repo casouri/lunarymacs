@@ -101,7 +101,7 @@ Available commands:
                 already a cons, add ARG to ‘auto-mode-alist’.
   :commands     Add autoload for this command.
   :after        Require after this package loads.
-  :defer        Don’t require the package.
+  :defer        Don’t require the package, doesn’t need arguments.
 
 Each command can take zero or more arguments."
   (declare (indent 1))
