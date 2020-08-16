@@ -18,30 +18,36 @@
   ;; http://haskell.github.io/haskell-mode/manual/latest/Interactive-Haskell.html#Interactive-Haskell
   (require 'console-buffer)
   (add-to-list 'luna-console-buffer-alist '(haskell-mode . "*haskell*"))
-  (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-file)
-  (define-key haskell-mode-map (kbd "C-c `") 'haskell-interactive-bring)
-  (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
-  (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
-  (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-  (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-  (define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
-  (with-eval-after-load 'haskell-interactive-mode
-    (define-key haskell-interactive-mode-map (kbd "C-a") #'haskell-interactive-mode-beginning)))
+  (luna-def-key
+   :keymaps 'haskell-mode-map
+   "C-c C-l" #'haskell-process-load-file
+   "C-c `"   #'haskell-interactive-bring
+   "C-c C-t" #'haskell-process-do-type
+   "C-c C-i" #'haskell-process-do-info
+   "C-c C-c" #'haskell-process-cabal-build
+   "C-c C-k" #'haskell-interactive-mode-clear
+   "C-c c"   #'haskell-process-cabal
+   :keymaps 'haskell-interactive-mode-map
+   "C-a" #'haskell-interactive-mode-beginning))
 
-(defun load-agda ()
-  (interactive)
-  (let ((coding-system-for-read 'utf-8))
-    (load-file (shell-command-to-string "~/.cabal/bin/agda-mode locate"))
-    (agda2-mode)))
 
-(add-to-list 'auto-mode-alist '("\\.l?agda\\'" . load-agda))
+(luna-on "Brown"
+  (defun load-agda ()
+    (interactive)
+    (let ((coding-system-for-read 'utf-8))
+      (load-file
+       (shell-command-to-string "~/.cabal/bin/agda-mode locate"))
+      (agda2-mode)))
+  (add-to-list 'auto-mode-alist '("\\.l?agda\\'" . load-agda)))
 
-(load-package matlab
-  :init
-  (setq matlab-shell-command "/Applications/MATLAB_R2018b.app/Contents/MacOS/MATLAB")
-  (setq matlab-shell-command-switches (list "-nodesktop"))
-  ;; don’t enable company in matlab-shell-mode
-  :commands matlab-shell)
+(luna-on "Brown"
+  (load-package matlab
+    :init
+    (setq matlab-shell-command
+          "/Applications/MATLAB_R2018b.app/Contents/MacOS/MATLAB")
+    (setq matlab-shell-command-switches (list "-nodesktop"))
+    ;; don’t enable company in matlab-shell-mode
+    :commands matlab-shell))
 
 
 (load-package mips-mode
