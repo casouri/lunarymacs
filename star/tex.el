@@ -3,7 +3,7 @@
 ;;; Keys
 
 (luna-def-key
- :TeX-mode-map
+ :keymaps 'TeX-mode-map
  "$" nil)
 
 ;;; Packages
