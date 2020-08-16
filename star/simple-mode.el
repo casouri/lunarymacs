@@ -8,6 +8,10 @@
   :mode "\\.yaml$")
 
 
+(load-package fish-mode
+  :mode "\\.fish$")
+
+
 (load-package haskell-mode
   :mode "\\.hs$"
   :config
