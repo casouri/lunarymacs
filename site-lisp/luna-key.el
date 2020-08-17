@@ -84,7 +84,8 @@ is equivalent to
 
 (defun luna-key-normalize (prefix key)
   "Normalize KEY and PREFIX with `kbd' and combine them.
-However, if KEY is [remap ...] or [t], don’t prepend PREFIX to it."
+However, if KEY is [remap ...] or [t], don’t prepend PREFIX to it.
+PREFIX can be nil, meaning no prefix."
   ;; Normalize KEY and PREFIX with `kbd'.
   (if (stringp key) (setq key (kbd key)))
   (if (and prefix (stringp prefix)) (setq prefix (kbd prefix)))
@@ -99,23 +100,40 @@ However, if KEY is [remap ...] or [t], don’t prepend PREFIX to it."
       key
     (vconcat prefix key)))
 
-(defun luna-key-define (key def map-list prefix)
+(defun luna-key-define (key def &optional map-list prefix condition)
   "Define KEY to DEF.
-Define KEY in all the maps in MAP-LIST, using PREFIX as prefix. 
-MAP-LIST and PREFIX can be nil.
-If MAP-LIST is nil, only define in `global-map'."
+Define KEY in all the maps in MAP-LIST, using PREFIX as prefix.
+If MAP-LIST is nil, define in `global-map'. CONDITION is a
+predicate function; the binding only takes effect if it evaluates
+to non-nil."
   (let ((map-list (or map-list (list 'global-map)))
         (key (luna-key-normalize prefix key))
         ;; If DEF is (STRING . DEFN), we use STRING as it’s description.
         (desc (car-safe def)))
+    ;; Add description to which-key, when available.
     (when desc
       (with-eval-after-load 'which-key
         (which-key-add-key-based-replacements
           (key-description key) desc)))
+    ;; If we have a condition function, generate a DEF with it.
+    (when condition
+      (setq def
+            (if desc
+                ;; If DESC is available, use it, otherwise use empty
+                ;; string as label (not that it makes any
+                ;; difference...).
+                `(menu-item desc ,(cdr def)
+                            :filter ,(lambda (cmd)
+                                       (if (funcall condition) cmd)))
+              `(menu-item "" ,def
+                          :filter ,(lambda (cmd)
+                                     (if (funcall condition) cmd))))))
     (dolist (map map-list)
       (let ((map (if (eq map 'override) 'luna-key-override-mode-map map)))
+        ;; If the map is present, just bind to it.
         (if (boundp map)
             (define-key (symbol-value map) key def)
+          ;; If the map is not defined yet, bind it later.
           (push (list key def)
                 (alist-get map luna-key-postponed-alist))
           (add-hook 'after-load-functions
@@ -148,31 +166,44 @@ They are basically macros that expand to other modifiers.
 
 Use :clear to reset all modifier effects. :--- is an alias for :clear.
 
+Use :when FUNC to conditionally bind commands. FUNC takes no
+arguments, returns a non-nil value when the binding should take
+effect, and returns nil when the binding shouldn’t take effect.
+
 ARGS.
 
-\(fn [:keymaps MAPS] [:prefix PREFIX] [:clear] KEY DEF ...)"
+\(fn [:keymaps MAPS] [:prefix PREFIX] [:when FUNC] [:clear] KEY DEF ...)"
   (luna-key-override-mode)
   (condition-case nil
-      (let (arg map-list prefix)
+      (let (arg map-list prefix condition)
         (while args
           (setq arg (pop args))
           (pcase arg
             (:keymaps
+             ;; Next argument is either a keymap or a list of them.
              (let ((map (pop args)))
                (cond ((symbolp map) (setq map-list (list map)))
                      ((proper-list-p map) (setq map-list map))
                      (t (error "Invalid argument for :keymaps command: %s"
                                map)))))
             (:prefix
+             ;; Next argument is a key prefix.
              (setq prefix (pop args)))
+            ;; Clear all states.
             ((or :clear :---) (setq prefix nil
-                                    map-list nil))
+                                    map-list nil
+                                    condition nil))
+            (:when
+             ;; Next argument is a condition predicate.
+             (setq condition (pop args)))
+            ;; Preset modifiers.
             ((pred keywordp)
              (when-let ((preset (alist-get arg luna-key-preset-alist)))
                (setq args (append preset args))))
+            ;; Next two arguments are key and value.
             (_ (let ((key arg)
                      (def (pop args)))
-                 (luna-key-define key def map-list prefix))))))
+                 (luna-key-define key def map-list prefix condition))))))
     (setting-constant (error "Not enough arguments"))))
 
 (provide 'luna-key)
