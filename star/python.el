@@ -13,29 +13,18 @@
                      '("\\.sage\\'" . sage-shell:sage-mode))
   :commands sage-shell-mode sage-shell:sage-mode)
 
-;; Install pyright with npm install -g pyright.
-(with-eval-after-load 'eglot
+
+(load-package eglot
+  :extern "npm install -g pyright"
+  :defer
   (add-to-list 'eglot-server-programs
                '(python-mode . ("pyright-langserver" "--stdio")))
   (add-hook 'python-mode-hook
-          (lambda ()
-            (when (and buffer-file-name
-                       (not (string-match "\.sage$" (buffer-file-name))))
-              (eglot-ensure)))))
-
-;;;; IDE
-
-;; (load-package anaconda-mode
-;;   :commands (anaconda-mode)
-;;   :init (add-hook 'python-mode-hook #'anaconda-mode))
-
-;; (load-package company-anaconda
-;;   :after (anaconda-mode)
-;;   :init (with-eval-after-load 'company
-;;           (add-to-list 'company-backends 'company-anaconda)))
-
-;; (with-eval-after-load 'flycheck
-;;   (add-hook 'python-mode-hook #'flycheck-mode))
+            (lambda ()
+              (when (and buffer-file-name
+                         (not (string-match "\.sage$"
+                                            (buffer-file-name))))
+                (eglot-ensure)))))
 
 ;;;; Virtual env
 
@@ -55,25 +44,27 @@
 ;; note this is set after setting exec path
 
 (with-eval-after-load 'quickrun
-  (quickrun-add-command "python"
-                        '((:command . (lambda () python-shell-interpreter))
-                          (:description . "Run python with binary in `python-shell-interpreter'."))
-                        :override t))
+  (quickrun-add-command
+    "python"
+    '((:command . (lambda () python-shell-interpreter))
+      (:description . "Run python with binary in `python-shell-interpreter'."))
+    :override t))
 
 ;;;; Mode line
 ;;
-;; The mode line segment shows current python executable
-;; hover text is the full path
-;; clicking it opens the customize panel for `python-shell-interpreter'
+;; The mode line segment shows current python executable.
+;; The hovering text is the full path.
+;; Clicking it opens the customize panel for `python-shell-interpreter'.
 ;;
-;; pyvenv displays the virtual env
+;; pyvenv displays the virtual env.
 
-(defvar luna-python-mode-line-map (let ((map (make-sparse-keymap)))
-                                    (define-key map (vector 'mode-line 'down-mouse-1)
-                                      (lambda ()
-                                        (interactive)
-                                        (customize-apropos "python-shell-interpreter")))
-                                    map))
+(defvar luna-python-mode-line-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (vector 'mode-line 'down-mouse-1)
+      (lambda ()
+        (interactive)
+        (customize-apropos "python-shell-interpreter")))
+    map))
 
 (defun luna-python-exec-mode-line ()
   "Return a mode line segment for python executable."
@@ -87,6 +78,7 @@
                      ""))
 
 (add-to-list 'mode-line-misc-info
-             '(:eval (if (and (eq major-mode 'python-mode) (featurep 'pyvenv))
+             '(:eval (if (and (eq major-mode 'python-mode)
+                              (featurep 'pyvenv))
                          (list "  " pyvenv-mode-line-indicator "  ")
                        "")))
