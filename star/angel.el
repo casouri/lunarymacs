@@ -216,38 +216,37 @@ Edit the underlined region and type C-c C-c to start
 
 ;;; Transient map in region (y p)
 
-(defconst angel-transient-mode-map-alist
-  `((mark-active
-     ,@(let ((map (make-sparse-keymap)))
-         ;; operations
-         (define-key map "p" (lambda (b e)
-                               (interactive "r") (delete-region b e) (yank)))
-         (define-key map "x" #'exchange-point-and-mark)
-         (define-key map ";" #'comment-dwim)
-         (define-key map "y" #'kill-ring-save)
-         (define-key map (kbd "C-y") #'kill-ring-save)
-         (define-key map "Y" (lambda
-                               (b e)
-                               (interactive "r")
-                               (kill-new (buffer-substring b e))
-                               (message "Region saved")))
-         (define-key map "r" #'query-replace+)
-         (define-key map "R" #'query-replace+delete)
-         ;; isolate
-         (define-key map "s" #'isolate-quick-add)
-         (define-key map "S" #'isolate-long-add)
-         (define-key map "d" #'isolate-quick-delete)
-         (define-key map "D" #'isolate-long-delete)
-         (define-key map "c" #'isolate-quick-change)
-         (define-key map "C" #'isolate-long-change)
-
-         ;; expand-region
-         (define-key map (kbd "C--") #'er/contract-region)
-         (define-key map (kbd "C-=") #'er/expand-region)
-         map))))
-
-(add-to-list 'emulation-mode-map-alists
-             'angel-transient-mode-map-alist t)
+;; Unlike `emulation-mode-map-alists', luna-def-key allows more
+;; flexibility for the predicate.
+(luna-def-key
+ :when (lambda ()
+         (and mark-active (not (derived-mode-p 'magit-status-mode))))
+ :keymaps 'override
+ "p" '("override-paste" . (lambda (b e)
+                            (interactive "r")
+                            (delete-region b e) (yank)))
+ "x" #'exchange-point-and-mark
+ ";" #'comment-dwim
+ "y" #'kill-ring-save
+ "C-y" #'kill-ring-save
+ "Y" '("kill-ring-save-keep-region" .
+       (lambda
+         (b e)
+         (interactive "r")
+         (kill-new (buffer-substring b e))
+         (message "Region saved")))
+ "r" #'query-replace+
+ "R" #'query-replace+delete
+ ;; isolate
+ "s" #'isolate-quick-add
+ "S" #'isolate-long-add
+ "d" #'isolate-quick-delete
+ "D" #'isolate-long-delete
+ "c" #'isolate-quick-change
+ "C" #'isolate-long-change
+ ;; expand-region
+ "C--" #'er/contract-region
+ "C-=" #'er/expand-region)
 
 ;;; Inline replace (:s)
 
