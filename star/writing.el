@@ -19,6 +19,8 @@
 
 (load-package deft
   :commands deft
+  :config
+  (require 'iimg)
   :hook
   (deft-open-file-hook . (color-outline-mode-maybe
                           bklink-minor-mode
