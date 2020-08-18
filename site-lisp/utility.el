@@ -333,6 +333,33 @@ E.g. SURNAME (c) to symbol ©."
   (font-lock-mode -1)
   (font-lock-mode))
 
+;;; Unfill
+
+;; Copied straight from flywrap.el.
+(defun unfill-region (beg end)
+  "Remove newlines in the region from BEG to END."
+  (interactive "r")
+  (save-excursion
+    (goto-char beg)
+    (while (search-forward "\n" end t)
+      (unless
+          ;; If we are at point-max, ‘char-after’ returns nil.
+          (eq (point) (point-max))
+        ;; Regarding the 'ascii: I can be more intelligent here
+        ;; (include iso-latin, etc), but since the break point function
+        ;; is from fill.el, better keep in sync with it. (see
+        ;; ‘fill-move-to-break-point’).
+        ;; Don’t remove consecutive newlines.
+        (cond ((or (eq (char-before (1- (point))) ?\n)
+                   (eq (char-after (point)) ?\n))
+               nil)
+              ;; Separate ascii characters with space
+              ((and (eq (char-charset (char-before (1- (point)))) 'ascii)
+	            (eq (char-charset (char-after (point))) 'ascii))
+               (replace-match " "))
+              ;; Don’t separate CJK characters.
+              (t (replace-match "")))))))
+
 ;;; Provide
 
 (provide 'utility)
