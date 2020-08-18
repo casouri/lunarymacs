@@ -35,6 +35,7 @@
               ("-B")
               nil utf-8)
         ispell-dictionary-alist)
+  :extern "aspell"
   :hook
   (text-mode-hook . flyspell-mode)
   (prog-mode-hook . flyspell-prog-mode))
@@ -50,6 +51,7 @@
 ;; Install proselint by macports.
 (load-package flycheck
   :hook (text-mode-hook . flycheck-mode)
+  :extern "proselint"
   :config
   (flycheck-define-checker proselint
     "A linter for prose."
@@ -65,6 +67,7 @@
   :config
   (setq langtool-language-tool-server-jar
         "/Users/yuan/attic/LanguageTool-5.0/languagetool-server.jar")
+  :extern "languagetool"
   :commands
   langtool-check
   langtool-check-done

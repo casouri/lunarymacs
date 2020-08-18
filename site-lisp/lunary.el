@@ -10,13 +10,18 @@
 ;;; Variables
 
 (defvar luna-cache-dir (expand-file-name "cache" user-emacs-directory)
-  "The dir for cache files.")
+  "The directory for cache files.")
 
 (defvar luna-package-list nil
   "List of package symbols. Added by ‘load-package’.")
 
+(defvar luna-external-program-list nil
+  "List of external programs needed. Added by ‘load-package’.
+A list of notes, really.")
+
 (defvar luna-dumped nil
-  "non-nil when a dump file is loaded (because dump.el sets this variable).")
+  "non-nil when a dump file is loaded.
+(Because dump.el sets this variable to t.)")
 
 (defvar luna-dumped-load-path nil
   "By default dump files doesn’t save ‘load-path’.

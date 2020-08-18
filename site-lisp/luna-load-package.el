@@ -128,6 +128,11 @@ Each command can take zero or more arguments."
                        `(add-to-list 'auto-mode-alist
                                      ',(cons pattern mode-fn))))
                    arg-list))
+                 (:extern
+                  (mapcar
+                   (lambda (arg)
+                     `(add-to-list 'luna-external-program-list ,arg))
+                   arg-list))
                  (:commands
                   (mapcar (lambda (cmd)
                             `(autoload ',cmd ,(symbol-name package) nil t))
