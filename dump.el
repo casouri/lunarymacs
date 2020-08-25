@@ -35,6 +35,8 @@
                        elec-pair))
   (require package))
 
+(require 'no-littering)
+
 ;;; Theme
 
 (add-to-list 'custom-theme-load-path
