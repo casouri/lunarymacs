@@ -71,16 +71,6 @@
   isolate-long-delete)
 
 
-;; (load-package undo-tree
-;;   :config (global-undo-tree-mode)
-;;   (setq undo-tree-visualizer-timestamps t
-;;         undo-tree-enable-undo-in-region nil
-;;         undo-tree-visualizer-diff t
-;;         undo-tree-auto-save-history t
-;;         undo-tree-history-directory-alist
-;;         `(("." . ,(luna-f-join luna-cache-dir "undo-tree")))))
-
-
 (load-package diff-hl
   :hook (prog-mode-hook . diff-hl-mode)
   :config (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
@@ -116,5 +106,7 @@
   :hook ((c-mode-hook c++-mode-hook) . semantic-mode))
 
 (load-package ghelp)
+
+(add-hook 'prog-mode-hook #'hs-minor-mode)
 
 (add-to-list 'luna-package-list 'helpful)
