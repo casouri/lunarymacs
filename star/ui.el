@@ -130,46 +130,6 @@
   luna-toggle-console
   luna-toggle-console-window)
 
-;;; Desktop resume
-
-(add-hook 'after-init-hook #'luna-setup-save-session)
-
-;; copied from
-;; https://gist.github.com/syl20bnr/4425094
-(defun luna-setup-save-session ()
-  "Setup desktop-save-mode.
-
-Don't bother me with annoying prompts when reading
-and saveing desktop."
-  ;; (when (not (eq (emacs-pid) (desktop-owner))) ; Check that emacs did not load a desktop yet
-
-  (desktop-save-mode 1) ; activate desktop mode
-  (setq desktop-save t) ; always save
-  ;; The default desktop is loaded anyway if it is locked
-  (setq desktop-load-locked-desktop t)
-  ;; Set the location to save/load default desktop
-  (setq desktop-dirname luna-cache-dir)
-
-  ;; Make sure that even if emacs or OS crashed, emacs
-  ;; still have last opened files.
-  (add-hook 'find-file-hook
-            (lambda ()
-              (run-with-timer 5 nil
-                              (lambda ()
-                                ;; Reset desktop modification time so the user is not bothered
-                                (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))
-                                (desktop-save luna-cache-dir)))))
-
-  ;; Add a hook when emacs is closed to we reset the desktop
-  ;; modification time (in this way the user does not get a warning
-  ;; message about desktop modifications)
-  (add-hook 'kill-emacs-hook
-            (lambda ()
-              ;; Reset desktop modification time so the user is not bothered
-              (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))))
-  ;; )
-  )
-
 ;;; Misc functions
 
 (defun chunyang-alpha-param-adjust ()
