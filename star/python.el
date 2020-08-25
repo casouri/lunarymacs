@@ -47,7 +47,7 @@
   (quickrun-add-command
     "python"
     '((:command . (lambda () python-shell-interpreter))
-      (:description . "Run python with binary in `python-shell-interpreter'."))
+      (:description . "Run python with the binary in `python-shell-interpreter'."))
     :override t))
 
 ;;;; Mode line
