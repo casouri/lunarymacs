@@ -56,7 +56,7 @@
 (setq luna-company-manual nil)
 
 ;; core must load first because other configs depends on them
-(luna-load-relative "star/builtin-config.el")
+(luna-load-relative "star/etc.el")
 (luna-load-relative "star/key.el")
 (luna-load-relative "star/angel.el")
 (luna-load-relative "star/ui.el")
@@ -131,9 +131,6 @@
   (luna-load-env)
   ;; Because Apple.
   (when (equal default-directory "/") (cd "~/")))
-
-;;;; Local unsynced customization
-(luna-safe-load (luna-f-join user-emacs-directory "local-config.el"))
 
 ;;;; Smooth scrolling
 (luna-on "Brown"
