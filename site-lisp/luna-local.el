@@ -12,7 +12,8 @@
 
 (require 'luna-f)
 
-(defvar luna-local-file (expand-file-name "local.el" user-emacs-directory)
+(defvar luna-local-file (expand-file-name "var/local.el"
+                                          user-emacs-directory)
   "File for local storage.")
 
 (defvar luna-local--pending-alist nil
