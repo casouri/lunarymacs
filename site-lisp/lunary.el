@@ -9,8 +9,7 @@
 
 ;;; Variables
 
-(defvar luna-cache-dir (expand-file-name "cache" user-emacs-directory)
-  "The directory for cache files.")
+(defvar luna-data-dir (expand-file-name "var" user-emacs-directory))
 
 (defvar luna-package-list nil
   "List of package symbols. Added by ‘load-package’.")
