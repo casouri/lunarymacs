@@ -26,12 +26,23 @@
 
 ;;; Config
 
-(add-hook 'dired-mode-hook #'auto-revert-mode)
-(with-eval-after-load 'dired
-  (require 'dired-x))
-(setq dired-dwim-target t)
-(advice-add #'dired-maybe-insert-subdir :after
-            (lambda (&rest _) (recenter-top-bottom)))
+(load-package dired
+  :defer
+  :hook (dired-mode-hook . auto-revert-mode)
+  :config
+  (require 'autorevert)
+  (require 'dired-x)
+  ;; On Linux this sorts numbers in natural order.
+  (setq dired-listing-switches "-lah1v"
+        dired-dwim-target t)
+  (luna-on "Brown"
+    (setq dired-listing-switches "-lah"))
+  
+  ;; Focus on the new subdir when after inserting it.
+  (advice-add #'dired-maybe-insert-subdir :after
+              (lambda (&rest _)
+                (when (called-interactively-p 'interactive)
+                  (recenter-top-bottom)))))
 
 ;;; Function
 
@@ -39,5 +50,5 @@
   (interactive)
   (if-let ((file (dired-file-name-at-point)))
       (shell-command (format "open %s" file))
-    (message "Not file found at point")))
+    (user-error "File not found at point")))
 
