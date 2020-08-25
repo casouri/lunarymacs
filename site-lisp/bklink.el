@@ -88,6 +88,33 @@ Ignore dotfiles and directories."
   ;; files in different directories can have the same name.
   (format " *back-links for %s*" (buffer-name buffer)))
 
+(defun bklink--search-at-point ()
+  "Search for links at point and set match data accordingly.
+Return t if found, nil otherwise. See `bklink--regepx' for
+groups."
+  (save-excursion
+    (catch 'found
+      (let ((p (point)))
+        (beginning-of-line)
+        (while (re-search-forward bklink-regexp (line-end-position) t)
+          (if (<= (match-beginning 0) p (match-end 0))
+              (throw 'found t)))))))
+
+(defun bklink--file-at-point ()
+  "Return the filename of the link at point.
+Return nil if not found."
+  (bklink--search-at-point)
+  (buffer-substring-no-properties (match-beginning 2) (match-end 3)))
+
+(defun bklink--set-file-at-point (name)
+  "Set the file name of the link at point to NAME.
+Do nothing if there is no link at point."
+  (bklink--search-at-point)
+  (save-excursion
+    (goto-char (match-beginning 2))
+    (delete-region (match-beginning 2) (match-end 3))
+    (insert name)))
+
 ;;;; Link button
 
 (define-button-type 'bklink
@@ -155,7 +182,8 @@ Ignore dotfiles and directories."
       (put-text-property (match-beginning 4) (match-end 4)
                          'display "”")
       (when (match-beginning 3)
-        (put-text-property (match-beginning 3) (match-end 3) 'invisible t)))
+        (put-text-property (match-beginning 3)
+                           (match-end 3) 'invisible t)))
     ;; Highlight link.
     (make-text-button (match-beginning 0)
                       (match-end 0)
@@ -279,13 +307,19 @@ Only used by the toggle function.")
 
 ;;; Userland
 
-(defun bklink-insert (file)
-  "Insert a link to FILE.
-If called interactively, prompt for the file."
-  (interactive
-   (list (completing-read
-          "File: " (bklink--get-file-list (buffer-file-name)))))
-  (insert (bklink--format-link file))
+(defun bklink-insert ()
+  "Insert a link to a file.
+If point not on a link, insert a new link, if already on a link,
+edit the link."
+  (interactive)
+  (if (bklink--search-at-point)
+      (let ((file (completing-read
+                   "New file: " (bklink--get-file-list (buffer-file-name))
+                   nil nil (bklink--file-at-point))))
+        (bklink--set-file-at-point file))
+    (let ((file (completing-read
+                 "File: " (bklink--get-file-list (buffer-file-name)))))
+      (insert (bklink--format-link file))))
   (bklink-minor-mode))
 
 (defun bklink-toggle-back-link ()
@@ -301,8 +335,9 @@ The back-links are links to the files that has a link to this file."
       ;; MASTER is this buffer, MINION is the back-link buffer.
       (if-let ((file (buffer-file-name)))
           (let ((master (current-buffer))
-                (minion (get-buffer-create (bklink--format-back-link-buffer
-                                            (current-buffer)))))
+                (minion (get-buffer-create
+                         (bklink--format-back-link-buffer
+                          (current-buffer)))))
             ;; Fire a sub-process to retrieve back-links.
             (bklink--get-linked-files
              file (lambda (file-list)
@@ -311,7 +346,7 @@ The back-links are links to the files that has a link to this file."
                       (if (null file-list)
                           (insert "No back-links found")
                         (dolist (file file-list)
-                          (bklink-insert file)
+                          (insert (bklink--format-link file))
                           (insert "\n"))))))
             ;; Initialize the back-link buffer...
             (with-current-buffer minion
