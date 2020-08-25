@@ -99,5 +99,7 @@ else return STR."
                              (nyan-lite-mode-line) "ฅ Φ ω Φ ฅ"))
                   ,spaces
                   "%p"
+                  ;; ,spaces
+                  ;; (:eval (symbol-name buffer-file-coding-system))
                   ;; "  %l:%c"
                   mode-line-end-spaces)))
