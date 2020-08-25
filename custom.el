@@ -27,6 +27,7 @@
  '(enable-recursive-minibuffers t)
  '(flywrap-debug-mode t)
  '(help-window-select t)
+ '(history-delete-duplicates t)
  '(history-length 500)
  '(idle-update-delay 0.5)
  '(indent-tabs-mode nil)
@@ -89,6 +90,7 @@
  '(visible-cursor nil)
  '(which-function-mode t)
  '(winner-mode t)
+ '(word-wrap-by-category t)
  '(xref-prompt-for-identifier
    '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame)))
 
