@@ -18,6 +18,7 @@
 ;;; Packages
 
 (load-package eglot
+  ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
   :commands eglot eglot-ensure)
 
 ;; (load-package eldoc-box
