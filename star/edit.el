@@ -53,7 +53,7 @@
   ;; specifically, the region-deactive-hook
   ;; doesn't run right after the region highlight is off
   (setq expand-region-fast-keys-enabled nil)
-  (require 'expand-region+)
+  (require 'expand-region-hacks)
   :commands
   expand-region
   contract-region
