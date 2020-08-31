@@ -22,6 +22,7 @@
  '(display-line-numbers-width 3)
  '(ediff-split-window-function 'split-window-horizontally)
  '(ediff-window-setup-function 'ediff-setup-windows-plain)
+ '(eldoc-idle-delay 0.2)
  '(electric-pair-mode t)
  '(electric-quote-mode t)
  '(enable-recursive-minibuffers t)
