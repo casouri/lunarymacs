@@ -13,8 +13,10 @@
  :---
  "C-h C-h" #'ghelp-describe
  "C-h r"   #'ghelp-resume
- "C-h k" #'ghelp-helpful-key
  "C-h e" #'ghelp-describe-elisp
+ "C-h f" #'ghelp-describe-function
+ "C-h v" #'ghelp-describe-variable
+ "C-h k" #'ghelp-describe-key
  "C-x i" #'luna-insert-special-symbol
  "C-c '" #'separedit
  "C-s-i" #'color-outline-toggle-all
