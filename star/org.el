@@ -24,7 +24,7 @@
   org-html-export-as-html)
 
 (load-package olivetti
-  :init (setq olivetti-body-width 80)
+  :init (setq-default olivetti-body-width 74)
   :commands olivetti-mode)
 
 (load-package org-download
