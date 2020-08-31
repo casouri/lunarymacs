@@ -18,7 +18,6 @@
  ;; "M-b"   #'luna-backward-word
 
  ;; Control bindings
- "C-="   #'er/expand-region
  "C-v"   #'set-mark-command
  "C-,"   #'luna-jump-back
 
@@ -243,10 +242,7 @@ Edit the underlined region and type C-c C-c to start
  "d" #'isolate-quick-delete
  "D" #'isolate-long-delete
  "c" #'isolate-quick-change
- "C" #'isolate-long-change
- ;; expand-region
- "C--" #'er/contract-region
- "C-=" #'er/expand-region)
+ "C" #'isolate-long-change)
 
 ;;; Inline replace (:s)
 

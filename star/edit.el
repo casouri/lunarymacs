@@ -24,6 +24,8 @@
  "C-."   #'undo-redo
  "C-s-i" #'outline-cycle-buffer
  "C-c C-h" #'hs-toggle-hiding
+ "C-=" #'expand-region
+ "C--" #'contract-region
  :keymaps '(c-mode-map c++-mode-map)
  "M-RET" #'srefactor-refactor-at-point
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
@@ -51,7 +53,10 @@
   ;; specifically, the region-deactive-hook
   ;; doesn't run right after the region highlight is off
   (setq expand-region-fast-keys-enabled nil)
+  (require 'expand-region+)
   :commands
+  expand-region
+  contract-region
   er/expand-region
   er/mark-defun
   er/mark-word
