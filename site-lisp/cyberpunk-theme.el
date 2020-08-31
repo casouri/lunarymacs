@@ -123,7 +123,7 @@
 
         (mode-line
          (nil nil ,violet2)
-         (:font ,(font-spec :family "SF Pro Text" :size 13.0 :weight 'light)
+         (:font ,(font-spec :family "SF Pro Text" :size 13 :weight 'light)
                 :box (:line-width 3 :color ,violet2)))
         (mode-line-inactive
          (mode-line nil ,(overlay bg violet2 0.7) nil nil nil)
