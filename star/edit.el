@@ -7,31 +7,29 @@
 
 (luna-def-key
  :leader
- "sr" #'grep
+ "sr"  #'grep
  "hha" #'hs-hide-all
  "hsa" #'hs-show-all
  :---
  "C-h C-h" #'ghelp-describe
  "C-h r"   #'ghelp-resume
- "C-h e" #'ghelp-describe-elisp
- "C-h f" #'ghelp-describe-function
- "C-h v" #'ghelp-describe-variable
- "C-h k" #'ghelp-describe-key
- "C-x i" #'luna-insert-special-symbol
- "C-c '" #'separedit
- "C-s-i" #'color-outline-toggle-all
- "C-/"   #'undo-only
- "C-."   #'undo-redo
- "C-s-i" #'outline-cycle-buffer
+ "C-h e"   #'ghelp-describe-elisp
+ "C-h f"   #'ghelp-describe-function
+ "C-h v"   #'ghelp-describe-variable
+ "C-h k"   #'ghelp-describe-key
+ "C-x i"   #'luna-insert-special-symbol
+ "C-c '"   #'separedit
+ "C-s-i"   #'color-outline-toggle-all
+ "C-/"     #'undo-only
+ "C-."     #'undo-redo
+ "C-s-i"   #'outline-cycle-buffer
  "C-c C-h" #'hs-toggle-hiding
- "C-=" #'expand-region
- "C--" #'contract-region
+ "C-="     #'expand-region
+ "C--"     #'contract-region
  :keymaps '(c-mode-map c++-mode-map)
  "M-RET" #'srefactor-refactor-at-point
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
- "s-i" #'outline-cycle
- :keymaps 'text-mode-map
- "TAB" #'self-insert-command)
+ "s-i" #'outline-cycle)
 
 ;;; Config
 
