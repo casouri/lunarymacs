@@ -103,8 +103,11 @@
 (load-package srefactor
   :hook ((c-mode-hook c++-mode-hook) . semantic-mode))
 
+
 (load-package ghelp)
+
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 
-(add-to-list 'luna-package-list 'helpful)
+
+(load-package helpful)
