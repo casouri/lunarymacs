@@ -41,13 +41,16 @@
 (setq custom-theme-directory
       (expand-file-name "site-lisp" user-emacs-directory))
 
+
 (load-package rainbow-delimiters
   :hook (prog-mode-hook . rainbow-delimiters-mode)
   :config (with-current-buffer (get-buffer-create "*scratch*")
             (rainbow-delimiters-mode)))
 
+
 (load-package rainbow-mode
   :commands rainbow-mode)
+
 
 (load-package highlight-parentheses
   :config
@@ -65,11 +68,13 @@
               (global-highlight-parentheses-mode -1)
               (global-highlight-parentheses-mode))))
 
+
 (load-package nyan-lite
   :init (setq nyan-lite-add-mode-line nil
               nyan-lite-progress-bar nil
               nyan-lite-animate t)
   :commands nyan-lite-mode)
+
 
 (load-package hl-todo
   :config
@@ -84,25 +89,24 @@
                 hl-todo-keyword-faces))
   (global-hl-todo-mode))
 
+
 (load-package sidebar
   :commands sidebar-mode global-sidebar-mode)
+
 
 (load-package form-feed
   :hook ((emacs-lisp-mode-hook text-mode-hook special-mode-hook)
          . form-feed-mode))
 
+
 (with-eval-after-load 'info
   (require 'info+)
   (info-pretty-mode))
 
+
 ;; (load-package treemacs
 ;;   :config (treemacs-resize-icons 11))
 
-;; interfere with 'display text property
-;; (load-package form-feed
-;;   :config (add-hook 'prog-mode-hook #'form-feed-mode))
-
-;;;; Desktop, Windows & buffer
 
 (load-package buffer-move
   :commands
@@ -110,6 +114,7 @@
   buf-move-dowan
   buf-move-left
   buf-move-right)
+
 
 (load-package eyebrowse
   :commands
@@ -125,18 +130,20 @@
   (eyebrowse-mode)
   (setq eyebrowse-mode-line-separator " "))
 
+
 (load-package console-buffer
   :commands
   luna-toggle-console
   luna-toggle-console-window)
 
-;;; Misc functions
+;;; Functions
 
 (defun chunyang-alpha-param-adjust ()
   "调节当前 Frame 的透明度."
   (interactive)
   (let ((alpha (or (frame-parameter nil 'alpha) 100)))
-    (while (pcase (read-key (format "%d%%, use +,-,0 for further adjustment" alpha))
+    (while (pcase (read-key
+                   (format "%d%%, use +,-,0 for further adjustment" alpha))
              ((or ?+ ?=) (setq alpha (1+ alpha)))
              (?- (setq alpha (1- alpha)))
              (?0 (setq alpha 100))
