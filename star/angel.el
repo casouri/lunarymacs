@@ -43,6 +43,8 @@
  "s-b"   (kbd "M-b")
  "s-a"   (kbd "M-a")
  "s-e"   (kbd "M-e")
+ "s-w"   (kbd "M-w")
+ "s-q"   (kbd "M-q")
  "C-s-p" (kbd "C-M-p")
  "C-s-n" (kbd "C-M-n")
  "C-s-f" (kbd "C-M-f")
@@ -64,7 +66,6 @@
  "C-." #'end-of-buffer ; as of >
  "C-b" #'switch-to-buffer
  "C-d" #'dired-jump
- "j" #'luna-jump-or-set
  
  :prefix "C-c"
  "C-b" #'switch-buffer-same-major-mode
@@ -228,7 +229,7 @@ Edit the underlined region and type C-c C-c to start
  ";" #'comment-dwim
  "y" #'kill-ring-save
  "C-y" #'kill-ring-save
- "Y" '("kill-ring-save-keep-region" .
+ "Y" '("copy-&-keep-region" .
        (lambda
          (b e)
          (interactive "r")
@@ -277,7 +278,8 @@ You can use \\&, \\N to refer matched text."
   (interactive)
   (condition-case nil
       (save-excursion
-        (setq inline-replace-beg (progn (beginning-of-line) (point-marker)))
+        (setq inline-replace-beg
+              (progn (beginning-of-line) (point-marker)))
         (setq inline-replace-original-buffer (current-buffer))
         (add-hook 'post-command-hook #'inline-replace-highlight)
 
@@ -313,8 +315,9 @@ You can use \\&, \\N to refer matched text."
            (replace (or (nth 1 (split-string input "/")) "")))
       (with-current-buffer inline-replace-original-buffer
         (goto-char inline-replace-beg)
-        ;; if no match and count is greater than 1, try to decrease count
-        ;; this way if there are only 2 match, you can't increase count to anything greater than 2
+        ;; if no match and count is greater than 1, try to decrease
+        ;; count this way if there are only 2 match, you can't
+        ;; increase count to anything greater than 2
         (while (and (not (ignore-errors
                            (re-search-forward
                             (car (split-string input "/"))
@@ -326,7 +329,8 @@ You can use \\&, \\N to refer matched text."
         (overlay-put inline-replace-overlay
                      'face '(:strike-through t :background "#75000F"))
         (overlay-put inline-replace-overlay 'after-string
-                     (propertize replace 'face '(:background "#078A00")))))))
+                     (propertize replace 'face
+                                 '(:background "#078A00")))))))
 
 ;;; Jump back
 
@@ -362,6 +366,7 @@ You can use \\&, \\N to refer matched text."
 ;;; Hungrey delete
 
 (defun luna-hungry-delete (&rest _)
+  "Delete backwards and also take away white spaces around point."
   (interactive)
   (if (region-active-p)
       (delete-region (region-beginning) (region-end))
