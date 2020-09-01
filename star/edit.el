@@ -58,13 +58,6 @@
   expand-region
   contract-region
   er/expand-region
-  er/mark-defun
-  er/mark-word
-  er/mark-symbol
-  er/mark-inside-quotes
-  er/mark-outside-quotes
-  er/mark-inside-pairs
-  er/mark-outside-pairs
   er/contract-region)
 
 
