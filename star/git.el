@@ -19,6 +19,12 @@
   (add-hook 'magit-status-mode-hook
             (lambda () (add-hook 'post-command-hook #'recenter 70 t)))
 
+  ;; Disable electric-quote-mode in commit message buffer.
+  (add-hook 'text-mode-hook
+            (lambda ()
+              (when (equal (buffer-name) "COMMIT_EDITMSG")
+                (electric-quote-mode -1))))
+
   ;; Patch
   (defun magit-patch-apply-buffer (buffer &rest args)
     "Apply the patch buffer BUFFER."
