@@ -13,7 +13,7 @@
  :---
  "C-h C-h" #'ghelp-describe
  "C-h r"   #'ghelp-resume
- "C-h e"   #'ghelp-describe-elisp
+ "C-h o"   #'ghelp-describe-elisp
  "C-h f"   #'ghelp-describe-function
  "C-h v"   #'ghelp-describe-variable
  "C-h k"   #'ghelp-describe-key
