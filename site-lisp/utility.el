@@ -182,27 +182,19 @@ buffer is not visiting a file."
 
 ;;; Insert
 
-(defvar luna-special-symbol-alist '(("(c)" . "©")
-                                    ("tm" . "™")
-                                    ("p" . " ")
-                                    ("s" . "§")
-                                    ("--" . "—") ; em dash
-                                    ("-" . "–") ; en dash
-                                    ("..." . "…")
-                                    ("<" . "⃖")
-                                    (">" . "⃗")
-                                    ("^" . "ꜛ")
-                                    ("v" . "ꜜ")
-                                    ("<<" . "←")
-                                    (">>" . "→")
-                                    ("^^" . "↑")
-                                    ("vv" . "↓")
-                                    ("l" . "‘")
-                                    ("r" . "’")
-                                    ("ll" . "“")
-                                    ("rr" . "”")
-                                    (" " . " ") ; non-breaking space
-                                    ("hand" . "☞"))
+(defvar luna-special-symbol-alist
+  '(("(c)" . "©") ("tm" . "™")  ("s" . "§") ("em" . "—") 
+    ("en" . "–") ("..." . "…") ("s<" . "⃖") ("s>" . "⃗") ("s^" . "ꜛ")
+    ("sv" . "ꜜ") ("<" . "←") (">" . "→") ("^" . "↑") ("v" . "↓")
+    ("l" . "‘") ("r" . "’") ("ll" . "“") ("rr" . "”") ("hand" . "☞")
+    ;; paragraph separator
+    ("p" . " ")
+    ;; non-breaking space
+    ("spc" . " ")
+    ;; zero-width space
+    ("0" . "​")
+    ;; thin space
+    ("thin" . " "))
   ;; don’t use tab character because we use that for splitting
   ;; in ‘luna-insert-special-symbol’
   "Alist used by `luna-insert-special-symbol'.")
@@ -210,13 +202,14 @@ buffer is not visiting a file."
 (defun luna-insert-special-symbol (surname)
   "Insert special symbol at point, SURNAME is used to search for symbol.
 E.g. SURNAME (c) to symbol ©."
-  (interactive (list (car (split-string
-                           (completing-read
-                            "MAbbrev: "
-                            (mapcar (lambda (c)
-                                      (format "%s\t%s" (car c) (cdr c)))
-                                    luna-special-symbol-alist))
-                           "\t"))))
+  (interactive
+   (list (car (split-string
+               (completing-read
+                "MAbbrev: "
+                (mapcar (lambda (c)
+                          (format "%s\t%s" (car c) (cdr c)))
+                        luna-special-symbol-alist))
+               "\t"))))
   (insert (alist-get surname luna-special-symbol-alist "" nil #'equal)))
 
 (defun luna-make-accent-fn (name)
