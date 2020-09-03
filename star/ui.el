@@ -94,6 +94,7 @@
   :commands sidebar-mode global-sidebar-mode)
 
 
+;; Use the site-lisp version.
 (load-package form-feed
   :hook ((emacs-lisp-mode-hook text-mode-hook special-mode-hook)
          . form-feed-mode))

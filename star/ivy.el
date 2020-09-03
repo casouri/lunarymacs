@@ -26,7 +26,7 @@
   :config
   (setq ivy-use-virtual-buffers t
         ivy-use-selectable-prompt t
-        ;; use full path for virtual buffer
+        ;; Use full path for virtual buffer.
         ivy-virtual-abbreviate 'full)
   (ivy-mode))
 
@@ -42,7 +42,7 @@
 
 ;; ivy-prescient doesn’t support ivy anymore.
 
-;; use the forked version in site-lisp
+;; Use the forked version in site-lisp.
 (load-package recentf-ext
   :config (recentf-mode))
 
