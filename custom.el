@@ -26,7 +26,6 @@
  '(electric-pair-mode t)
  '(electric-quote-mode t)
  '(enable-recursive-minibuffers t)
- '(flywrap-debug-mode t)
  '(help-window-select t)
  '(history-delete-duplicates t)
  '(history-length 500)
