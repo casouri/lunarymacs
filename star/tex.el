@@ -13,8 +13,9 @@
 ;; (load-package cdlatex
 ;;   :hook (LaTeX-mode-hook . cdlatex-mode))
 
-(add-to-list 'luna-package-list 'eglot)
-(with-eval-after-load 'eglot
+(load-package eglot
+  :defer
+  :config
   (add-to-list 'eglot-server-programs '(latex-mode . ("digestif"))))
 
 ;;; Config
@@ -27,7 +28,7 @@
   (company-mode)
   (eglot-ensure))
 
-;; This is AuCTex hooks and library.
+;; This is AucTeX hooks and library.
 ;; The built-in ones are tex-mode and tex-mode-hook.
 (with-eval-after-load 'latex
   (add-hook 'LaTeX-mode-hook #'tex-mode-setup))
