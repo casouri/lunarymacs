@@ -31,7 +31,8 @@ EVENT is the mouse event."
     ;; mouse released and Emacs realized that this is a click event.
     ;; We want to adjust point in both cases.
     (when (and (null (posn-object posn))
-               (> x (/ w 2)))
+               (> x (/ w 2))
+               (not (eq (char-after) ?\n)))
       (forward-char))))
 
 (define-minor-mode delicate-click-mode
