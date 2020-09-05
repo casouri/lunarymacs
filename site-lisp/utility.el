@@ -373,6 +373,10 @@ Saves to a temp file and puts the filename in the kill ring."
   (interactive)
   (set-buffer-file-coding-system 'dos))
 
+;;; Kill
+
+(defalias 'copy 'kill-new)
+
 ;;; Provide
 
 (provide 'utility)
