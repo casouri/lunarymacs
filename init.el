@@ -133,3 +133,7 @@
         scroll-down-aggressively 0.01
         scroll-margin 0
         scroll-conservatively 101))
+
+;;;; Trash
+(luna-on "Brown"
+  (setq trash-directory "~/.Trash"))
