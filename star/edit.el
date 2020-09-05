@@ -111,3 +111,11 @@
 
 
 (load-package helpful)
+
+
+(load-package tramp
+  :defer
+  :config
+  (setq tramp-default-method "ssh")
+  ;; Save tramp backups locally.
+  (setq tramp-backup-directory-alist backup-directory-alist))
