@@ -6,10 +6,18 @@
  :keymaps 'dired-mode-map
  "b" #'dired-up-directory
  "q" #'luna-quit-window
+ "<s-mouse-1>" #'dired-toggle-mark-click
  "C-c C-o" #'luna-dired-open-file-at-point
- "s-v" #'trivial-copy-paste
- "s-c" #'trivial-copy-copy
- "s-M-v" #'trivial-copy-move
+ 
+ "s-v" #'dired-copy
+ "s-c" #'dired-paste
+ ;; option+command+v
+ "s-M-v" #'dired-move
+
+ ;; "s-v" #'trivial-copy-paste
+ ;; "s-c" #'trivial-copy-copy
+ ;; "s-M-v" #'trivial-copy-move
+ 
  ;; command+shift+.
  "s->" #'dired-omit-mode
  "C-/" #'dired-undo)
@@ -32,6 +40,7 @@
   :config
   (require 'autorevert)
   (require 'dired-x)
+  (require 'dired+)
   ;; On Linux this sorts numbers in natural order.
   (setq dired-listing-switches "-lah1v"
         dired-dwim-target t)
