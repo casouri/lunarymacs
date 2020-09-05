@@ -366,6 +366,13 @@ Saves to a temp file and puts the filename in the kill ring."
     (kill-new filename)
     (message filename)))
 
+;;; Windows newline
+
+(defun windows-newline ()
+  "Set file to use windows newline (\\r\\n)."
+  (interactive)
+  (set-buffer-file-coding-system 'dos))
+
 ;;; Provide
 
 (provide 'utility)
