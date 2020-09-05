@@ -24,8 +24,8 @@ M-x luna-install-all RET
 | quanjiao.el          | 智能全角引号。                               |
 | outline+.el          | Cycle outline headers like in Org mode.      |
 | sidebar.el           | Show an outline sidebar.                     |
-| org-backtick.el      | Render =~= and ~=~ as backticks.             |
 | bklink.el            | Simple and primitive Roam back-links.        |
+| iimg.el              | Embed images in text files as base64 string. |
 | face-attr.el         | Set/get face attributes from face text prop. |
 | form-feed.el         | My fork of form-feed.el                      |
 | recentf-ext.el       | My fork of recentf-ext.el                    |
@@ -37,8 +37,10 @@ M-x luna-install-all RET
 | ox-cjk-html.el       | HTML export enhanced for CJK text.           |
 | luna-load-package.el | Home-brew use-package.el.                    |
 | luna-key.el          | Home-brew general.el.                        |
+| luna-local.el        | Session persistent variable.                 |
 | cowboy.el            | Home-brew package manager.                   |
 | luna-local.el        | Session-persistent storage.                  |
+| dired+.el            | Convenience dired commands.                  |
 
 * Structure
 #+begin_example
