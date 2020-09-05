@@ -64,17 +64,34 @@ For some major modes ‘comment-start’ is enough.")
 This is used to remove font-lock rules when ‘color-outline-mode’
 is turned off.")
 
+(defvar-local color-outline--imenu-expression nil
+  "We store imenu expressions in this variable.
+This is used to remove imenu expressions when ‘color-outline-mode’
+is turned off.")
+
 (defun color-outline--create-pattern (comment-char comment-begin)
   "Return the header pattern for major mode MODE.
 COMMENT-CHAR (string) is the comment character of this mode.
 COMMENT-BEGIN is string pattern starting a comment.
-The result pattern is “COMMENT-START(COMMENT-CHAR){3}”."
+The result pattern is
+
+<COMMENT-START><COMMENT-CHAR>{3}<COMMENT-CHAR>*<SPACE><ANYCHAR>*
+
+The first group is the second group of COMMENT-CHARS, the second
+group is <ANYCHAR>*.
+
+Return a plist
+
+    (:outline PATTERN :font-lock PATTERN-LIST :imenu PATTERN)
+
+where PATTERN is suitable for `outline-regepx', PATTERN-LIST is suitable
+for `font-lock-add-keywords' (a list of specs)."
   (let* ((header-level (length color-outline-face-list))
          (outline-re (rx-to-string `(seq ,comment-begin
                                          (= 3 ,comment-char)
                                          (group (* ,comment-char))
                                          " "
-                                         (* (not (any ?\t ?\n))))))
+                                         (group (* (not (any ?\t ?\n)))))))
          (re-list (cl-loop
                    for level from 0 to (1- header-level)
                    collect
@@ -87,7 +104,7 @@ The result pattern is “COMMENT-START(COMMENT-CHAR){3}”."
          (font-lock-list (cl-loop for re in re-list
                                   for face in color-outline-face-list
                                   collect `(,re (0 ',face t t)))))
-    (cons outline-re font-lock-list)))
+    (list :outline outline-re :font-lock font-lock-list)))
 
 (defun color-outline-define-header (mode comment-char comment-begin)
   "Define the header pattern for major mode MODE.
@@ -112,19 +129,29 @@ COMMENT-BEGIN is string pattern starting a comment."
                 (comment-char (or (car rule) comment-start))
                 (comment-begin (or (cadr rule) ""))
                 (config (color-outline--create-pattern
-                         comment-char comment-begin)))
-          (progn (setq-local outline-regexp (car config))
+                         comment-char comment-begin))
+                (outline-re (plist-get config :outline))
+                (imenu-expression `("Section" ,outline-re 2))
+                (font-lock-keywords (plist-get config :font-lock)))
+          (progn (setq-local outline-regexp outline-re)
                  (setq-local outline-level
                              (lambda () (1+ (/ (length (match-string 1))
                                                (length comment-char)))))
-                 (font-lock-add-keywords nil (cdr config))
-                 (setq color-outline--keywords (cdr config))
+                 (setq-local imenu-generic-expression
+                             (cons imenu-expression
+                                   imenu-generic-expression))
+                 (font-lock-add-keywords nil font-lock-keywords)
+                 (setq color-outline--keywords font-lock-keywords)
+                 (setq color-outline--imenu-expression imenu-expression)
                  (outline-minor-mode))
         (user-error "No color-outline pattern configured for %s"
                     major-mode))
     (kill-local-variable 'outline-regexp)
     (kill-local-variable 'outline-level)
     (font-lock-remove-keywords nil color-outline--keywords)
+    (setq-local imenu-generic-expression
+                (remove color-outline--imenu-expression
+                        imenu-generic-expression))
     (outline-minor-mode -1))
   (jit-lock-refontify))
 
