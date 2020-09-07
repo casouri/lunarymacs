@@ -36,7 +36,10 @@
 
 (load-package dired
   :defer
-  :hook (dired-mode-hook . auto-revert-mode)
+  :hook (dired-mode-hook
+         . (auto-revert-mode
+            toggle-truncate-lines
+            dired-omit-mode))
   :config
   (require 'autorevert)
   (require 'dired-x)
