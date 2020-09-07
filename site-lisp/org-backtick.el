@@ -10,7 +10,7 @@
 (defun org-backtick-fontify (beg end)
   "Fontify ~ and = between BEG and END."
   (goto-char beg)
-  (cl-labels ((varbatim-p (face)
+  (cl-labels ((verbatim-p (face)
                           (and (consp face)
                                (or (memq 'org-code face)
                                    (memq 'org-verbatim face))))
@@ -25,17 +25,16 @@
                                        (point-max)))))
         ;; Make it display backtick if the face indicates that
         ;; it’s a code/verbatim delimiter.
-        (if (and (verbatim-p face)
-                 ;; If any of (face-before face-after) is not
-                 ;; verbatim, this character is at the edge,
-                 ;; thus is an delimiter.
-                 (or (verbatim-p face-before)
-                     (verbatim-p face-after)))
+        (if (or (and (verbatim-p face)
+                     (not (verbatim-p face-before)))
+                (and (verbatim-p face)
+                     (not (verbatim-p face-after))))
             (put-text-property
              (match-beginning 0) (match-end 0) 'display "`")
           ;; Clean up our face if it’s not a code/verbatim
           ;; delimiter anymore.
-          (when (equal (plist-get text-props 'display) "`")
+          (when (equal (plist-get (text-properties-at point) 'display)
+                       "`")
             (put-text-property
              (match-beginning 0) (match-end 0) 'display nil))))))
   (cons 'jit-lock-bounds (cons beg end)))
