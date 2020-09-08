@@ -301,7 +301,12 @@
         (line-number              ((fixed-pitch default)))
         (line-number-current-line (shadow))
         (line-number-major-tick   (line-number))
-        (line-number-minor-tick   (line-number))))))
+        (line-number-minor-tick   (line-number))
+
+        (avy-lead-face      (nil ,bg ,red))
+        (avy-lead-face-0    (nil ,bg ,green))
+        (avy-lead-face-1    (nil ,bg ,orange))
+        (avy-lead-face-2    (nil ,bg ,blue2))))))
 
 (provide-theme 'light)
 
