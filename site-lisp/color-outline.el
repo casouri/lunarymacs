@@ -132,7 +132,7 @@ COMMENT-BEGIN is string pattern starting a comment."
                          comment-char comment-begin))
                 (outline-re (plist-get config :outline))
                 (imenu-expression `("Section" ,outline-re 2))
-                (font-lock-keywords (plist-get config :font-lock)))
+                (font-lock-keyword-list (plist-get config :font-lock)))
           (progn (setq-local outline-regexp outline-re)
                  (setq-local outline-level
                              (lambda () (1+ (/ (length (match-string 1))
@@ -140,8 +140,8 @@ COMMENT-BEGIN is string pattern starting a comment."
                  (setq-local imenu-generic-expression
                              (cons imenu-expression
                                    imenu-generic-expression))
-                 (font-lock-add-keywords nil font-lock-keywords)
-                 (setq color-outline--keywords font-lock-keywords)
+                 (font-lock-add-keywords nil font-lock-keyword-list)
+                 (setq color-outline--keywords font-lock-keyword-list)
                  (setq color-outline--imenu-expression imenu-expression)
                  (outline-minor-mode))
         (user-error "No color-outline pattern configured for %s"
