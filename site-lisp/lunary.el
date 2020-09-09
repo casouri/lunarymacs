@@ -1,8 +1,15 @@
-;;; -*- lexical-binding: t -*-
-;;
-;; Variables, functions and macros used by for config files
+;;; lunary.el --- Helpers for config files      -*- lexical-binding: t; -*-
 
-;;; UI
+;; Author: Yuan Fu <casouri@gmail.com>
+
+;;; This file is NOT part of GNU Emacs
+
+;;; Commentary:
+;;
+;; Variables, functions and macros used by config files.
+
+;;; Code:
+;;
 
 (require 'lunary-ui)
 (require 'cowboy)
@@ -165,4 +172,7 @@ For example, '(python-mode . format-python)")
   "Buffer name patterns that stays at the bottom of buffer list in helm.
 Each pattern is the beginning of the buffer name, e.g., *Flymake, magit:, etc.")
 
+
 (provide 'lunary)
+
+;;; lunary.el ends here
