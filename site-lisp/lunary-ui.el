@@ -1,6 +1,18 @@
-;;; -*- lexical-binding: t -*-
+;;; lunary-ui.el --- UI helpers      -*- lexical-binding: t; -*-
+
+;; Author: Yuan Fu <casouri@gmail.com>
+
+;;; This file is NOT part of GNU Emacs
+
+;;; Commentary:
+;;
+;; Provides some system-wide UI helpers.
+
+;;; Code:
+;;
 
 (require 'luna-local)
+(require 'cl-lib)
 
 ;;; Theme
 
@@ -12,15 +24,6 @@
 
 (defvar luna-load-theme-hook nil
   "Hook run after Emacs loads a theme.")
-
-(advice-add #'enable-theme :after
-            (lambda (&rest _)
-              (run-hooks 'luna-load-theme-hook)
-              ;; Otherwise title bar’s text’s color doesn’t look right
-              (when (featurep 'ns)
-                (set-frame-parameter
-                 nil 'ns-appearance
-                 (frame-parameter nil 'background-mode)))))
 
 (defun luna-load-theme (&optional theme)
   "Disable `luna-currnt-theme' and load THEME.
@@ -40,18 +43,22 @@ For NO-CONFIRM and NO-ENABLE see ‘load-theme’."
       (load-theme theme t))
     (luna-local-set 'luna-theme theme)))
 
-(defun luna-quit-window (arg)
-  "Quit current window and bury it's buffer.
-Unlike `quit-window', this function deletes the window no matter what.
-If run with prefix argument (ARG), kill buffer."
-  (interactive "p")
-  (if (equal major-mode 'dired-mode)
-      (while (equal major-mode 'dired-mode)
-        (kill-buffer))
-    (if (eq arg 4) ; with C-u
-        (kill-buffer)
-      (bury-buffer)))
-  (ignore-errors (delete-window)))
+;;; Utilities
+
+(defun luna-quit-window ()
+  "Quit from current window.
+If this window used to display another buffer with different
+major mode as the current one, switch to that buffer; if not,
+delete the window."
+  (interactive)
+  (cl-loop for buffer-info in (window-prev-buffers)
+           for buffer = (car buffer-info)
+           ;; If the buffer has different major mode, switch to it.
+           if (not (eq (buffer-local-value 'major-mode buffer)
+                       major-mode))
+           do (switch-to-buffer buffer)
+           and return nil
+           finally (delete-window)))
 
 (defun luna-window-sibling-list (&optional window)
   "Return all siblings of WINDOW or selected window."
@@ -69,9 +76,9 @@ If run with prefix argument (ARG), kill buffer."
   (mapc #'delete-window (luna-window-sibling-list)))
 
 (defun luna-switch-theme ()
-  "Switch between themes in `luna-toggle-theme-list'"
+  "Switch between themes in `luna-toggle-theme-list'."
   (interactive)
-  ;; move the fist element to last
+  ;; Move the fist element to last.
   (luna-load-theme (car luna-toggle-theme-list))
   (setq luna-toggle-theme-list
         (append (cdr luna-toggle-theme-list)
@@ -80,7 +87,7 @@ If run with prefix argument (ARG), kill buffer."
 ;;; Font
 
 (defmacro luna-set-font (&rest config-list)
-  "Set font. Accepts `font-spec' arguments.
+  "Set font. CONFIG-LIST is the same as `font-spec' arguments.
 
 e.g. :family :weight :size etc."
   `(set-frame-font (font-spec ,@config-list) nil t))
@@ -203,4 +210,36 @@ luna-local.el)."
 
   "Colors.")
 
+;;; Display buffer
+
+(defun luna-display-temp-buffer (buffer alist)
+  "Display BUFFER in a small window below.
+ALIST is an association list of action symbols and values.  See
+Info node `(elisp) Buffer Display Action Alists' for details of
+such alists.
+
+But, this function ignores all specifications in the ALIST."
+  (ignore alist)
+  (let* ((max-height (/ (window-height) 3))
+         (window (split-window-below (- max-height))))
+    (set-window-buffer window buffer)
+    (select-window window)
+    (fit-window-to-buffer window max-height 0)))
+
+
+;;; Configs
+
+(advice-add #'enable-theme :after
+            (lambda (&rest _)
+              (run-hooks 'luna-load-theme-hook)
+              ;; Otherwise title bar’s text’s color doesn’t look right.
+              (when (featurep 'ns)
+                (set-frame-parameter
+                 nil 'ns-appearance
+                 (frame-parameter nil 'background-mode)))))
+
+(define-key 'special-mode-map [remap quit-window] #'luna-quit-window)
+
 (provide 'lunary-ui)
+
+;;; lunary-ui.el ends here
