@@ -94,7 +94,7 @@
 (when window-system
   (luna-load-font)
   (luna-load-cjk-font))
-(luna-when-mac (luna-enable-apple-emoji))
+(luna-on "Brown" (luna-enable-apple-emoji))
 
 ;;;; server
 (run-with-idle-timer
