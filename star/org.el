@@ -125,7 +125,3 @@
                   ("ts" "School" entry (file+olp "~/note/todo.org" "School") "*** TODO %?")
                   ("tr" "Readlist" entry (file+olp "~/note/todo.org" "Readlist") "*** TODO %?")
                   ))))
-
-;;; Patch
-
-;; (luna-load-relative "star/org/org-patch.el")
