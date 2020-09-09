@@ -29,7 +29,9 @@
  :keymaps '(c-mode-map c++-mode-map)
  "M-RET" #'srefactor-refactor-at-point
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
- "s-i" #'outline-cycle)
+ "s-i" #'outline-cycle
+ :keymaps 'override
+ "C-j"     #'avy-goto-word-1)
 
 ;;; Config
 
@@ -39,6 +41,9 @@
           #'executable-make-buffer-file-executable-if-script-p)
 
 ;;; Package
+
+(load-package avy
+  :commands avy-goto-word-1)
 
 (load-package ws-butler
   ;; global mode interferes with magit
