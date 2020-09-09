@@ -9,6 +9,8 @@
  [down-mouse-3] #'flyspell-correct-word
  "C-." nil
  "C-," nil
+ "C-M-i" nil
+ "C-c $" nil
  
  :leader
  "lcc" #'langtool-check
