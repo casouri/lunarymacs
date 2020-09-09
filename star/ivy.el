@@ -28,7 +28,13 @@
         ivy-use-selectable-prompt t
         ;; Use full path for virtual buffer.
         ivy-virtual-abbreviate 'full)
-  (ivy-mode))
+  (ivy-mode)
+  ;; Ivy uses this function to add current selection face over
+  ;; candidates, it tries to blend colors together, which looks bad.
+  (defun luna-ivy-add-face (str face)
+    "Simply override STR’s face with FACE."
+    (propertize str 'face face))
+  (advice-add #'ivy--add-face :override #'luna-ivy-add-face))
 
 (load-package swiper
   :commands swiper)
