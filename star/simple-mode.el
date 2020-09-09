@@ -9,7 +9,9 @@
  "we" #'eval-last-sexp
  "wr" #'eval-region
  "wf" #'eval-defun
- "wb" #'eval-buffer)
+ "wb" #'eval-buffer
+ :keymaps 'lisp-interaction-mode-map
+ "C-j" #'eval-print-last-sexp)
 
 (load-package markdown-mode
   :mode "\\.md$" "\\.markdown$" "\\.mk$")
