@@ -34,7 +34,9 @@
   :commands swiper)
 
 (load-package counsel
-  :config (counsel-mode))
+  :config
+  (counsel-mode)
+  (push '(counsel-M-x . nil) ivy-initial-inputs-alist))
 
 ;; For M-x history.
 (load-package smex
