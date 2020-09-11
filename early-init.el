@@ -30,13 +30,13 @@
 
 (when window-system
   ;; (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (menu-bar-mode -1))
+  (scroll-bar-mode -1))
 
-(when (eq window-system 'mac)
-  ;; have to enable menu bar on mac port
-  ;; otherwise emacs lost focus
-  (menu-bar-mode))
+;; BTW, you have to enable menu bar on mac port,
+;; otherwise emacs lost focus.
+
+(when (not window-system)
+  (menu-bar-mode -1))
 
 ;; (when window-system
 ;;   (add-hook 'after-init-hook #'toggle-frame-maximized))
