@@ -238,7 +238,7 @@ But, this function ignores all specifications in the ALIST."
                  nil 'ns-appearance
                  (frame-parameter nil 'background-mode)))))
 
-(define-key 'special-mode-map [remap quit-window] #'luna-quit-window)
+(define-key special-mode-map [remap quit-window] #'luna-quit-window)
 
 (provide 'lunary-ui)
 
