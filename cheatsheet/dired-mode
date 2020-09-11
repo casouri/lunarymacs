@@ -1,0 +1,5 @@
+f       open    b       back    o       open in new window
+D       delete  C       copy    R       rename
+m       mark    u       unmark  t       toggle mark
+s-c     copy    s-v     paste   M-s-v   move
+S-s-.   toggle invisible        (       toggle more info
