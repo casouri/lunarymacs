@@ -377,6 +377,13 @@ Saves to a temp file and puts the filename in the kill ring."
 
 (defalias 'copy 'kill-new)
 
+;;; Read key
+
+(defun read-key-command ()
+  "Read key."
+  (interactive)
+  (read-key-sequence "Key: "))
+
 ;;; Provide
 
 (provide 'utility)
