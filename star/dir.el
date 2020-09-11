@@ -9,8 +9,8 @@
  "<s-mouse-1>" #'dired-toggle-mark-click
  "C-c C-o" #'luna-dired-open-file-at-point
  
- "s-v" #'dired-copy
- "s-c" #'dired-paste
+ "s-c" #'dired-copy
+ "s-v" #'dired-paste
  ;; option+command+v
  "s-M-v" #'dired-move
 
