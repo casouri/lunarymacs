@@ -85,8 +85,7 @@
         "/Applications/Emacs.app/Contents/MacOS/Emacs"))
 
 ;;;; theme
-(when window-system
-  (luna-load-theme))
+(luna-load-theme)
 
 ;;;; Font
 (when window-system
