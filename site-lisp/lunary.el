@@ -33,7 +33,7 @@ A list of notes, really.")
   "By default dump files doesn’t save ‘load-path’.
 We need to manually save and restore it. See manual for more info.")
 
-(defvar luna-dump-file (expand-file-name "emacs.pdmp" luna-cache-dir)
+(defvar luna-dump-file (expand-file-name "emacs.pdmp" luna-data-dir)
   "Location of dump file.")
 
 (defvar luna-dump-emacs-file "emacs"
