@@ -2,17 +2,22 @@
 
 ;;; Translation
 
-;; separate C-i from TAB
-(when window-system
-  ;; use as (kbd "<C-i>")
-  (define-key input-decode-map "\C-i" [C-i])
-  ;; iterm2 escape sequence
-  (define-key input-decode-map "\e[1;Ci" [C-i]))
+;; ;; separate C-i from TAB
+;; (when window-system
+;;   ;; use as (kbd "<C-i>")
+;;   (define-key input-decode-map "\C-i" [C-i])
+;;   ;; iterm2 escape sequence
+;;   (define-key input-decode-map "\e[1;Ci" [C-i]))
 
 ;; translate iTerm sequences
 (require 'cl-lib)
 (cl-loop for char from ?a to ?z
-         do (define-key input-decode-map (format "\e[1;P%c" char) (kbd (format "s-%c" char))))
+         do (define-key input-decode-map
+              (format "\e[1;P%c" char) (kbd (format "s-%c" char))))
+
+(define-key input-decode-map "\e[1;P=" (kbd "C-="))
+(define-key input-decode-map "\e[1;P;" (kbd "C-;"))
+(define-key input-decode-map "\e[1;P'" (kbd "C-'"))
 
 ;;; Key
 
