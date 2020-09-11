@@ -48,6 +48,11 @@
   (setq org-latex-compiler "xelatex"))
 
 
+(load-package org
+  :defer
+  :config (setq org-edit-src-content-indentation 0
+                org-adapt-indentation nil))
+
 ;;; Org config
 
 (define-minor-mode luna-prose-mode
