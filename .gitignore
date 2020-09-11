@@ -12,4 +12,5 @@
 !snippets/
 !snippets/**/*
 !custom.el
+!elpa
 .DS_Store
