@@ -67,9 +67,13 @@ ARGS are applied to ‘load'."
 
 (require 'luna-key)
 
-(luna-key-def-preset :leader
-  :keymaps 'override
-  :prefix "C-SPC")
+(if window-system
+    (luna-key-def-preset :leader
+      :keymaps 'override
+      :prefix "C-SPC")
+  (luna-key-def-preset :leader
+    :keymaps 'override
+    :prefix "C-@"))
 
 ;;; Package functions
 
