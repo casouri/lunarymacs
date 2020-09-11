@@ -53,7 +53,8 @@
         (success     (nil ,green))
         (tooltip     (nil ,fg ,bg-alt))
         (fringe      (default))
-        (shadow      (nil nil ,bg-alt))
+        (shadow      (nil ,fg-weak))
+        (vertical-border (nil ,bg-alt ,bg-alt))
         
         (variable-pitch () (:family "Charter" :height 150))
         (fixed-pitch    () (:family "SF Mono" :height 130))
@@ -295,7 +296,7 @@
         (diff-hl-change (nil ,orange ,(overlay bg orange 0.1)))
 
         (line-number              ((fixed-pitch default)))
-        (line-number-current-line (shadow))
+        (line-number-current-line (nil nil ,bg-alt))
         (line-number-major-tick   (line-number))
         (line-number-minor-tick   (line-number))
 

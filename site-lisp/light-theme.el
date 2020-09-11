@@ -54,7 +54,8 @@
         (success     (nil ,green))
         (tooltip     (nil nil ,(darken bg 0.03)))
         (fringe      (default))
-        (shadow      (nil nil ,bg-alt))
+        (shadow      (nil ,fg-weak))
+        (vertical-border (default ,bg-alt ,bg-alt))
 
         (variable-pitch () (:family "Charter" :height 150))
         (fixed-pitch () (:family "SF Mono" :height 130))
@@ -299,14 +300,16 @@
         (diff-hl-change (nil ,orange ,(overlay bg orange 0.1)))
 
         (line-number              ((fixed-pitch default)))
-        (line-number-current-line (shadow))
+        (line-number-current-line (nil nil ,bg-alt))
         (line-number-major-tick   (line-number))
         (line-number-minor-tick   (line-number))
 
         (avy-lead-face      (nil ,bg ,red))
         (avy-lead-face-0    (nil ,bg ,green))
         (avy-lead-face-1    (nil ,bg ,orange))
-        (avy-lead-face-2    (nil ,bg ,blue2))))))
+        (avy-lead-face-2    (nil ,bg ,blue2))
+
+        (widget-inactive (default))))))
 
 (provide-theme 'light)
 
