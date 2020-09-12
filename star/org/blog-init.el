@@ -9,7 +9,6 @@
 (require 'luna-f)
 (require 'lunary)
 (require 'cowboy)
-(setq package-user-dir (expand-file-name "package" user-emacs-directory))
 (package-initialize)
 (cowboy-add-load-path)
 (require 'light-theme)
