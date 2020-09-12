@@ -59,3 +59,11 @@
   (setq xref-show-definitions-function #'ivy-xref-show-defs)
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
+(load-package pinyinlib
+  :commands pinyinlib-build-regexp-string
+  :init
+  (defun ivy-pinyin-re-builder (str)
+    (if (string-prefix-p ";" str)
+        (pinyinlib-build-regexp-string (string-trim str ";"))
+      str))
+  (push '(t . ivy-pinyin-re-builder) ivy-re-builders-alist))
