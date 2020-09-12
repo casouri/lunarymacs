@@ -61,19 +61,13 @@ ARGS are applied to ‘load'."
 
 ;;; Load package
 
-(require 'luna-load-package)
+(eval-when-compile
+  (require 'luna-load-package))
 
 ;;; Define key
 
-(require 'luna-key)
-
-(if window-system
-    (luna-key-def-preset :leader
-      :keymaps 'override
-      :prefix "C-SPC")
-  (luna-key-def-preset :leader
-    :keymaps 'override
-    :prefix "C-@"))
+(eval-when-compile
+  (require 'luna-key))
 
 ;;; Package functions
 

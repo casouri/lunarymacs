@@ -53,6 +53,10 @@
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (setq luna-company-manual nil)
 
+(luna-key-def-preset :leader
+  :keymaps 'override
+  :prefix (if window-system "C-SPC" "C-@"))
+
 ;; core must load first because other configs depends on them
 (luna-load-relative "star/etc.el")
 (luna-load-relative "star/key.el")
