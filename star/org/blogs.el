@@ -41,7 +41,7 @@ archive.casouri.cat@gmail.com</a></p>")))
 <a accesskey=\"H\" href=\"%s\"> HOME </a>
 </div>
 <div>
-<a href=\"../rss.xml\"> RSS </a> |
+<a href=\"../../rss.xml\"> RSS </a> |
 <a href=\"https://github.com/casouri/casouri.github.io\"> Source </a> |
 <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\"> License </a>
 </div>
@@ -130,17 +130,27 @@ If FORCE non-nil, re-export every post."
 
 ;;;; Commands
 
-(defun luna-publish-note-process ()
-  "Run another Emacs and publish blog."
-  (interactive)
-  (start-process "Publish Notes"
-                 "*publish*"
-                 "emacs"
-                 ;; "--batch"
-                 "-q"
-                 "-l" "~/.emacs.d/star/org/blog-init.el"
-                 "-f" "luna-publish-note"
-                 "-f" "save-buffers-kill-terminal"))
+(defun luna-publish-note-process (arg)
+  "Run another Emacs and publish blog.
+Use prefix argument (ARG) to force publish."
+  (interactive "p")
+  (if (eq arg 4)
+      (start-process "Publish Notes"
+                     "*publish*"
+                     "emacs"
+                     ;; "--batch"
+                     "-q"
+                     "-l" "~/.emacs.d/star/org/blog-init.el"
+                     "--eval" "(luna-publish-note t)"
+                     "-f" "save-buffers-kill-terminal")
+    (start-process "Publish Notes"
+                   "*publish*"
+                   "emacs"
+                   ;; "--batch"
+                   "-q"
+                   "-l" "~/.emacs.d/star/org/blog-init.el"
+                   "-f" "luna-publish-note"
+                   "-f" "save-buffers-kill-terminal")))
 
 (defun luna-publish-note (&optional force)
   "Publish my blog.
