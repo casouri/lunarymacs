@@ -32,7 +32,7 @@
            (bg-alt    (brighten bg 0.1))
            (fg        "#C5DEED")
            (fg-weak   "#778CB8")
-           (fg-strong "#ABC4E5")
+           ;; (fg-strong "#ABC4E5")
            (blue1     "#79BEEF")
            (blue2     "#46EAFF")
            (green     "#52DEA1")
@@ -40,7 +40,9 @@
            (red       "#FF414A")
            (yellow    "#FFF100")
            (violet1   "#F975D4")
-           (violet2   "#582EBF"))
+           (violet2   "#582EBF")
+           ;; Note that this is not a cons cell.
+           (tty       '((type nil))))
       `(;; builtin faces
         (default     (nil ,fg ,bg))
         (region      (nil nil ,(overlay bg blue1 0.1)))
@@ -54,7 +56,7 @@
         (tooltip     (nil ,fg ,bg-alt))
         (fringe      (default))
         (shadow      (nil ,fg-weak))
-        (vertical-border (nil ,bg-alt ,bg-alt))
+        (vertical-border (nil ,bg-alt ,bg-alt) nil ,tty)
         
         (variable-pitch () (:family "Charter" :height 150))
         (fixed-pitch    () (:family "SF Mono" :height 130))
@@ -143,9 +145,11 @@
         (company-tooltip-annotation       (company-tooltip))
         (company-tooltip-annotation-selection (company-tooltip-selection))
         (company-tooltip-common           ((comp-common company-tooltip)))
-        (company-tooltip-common-selection ((selection-common company-tooltip)))
+        (company-tooltip-common-selection
+         ((selection-common company-tooltip)))
         (company-tooltip-mouse            ((comp-mouse company-tooltip)))
-        (company-tooltip-selection        ((current-selection company-tooltip)))
+        (company-tooltip-selection
+         ((current-selection company-tooltip)))
         (company-scrollbar-bg             (company-tooltip))
         (company-scrollbar-fg             (company-tooltip nil ,blue2))
         (company-preview                  (highlight-fg-only-1))
@@ -210,7 +214,9 @@
         (magit-diffstat-removed (nil ,red))
         (magit-dimmed (nil ,fg-weak))
         (magit-hash   (nil ,fg-weak))
-        (magit-header-line (nil nil ,violet2 nil bold nil (:box (:line-width 3 :color ,violet2))))
+        (magit-header-line
+         (nil nil ,violet2 nil bold nil
+              (:box (:line-width 3 :color ,violet2))))
         (magit-log-author (nil ,yellow))
         (magit-log-date (nil ,blue2))
         (magit-log-graph (nil ,fg-weak))
@@ -246,7 +252,8 @@
         (rainbow-delimiters-depth-6-face (nil ,yellow))
         (rainbow-delimiters-depth-7-face (nil ,blue2))
         (rainbow-delimiters-unmatched-face (nil ,red))
-        (rainbow-delimiters-mismatched-face (rainbow-delimiters-unmatched-face))
+        (rainbow-delimiters-mismatched-face
+         (rainbow-delimiters-unmatched-face))
 
         (smerge-lower (magit-diff-added))
         (smerge-upper (magit-diff-removed))

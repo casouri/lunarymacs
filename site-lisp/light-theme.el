@@ -33,7 +33,7 @@
            (bg-alt    (darken bg 0.05))
            (fg        "#2b3239")
            (fg-weak   "#9a9ea2")
-           (fg-strong "#0e0e0e")
+           ;; (fg-strong "#0e0e0e")
            (blue1     "#a0bcf8")
            (blue2     "#4078f2")
            (green     "#50a14f")
@@ -41,7 +41,9 @@
            (red       "#e45649")
            (yellow    "#986801")
            (violet1   "#b751b6")
-           (violet2   "#a626a4"))
+           (violet2   "#a626a4")
+           ;; Note that this is not a cons cell.
+           (tty       '((type nil))))
       `(;; builtin faces
         (default     (nil ,fg ,bg))
         (region      (nil nil ,(overlay bg violet1 0.1)))
@@ -55,7 +57,7 @@
         (tooltip     (nil nil ,(darken bg 0.03)))
         (fringe      (default))
         (shadow      (nil ,fg-weak))
-        (vertical-border (default ,bg-alt ,bg-alt))
+        (vertical-border (nil ,bg-alt ,bg-alt) nil ,tty)
 
         (variable-pitch () (:family "Charter" :height 150))
         (fixed-pitch () (:family "SF Mono" :height 130))
@@ -141,11 +143,16 @@
         
         (company-tooltip                     (tooltip))
         (company-tooltip-annotation          (company-tooltip))
-        (company-tooltip-annotation-selection (company-tooltip-selection))
-        (company-tooltip-common              ((comp-common company-tooltip)))
-        (company-tooltip-common-selection    ((selection-common company-tooltip)))
-        (company-tooltip-mouse               ((comp-mouse company-tooltip)))
-        (company-tooltip-selection           ((current-selection company-tooltip)))
+        (company-tooltip-annotation-selection
+         (company-tooltip-selection))
+        (company-tooltip-common
+         ((comp-common company-tooltip)))
+        (company-tooltip-common-selection
+         ((selection-common company-tooltip)))
+        (company-tooltip-mouse
+         ((comp-mouse company-tooltip)))
+        (company-tooltip-selection
+         ((current-selection company-tooltip)))
         (company-scrollbar-bg                (company-tooltip))
         (company-scrollbar-fg                (company-tooltip nil ,blue2))
         (company-preview                     (highlight-fg-only-1))
@@ -185,8 +192,8 @@
         (magit-diff-removed-highlight (nil ,red ,(overlay bg red 0.2)))
         (diff-refine-removed          (nil ,red "#ffaaaa"))
 
-        (magit-diff-base              (nil ,orange ,(overlay bg orange 0.1)))
-        (magit-diff-base-highlight    (nil ,orange ,(overlay bg orange 0.2)))
+        (magit-diff-base            (nil ,orange ,(overlay bg orange 0.1)))
+        (magit-diff-base-highlight  (nil ,orange ,(overlay bg orange 0.2)))
 
         (magit-diff-context           (default))
         (magit-diff-context-highlight (nil ,fg ,bg-alt))
@@ -195,8 +202,10 @@
         (magit-diff-file-heading-highlight (magit-heading-highlight))
         (magit-diff-file-heading-selection (magit-heading-selection))
         
-        (magit-diff-hunk-heading           (nil ,bg ,(overlay bg violet2 0.2)))
-        (magit-diff-hunk-heading-highlight (nil ,bg ,(overlay bg violet2 0.8)))
+        (magit-diff-hunk-heading
+         (nil ,bg ,(overlay bg violet2 0.2)))
+        (magit-diff-hunk-heading-highlight
+         (nil ,bg ,(overlay bg violet2 0.8)))
         (magit-diff-hunk-heading-selection (magit-heading-selection))
         ;; selected hunk region
         (magit-diff-hunk-region            (italic))
@@ -211,8 +220,9 @@
         (magit-diffstat-removed          (nil ,red))
         (magit-dimmed                    (nil ,fg-weak))
         (magit-hash                      (nil ,fg-weak))
-        (magit-header-line               (nil nil ,(overlay bg blue2 0.3) nil bold nil)
-                                         (:box (:line-width 3 :color ,(overlay bg blue2 0.3))))
+        (magit-header-line
+         (nil nil ,(overlay bg blue2 0.3) nil bold nil)
+         (:box (:line-width 3 :color ,(overlay bg blue2 0.3))))
         (magit-log-author                (nil ,orange))
         (magit-log-date                  (nil ,blue2))
         (magit-log-graph                 (nil ,fg-weak))
@@ -248,7 +258,8 @@
         (rainbow-delimiters-depth-6-face (nil ,yellow))
         (rainbow-delimiters-depth-7-face (nil ,blue2))
         (rainbow-delimiters-unmatched-face (nil ,red))
-        (rainbow-delimiters-mismatched-face (rainbow-delimiters-unmatched-face))
+        (rainbow-delimiters-mismatched-face
+         (rainbow-delimiters-unmatched-face))
 
         (smerge-lower   (magit-diff-added))
         (smerge-upper   (magit-diff-removed))
@@ -276,13 +287,15 @@
         (org-level-1 (info-title-3))
         (org-level-2 (info-title-4 ,(brighten fg 0.3)) (:height 1.1))
         (org-document-title (info-title-1))
-        (org-meta-line      (font-lock-comment-face nil nil nil nil italic))
+        (org-meta-line
+         (font-lock-comment-face nil nil nil nil italic))
         (org-document-info  (org-meta-line))
         (org-document-info-keyword (org-meta-line))
 
         (org-verbatim         (fixed-pitch))
         (org-code             (org-verbatim))
-        (org-block            ((org-verbatim org-meta-line) nil ,bg-alt) (:extend t))
+        (org-block
+         ((org-verbatim org-meta-line) nil ,bg-alt) (:extend t))
         (org-block-begin-line (org-block))
         (org-block-end-line   (org-block))
         (org-formula          (fixed-pitch))
