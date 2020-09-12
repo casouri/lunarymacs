@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 
-(require 'theme-util)
+(eval-when-compile (require 'theme-util))
 
 (deftheme light
   "Light theme.")
