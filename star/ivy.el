@@ -64,6 +64,8 @@
   :init
   (defun ivy-pinyin-re-builder (str)
     (if (string-prefix-p ";" str)
-        (pinyinlib-build-regexp-string (string-trim str ";"))
-      str))
-  (push '(t . ivy-pinyin-re-builder) ivy-re-builders-alist))
+        (pinyinlib-build-regexp-string
+         (ivy--regex (string-trim str ";")))
+      (ivy--regex str)))
+  (setf (alist-get t ivy-re-builders-alist)
+        #'ivy-pinyin-re-builder))
