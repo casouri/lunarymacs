@@ -23,8 +23,7 @@
 
 (defun theme-util-set-faces (name spec)
   "Define theme of NAME with SPEC on DISPLAY.
-SPEC is as in ‘theme-util-make-face-spec’.
-COLOR-ENV is color environment."
+SPEC is as in ‘theme-util-make-face-spec’."
   (declare (indent 1))
   (apply #'custom-theme-set-faces
          name
@@ -35,29 +34,35 @@ COLOR-ENV is color environment."
   "Convert SPEC into actual spec used in ‘custom-theme-set-faces’.
 
 SPEC is a list
-\(FACE INHERIT FOREGROUND BACKGROUND UNDERLINE WEIGHT SLANT REST-ATTR),
-REST-ATTR is a plist (:key :value ...).
+
+    \(FACE (INHERIT FOREGROUND BACKGROUND UNDERLINE WEIGHT SLANT)
+          REST-ATTR DISPLAY)
+
+REST-ATTR is a plist (:key :value ...). DISPLAY is the same as in
+`defface'.
 
 For example,
 \(default nil \"white\" \"black\" nil 'bold nil (:height 10))."
   (let* ((face (nth 0 spec))
          (attr (nth 1 spec))
          (rest-attr (nth 2 spec))
+         (display (nth 3 spec))
          (inherit (nth 0 attr))
          (fg (nth 1 attr))
          (bg (nth 2 attr))
          (underline (nth 3 attr))
          (weight (nth 4 attr))
          (slant (nth 5 attr)))
-    `(,face ((t . ,(remove
-                    nil
-                    (append (if inherit (list :inherit inherit))
-                            (if fg (list :foreground fg))
-                            (if bg (list :background bg))
-                            (if underline (list :underline underline))
-                            (if weight (list :weight weight))
-                            (if slant (list :slant slant))
-                            rest-attr)))))))
+    `(,face ((,(or display t)
+              . ,(remove
+                  nil
+                  (append (if inherit (list :inherit inherit))
+                          (if fg (list :foreground fg))
+                          (if bg (list :background bg))
+                          (if underline (list :underline underline))
+                          (if weight (list :weight weight))
+                          (if slant (list :slant slant))
+                          rest-attr)))))))
 
 ;;; Inspect theme
 
