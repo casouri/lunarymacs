@@ -116,20 +116,17 @@ TYPE should be either 'link or 'data."
   "Unfontify damaged links from BEG to END."
   (save-excursion
     (goto-char beg)
-    (let (match)
-      ;; Search for regiones that has text-prop iimg.
-      (while (and (setq match (text-property-search-forward 'iimg t t))
-                  (<= (point) end))
-        (let* ((beg (prop-match-beginning match))
-               (end (prop-match-end match))
-               (string (buffer-substring-no-properties beg end)))
-          ;; If the text don’t match link regexp anymore, remove
-          ;; the image display.
-          (unless (string-match-p iimg--link-regexp string)
-            (with-silent-modifications
-              (put-text-property beg end 'display nil)
-              (put-text-property beg end 'iimg nil)
-              (put-text-property beg end 'keymap nil))))))))
+    (let ((ov-list (cl-remove-if-not
+                    (lambda (ov) (overlay-get ov 'iimg))
+                    (overlays-in beg end))))
+      ;; If the text don’t match link regexp anymore, remove
+      ;; the image display.
+      (dolist (ov ov-list)
+        (unless (string-match-p
+                 iimg--link-regexp
+                 (buffer-substring-no-properties
+                  (overlay-start ov) (overlay-end ov)))
+          (delete-overlay ov))))))
 
 (defun iimg--fontify (beg end)
   "Fontify embedded image links between BEG and END."
@@ -137,31 +134,32 @@ TYPE should be either 'link or 'data."
   ;; Fontify link.
   (goto-char beg)
   (while (re-search-forward iimg--link-regexp end t)
-    ;; PROPS includes :name, :thumbnail, :size
-    (let* ((props (read (buffer-substring-no-properties
-                         (match-beginning 1) (match-end 1))))
-           (name (plist-get props :name))
-           (thumbnail (plist-get props :thumbnail))
-           (size (plist-get props :size))
-           (size-spec (if thumbnail
-                          ;; TODO This thumbnail size should work in most
-                          ;; cases, but can be improved.
-                          (iimg--calculate-size '(width char 30))
-                        (and size (iimg--calculate-size size))))
-           ;; Below `iimg--data-of' calls `iimg--load-image'
-           ;; which does regexp search, we save our match info
-           ;; so it’s not messed up. I added `save-match-data'
-           ;; in `iimg--load-image', but anyway.
-           (beg (match-beginning 0))
-           (end (match-end 0))
-           (image (apply #'create-image
-                         (iimg--data-of name) nil t size-spec)))
-      (with-silent-modifications
-        (put-text-property beg end 'display image)
-        (put-text-property beg end 'keymap iimg--link-keymap)
-        (put-text-property beg end 'iimg t)
-        (put-text-property beg end 'rear-nonsticky
-                           '(display keymap iimg)))))
+    (unless (cl-remove-if-not
+             (lambda (ov) (overlay-get ov 'iimg))
+             (overlays-at (match-beginning 0)))
+      ;; PROPS includes :name, :thumbnail, :size
+      (let* ((props (read (buffer-substring-no-properties
+                           (match-beginning 1) (match-end 1))))
+             (name (plist-get props :name))
+             (thumbnail (plist-get props :thumbnail))
+             (size (plist-get props :size))
+             (size-spec (if thumbnail
+                            ;; TODO This thumbnail size should work in most
+                            ;; cases, but can be improved.
+                            (iimg--calculate-size '(width char 30))
+                          (and size (iimg--calculate-size size))))
+             ;; Below `iimg--data-of' calls `iimg--load-image'
+             ;; which does regexp search, we save our match info
+             ;; so it’s not messed up. I added `save-match-data'
+             ;; in `iimg--load-image', but anyway.
+             (image (apply #'create-image
+                           (iimg--data-of name) nil t size-spec))
+             (ov (make-overlay (match-beginning 0) (match-end 0))))
+        (overlay-put ov 'display image)
+        (overlay-put ov 'keymap iimg--link-keymap)
+        (overlay-put ov 'iimg t)
+        (overlay-put ov 'display image)
+        (overlay-put ov 'rear-nonsticky '(display keymap iimg)))))
   (cons 'jit-lock-response (cons beg end)))
 
 (defun iimg--calculate-size (size)
@@ -354,7 +352,10 @@ Also refresh the image at point."
                          (cons '("^file:" . iimg-dnd-open-file)
                                dnd-protocol-alist)))
     (jit-lock-unregister #'iimg--fontify)
-    (kill-local-variable 'dnd-protocol-alist))
+    (kill-local-variable 'dnd-protocol-alist)
+    (dolist (ov (overlays-in (point-min) (point-max)))
+      (when (overlay-get ov 'iimg)
+        (delete-overlay ov))))
   (jit-lock-refontify))
 
 ;;; Drag and drop
