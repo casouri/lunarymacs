@@ -116,17 +116,15 @@ TYPE should be either 'link or 'data."
   "Unfontify damaged links from BEG to END."
   (save-excursion
     (goto-char beg)
-    (let ((ov-list (cl-remove-if-not
-                    (lambda (ov) (overlay-get ov 'iimg))
-                    (overlays-in beg end))))
-      ;; If the text don’t match link regexp anymore, remove
-      ;; the image display.
-      (dolist (ov ov-list)
-        (unless (string-match-p
-                 iimg--link-regexp
-                 (buffer-substring-no-properties
-                  (overlay-start ov) (overlay-end ov)))
-          (delete-overlay ov))))))
+    ;; If the text don’t match link regexp anymore, remove
+    ;; the image display.
+    (dolist (ov (overlays-in beg end))
+      (when (and (overlay-get ov 'iimg)
+                 (not (string-match-p
+                       iimg--link-regexp
+                       (buffer-substring-no-properties
+                        (overlay-start ov) (overlay-end ov)))))
+        (delete-overlay ov)))))
 
 (defun iimg--fontify (beg end)
   "Fontify embedded image links between BEG and END."
