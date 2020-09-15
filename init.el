@@ -30,7 +30,7 @@
                     (switch-to-buffer "*scratch*")
                     (goto-char (point-min))
                     (insert ";; \t\t\tE M A C S\n")
-                    (insert (format ";; %s\n" (make-string 55 ?-)))
+                    (insert (format ";; %s\n" (make-string 58 ?-)))
                     (insert (format ";; Welcome to GNU Emacs %s. "
                                     emacs-version))
                     (insert (format "Today is %s.\n"
