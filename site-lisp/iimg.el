@@ -73,6 +73,9 @@
 ;;
 ;; `iimg--data-alist' is always up to date: any image in the file are
 ;; in the alist.
+;;
+;; Why text property instead of overlay: text property seems to be
+;; faster (when scrolling, etc).
 
 ;;; Code:
 ;;
@@ -151,10 +154,10 @@ PLIST is the plist part of the link, should be a plist."
 
 (defun iimg--fontify-1 (beg end display)
   "Add overlay to text between BEG and END with DISPLAY property."
-  (let ((ov (make-overlay beg end nil t)))
-    (overlay-put ov 'display display)
-    (overlay-put ov 'keymap iimg--link-keymap)
-    (overlay-put ov 'iimg t)))
+  (put-text-property beg end 'display display)
+  (put-text-property beg end 'keymap iimg--link-keymap)
+  (put-text-property beg end 'iimg t)
+  (put-text-property beg end 'rear-nonstick '(display keymap iimg)))
 
 (defun iimg--fontify (beg end)
   "Fontify embedded image links between BEG and END."
@@ -163,11 +166,13 @@ PLIST is the plist part of the link, should be a plist."
         (delete-overlay ov)))
   ;; Fontify link.
   (goto-char beg)
-  (while (re-search-forward iimg--link-regexp end t)
+  (while (and (re-search-forward iimg--link-regexp nil t)
+              (< (match-beginning 0) end))
     ;; PROPS includes :name, :thumbnail, :size
     (let* ((props (read (match-string-no-properties 1)))
            (image (iimg--image-from-props props))
-           (multi-line (plist-get props :multi-line)))
+           (multi-line (plist-get props :multi-line))
+           (inhibit-read-only t))
       (if (not multi-line)
           (iimg--fontify-1 (match-beginning 0) (match-end 0) image)
         (save-excursion
@@ -183,7 +188,9 @@ PLIST is the plist part of the link, should be a plist."
                                image))
                 (put-text-property end (1+ end) 'line-height t)
                 (setq y (+ y slice-height)))
-              (forward-line)))))))
+              (forward-line)))))
+      (put-text-property (match-beginning 0) (match-end 0)
+                         'read-only t)))
   (cons 'jit-lock-response (cons beg end)))
 
 (defun iimg--calculate-size (size)
@@ -338,7 +345,8 @@ Return nil if not found."
 Also refresh the image at point."
   (when (iimg--search-link-at-point)
     (save-excursion
-      (let ((beg (match-beginning 0)))
+      (let ((beg (match-beginning 0))
+            (inhibit-read-only t))
         (goto-char beg)
         (delete-region beg (match-end 0))
         (insert (iimg--format-link props))
@@ -380,7 +388,8 @@ Also refresh the image at point."
   "Delete the image at point."
   (interactive)
   (if (iimg--search-link-at-point)
-      (delete-region (match-beginning 0) (match-end 0))
+      (let ((inhibit-read-only t))
+        (delete-region (match-beginning 0) (match-end 0)))
     (user-error "There is no image at point")))
 
 (defun iimg-force-delete (beg end)
@@ -411,14 +420,11 @@ Also refresh the image at point."
   "Display inline iamges."
   :lighter ""
   (if iimg-minor-mode
-      (progn (iimg--fontify (point-min) (point-max))
+      (progn (jit-lock-register #'iimg--fontify)
              (setq-local dnd-protocol-alist
                          (cons '("^file:" . iimg-dnd-open-file)
                                dnd-protocol-alist)))
-    (kill-local-variable 'dnd-protocol-alist)
-    (dolist (ov (overlays-in (point-min) (point-max)))
-      (when (overlay-get ov 'iimg)
-        (delete-overlay ov))))
+    (kill-local-variable 'dnd-protocol-alist))
   (jit-lock-refontify))
 
 ;;; Drag and drop
