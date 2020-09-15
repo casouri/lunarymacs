@@ -22,7 +22,7 @@
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
 ;;;; Term mouse
-(unless window-system
+(unless (display-graphic-p)
   (require 'mouse)
   (xterm-mouse-mode t)
   ;; (defun track-mouse (e))

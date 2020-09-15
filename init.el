@@ -55,7 +55,7 @@
 
 (luna-key-def-preset :leader
   :keymaps 'override
-  :prefix (if window-system "C-SPC" "C-@"))
+  :prefix (if (display-graphic-p) "C-SPC" "C-@"))
 
 ;; core must load first because other configs depends on them
 (luna-load-relative "star/etc.el")
@@ -92,7 +92,7 @@
 (luna-load-theme)
 
 ;;;; Font
-(when window-system
+(when (display-graphic-p)
   (luna-load-font)
   (luna-load-cjk-font))
 (luna-on "Brown" (luna-enable-apple-emoji))

@@ -2,7 +2,7 @@
 
 ;;; Key
 
-(when (not window-system)
+(when (not (display-graphic-p))
   (luna-def-key
    "M-h" #'windmove-left
    "M-j" #'windmove-down

@@ -28,14 +28,14 @@
 (when (featurep 'ns)
   (push '(ns-transparent-titlebar . t) default-frame-alist))
 
-(when window-system
+(when (display-graphic-p)
   ;; (tool-bar-mode -1)
   (scroll-bar-mode -1))
 
 ;; BTW, you have to enable menu bar on mac port,
 ;; otherwise emacs lost focus.
 
-(when (not window-system)
+(when (not (display-graphic-p))
   (menu-bar-mode -1))
 
 ;; (when window-system

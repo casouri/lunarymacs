@@ -95,7 +95,7 @@ else return STR."
                   ,spaces
                   "%I"
                   ,spaces
-                  (:eval (when window-system
+                  (:eval (when (display-graphic-p)
                            (if (bound-and-true-p nyan-lite-mode)
                                (nyan-lite-mode-line) "ฅ Φ ω Φ ฅ")))
                   ,spaces
