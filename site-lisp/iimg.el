@@ -54,6 +54,16 @@
 ;; the data, select a region and use `iimg-force-delete'.
 ;;
 ;; I didn’t bother to write unfontification function.
+;;
+;;;; To render an image across multiple lines:
+;;
+;; Type m on an image or use `iimg-toggle-multi-line'.
+;;
+;; When an image is displayed across multiple lines, scrolling is much
+;; more smooth. However, this doesn't work well when image size is set
+;; to n percent of the window width/height: if you change the window
+;; width/height, the number of lines needed for the image changes, but
+;; iimg doesn't update its "image lines" automatically.
 
 ;;; Developer
 ;;
@@ -146,10 +156,8 @@ PLIST is the plist part of the link, should be a plist."
                         ;; cases, but can be improved.
                         (iimg--calculate-size '(width char 30))
                       (iimg--calculate-size (or size '(width char 1.0))))))
-    ;; Below `iimg--data-of' calls `iimg--load-image'
-    ;; which does regexp search, we save our match info
-    ;; so it’s not messed up. I added `save-match-data'
-    ;; in `iimg--load-image', but anyway.
+    ;; Below `iimg--data-of' calls `iimg--load-image' which does
+    ;; regexp search. I added `save-match-data' in `iimg--load-image'.
     (apply #'create-image (iimg--data-of name) nil t size-spec)))
 
 (defun iimg--fontify-1 (beg end display)
@@ -174,7 +182,10 @@ PLIST is the plist part of the link, should be a plist."
            (multi-line (plist-get props :multi-line))
            (inhibit-read-only t))
       (if (not multi-line)
+          ;; Render the image on a single line.
           (iimg--fontify-1 (match-beginning 0) (match-end 0) image)
+        ;; Render the image across multiple lines. We assume the
+        ;; number of placeholder lines in the buffer is correct.
         (save-excursion
           (let* ((slice-height (frame-char-height))
                  (image-width (car (image-size image t)))
@@ -261,31 +272,6 @@ Look for iimg-data’s and store them into `iimg--data-alist'."
     (iimg--load-image-data (point-min) (point-max)))
   (alist-get name iimg--data-alist nil nil #'equal))
 
-;;; Multi-line
-
-(defun iimg--generate-link-and-slice (props)
-  "Generate multi-line slices for an image described by PROPS.
-PROPS is the plist stored in a link."
-  (let*
-      ((image (iimg--image-from-props props))
-       (image-height (cdr (image-size image t)))
-       (slice-height (frame-char-height))
-       (slice-width (car (image-size image t)))
-       (row-count (ceiling (/ image-height slice-height)))
-       (slice-spec-list
-        (cl-loop for slice-idx from 0 to (1- row-count)
-                 for x = 0
-                 for y = 0 then (+ y slice-height)
-                 collect (list 'slice x y slice-width slice-height)))
-       (link (iimg--format
-              'link (plist-put props :slice (car slice-spec-list))))
-       (slice-list (mapcar
-                    (lambda (spec)
-                      (iimg--format
-                       'slice (plist-put props :slice spec)))
-                    (cdr slice-spec-list))))
-    (string-join (cons link slice-list) "\n")))
-
 ;;; Inserting and modifying
 
 (defun iimg-insert (file name)
@@ -324,13 +310,16 @@ If found, set match data accordingly and return t, if not, return nil."
     (save-excursion
       (let ((pos (point)))
         (beginning-of-line)
+        ;; First search in current line.
         (while (and (<= (point) pos)
                     (re-search-forward iimg--link-regexp nil t))
           (if (<= (match-beginning 0) pos (match-end 0))
               (throw 'found t)))
+        ;; Next search by search backward.
         (goto-char pos)
         (if (and (search-backward "({iimg-link" nil t)
-                 (re-search-forward iimg--link-regexp nil t))
+                 (re-search-forward iimg--link-regexp nil t)
+                 (<= (match-beginning 0) pos (match-end 0)))
             (throw 'found t))))))
 
 (defun iimg--link-at-point ()
@@ -417,7 +406,8 @@ Also refresh the image at point."
 ;;; Minor mode
 
 (define-minor-mode iimg-minor-mode
-  "Display inline iamges."
+  "Display inline images.
+There is no way to un-render the images because I'm lazy."
   :lighter ""
   (if iimg-minor-mode
       (progn (jit-lock-register #'iimg--fontify)
@@ -430,6 +420,7 @@ Also refresh the image at point."
 ;;; Drag and drop
 
 (defun iimg-dnd-open-file (uri _action)
+  "Drag-and-drop handler for iimg. URI is the file path."
   (let ((file (dnd-get-local-file-name uri t)))
     (if (and file (file-readable-p file))
         (iimg-insert
