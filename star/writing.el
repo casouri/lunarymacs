@@ -5,7 +5,7 @@
 (luna-def-key
  :keymaps 'bklink-minor-mode-map
  "C-c l" #'bklink-toggle-back-link
- "C-c C-l" #'bklink-insert
+ "C-c i" #'bklink-insert
  :keymaps 'text-mode-map
  "TAB" #'indent-for-tab-command
  "<C-tab>" '("insert-tab" . (lambda () (interactive) (insert "\t"))))
