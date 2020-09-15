@@ -84,80 +84,106 @@
 NAME (string) is the name of the image.
 IMAGE-DATA is the image binary data.")
 
+(defvar iimg-multi-line t
+  "Render image in multiple lines.")
+
 (defvar iimg--data-regexp (rx (seq "({iimg-data "
                                    (group (+? anything))
                                    "})"))
   "Regular expression for inline image data.
 The first group is the plist containing data.")
 
-(defvar iimg--link-regexp (rx (seq "({iimg-link "
-                                   (group (+? anything))
-                                   "})"))
+(defvar iimg--link-regexp
+  (rx (seq "({iimg-link " (group (+? anything)) "})"
+           (group (* "\n---"))))
   "Regular expression for inline image link.
-The first group is the plist containing data.")
+The first group is the plist containing data. The second group
+contains the slices.")
 
-(defsubst iimg--format (type plist)
+(defsubst iimg--format-data (plist)
+  "Return formatted iimg data.
+PLIST is the plist part of the link, should be a plist."
+  (format "({iimg-data %s})" (prin1-to-string plist)))
+
+(defun iimg--format-link (plist)
   "Return formatted iimg link.
-PLIST is the plist part of the link, should be a plist.
-TYPE should be either 'link or 'data."
-  (format "({iimg-%s %s})" type (prin1-to-string plist)))
+PLIST is the plist part of the link, should be a plist."
+  (let* ((img (iimg--image-from-props plist))
+         (multi-line (plist-get plist :multi-line))
+         (row-count (ceiling (/ (cdr (image-size img t))
+                                (frame-char-height)))))
+    (format "({iimg-link %s})%s"
+            (prin1-to-string plist)
+            (if multi-line
+                (with-temp-buffer
+                  (dotimes (_ (1- row-count))
+                    (insert "\n---"))
+                  (buffer-string))
+              ""))))
 
 (defvar iimg--link-keymap
   (let ((map (make-sparse-keymap)))
     (define-key map "t" #'iimg-toggle-thumbnail)
     (define-key map "s" #'iimg-resize)
     (define-key map "d" #'iimg-delete-image-at-point)
+    (define-key map "m" #'iimg-toggle-multi-line)
     map)
   "Keymap used on images.")
 
 ;;; Loading and rendering
 
-(defun iimg--check-integrity (beg end)
-  "Unfontify damaged links from BEG to END."
-  (save-excursion
-    (goto-char beg)
-    ;; If the text don’t match link regexp anymore, remove
-    ;; the image display.
-    (dolist (ov (overlays-in beg end))
-      (when (and (overlay-get ov 'iimg)
-                 (not (string-match-p
-                       iimg--link-regexp
-                       (buffer-substring-no-properties
-                        (overlay-start ov) (overlay-end ov)))))
-        (delete-overlay ov)))))
+
+(defun iimg--image-from-props (props)
+  "Given plist PROPS, return an image spec."
+  (let* ((name (plist-get props :name))
+         (thumbnail (plist-get props :thumbnail))
+         (size (plist-get props :size))
+         (size-spec (if thumbnail
+                        ;; TODO This thumbnail size should work in most
+                        ;; cases, but can be improved.
+                        (iimg--calculate-size '(width char 30))
+                      (iimg--calculate-size (or size '(width char 1.0))))))
+    ;; Below `iimg--data-of' calls `iimg--load-image'
+    ;; which does regexp search, we save our match info
+    ;; so it’s not messed up. I added `save-match-data'
+    ;; in `iimg--load-image', but anyway.
+    (apply #'create-image (iimg--data-of name) nil t size-spec)))
+
+(defun iimg--fontify-1 (beg end display)
+  "Add overlay to text between BEG and END with DISPLAY property."
+  (let ((ov (make-overlay beg end nil t)))
+    (overlay-put ov 'display display)
+    (overlay-put ov 'keymap iimg--link-keymap)
+    (overlay-put ov 'iimg t)))
 
 (defun iimg--fontify (beg end)
   "Fontify embedded image links between BEG and END."
-  (iimg--check-integrity beg end)
+  (dolist (ov (overlays-in beg end))
+    (if (overlay-get ov 'iimg)
+        (delete-overlay ov)))
   ;; Fontify link.
   (goto-char beg)
   (while (re-search-forward iimg--link-regexp end t)
-    (unless (cl-remove-if-not
-             (lambda (ov) (overlay-get ov 'iimg))
-             (overlays-at (match-beginning 0)))
-      ;; PROPS includes :name, :thumbnail, :size
-      (let* ((props (read (buffer-substring-no-properties
-                           (match-beginning 1) (match-end 1))))
-             (name (plist-get props :name))
-             (thumbnail (plist-get props :thumbnail))
-             (size (plist-get props :size))
-             (size-spec (if thumbnail
-                            ;; TODO This thumbnail size should work in most
-                            ;; cases, but can be improved.
-                            (iimg--calculate-size '(width char 30))
-                          (and size (iimg--calculate-size size))))
-             ;; Below `iimg--data-of' calls `iimg--load-image'
-             ;; which does regexp search, we save our match info
-             ;; so it’s not messed up. I added `save-match-data'
-             ;; in `iimg--load-image', but anyway.
-             (image (apply #'create-image
-                           (iimg--data-of name) nil t size-spec))
-             (ov (make-overlay (match-beginning 0) (match-end 0))))
-        (overlay-put ov 'display image)
-        (overlay-put ov 'keymap iimg--link-keymap)
-        (overlay-put ov 'iimg t)
-        (overlay-put ov 'display image)
-        (overlay-put ov 'rear-nonsticky '(display keymap iimg)))))
+    ;; PROPS includes :name, :thumbnail, :size
+    (let* ((props (read (match-string-no-properties 1)))
+           (image (iimg--image-from-props props))
+           (multi-line (plist-get props :multi-line)))
+      (if (not multi-line)
+          (iimg--fontify-1 (match-beginning 0) (match-end 0) image)
+        (save-excursion
+          (let* ((slice-height (frame-char-height))
+                 (image-width (car (image-size image t)))
+                 (x 0) (y 0))
+            (goto-char (match-beginning 0))
+            (while (< (point) (match-end 0))
+              (let ((beg (line-beginning-position))
+                    (end (line-end-position)))
+                (iimg--fontify-1
+                 beg end (list (list 'slice x y image-width slice-height)
+                               image))
+                (put-text-property end (1+ end) 'line-height t)
+                (setq y (+ y slice-height)))
+              (forward-line)))))))
   (cons 'jit-lock-response (cons beg end)))
 
 (defun iimg--calculate-size (size)
@@ -228,6 +254,31 @@ Look for iimg-data’s and store them into `iimg--data-alist'."
     (iimg--load-image-data (point-min) (point-max)))
   (alist-get name iimg--data-alist nil nil #'equal))
 
+;;; Multi-line
+
+(defun iimg--generate-link-and-slice (props)
+  "Generate multi-line slices for an image described by PROPS.
+PROPS is the plist stored in a link."
+  (let*
+      ((image (iimg--image-from-props props))
+       (image-height (cdr (image-size image t)))
+       (slice-height (frame-char-height))
+       (slice-width (car (image-size image t)))
+       (row-count (ceiling (/ image-height slice-height)))
+       (slice-spec-list
+        (cl-loop for slice-idx from 0 to (1- row-count)
+                 for x = 0
+                 for y = 0 then (+ y slice-height)
+                 collect (list 'slice x y slice-width slice-height)))
+       (link (iimg--format
+              'link (plist-put props :slice (car slice-spec-list))))
+       (slice-list (mapcar
+                    (lambda (spec)
+                      (iimg--format
+                       'slice (plist-put props :slice spec)))
+                    (cdr slice-spec-list))))
+    (string-join (cons link slice-list) "\n")))
+
 ;;; Inserting and modifying
 
 (defun iimg-insert (file name)
@@ -246,11 +297,10 @@ image. See Commentary for the format of NAME, THUMBNAIL, and SIZE."
                  (base64-encode-region (point-min) (point-max))
                  ;; TODO Check for max image file size?
                  (buffer-string)))
-         (data-string (iimg--format
-                       'data (list :name name :data data)))
-         (link-string (iimg--format
-                       'link (list :name name :size '(width pixel 0.6)
-                                   :ext (file-name-extension file)))))
+         (data-string (iimg--format-data (list :name name :data data)))
+         (link-string (iimg--format-link
+                       (list :name name :size '(width pixel 0.6)
+                             :ext (file-name-extension file)))))
     ;; Insert data.
     (save-excursion
       (goto-char (point-max))
@@ -263,19 +313,25 @@ image. See Commentary for the format of NAME, THUMBNAIL, and SIZE."
 (defun iimg--search-link-at-point ()
   "Search for iimg link at point.
 If found, set match data accordingly and return t, if not, return nil."
-  (let ((p (point)))
+  (catch 'found
     (save-excursion
-      (and (re-search-forward iimg--link-regexp nil t)
-           (and (<= (match-beginning 0) p)
-                (>= (match-end 0) p))
-           t))))
+      (let ((pos (point)))
+        (beginning-of-line)
+        (while (and (<= (point) pos)
+                    (re-search-forward iimg--link-regexp nil t))
+          (if (<= (match-beginning 0) pos (match-end 0))
+              (throw 'found t)))
+        (goto-char pos)
+        (if (and (search-backward "({iimg-link" nil t)
+                 (re-search-forward iimg--link-regexp nil t))
+            (throw 'found t))))))
 
 (defun iimg--link-at-point ()
   "Return the data (plist) of the iimg link at point.
 Return nil if not found."
-  (when (iimg--search-link-at-point)
-    (read (buffer-substring-no-properties
-           (match-beginning 1) (match-end 1)))))
+  (if (iimg--search-link-at-point)
+      (read (match-string 1))
+    nil))
 
 (defun iimg--set-link-at-point-refresh (props)
   "Set iimg link at point to PROPS, if there is any link.
@@ -285,7 +341,7 @@ Also refresh the image at point."
       (let ((beg (match-beginning 0)))
         (goto-char beg)
         (delete-region beg (match-end 0))
-        (insert (iimg--format 'link props))
+        (insert (iimg--format-link props))
         (iimg--fontify beg (point))))))
 
 (defun iimg-resize ()
@@ -307,6 +363,16 @@ Also refresh the image at point."
       (progn (setq img-props
                    (plist-put img-props :thumbnail
                               (not (plist-get img-props :thumbnail))))
+             (iimg--set-link-at-point-refresh img-props))
+    (user-error "There is no image at point")))
+
+(defun iimg-toggle-multi-line ()
+  "Toggle multi-line display for the image at point."
+  (interactive)
+  (if-let ((img-props (iimg--link-at-point)))
+      (progn (setq img-props
+                   (plist-put img-props :multi-line
+                              (not (plist-get img-props :multi-line))))
              (iimg--set-link-at-point-refresh img-props))
     (user-error "There is no image at point")))
 
@@ -345,11 +411,10 @@ Also refresh the image at point."
   "Display inline iamges."
   :lighter ""
   (if iimg-minor-mode
-      (progn (jit-lock-register #'iimg--fontify)
+      (progn (iimg--fontify (point-min) (point-max))
              (setq-local dnd-protocol-alist
                          (cons '("^file:" . iimg-dnd-open-file)
                                dnd-protocol-alist)))
-    (jit-lock-unregister #'iimg--fontify)
     (kill-local-variable 'dnd-protocol-alist)
     (dolist (ov (overlays-in (point-min) (point-max)))
       (when (overlay-get ov 'iimg)
