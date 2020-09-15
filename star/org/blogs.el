@@ -253,7 +253,7 @@ FORCE as usual."
                       luna-blog-url
                       force)))
 
-;;; Commands
+;;;; Commands
 
 (defun luna-publish-rock/day (&optional force)
   "Publish rock/day blog.
@@ -341,6 +341,14 @@ If FORCE is non-nil, only export when org file is newer than html file."
   "Open ~/p/casouri/rock/day/album/."
   (interactive)
   (shell-command-to-string (format "open ~/p/casouri/rock/day/album/")))
+
+(defun luna-insert-album ()
+  "Insert a album image name."
+  (interactive)
+  (insert (completing-read
+           "Album: "
+           (luna-f-directory-files
+            (luna-f-join luna-blog-rock/day-dir "album")))))
 
 ;;; goldfish
 
