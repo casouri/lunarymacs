@@ -180,10 +180,18 @@ PLIST is the plist part of the link, should be a plist."
     (let* ((props (read (match-string-no-properties 1)))
            (image (iimg--image-from-props props))
            (multi-line (plist-get props :multi-line))
+           (name (plist-get props :name))
            (inhibit-read-only t))
-      (if (not multi-line)
-          ;; Render the image on a single line.
-          (iimg--fontify-1 (match-beginning 0) (match-end 0) image)
+      (cond
+       ((not (display-graphic-p))
+        ;; In terminal.
+        (put-text-property
+         (match-beginning 0) (match-end 0)
+         'display (format "[iimg link of %s]" name)))
+       ((not multi-line)
+        ;; Render the image on a single line.
+        (iimg--fontify-1 (match-beginning 0) (match-end 0) image))
+       (t
         ;; Render the image across multiple lines. We assume the
         ;; number of placeholder lines in the buffer is correct.
         (save-excursion
@@ -199,7 +207,7 @@ PLIST is the plist part of the link, should be a plist."
                                image))
                 (put-text-property end (1+ end) 'line-height t)
                 (setq y (+ y slice-height)))
-              (forward-line)))))
+              (forward-line))))))
       (put-text-property (match-beginning 0) (match-end 0)
                          'read-only t)))
   (cons 'jit-lock-response (cons beg end)))
