@@ -4,14 +4,8 @@
 
 (fset #'yes-or-no-p #'y-or-n-p) ; y/n instead of yes/no
 
-(setq-default ;; current file name
- frame-title-format '("%f"))
-
-;;;; minibuffer
-;; keep the point out of the minibuffer
-;; (setq minibuffer-prompt-properties
-;;       '(read-only t point-entered minibuffer-avoid-prompt
-;;                   face minibuffer-prompt))
+;; current file name
+(setq-default frame-title-format '("%f"))
 
 ;;;; utf-8
 (prefer-coding-system 'utf-8)
@@ -60,3 +54,7 @@
     (add-to-list 'recentf-exclude no-littering-etc-directory))
   (setq auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
+
+;;;; Button
+;; mouse-1 to follow link
+(put 'default-button 'follow-link t)
