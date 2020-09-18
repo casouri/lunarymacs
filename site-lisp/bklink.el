@@ -195,15 +195,15 @@ Do nothing if there is no link at point."
          '(display "]" font-lock-face shadow face shadow))
         (when (match-beginning 3)
           (put-text-property (match-beginning 3)
-                             (match-end 3) 'invisible t)))
-      ;; Highlight link.
-      (make-text-button (match-end 1)
-                        (match-beginning 4)
-                        :type 'bklink
-                        'filename (concat
-                                   (match-string-no-properties 2)
-                                   (or (match-string-no-properties 3)
-                                       ""))))))
+                             (match-end 3) 'invisible t))
+        ;; Highlight link.
+        (make-text-button (match-end 1)
+                          (match-beginning 4)
+                          :type 'bklink
+                          'filename (concat
+                                     (match-string-no-properties 2)
+                                     (or (match-string-no-properties 3)
+                                         "")))))))
 
 (defun bklink-fontify-url (beg end)
   "Add clickable buttons to URLs between BEG and END.
@@ -226,7 +226,8 @@ clickable and will use `browse-url' to open the URLs in question."
 
 (defvar bklink--back-link-regexp
   (rx (seq "\n" (or "\x0C" (= 70 "-")) "\n"
-           (+ digit) " linked references to " (+ anything) "\n"))
+           (+ digit) " linked references to " (+ anything)
+           (or "\x0C" (= 70 "-")) "\n"))
   "Regular expression that matches the beginning of a summary.")
 
 (defun bklink--prune-back-link-summary ()
@@ -235,7 +236,7 @@ clickable and will use `browse-url' to open the URLs in question."
   (let ((inhibit-read-only t))
     ;; Remove summary.
     (when (re-search-forward bklink--back-link-regexp nil t)
-      (delete-region (match-beginning 0) (point-max)))))
+      (delete-region (match-beginning 0) (match-end 0)))))
 
 (defun bklink--insert-back-link-summary (files buffer this-file)
   "Append back-link summary to BUFFER.
@@ -289,6 +290,8 @@ THIS-FILE is the filename we are inserting summary into."
              (insert (cdr summary))
              (indent-rigidly beg (point) 2))
            (insert "\n"))
+         (insert (if bklink-use-form-feed "\x0C" (make-string 70 ?-))
+                 "\n")
          (put-text-property summary-start (point) 'read-only t)
          (bklink-fontify summary-start (point)))))))
 
