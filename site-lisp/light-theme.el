@@ -40,14 +40,14 @@
            (orange    "#da8548")
            (red       "#e45649")
            (yellow    "#986801")
-           (violet1   "#b751b6")
-           (violet2   "#a626a4")
+           (violet1   "#b751b6") ; bg
+           (violet2   "#A8289C") ; fg 
            ;; Note that this is not a cons cell.
            (tty       '((type nil))))
       `(;; builtin faces
         (default     (nil ,fg ,bg))
         (region      (nil nil ,(overlay bg violet1 0.1)))
-        (highlight   (nil "white" ,blue2))
+        (highlight   (nil ,bg ,blue2))
         (cursor      (nil "white" "black"))
         (link        (nil ,blue1 nil nil))
         (match       (nil ,green nil nil bold))
@@ -58,6 +58,7 @@
         (fringe      (default))
         (shadow      (nil ,fg-weak))
         (vertical-border (nil ,bg-alt ,bg-alt) nil ,tty)
+        (link-visited    (link ,violet2))
 
         (variable-pitch () (:family "Charter" :height 150))
         (fixed-pitch () (:family "SF Mono" :height 130))
@@ -65,7 +66,7 @@
         (vertical-border     (nil nil "black"))
         (lazy-highlight      (nil "black" nil nil bold))
         (highlight-fg-only-1 (nil ,blue1))
-        (highlight-fg-only-2 (nil ,violet1))
+        (highlight-fg-only-2 (nil ,violet2))
         (minibuffer-prompt   (highlight-fg-only-1))
         (secondary-selection (nil nil ,(overlay bg blue1 0.3)))
         (isearch             (bold))
@@ -111,7 +112,7 @@
         (font-lock-comment-face              (nil ,fg-weak))
         (font-lock-comment-delimiter-face    (font-lock-comment-face))
         (font-lock-doc-face                  (font-lock-comment-face))
-        (font-lock-constant-face             (nil ,violet1))
+        (font-lock-constant-face             (nil ,violet2))
         (font-lock-function-name-face        (nil ,violet2))
         (font-lock-keyword-face              (nil ,red))
         (font-lock-string-face               (nil ,green))
@@ -135,9 +136,9 @@
 
         ;; completion
         (current-selection (nil ,bg ,blue2))
-        (comp-common       (nil ,violet1))
+        (comp-common       (nil ,violet2))
         (selection-common  (current-selection ,bg))
-        (comp-mouse        (nil ,bg ,violet2))
+        (comp-mouse        (nil ,bg ,violet1))
         
         ;; package faces
         
@@ -179,10 +180,10 @@
         (magit-branch-current    (nil ,blue1))
         (magit-branch-local      (nil ,blue1))
         (magit-branch-remote     (nil ,green))
-        (magit-cherry-equivalent (nil ,violet1))
+        (magit-cherry-equivalent (nil ,violet2))
         (magit-cherry-unmatched  (nil ,blue1))
         (magit-tag               (nil ,yellow))
-        (magit-filename          (nil ,violet1))
+        (magit-filename          (nil ,violet2))
         
         (magit-diff-added             (nil ,green ,(overlay bg green 0.1)))
         (magit-diff-added-highlight   (nil ,green ,(overlay bg green 0.2)))
@@ -203,9 +204,9 @@
         (magit-diff-file-heading-selection (magit-heading-selection))
         
         (magit-diff-hunk-heading
-         (nil ,bg ,(overlay bg violet2 0.2)))
+         (nil ,bg ,(overlay bg violet1 0.2)))
         (magit-diff-hunk-heading-highlight
-         (nil ,bg ,(overlay bg violet2 0.8)))
+         (nil ,bg ,(overlay bg violet1 0.8)))
         (magit-diff-hunk-heading-selection (magit-heading-selection))
         ;; selected hunk region
         (magit-diff-hunk-region            (italic))
@@ -254,7 +255,7 @@
         (rainbow-delimiters-depth-2-face (nil ,violet2))
         (rainbow-delimiters-depth-3-face (nil ,green))
         (rainbow-delimiters-depth-4-face (nil ,orange))
-        (rainbow-delimiters-depth-5-face (nil ,violet1))
+        (rainbow-delimiters-depth-5-face (nil ,violet2))
         (rainbow-delimiters-depth-6-face (nil ,yellow))
         (rainbow-delimiters-depth-7-face (nil ,blue2))
         (rainbow-delimiters-unmatched-face (nil ,red))
@@ -267,7 +268,7 @@
         (smerge-markers (nil nil nil nil bold))
 
         (which-key-key-face                   (nil ,green))
-        (which-key-group-description-face     (nil ,violet1))
+        (which-key-group-description-face     (nil ,violet2))
         (which-key-command-description-face   (nil ,blue1))
         (which-key-local-map-description-face (nil ,violet2))
 
