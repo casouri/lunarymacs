@@ -78,7 +78,7 @@ project."
 (defun open-in-finder ()
   "Open ‘default-directory’ in Finder."
   (interactive)
-  (shell-command-to-string (format "open %s" default-directory)))
+  (shell-command-to-string (format "open '%s'" default-directory)))
 
 (defun open-in-iterm ()
   "Open ‘default-directory’ iTerm."
