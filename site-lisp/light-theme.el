@@ -36,7 +36,7 @@
            ;; (fg-strong "#0e0e0e")
            (blue1     "#0076D6") ; fg
            (blue2     "#2C79F5") ; bg
-           (green     "#478F46")
+           (green     "#489446")
            (orange    "#da8548")
            (red       "#e45649")
            (yellow    "#986801")
