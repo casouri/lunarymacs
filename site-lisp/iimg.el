@@ -122,7 +122,8 @@ PLIST is the plist part of the link, should be a plist."
 
 (defun iimg--format-link (plist)
   "Return formatted iimg link.
-PLIST is the plist part of the link, should be a plist."
+PLIST is the plist part of the link, should be a plist.
+The image must already be in `iimg--data-alist'."
   (let* ((img (iimg--image-from-props plist))
          (multi-line (plist-get plist :multi-line))
          (row-count (ceiling (/ (cdr (image-size img t))
@@ -330,18 +331,21 @@ image. See Commentary for the format of NAME, THUMBNAIL, and SIZE."
                  (base64-encode-region (point-min) (point-max))
                  ;; TODO Check for max image file size?
                  (buffer-string)))
-         (data-string (iimg--format-data (list :name name :data data)))
-         (link-string (iimg--format-link
-                       (list :name name :size '(width pixel 0.6)
-                             :ext (file-name-extension file)))))
+         (data-string (iimg--format-data (list :name name :data data))))
     ;; Insert data.
     (save-excursion
       (goto-char (point-max))
+      (when (text-property-any
+             (max (point-min) (1- (point))) (point) 'read-only t)
+        (goto-char
+         (previous-single-char-property-change (point) 'read-only)))
       (let ((beg (point)))
         (insert "\n" data-string "\n")
         (iimg--load-image-data beg (point))))
-    ;; Insert link.
-    (insert link-string)))
+    ;; Insert link. We insert link after loading image data.
+    (insert (iimg--format-link
+             (list :name name :size '(width pixel 0.6)
+                   :ext (file-name-extension file))))))
 
 (defun iimg--search-link-at-point ()
   "Search for iimg link at point.
