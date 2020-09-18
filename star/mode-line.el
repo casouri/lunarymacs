@@ -1,13 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
-(load-package minions
-  :config
-  (add-hook #'after-init-hook #'minions-mode 90))
+(require 'subr-x)
 
-(defun restart-minions-mode ()
-  (interactive)
-  (minions-mode -1)
-  (minions-mode))
+(load-package minions)
 
 (defun luna-edit-lighter ()
   (if (buffer-modified-p)
@@ -42,7 +37,6 @@ else return STR."
     ""))
 
 (defun luna-flymake-mode-line ()
-  (require 'subr-x)
   (let* ((known (hash-table-keys flymake--backend-state))
          (running (flymake-running-backends))
          (disabled (flymake-disabled-backends))
@@ -71,9 +65,12 @@ else return STR."
                                       (length running)))
                   (propertize pad 'face '(:foreground "gray"))))
                args))
-            `((,(length (gethash :error diags-by-type)) "%d " error "|")
-              (,(length (gethash :warning diags-by-type)) " %d " warning "|")
-              (,(length (gethash :note diags-by-type)) " %d" success ""))))))
+            `((,(length (gethash :error diags-by-type))
+               "%d " error "|")
+              (,(length (gethash :warning diags-by-type))
+               " %d " warning "|")
+              (,(length (gethash :note diags-by-type))
+               " %d" success ""))))))
 
 (setq-default mode-line-format
               (let ((spaces "   "))
@@ -86,7 +83,7 @@ else return STR."
                   ;;            (eyebrowse-mode-line-indicator) ""))
                   "%b"
                   ,spaces
-                  mode-line-modes
+                  minions-mode-line-modes
                   ,spaces
                   (:eval (if (bound-and-true-p flymake-mode)
                              (luna-flymake-mode-line) "OK"))
