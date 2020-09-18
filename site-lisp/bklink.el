@@ -6,7 +6,7 @@
 
 ;;; Commentary:
 ;;
-;; In org-roam, you can show back-links -- a list of files that
+;; In org-roam, you can show back links -- a list of files that
 ;; contains a link to the current file. The idea is nice but I don’t
 ;; like how org-roam and zetteldeft implement things. Hence this
 ;; minimal package.
@@ -25,7 +25,7 @@
 ;;  1. Filename as link, no id, no database.
 ;;  2. Works for multiple directories without configuration.
 ;;  3. Works for any file format.
-;;  4. Back-link buffer follows the main buffer automatically.
+;;  4. Back-link summary is not saved to the file.
 ;;
 ;; To use with Deft:
 ;;
@@ -54,11 +54,30 @@
 ;;; Code:
 
 (require 'cl-lib)
+;; For `with-buffer-modified-unmodified'.
+(require 'bookmark)
+
+;;; Customize
+
+(defvar bklink-use-form-feed t
+  "If non-nil, use form-feed instead of dashes.")
+
+(defvar bklink-show-back-link-on-start t
+  "If non-nil, show back-links when `bklink-minor-mode' starts.")
+
+(defvar bklink-more-match nil
+  "If non-nil, bklink includes more matches in the back-link summary.
+
+Besides explicitly links, we also include text that matches the
+title but isn't a link.
+
+For example, for Emacs.txt, we match not only [{Emacs.txt}],
+but also Emacs.")
 
 ;;; Backstage
 
 (defvar bklink-regexp (rx (seq (group "[{")
-                               (group (+? (not (any "/\n"))))
+                               (group (+? (not (any "/"))))
                                (group (? (or ".txt" ".org" ".md")))
                                (group "}]")))
   "Regular expression that matches a bklink.
@@ -81,12 +100,6 @@ Ignore dotfiles and directories."
   (cl-remove-if (lambda (f) (or (string-prefix-p "." f)
                                 (file-directory-p f)))
                 (directory-files (file-name-directory file))))
-
-(defsubst bklink--format-back-link-buffer (buffer)
-  "Format buffer name for the back-link for BUFFER."
-  ;; We use buffer to generate new names to avoid name conflict:
-  ;; files in different directories can have the same name.
-  (format " *back-links for %s*" (buffer-name buffer)))
 
 (defun bklink--search-at-point ()
   "Search for links at point and set match data accordingly.
@@ -127,21 +140,9 @@ Do nothing if there is no link at point."
 (defun bklink-follow-link (button)
   "Jump to the file that BUTTON represents."
   (with-demoted-errors "Error when following the link: %s"
-    (let ((file (button-get button 'filename)))
-      ;; If we are in a back-link buffer, open the file in the
-      ;; main buffer and delete back-link window.
-      (if bklink--minion-p
-          (if-let ((win (get-buffer-window bklink--master))
-                   (bklink-win (selected-window)))
-              (progn (select-window win)
-                     (find-file file)
-                     (set-window-parameter
-                      bklink-win 'window-atom nil)
-                     (delete-window bklink-win))
-            (error
-             "Cannot find the main buffer of this back-link buffer"))
-        (find-file file)))
-    (bklink-minor-mode)))
+    (find-file (button-get button 'filename))
+    (unless bklink-minor-mode
+      (bklink-minor-mode))))
 
 (define-button-type 'bklink-url
   'action #'bklink-browse-url
@@ -162,35 +163,47 @@ Do nothing if there is no link at point."
   (if bklink-minor-mode
       (progn (jit-lock-register #'bklink-fontify)
              (unless (derived-mode-p 'org-mode 'markdown-mode)
-               (jit-lock-register #'bklink-fontify-url)))
+               (jit-lock-register #'bklink-fontify-url))
+             (add-hook 'write-file-functions
+                       #'bklink--write-file-function 90 t)
+             ;; (add-hook 'fill-nobreak-predicate #'bklink--nobreak-p 90 t)
+             (if (and bklink-show-back-link-on-start
+                      (not bklink-show-back-link))
+                 (bklink-show-back-link)))
     (jit-lock-unregister #'bklink-fontify)
     (jit-lock-unregister #'bklink-fontify-url)
+    ;; (remove-hook 'fill-nobreak-predicate #'bklink--nobreak-p t)
     (with-silent-modifications
       (put-text-property (point-min) (point-max) 'display nil)))
-  (bklink-managed-mode)
   (jit-lock-refontify))
 
 (defun bklink-fontify (beg end)
   "Highlight bklinks between BEG and END."
   (goto-char beg)
-  ;; FIXME: What if END is in the middle of a link?
-  (while (re-search-forward bklink-regexp end t)
-    ;; Hide opening and closing delimiters and file extension.
-    (with-silent-modifications
-      (put-text-property (match-beginning 1) (match-end 1)
-                         'display "“")
-      (put-text-property (match-beginning 4) (match-end 4)
-                         'display "”")
-      (when (match-beginning 3)
-        (put-text-property (match-beginning 3)
-                           (match-end 3) 'invisible t)))
-    ;; Highlight link.
-    (make-text-button (match-beginning 0)
-                      (match-end 0)
-                      :type 'bklink
-                      'filename (concat (match-string-no-properties 2)
-                                        (or (match-string-no-properties 3)
-                                            "")))))
+  (while (and (re-search-forward bklink-regexp nil t)
+              (< (point) end))
+    (let ((inhibit-read-only t))
+      ;; Hide opening and closing delimiters and file extension.
+      (with-silent-modifications
+        ;; (put-text-property (match-beginning 0) (match-end 0)
+        ;;                    'bklink-no-break t)
+        (add-text-properties
+         (match-beginning 1) (match-end 1)
+         '(display "[" font-lock-face shadow face shadow))
+        (add-text-properties
+         (match-beginning 4) (match-end 4)
+         '(display "]" font-lock-face shadow face shadow))
+        (when (match-beginning 3)
+          (put-text-property (match-beginning 3)
+                             (match-end 3) 'invisible t)))
+      ;; Highlight link.
+      (make-text-button (match-end 1)
+                        (match-beginning 4)
+                        :type 'bklink
+                        'filename (concat
+                                   (match-string-no-properties 2)
+                                   (or (match-string-no-properties 3)
+                                       ""))))))
 
 (defun bklink-fontify-url (beg end)
   "Add clickable buttons to URLs between BEG and END.
@@ -204,15 +217,113 @@ clickable and will use `browse-url' to open the URLs in question."
                       :type 'bklink-url
                       'url (match-string-no-properties 0))))
 
-;;;; Back-links
+;; (defun bklink--nobreak-p ()
+;;   "Return non-nil if shouldn't break at point."
+;;   (text-property-any
+;;    (max (1- (point)) (point-min)) (point) 'bklink-no-break t))
+
+;;;; Back-link summary
+
+(defvar bklink--back-link-regexp
+  (rx (seq "\n" (or "\x0C" (= 70 "-")) "\n"
+           (+ digit) " linked references to " (+ anything) "\n"))
+  "Regular expression that matches the beginning of a summary.")
+
+(defun bklink--prune-back-link-summary ()
+  "Remove back-links before save."
+  (goto-char (point-min))
+  (let ((inhibit-read-only t))
+    ;; Remove summary.
+    (when (re-search-forward bklink--back-link-regexp nil t)
+      (delete-region (match-beginning 0) (point-max)))))
+
+(defun bklink--insert-back-link-summary (files buffer this-file)
+  "Append back-link summary to BUFFER.
+FILES is a list of filenames that contains the link.
+THIS-FILE is the filename we are inserting summary into."
+  (with-current-buffer buffer
+    (save-excursion
+      (with-buffer-modified-unmodified
+       (bklink--prune-back-link-summary)
+       (goto-char (point-max))
+       (let* ((summary-start (point))
+              (this-link (bklink--format-link this-file))
+              (this-link-re (string-join
+                             (mapcar #'regexp-quote
+                                     (if bklink-more-match
+                                         (split-string
+                                          (file-name-base this-file))
+                                       (split-string this-link)))
+                             "[ \n]*"))
+              ;; A list of (FILE . SUMMARY). The grep search didn't
+              ;; match against the complete link and we need to filter
+              ;; out the false-positives here.
+              (summary-list
+               (mapcar
+                (lambda (file)
+                  (if (not (equal file this-file))
+                      (with-temp-buffer
+                        (insert-file-contents file)
+                        (goto-char (point-min))
+                        (if (re-search-forward this-link-re nil t)
+                            (cons file (if (org-at-table-p)
+                                           (thing-at-point 'line)
+                                         (thing-at-point 'sentence)))))))
+                files))
+              (summary-list (remove nil summary-list)))
+         ;; Insert separator.
+         (insert "\n"
+                 (if bklink-use-form-feed "\x0C" (make-string 70 ?-))
+                 "\n"
+                 ;; Plural might not be correct, but I don't care.
+                 (format "%d linked references to %s:\n"
+                         (length summary-list) this-link))
+         (dolist (summary summary-list)
+           (insert "\n")
+           ;; Insert file link.
+           (insert (bklink--format-link (car summary)) ":\n")
+           ;; Insert surrounding sentence. We only get the first
+           ;; sentence. Don’t fill the paragraph, filling might break
+           ;; the layout of the original text.
+           (let ((beg (point)))
+             (insert (cdr summary))
+             (indent-rigidly beg (point) 2))
+           (insert "\n"))
+         (put-text-property summary-start (point) 'read-only t)
+         (bklink-fontify summary-start (point)))))))
+
+(defun bklink--write-file-function ()
+  "Write to file without the back-links."
+  (save-excursion
+    (let ((this-buffer (current-buffer))
+          (this-file (buffer-file-name)))
+      (with-temp-buffer
+        (insert-buffer-substring this-buffer)
+        (bklink--prune-back-link-summary)
+        (write-region (point-min) (point-max) this-file))
+      (clear-visited-file-modtime)
+      (set-buffer-modified-p nil)
+      t)))
+
+;;;; Retrieve back-links
 
 (defun bklink--get-linked-files (file callback)
-  "Call CALLBACK with a list of files’ name that has a link to FILE."
+  "Call CALLBACK with a list of filenames that has a link to FILE."
   (let* ((name (generate-new-buffer-name " *bklink grep*"))
-         (process (start-process
-                   name name "grep" "-rlF"
-                   (bklink--format-link (file-name-nondirectory file))
-                   (file-name-directory file)))
+         (process (apply
+                   #'start-process
+                   name name "grep" "-ilF"
+                   ;; The link could span multiple lines (because of
+                   ;; filling), so we only search for the part before
+                   ;; first space as a preliminary filter. We later do
+                   ;; an accurate search in
+                   ;; `bklink--insert-back-link-summary'.
+                   (car (split-string
+                         (if bklink-more-match
+                             (file-name-base file)
+                           (bklink--format-link
+                            (file-name-nondirectory file)))))
+                   (bklink--get-file-list file)))
          ;; When the grep process finishes, we parse the result files
          ;; and call CALLBACK with them.
          (sentinal
@@ -229,81 +340,6 @@ clickable and will use `browse-url' to open the URLs in question."
               (error "Bklink’s grep process failed with signal: %s"
                      event)))))
     (set-process-sentinel process sentinal)))
-
-;;;; Manage back-link window
-;;
-;; The back-link buffer (minion) follows its document buffer (master).
-;; If the master moves, the minion moves with it.
-
-(defvar-local bklink--minion-p nil
-  "Non-nil means this buffer is a back-link buffer.")
-
-(defvar-local bklink--master nil
-  "The main buffer for this back-link buffer.")
-
-(defvar-local bklink--show-back-link nil
-  "If non-nil, show the back-link buffer for this buffer.
-Only used by the toggle function.")
-
-(defun bklink--share-parent-any (win win-list)
-  "Return non-nil if WIN and any window in WIN-LIST shares parent."
-  (cl-labels ((share-parent (a b) (eq (window-parent a)
-                                      (window-parent b))))
-    (cl-loop for w in win-list
-             if (share-parent win w)
-             return t
-             finally return nil)))
-
-(defun bklink--display-minion (minion master-window)
-  "Display MINION buffer next to MASTER-WINDOW."
-  (let ((window (display-buffer-in-atom-window
-                 minion `((side . below) (window . ,master-window)))))
-    (set-window-dedicated-p window t)
-    (fit-window-to-buffer window nil nil nil nil t)))
-
-(defun bklink--delete-minion-window (minion-window)
-  "Delete MINION-WINDOW."
-  (set-window-parameter minion-window 'window-atom nil)
-  (delete-window minion-window))
-
-(defun bklink--sync-window (_)
-  "Show/delete back-link window for document buffer accordingly."
-  (dolist (buf (buffer-list))
-    ;; BUF is either a minion or a master.
-    (when (buffer-local-value 'bklink-minor-mode buf)
-      (if (buffer-local-value 'bklink--minion-p buf)
-          ;; For a back-link buffer MINION, make sure it’s next to
-          ;; it MASTER. If not, delete MINION’s window.
-          (let* ((minion buf)
-                 (minion-windows (get-buffer-window-list minion))
-                 (master (buffer-local-value 'bklink--master minion))
-                 (master-windows (get-buffer-window-list master)))
-            (dolist (minion-window minion-windows)
-              (unless (bklink--share-parent-any
-                       minion-window master-windows)
-                (bklink--delete-minion-window minion-window))))
-        ;; For a main buffer MASTER, make sure it has a back-link
-        ;; buffer (MINION) next to it.
-        (let* ((master buf)
-               (master-windows (get-buffer-window-list master))
-               (minion (get-buffer (bklink--format-back-link-buffer
-                                    master)))
-               (minion-windows (get-buffer-window-list minion)))
-          (when minion
-            (dolist (master-window master-windows)
-              (unless (bklink--share-parent-any
-                       master-window minion-windows)
-                (bklink--display-minion minion master-window)))))))))
-
-(define-minor-mode bklink-managed-mode
-  "Manage back-link windows automatically."
-  :global t
-  :lighter ""
-  (if bklink-managed-mode
-      (add-hook 'window-buffer-change-functions
-                #'bklink--sync-window)
-    (remove-hook 'window-buffer-change-functions
-                 #'bklink--sync-window)))
 
 ;;; Userland
 
@@ -322,53 +358,26 @@ edit the link."
       (insert (bklink--format-link file))))
   (bklink-minor-mode))
 
-(defun bklink-toggle-back-link ()
+(define-minor-mode bklink-show-back-link
   "Toggle display of a buffer that show back-links.
 The back-links are links to the files that has a link to this file."
-  (interactive)
+  :lighter ""
   (unless (executable-find "grep")
     (user-error "Displaying back-link needs grep but we cannot find it"))
-  (bklink-minor-mode)
-  (setq bklink--show-back-link (not bklink--show-back-link))
-  (if bklink--show-back-link
-      ;; Show.
-      ;; MASTER is this buffer, MINION is the back-link buffer.
-      (if-let ((file (buffer-file-name)))
-          (let ((master (current-buffer))
-                (minion (get-buffer-create
-                         (bklink--format-back-link-buffer
-                          (current-buffer)))))
-            ;; Fire a sub-process to retrieve back-links.
-            (bklink--get-linked-files
-             file (lambda (file-list)
-                    (with-current-buffer minion
-                      (erase-buffer)
-                      (if (null file-list)
-                          (insert "No back-links found")
-                        (dolist (file file-list)
-                          (insert (bklink--format-link file))
-                          (insert "\n"))))))
-            ;; Initialize the back-link buffer...
-            (with-current-buffer minion
-              ;; Normally it’s pretty fast, so this just creates flicker.
-              ;; (insert "Waiting for search to finish...")
-              ;; We use ‘bklink-minor-mode’ to identify back-link
-              ;; buffers.
-              (bklink-minor-mode)
-              (setq mode-line-format nil
-                    bklink--minion-p t
-                    bklink--master master))
-            ;; ... and display the buffer.
-            (bklink--sync-window nil))
+  (unless bklink-minor-mode
+    (user-error "Bklink-minor-mode is not on"))
+  (if bklink-show-back-link
+      (if-let ((file (buffer-file-name))
+               (buffer (current-buffer)))
+          ;; Fire a sub-process to retrieve back-links.
+          (bklink--get-linked-files
+           file (lambda (file-list)
+                  (bklink--insert-back-link-summary
+                   file-list buffer (file-name-nondirectory file))))
         (user-error "This buffer is not associated with any file"))
-    ;; Hide.
-    (when-let ((minion (get-buffer (bklink--format-back-link-buffer
-                                    (current-buffer)))))
-      (dolist (win (get-buffer-window-list minion))
-        (bklink--delete-minion-window win))
-      ;; We kill the buffer so that ‘bklink--sync-window’ doesn’t
-      ;; bring it up automatically.
-      (kill-buffer minion))))
+    (with-buffer-modified-unmodified
+     (save-excursion
+       (bklink--prune-back-link-summary)))))
 
 (defun bklink-rename (new-name)
   "Rename current file to NEW-NAME.
@@ -400,8 +409,9 @@ current file."
                              (format-time-string "%s")))
            (command
             (concat
-             (format "grep -rlF '%s' %s > %s"
-                     old-link default-directory tmp-file)
+             (format "grep -ilF '%s' %s > %s"
+                     (car (split-string old-link))
+                     default-directory tmp-file)
              (format "; emacs --batch -l '%s'"
                      (find-library-name "bklink"))
              (format
@@ -421,8 +431,12 @@ The files to replace are in PATH-FILE"
       (with-temp-buffer
         (insert-file-contents file)
         (goto-char (point-min))
-        (while (search-forward old-link nil t)
-          (replace-match new-link))
+        (let ((link-re (string-join
+                        (mapcar #'regexp-quote
+                                (split-string old-link))
+                        "[ \n]*")))
+          (while (re-search-forward link-re nil t)
+            (replace-match new-link)))
         (write-file file)))))
 
 (provide 'bklink)
