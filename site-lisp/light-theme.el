@@ -38,7 +38,7 @@
            (blue2     "#2C79F5") ; bg
            (green     "#489446")
            (orange    "#DA7A48")
-           (red       "#e45649")
+           (red       "#E04E49")
            (yellow    "#987816")
            (violet1   "#b751b6") ; bg
            (violet2   "#A8289C") ; fg 
