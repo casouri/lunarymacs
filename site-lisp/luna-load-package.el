@@ -37,11 +37,12 @@ return: ((:command . (args args args)) (:command . (args)))."
         (push token arg-list)))
     (reverse ret-list)))
 
-(defun luna-load-package--handle-hook (arg-list)
+(defun luna-load-package--handle-hook (arg-list package)
   "Handle hook arguments.
 Each ARG in ARG-LIST is a cons (HOOK . FUNCTION).
 HOOK can be either a single hook or a list of hooks.
-FUNCTION can also be either a single function or a list of them."
+FUNCTION can also be either a single function or a list of them.
+PACKAGE is the package we are configuring."
   (let (ret-list hook-list func-list)
     (dolist (arg arg-list)
       (let ((hook (car arg))
@@ -50,11 +51,20 @@ FUNCTION can also be either a single function or a list of them."
         (setq hook-list
               (if (symbolp hook) (list hook) hook))
         (setq func-list
-              (if (symbolp func) (list func) func)))
+              (if (or (symbolp func)
+                      ;; Handle lambda correctly.
+                      (functionp func))
+                  (list func) func)))
       ;; Produce add-hook forms.
       (dolist (func func-list)
-        (dolist (hook hook-list)
-          (push `(add-hook ',hook #',func) ret-list))))
+        ;; If FUNC is a lambda function, we can't autoload it,
+        ;; Make it load the package before execution.
+        (let ((func (if (not (symbolp func))
+                        ;; We don't want closure.
+                        `(lambda () (require ',package) (funcall ,func))
+                      func)))
+          (dolist (hook hook-list)
+            (push `(add-hook ',hook #',func) ret-list)))))
     (reverse ret-list)))
 
 (defun luna-load-package--collect-autoload (arg-list package)
@@ -71,7 +81,9 @@ Return a list of (autoload ...) forms."
                         ;;               (hook . (fn ...))
                         (:hook (mapcan (lambda (arg)
                                          (let ((fn (cdr arg)))
-                                           (if (symbolp fn)
+                                           (if (or (symbolp fn)
+                                                   ;; Handle lambda.
+                                                   (functionp fn))
                                                (list fn)
                                              fn)))
                                        arg-list))
@@ -83,7 +95,8 @@ Return a list of (autoload ...) forms."
                                        arg-list)))))
                   arg-list)))
     (mapcar (lambda (fn)
-              `(autoload #',fn ,(symbol-name package) nil t))
+              (if (symbolp fn)
+                  `(autoload #',fn ,(symbol-name package) nil t)))
             autoload)))
 
 (defmacro luna-load-package (package &rest args)
@@ -118,7 +131,7 @@ Each command can take zero or more arguments."
                  (:init arg-list)
                  (:config `((with-eval-after-load ',package
                               ,@arg-list)))
-                 (:hook (luna-load-package--handle-hook arg-list))
+                 (:hook (luna-load-package--handle-hook arg-list package))
                  (:mode
                   ;; ARG is either ".xxx" or (".xxx" . mode)
                   (mapcar
