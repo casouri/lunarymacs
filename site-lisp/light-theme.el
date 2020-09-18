@@ -118,11 +118,11 @@
         (font-lock-type-face                 (nil ,yellow))
         (font-lock-variable-name-face        (nil ,violet2))
         (font-lock-warning-face              (warning))
-        (font-lock-negation-char-face        (nil ,blue1))
-        (font-lock-preprocessor-face         (nil ,blue1))
-        (font-lock-preprocessor-char-face    (nil ,blue1))
-        (font-lock-regexp-grouping-backslash (nil ,blue1))
-        (font-lock-regexp-grouping-construct (nil ,blue1))
+        (font-lock-negation-char-face        (nil ,blue2))
+        (font-lock-preprocessor-face         (nil ,blue2))
+        (font-lock-preprocessor-char-face    (nil ,blue2))
+        (font-lock-regexp-grouping-backslash (nil ,blue2))
+        (font-lock-regexp-grouping-construct (nil ,blue2))
 
         (mode-line
          (nil nil ,(darken bg 0.07))
