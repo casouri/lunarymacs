@@ -34,8 +34,8 @@
            (fg        "#2b3239")
            (fg-weak   "#9a9ea2")
            ;; (fg-strong "#0e0e0e")
-           (blue1     "#0070C9")
-           (blue2     "#4078f2")
+           (blue1     "#0076D6") ; fg
+           (blue2     "#2C79F5") ; bg
            (green     "#50a14f")
            (orange    "#da8548")
            (red       "#e45649")
@@ -250,13 +250,13 @@
         (magit-signature-untrusted       (nil ,orange))
         (magit-section-secondary-heading (nil ,violet1))
 
-        (rainbow-delimiters-depth-1-face (nil ,blue1))
+        (rainbow-delimiters-depth-1-face (nil ,blue2))
         (rainbow-delimiters-depth-2-face (nil ,violet2))
         (rainbow-delimiters-depth-3-face (nil ,green))
         (rainbow-delimiters-depth-4-face (nil ,orange))
         (rainbow-delimiters-depth-5-face (nil ,violet1))
         (rainbow-delimiters-depth-6-face (nil ,yellow))
-        (rainbow-delimiters-depth-7-face (nil ,blue1))
+        (rainbow-delimiters-depth-7-face (nil ,blue2))
         (rainbow-delimiters-unmatched-face (nil ,red))
         (rainbow-delimiters-mismatched-face
          (rainbow-delimiters-unmatched-face))
