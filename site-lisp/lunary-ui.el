@@ -19,30 +19,14 @@
 (defvar luna-toggle-theme-list ()
   "Themes that you can toggle bwtween by `luna-switch-theme'.")
 
-(defvar luna-theme nil
-  "The theme applied on startup (by ‘luna-load-theme’ in init.el).")
-
-(defvar luna-load-theme-hook nil
-  "Hook run after Emacs loads a theme.")
-
-(defun luna-load-theme (&optional theme)
-  "Disable `luna-currnt-theme' and load THEME.
-For NO-CONFIRM and NO-ENABLE see ‘load-theme’."
-  (interactive
-   (list
-    (intern (completing-read "Load custom theme: "
-                             (mapcar #'symbol-name
-				     (custom-available-themes))))))
-  (dolist (theme custom-enabled-themes)
-    (disable-theme theme))
-  (let ((theme (or theme luna-theme (car luna-toggle-theme-list))))
-    ;; We can save a lot of time by enabling the theme instead of
-    ;; loading it
-    (if (featurep (intern-soft (format "%s-theme" theme)))
-        (enable-theme theme)
-      (load-theme theme t))
-    (luna-local-set 'luna-theme theme)))
-
+(defun luna-switch-theme ()
+  "Switch between themes in `luna-toggle-theme-list'."
+  (interactive)
+  ;; Move the fist element to last.
+  (luna-load-theme (car luna-toggle-theme-list))
+  (setq luna-toggle-theme-list
+        (append (cdr luna-toggle-theme-list)
+                (list (car luna-toggle-theme-list)))))
 ;;; Utilities
 
 (defun luna-quit-window ()
@@ -75,15 +59,6 @@ delete the window."
   (interactive)
   (mapc #'delete-window (luna-window-sibling-list)))
 
-(defun luna-switch-theme ()
-  "Switch between themes in `luna-toggle-theme-list'."
-  (interactive)
-  ;; Move the fist element to last.
-  (luna-load-theme (car luna-toggle-theme-list))
-  (setq luna-toggle-theme-list
-        (append (cdr luna-toggle-theme-list)
-                (list (car luna-toggle-theme-list)))))
-
 ;;; Font
 
 (defmacro luna-set-font (&rest config-list)
@@ -108,7 +83,9 @@ e.g. :family :weight :size etc."
     ("SF Mono Light 13" . (:family "SF Mono" :size 13 :weight light))
     ("PragmataPro 13" . (:family "Essential PragmataPro" :size 13))
     ("PragmataPro 14" . (:family "Essential PragmataPro" :size 14))
-    ("Iosevka 13" . (:family "Iosevka" :size 14)))
+    ("Iosevka 13" . (:family "Iosevka" :size 14))
+    ("JetBrains Mono 12" . (:family "JetBrains Mono" :size 12))
+    ("Roboto Mono 12" . (:family "Roboto Mono" :size 12)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
 Key is a symbol as the name, value is a plist specifying the font spec.
 More info about spec in `font-spec'.")
@@ -231,7 +208,6 @@ But, this function ignores all specifications in the ALIST."
 
 (advice-add #'enable-theme :after
             (lambda (&rest _)
-              (run-hooks 'luna-load-theme-hook)
               ;; Otherwise title bar’s text’s color doesn’t look right.
               (when (featurep 'ns)
                 (set-frame-parameter
