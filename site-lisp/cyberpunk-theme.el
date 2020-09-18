@@ -57,6 +57,7 @@
         (fringe      (default))
         (shadow      (nil ,fg-weak))
         (vertical-border (nil ,bg-alt ,bg-alt) nil ,tty)
+        (link-visited    (link ,violet1))
         
         (variable-pitch () (:family "Charter" :height 150))
         (fixed-pitch    () (:family "SF Mono" :height 130))
