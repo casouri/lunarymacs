@@ -89,6 +89,8 @@
 
 ;;; Code:
 ;;
+;; For `with-buffer-modified-unmodified'.
+(require 'bookmark)
 
 ;;; Variables
 
@@ -280,6 +282,36 @@ Look for iimg-data’s and store them into `iimg--data-alist'."
     (iimg--load-image-data (point-min) (point-max)))
   (alist-get name iimg--data-alist nil nil #'equal))
 
+(defun iimg--replenish-slices ()
+  "We don't save the slices under a link, add them back when open a file."
+  (save-excursion
+    (with-buffer-modified-unmodified
+     (goto-char (point-min))
+     (while (re-search-forward iimg--link-regexp nil t)
+       (when-let* ((props (read (buffer-substring-no-properties
+                                 (match-beginning 1) (match-end 1))))
+                   (multi-line (plist-get props :multi-line))
+                   (inhibit-read-only t))
+         (replace-match (iimg--format-link props)))))))
+
+(defun iimg--prune-slices ()
+  "Remove slices under a link before saving to a file."
+  (save-excursion
+    (let ((this-buffer (current-buffer))
+          (this-file (buffer-file-name))
+          (inhibit-read-only t))
+      (with-temp-buffer
+        (insert-buffer-substring this-buffer)
+        (goto-char (point-min))
+        (while (re-search-forward iimg--link-regexp nil t)
+          (when-let ((beg (match-beginning 2))
+                     (end (match-end 2)))
+            (delete-region beg end)))
+        (write-region (point-min) (point-max) this-file))
+      (clear-visited-file-modtime)
+      (set-buffer-modified-p nil)
+      t)))
+
 ;;; Inserting and modifying
 
 (defun iimg-insert (file name)
@@ -421,9 +453,12 @@ There is no way to un-render the images because I'm lazy."
       (progn (jit-lock-register #'iimg--fontify)
              (setq-local dnd-protocol-alist
                          (cons '("^file:" . iimg-dnd-open-file)
-                               dnd-protocol-alist)))
+                               dnd-protocol-alist))
+             (add-hook 'write-file-functions #'iimg--prune-slices 90 t)
+             (iimg--replenish-slices))
     (kill-local-variable 'dnd-protocol-alist))
-  (jit-lock-refontify))
+  (jit-lock-refontify)
+  (remove-hook 'write-file-functions #'iimg--prune-slices t))
 
 ;;; Drag and drop
 
