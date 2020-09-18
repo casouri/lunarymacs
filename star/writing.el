@@ -4,7 +4,7 @@
 
 (luna-def-key
  :keymaps 'bklink-minor-mode-map
- "C-c l" #'bklink-toggle-back-link
+ "C-c l" #'bklink-show-back-link
  "C-c i" #'bklink-insert
  :keymaps 'text-mode-map
  "TAB" #'indent-for-tab-command
@@ -21,6 +21,8 @@
   :commands deft
   :config
   (require 'iimg)
+  (require 'bklink)
+  (require 'color-outline)
   :hook
   (deft-open-file-hook . (color-outline-mode-maybe
                           bklink-minor-mode
@@ -38,7 +40,9 @@
         deft-use-filter-string-for-filename t))
 
 (load-package bklink
-  :hook (text-mode-hook . bklink-minor-mode))
+  :hook
+  (bklink-minor-mode-hook
+   . (lambda () (if bklink-minor-mode (color-outline-mode-maybe)))))
 
 (load-package iimg
   :hook (text-mode-hook . iimg-minor-mode))
