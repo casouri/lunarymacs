@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (setq cowboy-recipe-alist
       '((isolate . (:repo "casouri/isolate" :option (:full-clone t)))
         (nyan-lite . (:repo "casouri/nyan-lite" :option (:full-clone t)))
