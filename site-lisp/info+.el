@@ -46,7 +46,7 @@
   "Face for body text in Info buffer."
   :group 'info)
 
-(defface info-inline-code `((t . (:inherit shadow)))
+(defface info-inline-code `((t . (:inherit widget-field)))
   "Face for inline code in Info buffer."
   :group 'info)
 
@@ -297,7 +297,7 @@ Moves point."
       (add-hook 'Info-selection-hook #'Info--prettify-buffer)
     (remove-hook 'Info-selection-hook #'Info--prettify-buffer))
   (when (derived-mode-p 'Info-mode)
-    (revert-buffer)))
+    (revert-buffer nil t)))
 
 
 
