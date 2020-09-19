@@ -100,9 +100,9 @@
          . form-feed-mode))
 
 
-(with-eval-after-load 'info
-  (require 'info+)
-  (info-pretty-mode))
+;; (with-eval-after-load 'info
+;;   (require 'info+)
+;;   (info-pretty-mode))
 
 
 ;; (load-package treemacs
