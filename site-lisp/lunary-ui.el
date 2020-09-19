@@ -19,6 +19,9 @@
 (defvar luna-toggle-theme-list ()
   "Themes that you can toggle bwtween by `luna-switch-theme'.")
 
+(defvar luna-theme nil
+  "The current theme.")
+
 (defun luna-switch-theme ()
   "Switch between themes in `luna-toggle-theme-list'."
   (interactive)
@@ -27,6 +30,18 @@
   (setq luna-toggle-theme-list
         (append (cdr luna-toggle-theme-list)
                 (list (car luna-toggle-theme-list)))))
+
+(defun luna-load-theme (&optional theme)
+  "Load THEME or `luna-theme'."
+  (dolist (theme custom-enabled-themes)
+    (disable-theme theme))
+  (when-let ((theme (or theme luna-theme (car luna-toggle-theme-list))))
+    (if (featurep (intern (format "%s-theme" theme)))
+        ;; We can save a lot of time by only enabling the theme.
+        (enable-theme theme)
+      (load-theme theme t))
+    (luna-local-setq luna-theme)))
+
 ;;; Utilities
 
 (defun luna-quit-window ()
