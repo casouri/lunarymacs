@@ -204,9 +204,9 @@
         (magit-diff-file-heading-selection (magit-heading-selection))
         
         (magit-diff-hunk-heading
-         (nil ,bg ,(overlay bg violet1 0.2)))
+         (nil ,bg ,(overlay bg violet2 0.2)))
         (magit-diff-hunk-heading-highlight
-         (nil ,bg ,(overlay bg violet1 0.8)))
+         (nil ,bg ,(overlay bg violet2 0.8)))
         (magit-diff-hunk-heading-selection (magit-heading-selection))
         ;; selected hunk region
         (magit-diff-hunk-region            (italic))
