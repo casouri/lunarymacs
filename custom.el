@@ -38,7 +38,7 @@
  '(mouse-scroll-delay 0)
  '(mouse-wheel-flip-direction t)
  '(mouse-wheel-progressive-speed nil)
- '(mouse-wheel-scroll-amount '(0.02))
+ '(mouse-wheel-scroll-amount '(0.03))
  '(mouse-wheel-tilt-scroll t)
  '(ns-pop-up-frames nil nil nil "This way emacsclient doesn't open new frames.")
  '(org-fontify-quote-and-verse-blocks t)
