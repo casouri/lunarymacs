@@ -290,7 +290,7 @@
         (org-level-1 (info-title-3))
         (org-level-2 (info-title-4 ,(brighten fg 0.3)) (:height 1.1))
         (org-document-title (info-title-1))
-        (org-meta-line ((block shadow) nil nil nil nil italic))
+        (org-meta-line (shadow nil nil nil nil italic))
         (org-document-info  (org-meta-line))
         (org-document-info-keyword (org-meta-line))
 
