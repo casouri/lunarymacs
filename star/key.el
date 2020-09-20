@@ -64,6 +64,7 @@
  "<down>" #'comint-next-input)
 
 (load-package which-key
+  ;; We handle this in `luna-def-key'.
+  ;; :init (setq which-key-enable-extended-define-key t)
   :config
-  (setq which-key-enable-extended-define-key t)
   (which-key-mode))
