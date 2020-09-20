@@ -89,7 +89,6 @@
     (cons 360 "#383a42")))
  '(vc-annotate-very-old-color nil)
  '(visible-cursor nil)
- '(which-function-mode t)
  '(winner-mode t)
  '(word-wrap-by-category t)
  '(xref-prompt-for-identifier
