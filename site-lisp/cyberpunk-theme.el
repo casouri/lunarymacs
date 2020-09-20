@@ -6,6 +6,7 @@
   "Cuberpunk theme.")
 
 (theme-util-deffaces
+ 'block
  'custom-default
  'highlight-fg-only-2
  'highlight-fg-only-1
@@ -58,6 +59,7 @@
         (shadow      (nil ,fg-weak))
         (vertical-border (nil ,bg-alt ,bg-alt) nil ,tty)
         (link-visited    (link ,violet1))
+        (block       (nil nil ,bg-alt))
         
         (variable-pitch () (:family "Charter" :height 150))
         (fixed-pitch    () (:family "SF Mono" :height 130))
@@ -280,15 +282,15 @@
         (org-level-1 (info-title-3))
         (org-level-2 (info-title-4 ,(brighten fg 0.3)) (:height 1.1))
         (org-document-title (info-title-1))
-        (org-meta-line (font-lock-comment-face nil nil nil nil italic))
+        (org-meta-line ((block shadow) nil nil nil nil italic))
         (org-document-info (org-meta-line))
         (org-document-info-keyword (org-meta-line))
 
         (org-verbatim (fixed-pitch))
         (org-code (org-verbatim))
-        (org-block ((org-verbatim org-meta-line) nil ,bg-alt) (:extend t))
-        (org-block-begin-line (org-block))
-        (org-block-end-line (org-block))
+        (org-block            ((org-verbatim block)) (:extend t))
+        (org-block-begin-line ((org-block org-meta-line)))
+        (org-block-end-line   ((org-block org-meta-line)))
         (org-formula        (fixed-pitch))
         (org-quote            (nil nil ,bg-alt) (:extend t))
 
