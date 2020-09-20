@@ -27,7 +27,7 @@
                       (propertize " " 'display '(space :width 1.5)))
                      (percentage
                       '(format
-                        "%d%%" (/ (* (point) 100.0) (point-max)))))
+                        "%d%%" (/ (* (window-end) 100.0) (point-max)))))
                 `((:eval (if (window-dedicated-p)
                              "🔒"
                            ""))
