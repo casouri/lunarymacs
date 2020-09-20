@@ -2,8 +2,10 @@
 
 This is my Emacs configuration. Features:
 - home-brew ~use-package~ and key-binding macros.
-- A simple package manager cowboy.el that can install by package.el, git or by url.
+- A simple package manager cowboy.el that can install by package.el, git or url.
 - Some on-site packages included in =site-lisp=.
+
+[[./screenshot.png]]
 
 * Usage
 #+BEGIN_SRC shell

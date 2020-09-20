@@ -13,4 +13,5 @@
 !snippets/**/*
 !custom.el
 !elpa
+!screenshot.png
 .DS_Store
