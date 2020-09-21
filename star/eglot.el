@@ -2,15 +2,6 @@
 
 ;;; Keys
 
-(luna-def-key
- :leader
- "lf" #'eglot-format-buffer
- "lR" #'eglot-rename
- "ld" #'xref-find-definitions
- "lr" #'xref-find-references
- "lk" #'eldoc-box-quit-frame
- "ls" #'eldoc-box-show-frame)
-
 ;;; Config
 ;; speed up IPC
 (setq read-process-output-max (* 1024 1024))
