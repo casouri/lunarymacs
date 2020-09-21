@@ -10,6 +10,7 @@
  "sr"  #'grep
  "hha" #'hs-hide-all
  "hsa" #'hs-show-all
+ "hm"  #'helpme ; utility.el
  :---
  "C-h C-h" #'ghelp-describe
  "C-h r"   #'ghelp-resume
@@ -26,12 +27,11 @@
  "C-c C-h" #'hs-toggle-hiding
  "C-="     #'expand-region
  "C--"     #'contract-region
+ "C-j"     #'avy-goto-word-1
  :keymaps '(c-mode-map c++-mode-map)
  "M-RET" #'srefactor-refactor-at-point
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
- "s-i" #'outline-cycle
- :keymaps 'override
- "C-j"     #'avy-goto-word-1)
+ "s-i" #'outline-cycle)
 
 ;;; Config
 
@@ -44,6 +44,7 @@
 
 (load-package avy
   :commands avy-goto-word-1)
+
 
 (load-package ws-butler
   ;; global mode interferes with magit

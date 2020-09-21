@@ -23,32 +23,44 @@
 
 (luna-def-key
  :leader
- "p" '("Project")
  ;; align
  "="  #'align-regexp
  ;; file
  "f" '("File")
- "fR"  #'luna-rename-file
+ "fr"  #'luna-rename-file
  ;; buffer
  "b" '("Buffer")
- "bm"  '("goto message buffer" .
+ "bm"  '("message buffer" .
          (lambda () (interactive) (switch-to-buffer "*Messages*")))
- "bs"  '("goto scratch buffer" .
+ "bs"  '("scratch buffer" .
          (lambda () (interactive) (switch-to-buffer "*scratch*")))
  ;; toggle
- "t" '("Toggle")
- "tt"  #'luna-switch-theme
+ "st"  #'luna-switch-theme
  "tm"  #'toggle-frame-maximized
- "tf"  #'luna-toggle-format-on-save
  "td"  #'toggle-debug-on-error
- "tl"  #'display-line-numbers-mode
+ "dl"  #'display-line-numbers-mode
+ "ir" #'inhibit-read-only-mode
+ "ip" #'info-pretty-mode
+ "af" #'auto-fill-mode
  ;; search
  "s" '("Search")
  "si"  #'imenu
- ;; jumping
- "j"  '("Jumping")
- "js" #'point-to-register
- "jj" #'jump-to-register
+ "sg"  #'grep
+ ;; open
+ "o" '("Open")
+ "of" #'open-in-finder
+ "oi" #'open-in-iterm
+ ;; etc
+ "ld" #'luna-dump
+ "cw" #'count-words
+ "cm" #'customize
+ "fl" #'find-library
+ "de" #'debug-on-entry
+ "cd" #'cancel-debug-on-entry
+ "ci" #'cowgirl-install
+ "cd" #'cowgirl-delete
+ "wu" #'winner-undo
+ "wr" #'winner-redo
  
  :---
  :keymaps 'smerge-mode-map
