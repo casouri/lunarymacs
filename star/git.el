@@ -12,8 +12,6 @@
   :commands magit-status
   :config
   (define-key magit-mode-map (kbd "<tab>") 'magit-section-toggle)
-  (add-to-list 'luna-buffer-bottom-list "magit:")
-  (add-to-list 'luna-buffer-bottom-list "magit-process:")
 
   ;; recenter
   (add-hook 'magit-status-mode-hook

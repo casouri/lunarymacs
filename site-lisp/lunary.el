@@ -164,12 +164,34 @@ For example, '(python-mode . format-python)")
 
 (add-hook 'after-save-hook #'luna-smart-format-buffer)
 
-;;; buffer ordering
+;;; External program
 
-(defvar luna-buffer-bottom-list nil
-  "Buffer name patterns that stays at the bottom of buffer list in helm.
-Each pattern is the beginning of the buffer name, e.g., *Flymake, magit:, etc.")
-
+(defun luna-check-external-program ()
+  "Check if external programs are available."
+  (interactive)
+  (pop-to-buffer (get-buffer-create "*external program*"))
+  (erase-buffer)
+  (let* ((programs (mapcar (lambda (p)
+                             (car (split-string p)))
+                           luna-external-program-list))
+         (notes (mapcar (lambda (p)
+                          (string-join (cdr (split-string p)) " "))
+                        luna-external-program-list))
+         (max-len (apply #'max (mapcar #'length programs)))
+         (align (propertize
+                 " " 'display `(space :align-to ,(+ max-len 2)))))
+    (cl-loop for program in programs
+             for note in notes
+             if (not (or (executable-find program)
+                         (file-exists-p program)))
+             do (progn
+                  (insert program align "is not available")
+                  (if (equal note "")
+                      (insert "\n")
+                    (insert ", it has a note: " note "\n"))))
+    (when (eq (point) (point-min))
+      (insert "All good\n"))
+    (special-mode)))
 
 (provide 'lunary)
 
