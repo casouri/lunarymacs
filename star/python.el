@@ -17,12 +17,13 @@
 (load-package eglot
   :extern "npm install -g pyright"
   :defer
+  :init
   (add-to-list 'eglot-server-programs
                '(python-mode . ("pyright-langserver" "--stdio")))
   (add-hook 'python-mode-hook
             (lambda ()
               (when (and buffer-file-name
-                         (not (string-match "\.sage$"
+                         (not (string-match "\\.sage$"
                                             (buffer-file-name))))
                 (eglot-ensure)))))
 

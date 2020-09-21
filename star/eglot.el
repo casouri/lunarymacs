@@ -10,7 +10,10 @@
 
 (load-package eglot
   ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
-  :commands eglot eglot-ensure)
+  :commands eglot eglot-ensure
+  ;; Otherwise eglot highlights documentations, which is annoying.
+  :config (push :documentHighlightProvider
+                eglot-ignored-server-capabilites))
 
 ;; (load-package eldoc-box
 ;;   :commands (eldoc-box-hover-mode
