@@ -34,31 +34,8 @@
 
 ;;; Buffer
 
-(defun luna-kill-other-buffer ()
-  "Kill all other buffers (besides the current one).
-
-If PROJECT-P (universal argument), kill only buffers that belong to the current
-project."
-  ;; copied from doom-emacs
-  (interactive)
-  (let ((buffers (buffer-list))
-        (current-buffer (current-buffer)))
-    (dolist (buf buffers)
-      (unless (eq buf current-buffer)
-        (luna-kill-buffer-and-window buf)))
-    (when (called-interactively-p 'interactive)
-      (message "Killed %s buffers" (length buffers)))))
-
-(defun luna-kill-buffer-and-window (buffer)
-  ;; copied from doom-emacs
-  "Kill the buffer and delete all the windows it's displayed in."
-  (dolist (window (get-buffer-window-list buffer))
-    (unless (one-window-p t)
-      (delete-window window)))
-  (kill-buffer buffer))
-
 (defun switch-buffer-same-major-mode ()
-  "Switch buffer among those who have the same major mode as the current one."
+  "Switch buffer among those with the same major mode."
   (interactive)
   (switch-to-buffer
    (completing-read
@@ -70,21 +47,26 @@ project."
                                  major-mode))
                               (buffer-list))))))
 
-(defun show-line-number ()
-  "Show current line’s line number."
-  (interactive)
-  (message "Line %s" (1+ (current-line))))
-
 (defun open-in-finder ()
   "Open ‘default-directory’ in Finder."
   (interactive)
-  (shell-command-to-string (format "open '%s'" default-directory)))
+  (shell-command (format "open '%s'" default-directory))
+  ;; For some reason, we need to explicitly switch to Finder.
+  (shell-command
+   "osascript -e 'tell application \"Finder\" to activate'"))
 
 (defun open-in-iterm ()
   "Open ‘default-directory’ iTerm."
   (interactive)
-  (shell-command-to-string
+  (shell-command
    (format "open -a /Applications/iTerm.app %s" default-directory)))
+
+(define-minor-mode inhibit-read-only-mode
+  "Inhibit read-only in this buffer."
+  :lighter ""
+  (if inhibit-read-only-mode
+      (setq-local inhibit-read-only t)
+    (setq-local inhibit-read-only nil)))
 
 ;;; File
 
@@ -127,42 +109,6 @@ buffer is not visiting a file."
        #'project-find-file
      #'find-file)))
 
-;;; Package mirror
-
-(defvar luna-package-mirror-alist
-  (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                      (not (gnutls-available-p))))
-         (proto (if no-ssl "http" "https")))
-    `(,(cons 'melpa
-             `(,(cons "gnu"   (concat proto "://elpa.gnu.org/packages/"))
-               ,(cons "melpa" (concat proto "://melpa.org/packages/"))))
-      ,(cons 'melpa-mirror
-             `(,(cons "gnu"   (concat proto "://elpa.gnu.org/packages/"))
-               ,(cons "melpa" (concat proto "://www.mirrorservice.org/sites/melpa.org/packages/"))))
-      ,(cons 'emacs-china
-             `(,(cons "gnu"   (concat proto "://elpa.emacs-china.org/gnu/"))
-               ,(cons "melpa" (concat proto "://elpa.emacs-china.org/melpa/"))))
-      ,(cons 'netease
-             `(,(cons "gnu"   (concat proto "://mirrors.163.com/elpa/gnu/"))
-               ,(cons "melpa" (concat proto "://mirrors.163.com/elpa/melpa/"))))
-      ,(cons 'tencent
-             `(,(cons "gnu"   (concat proto "://mirrors.cloud.tencent.com/elpa/gnu/"))
-               ,(cons "melpa" (concat proto "://mirrors.cloud.tencent.com/elpa/melpa/"))))
-      ,(cons 'tuna
-             `(,(cons "gnu"   (concat proto "://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/"))
-               ,(cons "melpa" (concat proto "://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/"))))))
-  "Each mirror can be used for ‘package-archives’.")
-
-(defun luna-change-mirror (mirror)
-  "Change mirror."
-  (interactive (list (completing-read
-                      "Mirror: "
-                      (mapcar #'car luna-package-mirror-alist)
-                      nil t)))
-  (require 'package)
-  (setq package-archives
-        (alist-get mirror luna-package-mirror-alist))
-  (package-refresh-contents))
 
 ;;; ENV
 
@@ -217,7 +163,7 @@ E.g. SURNAME (c) to symbol ©."
   (lambda () (interactive)
     (insert (char-from-name (concat "COMBINING " name)))))
 
-(global-set-key (kbd "C-x 9 -") (luna-make-accent-fn "MACRON"))
+;; (global-set-key (kbd "C-x 9 -") (luna-make-accent-fn "MACRON"))
 
 ;;; Auto insert
 
@@ -227,10 +173,11 @@ E.g. SURNAME (c) to symbol ©."
   "The template file.")
 
 (defun luna-autoinsert (description)
-  "Autoinsert what auto-insert inserts."
+  "Autoinsert what auto-insert inserts.
+With DESCRIPTION of the package."
   (interactive "MDescription: ")
   (let* ((filename (file-name-nondirectory (buffer-file-name)))
-         (year (format-time-string "%Y"))
+         ;; (year (format-time-string "%Y"))
          (feature (file-name-base (buffer-file-name)))
          (template (luna-f-content luna-autoinsert-template)))
     (insert (format template
