@@ -37,7 +37,7 @@
               ("-B")
               nil utf-8)
         ispell-dictionary-alist)
-  :extern "aspell"
+  :extern "aspell port install aspell; port install aspell-dict-en"
   :hook
   (text-mode-hook . flyspell-mode)
   (prog-mode-hook . flyspell-prog-mode))
@@ -69,7 +69,7 @@
   :config
   (setq langtool-language-tool-server-jar
         "/Users/yuan/attic/LanguageTool-5.0/languagetool-server.jar")
-  :extern "languagetool"
+  :extern "~/attic/LanguageTool-5.0"
   :commands
   langtool-check
   langtool-check-done

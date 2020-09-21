@@ -15,7 +15,7 @@
 
 
 (load-package eglot
-  :extern "npm install -g pyright"
+  :extern "pyright npm install -g pyright"
   :defer
   :init
   (add-to-list 'eglot-server-programs
