@@ -115,8 +115,14 @@ Available commands:
   :commands     Add autoload for this command.
   :after        Require after this package loads.
   :defer        Don’t require the package, doesn’t need arguments.
+  :extern       Add ARG to `luna-external-program-list'. ARG should
+                be a string \"PROGRAM NOTE\". PROGRAM is a command
+                or file path.
 
-Each command can take zero or more arguments."
+Each command can take zero or more arguments. Among these
+commands, :hook, :commands, and :after expect literal arguments,
+:init, :config, :load-path, :extern expect s-expressions, which
+are evaluated after expansion of the macro."
   (declare (indent 1))
   ;; Group commands and arguments together.
   (let* ((arg-list (luna-split-command-args args))
