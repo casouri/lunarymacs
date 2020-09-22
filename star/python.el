@@ -17,9 +17,10 @@
 (load-package eglot
   :extern "pyright npm install -g pyright"
   :defer
-  :init
+  :config
   (add-to-list 'eglot-server-programs
                '(python-mode . ("pyright-langserver" "--stdio")))
+  :init
   (add-hook 'python-mode-hook
             (lambda ()
               (when (and buffer-file-name
