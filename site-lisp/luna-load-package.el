@@ -102,8 +102,7 @@ Return a list of (autoload ...) forms."
 (defmacro luna-load-package (package &rest args)
   "Like ‘use-package’.
 PACKAGE is the package you are loading.
-ARGS contains commands and arguments.
-Available commands:
+Available COMMAND:
 
   :init         Run right away.
   :config       Run after package loads.
@@ -119,10 +118,14 @@ Available commands:
                 be a string \"PROGRAM NOTE\". PROGRAM is a command
                 or file path.
 
-Each command can take zero or more arguments. Among these
-commands, :hook, :commands, and :after expect literal arguments,
-:init, :config, :load-path, :extern expect s-expressions, which
-are evaluated after expansion of the macro."
+Each COMMAND can take zero or more ARG. Among these commands,
+:hook, :commands, and :after expect literal arguments, :init,
+:config, :load-path, :extern expect s-expressions, which are
+evaluated after expansion of the macro.
+
+ARGS.
+
+\(fn PACKAGE &rest [COMMAND [ARG ...]] ...)"
   (declare (indent 1))
   ;; Group commands and arguments together.
   (let* ((arg-list (luna-split-command-args args))
