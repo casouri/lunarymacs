@@ -61,6 +61,7 @@
  "cd" #'cowgirl-delete
  "wu" #'winner-undo
  "wr" #'winner-redo
+ "sc" #'shell-command
  
  :---
  :keymaps 'smerge-mode-map
