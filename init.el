@@ -141,3 +141,7 @@
 ;;;; Trash
 (luna-on "Brown"
   (setq trash-directory "~/.Trash"))
+
+;;;; Bidi
+(setq bidi-paragraph-direction 'left-to-right
+      bidi-inhibit-bpa t)
