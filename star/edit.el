@@ -7,10 +7,11 @@
 
 (luna-def-key
  :leader
- "sr"  #'grep
- "hha" #'hs-hide-all
- "hsa" #'hs-show-all
- "hm"  #'helpme ; utility.el
+ "hh" #'hs-hide-all
+ "hs" #'hs-show-all
+ ;; utility.el
+ "hm" #'helpme
+ "ff" #'finder-toggle
  :---
  "C-h C-h" #'ghelp-describe
  "C-h r"   #'ghelp-resume
@@ -27,6 +28,7 @@
  "C-c C-h" #'hs-toggle-hiding
  "C-="     #'expand-region
  "C--"     #'contract-region
+ :keymaps 'override
  "C-j"     #'avy-goto-word-1
  :keymaps '(c-mode-map c++-mode-map)
  "M-RET" #'srefactor-refactor-at-point
