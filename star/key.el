@@ -35,13 +35,14 @@
  "bs"  '("scratch buffer" .
          (lambda () (interactive) (switch-to-buffer "*scratch*")))
  ;; toggle
- "st"  #'luna-switch-theme
+ "t" '("Toggle")
+ "tt"  #'luna-switch-theme
  "tm"  #'toggle-frame-maximized
  "td"  #'toggle-debug-on-error
- "dl"  #'display-line-numbers-mode
- "ir" #'inhibit-read-only-mode
- "ip" #'info-pretty-mode
- "af" #'auto-fill-mode
+ "tl"  #'display-line-numbers-mode
+ "tir" #'inhibit-read-only-mode
+ "tip" #'info-pretty-mode
+ "ta" #'auto-fill-mode
  ;; search
  "s" '("Search")
  "si"  #'imenu
@@ -50,6 +51,11 @@
  "o" '("Open")
  "of" #'open-in-finder
  "oi" #'open-in-iterm
+ ;; replace
+ "r" '("Replace")
+ "rq" #'query-replace
+ "rr" #'replace-regexp
+ "rs" #'replace-string
  ;; etc
  "ld" #'luna-dump
  "cw" #'count-words
@@ -62,19 +68,23 @@
  "wu" #'winner-undo
  "wr" #'winner-redo
  "sc" #'shell-command
+ "ai" #'luna-autoinsert
+ "se" #'luna-sudo-edit
  
  :---
  :keymaps 'smerge-mode-map
  "C-c n" #'smerge-next
  "C-c p" #'smerge-prev
- "C-c o" #'smerge-keep-lower ; other
- "C-c m" #'smerge-keep-upper ; mine
  "C-c l" #'smerge-keep-lower
  "C-c u" #'smerge-keep-upper
  
  :keymaps 'comint-mode-map
  "<up>" #'comint-previous-input
- "<down>" #'comint-next-input)
+ "<down>" #'comint-next-input
+
+ :keymaps 'minibuffer-local-map
+ "<S-return>" '("insert newline" .
+                (lambda () (interactive) (insert "\n"))))
 
 (load-package which-key
   ;; We handle this in `luna-def-key'.
