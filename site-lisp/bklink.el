@@ -249,13 +249,11 @@ THIS-FILE is the filename we are inserting summary into."
        (goto-char (point-max))
        (let* ((summary-start (point))
               (this-link (bklink--format-link this-file))
-              (this-link-re (string-join
-                             (mapcar #'regexp-quote
-                                     (if bklink-more-match
-                                         (split-string
-                                          (file-name-base this-file))
-                                       (split-string this-link)))
-                             "[ \n]*"))
+              (this-link-re (replace-regexp-in-string
+                             " " "[ \n]*"
+                             (if bklink-more-match
+                                 (file-name-base this-file)
+                               this-link)))
               ;; A list of (FILE . SUMMARY). The grep search didn't
               ;; match against the complete link and we need to filter
               ;; out the false-positives here.
