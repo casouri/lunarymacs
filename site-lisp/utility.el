@@ -331,6 +331,33 @@ Saves to a temp file and puts the filename in the kill ring."
   (interactive)
   (read-key-sequence "Key: "))
 
+;;; Finder
+
+(defvar finder--window-config nil
+  "Window configuration for finder.")
+
+(defvar finder--frame nil
+  "Frame for finder.")
+
+(defun finder-toggle ()
+  "Open a dired frame."
+  (interactive)
+  (if (eq (selected-frame) finder--frame)
+      ;; Disable.
+      (progn
+        (setq finder--window-config
+              (window-state-get (frame-root-window)))
+        (delete-frame finder--frame))
+    ;; Enable.
+    (unless (frame-live-p finder--frame)
+      (setq finder--frame
+            (make-frame)))
+    (select-frame finder--frame)
+    (if finder--window-config
+        (window-state-put
+         finder--window-config (frame-root-window))
+      (find-file "~/"))))
+
 ;;; Provide
 
 (provide 'utility)
