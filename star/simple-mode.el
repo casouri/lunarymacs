@@ -2,16 +2,21 @@
 
 ;; Emacs Lisp
 (luna-def-key
- :prefix "C-x"
  :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
- ;; eval
- "w" '("eval")
- "we" #'eval-last-sexp
- "wr" #'eval-region
- "wf" #'eval-defun
- "wb" #'eval-buffer
+ "<S-return>" #'eval-defun
+ :leader-prefix
+ "eb" #'eval-buffer
+ :---
  :keymaps 'lisp-interaction-mode-map
- "C-j" #'eval-print-last-sexp)
+ "<S-return>" #'eval-print-sexp-at-point)
+
+(defun eval-print-sexp-at-point ()
+  "Evaluate top level sexp at point and print."
+  (interactive)
+  (save-excursion
+    (end-of-defun)
+    (skip-chars-backward "\n")
+    (eval-print-last-sexp)))
 
 (load-package markdown-mode
   :mode "\\.md$" "\\.markdown$" "\\.mk$")
