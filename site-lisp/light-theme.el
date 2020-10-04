@@ -62,7 +62,7 @@
         (link-visited    (link ,violet2))
         (block       (nil nil ,bg-alt))
 
-        (variable-pitch () (:family "Charter" :height 150))
+        (variable-pitch () (:family "Charter" :height 155))
         (fixed-pitch () (:family "SF Mono" :height 130))
 
         (vertical-border     (nil nil "black"))
@@ -135,7 +135,7 @@
          (mode-line nil ,(darken bg 0.04) nil nil nil)
          (:box (:line-width 3 :color ,(darken bg 0.04))))
         (mode-line-highlight () (:box (:line-width 2 :color fg)))
-        (header-line (mode-line))
+        (header-line (mode-line-inactive))
 
         ;; completion
         (current-selection (nil ,bg ,blue2))
@@ -324,7 +324,9 @@
         (avy-lead-face-1    (nil ,bg ,orange))
         (avy-lead-face-2    (nil ,bg ,blue2))
 
-        (widget-inactive (default))))))
+        (widget-inactive (default))
+
+        (table-cell (defualt))))))
 
 (provide-theme 'light)
 

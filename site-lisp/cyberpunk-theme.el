@@ -61,7 +61,7 @@
         (link-visited    (link ,violet1))
         (block       (nil nil ,bg-alt))
         
-        (variable-pitch () (:family "Charter" :height 150))
+        (variable-pitch () (:family "Charter" :height 155))
         (fixed-pitch    () (:family "SF Mono" :height 130))
         
         (vertical-border      (nil nil "black"))
