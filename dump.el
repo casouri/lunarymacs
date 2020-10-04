@@ -21,16 +21,15 @@
                        highlight-parentheses hl-todo buffer-move
                        savehist eyebrowse minions ws-butler
                        expand-region flyspell flycheck eglot
-                       minibuf-eldef yasnippet wucuo ivy-xref
-                       olivetti
+                       minibuf-eldef yasnippet ivy-xref
                        ;; site-lisp
                        transform utility pause info+ color-outline
                        commentary quanjiao outline+ luna-publish
                        ox-cjk-html sidebar form-feed
                        ;; ranch
-                       valign ghelp isolate
+                       ghelp
                        ;; built-in dired-x subr-x cl-lib seq
-                       pcase cl-lib which-func savehist winner
+                       pcase cl-lib which-func savehist
                        elec-pair))
   (require package))
 
