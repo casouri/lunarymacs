@@ -57,6 +57,9 @@
   :keymaps 'override
   :prefix (if (display-graphic-p) "C-SPC" "C-@"))
 
+(luna-key-def-preset :leader-prefix
+  :prefix (if (display-graphic-p) "C-SPC" "C-@"))
+
 ;; core must load first because other configs depends on them
 (luna-load-relative "star/etc.el")
 (luna-load-relative "star/key.el")
