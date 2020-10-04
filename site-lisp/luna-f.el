@@ -65,7 +65,7 @@ If the file is empty, return DEFAULT."
   (with-temp-buffer
     (insert-file-contents path)
     (goto-char (point-min))
-    (condition-case err
+    (condition-case nil
         (read (current-buffer))
       (end-of-file default))))
 
@@ -87,11 +87,24 @@ If the file is empty, return DEFAULT."
 
 (defmacro luna-f-with-file (file &rest form)
   "Open a temp buffer, insert FILE’s content, eval FORM."
-  (declare (indent 1))
+  (declare (debug (sexp &rest sexp)) (indent 1))
   `(with-temp-buffer
      (insert-file-contents ,file)
      (goto-char (point-min))
      ,@form))
+
+(defmacro luna-f-with-edit-file (file &rest form)
+  "Open a temp buffer, insert FILE’s content, eval FORM.
+Finally write visible region to file."
+  (declare (debug (sexp &rest sexp)) (indent 1))
+  (let ((buf-sym (gensym)))
+    `(with-temp-buffer
+       (let ((,buf-sym (current-buffer)))
+         (insert-file-contents ,file)
+         (goto-char (point-min))
+         ,@form
+         (with-current-buffer ,buf-sym
+           (write-region (point-min) (point-max) ,file))))))
 
 (defalias 'luna-f-with-write-file #'with-temp-file)
 
