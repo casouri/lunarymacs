@@ -51,7 +51,8 @@
    '(("melpa" . "http://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")
      ("org" . "https://orgmode.org/elpa/")))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(rainbow-delimiters rainbow-mode helpful pyvenv htmlize yaml-mode lua-mode aggressive-indent rg undo-tree selectrum pinyinlib avy yasnippet xr ws-butler writegood-mode which-key web-mode visual-regexp toc-org tide srefactor smex sly separedit sage-shell-mode restclient racket-mode quickrun proof-general php-mode pdf-tools org-download olivetti nyan-mode mips-mode minions memory-usage magit-todos magit-patch-changelog langtool ivy-xref highlight-parentheses haskell-mode google-translate git-timemachine git-link geiser fish-mode eglot diff-hl debbugs counsel company ccls buffer-move benchmark-init auto-pause auctex))
  '(recentf-max-saved-items 1000)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values '((git-commit-major-mode . git-commit-elisp-text-mode)))
