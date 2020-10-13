@@ -249,11 +249,16 @@ THIS-FILE is the filename we are inserting summary into."
        (goto-char (point-max))
        (let* ((summary-start (point))
               (this-link (bklink--format-link this-file))
-              (this-link-re (replace-regexp-in-string
-                             " " "[ \n]*"
-                             (if bklink-more-match
-                                 (file-name-base this-file)
-                               this-link)))
+              (this-link-re
+               (if bklink-more-match
+                   ;; Prevent matching base64 string in iimg.
+                   (concat (rx (any " \n{"))
+                           (replace-regexp-in-string
+                            " " "[ \n]*"
+                            (file-name-base this-file))
+                           (rx (any " \n}")))
+                 (replace-regexp-in-string
+                  " " "[ \n]*" this-link)))
               ;; A list of (FILE . SUMMARY). The grep search didn't
               ;; match against the complete link and we need to filter
               ;; out the false-positives here.
