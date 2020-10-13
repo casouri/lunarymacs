@@ -19,7 +19,7 @@
                        recentf-ext swiper aggressive-indent
                        winner elec-pair rainbow-delimiters
                        highlight-parentheses hl-todo buffer-move
-                       savehist eyebrowse minions ws-butler
+                       savehist minions ws-butler
                        expand-region flyspell flycheck eglot
                        minibuf-eldef yasnippet ivy-xref
                        ;; site-lisp

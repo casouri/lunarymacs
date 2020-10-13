@@ -117,21 +117,6 @@
   buf-move-right)
 
 
-(load-package eyebrowse
-  :commands
-  eyebrowse-switch-to-window-config-1
-  eyebrowse-switch-to-window-config-2
-  eyebrowse-switch-to-window-config-3
-  eyebrowse-switch-to-window-config-4
-  eyebrowse-switch-to-window-config-5
-  eyebrowse-switch-to-window-config-6
-  :init
-  (setq eyebrowse-keymap-prefix (kbd "C-x C-w"))
-  :config
-  (eyebrowse-mode)
-  (setq eyebrowse-mode-line-separator " "))
-
-
 (load-package console-buffer
   :commands
   luna-toggle-console
