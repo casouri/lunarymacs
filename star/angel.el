@@ -6,6 +6,7 @@
 (require 'cl-lib)
 (require 'utility)
 (require 'transform)
+(require 'iscroll)
 
 ;;; Keys
 
@@ -22,8 +23,8 @@
  "C-,"   #'luna-jump-back
 
  ;; Super bindings
- "s-n"   #'luna-scroll-down-reserve-point
- "s-p"   #'luna-scroll-up-reserve-point
+ "s-n"   #'luna-scroll-up-reserve-point
+ "s-p"   #'luna-scroll-down-reserve-point
  "s-/"   #'transform-previous-char
  "s-u"   #'revert-buffer
 
@@ -128,22 +129,39 @@
 
 (defvar luna-scroll-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "n") #'luna-scroll-down-reserve-point)
-    (define-key map (kbd "p") #'luna-scroll-up-reserve-point)
+    (define-key map (kbd "n") #'luna-scroll-up-reserve-point)
+    (define-key map (kbd "s-n") #'luna-scroll-up-reserve-point)
+    (define-key map (kbd "p") #'luna-scroll-down-reserve-point)
+    (define-key map (kbd "s-n") #'luna-scroll-up-reserve-point)
     map)
   "Transient map for `luna-scroll-mode'.")
 
+(defvar luna-scroll-amount 3
+  "Number of lines to scroll in `luna-scroll-down-reserve-point'.")
+
 (defun luna-scroll-down-reserve-point ()
+  "Scroll down `luna-scroll-amount' lines.
+Keeps the relative position of point against window."
   (interactive)
-  (scroll-up 2)
-  (forward-line 2)
+  (let ((logical-lines-scrolled (iscroll-down 2)))
+    (vertical-motion (- logical-lines-scrolled)))
+
+  ;; (scroll-down luna-scroll-amount)
+  ;; (forward-line (- luna-scroll-amount))
+
   ;; Prevent me from accidentally inserting n and p.
   (set-transient-map luna-scroll-map t))
 
 (defun luna-scroll-up-reserve-point ()
+  "Scroll up `luna-scroll-amount' lines. 
+Keeps the relative position of point against window."
   (interactive)
-  (scroll-down 2)
-  (forward-line -2)
+  (let ((logical-lines-scrolled (iscroll-up 2)))
+    (vertical-motion logical-lines-scrolled))
+
+  ;; (scroll-up luna-scroll-amount)
+  ;; (forward-line luna-scroll-amount)
+
   ;; Prevent me from accidentally inserting n and p.
   (set-transient-map luna-scroll-map t))
 
