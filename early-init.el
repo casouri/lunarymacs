@@ -2,7 +2,9 @@
 
 (add-hook 'emacs-startup-hook
           (let ((old-list file-name-handler-alist)
-                (threshold (* 10 gc-cons-threshold))
+                ;; If x10, half of cpu time is spent on gc when
+                ;; scrolling.
+                (threshold (* 100 gc-cons-threshold))
                 (percentage gc-cons-percentage))
             (lambda ()
               (message "Emacs ready in %s with %d garbage collections."
