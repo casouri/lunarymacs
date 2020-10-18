@@ -80,13 +80,25 @@
   :config
   (push 'org-mode hl-todo-text-modes)
   (push 'fundamental-mode hl-todo-text-modes)
-  (setq hl-todo-keyword-faces ; override
-        (append '(("FAIL" . "red1")
-                  ("TOTEST" . "#d0bf8f")
-                  ("UNSURE" . "#FE6266")
-                  ("TRY" . "#FFF100")
-                  ("GOOD" . "#52DEA1"))
-                hl-todo-keyword-faces))
+  (let ((warning '(:inherit (warning bold)))
+        (error '(:inherit (error bold)))
+        (success '(:inherit (success bold))))
+    (setq hl-todo-keyword-faces
+          `(("FAIL" . ,error)
+            ("HACK" . ,error)
+            ("KLUDGE". ,error)
+            ("FIXME" . ,error)
+            ("DONT" . ,error)
+            ("TOTEST" . ,warning)
+            ("UNSURE" . ,warning)
+            ("TRY" . ,warning)
+            ("TODO" . ,warning)
+            ("TEMP" . ,warning)
+            ("GOOD" . ,success)
+            ("DONE" . ,success)
+            ("NOTE" . ,success)
+            ("OKAY" . ,success)
+            ("NEXT" . ,success))))
   (global-hl-todo-mode))
 
 
