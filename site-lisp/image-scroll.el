@@ -1,4 +1,4 @@
-;;; image-scroll.el --- Smooth scrolling over images      -*- lexical-binding: t; -*-
+;;; iscroll.el --- Smooth scrolling over images      -*- lexical-binding: t; -*-
 
 ;; Author: Yuan Fu <casouri@gmail.com>
 
@@ -14,19 +14,22 @@
 ;;
 ;; To use this package:
 ;;
-;;     M-x image-scroll-mode RET
+;;     M-x iscroll-mode RET
 ;;
 ;; This mode remaps mouse scrolling functions. If you use other
 ;; commands, you need to adapt them accordingly. See
-;; `image-scroll-mode-map' and `image-scroll-mode' for some
+;; `iscroll-mode-map' and `iscroll-mode' for some
 ;; inspiration.
 ;;
 ;; Commands provided:
 ;;
-;; - image-scroll-up
-;; - image-scroll-down
-;; - image-scroll-next-line
-;; - image-scroll-previous-line
+;; - iscroll-up
+;; - iscroll-down
+;; - iscroll-next-line
+;; - iscroll-previous-line
+;;
+;; Used to be image-scroll.el, but image-scroll-up/down collide with
+;; image.el
 ;;
 ;; Limitations:
 ;;
@@ -54,32 +57,32 @@
 
 (require 'cl-lib)
 
-(defun image-scroll--image-at (point)
+(defun iscroll--image-at (point)
   "Return image at POINT or nil."
   (let ((img (plist-get (text-properties-at point) 'display)))
     (if (and (consp img) (eq (car img) 'image))
         img
       nil)))
 
-(defun image-scroll--to (scroll-amount point)
+(defun iscroll--to (scroll-amount point)
   "Scroll image at POINT to SCROLL-AMOUNT.
 Also set text property at point."
   (set-window-vscroll nil scroll-amount t)
   (put-text-property
    point (min (1+ point) (point-max))
-   'image-scroll-amount scroll-amount))
+   'iscroll-amount scroll-amount))
 
-(defun image-scroll--image-height-at (point)
+(defun iscroll--image-height-at (point)
   "Return image height at POINT or nil."
-  (when-let ((img (image-scroll--image-at point)))
+  (when-let ((img (iscroll--image-at point)))
     (cdr (image-size img t))))
 
-(defun image-scroll--current-scroll-amount (point direction)
+(defun iscroll--current-scroll-amount (point direction)
   "Return the scroll amount of image at POINT in pixels.
 Assumes POINT is at an image. DIRECTION can be either 'up for
 'down."
   (let ((amount (or (plist-get (text-properties-at point)
-                               'image-scroll-amount)
+                               'iscroll-amount)
                     0)))
     ;; If the scroll-amount property doesn’t agree with the actual
     ;; window-vscroll, we are NOT scrolling in this image. In that
@@ -93,9 +96,9 @@ Assumes POINT is at an image. DIRECTION can be either 'up for
           amount
         ;; If POINT < window start, we are scrolling into this
         ;; image, so just set AMOUNT to IMG-HEIGHT.
-        (or (image-scroll--image-height-at point) 0)))))
+        (or (iscroll--image-height-at point) 0)))))
 
-(defun image-scroll-up (&optional arg)
+(defun iscroll-up (&optional arg)
   "Scroll up ARG lines.
 Normally just calls `scroll-up'. But if the top of the window is
 an image, scroll inside the image. Return the number of logical
@@ -114,9 +117,9 @@ lines scrolled."
       ;; entered the command.
       (when (null scroll-amount)
         (setq scroll-amount
-              (image-scroll--current-scroll-amount (point) 'up)))
+              (iscroll--current-scroll-amount (point) 'up)))
       ;; Scroll.
-      (let ((img-height (image-scroll--image-height-at (point))))
+      (let ((img-height (iscroll--image-height-at (point))))
         (if (and img-height (< scroll-amount img-height))
             ;; If we are in the middle of scrolling an image, scroll
             ;; that image.
@@ -137,13 +140,13 @@ lines scrolled."
     ;; This is also important for the code to work.
     (set-window-vscroll nil 0 t)
     (when scroll-amount
-      (image-scroll--to scroll-amount (point)))
+      (iscroll--to scroll-amount (point)))
     ;; If the original point is out of visible portion, move it in.
     (when (> original-point (window-start))
       (goto-char original-point))
     logical-lines-scrolled))
 
-(defun image-scroll-down (&optional arg)
+(defun iscroll-down (&optional arg)
   "Scroll down ARG lines.
 Normally just calls `scroll-down'. But if the top of the window is
 an image, scroll inside the image. Return the number of logical
@@ -158,8 +161,8 @@ lines scrolled."
     (while (> arg 0)
       (when (null scroll-amount)
         (setq scroll-amount
-              (image-scroll--current-scroll-amount (point) 'down)))
-      (let ((img-height (image-scroll--image-height-at (point))))
+              (iscroll--current-scroll-amount (point) 'down)))
+      (let ((img-height (iscroll--image-height-at (point))))
         (if (and img-height (> scroll-amount 0))
             ;; Scroll image.
             (setq scroll-amount (- scroll-amount (frame-char-height)))
@@ -171,7 +174,7 @@ lines scrolled."
     (set-window-start nil (point) t)
     (set-window-vscroll nil 0 t)
     (when scroll-amount
-      (image-scroll--to scroll-amount (point)))
+      (iscroll--to scroll-amount (point)))
     ;; HACK: There is no fast and reliable way to get the last visible
     ;; point, hence this hack: move point up until it is visible.
     (goto-char original-point)
@@ -183,10 +186,10 @@ lines scrolled."
       (vertical-motion -2))
     logical-lines-scrolled))
 
-(defvar image-scroll--goal-column nil
+(defvar iscroll--goal-column nil
   "Goal column when scrolling.")
 
-(defun image-scroll-forward-line (&optional arg)
+(defun iscroll-forward-line (&optional arg)
   "Smooth `forward-line'.
 ARG is the number of lines to move."
   (interactive "p")
@@ -194,23 +197,23 @@ ARG is the number of lines to move."
          (abs-arg (abs arg))
          (step (if (> arg 0) 1 -1))
          (scroll-fn (if (> arg 0)
-                        #'image-scroll-up
-                      #'image-scroll-down))
+                        #'iscroll-up
+                      #'iscroll-down))
          (old-point (point))
          (first-command-p (not (memq last-command
-                                     '(image-scroll-next-line
-                                       image-scroll-previous-line)))))
+                                     '(iscroll-next-line
+                                       iscroll-previous-line)))))
     ;; Because in most cases we move into visible portions, we move
     ;; first and check after, this should be faster than check first
     ;; and move after.
     (while (> abs-arg 0)
       ;; The goal column is either inherited from previous calls to
       ;; this command, or calculated by visual column.
-      (if (or first-command-p (not image-scroll--goal-column))
+      (if (or first-command-p (not iscroll--goal-column))
           (let ((old-point (point)))
             (vertical-motion 0)
-            (setq image-scroll--goal-column (- old-point (point)))))
-      (vertical-motion (cons image-scroll--goal-column step))
+            (setq iscroll--goal-column (- old-point (point)))))
+      (vertical-motion (cons iscroll--goal-column step))
       ;; The new point is not visible! Scroll up/down one line to try
       ;; to accommodate that line. TODO: `pos-visible-in-window-p' is
       ;; very slow, how can we replace it? `pos-visible-in-window-p'
@@ -226,40 +229,40 @@ ARG is the number of lines to move."
         (goto-char old-point))
       (cl-decf abs-arg))))
 
-(defun image-scroll-next-line (&optional arg _)
+(defun iscroll-next-line (&optional arg _)
   "Smooth `next-line'.
 ARG is the number of lines to move."
   (interactive "p")
-  (image-scroll-forward-line arg))
+  (iscroll-forward-line arg))
 
-(defun image-scroll-previous-line (&optional arg _)
+(defun iscroll-previous-line (&optional arg _)
   "Smooth `previous-line'.
 ARG is the number of lines to move."
   (interactive "p")
-  (image-scroll-forward-line (- (or arg 1))))
+  (iscroll-forward-line (- (or arg 1))))
 
-(defvar image-scroll-mode-map
+(defvar iscroll-mode-map
   (let ((map (make-sparse-keymap)))
-    ;; (define-key map [remap next-line] #'image-scroll-next-line)
-    ;; (define-key map [remap previous-line] #'image-scroll-previous-line)
+    ;; (define-key map [remap next-line] #'iscroll-next-line)
+    ;; (define-key map [remap previous-line] #'iscroll-previous-line)
     map)
-  "Mode map for `image-scroll-mode.'")
+  "Mode map for `iscroll-mode.'")
 
-(define-minor-mode image-scroll-mode
+(define-minor-mode iscroll-mode
   "Smooth scrolling over images."
   :global t
   :lighter " IS"
-  :keymap image-scroll-mode-map
+  :keymap iscroll-mode-map
   :group 'scrolling
-  (if image-scroll-mode
+  (if iscroll-mode
       (progn
-        (setq mwheel-scroll-up-function #'image-scroll-up
-              mwheel-scroll-down-function #'image-scroll-down)
+        (setq mwheel-scroll-up-function #'iscroll-up
+              mwheel-scroll-down-function #'iscroll-down)
         ;; We don’t remap next/previous-line in the minor mode map
         ;; because that shallows ivy’s binding.
-        (global-set-key [remap next-line] #'image-scroll-next-line)
+        (global-set-key [remap next-line] #'iscroll-next-line)
         (global-set-key [remap previous-line]
-                        #'image-scroll-previous-line))
+                        #'iscroll-previous-line))
     (setq mwheel-scroll-up-function #'scroll-up
           mwheel-scroll-down-function #'scroll-down)
     (global-set-key [remap next-line] nil)
@@ -284,7 +287,11 @@ ARG is the number of lines to move."
 ;; (benchmark-run 1 (scroll-up 100)) ; 0.01
 ;; (benchmark-run 1 (scroll-down 100)) ; 0.04
 
+;; (insert-image (create-image "~/d/abby road.jpeg" nil nil
+;;                             :scale 0.15)
+;;               "x")
 
-(provide 'image-scroll)
 
-;;; image-scroll.el ends here
+(provide 'iscroll)
+
+;;; iscroll.el ends here
