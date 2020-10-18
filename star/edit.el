@@ -108,10 +108,6 @@
   vr/mc-mark)
 
 
-(load-package srefactor
-  :hook ((c-mode-hook c++-mode-hook) . semantic-mode))
-
-
 (load-package ghelp)
 
 
