@@ -38,6 +38,7 @@
 ;; - For the same reason, if you scroll over an image partially and
 ;;   move point to another window, the image jumps back to display
 ;;   completely.
+;; - Doesn't work with `scroll-preserve-screen-position'.
 
 ;;; Developer
 ;;
@@ -138,8 +139,9 @@ lines scrolled."
       (cl-decf arg))
     ;; Finally, we’ve finished the dry-run, apply the result.
     ;;
-    ;; This `t' is important for the code to take effect. I’m not an
-    ;; expert of Emacs redisplay so I don’t know why, but this works.
+    ;; The third argument `t' tells redisplay that (point) doesn't
+    ;; have to be the window start and be completely visible. That
+    ;; allows our vscroll value to survive.
     (set-window-start nil (point) t)
     (if scroll-amount
         (iscroll--to scroll-amount (point))
