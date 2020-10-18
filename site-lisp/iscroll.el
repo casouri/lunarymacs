@@ -34,6 +34,10 @@
 ;; Limitations:
 ;;
 ;; - currently we only look for images at the beginning of a line.
+;; - Scrolling over images in other window doesn’t work.
+;; - For the same reason, if you scroll over an image partially and
+;;   move point to another window, the image jumps back to display
+;;   completely.
 
 ;;; Developer
 ;;
@@ -137,10 +141,9 @@ lines scrolled."
     ;; This `t' is important for the code to take effect. I’m not an
     ;; expert of Emacs redisplay so I don’t know why, but this works.
     (set-window-start nil (point) t)
-    ;; This is also important for the code to work.
-    (set-window-vscroll nil 0 t)
-    (when scroll-amount
-      (iscroll--to scroll-amount (point)))
+    (if scroll-amount
+        (iscroll--to scroll-amount (point))
+      (set-window-vscroll nil 0 t))
     ;; If the original point is out of visible portion, move it in.
     (when (> original-point (window-start))
       (goto-char original-point))
@@ -173,8 +176,9 @@ lines scrolled."
       (cl-decf arg))
     (set-window-start nil (point) t)
     (set-window-vscroll nil 0 t)
-    (when scroll-amount
-      (iscroll--to scroll-amount (point)))
+    (if scroll-amount
+        (iscroll--to scroll-amount (point))
+      (set-window-vscroll nil 0 t))
     ;; HACK: There is no fast and reliable way to get the last visible
     ;; point, hence this hack: move point up until it is visible.
     (goto-char original-point)
@@ -246,7 +250,7 @@ ARG is the number of lines to move."
     ;; (define-key map [remap next-line] #'iscroll-next-line)
     ;; (define-key map [remap previous-line] #'iscroll-previous-line)
     map)
-  "Mode map for `iscroll-mode.'")
+  "Mode map for `iscroll-mode'.")
 
 (define-minor-mode iscroll-mode
   "Smooth scrolling over images."
