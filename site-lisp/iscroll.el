@@ -69,14 +69,6 @@
         img
       nil)))
 
-(defun iscroll--to (scroll-amount point)
-  "Scroll image at POINT to SCROLL-AMOUNT.
-Also set text property at point."
-  (set-window-vscroll nil scroll-amount t)
-  (put-text-property
-   point (min (1+ point) (point-max))
-   'iscroll-amount scroll-amount))
-
 (defun iscroll--image-height-at (point)
   "Return image height at POINT or nil."
   (when-let ((img (iscroll--image-at point)))
@@ -122,7 +114,7 @@ lines scrolled."
     ;; allows our vscroll value to survive.
     (set-window-start nil (point) t)
     (if scroll-amount
-        (iscroll--to scroll-amount (point))
+        (set-window-vscroll nil scroll-amount t)
       (set-window-vscroll nil 0 t))
     ;; If the original point is out of visible portion, move it in.
     (when (> original-point (window-start))
@@ -162,7 +154,7 @@ lines scrolled."
     (set-window-start nil (point) t)
     (set-window-vscroll nil 0 t)
     (if scroll-amount
-        (iscroll--to scroll-amount (point))
+        (set-window-vscroll nil scroll-amount t)
       (set-window-vscroll nil 0 t))
     ;; HACK: There is no fast and reliable way to get the last visible
     ;; point, hence this hack: move point up until it is visible.
