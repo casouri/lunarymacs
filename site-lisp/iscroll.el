@@ -82,27 +82,6 @@ Also set text property at point."
   (when-let ((img (iscroll--image-at point)))
     (cdr (image-size img t))))
 
-(defun iscroll--current-scroll-amount (point direction)
-  "Return the scroll amount of image at POINT in pixels.
-Assumes POINT is at an image. DIRECTION can be either 'up for
-'down."
-  (let ((amount (or (plist-get (text-properties-at point)
-                               'iscroll-amount)
-                    0)))
-    ;; If the scroll-amount property doesn’t agree with the actual
-    ;; window-vscroll, we are NOT scrolling in this image. In that
-    ;; case we must just entered this image, set scroll amount to 0.
-    (if (eq direction 'up)
-        (if (eq amount (window-vscroll nil t)) amount 0)
-      ;; Scroll down.
-      (if (and (eq amount (window-vscroll nil t))
-               ;; This = is important.
-               (>= point (window-start)))
-          amount
-        ;; If POINT < window start, we are scrolling into this
-        ;; image, so just set AMOUNT to IMG-HEIGHT.
-        (or (iscroll--image-height-at point) 0)))))
-
 (defun iscroll-up (&optional arg)
   "Scroll up ARG lines.
 Normally just calls `scroll-up'. But if the top of the window is
@@ -121,8 +100,7 @@ lines scrolled."
       ;; Initialize SCROLL-AMOUNT when we arrive at a new line or first
       ;; entered the command.
       (when (null scroll-amount)
-        (setq scroll-amount
-              (iscroll--current-scroll-amount (point) 'up)))
+        (setq scroll-amount (window-vscroll nil t)))
       ;; Scroll.
       (let ((img-height (iscroll--image-height-at (point))))
         (if (and img-height (< scroll-amount img-height))
@@ -165,8 +143,7 @@ lines scrolled."
     (goto-char (window-start))
     (while (> arg 0)
       (when (null scroll-amount)
-        (setq scroll-amount
-              (iscroll--current-scroll-amount (point) 'down)))
+        (setq scroll-amount (window-vscroll nil t)))
       (let ((img-height (iscroll--image-height-at (point))))
         (if (and img-height (> scroll-amount 0))
             ;; Scroll image.
@@ -176,6 +153,12 @@ lines scrolled."
           (vertical-motion -1)
           (setq scroll-amount nil)))
       (cl-decf arg))
+    ;; If the line we stopped at is an image, we don't want to show it
+    ;; completely, instead, modify vscroll and only show a bottom
+    ;; strip of it.
+    (let ((img-height (iscroll--image-height-at (point))))
+      (when (and (not scroll-amount) img-height)
+        (setq scroll-amount (- img-height (frame-char-height)))))
     (set-window-start nil (point) t)
     (set-window-vscroll nil 0 t)
     (if scroll-amount
