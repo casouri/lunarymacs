@@ -23,4 +23,5 @@
                                                google-translate
                                                youdao-dictionary
                                                sdcv)))
-        (deft . (:repo "casouri/deft" :option (:full-clone t)))))
+        (deft . (:repo "casouri/deft" :option (:full-clone t)))
+        (svg-tag-mode . (:repo "rougier/svg-tag-mode"))))
