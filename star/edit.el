@@ -9,6 +9,7 @@
  :leader
  "hh" #'hs-hide-all
  "hs" #'hs-show-all
+ "rr" #'vr/replace
  ;; utility.el
  "hm" #'helpme
  "ff" #'finder-toggle
