@@ -49,16 +49,19 @@ Return either 'hide-all, 'headings-only, or 'show-all."
 “Headings only” means show sub headings but not their bodies.
 “Show all” means show all subheadings and their bodies."
   (interactive)
-  (pcase (outline--cycle-state)
-    ('hide-all (if (outline-has-subheading-p)
-                   (progn (outline-show-children)
-                          (message "Only headings"))
-                 (outline-show-subtree)
-                 (message "Show all")))
-    ('headings-only (outline-show-subtree)
-                    (message "Show all"))
-    ('show-all (outline-hide-subtree)
-               (message "Hide all"))))
+  (condition-case nil
+      (pcase (outline--cycle-state)
+        ('hide-all (if (outline-has-subheading-p)
+                       (progn (outline-show-children)
+                              (message "Only headings"))
+                     (outline-show-subtree)
+                     (message "Show all")))
+        ('headings-only (outline-show-subtree)
+                        (message "Show all"))
+        ('show-all (outline-hide-subtree)
+                   (message "Hide all")))
+    ;; If error: "Before first heading" occurs, ignore it.
+    (error nil)))
 
 (defvar-local outline--cycle-buffer-state 'show-all
   "Interval variable used for tracking buffer cycle state.")
@@ -68,12 +71,11 @@ Return either 'hide-all, 'headings-only, or 'show-all."
   (interactive)
   (pcase outline--cycle-buffer-state
     ('show-all (save-excursion
-                 (let ((start-point (point)))
-                   (while (not (eq (point) start-point))
-                     (outline-up-heading 1))
-                   (outline-hide-sublevels
-                    (progn (outline-back-to-heading)
-                           (funcall 'outline-level)))))
+                 (outline-hide-sublevels
+                  (or (ignore-errors
+                        (outline-back-to-heading)
+                        (outline-level))
+                      1)))
                (setq outline--cycle-buffer-state 'top-level)
                (message "Top level headings"))
     ('top-level (outline-show-all)
