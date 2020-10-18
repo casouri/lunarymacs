@@ -151,14 +151,14 @@ lines scrolled."
           ;; Scroll logical line.
           (cl-incf logical-lines-scrolled)
           (vertical-motion -1)
-          (setq scroll-amount nil)))
+          (setq scroll-amount nil)
+          ;; If the line we stopped at is an image, we don't want to
+          ;; show it completely, instead, modify vscroll and only show
+          ;; a bottom strip of it.
+          (let ((img-height (iscroll--image-height-at (point))))
+            (when (and (not scroll-amount) img-height)
+              (setq scroll-amount (- img-height (frame-char-height)))))))
       (cl-decf arg))
-    ;; If the line we stopped at is an image, we don't want to show it
-    ;; completely, instead, modify vscroll and only show a bottom
-    ;; strip of it.
-    (let ((img-height (iscroll--image-height-at (point))))
-      (when (and (not scroll-amount) img-height)
-        (setq scroll-amount (- img-height (frame-char-height)))))
     (set-window-start nil (point) t)
     (set-window-vscroll nil 0 t)
     (if scroll-amount
