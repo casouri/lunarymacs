@@ -54,19 +54,11 @@
 
 (load-package highlight-parentheses
   :config
-  (set-face-attribute 'hl-paren-face nil :weight 'bold)
-  (setq hl-paren-colors
-        (list (face-attribute
-               'hl-paren-face :foreground)))
-  (global-highlight-parentheses-mode)
-  ;; highlight only the most inner pair
-  (add-hook 'luna-load-theme-hook
-            (lambda ()
-              (setq hl-paren-colors
-                    (list (face-attribute
-                           'hl-paren-face :foreground)))
-              (global-highlight-parentheses-mode -1)
-              (global-highlight-parentheses-mode))))
+  ;; Highlight only the most inner pair. Face is set in light-theme
+  ;; and cyberpunk-theme.
+  (setq highlight-parentheses-colors
+        (lambda () (list (face-attribute 'hl-paren-face :foreground))))
+  (global-highlight-parentheses-mode))
 
 
 (load-package nyan-lite
