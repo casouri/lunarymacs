@@ -358,6 +358,16 @@ Saves to a temp file and puts the filename in the kill ring."
          finder--window-config (frame-root-window))
       (find-file "~/"))))
 
+;;; Gif
+
+(defun gif-animate ()
+  "Animate Gif in buffer."
+  (interactive)
+  (when (derived-mode-p 'image-mode)
+    (save-excursion
+      (goto-char (point-min))
+      (image-animate (plist-get (text-properties-at (point)) 'display)))))
+
 ;;; Provide
 
 (provide 'utility)
