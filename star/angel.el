@@ -143,12 +143,10 @@
   "Scroll down `luna-scroll-amount' lines.
 Keeps the relative position of point against window."
   (interactive)
+  ;; Set `scroll-preserve-screen-position' doesn't work because
+  ;; `iscroll-down' doesn't call `window_scroll_pixel_based'.
   (let ((logical-lines-scrolled (iscroll-down 2)))
     (vertical-motion (- logical-lines-scrolled)))
-
-  ;; (scroll-down luna-scroll-amount)
-  ;; (forward-line (- luna-scroll-amount))
-
   ;; Prevent me from accidentally inserting n and p.
   (set-transient-map luna-scroll-map t))
 
@@ -156,12 +154,10 @@ Keeps the relative position of point against window."
   "Scroll up `luna-scroll-amount' lines. 
 Keeps the relative position of point against window."
   (interactive)
+  ;; Set `scroll-preserve-screen-position' doesn't work because
+  ;; `iscroll-up' doesn't call `window_scroll_pixel_based'.
   (let ((logical-lines-scrolled (iscroll-up 2)))
     (vertical-motion logical-lines-scrolled))
-
-  ;; (scroll-up luna-scroll-amount)
-  ;; (forward-line luna-scroll-amount)
-
   ;; Prevent me from accidentally inserting n and p.
   (set-transient-map luna-scroll-map t))
 
