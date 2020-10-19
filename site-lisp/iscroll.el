@@ -73,14 +73,14 @@ lines scrolled. If PRESERVE-SCREEN-POS non-nil, try to preserve
 screen position."
   (interactive "p")
   (let ((arg (or arg 1))
-        (logical-lines-scrolled 0)
+        (display-lines-scrolled 0)
         (original-point (point))
         (scroll-amount nil)
         hit-end-of-buffer)
-    (goto-char (window-start))
-    ;; We first do a dry-run: not actually scrolling, just moving
+    ;; 1) We first do a dry-run: not actually scrolling, just moving
     ;; point and modifying SCROLL-AMOUNT. See Developer section for
     ;; rationale.
+    (goto-char (window-start))
     (while (> arg 0)
       ;; Initialize SCROLL-AMOUNT when we arrive at a new line or first
       ;; entered the command.
@@ -96,15 +96,15 @@ screen position."
                   (min (+ scroll-amount (default-line-height))
                        img-height))
           ;; If we are not on an image or the image is scrolled over,
-          ;; scroll logical line.
-          (cl-incf logical-lines-scrolled)
+          ;; scroll display line.
+          (cl-incf display-lines-scrolled)
           ;; We hit the end of buffer, stop.
           (when (not (eq (vertical-motion 1) 1))
             (setq hit-end-of-buffer t)
             (setq arg 0))
           (setq scroll-amount nil)))
       (cl-decf arg))
-    ;; Finally, we’ve finished the dry-run, apply the result.
+    ;; 2) Finally, we’ve finished the dry-run, apply the result.
     ;;
     ;; The third argument `t' tells redisplay that (point) doesn't
     ;; have to be the window start and be completely visible. That
@@ -113,6 +113,8 @@ screen position."
     (if scroll-amount
         (set-window-vscroll nil scroll-amount t)
       (set-window-vscroll nil 0 t))
+    ;; 3) Misc stuff.
+    ;;
     ;; If the original point is after window-start, it is in the
     ;; visible portion of the window, and is safe to go back to.
     (if (> original-point (window-start))
@@ -121,11 +123,11 @@ screen position."
       (setq preserve-screen-pos nil))
     ;; (Maybe) move point to preserve screen position.
     (when preserve-screen-pos
-      (vertical-motion logical-lines-scrolled))
+      (vertical-motion display-lines-scrolled))
     ;; Show “error message”.
     (when hit-end-of-buffer
       (message "%s" (error-message-string '(end-of-buffer))))
-    logical-lines-scrolled))
+    display-lines-scrolled))
 
 (defun iscroll-down (&optional arg preserve-screen-pos)
   "Scroll down ARG lines.
@@ -135,11 +137,12 @@ lines scrolled. If PRESERVE-SCREEN-POS non-nil, try to preserve
 screen position."
   (interactive "p")
   (let ((arg (or arg 1))
-        (logical-lines-scrolled 0)
+        (display-lines-scrolled 0)
         (original-point (point))
         ;; Nil means needs to re-measure.
         (scroll-amount nil)
         hit-beginning-of-buffer)
+    ;; 1) Dry-run.
     (goto-char (window-start))
     (while (> arg 0)
       (when (null scroll-amount)
@@ -149,12 +152,12 @@ screen position."
                  (> scroll-amount 0))
             ;; Scroll image.
             (setq scroll-amount (- scroll-amount (default-line-height)))
-          ;; Scroll logical line.
+          ;; Scroll display line.
           (if (not (eq (vertical-motion -1) -1))
               ;; If we hit the beginning of buffer, stop.
               (progn (setq hit-beginning-of-buffer t
                            arg 0))
-            (cl-incf logical-lines-scrolled)
+            (cl-incf display-lines-scrolled)
             ;; If the line we stopped at is an image, we don't want to
             ;; show it completely, instead, modify vscroll and only
             ;; show a bottom strip of it. If we are at the beginning
@@ -165,10 +168,13 @@ screen position."
                   (setq scroll-amount (- img-height (default-line-height)))
                 (setq scroll-amount nil))))))
       (cl-decf arg))
+    ;; 2) Apply result.
     (set-window-start nil (point) t)
     (if scroll-amount
         (set-window-vscroll nil scroll-amount t)
       (set-window-vscroll nil 0 t))
+    ;; 3) Misc
+    ;;
     ;; HACK: There is no fast and reliable way to get the last visible
     ;; point, hence this hack: move point up until it is visible.
     (goto-char original-point)
@@ -180,10 +186,10 @@ screen position."
       (setq preserve-screen-pos nil)
       (vertical-motion -2))
     (when preserve-screen-pos
-      (vertical-motion (- logical-lines-scrolled)))
+      (vertical-motion (- display-lines-scrolled)))
     (when hit-beginning-of-buffer
       (message "%s" (error-message-string '(beginning-of-buffer))))
-    logical-lines-scrolled))
+    display-lines-scrolled))
 
 (defvar iscroll--goal-column nil
   "Goal column when scrolling.")
