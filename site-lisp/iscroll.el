@@ -62,17 +62,12 @@
 
 (require 'cl-lib)
 
-(defun iscroll--image-at (point)
-  "Return image at POINT or nil."
-  (let ((img (plist-get (text-properties-at point) 'display)))
-    (if (and (consp img) (eq (car img) 'image))
-        img
-      nil)))
-
 (defun iscroll--image-height-at (point)
   "Return image height at POINT or nil."
-  (when-let ((img (iscroll--image-at point)))
-    (cdr (image-size img t))))
+  (let ((img (get-char-property point 'display)))
+    (if (and (consp img) (eq (car img) 'image))
+        (cdr (image-size img t))
+      nil)))
 
 (defun iscroll-up (&optional arg)
   "Scroll up ARG lines.
