@@ -33,12 +33,13 @@
 ;;
 ;; Limitations:
 ;;
-;; - currently we only look for images at the beginning of a line.
-;; - Scrolling over images in other window doesn’t work.
+;; - Currently we only look for images at the beginning of a line.
+;; - Scrolling over images in other window sometimes doesn’t work.
 ;; - For the same reason, if you scroll over an image partially and
-;;   move point to another window, the image jumps back to display
-;;   completely.
-;; - Doesn't work with `scroll-preserve-screen-position'.
+;;   move point to another window, sometimes the image jumps back to
+;;   display completely.
+;; - Doesn't work with `scroll-preserve-screen-position'. But you can
+;;   use the PRESERVE-SCREEN-POS flag.
 
 ;;; Developer
 ;;
@@ -69,11 +70,12 @@
         (cdr (image-size img t))
       nil)))
 
-(defun iscroll-up (&optional arg)
+(defun iscroll-up (&optional arg preserve-screen-pos)
   "Scroll up ARG lines.
 Normally just calls `scroll-up'. But if the top of the window is
 an image, scroll inside the image. Return the number of logical
-lines scrolled."
+lines scrolled. If PRESERVE-SCREEN-POS non-nil, try to preserve
+screen position."
   (interactive "p")
   (let ((arg (or arg 1))
         (logical-lines-scrolled 0)
@@ -111,16 +113,22 @@ lines scrolled."
     (if scroll-amount
         (set-window-vscroll nil scroll-amount t)
       (set-window-vscroll nil 0 t))
-    ;; If the original point is out of visible portion, move it in.
-    (when (> original-point (window-start))
-      (goto-char original-point))
+    ;; If the original point is after window-start, it is in the
+    ;; visible portion of the window, and is safe to go back to.
+    (if (> original-point (window-start))
+        (goto-char original-point)
+      ;; If not, we just stay at current position, i.e. window-start.
+      (setq preserve-screen-pos nil))
+    (when preserve-screen-pos
+      (vertical-motion logical-lines-scrolled))
     logical-lines-scrolled))
 
-(defun iscroll-down (&optional arg)
+(defun iscroll-down (&optional arg preserve-screen-pos)
   "Scroll down ARG lines.
 Normally just calls `scroll-down'. But if the top of the window is
 an image, scroll inside the image. Return the number of logical
-lines scrolled."
+lines scrolled. If PRESERVE-SCREEN-POS non-nil, try to preserve
+screen position."
   (interactive "p")
   (let ((arg (or arg 1))
         (logical-lines-scrolled 0)
@@ -159,7 +167,10 @@ lines scrolled."
     ;; under the point is an image that is not completely visible.
     (while (and (> (point) (window-start))
                 (not (pos-visible-in-window-p (point))))
+      (setq preserve-screen-pos nil)
       (vertical-motion -2))
+    (when preserve-screen-pos
+      (vertical-motion (- logical-lines-scrolled)))
     logical-lines-scrolled))
 
 (defvar iscroll--goal-column nil
