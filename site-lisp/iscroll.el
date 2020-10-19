@@ -65,13 +65,6 @@
 
 (require 'cl-lib)
 
-(defun iscroll--image-height-at (point)
-  "Return image height at POINT or nil."
-  (let ((img (get-char-property point 'display)))
-    (if (and (consp img) (eq (car img) 'image))
-        (cdr (image-size img t))
-      nil)))
-
 (defun iscroll-up (&optional arg preserve-screen-pos)
   "Scroll up ARG lines.
 Normally just calls `scroll-up'. But if the top of the window is
@@ -94,12 +87,13 @@ screen position."
       (when (null scroll-amount)
         (setq scroll-amount (window-vscroll nil t)))
       ;; Scroll.
-      (let ((img-height (iscroll--image-height-at (point))))
-        (if (and img-height (< scroll-amount img-height))
+      (let ((img-height (line-pixel-height)))
+        (if (and (>= img-height (* 2 (default-line-height)))
+                 (< scroll-amount img-height))
             ;; If we are in the middle of scrolling an image, scroll
             ;; that image.
             (setq scroll-amount
-                  (min (+ scroll-amount (frame-char-height))
+                  (min (+ scroll-amount (default-line-height))
                        img-height))
           ;; If we are not on an image or the image is scrolled over,
           ;; scroll logical line.
@@ -150,10 +144,11 @@ screen position."
     (while (> arg 0)
       (when (null scroll-amount)
         (setq scroll-amount (window-vscroll nil t)))
-      (let ((img-height (iscroll--image-height-at (point))))
-        (if (and img-height (> scroll-amount 0))
+      (let ((img-height (line-pixel-height)))
+        (if (and (>= img-height (* 2 (default-line-height)))
+                 (> scroll-amount 0))
             ;; Scroll image.
-            (setq scroll-amount (- scroll-amount (frame-char-height)))
+            (setq scroll-amount (- scroll-amount (default-line-height)))
           ;; Scroll logical line.
           (if (not (eq (vertical-motion -1) -1))
               ;; If we hit the beginning of buffer, stop.
@@ -165,9 +160,10 @@ screen position."
             ;; show a bottom strip of it. If we are at the beginning
             ;; of the buffer and `vertical-motion' returns 0, we don't
             ;; want to do this.
-            (if-let ((img-height (iscroll--image-height-at (point))))
-                (setq scroll-amount (- img-height (frame-char-height)))
-              (setq scroll-amount nil)))))
+            (let ((img-height (line-pixel-height)))
+              (if (>= img-height (* 2 (default-line-height)))
+                  (setq scroll-amount (- img-height (default-line-height)))
+                (setq scroll-amount nil))))))
       (cl-decf arg))
     (set-window-start nil (point) t)
     (if scroll-amount
@@ -237,10 +233,7 @@ ARG is the number of lines to move."
                  ;; If the image is taller than the window and is the
                  ;; first row of the window, it is ok to leave point
                  ;; on it.
-                 (not (and (> (or (iscroll--image-height-at (point)) 0)
-                              (- (nth 3 (window-body-pixel-edges))
-                                 (nth 1 (window-body-pixel-edges))))
-                           (eq (point) (window-start)))))
+                 (<= (line-pixel-height) (window-text-height nil t)))
         (goto-char old-point)
         (setq hit-boundary nil))
       (cl-decf abs-arg))
