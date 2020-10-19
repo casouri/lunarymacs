@@ -145,3 +145,8 @@
 ;;;; Bidi
 (setq bidi-paragraph-direction 'left-to-right
       bidi-inhibit-bpa t)
+
+;;;; Scroll
+
+(require 'iscroll)
+(iscroll-mode)
