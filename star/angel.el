@@ -136,36 +136,67 @@
     map)
   "Transient map for `luna-scroll-mode'.")
 
-(defvar luna-scroll-amount 3
-  "Number of lines to scroll in `luna-scroll-down-reserve-point'.")
+(defvar luna-scroll-optimized-command-list
+  '(luna-scroll-down-reserve-point
+    luna-scroll-up-reserve-point
+    angel-scroll-next-line
+    angel-scroll-previous-line)
+  "Commands that inhibit `post-command-hook'.")
+
+(defvar luna-scroll-post-command-hook-backup nil
+  "Backup for `post-command-hook'.")
+
+(defvar luna-scroll-recover-post-command-hook-timer nil
+  "Timer for recovering `post-command-hook'.")
+
+(defmacro luna-scroll-optimize (recover-fn-sym &rest body)
+  "Evaluate BODY with luna-scroll optimizations.
+RECOVER-FN-SYM is assigned to the recover function."
+  ;; Inhibit flyspell jit-lock and other stuff when scrolling. In
+  ;; particular, flyspell is very slow.
+  (declare (indent 1))
+  `(let ((,recover-fn-sym
+          (lambda ()
+            (setq post-command-hook
+                  luna-scroll-post-command-hook-backup
+                  luna-scroll-recover-post-command-hook-timer
+                  nil))))
+     (unless (memq last-command luna-scroll-optimized-command-list)
+       ;; Empty `post-command-hook'...
+       (setq luna-scroll-post-command-hook-backup post-command-hook
+             post-command-hook nil)
+       ;; ...and set a timer to recover it. When the timer runs, it
+       ;; sets itself to nil.
+       (unless luna-scroll-recover-post-command-hook-timer
+         (setq luna-scroll-recover-post-command-hook-timer
+               (run-with-idle-timer 0.5 nil ,recover-fn-sym))))
+     ,@body))
 
 (defun luna-scroll-down-reserve-point ()
   "Scroll down `luna-scroll-amount' lines.
 Keeps the relative position of point against window."
   (interactive)
-  ;; Set `scroll-preserve-screen-position' doesn't work because
-  ;; `iscroll-down' doesn't call `window_scroll_pixel_based'.
-  (if (derived-mode-p 'prog-mode)
-      (progn (scroll-down luna-scroll-amount)
-             (vertical-motion (- luna-scroll-amount)))
-    (let ((logical-lines-scrolled (iscroll-down luna-scroll-amount)))
-      (vertical-motion (- logical-lines-scrolled))))
-  ;; Prevent me from accidentally inserting n and p.
-  (set-transient-map luna-scroll-map t))
+  (luna-scroll-optimize recover-fn
+    ;; Set `scroll-preserve-screen-position' doesn't work because
+    ;; `iscroll-down' doesn't call `window_scroll_pixel_based'. And it
+    ;; also feel slower.
+    (if (derived-mode-p 'prog-mode)
+        (progn (scroll-down 3)
+               (vertical-motion -3))
+      (iscroll-down 2 t))
+    ;; Prevent me from accidentally inserting n and p.
+    (set-transient-map luna-scroll-map t recover-fn)))
 
 (defun luna-scroll-up-reserve-point ()
-  "Scroll up `luna-scroll-amount' lines. 
+  "Scroll up `luna-scroll-amount' lines.
 Keeps the relative position of point against window."
   (interactive)
-  ;; Set `scroll-preserve-screen-position' doesn't work because
-  ;; `iscroll-up' doesn't call `window_scroll_pixel_based'.
-  (if (derived-mode-p 'prog-mode)
-      (progn (scroll-up luna-scroll-amount)
-             (vertical-motion luna-scroll-amount))
-    (let ((logical-lines-scrolled (iscroll-up luna-scroll-amount)))
-      (vertical-motion logical-lines-scrolled)))
-  ;; Prevent me from accidentally inserting n and p.
-  (set-transient-map luna-scroll-map t))
+  (luna-scroll-optimize recover-fn
+    (if (derived-mode-p 'prog-mode)
+        (progn (scroll-up 3)
+               (vertical-motion 3))
+      (iscroll-up 2 t))
+    (set-transient-map luna-scroll-map t recover-fn)))
 
 ;;; Better C-a
 
