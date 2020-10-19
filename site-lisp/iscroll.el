@@ -34,12 +34,14 @@
 ;; Limitations:
 ;;
 ;; - Currently we only look for images at the beginning of a line.
-;; - Scrolling over images in other window sometimes doesn’t work.
-;; - For the same reason, if you scroll over an image partially and
-;;   move point to another window, sometimes the image jumps back to
-;;   display completely.
 ;; - Doesn't work with `scroll-preserve-screen-position'. But you can
 ;;   use the PRESERVE-SCREEN-POS flag.
+;; - Scrolling over images in other window sometimes doesn’t work.
+;; - If you scroll over an image partially and move point to another
+;;   window, sometimes the image jumps back to display completely.
+;; - If there is only one line after an image, you can’t scroll that
+;;   image down. Why? I have no idea.
+
 
 ;;; Developer
 ;;
@@ -80,7 +82,8 @@ screen position."
   (let ((arg (or arg 1))
         (logical-lines-scrolled 0)
         (original-point (point))
-        (scroll-amount nil))
+        (scroll-amount nil)
+        hit-end-of-buffer)
     (goto-char (window-start))
     ;; We first do a dry-run: not actually scrolling, just moving
     ;; point and modifying SCROLL-AMOUNT. See Developer section for
@@ -101,7 +104,10 @@ screen position."
           ;; If we are not on an image or the image is scrolled over,
           ;; scroll logical line.
           (cl-incf logical-lines-scrolled)
-          (vertical-motion 1)
+          ;; We hit the end of buffer, stop.
+          (when (not (eq (vertical-motion 1) 1))
+            (setq hit-end-of-buffer t)
+            (setq arg 0))
           (setq scroll-amount nil)))
       (cl-decf arg))
     ;; Finally, we’ve finished the dry-run, apply the result.
@@ -119,8 +125,12 @@ screen position."
         (goto-char original-point)
       ;; If not, we just stay at current position, i.e. window-start.
       (setq preserve-screen-pos nil))
+    ;; (Maybe) move point to preserve screen position.
     (when preserve-screen-pos
       (vertical-motion logical-lines-scrolled))
+    ;; Show “error message”.
+    (when hit-end-of-buffer
+      (message "%s" (error-message-string '(end-of-buffer))))
     logical-lines-scrolled))
 
 (defun iscroll-down (&optional arg preserve-screen-pos)
@@ -134,7 +144,8 @@ screen position."
         (logical-lines-scrolled 0)
         (original-point (point))
         ;; Nil means needs to re-measure.
-        (scroll-amount nil))
+        (scroll-amount nil)
+        hit-beginning-of-buffer)
     (goto-char (window-start))
     (while (> arg 0)
       (when (null scroll-amount)
@@ -144,18 +155,21 @@ screen position."
             ;; Scroll image.
             (setq scroll-amount (- scroll-amount (frame-char-height)))
           ;; Scroll logical line.
-          (cl-incf logical-lines-scrolled)
-          (vertical-motion -1)
-          (setq scroll-amount nil)
-          ;; If the line we stopped at is an image, we don't want to
-          ;; show it completely, instead, modify vscroll and only show
-          ;; a bottom strip of it.
-          (let ((img-height (iscroll--image-height-at (point))))
-            (when (and (not scroll-amount) img-height)
-              (setq scroll-amount (- img-height (frame-char-height)))))))
+          (if (not (eq (vertical-motion -1) -1))
+              ;; If we hit the beginning of buffer, stop.
+              (progn (setq hit-beginning-of-buffer t
+                           arg 0))
+            (cl-incf logical-lines-scrolled)
+            ;; If the line we stopped at is an image, we don't want to
+            ;; show it completely, instead, modify vscroll and only
+            ;; show a bottom strip of it. If we are at the beginning
+            ;; of the buffer and `vertical-motion' returns 0, we don't
+            ;; want to do this.
+            (if-let ((img-height (iscroll--image-height-at (point))))
+                (setq scroll-amount (- img-height (frame-char-height)))
+              (setq scroll-amount nil)))))
       (cl-decf arg))
     (set-window-start nil (point) t)
-    (set-window-vscroll nil 0 t)
     (if scroll-amount
         (set-window-vscroll nil scroll-amount t)
       (set-window-vscroll nil 0 t))
@@ -171,6 +185,8 @@ screen position."
       (vertical-motion -2))
     (when preserve-screen-pos
       (vertical-motion (- logical-lines-scrolled)))
+    (when hit-beginning-of-buffer
+      (message "%s" (error-message-string '(beginning-of-buffer))))
     logical-lines-scrolled))
 
 (defvar iscroll--goal-column nil
@@ -189,32 +205,52 @@ ARG is the number of lines to move."
          (old-point (point))
          (first-command-p (not (memq last-command
                                      '(iscroll-next-line
-                                       iscroll-previous-line)))))
+                                       iscroll-previous-line))))
+         ;; Calculate the goal column. The goal column is either
+         ;; inherited from previous calls to this command, or
+         ;; calculated by visual column.
+         (goal-column (if (or first-command-p (not iscroll--goal-column))
+                          (let ((old-point (point)))
+                            (vertical-motion 0)
+                            (setq iscroll--goal-column
+                                  (- old-point (point))))
+                        (or iscroll--goal-column 0)))
+         hit-boundary)
     ;; Because in most cases we move into visible portions, we move
     ;; first and check after, this should be faster than check first
     ;; and move after.
     (while (> abs-arg 0)
-      ;; The goal column is either inherited from previous calls to
-      ;; this command, or calculated by visual column.
-      (if (or first-command-p (not iscroll--goal-column))
-          (let ((old-point (point)))
-            (vertical-motion 0)
-            (setq iscroll--goal-column (- old-point (point)))))
-      (vertical-motion (cons iscroll--goal-column step))
-      ;; The new point is not visible! Scroll up/down one line to try
-      ;; to accommodate that line. TODO: `pos-visible-in-window-p' is
-      ;; very slow, how can we replace it? `pos-visible-in-window-p'
-      ;; doesn’t seem to be the culprit (judging from source and
-      ;; profiling), it might be because it invokes redisplay which is
-      ;; slow?
+      ;; Move point.
+      (when (not (eq (vertical-motion (cons goal-column step)) step))
+        ;; If we hit beginning or end of buffer, stop.
+        (setq hit-boundary t
+              abs-arg 0))
       (when (not (pos-visible-in-window-p (point)))
+        ;; The new point is not visible! Scroll up/down one line to try
+        ;; to accommodate that line.
         (funcall scroll-fn 1))
       ;; We scrolled one line but that line is still not fully
       ;; visible, move the point back so that redisplay doesn’t force
-      ;; the whole line into visible region.
-      (when (not (pos-visible-in-window-p (point)))
-        (goto-char old-point))
-      (cl-decf abs-arg))))
+      ;; the whole line into visible region. Partially visible is ok,
+      ;; completely invisible is not ok.
+      (when (and (not (pos-visible-in-window-p (point)))
+                 ;; If the image is taller than the window and is the
+                 ;; first row of the window, it is ok to leave point
+                 ;; on it.
+                 (not (and (> (or (iscroll--image-height-at (point)) 0)
+                              (- (nth 3 (window-body-pixel-edges))
+                                 (nth 1 (window-body-pixel-edges))))
+                           (eq (point) (window-start)))))
+        (goto-char old-point)
+        (setq hit-boundary nil))
+      (cl-decf abs-arg))
+    ;; If we hit buffer boundary and didn’t back off, show “error
+    ;; message”.
+    (when hit-boundary
+      (message "%s" (error-message-string
+                     (list (if (> arg 0)
+                               'end-of-buffer
+                             'beginning-of-buffer)))))))
 
 (defun iscroll-next-line (&optional arg _)
   "Smooth `next-line'.
@@ -274,9 +310,39 @@ ARG is the number of lines to move."
 ;; (benchmark-run 1 (scroll-up 100)) ; 0.01
 ;; (benchmark-run 1 (scroll-down 100)) ; 0.04
 
+;;;; Benchmarks for iscroll
+;;
+;; In prog file:
+;;
+;; (benchmark-run 33 (iscroll-up 3)) ; 0.04
+;; (benchmark-run 33 (iscroll-down 3)) ; 0.55
+
+;; (benchmark-run 33 (scroll-up 3)) ; 0.04
+;; (benchmark-run 33 (scroll-down 3)) ; 0.50
+
+;; In a buffer filled with images. Though, it feels much slower when
+;; you actually scroll with them, I wonder why.
+
+;; (benchmark-run 33 (iscroll-up 3)) ; 0.01
+;; (benchmark-run 33 (iscroll-down 3)) ; 0.05
+
+;; In an Org buffer:
+
+;; (benchmark-run 33 (iscroll-up 3)) ; 0.04
+;; (benchmark-run 33 (iscroll-down 3)) ; 0.306
+
+;; (benchmark-run 33 (scroll-up 3)) ; 0.04
+;; (benchmark-run 33 (scroll-down 3)) ; 0.25
+
 ;; (insert-image (create-image "~/d/abby road.jpeg" nil nil
 ;;                             :scale 0.15)
 ;;               "x")
+
+;; (progn
+;;   (profiler-start 'cpu)
+;;   (kmacro-call-macro 33)
+;;   (profiler-stop)
+;;   (profiler-report))
 
 
 (provide 'iscroll)
