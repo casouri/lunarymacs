@@ -104,6 +104,10 @@
          . form-feed-mode))
 
 
+(load-package greenbar
+  :hook (comint-mode-hook . greenbar-mode))
+
+
 (with-eval-after-load 'info
   (require 'info+)
   (info-pretty-mode))
