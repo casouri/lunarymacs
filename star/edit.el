@@ -31,8 +31,6 @@
  "C--"     #'contract-region
  :keymaps 'override
  "C-j"     #'avy-goto-word-1
- :keymaps '(c-mode-map c++-mode-map)
- "M-RET" #'srefactor-refactor-at-point
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
  "s-i" #'outline-cycle)
 
