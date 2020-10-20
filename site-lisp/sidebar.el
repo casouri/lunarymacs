@@ -24,6 +24,7 @@
 ;;
 
 (require 'outline+)
+(require 'hi-lock)
 
 (defvar sidebar-enabled-mode-list
   '(org-mode markdown-mode)
