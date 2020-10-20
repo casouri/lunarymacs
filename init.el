@@ -150,3 +150,4 @@
 
 (require 'iscroll)
 (iscroll-mode)
+(setq iscroll-preserve-screen-position t)
