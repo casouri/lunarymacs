@@ -65,6 +65,24 @@
 
 (require 'cl-lib)
 
+(defvar iscroll-image-stride-ratio 1
+  "Determines how much does iscroll scrolls over images.
+The amount scrolled is
+
+    `iscroll-image-stride-ratio' x (default-line-height).
+
+You can increase this to make scrolling appear to be faster.")
+
+(defsubst iscroll--image-height ()
+  "Return image height at point or 0."
+  ;; This is much faster than `line-pixel-height' but doesn’t seem to
+  ;; make any difference.
+  ;; (let ((img (get-char-property (point) 'display)))
+  ;;   (if (and (consp img) (eq (car img) 'image))
+  ;;       (cdr (image-size img t))
+  ;;     0))
+  (line-pixel-height))
+
 (defun iscroll-up (&optional arg preserve-screen-pos)
   "Scroll up ARG lines.
 Normally just calls `scroll-up'. But if the top of the window is
@@ -76,6 +94,8 @@ screen position."
         (display-lines-scrolled 0)
         (original-point (point))
         (scroll-amount nil)
+        (need-to-recalculate-img-height t)
+        img-height
         hit-end-of-buffer)
     ;; 1) We first do a dry-run: not actually scrolling, just moving
     ;; point and modifying SCROLL-AMOUNT. See Developer section for
@@ -86,23 +106,30 @@ screen position."
       ;; entered the command.
       (when (null scroll-amount)
         (setq scroll-amount (window-vscroll nil t)))
+      ;; `line-pixel-height' is expensive so we try to call it as few
+      ;; as possible.
+      (when need-to-recalculate-img-height
+        (setq img-height (iscroll--image-height)
+              need-to-recalculate-img-height nil))
       ;; Scroll.
-      (let ((img-height (line-pixel-height)))
-        (if (and (>= img-height (* 2 (default-line-height)))
-                 (< scroll-amount img-height))
-            ;; If we are in the middle of scrolling an image, scroll
-            ;; that image.
-            (setq scroll-amount
-                  (min (+ scroll-amount (default-line-height))
-                       img-height))
-          ;; If we are not on an image or the image is scrolled over,
-          ;; scroll display line.
-          (cl-incf display-lines-scrolled)
-          ;; We hit the end of buffer, stop.
-          (when (not (eq (vertical-motion 1) 1))
-            (setq hit-end-of-buffer t)
-            (setq arg 0))
-          (setq scroll-amount nil)))
+      (if (and (>= img-height (* 2 (default-line-height)))
+               (< scroll-amount img-height))
+          ;; If we are in the middle of scrolling an image, scroll
+          ;; that image.
+          (setq scroll-amount
+                (min (+ scroll-amount
+                        (* iscroll-image-stride-ratio
+                           (default-line-height)))
+                     img-height))
+        ;; If we are not on an image or the image is scrolled over,
+        ;; scroll display line.
+        (cl-incf display-lines-scrolled)
+        (setq need-to-recalculate-img-height t)
+        ;; We hit the end of buffer, stop.
+        (when (not (eq (vertical-motion 1) 1))
+          (setq hit-end-of-buffer t)
+          (setq arg 0))
+        (setq scroll-amount nil))
       (cl-decf arg))
     ;; 2) Finally, we’ve finished the dry-run, apply the result.
     ;;
@@ -147,11 +174,14 @@ screen position."
     (while (> arg 0)
       (when (null scroll-amount)
         (setq scroll-amount (window-vscroll nil t)))
-      (let ((img-height (line-pixel-height)))
+      (let ((img-height (iscroll--image-height)))
         (if (and (>= img-height (* 2 (default-line-height)))
                  (> scroll-amount 0))
             ;; Scroll image.
-            (setq scroll-amount (- scroll-amount (default-line-height)))
+            (setq scroll-amount
+                  (- scroll-amount
+                     (* iscroll-image-stride-ratio
+                        (default-line-height))))
           ;; Scroll display line.
           (if (not (eq (vertical-motion -1) -1))
               ;; If we hit the beginning of buffer, stop.
@@ -308,41 +338,6 @@ ARG is the number of lines to move."
 
 ;; (benchmark-run 1 (scroll-up 100)) ; 0.01
 ;; (benchmark-run 1 (scroll-down 100)) ; 0.04
-
-;;;; Benchmarks for iscroll
-;;
-;; In prog file:
-;;
-;; (benchmark-run 33 (iscroll-up 3)) ; 0.04
-;; (benchmark-run 33 (iscroll-down 3)) ; 0.55
-
-;; (benchmark-run 33 (scroll-up 3)) ; 0.04
-;; (benchmark-run 33 (scroll-down 3)) ; 0.50
-
-;; In a buffer filled with images. Though, it feels much slower when
-;; you actually scroll with them, I wonder why.
-
-;; (benchmark-run 33 (iscroll-up 3)) ; 0.01
-;; (benchmark-run 33 (iscroll-down 3)) ; 0.05
-
-;; In an Org buffer:
-
-;; (benchmark-run 33 (iscroll-up 3)) ; 0.04
-;; (benchmark-run 33 (iscroll-down 3)) ; 0.306
-
-;; (benchmark-run 33 (scroll-up 3)) ; 0.04
-;; (benchmark-run 33 (scroll-down 3)) ; 0.25
-
-;; (insert-image (create-image "~/d/abby road.jpeg" nil nil
-;;                             :scale 0.15)
-;;               "x")
-
-;; (progn
-;;   (profiler-start 'cpu)
-;;   (kmacro-call-macro 33)
-;;   (profiler-stop)
-;;   (profiler-report))
-
 
 (provide 'iscroll)
 
