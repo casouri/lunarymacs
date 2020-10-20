@@ -33,9 +33,6 @@
 ;;
 ;; Limitations:
 ;;
-;; - Currently we only look for images at the beginning of a line.
-;; - Doesn't work with `scroll-preserve-screen-position'. But you can
-;;   use the PRESERVE-SCREEN-POS flag.
 ;; - Scrolling over images in other window sometimes doesn’t work.
 ;; - If you scroll over an image partially and move point to another
 ;;   window, sometimes the image jumps back to display completely.
@@ -65,36 +62,23 @@
 
 (require 'cl-lib)
 
-(defvar iscroll-image-stride-ratio 1
-  "Determines how much does iscroll scrolls over images.
-The amount scrolled is
+(defvar iscroll-preserve-screen-position
+  scroll-preserve-screen-position
+  "Whether to preserve screen position when scrolling.
+I want to control this for iscroll separately, don’t ask why.")
 
-    `iscroll-image-stride-ratio' x (default-line-height).
-
-You can increase this to make scrolling appear to be faster.")
-
-(defsubst iscroll--image-height ()
-  "Return image height at point or 0."
-  ;; This is much faster than `line-pixel-height' but doesn’t seem to
-  ;; make any difference.
-  ;; (let ((img (get-char-property (point) 'display)))
-  ;;   (if (and (consp img) (eq (car img) 'image))
-  ;;       (cdr (image-size img t))
-  ;;     0))
-  (line-pixel-height))
-
-(defun iscroll-up (&optional arg preserve-screen-pos)
+(defun iscroll-up (&optional arg)
   "Scroll up ARG lines.
 Normally just calls `scroll-up'. But if the top of the window is
 an image, scroll inside the image. Return the number of logical
-lines scrolled. If PRESERVE-SCREEN-POS non-nil, try to preserve
-screen position."
+lines scrolled."
   (interactive "p")
   (let ((arg (or arg 1))
         (display-lines-scrolled 0)
         (original-point (point))
         (scroll-amount nil)
         (need-to-recalculate-img-height t)
+        (preserve-screen-pos iscroll-preserve-screen-position)
         img-height
         hit-end-of-buffer)
     ;; 1) We first do a dry-run: not actually scrolling, just moving
@@ -109,7 +93,7 @@ screen position."
       ;; `line-pixel-height' is expensive so we try to call it as few
       ;; as possible.
       (when need-to-recalculate-img-height
-        (setq img-height (iscroll--image-height)
+        (setq img-height (line-pixel-height)
               need-to-recalculate-img-height nil))
       ;; Scroll.
       (if (and (>= img-height (* 2 (default-line-height)))
@@ -117,9 +101,7 @@ screen position."
           ;; If we are in the middle of scrolling an image, scroll
           ;; that image.
           (setq scroll-amount
-                (min (+ scroll-amount
-                        (* iscroll-image-stride-ratio
-                           (default-line-height)))
+                (min (+ scroll-amount (default-line-height))
                      img-height))
         ;; If we are not on an image or the image is scrolled over,
         ;; scroll display line.
@@ -156,7 +138,7 @@ screen position."
       (message "%s" (error-message-string '(end-of-buffer))))
     display-lines-scrolled))
 
-(defun iscroll-down (&optional arg preserve-screen-pos)
+(defun iscroll-down (&optional arg)
   "Scroll down ARG lines.
 Normally just calls `scroll-down'. But if the top of the window is
 an image, scroll inside the image. Return the number of logical
@@ -168,20 +150,19 @@ screen position."
         (original-point (point))
         ;; Nil means needs to re-measure.
         (scroll-amount nil)
+        (preserve-screen-pos iscroll-preserve-screen-position)
         hit-beginning-of-buffer)
     ;; 1) Dry-run.
     (goto-char (window-start))
     (while (> arg 0)
       (when (null scroll-amount)
         (setq scroll-amount (window-vscroll nil t)))
-      (let ((img-height (iscroll--image-height)))
+      (let ((img-height (line-pixel-height)))
         (if (and (>= img-height (* 2 (default-line-height)))
                  (> scroll-amount 0))
             ;; Scroll image.
             (setq scroll-amount
-                  (- scroll-amount
-                     (* iscroll-image-stride-ratio
-                        (default-line-height))))
+                  (- scroll-amount (default-line-height)))
           ;; Scroll display line.
           (if (not (eq (vertical-motion -1) -1))
               ;; If we hit the beginning of buffer, stop.
