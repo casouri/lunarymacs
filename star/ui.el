@@ -126,6 +126,12 @@
   luna-toggle-console
   luna-toggle-console-window)
 
+
+(load-package iscroll
+  :config
+  (setq iscroll-preserve-screen-position t)
+  (iscroll-mode))
+
 ;;; Functions
 
 (defun chunyang-alpha-param-adjust ()
