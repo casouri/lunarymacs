@@ -34,13 +34,16 @@
  "<M-up>" #'outline-previous-visible-heading
  "<M-down>" #'outline-next-visible-heading)
 
+
+;;; Config
+
+(setq custom-theme-directory
+      (expand-file-name "site-lisp" user-emacs-directory))
+
 ;;; Package
 
 (add-to-list 'luna-toggle-theme-list 'light)
 (add-to-list 'luna-toggle-theme-list 'cyberpunk)
-(setq custom-theme-directory
-      (expand-file-name "site-lisp" user-emacs-directory))
-
 
 (load-package rainbow-delimiters
   :hook (prog-mode-hook . rainbow-delimiters-mode)
@@ -59,13 +62,6 @@
   (setq highlight-parentheses-colors
         (lambda () (list (face-attribute 'hl-paren-face :foreground))))
   (global-highlight-parentheses-mode))
-
-
-(load-package nyan-lite
-  :init (setq nyan-lite-add-mode-line nil
-              nyan-lite-progress-bar nil
-              nyan-lite-animate t)
-  :commands nyan-lite-mode)
 
 
 (load-package hl-todo

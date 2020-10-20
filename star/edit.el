@@ -110,7 +110,8 @@
 (load-package ghelp)
 
 
-(add-hook 'prog-mode-hook #'hs-minor-mode)
+(load-package hideshow
+  :hook (prog-mode-hook . hs-minor-mode))
 
 
 (load-package helpful)
