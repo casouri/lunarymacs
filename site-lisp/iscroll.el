@@ -228,6 +228,8 @@ ARG is the number of lines to move."
                             (setq iscroll--goal-column
                                   (- old-point (point))))
                         (or iscroll--goal-column 0)))
+         ;; We don't want to preserve screen position when moving point.
+         (iscroll-preserve-screen-position nil)
          hit-boundary)
     ;; Because in most cases we move into visible portions, we move
     ;; first and check after, this should be faster than check first
