@@ -70,6 +70,11 @@
  "sc" #'shell-command
  "ai" #'luna-autoinsert
  "se" #'luna-sudo-edit
+ "ps" '("profiler-start" . (lambda () (interactive)
+                             (profiler-start 'cpu)))
+ "pr" '("profiler-report" . (lambda () (interactive)
+                              (profiler-stop)
+                              (profiler-report)))
  
  :---
  :keymaps 'smerge-mode-map
