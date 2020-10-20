@@ -179,7 +179,8 @@
   :commands aggressive-indent-mode
   :hook ((emacs-lisp-mode-hook
           lisp-interaction-mode-hook
-          scheme-mode-hook lisp-mode-hook)
+          scheme-mode-hook
+          lisp-mode-hook)
          . aggressive-indent-mode))
 
 
