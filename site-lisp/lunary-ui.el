@@ -100,7 +100,7 @@ e.g. :family :weight :size etc."
     ("PragmataPro 14" . (:family "Essential PragmataPro" :size 14))
     ("Iosevka 13" . (:family "Iosevka" :size 14))
     ("JetBrains Mono 12" . (:family "JetBrains Mono" :size 12))
-    ("Roboto Mono 12" . (:family "Roboto Mono" :size 12)))
+    ("Roboto Mono 12" . (:family "Roboto Mono" :size 12 :weight light)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
 Key is a symbol as the name, value is a plist specifying the font spec.
 More info about spec in `font-spec'.")
