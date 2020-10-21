@@ -59,6 +59,7 @@
 (luna-key-def-preset :leader-prefix
   :prefix (if (display-graphic-p) "C-SPC" "C-@"))
 
+(require 'no-littering)
 (luna-load-relative "star/etc.el")
 (luna-load-relative "star/key.el")
 (luna-load-relative "star/angel.el")
