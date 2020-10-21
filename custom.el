@@ -59,7 +59,7 @@
  '(savehist-additional-variables '(tablist-named-filter extended-command-history))
  '(savehist-mode t)
  '(scroll-bar-mode nil)
- '(scroll-conservatively 101)
+ '(scroll-conservatively 1)
  '(scroll-margin 4)
  '(scroll-preserve-screen-position nil)
  '(send-mail-function 'mailclient-send-it)
