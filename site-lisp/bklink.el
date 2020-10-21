@@ -140,7 +140,10 @@ Do nothing if there is no link at point."
 (defun bklink-follow-link (button)
   "Jump to the file that BUTTON represents."
   (with-demoted-errors "Error when following the link: %s"
-    (find-file (button-get button 'filename))
+    (let ((file (button-get button 'filename)))
+      (if (file-name-extension file)
+          (find-file file)
+        (find-file (concat file ".txt"))))
     (unless bklink-minor-mode
       (bklink-minor-mode))))
 
@@ -271,9 +274,10 @@ THIS-FILE is the filename we are inserting summary into."
                         (goto-char (point-min))
                         (if (re-search-forward this-link-re nil t)
                             (when-let ((summary
-                                        (if (org-at-table-p)
-                                            (thing-at-point 'line)
-                                          (thing-at-point 'sentence))))
+                                        (or (if (org-at-table-p)
+                                                (thing-at-point 'line)
+                                              (thing-at-point 'sentence))
+                                            "(No summary)")))
                               (cons file summary))))))
                 files))
               (summary-list (remove nil summary-list)))
@@ -339,11 +343,14 @@ THIS-FILE is the filename we are inserting summary into."
             (if (string-match-p (rx (or "finished" "exited"))
                                 event)
                 (if-let ((buf (process-buffer process)))
-                    (with-current-buffer buf
-                      (let ((files (split-string (buffer-string) "\n")))
-                        (funcall callback
-                                 (mapcar #'file-name-nondirectory
-                                         (remove "" files)))))
+                    (unwind-protect
+                        (with-current-buffer buf
+                          (let ((files (split-string
+                                        (buffer-string) "\n")))
+                            (funcall callback
+                                     (mapcar #'file-name-nondirectory
+                                             (remove "" files)))))
+                      (kill-buffer buf))
                   (error "Bklink’s grep process’ buffer is killed"))
               (error "Bklink’s grep process failed with signal: %s"
                      event)))))
@@ -358,11 +365,15 @@ edit the link."
   (interactive)
   (if (bklink--search-at-point)
       (let ((file (completing-read
-                   "New file: " (bklink--get-file-list (buffer-file-name))
+                   "New file: "
+                   (mapcar #'file-name-base
+                           (bklink--get-file-list (buffer-file-name)))
                    nil nil (bklink--file-at-point))))
         (bklink--set-file-at-point file))
     (let ((file (completing-read
-                 "File: " (bklink--get-file-list (buffer-file-name)))))
+                 "File: "
+                 (mapcar #'file-name-base
+                         (bklink--get-file-list (buffer-file-name))))))
       (insert (bklink--format-link file))))
   (bklink-minor-mode))
 
