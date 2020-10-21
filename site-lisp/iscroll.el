@@ -164,20 +164,20 @@ screen position."
             (setq scroll-amount
                   (- scroll-amount (default-line-height)))
           ;; Scroll display line.
-          (if (not (eq (vertical-motion -1) -1))
-              ;; If we hit the beginning of buffer, stop.
-              (progn (setq hit-beginning-of-buffer t
-                           arg 0))
-            (cl-incf display-lines-scrolled)
-            ;; If the line we stopped at is an image, we don't want to
-            ;; show it completely, instead, modify vscroll and only
-            ;; show a bottom strip of it. If we are at the beginning
-            ;; of the buffer and `vertical-motion' returns 0, we don't
-            ;; want to do this.
-            (let ((img-height (line-pixel-height)))
-              (if (>= img-height (* 2 (default-line-height)))
-                  (setq scroll-amount (- img-height (default-line-height)))
-                (setq scroll-amount nil))))))
+          (when (not (eq (vertical-motion -1) -1))
+            ;; If we hit the beginning of buffer, stop.
+            (setq hit-beginning-of-buffer t
+                  arg 0))
+          (cl-incf display-lines-scrolled)
+          ;; If the line we stopped at is an image, we don't want to
+          ;; show it completely, instead, modify vscroll and only
+          ;; show a bottom strip of it. If we are at the beginning
+          ;; of the buffer and `vertical-motion' returns 0, we don't
+          ;; want to do this.
+          (let ((img-height (line-pixel-height)))
+            (if (>= img-height (* 2 (default-line-height)))
+                (setq scroll-amount (- img-height (default-line-height)))
+              (setq scroll-amount nil)))))
       (cl-decf arg))
     ;; 2) Apply result.
     (set-window-start nil (point) t)
@@ -196,7 +196,7 @@ screen position."
                 (not (pos-visible-in-window-p (point))))
       (setq preserve-screen-pos nil)
       (vertical-motion -2))
-    (when preserve-screen-pos
+    (when (and preserve-screen-pos (not hit-beginning-of-buffer))
       (vertical-motion (- display-lines-scrolled)))
     (when hit-beginning-of-buffer
       (message "%s" (error-message-string '(beginning-of-buffer))))
@@ -241,8 +241,8 @@ ARG is the number of lines to move."
         (setq hit-boundary t
               abs-arg 0))
       (when (not (pos-visible-in-window-p (point)))
-        ;; The new point is not visible! Scroll up/down one line to try
-        ;; to accommodate that line.
+        ;; The new point is not fully visible! Scroll up/down one line
+        ;; to try to accommodate that line.
         (funcall scroll-fn 1))
       ;; We scrolled one line but that line is still not fully
       ;; visible, move the point back so that redisplay doesn’t force
