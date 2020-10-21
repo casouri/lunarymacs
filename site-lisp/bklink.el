@@ -270,9 +270,11 @@ THIS-FILE is the filename we are inserting summary into."
                         (insert-file-contents file)
                         (goto-char (point-min))
                         (if (re-search-forward this-link-re nil t)
-                            (cons file (if (org-at-table-p)
-                                           (thing-at-point 'line)
-                                         (thing-at-point 'sentence)))))))
+                            (when-let ((summary
+                                        (if (org-at-table-p)
+                                            (thing-at-point 'line)
+                                          (thing-at-point 'sentence))))
+                              (cons file summary))))))
                 files))
               (summary-list (remove nil summary-list)))
          ;; Insert separator.
