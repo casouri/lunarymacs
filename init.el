@@ -37,7 +37,7 @@
                                     (format-time-string "%A %Y.%-m.%-d")))
                     (insert ";;\n")
                     (lisp-interaction-mode)))))
-  ;; add load-path’s and load autoload files
+  ;; Add load-paths and load autoload files.
   (luna-load-relative "star/recipe.el")
   (package-initialize)
   (cowboy-add-load-path))
@@ -50,8 +50,7 @@
 
 ;;; Configs
 
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-(setq luna-company-manual nil)
+;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (luna-key-def-preset :leader
   :keymaps 'override
@@ -60,7 +59,6 @@
 (luna-key-def-preset :leader-prefix
   :prefix (if (display-graphic-p) "C-SPC" "C-@"))
 
-;; core must load first because other configs depends on them
 (luna-load-relative "star/etc.el")
 (luna-load-relative "star/key.el")
 (luna-load-relative "star/angel.el")
@@ -69,7 +67,6 @@
 (luna-load-relative "star/edit.el")
 (luna-load-relative "star/ivy.el")
 (luna-load-relative "star/checker.el")
-(luna-load-relative "star/company.el")
 (luna-load-relative "star/eglot.el")
 (luna-load-relative "star/python.el")
 (luna-load-relative "star/git.el")
@@ -112,7 +109,6 @@
 
 ;;;; Macports
 (luna-on "Brown"
-  ;; macports
   (add-to-list 'load-path "/opt/local/share/emacs/site-lisp"))
 
 ;;;; Emacs Mac port
