@@ -35,7 +35,7 @@
 archive.casouri.cat@gmail.com</a></p>")))
 
 (defvar luna-blog-home/up-format
-  "<div id=\"org-div-home-and-up-index-page\">
+  "<div id=\"org-div-home-and-up\">
 <div>
 <a accesskey=\"h\" href=\"%s\"> UP </a> |
 <a accesskey=\"H\" href=\"%s\"> HOME </a>
