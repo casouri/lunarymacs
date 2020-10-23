@@ -199,6 +199,8 @@ Do nothing if there is no link at point."
         (when (match-beginning 3)
           (put-text-property (match-beginning 3)
                              (match-end 3) 'invisible t))
+        (put-text-property (match-beginning 0) (match-end 0)
+                           'rear-nonsticky t)
         ;; Highlight link.
         (make-text-button (match-end 1)
                           (match-beginning 4)
