@@ -134,8 +134,8 @@
         (mode-line-inactive
          (mode-line nil ,(overlay bg violet2 0.7) nil nil nil)
          (:box (:line-width 3 :color ,(overlay bg violet2 0.7))))
-        (mode-line-highlight () (:box (:line-width 2 :color fg)))
-        (header-line (mode-line))
+        (mode-line-highlight () (:box (:line-width 3 :color fg)))
+        (header-line (mode-line-inactive))
 
         ;; completion
         (current-selection  (nil ,bg ,blue2))
@@ -314,7 +314,22 @@
         (avy-lead-face      (nil ,bg ,yellow))
         (avy-lead-face-0    (nil ,bg ,violet1))
         (avy-lead-face-1    (nil ,bg ,green))
-        (avy-lead-face-2    (nil ,bg ,blue2))))))
+        (avy-lead-face-2    (nil ,bg ,blue2))
+
+        (widget-inactive (default))
+
+        (table-cell (defualt))
+
+        (tab-line (mode-line nil ,(brighten bg 0.1))
+                  (:box (:line-width 3 :color ,(brighten bg 0.1))))
+        (tab-line-tab (tab-line nil ,(brighten bg 0.15))
+                      (:box (:line-width 3 :color ,(brighten bg 0.15))))
+        (tab-line-highlight
+         (tab-line nil ,(brighten bg 0.2))
+         (:box (:line-width 3 :color ,(brighten bg 0.2))))
+        (tab-line-tab-current
+         (tab-line nil ,bg) (:box (:line-width 3 :color ,bg)))
+        (tab-line-tab-inactive (tab-line-tab))))))
 
 (provide-theme 'cyberpunk)
 

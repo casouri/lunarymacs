@@ -326,7 +326,16 @@
 
         (widget-inactive (default))
 
-        (table-cell (defualt))))))
+        (table-cell (defualt))
+
+        (tab-line              (mode-line-inactive))
+        (tab-line-tab          (tab-line))
+        (tab-line-tab-inactive (tab-line-tab))
+        (tab-line-highlight
+         (tab-line nil ,(darken bg 0.15))
+         (:box (:line-width 3 :color ,(darken bg 0.15))))
+        (tab-line-tab-current
+         (tab-line nil ,bg) (:box (:line-width 3 :color ,bg)))))))
 
 (provide-theme 'light)
 
