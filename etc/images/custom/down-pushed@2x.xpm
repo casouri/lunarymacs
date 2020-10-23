@@ -1,0 +1,34 @@
+/* XPM */
+static char *down_pushed_2x[] = {
+/* columns rows colors chars-per-pixel */
+"16 24 4 1 ",
+"  c gray45",
+". c gray60",
+"X c gray90",
+"o c None",
+/* pixels */
+"                ",
+"                ",
+"  ............XX",
+"  ............XX",
+"oo  ........XXoo",
+"oo  ........XXoo",
+"oo  ........XXoo",
+"oo  ........XXoo",
+"oooo  ....XXoooo",
+"oooo  ....XXoooo",
+"oooo  ....XXoooo",
+"oooo  ....XXoooo",
+"oooooo..XXoooooo",
+"oooooo..XXoooooo",
+"oooooo..XXoooooo",
+"oooooo..XXoooooo",
+"oooooooooooooooo",
+"oooooooooooooooo",
+"oooooooooooooooo",
+"oooooooooooooooo",
+"oooooooooooooooo",
+"oooooooooooooooo",
+"oooooooooooooooo",
+"oooooooooooooooo"
+};

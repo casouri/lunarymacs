@@ -1,0 +1,28 @@
+/* XPM */
+static char *close_2x[] = {
+/* columns rows colors chars-per-pixel */
+"18 18 4 1 ",
+"  c black",
+". c #808080",
+"X c gray75",
+"o c None",
+/* pixels */
+"oooooooooooooooooo",
+"oooooooooooooooooo",
+"oooooooooooooooooo",
+"oooooooooooooooooo",
+"oooo  oooooo  oooo",
+"oooo   oooo   oooo",
+"ooooo   oo   ooooo",
+"oooooo      oooooo",
+"ooooooo    ooooooo",
+"ooooooo    ooooooo",
+"oooooo      oooooo",
+"ooooo   oo   ooooo",
+"oooo   oooo   oooo",
+"oooo  oooooo  oooo",
+"oooooooooooooooooo",
+"oooooooooooooooooo",
+"oooooooooooooooooo",
+"oooooooooooooooooo"
+};

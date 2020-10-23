@@ -1,0 +1,27 @@
+/* XPM */
+static char *left_arrow_2x[] = {
+/* columns rows colors chars-per-pixel */
+"18 18 3 1 ",
+"  c black",
+". c #808080",
+"X c none",
+/* pixels */
+"XXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXX    XXXX",
+"XXXXXXXXX    XXXXX",
+"XXXXXXXX    XXXXXX",
+"XXXXXXX    XXXXXXX",
+"XXXXXX    XXXXXXXX",
+"XXXXX    XXXXXXXXX",
+"XXXX    XXXXXXXXXX",
+"XXXX    XXXXXXXXXX",
+"XXXXX    XXXXXXXXX",
+"XXXXXX    XXXXXXXX",
+"XXXXXXX    XXXXXXX",
+"XXXXXXXX    XXXXXX",
+"XXXXXXXXX    XXXXX",
+"XXXXXXXXXX    XXXX",
+"XXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXX"
+};

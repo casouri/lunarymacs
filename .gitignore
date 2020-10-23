@@ -2,6 +2,8 @@
 !README.org
 !init.el
 !early-init.el
+!etc
+!etc/**/*
 !dump.el
 !site-lisp/
 !site-lisp/**/*

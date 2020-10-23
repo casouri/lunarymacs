@@ -1,0 +1,28 @@
+/* XPM */
+static char *down_2x[] = {
+/* columns rows colors chars-per-pixel */
+"18 18 4 1 ",
+"  c black",
+". c gray45",
+"X c white",
+"o c None",
+/* pixels */
+"                  ",
+"                  ",
+"  .XXXXXXXXXXXX.  ",
+"  ..XXXXXXXXXX..  ",
+"  ..XXXXXXXXXX..  ",
+"o  ..XXXXXXXX..  o",
+"o   .XXXXXXXX.   o",
+"oo  ..XXXXXX..  oo",
+"oo   .XXXXXX.   oo",
+"ooo  ..XXXX..  ooo",
+"ooo   .XXXX.   ooo",
+"oooo  ..XX..  oooo",
+"oooo   .XX.   oooo",
+"ooooo  ....  ooooo",
+"ooooo   ..   ooooo",
+"oooooo  ..  oooooo",
+"oooooo      oooooo",
+"ooooooo    ooooooo"
+};

@@ -1,0 +1,28 @@
+/* XPM */
+static char *righ_2x[] = {
+/* columns rows colors chars-per-pixel */
+"18 18 4 1 ",
+"  c black",
+". c gray45",
+"X c white",
+"o c None",
+/* pixels */
+"     ooooooooooooo",
+"       ooooooooooo",
+"  ...    ooooooooo",
+"  X...     ooooooo",
+"  XXX...     ooooo",
+"  XXXXX...     ooo",
+"  XXXXXXX...     o",
+"  XXXXXXXXX...    ",
+"  XXXXXXXXXXX...  ",
+"  XXXXXXXXXXX...  ",
+"  XXXXXXXXX...    ",
+"  XXXXXXX...     o",
+"  XXXXX...     ooo",
+"  XXX....    ooooo",
+"  X...     ooooooo",
+"  ...    ooooooooo",
+"       ooooooooooo",
+"     ooooooooooooo"
+};
