@@ -36,7 +36,8 @@
                     (insert (format "Today is %s.\n"
                                     (format-time-string "%A %Y.%-m.%-d")))
                     (insert ";;\n")
-                    (lisp-interaction-mode)))))
+                    (lisp-interaction-mode)
+                    (goto-char (point-max))))))
   ;; Add load-paths and load autoload files.
   (luna-load-relative "star/recipe.el")
   (package-initialize)
@@ -143,3 +144,6 @@
 ;;;; Bidi
 (setq bidi-paragraph-direction 'left-to-right
       bidi-inhibit-bpa t)
+
+;;;; Sans
+(luna-sans-mode)

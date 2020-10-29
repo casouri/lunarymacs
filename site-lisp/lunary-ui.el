@@ -218,6 +218,16 @@ But, this function ignores all specifications in the ALIST."
     (select-window window)
     (fit-window-to-buffer window max-height 0)))
 
+;;; Serif/sans serif
+
+(define-minor-mode luna-sans-mode
+  "Use sans-serif font for variable-pitch face."
+  :lighter ""
+  :global t
+  :group 'convenience
+  (if luna-sans-mode
+      (set-face-attribute 'variable-pitch nil :family "Helvetica")
+    (set-face-attribute 'variable-pitch nil :family "Charter")))
 
 ;;; Configs
 
