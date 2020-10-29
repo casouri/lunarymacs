@@ -225,9 +225,7 @@
         (magit-diffstat-removed          (nil ,red))
         (magit-dimmed                    (nil ,fg-weak))
         (magit-hash                      (nil ,fg-weak))
-        (magit-header-line
-         (nil nil ,(overlay bg blue1 0.3) nil bold nil)
-         (:box (:line-width 3 :color ,(overlay bg blue1 0.3))))
+        (magit-header-line               (outline-3))
         (magit-log-author                (nil ,orange))
         (magit-log-date                  (nil ,blue1))
         (magit-log-graph                 (nil ,fg-weak))
