@@ -35,9 +35,9 @@
 ;; Usage:
 ;;
 ;; Link format is [{filename.ext}]. Extension is optional.
-;; Links are displayed as “filename” with 'link face.
+;; Links are displayed as [filename] with 'link face.
 ;;
-;; Insert a link to another file:
+;; Insert a link to another file or edit a link:
 ;;
 ;;     M-x bklink-insert RET
 ;;
@@ -50,6 +50,20 @@
 ;;     M-x bklink-rename new-name RET
 ;;
 ;; And then manually rename the current file.
+;;
+;; Notes:
+;;
+;; - If a link doesn’t have extension, bklink appends “.txt” to it
+;;   when searching for the corresponding file.
+;; - If the file a link points to doesn’t exist, bklink doesn’t create
+;;   that file. Instead, bklink creates a buffer, and you can show
+;;   back-links to it without creating that file.
+;; - When ‘bklink-show-back-link-on-start’ is non-nil, back-link
+;;   summary is shown on startup.
+;; - When ‘bklink-more-match’ is non-nil, bklink also shows files that
+;;   include the phrase but not as a link.
+;; - When ‘bklink-use-form-feed’ is non-nil, bklink uses form-feed
+;;   character to delineate back-link summary.
 
 ;;; Code:
 
@@ -99,7 +113,9 @@ Change this variable and
 Ignore dotfiles and directories."
   (cl-remove-if (lambda (f) (or (string-prefix-p "." f)
                                 (file-directory-p f)))
-                (directory-files (file-name-directory file))))
+                ;; FILE could be a file-less buffer.
+                (directory-files (or (file-name-directory file)
+                                     default-directory))))
 
 (defun bklink--search-at-point ()
   "Search for links at point and set match data accordingly.
@@ -138,12 +154,19 @@ Do nothing if there is no link at point."
   'help-echo "Jump to file")
 
 (defun bklink-follow-link (button)
-  "Jump to the file that BUTTON represents."
+  "Jump to the file that BUTTON represents.
+If the file doesn't exist, create a buffer."
   (with-demoted-errors "Error when following the link: %s"
-    (let ((file (button-get button 'filename)))
-      (if (file-name-extension file)
-          (find-file file)
-        (find-file (concat file ".txt"))))
+    (let* ((file (button-get button 'filename))
+           (fullname (if (file-name-extension file)
+                         file
+                       (concat file ".txt"))))
+      (if (file-exists-p fullname)
+          (find-file fullname)
+        (switch-to-buffer (get-buffer-create fullname))
+        (insert file "\n\n")))
+    (when (eq major-mode 'fundamental-mode)
+      (text-mode))
     (unless bklink-minor-mode
       (bklink-minor-mode))))
 
@@ -388,7 +411,8 @@ The back-links are links to the files that has a link to this file."
   (unless bklink-minor-mode
     (user-error "Bklink-minor-mode is not on"))
   (if bklink-show-back-link
-      (if-let ((file (buffer-file-name))
+      ;; The buffer could be not having a file.
+      (if-let ((file (or (buffer-file-name) (buffer-name)))
                (buffer (current-buffer)))
           ;; Fire a sub-process to retrieve back-links.
           (bklink--get-linked-files
