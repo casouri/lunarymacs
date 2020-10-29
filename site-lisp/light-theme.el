@@ -172,6 +172,7 @@
         (ivy-virtual                         (default))
         (ivy-subdir                          (default))
         (ivy-remote                          (default))
+        (ivy-org                             (default))
 
         (magit-heading-highlight (nil nil ,bg-alt))
         (magit-heading-selection (nil ,bg ,(overlay bg orange 0.8)))
