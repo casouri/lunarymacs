@@ -70,7 +70,7 @@
         ;; (delicate-click-mode)
         ;; (setq-local blink-cursor-interval 0.6)
         ;; (blink-cursor-mode)
-        (setq-local line-spacing 0.2))
+        (setq-local line-spacing 0.15))
     (variable-pitch-mode -1)
     (olivetti-mode -1)
     (luna-scale-cjk-mode -1)
@@ -88,6 +88,7 @@
   (require 'org-tempo))
 
 (add-hook 'org-mode-hook #'luna-org-hook)
+(font-lock-add-keywords 'org-mode '(("^ *- " 0 'fixed-pitch)))
 
 ;;; Org Agenda config
 
