@@ -16,10 +16,13 @@
 ;;
 ;;     M-x iscroll-mode RET
 ;;
-;; This mode remaps mouse scrolling functions. If you use other
-;; commands, you need to adapt them accordingly. See
-;; `iscroll-mode-map' and `iscroll-mode' for some
-;; inspiration.
+;; This mode remaps mouse scrolling functions and `next/previous-line'.
+;; If you use other commands, you need to adapt them accordingly. See
+;; `iscroll-mode-map' and `iscroll-mode' for some inspiration.
+;;
+;; If a line is taller than double the default line height, smooth
+;; scrolling is triggered and Emacs will reveal one line’s height each
+;; time.
 ;;
 ;; Commands provided:
 ;;
@@ -50,8 +53,8 @@
 ;; before actually scrolling. ”Dry run” means moving point when
 ;; scrolling over logical lines, and simply incrementing vscroll
 ;; amount when scrolling over images. When we finished the dry-run, we
-;; apply the logical scrolls with `set-window-start` and vscroll
-;; amount with `set-window-vscroll`.
+;; apply the logical scrolls with `set-window-start’ and vscroll
+;; amount with `set-window-vscroll’.
 ;;
 ;; In practice this is indeed much more efficient when ARG (number of
 ;; lines to scroll) is larger than 1. That’s important for me because
