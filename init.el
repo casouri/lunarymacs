@@ -124,6 +124,9 @@
   (global-set-key (kbd "s-c") #'kill-ring-save)
   (global-set-key (kbd "s-v") #'yank))
 
+(luna-on "Brown"
+  (menu-bar-mode -1))
+
 ;;;; ENV
 (luna-on "Brown"
   (luna-load-env)
@@ -144,6 +147,3 @@
 ;;;; Bidi
 (setq bidi-paragraph-direction 'left-to-right
       bidi-inhibit-bpa t)
-
-;;;; Sans
-(luna-sans-mode)
