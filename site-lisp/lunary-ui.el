@@ -40,7 +40,7 @@
         ;; We can save a lot of time by only enabling the theme.
         (enable-theme theme)
       (load-theme theme t))
-    (luna-local-setq luna-theme)))
+    (luna-local-set 'luna-theme theme)))
 
 ;;; Utilities
 
