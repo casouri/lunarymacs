@@ -305,7 +305,8 @@ THIS-FILE is the filename we are inserting summary into."
                                             "(No summary)")))
                               (cons file summary))))))
                 files))
-              (summary-list (remove nil summary-list)))
+              (summary-list (remove nil summary-list))
+              (inhibit-read-only t))
          ;; Insert separator.
          (insert "\n"
                  (if bklink-use-form-feed "\x0C" (make-string 70 ?-))
