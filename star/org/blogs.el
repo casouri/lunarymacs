@@ -360,7 +360,7 @@ If FORCE is non-nil, only export when org file is newer than html file."
   (interactive)
   (save-excursion
     ;; publish each post
-    (dolist (file (luna-f-directory-files luna-publish-goldfish-dir t))
+    (dolist (file (directory-files luna-publish-goldfish-dir t ".org"))
       (luna-f-with-file file
         (org-mode)
         (let ((org-export-use-babel nil)
