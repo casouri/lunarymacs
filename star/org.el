@@ -51,7 +51,8 @@
 (load-package org
   :defer
   :config (setq org-edit-src-content-indentation 0
-                org-adapt-indentation nil))
+                org-adapt-indentation nil
+                org-ellipsis " ▼ "))
 
 ;;; Org config
 
@@ -125,9 +126,14 @@
   (setq org-capture-templates
         (append org-capture-templates
                 `(("t" "TODOs")
-                  ("te" "Emacs" entry (file+olp "~/note/todo.org" "Emacs") "*** TODO %?")
-                  ("th" "Homework" entry (file+olp "~/note/todo.org" "Homework") "*** TODO %?")
-                  ("to" "Other" entry (file+olp "~/note/todo.org" "Other") "*** TODO %?")
-                  ("ts" "School" entry (file+olp "~/note/todo.org" "School") "*** TODO %?")
-                  ("tr" "Readlist" entry (file+olp "~/note/todo.org" "Readlist") "*** TODO %?")
+                  ("te" "Emacs" entry
+                   (file+olp "~/note/todo.org" "Emacs") "*** TODO %?")
+                  ("th" "Homework" entry
+                   (file+olp "~/note/todo.org" "Homework") "*** TODO %?")
+                  ("to" "Other" entry
+                   (file+olp "~/note/todo.org" "Other") "*** TODO %?")
+                  ("ts" "School" entry
+                   (file+olp "~/note/todo.org" "School") "*** TODO %?")
+                  ("tr" "Readlist" entry
+                   (file+olp "~/note/todo.org" "Readlist") "*** TODO %?")
                   ))))
