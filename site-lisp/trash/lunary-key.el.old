@@ -1,0 +1,72 @@
+;;; lunary-key.el --- Key binder      -*- lexical-binding: t; -*-
+
+;; Author: Yuan Fu <casouri@gmail.com>
+
+;;; This file is NOT part of GNU Emacs
+
+;;; Commentary:
+;;
+
+;;; Code:
+;;
+
+(require 'pcase)
+
+
+(defvar luna-key-defer-arg-list nil)
+
+(defun luna-defer-defkey ()
+  (let ((arg-list luna-key-defer-arg-list))
+    (setq luna-key-defer-arg-list nil)
+    (dolist (args arg-list)
+      (apply #'luna-defkey args))))
+
+(add-hook 'after-load-functions #'luna-defer-defkey)
+
+(defun luna-defkey (&rest args)
+  "Define keys.
+
+Keyword includes :keymap and :prefix.
+Effect of each keyword lasts until another one overwrites it.
+
+KEY is a string representing a key sequence.
+VALUE can be a function, a symbol of function, (NAME FN) or (NAME)
+where NAME is the display name of function FN in which-key panel.
+
+ARGS
+
+\(fn :keymap MAP :prefix PREFIX KEY VALUE KEY VALUE ...)"
+  (let (map-list prefix name key package map)
+    (while args
+      (let ((arg1 (pop args))
+            (arg2 (pop args)))
+        (pcase arg1
+          (:keymap (setq map-list (if (consp arg2) arg2 (list arg2))))
+          (:prefix (setq prefix arg2))
+          ;; args1: KEY arg2: VALUE
+          ;; first get key
+          (_ (setq key (if (vectorp arg1)
+                           arg1
+                         (concat
+                          (if prefix (concat prefix " ")
+                            "")
+                          arg1)))
+             ;; then deal with name for lambda
+             (when (consp arg2)
+               (setq name (car arg2)
+                     arg2 (cadr arg2))
+               (which-key-add-key-based-replacements
+                 key name))
+             ;; finally define key
+             (when arg2
+               (dolist (map map-list)
+                 (if (intern-soft package)
+                     (define-key (or map global-map)
+                       (kbd key)
+                       arg2)
+                   (push (list :keymap map key arg2)
+                         luna-key-defer-arg-list))))))))))
+
+(provide 'lunary-key)
+
+;;; lunary-key.el ends here
