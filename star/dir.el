@@ -20,7 +20,9 @@
  
  ;; command+shift+.
  "s->" #'dired-omit-mode
- "C-/" #'dired-undo)
+ "C-/" #'dired-undo
+
+ "C-c C-r" #'dired-rsync)
 
 ;;; Package
 
@@ -31,6 +33,9 @@
     trivial-copy-copy
     trivial-copy-move
     trivial-copy-paste))
+
+(load-package dired-rsync
+  :commands dired-rsync)
 
 ;;; Config
 
