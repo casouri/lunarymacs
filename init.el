@@ -91,7 +91,7 @@
         luna-dump-emacs-file
         "/Applications/Emacs.app/Contents/MacOS/Emacs"))
 
-;;;; theme
+;;;; Theme
 (luna-load-theme)
 
 ;;;; Font
@@ -100,14 +100,14 @@
   (luna-load-cjk-font))
 (luna-on "Brown" (luna-enable-apple-emoji))
 
-;;;; server
+;;;; Server
 (run-with-idle-timer
  3 nil (lambda ()
          (require 'server)
          (unless (eq (server-running-p) t)
            (server-start t t))))
 
-;;;; vterm
+;;;; Vterm
 ;; (luna-load-relative "star/term.el")
 
 ;;;; Macports
@@ -116,6 +116,8 @@
 
 ;;;; Emacs Mac port
 (luna-on "Brown"
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
   (setq mac-option-modifier 'meta
         mac-command-modifier 'super
         mac-pass-command-to-system nil ; fix cmd h
@@ -123,9 +125,6 @@
 
   (global-set-key (kbd "s-c") #'kill-ring-save)
   (global-set-key (kbd "s-v") #'yank))
-
-(luna-on "Brown"
-  (menu-bar-mode -1))
 
 ;;;; ENV
 (luna-on "Brown"
@@ -147,3 +146,10 @@
 ;;;; Bidi
 (setq bidi-paragraph-direction 'left-to-right
       bidi-inhibit-bpa t)
+
+;;; Local init
+
+(let ((local-init (expand-file-name
+                   "local-init.el" user-emacs-directory)))
+  (when (file-exists-p local-init)
+    (load local-init)))
