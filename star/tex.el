@@ -18,6 +18,9 @@
   :config
   (add-to-list 'eglot-server-programs '(latex-mode . ("digestif"))))
 
+(load-package xenops
+  :hook (latex-mode-hook . xenops-mode))
+
 ;;; Config
 
 (defun tex-mode-setup ()
