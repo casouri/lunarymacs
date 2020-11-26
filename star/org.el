@@ -52,7 +52,9 @@
   :defer
   :config (setq org-edit-src-content-indentation 0
                 org-adapt-indentation nil
-                org-ellipsis " ▼ "))
+                ;; This program generates crisp images for latex
+                ;; preview.
+                org-preview-latex-default-process 'dvisvgm))
 
 ;;; Org config
 
