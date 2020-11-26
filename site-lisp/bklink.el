@@ -325,9 +325,11 @@ THIS-FILE is the filename we are inserting summary into."
              (insert (cdr summary))
              (indent-rigidly beg (point) 2))
            (insert "\n"))
-         (insert (if bklink-use-form-feed "\x0C" (make-string 70 ?-))
-                 "\n")
+         (insert (if bklink-use-form-feed "\x0C" (make-string 70 ?-)))
          (put-text-property summary-start (point) 'read-only t)
+         ;; Add an non-read-only newline so the user and other
+         ;; commands can append text at the end of the file.
+         (insert "\n")
          (bklink-fontify summary-start (point)))))))
 
 (defun bklink--write-file-function ()
