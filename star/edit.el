@@ -29,6 +29,7 @@
  "C-c C-h" #'hs-toggle-hiding
  "C-="     #'expand-region
  "C--"     #'contract-region
+ "M-q"     #'ftable-fill
  :keymaps 'override
  "C-j"     #'avy-goto-word-1
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
@@ -123,6 +124,12 @@
   (setq tramp-default-method "ssh")
   ;; Save tramp backups locally.
   (setq tramp-backup-directory-alist backup-directory-alist))
+
+(load-package ftable
+  :commands
+  ftable-fill
+  ftable-edit-cell
+  ftable-reformat)
 
 
 (luna-def-key
