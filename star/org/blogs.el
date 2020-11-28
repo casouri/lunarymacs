@@ -220,7 +220,7 @@ If FORCE is non-nil, only export when org file is newer than html file."
                           t))))
     (string-join
      (cl-loop for day-idx downfrom day-num to 1
-              collect (format "* [[./day-%d/index.html][Day %d]]"
+              collect (format "* [[./day-%d/index.html][%d]]"
                               day-idx day-idx))
      "\n")))
 
