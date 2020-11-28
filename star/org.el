@@ -7,8 +7,8 @@
  "rf" #'org-roam-find-file
  "ri" #'org-roam-insert
  "rb" #'org-roam-buffer-toggle-display
- "df"  #'deft
- 
+ "df" #'deft
+
  :---
  :keymaps 'org-mode-map
  "C-c <tab>" #'outline-toggle-children)
@@ -65,7 +65,7 @@
       (progn
         (variable-pitch-mode)
         (olivetti-mode)
-        (luna-scale-cjk-mode)
+        ;; (luna-scale-cjk-mode)
         (electric-pair-local-mode -1)
         (setq-local cursor-type 'bar)
         ;; This is a global mode!
@@ -76,7 +76,7 @@
         (setq-local line-spacing 0.15))
     (variable-pitch-mode -1)
     (olivetti-mode -1)
-    (luna-scale-cjk-mode -1)
+    ;; (luna-scale-cjk-mode -1)
     (electric-pair-local-mode)
     (kill-local-variable 'line-spacing)
     (kill-local-variable 'cursor-type)))
