@@ -189,16 +189,16 @@
         (magit-tag               (nil ,yellow))
         (magit-filename          (nil ,violet2))
         
-        (magit-diff-added             (nil ,green ,(overlay bg green 0.1)))
-        (magit-diff-added-highlight   (nil ,green ,(overlay bg green 0.2)))
-        (diff-refine-added            (nil ,green "#99ff99"))
+        (magit-diff-added            (nil ,green ,(overlay bg green 0.1)))
+        (magit-diff-added-highlight  (nil ,green ,(overlay bg green 0.2)))
+        (diff-refine-added           (nil ,green "#99ff99"))
 
-        (magit-diff-removed           (nil ,red ,(overlay bg red 0.1)))
+        (magit-diff-removed          (nil ,red ,(overlay bg red 0.1)))
         (magit-diff-removed-highlight (nil ,red ,(overlay bg red 0.2)))
-        (diff-refine-removed          (nil ,red "#ffaaaa"))
+        (diff-refine-removed         (nil ,red "#ffaaaa"))
 
-        (magit-diff-base            (nil ,orange ,(overlay bg orange 0.1)))
-        (magit-diff-base-highlight  (nil ,orange ,(overlay bg orange 0.2)))
+        (magit-diff-base           (nil ,orange ,(overlay bg orange 0.1)))
+        (magit-diff-base-highlight (nil ,orange ,(overlay bg orange 0.2)))
 
         (magit-diff-context           (default))
         (magit-diff-context-highlight (nil ,fg ,bg-alt))
