@@ -10,7 +10,7 @@
 ;;  1. Embedding images into text files by encoding them to base64
 ;;     strings.
 ;;  2. Rendering embedded images.
-;;  3. Control the size of the displayed image.
+;;  3. Controlling the size of the displayed image.
 ;;
 ;; Why embed the image? This way everything is in a single file and I
 ;; feel safe.
@@ -21,14 +21,20 @@
 ;;
 ;;;; To insert an image:
 ;;
-;; Drag and drop the image or use `iimg-insert'. Emacs will prompt for
-;; a caption/name for the image. If you don’t enter anything, Emacs
+;; Drag and drop the image or use `iimg-insert'. Iimg will prompt for
+;; a caption/name for the image. If you don’t enter anything, iimg
 ;; generates a unique string as the fallback.
+;;
+;; When you insert an image, the image appears at point is just a
+;; link, the actual base64 data is appended at the end of the file. I
+;; separate link and data because that way readers incapable of
+;; rendering inline images can still view the rest of the document
+;; without problems.
 ;;
 ;;;; To resize an image:
 ;;
 ;; Type s on an image or use `iimg-resize'. In the minibuffer, type in
-;; the specification in the format of SIDE UNIT AMOUNT.
+;; the specification in the format of “SIDE UNIT AMOUNT”.
 ;;
 ;; SIDE can be width or height.
 ;; UNIT can be char or pixel.
@@ -38,30 +44,24 @@
 ;; a floating point number like 0.5, it is interpreted as a percentage
 ;; to the width/height of the window and UNIT is ignored.
 ;;
-;; The default width is (width char 70).
+;; The default size is (width char 70).
 ;;
 ;;;; To toggle thumbnail display:
 ;;
 ;; Type t on an image or use `iimg-toggle-thumbnail'.
 ;;
-;; When you insert an image, the image appears at point is just a
-;; link, the actual base64 data is appended at the end of the file. I
-;; separate link and data because that way readers incapable of
-;; rendering inline images can still view the rest of the document
-;; without problems.
+;;;; To delete an image or image data
 ;;
 ;; To protect the image data, iimg marks them read-only, to delete
 ;; the data, press D on the data.
-;;
-;; I didn’t bother to write unfontification function.
 ;;
 ;;;; To render an image across multiple lines:
 ;;
 ;; Type m on an image or use `iimg-toggle-multi-line'.
 ;;
 ;; When an image is displayed across multiple lines, scrolling is much
-;; more smooth. However, this doesn't work well when image size is set
-;; to n percent of the window width/height: if you change the window
+;; smoother. However, this doesn't work well when image size is set to
+;; n percent of the window width/height: if you change the window
 ;; width/height, the number of lines needed for the image changes, but
 ;; iimg doesn't update its "image lines" automatically.
 ;;
@@ -286,7 +286,8 @@ Look for iimg-data’s and store them into `iimg--data-alist'."
               ;; This allows inserting after the data.
               (put-text-property beg end 'rear-nonsticky
                                  '(read-only display))
-              (put-text-property beg end 'keymap iimg--data-keymap))))))))
+              (put-text-property beg end 'keymap iimg--data-keymap)
+              (put-text-property beg end 'iimg t))))))))
 
 (defun iimg--data-of (name)
   "Get the image data of NAME (string)."
@@ -295,7 +296,8 @@ Look for iimg-data’s and store them into `iimg--data-alist'."
   (alist-get name iimg--data-alist nil nil #'equal))
 
 (defun iimg--replenish-slices ()
-  "We don't save the slices under a link, add them back when open a file."
+  "Re-slice images.
+We don't save the slices under a link, so we need to add them back."
   (save-excursion
     (with-buffer-modified-unmodified
      (goto-char (point-min))
@@ -472,7 +474,7 @@ Also refresh the image at point."
 
 (define-minor-mode iimg-minor-mode
   "Display inline images.
-There is no way to un-render the images because I'm lazy."
+There is no way to un-render the images."
   :lighter ""
   (if iimg-minor-mode
       (progn (jit-lock-register #'iimg--fontify)
