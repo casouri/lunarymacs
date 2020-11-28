@@ -36,15 +36,18 @@
                           face-remapping-alist
                           (append remapping-list face-remapping-alist)
                           buffer-read-only t)
-              (org-display-inline-images))
+              (org-display-inline-images)
+              (org--latex-preview-region (point-min) (point-max)))
           (kill-local-variable 'org-hide-emphasis-markers)
-          (kill-local-variable 'buffer-read-only)
+          ;; `kill-local-variable' doesn't seem to work.
+          (setq buffer-read-only nil)
           ;; Font-rescale also uses this variable, so don't simply kill
           ;; the local variable.
           (dolist (remapping remapping-list)
             (setq-local face-remapping-alist
                         (remove remapping face-remapping-alist)))
-          (org-remove-inline-images))
+          (org-remove-inline-images)
+          (org-clear-latex-preview (point-min) (point-max)))
         (jit-lock-refontify))
     (user-error "Not in Org Mode")))
 
