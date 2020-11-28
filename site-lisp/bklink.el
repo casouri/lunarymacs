@@ -153,6 +153,8 @@ Do nothing if there is no link at point."
   'use-window nil
   'help-echo "Jump to file")
 
+;; Please the byte compiler.
+(defvar bklink-minor-mode)
 (defun bklink-follow-link (button)
   "Jump to the file that BUTTON represents.
 If the file doesn't exist, create a buffer."
