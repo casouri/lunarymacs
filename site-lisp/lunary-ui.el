@@ -128,8 +128,8 @@ luna-local.el)."
                           (alist-get font-name luna-font-alist
                                      nil nil #'equal)
                         ;; If font-name is nil (loading from local
-                        ;; file and don’t have it saved), use first
-                        ;; font spec.
+                        ;; file and don’t have it saved), use the
+                        ;; first font spec.
                         (cdar luna-font-alist)))))
     (set-frame-font font nil t)
     ;; seems that there isn't a good way to get font-object directly
