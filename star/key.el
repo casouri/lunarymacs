@@ -40,9 +40,9 @@
  "tm"  #'toggle-frame-maximized
  "td"  #'toggle-debug-on-error
  "tl"  #'display-line-numbers-mode
- "tir" #'inhibit-read-only-mode
- "tip" #'info-pretty-mode
- "ta" #'auto-fill-mode
+ "tr" #'inhibit-read-only-mode
+ "ti" #'info-pretty-mode
+ "tf" #'auto-fill-mode
  ;; search
  "s" '("Search")
  "si"  #'imenu
@@ -68,7 +68,6 @@
  "wu" #'winner-undo
  "wr" #'winner-redo
  "sc" #'shell-command
- "ai" #'luna-autoinsert
  "se" #'luna-sudo-edit
  "ps" '("profiler-start" . (lambda () (interactive)
                              (profiler-start 'cpu)))
