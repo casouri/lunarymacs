@@ -51,7 +51,7 @@
 ;; without problems.
 ;;
 ;; To protect the image data, iimg marks them read-only, to delete
-;; the data, select a region and use `iimg-force-delete'.
+;; the data, press D on the data.
 ;;
 ;; I didn’t bother to write unfontification function.
 ;;
@@ -64,6 +64,10 @@
 ;; to n percent of the window width/height: if you change the window
 ;; width/height, the number of lines needed for the image changes, but
 ;; iimg doesn't update its "image lines" automatically.
+;;
+;; Another way to get smooth scrolling over images is to use
+;; iscroll.el. In that case you don't need to make the image
+;; multi-line.
 
 ;;; Developer
 ;;
@@ -145,6 +149,12 @@ The image must already be in `iimg--data-alist'."
     (define-key map "m" #'iimg-toggle-multi-line)
     map)
   "Keymap used on images.")
+
+(defvar iimg--data-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map "D" #'iimg-delete-data-at-point)
+    map)
+  "Keymap used on image data.")
 
 ;;; Loading and rendering
 
@@ -275,7 +285,8 @@ Look for iimg-data’s and store them into `iimg--data-alist'."
               (put-text-property beg end 'read-only t)
               ;; This allows inserting after the data.
               (put-text-property beg end 'rear-nonsticky
-                                 '(read-only display)))))))))
+                                 '(read-only display))
+              (put-text-property beg end 'keymap iimg--data-keymap))))))))
 
 (defun iimg--data-of (name)
   "Get the image data of NAME (string)."
@@ -347,22 +358,30 @@ image. See Commentary for the format of NAME, THUMBNAIL, and SIZE."
              (list :name name :size '(width pixel 0.6)
                    :ext (file-name-extension file))))))
 
-(defun iimg--search-link-at-point ()
+(defun iimg--search-link-at-point (&optional datap)
   "Search for iimg link at point.
-If found, set match data accordingly and return t, if not, return nil."
+If found, set match data accordingly and return t, if not, return nil.
+
+If DATAP non-nil, search for image data instead."
   (catch 'found
     (save-excursion
       (let ((pos (point)))
         (beginning-of-line)
         ;; First search in current line.
         (while (and (<= (point) pos)
-                    (re-search-forward iimg--link-regexp nil t))
+                    (re-search-forward
+                     (if datap iimg--data-regexp iimg--link-regexp)
+                     nil t))
           (if (<= (match-beginning 0) pos (match-end 0))
               (throw 'found t)))
         ;; Next search by search backward.
         (goto-char pos)
-        (if (and (search-backward "({iimg-link" nil t)
-                 (re-search-forward iimg--link-regexp nil t)
+        (if (and (search-backward
+                  (if datap "({iimg-data" "({iimg-link")
+                  nil t)
+                 (re-search-forward
+                  (if datap iimg--data-regexp iimg--link-regexp)
+                  nil t)
                  (<= (match-beginning 0) pos (match-end 0)))
             (throw 'found t))))))
 
@@ -425,11 +444,13 @@ Also refresh the image at point."
         (delete-region (match-beginning 0) (match-end 0)))
     (user-error "There is no image at point")))
 
-(defun iimg-force-delete (beg end)
-  "Force delete data between BEG and END."
-  (interactive "r")
-  (let ((inhibit-read-only t))
-    (delete-region beg end)))
+(defun iimg-delete-data-at-point ()
+  "Delete the image data at point."
+  (interactive)
+  (if (iimg--search-link-at-point t)
+      (let ((inhibit-read-only t))
+        (delete-region (match-beginning 0) (match-end 0)))
+    (user-error "There is no image data at point")))
 
 (defun iimg-export ()
   "Export image at point."
