@@ -254,7 +254,10 @@ clickable and will use `browse-url' to open the URLs in question."
 
 (defvar bklink--back-link-regexp
   (rx (seq "\n" (or "\x0C" (= 70 "-")) "\n"
-           (+ digit) " linked references to " (+ anything)
+           ;; Non-greedy is important: otherwise we risk of
+           ;; regexp stack overflow. That happened for buffers
+           ;; when iimg data.
+           (+? digit) " linked references to " (+? anything)
            (or "\x0C" (= 70 "-")) "\n"))
   "Regular expression that matches the beginning of a summary.")
 
