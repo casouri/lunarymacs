@@ -46,7 +46,7 @@
   :config (setq bklink-more-match t))
 
 (load-package iimg
-  :hook (text-mode-hook . iimg-minor-mode))
+  :hook (text-mode-hook . iimg-enable))
 
 (load-package quanjiao
   :hook (text-mode-hook . quanjiao-mode))
