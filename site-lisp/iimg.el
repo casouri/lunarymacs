@@ -17,7 +17,7 @@
 ;;
 ;;;; To enable:
 ;;
-;;     M-x iimg-minor-mode RET
+;;     M-x iimg-enable RET
 ;;
 ;;;; To insert an image:
 ;;
@@ -470,22 +470,16 @@ Also refresh the image at point."
         (message "Exported to %s" path))
     (user-error "There is no image at point")))
 
-;;; Minor mode
+;;; Entry
 
-(define-minor-mode iimg-minor-mode
-  "Display inline images.
-Disabling this mode doesn’t un-render the images."
-  :lighter ""
-  (if iimg-minor-mode
-      (progn (jit-lock-register #'iimg--fontify)
-             (setq-local dnd-protocol-alist
-                         (cons '("^file:" . iimg-dnd-open-file)
-                               dnd-protocol-alist))
-             (add-hook 'write-file-functions #'iimg--prune-slices 90 t)
-             (iimg--replenish-slices))
-    (kill-local-variable 'dnd-protocol-alist))
-  (jit-lock-refontify)
-  (remove-hook 'write-file-functions #'iimg--prune-slices t))
+(defun iimg-enable ()
+  "Enable iimg."
+  (jit-lock-register #'iimg--fontify)
+  (setq-local dnd-protocol-alist
+              (cons '("^file:" . iimg-dnd-open-file)
+                    dnd-protocol-alist))
+  (add-hook 'write-file-functions #'iimg--prune-slices 90 t)
+  (iimg--replenish-slices))
 
 ;;; Drag and drop
 
