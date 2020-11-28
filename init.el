@@ -73,7 +73,7 @@
 (luna-load-relative "star/python.el")
 (luna-load-relative "star/git.el")
 (luna-load-relative "star/dir.el")
-(luna-load-relative "star/org.el")
+(luna-load-relative "star/org-mode.el")
 (luna-load-relative "star/org/blogs.el")
 (luna-load-relative "star/writing.el")
 (luna-load-relative "star/tex.el")
