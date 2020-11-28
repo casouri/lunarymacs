@@ -474,7 +474,7 @@ Also refresh the image at point."
 
 (define-minor-mode iimg-minor-mode
   "Display inline images.
-There is no way to un-render the images."
+Disabling this mode doesn’t un-render the images."
   :lighter ""
   (if iimg-minor-mode
       (progn (jit-lock-register #'iimg--fontify)
