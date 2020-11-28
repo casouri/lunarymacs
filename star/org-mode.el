@@ -98,7 +98,8 @@
 (add-to-list 'display-buffer-alist
              '((lambda (buf _)
                  (with-current-buffer buf
-                   (and (derived-mode-p 'calendar-mode)
+                   (and (window-system)
+                        (derived-mode-p 'calendar-mode)
                         (eq this-command 'org-time-stamp))))
                . (display-buffer-in-child-frame
                   . ((child-frame-parameters
