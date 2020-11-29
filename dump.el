@@ -21,7 +21,7 @@
                        highlight-parentheses hl-todo buffer-move
                        savehist minions ws-butler
                        expand-region flyspell flycheck eglot
-                       minibuf-eldef yasnippet ivy-xref
+                       minibuf-eldef yasnippet ivy-xref rime
                        ;; site-lisp
                        transform utility pause info+ color-outline
                        commentary quanjiao outline+ luna-publish
