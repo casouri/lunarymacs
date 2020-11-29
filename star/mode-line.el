@@ -4,7 +4,7 @@
 
 (load-package minions)
 
-(defun mode-line-with-padding (text)
+(defun luna-mode-line-with-padding (text)
   "Return TEXT with padding on the left.
 The padding pushes TEXT to the right edge of the mode-line."
   (let* ((font (face-attribute 'mode-line :font))
@@ -18,6 +18,14 @@ The padding pushes TEXT to the right edge of the mode-line."
                    `(space :align-to (- (+ right right-margin) (,len))))))
     (concat padding text)))
 
+(defun luna-mode-line-coding-system ()
+  "Display abnormal coding system"
+  (let ((coding (symbol-name buffer-file-coding-system)))
+    (if (or (not (string-prefix-p "prefer-utf-8" coding))
+            (string-suffix-p "dos" coding))
+        (concat "  " coding)
+      "")))
+
 (setq-default mode-line-format
               (let* ((spaces
                       (propertize " " 'display '(space :width 1.5)))
@@ -30,6 +38,7 @@ The padding pushes TEXT to the right edge of the mode-line."
                   (:eval (if (window-dedicated-p)
                              (concat "🔒" spaces) ""))
                   "%[%b%]"
+                  (:eval (luna-mode-line-coding-system))
                   ,spaces
                   ,(if (featurep 'minions)
                        'minions-mode-line-modes
@@ -45,6 +54,6 @@ The padding pushes TEXT to the right edge of the mode-line."
                   ,spaces
                   mode-line-misc-info
                   ,(if (display-graphic-p)
-                       `(:eval (concat (mode-line-with-padding
+                       `(:eval (concat (luna-mode-line-with-padding
                                         ,percentage) "%%"))
                      `(:eval (concat ,spaces ,percentage "%%"))))))
