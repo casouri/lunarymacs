@@ -54,6 +54,8 @@
  "C-s-;" (kbd "C-M-;")
  ;; For some reason, keyboard macro doesn't work.
  "s-!"   #'shell-command
+ ;; Super -> Control
+ "s-\\"  (kbd "C-\\")
 
  :prefix "C-x"
  "9"   (kbd "C-x 1 C-x 3")

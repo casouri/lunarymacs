@@ -328,7 +328,11 @@
          (:box (:line-width 3 :color ,(brighten bg 0.2))))
         (tab-line-tab-current
          (tab-line nil ,bg) (:box (:line-width 3 :color ,bg)))
-        (tab-line-tab-inactive (tab-line-tab))))))
+        (tab-line-tab-inactive (tab-line-tab))
+
+        (rime-default-face (tooltip) (:height 160))
+        (rime-highlight-candidate-face ((bold rime-default-face)))
+        (rime-code-face ((variable-pitch rime-default-face)))))))
 
 (provide-theme 'cyberpunk)
 

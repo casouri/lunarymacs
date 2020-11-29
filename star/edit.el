@@ -33,7 +33,14 @@
  :keymaps 'override
  "C-j"     #'avy-goto-word-1
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
- "s-i" #'outline-cycle)
+ "s-i"     #'outline-cycle
+ :keymaps 'rime-active-mode-map
+ "C-\\"    (lambda () (interactive)
+             (rime--return)
+             (toggle-input-method))
+ ;; "<tab>" #'rime-inline-ascii
+ :keymaps 'rime-mode-map
+ "C-`" #'rime-send-keybinding)
 
 ;;; Config
 
@@ -150,3 +157,20 @@
   (setq-default company-backends
                 '(company-capf company-files company-dabbrev-code))
   (setq-default company-search-filtering t))
+
+(load-package rime
+  :config
+  (luna-on "Brown"
+    (setq rime-librime-root
+          (expand-file-name "librime/dist"
+                            user-emacs-directory)
+          rime-show-candidate 'posframe
+          rime-posframe-style 'vertical
+          rime-user-data-dir "/Users/yuan/Library/Rime")
+    (add-hook 'input-method-activate-hook
+              (lambda () (interactive)
+                (setq-local cursor-type 'hbar)))
+    (add-hook 'input-method-inactivate-hook
+              (lambda () (interactive)
+                (kill-local-variable 'cursor-type)))
+    (rime-mode)))

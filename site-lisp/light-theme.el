@@ -334,7 +334,11 @@
          (tab-line nil ,(darken bg 0.15))
          (:box (:line-width 3 :color ,(darken bg 0.15))))
         (tab-line-tab-current
-         (tab-line nil ,bg) (:box (:line-width 3 :color ,bg)))))))
+         (tab-line nil ,bg) (:box (:line-width 3 :color ,bg)))
+
+        (rime-default-face (tooltip) (:height 160))
+        (rime-highlight-candidate-face ((bold rime-default-face)))
+        (rime-code-face ((variable-pitch rime-default-face)))))))
 
 (provide-theme 'light)
 
