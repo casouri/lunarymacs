@@ -117,7 +117,7 @@
 ;;;; Emacs Mac port
 (luna-on "Brown"
   (menu-bar-mode -1)
-  (tool-bar-mode -1)
+  ;; (tool-bar-mode -1)
   (setq mac-option-modifier 'meta
         mac-command-modifier 'super
         mac-pass-command-to-system nil ; fix cmd h
