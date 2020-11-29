@@ -21,7 +21,8 @@ The padding pushes TEXT to the right edge of the mode-line."
 (defun luna-mode-line-coding-system ()
   "Display abnormal coding system"
   (let ((coding (symbol-name buffer-file-coding-system)))
-    (if (or (not (string-prefix-p "prefer-utf-8" coding))
+    (if (or (and (not (string-prefix-p "prefer-utf-8" coding))
+                 (not (string-prefix-p "utf-8" coding)))
             (string-suffix-p "dos" coding))
         (concat "  " coding)
       "")))
