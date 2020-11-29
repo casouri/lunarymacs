@@ -4,9 +4,6 @@
 
 (fset #'yes-or-no-p #'y-or-n-p) ; y/n instead of yes/no
 
-;; current file name
-(setq-default frame-title-format '("%f"))
-
 ;;;; utf-8
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)

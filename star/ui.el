@@ -132,6 +132,17 @@
   (setq iscroll-preserve-screen-position t)
   (iscroll-mode))
 
+(load-package which-func
+  :config
+  (setq-default frame-title-format (list which-func-current))
+  (which-func-mode)
+  (setq mode-line-misc-info
+        (remove '(which-function-mode
+                  (which-func-mode
+                   ("" which-func-format " ")))
+                mode-line-misc-info)
+        which-func-unknown " "))
+
 ;;; Functions
 
 (defun chunyang-alpha-param-adjust ()
