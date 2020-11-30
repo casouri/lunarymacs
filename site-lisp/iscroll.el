@@ -288,23 +288,21 @@ ARG is the number of lines to move."
 
 (define-minor-mode iscroll-mode
   "Smooth scrolling over images."
-  :global t
   :lighter " IS"
   :keymap iscroll-mode-map
   :group 'scrolling
   (if iscroll-mode
       (progn
-        (setq mwheel-scroll-up-function #'iscroll-up
-              mwheel-scroll-down-function #'iscroll-down)
+        (setq-local mwheel-scroll-up-function #'iscroll-up
+                    mwheel-scroll-down-function #'iscroll-down)
         ;; We don’t remap next/previous-line in the minor mode map
         ;; because that shallows ivy’s binding.
-        (global-set-key [remap next-line] #'iscroll-next-line)
-        (global-set-key [remap previous-line]
-                        #'iscroll-previous-line))
-    (setq mwheel-scroll-up-function #'scroll-up
-          mwheel-scroll-down-function #'scroll-down)
-    (global-set-key [remap next-line] nil)
-    (global-set-key [remap previous-line] nil)))
+        (local-set-key [remap next-line] #'iscroll-next-line)
+        (local-set-key [remap previous-line] #'iscroll-previous-line))
+    (kill-local-variable 'mwheel-scroll-up-function)
+    (kill-local-variable 'mwheel-scroll-down-function)
+    (local-set-key [remap next-line] nil)
+    (local-set-key [remap previous-line] nil)))
 
 ;;; Rough Benchmarks
 ;;
