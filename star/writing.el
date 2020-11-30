@@ -51,6 +51,11 @@
 (load-package quanjiao
   :hook (text-mode-hook . quanjiao-mode))
 
+(load-package iscroll
+  :hook (text-mode-hook . iscroll-mode)
+  :config
+  (setq iscroll-preserve-screen-position t))
+
 (load-package multi-translate
   :commands multi-translate-at-point
   :config (push 'youdao multi-translate-word-backends)

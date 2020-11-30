@@ -127,11 +127,6 @@
   luna-toggle-console-window)
 
 
-(load-package iscroll
-  :config
-  (setq iscroll-preserve-screen-position t)
-  (iscroll-mode))
-
 (load-package which-func
   :config
   (setq-default frame-title-format (list which-func-current))
