@@ -141,42 +141,35 @@
 (defvar luna-scroll-optimized-command-list
   '(luna-scroll-down-reserve-point
     luna-scroll-up-reserve-point
-    angel-scroll-next-line
-    angel-scroll-previous-line)
+    iscroll-next-line
+    iscroll-next-line)
   "Commands that inhibit `post-command-hook'.")
-
-(defvar-local luna-scroll-post-command-hook-backup nil
-  "Backup for `post-command-hook'.")
-
-(defvar luna-scroll-recover-post-command-hook-timer nil
-  "Timer for recovering `post-command-hook'.")
 
 (defsubst luna-scroll-setup-optimize ()
   "Setup optimization and return the recover function."
   ;; Inhibit flyspell jit-lock and other stuff when scrolling. In
   ;; particular, flyspell is very slow.
   (declare (indent 1))
-  (let ((recover-fn
-         (lambda ()
-           (setq post-command-hook
-                 luna-scroll-post-command-hook-backup
-                 luna-scroll-recover-post-command-hook-timer
-                 nil))))
-    (unless (memq last-command luna-scroll-optimized-command-list)
-      ;; Empty `post-command-hook'...
-      (setq luna-scroll-post-command-hook-backup post-command-hook
-            post-command-hook nil)
-      ;; ...and set a timer to recover it. When the timer runs, it
-      ;; sets itself to nil.
-      (unless luna-scroll-recover-post-command-hook-timer
-        (setq luna-scroll-recover-post-command-hook-timer
-              (run-with-idle-timer 0.2 nil recover-fn))))))
+  (let* ((post-command-hook-backup post-command-hook)
+         (pre-command-hook-backup pre-command-hook)
+         (recover-fn
+          (lambda ()
+            (when (not (memq this-command
+                             luna-scroll-optimized-command-list))
+              (setq post-command-hook
+                    post-command-hook-backup
+                    pre-command-hook
+                    pre-command-hook-backup)))))
+    (when (not (memq last-command luna-scroll-optimized-command-list))
+      ;; First in a series of luna scroll commands. Empty
+      ;; `post-command-hook' and add a hook to recover it.
+      (add-hook 'post-command-hook recover-fn 0 t))))
 
 (defun luna-scroll-down-reserve-point ()
   "Scroll down `luna-scroll-amount' lines.
 Keeps the relative position of point against window."
   (interactive)
-  (luna-scroll-setup-optimize)
+  ;; (luna-scroll-setup-optimize)
   (if (derived-mode-p 'prog-mode)
       ;; This is actually better than
       ;; `scroll-preserve-screen-position'.
@@ -190,7 +183,7 @@ Keeps the relative position of point against window."
   "Scroll up `luna-scroll-amount' lines.
 Keeps the relative position of point against window."
   (interactive)
-  (luna-scroll-setup-optimize)
+  ;; (luna-scroll-setup-optimize)
   (if (derived-mode-p 'prog-mode)
       (progn (scroll-up 3)
              (vertical-motion 3))
