@@ -100,11 +100,11 @@
 (defvar tool-bar-right-mode t
   "When non-nil, tool-bar-right-map takes effect.")
 
-(define-key tool-bar-right-map [tool-bar sidebar-mode]
-  `(menu-item "Sidebar" sidebar-mode
-              :help "Toggle sidebar"
-              :image ,(find-image '((:type png :file "sidebar-mode.png")
-                                    (:type png :file "sidebar.png")))))
+;; (define-key tool-bar-right-map [tool-bar sidebar-mode]
+;;   `(menu-item "Sidebar" sidebar-mode
+;;               :help "Toggle sidebar"
+;;               :image ,(find-image '((:type png :file "sidebar-mode.png")
+;;                                     (:type png :file "sidebar.png")))))
 
 (define-key tool-bar-right-map [tool-bar bookmark-set]
   `(menu-item "Bookmark" bookmark-set
@@ -112,15 +112,20 @@
               :image ,(find-image '((:type png :file "bookmark-set.png")
                                     (:type png :file "bookmark-plus.png")))))
 
+(define-key tool-bar-right-map [tool-bar menu-set-font]
+  `(menu-item "Set font" menu-set-font
+              :help "Set font"
+              :image ,(find-image '((:type png :file "menu-set-font.png")
+                                    (:type png :file "fonts.png")))))
+
 (define-key tool-bar-right-map [tool-bar read-only-mode]
   `(menu-item "Read-only" read-only-mode
               :help "Toggle buffer read-only"
               :image ,(find-image '((:type png :file "read-only-mode.png")
                                     (:type png :file "lock.png")))))
 
-(add-to-list 'minor-mode-map-alist
-             (cons tool-bar-right-mode
-                   tool-bar-right-map))
+(setf (alist-get 'tool-bar-right-mode minor-mode-map-alist)
+      tool-bar-right-map)
 
 ;;; Isearch
 
