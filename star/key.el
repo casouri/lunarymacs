@@ -34,6 +34,7 @@
          (lambda () (interactive) (switch-to-buffer "*Messages*")))
  "bs"  '("scratch buffer" .
          (lambda () (interactive) (switch-to-buffer "*scratch*")))
+ "bj" #'bookmark-jump
  ;; toggle
  "t" '("Toggle")
  "tt"  #'luna-switch-theme
