@@ -79,17 +79,13 @@
 (luna-load-relative "star/tex.el")
 (luna-load-relative "star/simple-mode.el")
 (luna-load-relative "star/highres-icon.el")
+(luna-load-relative "star/tool-bar.el")
 (require 'utility)
 
 ;;; Customize
 
 ;;;; Misc
 (setq-default luna-format-on-save t)
-(luna-on "Brown"
-  (setq luna-dump-file
-        "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp"
-        luna-dump-emacs-file
-        "/Applications/Emacs.app/Contents/MacOS/Emacs"))
 
 ;;;; Theme
 (luna-load-theme)
