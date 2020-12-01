@@ -1,9 +1,5 @@
 ;;; Icons
 
-;; (add-to-list
-;;  'image-load-path
-;;  (expand-file-name "etc/images/material" user-emacs-directory))
-
 (add-to-list
  'image-load-path
  (expand-file-name "etc/images/bootstrap" user-emacs-directory))
@@ -177,6 +173,75 @@
               :help "Get help for Isearch"
               :image ,(find-image '((:type png :file "isearch-describe-mode.png")
                                     (:type png :file "help.png")))))
+
+;;; Info mode
+
+(setq info-tool-bar-map (make-sparse-keymap))
+
+(define-key info-tool-bar-map [quit-window]
+  `(menu-item "Exit" quit-window
+              :help "Stop reading Info"
+              :image ,(find-image '((:type png :file "quit-window.png")
+                                    (:type png :file "stop.png")))))
+
+(define-key info-tool-bar-map [Info-search]
+  `(menu-item "Search..." Info-search
+              :help "Search for regular expression in this Info file"
+              :image ,(find-image '((:type png :file "Info-search.png")
+                                    (:type png :file "search.png")))))
+
+(define-key info-tool-bar-map [Info-index]
+  `(menu-item "Lookup a String..." Info-index
+              :help "Look for a string in the index items"
+              :image ,(find-image '((:type png :file "Info-index.png")
+                                    (:type png :file "index.png")))))
+
+(define-key info-tool-bar-map [Info-goto-node]
+  `(menu-item "Go to Node..." Info-goto-node
+              :help "Go to a named node"
+              :image ,(find-image '((:type png :file "Info-goto-node.png")
+                                    (:type png :file "node-list.png")))))
+
+(define-key info-tool-bar-map [Info-top-node]
+  `(menu-item "Top" Info-top-node
+              :help "Go to top node of file"
+              :image ,(find-image '((:type png :file "Info-top-node.png")
+                                    (:type png :file "home.png")))))
+
+(define-key info-tool-bar-map [Info-up]
+  `(menu-item "Up" Info-up
+              :help "Go up in the Info tree"
+              :enable (Info-check-pointer "up")
+              :image ,(find-image '((:type png :file "Info-up.png")
+                                    (:type png :file "arrow-up.png")))))
+
+(define-key info-tool-bar-map [Info-next]
+  `(menu-item "Next" Info-next
+              :help "Go to the next node"
+              :enable (Info-check-pointer "next")
+              :image ,(find-image '((:type png :file "Info-next.png")
+                                    (:type png :file "arrow-right.png")))))
+
+(define-key info-tool-bar-map [Info-prev]
+  `(menu-item "Previous" Info-prev
+              :help "Go to the previous node"
+              :enable (Info-check-pointer "prev[ious]*")
+              :image ,(find-image '((:type png :file "Info-prev.png")
+                                    (:type png :file "arrow-left.png")))))
+
+(define-key info-tool-bar-map [Info-history-forward]
+  `(menu-item "Forward in history" Info-history-forward
+              :help "Go back in history to the last node you were at"
+              :enable Info-history-forward
+              :image ,(find-image '((:type png :file "Info-history-forward.png")
+                                    (:type png :file "redo.png")))))
+
+(define-key info-tool-bar-map [Info-history-back]
+  `(menu-item "Back in history" Info-history-back
+              :help "Go back in history to the last node you were at"
+              :enable Info-history
+              :image ,(find-image '((:type png :file "Info-history-forward.png")
+                                    (:type png :file "undo.png")))))
 
 ;;; Org Mode
 
