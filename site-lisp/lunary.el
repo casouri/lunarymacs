@@ -33,11 +33,14 @@ A list of notes, really.")
   "By default dump files doesn’t save ‘load-path’.
 We need to manually save and restore it. See manual for more info.")
 
-(defvar luna-dump-file (expand-file-name "emacs.pdmp" luna-data-dir)
-  "Location of dump file.")
-
-(defvar luna-dump-emacs-file "emacs"
-  "Emacs executable used when dumping.")
+(defvar luna-dump-location-alist
+  '((Emacs "/Applications/Emacs.app/Contents/MacOS/Emacs"
+           "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp")
+    (Emacs-27 "/Applications/Emacs 27.app/Contents/MacOS/Emacs"
+              "/Applications/Emacs 27.app/Contents/MacOS/Emacs.pdmp")
+    (Emacs-gcc "/Applications/Emacs Native.app/Contents/MacOS/Emacs"
+               "/Applications/Emacs Native.app/Contents/MacOS/Emacs.pdmp"))
+  "An alist of (Name . LOCATION-LIST).")
 
 ;;; Loading functions
 
@@ -126,20 +129,27 @@ To make the change persist reboot, use
 
 ;;; Dump
 
-(defun luna-dump ()
-  "Dump Emacs."
-  (interactive)
+(defun luna-dump (emacs-location dump-location)
+  "Dump Emacs.
+Run Emacs at EMACS-LOCATION and dump to DUMP-LOCATION."
+  (interactive
+   (alist-get (intern (completing-read
+                       "Location: "
+                       (mapcar (lambda (elt)
+                                 (symbol-name (car elt)))
+                               luna-dump-location-alist)))
+              luna-dump-location-alist))
   (let ((buf "*dump process*"))
-    (delete-file luna-dump-file)
+    (delete-file dump-location)
     (make-process
      :name "dump"
      :buffer buf
      :command
-     (list luna-dump-emacs-file
+     (list emacs-location
            "--batch" "-Q"
            "--eval"
            ;; Don’t add quote around!
-           (format "(setq luna-dump-file \"%s\")" luna-dump-file)
+           (format "(setq luna-dump-file \"%s\")" dump-location)
            "-l" (luna-f-join user-emacs-directory
                              "dump.el")))
     (display-buffer buf)))
