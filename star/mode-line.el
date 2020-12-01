@@ -19,10 +19,11 @@ The padding pushes TEXT to the right edge of the mode-line."
     (concat padding text)))
 
 (defun luna-mode-line-coding-system ()
-  "Display abnormal coding system"
+  "Display abnormal coding systems."
   (let ((coding (symbol-name buffer-file-coding-system)))
     (if (or (and (not (string-prefix-p "prefer-utf-8" coding))
-                 (not (string-prefix-p "utf-8" coding)))
+                 (not (string-prefix-p "utf-8" coding))
+                 (not (string-prefix-p "undecided" coding)))
             (string-suffix-p "dos" coding))
         (concat "  " coding)
       "")))
@@ -38,7 +39,7 @@ The padding pushes TEXT to the right edge of the mode-line."
                 `(,fringe
                   (:eval (if (window-dedicated-p)
                              (concat "🔒" spaces) ""))
-                  "%[%b%]"
+                  (:propertize "%[%b%]" face (weight bold))
                   (:eval (luna-mode-line-coding-system))
                   ,spaces
                   ,(if (featurep 'minions)
