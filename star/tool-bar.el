@@ -51,14 +51,6 @@
               :help "Save current buffer to its file"
               :image ,(find-image '((:type png :file "save-buffer.png")))))
 
-(define-key tool-bar-map [save-buffer]
-  `(menu-item "Save" save-buffer
-              :enable (and (buffer-modified-p)
-                           (buffer-file-name)
-                           (menu-bar-non-minibuffer-window-p))
-              :help "Save current buffer to its file"
-              :image ,(find-image '((:type png :file "save-buffer.png")))))
-
 (define-key tool-bar-map [dired]
   `(menu-item "Open Directory..." dired
               :enable (menu-bar-non-minibuffer-window-p)
