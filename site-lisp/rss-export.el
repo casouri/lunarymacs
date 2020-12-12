@@ -7,6 +7,8 @@
 ;;; Commentary:
 ;;
 
+;;; This package is obsolete, see ox-blog.el
+
 ;;; Code:
 ;;
 
@@ -25,8 +27,8 @@ offline RSS readers can’t interpret relative image paths.")
 (org-export-define-derived-backend 'rss-html 'cjk-html
   :translate-alist '((link . rss-export-link)
                      (export-block . rss-export-block))
-  ;;                                       keyword option default
-  :options-alist '((:rss-html-relative-dir nil nil rss-export-html-relative-dir)))
+  :options-alist '((:rss-html-relative-dir
+                    nil nil rss-export-html-relative-dir)))
 
 (defun rss-export-fix-relative-link (text relative-dir root-dir)
   "Fix the relative links in TEXT and return.
