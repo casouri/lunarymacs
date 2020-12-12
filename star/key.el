@@ -15,6 +15,9 @@
          do (define-key input-decode-map
               (format "\e[1;P%c" char) (kbd (format "s-%c" char))))
 
+(define-key input-decode-map "\e[1;PC-f" (kbd "C-s-f"))
+(define-key input-decode-map "\e[1;PC-b" (kbd "C-s-b"))
+
 (define-key input-decode-map "\e[1;P=" (kbd "C-="))
 (define-key input-decode-map "\e[1;P;" (kbd "C-;"))
 (define-key input-decode-map "\e[1;P'" (kbd "C-'"))

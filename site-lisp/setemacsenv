@@ -1,3 +1,4 @@
 #!/bin/bash
 
+source ~/.profile
 echo "(setenv \"PATH\" \"$PATH\") (setenv \"CPATH\" \"$CPATH\") (setenv \"MANPATH\" \"$MANPATH\")" > ~/.emacsenv

@@ -108,12 +108,6 @@
 
 
 
-(load-package pdf-tools
-  :mode "\\.pdf%"
-  :init (setq doc-view-resolution 320)
-  :commands pdf-view-mode)
-
-
 ;; Javascript
 (setq js-indent-level 2)
 

@@ -120,12 +120,6 @@ buffer is not visiting a file."
              (setq exec-path (split-string (getenv "PATH") ":")))
     (error (message (error-message-string err)))))
 
-(defun luna-set-env ()
-  "Set PATH and CPATH."
-  (interactive)
-  (shell-command-to-string
-   "source ~/.profile; ~/.emacs.d/site-lisp/setemacsenv"))
-
 ;;; Insert
 
 (defvar luna-special-symbol-alist

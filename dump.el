@@ -50,7 +50,6 @@
 ;;; Env
 
 (message "Setting ENV")
-(luna-set-env)
 
 ;;; Dump
 

@@ -27,8 +27,8 @@
  "C-."     #'undo-redo
  "C-s-i"   #'outline-cycle-buffer
  "C-c C-h" #'hs-toggle-hiding
- "C-="     #'expand-region
- "C--"     #'contract-region
+ "C-="     #'er/expand-region
+ "C--"     #'er/contract-region
  "M-q"     #'ftable-fill
  :keymaps 'override
  "C-j"     #'avy-goto-word-1
@@ -129,8 +129,15 @@
   :defer
   :config
   (setq tramp-default-method "ssh")
-  ;; Save tramp backups locally.
-  (setq tramp-backup-directory-alist backup-directory-alist))
+  ;; `tramp-backup-directory-alist' is for remote backup on remote
+  ;; machines, so it is not useful. The following is the real way:
+  ;; https://stackoverflow.com/questions/3893727/setting-emacs-tramp-to-store-local-backups
+  (let ((backup-dir (expand-file-name
+                     "var/tramp/backup" user-emacs-directory)))
+    (unless (file-exists-p backup-dir)
+      (mkdir backup-dir))
+    (add-to-list 'backup-directory-alist
+                 (cons tramp-file-name-regexp backup-dir))))
 
 (load-package ftable
   :commands
@@ -174,3 +181,4 @@
               (lambda () (interactive)
                 (kill-local-variable 'cursor-type)))
     (rime-mode)))
+
