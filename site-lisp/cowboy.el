@@ -38,10 +38,13 @@ package is a symbol, properties is a plist. Available keywords:
 :fetcher, :repo, :dependency, :pseudo.
 
 :fetcher is a symbol representing the source, available options
-are 'github, 'url. If none specified, default to 'github.
+are 'git, 'url. If none specified, default to 'git.
 
 :repo is a string representing a repository from github, it
 should be like \"user/repo\".
+
+:http is a string representing the http url for a git repo, only
+works for git fetcher.
 
 :dependency is a list of symbols representing packages that this
 package depends on.
@@ -390,8 +393,6 @@ In RECIPE, :repo is of form \"user/repo\"."
     (cowboy--command "git"
                      (luna-f-join cowboy-package-dir (symbol-name package))
                      "pull" "--rebase")))
-
-
 
 ;;;; URL
 
