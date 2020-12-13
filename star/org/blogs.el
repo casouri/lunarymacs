@@ -199,8 +199,8 @@ INFO is not used."
 
 * - *
 
-#+BEGIN_EXAMPLE
-#+END_EXAMPLE
+{{{BEGIN_LYRICS}}}
+{{{END_LYRICS}}}
 ")
     (save-buffer)))
 
@@ -208,6 +208,21 @@ INFO is not used."
   "Open ~/p/casouri/rock/day/album/."
   (interactive)
   (shell-command-to-string (format "open ~/p/casouri/rock/day/album/")))
+
+(defun luna-blog-rock-add-line-break (beg end)
+  "Add line breaks after each line in region between BEG and END."
+  (interactive "r")
+  (replace-regexp "$" " \\\\\\\\" nil beg end))
+
+(defun luna-blog-rock-convert ()
+  (interactive)
+  (search-forward "#+BEGIN_EXAMPLE")
+  (replace-match "{{{begin_lyrics}}}")
+  (setq beg (1+ (match-end 0)))
+  (search-forward "#+END_EXAMPLE")
+  (setq end (match-beginning 0))
+  (replace-match "{{{end_lyrics}}}")
+  (luna-blog-rock-add-line-break beg end))
 
 (defun luna-insert-album ()
   "Insert a album image name."

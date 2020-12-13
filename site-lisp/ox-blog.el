@@ -106,7 +106,9 @@ archive.casouri.cat@gmail.com</a></p>")))
     (when (and (equal type "file")
                (string-prefix-p "." path))
       (let* ((abs-path (expand-file-name path))
-             (site-base (plist-get info :blog-site-base))
+             ;; We want the final path to have a “\” at the beginning.
+             (site-base (directory-file-name
+                         (plist-get info :blog-site-base)))
              (relative-path (luna-f-subtract site-base abs-path)))
         (setq link (org-element-put-property link :path relative-path))
         ;; If we let :type be "file", the final link is file:///xxx,
