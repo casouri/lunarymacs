@@ -14,6 +14,7 @@
 (require 'luna-f)
 (require 'cl-lib)
 (require 'subr-x)
+(require 'ox-blog)
 
 ;;; Common
 
@@ -26,7 +27,9 @@
 (defvar luna-blog-note-info
   `(:blog-site-base
     ,(concat luna-blog-root "note/")
+    :blog-site-root ,luna-blog-root
     :blog-url-base ,(concat luna-blog-url "note/")
+    :blog-url-root ,luna-blog-url
     :blog-rss-title "Notes"
     :blog-rss-desc "RSS feed for my notes"
     :blog-link-source "https://github.com/casouri/casouri.github.io"
@@ -43,7 +46,9 @@
 (defvar luna-blog-rock-info
   `(:blog-site-base
     ,(concat luna-blog-root "rock/day/")
+    :blog-site-root ,luna-blog-root
     :blog-url-base ,(concat luna-blog-url "rock/day/")
+    :blog-url-root ,luna-blog-url
     :blog-rss-title "余日摇滚"
     :blog-rss-desc "音乐推荐☆DAZE☆"
     :blog-link-source "https://github.com/casouri/casouri.github.io"
@@ -230,6 +235,9 @@ INFO is not used."
   (insert (completing-read
            "Album: "
            (luna-f-directory-files
-            (luna-f-join luna-blog-rock/day-dir "album")))))
+            (luna-f-join
+             (plist-get luna-blog-rock-info
+                        :blog-site-base)
+             "album")))))
 
 ;;; blogs.el ends here

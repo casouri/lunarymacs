@@ -42,7 +42,7 @@ If FORCE is non-nil, export regardless.
 
 INFO-PLIST should include
 
-    (:blog-rss-link LINK :blog-site-base ROOT)
+    (:blog-rss-link LINK :blog-site-root ROOT)
 
 LINK is the url link for the post in path. PATH is the absolute
 path to the directory containing the post (index.org). ROOT is
@@ -58,7 +58,7 @@ the root directory of the site, where the rss file resides."
           (org-mode)
           (org-export-to-file 'rss-item rss-file nil nil nil nil
                               ;; This list contains :blog-rss-link and
-                              ;; :blog-site-base.
+                              ;; :blog-site-root.
                               info-plist)))
       ;; Return file content.
       (luna-f-content rss-file))))
@@ -94,7 +94,7 @@ You can get such a list from `luna-publish-post-info'.
 PROJECT-INFO should contain
 
     (:blog-rss-title TITLE :blog-url-base HOST 
-     :blog-rss-desc DESC   :blog-site-base ROOT)
+     :blog-rss-desc DESC   :blog-site-root ROOT)
 
 See `luna-publish-rss-template' for the purpose of TITLE, HOST
 and DESC. ROOT is passed to rss-item backend to produce absolute
@@ -115,10 +115,10 @@ Normally only export outdated RSS, if FORCE non-nil, always export."
           ;; We calculate the url for each rss post.
           (let* ((path (plist-get post :path))
                  (host (plist-get project-info :blog-url-base))
-                 (root (plist-get project-info :blog-site-base))
-                 (link (concat host (luna-f-subtract root path))))
+                 (base (plist-get project-info :blog-site-base))
+                 (link (concat host (luna-f-subtract base path))))
             (luna-publish-rss-export
-             path `(:blog-site-base ,root :blog-rss-link ,link) force)))
+             path (append `(:blog-rss-link ,link) project-info) force)))
         post-list))))))
 
 ;;; Post info
@@ -182,17 +182,18 @@ The list is sorted by date, hidden posts are ignored."
    (funcall (plist-get project-info :blog-dir-list-fn)
             project-info)))
 
-(defun luna-publish (project-info &optional force)
+(defun luna-publish (&optional force)
   "Publish blog defined by PROJECT-INFO.
-If FORCE non-nil, force publish the whole blog."
-  (interactive
-   (list (alist-get (intern
-                     (completing-read
-                      "Project: "
-                      (mapcar #'car
-                              luna-publish-project-alist)))
-                    luna-publish-project-alist)))
-  (let ((pre-process-fn (plist-get project-info :blog-preprocess)))
+If FORCE non-nil, force publish the whole blog. When called
+interactively, prefix argument indicates force publish."
+  (interactive "p")
+  (let* ((force (if (eq force 1) nil force))
+         (project-info (alist-get (intern
+                                   (completing-read
+                                    "Project: "
+                                    luna-publish-project-alist))
+                                  luna-publish-project-alist))
+         (pre-process-fn (plist-get project-info :blog-preprocess)))
     ;; Pre-process
     (when pre-process-fn
       (funcall pre-process-fn project-info))

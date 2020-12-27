@@ -106,15 +106,21 @@ archive.casouri.cat@gmail.com</a></p>")))
     (when (and (equal type "file")
                (string-prefix-p "." path))
       (let* ((abs-path (expand-file-name path))
-             ;; We want the final path to have a “\” at the beginning.
-             (site-base (directory-file-name
-                         (plist-get info :blog-site-base)))
-             (relative-path (luna-f-subtract site-base abs-path)))
-        (setq link (org-element-put-property link :path relative-path))
-        ;; If we let :type be "file", the final link is file:///xxx,
-        ;; we want simply /xxx.
-        (setq link (org-element-put-property link :type ""))))
-    (org-html-link link desc info)))
+             ;; We want the final path to have a “/” at the beginning.
+             (site-root (directory-file-name
+                         (plist-get info :blog-site-root)))
+             (relative-path (luna-f-subtract site-root abs-path)))
+        (setq link (org-element-put-property link :path relative-path))))
+    ;; We bypass Org’s link dispatch. This way we get the desired
+    ;; image format.
+    (if (and (plist-get info :html-inline-images)
+	     (org-export-inline-image-p
+	      link (plist-get info :html-inline-image-rules)))
+        ;; We don’t deal with attributes list (pass a nil), since RSS
+        ;; probably doesn’t need them, hopefully.
+        (org-html--format-image
+         (org-element-property :path link) nil info)
+      (org-html-link link desc info))))
 
 (defun org-blog-rss-item-template (contents info)
   "Export RSS item."
