@@ -235,12 +235,15 @@ ARG is the number of lines to move."
     ;; first and check after, this should be faster than check first
     ;; and move after.
     (while (> abs-arg 0)
-      ;; Move point.
-      (when (not (eq (vertical-motion step) step))
+      ;; Move point. `move-to-column' counts columns from logical line
+      ;; beginnings and `vertical-motion' counts columns from visual
+      ;; beginnings. So `vertical-motion' works with line-wrapping but
+      ;; `move-to-column' does not.
+      (when (not (eq (vertical-motion (cons iscroll--goal-column step))
+                     step))
         ;; If we hit beginning or end of buffer, stop.
         (setq hit-boundary t
               abs-arg 0))
-      (move-to-column iscroll--goal-column)
       (when (not (pos-visible-in-window-p (point)))
         ;; The new point is not fully visible! Scroll up/down one line
         ;; to try to accommodate that line.
