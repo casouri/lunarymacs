@@ -226,10 +226,7 @@ ARG is the number of lines to move."
          ;; inherited from previous calls to this command, or
          ;; calculated by visual column.
          (goal-column (if (or first-command-p (not iscroll--goal-column))
-                          (let ((old-point (point)))
-                            (vertical-motion 0)
-                            (setq iscroll--goal-column
-                                  (- old-point (point))))
+                          (setq iscroll--goal-column (current-column))
                         (or iscroll--goal-column 0)))
          ;; We don't want to preserve screen position when moving point.
          (iscroll-preserve-screen-position nil)
@@ -239,10 +236,11 @@ ARG is the number of lines to move."
     ;; and move after.
     (while (> abs-arg 0)
       ;; Move point.
-      (when (not (eq (vertical-motion (cons goal-column step)) step))
+      (when (not (eq (vertical-motion step) step))
         ;; If we hit beginning or end of buffer, stop.
         (setq hit-boundary t
               abs-arg 0))
+      (move-to-column iscroll--goal-column)
       (when (not (pos-visible-in-window-p (point)))
         ;; The new point is not fully visible! Scroll up/down one line
         ;; to try to accommodate that line.
