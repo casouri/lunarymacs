@@ -144,8 +144,8 @@ COMMENT-BEGIN is string pattern starting a comment."
                  (setq color-outline--keywords font-lock-keyword-list)
                  (setq color-outline--imenu-expression imenu-expression)
                  (outline-minor-mode))
-        (user-error "No color-outline pattern configured for %s"
-                    major-mode))
+        (message "No color-outline pattern configured for %s"
+                 major-mode))
     (kill-local-variable 'outline-regexp)
     (kill-local-variable 'outline-level)
     (font-lock-remove-keywords nil color-outline--keywords)
