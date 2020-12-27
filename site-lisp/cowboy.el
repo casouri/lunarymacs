@@ -205,6 +205,7 @@ OPTION-PLIST contains user options that each backend may use."
                                   (cowgirl--installed-package-list)))))
   (if (cowgirl-use-cowboy package)
       (cowboy-update package)
+    (cowgirl-ensure-refresh-content)
     (if (cowgirl--up-to-date-p package)
         (message "%s is up to date" package)
       (cowboy--with-warning (format "Error when updating %s: %%s" package)
