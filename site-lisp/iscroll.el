@@ -208,6 +208,16 @@ screen position."
 (defvar iscroll--goal-column nil
   "Goal column when scrolling.")
 
+(defun iscroll--current-column ()
+  "Return the current column of point in current screen line.
+‘current-column’ counts columns from logical line beginning, this
+function counts from visual line beginning."
+  (save-excursion
+    (let ((col (current-column)))
+      ;; Go to visual line beginning.
+      (vertical-motion 0)
+      (- col (current-column)))))
+
 (defun iscroll-forward-line (&optional arg)
   "Smooth `forward-line'.
 ARG is the number of lines to move."
@@ -226,7 +236,8 @@ ARG is the number of lines to move."
          ;; inherited from previous calls to this command, or
          ;; calculated by visual column.
          (goal-column (if (or first-command-p (not iscroll--goal-column))
-                          (setq iscroll--goal-column (current-column))
+                          (setq iscroll--goal-column
+                                (iscroll--current-column))
                         (or iscroll--goal-column 0)))
          ;; We don't want to preserve screen position when moving point.
          (iscroll-preserve-screen-position nil)
