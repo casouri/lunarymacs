@@ -44,7 +44,7 @@
   :hook (dired-mode-hook
          . (auto-revert-mode
             toggle-truncate-lines
-            dired-omit-mode
+            ;; dired-omit-mode
             dired-hide-details-mode))
   :config
   (require 'autorevert)
