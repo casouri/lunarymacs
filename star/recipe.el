@@ -25,4 +25,5 @@
                                                sdcv)))
         (deft . (:repo "casouri/deft" :option (:full-clone t)))
         (svg-tag-mode . (:repo "rougier/svg-tag-mode"))
-        (scroll-on-jump . (:http "https://gitlab.com/ideasman42/emacs-scroll-on-jump.git"))))
+        (scroll-on-jump . (:http "https://gitlab.com/ideasman42/emacs-scroll-on-jump.git"))
+        (emacs-svg-icon . (:repo "rougier/emacs-svg-icon"))))
