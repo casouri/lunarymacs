@@ -59,7 +59,6 @@
 
  :prefix "C-x"
  "9"   (kbd "C-x 1 C-x 3")
- "C-f" #'luna-find-file
  "C-v" #'rectangle-mark-mode
  "`"   #'luna-expand-window
  "k"   '("kill-buffer" .
