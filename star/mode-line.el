@@ -39,7 +39,7 @@ The padding pushes TEXT to the right edge of the mode-line."
                 `(,fringe
                   (:eval (if (window-dedicated-p)
                              (concat "🔒" spaces) ""))
-                  (:propertize "%[%b%]" face (weight bold))
+                  (:propertize "%[%b%]" face (:weight bold))
                   (:eval (luna-mode-line-coding-system))
                   ,spaces
                   ,(if (featurep 'minions)
