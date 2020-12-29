@@ -10,6 +10,7 @@
                             :dependency (edit-indirect dash)))
         (package-demo . (:repo "vermiculus/package-demo"))
         (ghelp . (:repo "casouri/ghelp" :option (:full-clone t)))
+        (ftable . (:repo "casouri/ftable" :option (:full-clone t)))
         (sly-el-indent . (:repo "cireu/sly-el-indent"))
         (cowboy-test . (:repo "casouri/cowboy-test"))
         (binder . (:repo "rnkn/binder"))
