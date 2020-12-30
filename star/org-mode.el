@@ -93,22 +93,13 @@
 (add-hook 'org-mode-hook #'luna-org-hook)
 (font-lock-add-keywords 'org-mode '(("^ *- " 0 'fixed-pitch)))
 
-;;; Org calendar config
+;;; Org calendar
 
 (add-to-list 'display-buffer-alist
              '((lambda (buf _)
                  (with-current-buffer buf
-                   (and (window-system)
-                        (derived-mode-p 'calendar-mode)
+                   (and (derived-mode-p 'calendar-mode)
                         (eq this-command 'org-time-stamp))))
-               . (display-buffer-in-child-frame
-                  . ((child-frame-parameters
-                      . ((desktop-dont-save . t)
-                         (menu-bar-lines . 0)
-                         (tool-bar-lines . 0)
-                         (minibuffer-exit . delete-frame)
-                         (height . 10)
-                         (ns-transparent-titlebar . t)))))))
 
 ;;; Org Agenda config
 
