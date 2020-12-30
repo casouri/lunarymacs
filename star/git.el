@@ -43,5 +43,3 @@
 (load-package magit-todos
   :hook (magit-mode . magit-todos-mode))
 
-(load-package git-link
-  :commands git-link)

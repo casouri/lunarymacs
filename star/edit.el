@@ -10,9 +10,7 @@
  "hh" #'hs-hide-all
  "hs" #'hs-show-all
  "rr" #'vr/replace
- ;; utility.el
- "hm" #'helpme
- "ff" #'finder-toggle
+
  :---
  "C-h C-h" #'ghelp-describe
  "C-h r"   #'ghelp-resume
@@ -22,11 +20,9 @@
  "C-h k"   #'ghelp-describe-key
  "C-x i"   #'luna-insert-special-symbol
  "C-c '"   #'separedit
- "C-s-i"   #'color-outline-toggle-all
  "C-/"     #'undo-only
  "C-."     #'undo-redo
- "C-s-i"   #'outline-cycle-buffer
- "C-c C-h" #'hs-toggle-hiding
+ ;; "C-c C-h" #'hs-toggle-hiding
  "C-="     #'er/expand-region
  "C--"     #'er/contract-region
  "M-q"     #'ftable-fill
@@ -34,6 +30,7 @@
  "C-j"     #'avy-goto-word-1
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
  "s-i"     #'outline-cycle
+ "C-s-i"   #'outline-cycle-buffer
  :keymaps 'rime-active-mode-map
  "C-\\"    (lambda () (interactive)
              (rime--return)
@@ -42,12 +39,6 @@
  :keymaps 'rime-mode-map
  "C-`" #'rime-send-keybinding)
 
-;;; Config
-
-;; (which-function-mode)
-
-(add-hook 'after-save-hook
-          #'executable-make-buffer-file-executable-if-script-p)
 
 ;;; Package
 
@@ -139,6 +130,7 @@
     (add-to-list 'backup-directory-alist
                  (cons tramp-file-name-regexp backup-dir))))
 
+
 (load-package ftable
   :commands
   ftable-fill
@@ -164,6 +156,7 @@
   (setq-default company-backends
                 '(company-capf company-files company-dabbrev-code))
   (setq-default company-search-filtering t))
+
 
 (load-package rime
   :config

@@ -59,3 +59,7 @@
 ;;;; Button
 ;; mouse-1 to follow link
 (put 'default-button 'follow-link t)
+
+;;;; Benchmark
+
+(load-package benchmark-init :defer)

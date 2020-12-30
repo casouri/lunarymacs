@@ -137,20 +137,3 @@
                    ("" which-func-format " ")))
                 mode-line-misc-info)
         which-func-unknown " "))
-
-;;; Functions
-
-(defun chunyang-alpha-param-adjust ()
-  "调节当前 Frame 的透明度."
-  (interactive)
-  (let ((alpha (or (frame-parameter nil 'alpha) 100)))
-    (while (pcase (read-key
-                   (format "%d%%, use +,-,0 for further adjustment" alpha))
-             ((or ?+ ?=) (setq alpha (1+ alpha)))
-             (?- (setq alpha (1- alpha)))
-             (?0 (setq alpha 100))
-             (_  nil))
-      (cond ((> alpha 100) (setq alpha 100))
-            ((< alpha 0) (setq alpha 0)))
-      (modify-frame-parameters nil `((alpha . ,alpha))))))
-

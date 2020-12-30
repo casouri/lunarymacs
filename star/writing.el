@@ -56,15 +56,15 @@
   :config
   (setq iscroll-preserve-screen-position t))
 
-(load-package multi-translate
-  :commands multi-translate-at-point
-  :config (push 'youdao multi-translate-word-backends)
-  :init (defalias 'mtran 'multi-translate-at-point))
+;; (load-package multi-translate
+;;   :commands multi-translate-at-point
+;;   :config (push 'youdao multi-translate-word-backends)
+;;   :init (defalias 'mtran 'multi-translate-at-point))
 
-(defun dic ()
-  "Open Dictionary.app and lookup word at point."
-  (interactive)
-  (shell-command-to-string
-   (format "open dict://%s" (word-at-point))))
+;; (defun dic ()
+;;   "Open Dictionary.app and lookup word at point."
+;;   (interactive)
+;;   (shell-command-to-string
+;;    (format "open dict://%s" (word-at-point))))
 
 ;;; end
