@@ -27,9 +27,6 @@
   :init (setq-default olivetti-body-width 74)
   :commands olivetti-mode)
 
-(load-package org-download
-  :hook (org-mode-hook . org-download-enable))
-
 (load-package valign
   :hook (org-mode-hook . valign-mode))
 
