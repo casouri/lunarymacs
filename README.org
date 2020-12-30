@@ -1,9 +1,9 @@
 #+TITLE: Lunarymacs
 
-This is my Emacs configuration. Features:
+This is my Emacs configuration featuring:
 - home-brew ~use-package~ and key-binding macros.
 - A simple package manager cowboy.el that can install by package.el, git or url.
-- Some on-site packages included in =site-lisp=.
+- Some on-site packages in =site-lisp= directory.
 
 [[./screenshot.png]]
 
@@ -13,7 +13,7 @@ git clone https://github.com/casouri/lunarymacs.git ~/.emacs.d
 emacs
 #+END_SRC
 
-While Emacs starts, a lot of warning will appear saying package xxx is not installed. To install all the missing packages, type
+When Emacs starts, a lot of warning will appear saying package xxx is not installed. To install all the missing packages, type
 #+BEGIN_SRC elisp
 M-x luna-install-all RET
 #+END_SRC
@@ -29,7 +29,7 @@ M-x luna-install-all RET
 | dired+.el            | Convenience dired commands.                  |
 | face-attr.el         | Set/get face attributes from face text prop. |
 | form-feed.el         | My fork of form-feed.el                      |
-| [[https://archive.casouri.cat/note/2020/embed-images-in-text-files/index.html][iimg.el]]                     | Embed images in text files as base64 string. |
+| [[https://archive.casouri.cat/note/2020/embed-images-in-text-files/index.html][iimg.el]]              | Embed images in text files as base64 string. |
 | info+.el             | Prettify Info buffers.                       |
 | light-theme.el       | A light custom color theme                   |
 | luna-local.el        | Session persistent variables.                |
