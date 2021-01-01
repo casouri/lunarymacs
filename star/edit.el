@@ -126,7 +126,7 @@
   (let ((backup-dir (expand-file-name
                      "var/tramp/backup" user-emacs-directory)))
     (unless (file-exists-p backup-dir)
-      (mkdir backup-dir))
+      (mkdir backup-dir t))
     (add-to-list 'backup-directory-alist
                  (cons tramp-file-name-regexp backup-dir))))
 
