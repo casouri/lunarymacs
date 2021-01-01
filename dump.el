@@ -21,16 +21,14 @@
                        highlight-parentheses hl-todo buffer-move
                        savehist minions ws-butler
                        expand-region flyspell flycheck eglot
-                       minibuf-eldef yasnippet ivy-xref rime
+                       yasnippet ivy-xref which-func savehist
                        ;; site-lisp
-                       transform utility pause info+ color-outline
-                       commentary quanjiao outline+ luna-publish
-                       ox-cjk-html sidebar form-feed
+                       transform utility pause color-outline
+                       outline+
                        ;; ranch
                        ghelp
-                       ;; built-in dired-x subr-x cl-lib seq
-                       pcase cl-lib which-func savehist
-                       elec-pair))
+                       ;; lib
+                       subr-x cl-lib seq pcase))
   (require package))
 
 (require 'no-littering)
@@ -46,10 +44,6 @@
 
 (load "kinsoku.el")
 (luna-load-relative "star/org/blogs.el")
-
-;;; Env
-
-(message "Setting ENV")
 
 ;;; Dump
 
