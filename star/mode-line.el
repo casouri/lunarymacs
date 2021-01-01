@@ -7,16 +7,20 @@
 (defun luna-mode-line-with-padding (text)
   "Return TEXT with padding on the left.
 The padding pushes TEXT to the right edge of the mode-line."
-  (let* ((font (face-attribute 'mode-line :font))
-         (glyph-list (font-get-glyphs font 0 (length text) text))
-         (len (cl-reduce (lambda (len glyph)
-                           (+ len (aref glyph 4)))
-                         glyph-list
-                         :initial-value 0))
-         (padding (propertize
-                   "-" 'display
-                   `(space :align-to (- (+ right right-margin) (,len))))))
-    (concat padding text)))
+  (let ((font (face-attribute 'mode-line :font)))
+    (if (not (fontp font))
+        " "
+      (let* ((font (face-attribute 'mode-line :font))
+             (glyph-list (font-get-glyphs font 0 (length text) text))
+             (len (cl-reduce (lambda (len glyph)
+                               (+ len (aref glyph 4)))
+                             glyph-list
+                             :initial-value 0))
+             (padding (propertize
+                       "-" 'display
+                       `(space :align-to
+                               (- (+ right right-margin) (,len))))))
+        (concat padding text)))))
 
 (defun luna-mode-line-coding-system ()
   "Display abnormal coding systems."
@@ -48,11 +52,11 @@ The padding pushes TEXT to the right edge of the mode-line."
                   ,spaces
                   (:eval
                    (cond (inhibit-read-only
-                          ,(if (display-graphic-p) "– ω –" "-w-"))
+                          ,(if (display-graphic-p) "–ω–" "-w-"))
                          ((buffer-modified-p)
-                          ,(if (display-graphic-p) "Φ A Φ" "OAO"))
+                          ,(if (display-graphic-p) "ΦAΦ" "OAO"))
                          (t
-                          ,(if (display-graphic-p) "Φ ω Φ" "OwO"))))
+                          ,(if (display-graphic-p) "ΦωΦ" "OwO"))))
                   ,spaces
                   mode-line-misc-info
                   ,(if (display-graphic-p)
