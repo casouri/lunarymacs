@@ -118,7 +118,7 @@
 
 (load-package tramp
   :defer
-  :config
+  :init
   (setq tramp-default-method "ssh")
   ;; `tramp-backup-directory-alist' is for remote backup on remote
   ;; machines, so it is not useful. The following is the real way:
