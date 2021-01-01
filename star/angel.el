@@ -57,7 +57,7 @@
  "9"   (kbd "C-x 1 C-x 3")
  "C-v" #'rectangle-mark-mode
  "k"   '("kill-buffer" .
-         (lambda (interactive)
+         (lambda () (interactive)
            (kill-buffer (current-buffer))))
  "C-," #'beginning-of-buffer ; as of <
  "C-." #'end-of-buffer ; as of >
