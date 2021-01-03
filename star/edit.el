@@ -31,6 +31,14 @@
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
  "s-i"     #'outline-cycle
  "C-s-i"   #'outline-cycle-buffer
+ "M-]"     '("outline-next-heading"
+             . (lambda () (interactive)
+                 (outline-next-heading)
+                 (recenter-top-bottom)))
+ "M-["     '("outline-previous-heading"
+             . (lambda () (interactive)
+                 (outline-previous-heading)
+                 (recenter-top-bottom)))
  :keymaps 'rime-active-mode-map
  "C-\\"    (lambda () (interactive)
              (rime--return)

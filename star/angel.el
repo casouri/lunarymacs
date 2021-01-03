@@ -50,6 +50,8 @@
  "C-s-;" (kbd "C-M-;")
  ;; For some reason, keyboard macro doesn't work.
  "s-!"   #'shell-command
+ "s-["   (kbd "M-[")
+ "s-]"   (kbd "M-]")
  ;; Super -> Control
  "s-\\"  (kbd "C-\\")
 
