@@ -88,7 +88,8 @@
 (setq-default luna-format-on-save t)
 
 ;;;; Theme
-(luna-load-theme)
+(when (window-system)
+  (luna-load-theme))
 
 ;;;; Font
 (when (display-graphic-p)
