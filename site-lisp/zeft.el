@@ -8,18 +8,18 @@
 ;;
 ;; Why I need to write another Deft:
 ;;
-;; Deft makes two design decisions, which are actually genius. But
-;; they bring some problems. First, Deft decides to capture user
-;; inputs and construct the search phrase itself. This allows the
-;; point to be anywhere in the buffer while updating the search
-;; phrase. That prohibits any Emacs input method from working. And I
-;; can’t use editing tools like selection when “editing” the search
-;; phrase. Second, Deft decides to load all files into memory and
-;; simply search in them when filtering. Who would dare to think of
-;; doing that? But it works, and works well. However, it does bring a
-;; slow startup speed to Deft, I have to wait for a second or two
-;; every time I start Deft. And a mortal like me can’t help worrying
-;; about the memory used for storing all these files.
+;; Deft made two design decisions. While ingenious, these designs
+;; bring problems that I can’t easily workaround. First, Deft decides
+;; to capture user inputs and construct the search phrase itself. This
+;; allows the point to be anywhere in the buffer while updating the
+;; search phrase. That prohibits any Emacs input method from working.
+;; And I can’t select the search phrase like normal buffer text
+;; Second, Deft decides to load all files into memory and simply
+;; search in them when filtering. As inefficient and wasteful as it
+;; sounds, this works well. However, it does make Deft a bit slow on
+;; startup. I have to wait for a second or two every time I start
+;; Deft. And a mortal like me can’t help but worrying about the memory
+;; used for storing all these files.
 ;; 
 ;; There are other motivations, like the desire for a interface
 ;; similar to Apple’s Note.app, where each file comes with a
@@ -64,7 +64,7 @@
 
 ;;; Customize
 
-(defcustom zeft-directory (expand-file-name "~/deft")
+(defcustom zeft-directory (expand-file-name "~/.deft")
   "Directory in where notes are stored."
   :group 'zeft
   :type 'string)
@@ -74,8 +74,13 @@
   :group 'zeft
   :type 'list)
 
+(defface zeft-selection
+  '((t . (:inherit region :extend t)))
+  "Face for the current selected search result."
+  :group 'zeft)
+
 (defface zeft-highlight
-  '((t . (:inherit highlight)))
+  '((t . (:inherit highlight :extend t)))
   "Face for highlighting in Zeft."
   :group 'zeft)
 
@@ -141,35 +146,50 @@
         (insert search-phrase "\n\n")
         (save-buffer)))))
 
-(defvar-local zeft--activate-overlay nil
-  "Overlay used for highlighting activtated summary button.")
+(defvar-local zeft--select-overlay nil
+  "Overlay used for highlighting selected search result.")
 
-(defun zeft--activate-file-at-point ()
-  "Activate the file summary button at point."
-  (let ((button (button-at (point))))
-    (when (null zeft--activate-overlay)
-      (setq zeft--activate-overlay
-            (make-overlay (button-start button)
-                          (button-end button)))
-      (overlay-put zeft--activate-overlay 'evaporate t)
-      (overlay-put zeft--activate-overlay 'face 'zeft-highlight))
-    (move-overlay zeft--activate-overlay
-                  (button-start button)
-                  (button-end button))
-    (funcall (button-get button 'action) button)))
+(defvar-local zeft--activate-overlay nil
+  "Overlay used for highlighting activated search result.")
+
+(defun zeft--highlight-file-at-point (type)
+  "Activate (highlight) the file summary button at point.
+If TYPE is 'select, apply `zeft-selection' face,
+if TYPE is 'activate, apply `zeft-highlight' face."
+  (let ((button (button-at (point)))
+        overlay overlay-sym face priority)
+    (if (eq type 'select)
+        (setq overlay zeft--select-overlay
+              overlay-sym 'zeft--select-overlay
+              face 'zeft-selection
+              priority 1)
+      (setq overlay zeft--activate-overlay
+            overlay-sym 'zeft--activate-overlay
+            face 'zeft-highlight
+            priority 0))
+    ;; Create the overlay if it doesn't exist yet.
+    (when (null overlay)
+      (setq overlay (make-overlay (button-start button)
+                                  (button-end button)))
+      (overlay-put overlay 'evaporate t)
+      (overlay-put overlay 'face face)
+      (overlay-put overlay 'priority priority)
+      (set overlay-sym overlay))
+    ;; Move the overlay over the file.
+    (move-overlay overlay (button-start button) (button-end button))))
 
 (defun zeft-next ()
   "Move to next file summary."
   (interactive)
-  (when (forward-button 1 nil t t)
-    (zeft--activate-file-at-point)))
+  (when (forward-button 1 nil nil t)
+    (zeft--highlight-file-at-point 'select)))
 
 (defun zeft-previous ()
   "Move to previous file summary."
   (interactive)
-  (if (backward-button 1 nil t t)
-      (zeft--activate-file-at-point)
-    ;; Go to end of search phrase.
+  (if (backward-button 1 nil nil t)
+      (zeft--highlight-file-at-point 'select)
+    ;; Go to the end of the search phrase.
     (goto-char (point-min))
     (end-of-line)))
 
@@ -211,7 +231,8 @@ If SELECT is non-nil, select the buffer after displaying it."
                           . (lambda (win)
                               (let ((width (window-width)))
                                 (when (< width 50)
-                                  (window-resize win (- 50 width) t))))))))))
+                                  (window-resize
+                                   win (- 50 width) t))))))))))
     (if select (select-window zeft--preview-window))
     (with-current-buffer buffer
       (zeft--highlight-matched keyword-list)
@@ -219,18 +240,21 @@ If SELECT is non-nil, select the buffer after displaying it."
 
 (define-button-type 'zeft-summary
   'action (lambda (button)
-            ;; If the file is no already selected/highlighted, select
-            ;; it first.
-            (if (and zeft--activate-overlay
-                     (<= (overlay-start zeft--activate-overlay)
-                         (button-start button)
-                         (overlay-end zeft--activate-overlay)))
-                (zeft--view-file (button-get button 'path))
+            ;; If the file is no already highlighted, highlight it
+            ;; first.
+            (when (not (and zeft--activate-overlay
+                            (overlay-buffer zeft--activate-overlay)
+                            (<= (overlay-start zeft--activate-overlay)
+                                (button-start button)
+                                (overlay-end zeft--activate-overlay))))
               (goto-char (button-start button))
-              (zeft--activate-file-at-point)))
+              (zeft--highlight-file-at-point 'activate))
+            ;; Open the file.
+            (zeft--view-file (button-get button 'path)))
   'help-echo "Open this file"
   'follow-link t
-  'face 'default)
+  'face 'default
+  'mouse-face 'zeft-selection)
 
 (defun zeft--insert-file-summary (file)
   "Insert a summary for FILE at point.
@@ -258,7 +282,9 @@ FILE should be an absolute path."
       ;; Cut the full summary two at most two lines.
       (setq summary (if (<= (length full-summary) summary-len)
                         full-summary
-                      (concat (substring full-summary 0 (- summary-len 3))
+                      ;; The length is an estimate, we don't need to
+                      ;; be precise.
+                      (concat (substring full-summary 0 summary-len)
                               "..."))))
     ;; Now we insert the summary
     (let ((start (point)))
@@ -345,7 +371,7 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
                      (directory-files zeft-directory t)))
          ;; Given a list of files, FILTER searches for rest of the
          ;; keywords. This is the filter function for round 2.
-         (filter (lambda (file-list)
+         (filter (lambda (file-list keyword-list)
                    (funcall
                     callback
                     (cl-loop
@@ -354,7 +380,7 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
                             (when (file-exists-p file)
                               (with-temp-buffer
                                 (insert-file-contents file)
-                                (dolist (keyword (cdr keyword-list) t)
+                                (dolist (keyword keyword-list t)
                                   (goto-char (point-min))
                                   ;; TODO: Add [[:space:]] on both
                                   ;; sides.
@@ -368,7 +394,7 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
      ;; Have a shortcut and it's short enough, skip round 1 and go
      ;; straight to round 2.
      ((and shortcut-file-list (< (length shortcut-file-list) 50))
-      (funcall filter shortcut-file-list))
+      (funcall filter shortcut-file-list keyword-list))
      ;; Normal search, do round 1 then round 2.
      (t
       (let* ((name (generate-new-buffer-name " *zeft grep*"))
@@ -393,7 +419,9 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
                             (with-current-buffer buf
                               (let ((files (split-string
                                             (buffer-string) "\n")))
-                                (funcall filter (remove "" files))))
+                                (funcall filter
+                                         (remove "" files)
+                                         (cdr keyword-list))))
                           (kill-buffer buf))
                       (error "Zeft’s grep process’ buffer is killed"))
                   (error "Zeft’s grep process failed with signal: %s"
