@@ -30,11 +30,13 @@
 ;;
 ;; Type M-x zeft RET, and you should see the Zeft buffer. Type in your
 ;; search phrase in the first line and the result will show up as you
-;; type. Type C-n and C-p to go through each file. You can also click
-;; them with a mouse.
+;; type. Press C-n and C-p to go through each file. You can open a
+;; file by pressing RET when the point is on a file, or click the file
+;; with mouse.
 ;;
-;; Like in Deft, type C-c C-g to force a refresh. Type RET to create a
-;; new file.
+;; Type C-c C-g to force a refresh. When point is on the search
+;; phrase, press RET to create a file with the search phrase as
+;; filename and title.
 ;;
 ;; Notes:
 ;;
@@ -149,46 +151,30 @@
 (defvar-local zeft--select-overlay nil
   "Overlay used for highlighting selected search result.")
 
-(defvar-local zeft--activate-overlay nil
-  "Overlay used for highlighting activated search result.")
-
-(defun zeft--highlight-file-at-point (type)
-  "Activate (highlight) the file summary button at point.
-If TYPE is 'select, apply `zeft-selection' face,
-if TYPE is 'activate, apply `zeft-highlight' face."
-  (let ((button (button-at (point)))
-        overlay overlay-sym face priority)
-    (if (eq type 'select)
-        (setq overlay zeft--select-overlay
-              overlay-sym 'zeft--select-overlay
-              face 'zeft-selection
-              priority 1)
-      (setq overlay zeft--activate-overlay
-            overlay-sym 'zeft--activate-overlay
-            face 'zeft-highlight
-            priority 0))
+(defun zeft--highlight-file-at-point ()
+  "Activate (highlight) the file summary button at point."
+  (let ((button (button-at (point))))
     ;; Create the overlay if it doesn't exist yet.
-    (when (null overlay)
-      (setq overlay (make-overlay (button-start button)
-                                  (button-end button)))
-      (overlay-put overlay 'evaporate t)
-      (overlay-put overlay 'face face)
-      (overlay-put overlay 'priority priority)
-      (set overlay-sym overlay))
+    (when (null zeft--select-overlay)
+      (setq zeft--select-overlay (make-overlay (button-start button)
+                                               (button-end button)))
+      (overlay-put zeft--select-overlay 'evaporate t)
+      (overlay-put zeft--select-overlay 'face 'zeft-selection))
     ;; Move the overlay over the file.
-    (move-overlay overlay (button-start button) (button-end button))))
+    (move-overlay zeft--select-overlay
+                  (button-start button) (button-end button))))
 
 (defun zeft-next ()
   "Move to next file summary."
   (interactive)
   (when (forward-button 1 nil nil t)
-    (zeft--highlight-file-at-point 'select)))
+    (zeft--highlight-file-at-point)))
 
 (defun zeft-previous ()
   "Move to previous file summary."
   (interactive)
   (if (backward-button 1 nil nil t)
-      (zeft--highlight-file-at-point 'select)
+      (zeft--highlight-file-at-point)
     ;; Go to the end of the search phrase.
     (goto-char (point-min))
     (end-of-line)))
@@ -242,13 +228,13 @@ If SELECT is non-nil, select the buffer after displaying it."
   'action (lambda (button)
             ;; If the file is no already highlighted, highlight it
             ;; first.
-            (when (not (and zeft--activate-overlay
-                            (overlay-buffer zeft--activate-overlay)
-                            (<= (overlay-start zeft--activate-overlay)
+            (when (not (and zeft--select-overlay
+                            (overlay-buffer zeft--select-overlay)
+                            (<= (overlay-start zeft--select-overlay)
                                 (button-start button)
-                                (overlay-end zeft--activate-overlay))))
+                                (overlay-end zeft--select-overlay))))
               (goto-char (button-start button))
-              (zeft--highlight-file-at-point 'activate))
+              (zeft--highlight-file-at-point))
             ;; Open the file.
             (zeft--view-file (button-get button 'path)))
   'help-echo "Open this file"
