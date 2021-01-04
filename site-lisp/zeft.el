@@ -23,8 +23,8 @@
 ;; 
 ;; There are other motivations, like the desire for a interface
 ;; similar to Apple’s Note.app, where each file comes with a
-;; multi-line summary and have another window previewing the currently
-;; selected file.
+;; multi-line summary and there is another window previewing the
+;; currently selected file.
 ;;
 ;; Usage:
 ;;
@@ -38,7 +38,7 @@
 ;; phrase, press RET to create a file with the search phrase as
 ;; filename and title.
 ;;
-;; Notes:
+;; Note that:
 ;;
 ;; 1. Zeft uses grep, make sure it is installed in your system and can
 ;;    be found by Emacs.
@@ -55,12 +55,7 @@
 ;;    Zeft buffer. When Zeft buffer is killed, Zeft restores the saved
 ;;    window configuration.
 
-;;; Developer
-;;
-;; ‘zeft-refresh’ and ‘zeft--search’ are the core functions.
-
 ;;; Code:
-;;
 
 (require 'cl-lib)
 
@@ -436,15 +431,14 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
 (defun zeft--cleanup-highlight (window)
   "Cleanup highlights in WINDOW."
   (when (eq window (selected-window))
-    (with-selected-window window
-      (let ((ov-list (overlays-in (point-min)
-                                  (point-max))))
-        (dolist (ov ov-list)
-          (when (overlay-get ov 'zeft-highlight)
-            (delete-overlay ov))))
-      (remove-hook 'window-selection-change-functions
-                   #'zeft--cleanup-highlight
-                   t))))
+    (let ((ov-list (overlays-in (point-min)
+                                (point-max))))
+      (dolist (ov ov-list)
+        (when (overlay-get ov 'zeft-highlight)
+          (delete-overlay ov))))
+    (remove-hook 'window-selection-change-functions
+                 #'zeft--cleanup-highlight
+                 t)))
 
 (provide 'zeft)
 
