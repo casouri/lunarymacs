@@ -8,7 +8,9 @@
  "C-c i" #'bklink-insert
  :keymaps 'text-mode-map
  "TAB" #'indent-for-tab-command
- "<C-tab>" '("insert-tab" . (lambda () (interactive) (insert "\t"))))
+ "<C-tab>" '("insert-tab" . (lambda () (interactive) (insert "\t")))
+ :leader
+ "df" #'zeft)
 
 ;;; Packages
 
