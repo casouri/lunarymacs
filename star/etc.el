@@ -63,3 +63,11 @@
 ;;;; Benchmark
 
 (load-package benchmark-init :defer)
+
+;;;; Screencasting
+
+(load-package keycast
+  :commands
+  keycast-mode
+  keycast-log-mode
+  :init (setq keycast-insert-after 'mode-line-misc-info))
