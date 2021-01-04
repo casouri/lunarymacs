@@ -203,7 +203,8 @@ If SELECT is non-nil, select the buffer after displaying it."
   (let* ((buffer (find-file-noselect file))
          (search-phrase (zeft--get-search-phrase))
          (keyword-list (split-string search-phrase)))
-    (if (window-live-p zeft--preview-window)
+    (if (and (window-live-p zeft--preview-window)
+             (not (eq zeft--preview-window (selected-window))))
         (with-selected-window zeft--preview-window
           (switch-to-buffer buffer))
       (setq zeft--preview-window
