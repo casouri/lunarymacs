@@ -65,7 +65,6 @@
   ;; specifically, the region-deactive-hook
   ;; doesn't run right after the region highlight is off
   (setq expand-region-fast-keys-enabled nil)
-  (require 'expand-region-hacks)
   :commands
   expand-region
   contract-region
@@ -122,6 +121,10 @@
 
 
 (load-package helpful)
+
+
+(load-package iscroll
+  :commands iscroll-mode)
 
 
 (load-package tramp

@@ -104,9 +104,8 @@
   :hook (comint-mode-hook . greenbar-mode))
 
 
-(with-eval-after-load 'info
-  (require 'info+)
-  (info-pretty-mode))
+(load-package info+
+  :hook (Info-mode-hook . info-pretty-mode))
 
 
 ;; (load-package treemacs

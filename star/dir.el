@@ -42,25 +42,17 @@
 (load-package dired
   :defer
   :hook (dired-mode-hook
-         . (auto-revert-mode
+         . ((lambda () (require 'dired+))
+            auto-revert-mode
             toggle-truncate-lines
             ;; dired-omit-mode
             dired-hide-details-mode))
   :config
-  (require 'autorevert)
-  (require 'dired-x)
-  (require 'dired+)
   ;; On Linux this sorts numbers in natural order.
   (setq dired-listing-switches "-lah1v"
         dired-dwim-target t)
   (luna-on "Brown"
-    (setq dired-listing-switches "-lah"))
-  
-  ;; Focus on the new subdir when after inserting it.
-  (advice-add #'dired-maybe-insert-subdir :after
-              (lambda (&rest _)
-                (when (called-interactively-p 'interactive)
-                  (recenter-top-bottom)))))
+    (setq dired-listing-switches "-lah")))
 
 ;;; Function
 
