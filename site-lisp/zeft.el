@@ -244,7 +244,7 @@ This summary contains note title and except and is clickable.
 FILE should be an absolute path."
   (let ((summary-len (floor (* 2.7 (1- (window-width)))))
         title full-summary summary)
-    (with-temp-buffer
+    (with-current-buffer (get-buffer-create " *zeft work*")
       (insert-file-contents file)
       (goto-char (point-min))
       (search-forward "#+TITLE: " (line-end-position) t)
@@ -306,21 +306,20 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
          ;; Insert file summaries.
          (let ((inhibit-read-only t))
            (with-current-buffer buffer
-             (goto-char (point-min))
-             (forward-line 2)
-             (delete-region (point) (point-max))
-             (let ((start (point)))
-               (if file-list
-                   (dolist (file file-list)
-                     (zeft--insert-file-summary file))
-                 (insert "Press RET to create a new note"))
-               (put-text-property (- start 2) (point)
-                                  'read-only t))
-             (goto-char (point-min))
-             (end-of-line)
-             (setq zeft--last-search-phrase search-phrase
-                   zeft--last-file-list file-list)
-             (set-buffer-modified-p nil))))
+             (save-excursion
+               (goto-char (point-min))
+               (forward-line 2)
+               (delete-region (point) (point-max))
+               (let ((start (point)))
+                 (if file-list
+                     (dolist (file file-list)
+                       (zeft--insert-file-summary file))
+                   (insert "Press RET to create a new note"))
+                 (put-text-property (- start 2) (point)
+                                    'read-only t))
+               (setq zeft--last-search-phrase search-phrase
+                     zeft--last-file-list file-list)
+               (set-buffer-modified-p nil)))))
        ;; If the current search phrase includes the previous search
        ;; phrase, we can just filter the last file-list.
        (if (and zeft--last-search-phrase
@@ -356,26 +355,25 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
          (filter (lambda (file-list keyword-list)
                    (funcall
                     callback
-                    (cl-loop
-                     for file in file-list
-                     if (condition-case nil
-                            (when (file-exists-p file)
-                              (with-temp-buffer
+                    (with-temp-buffer
+                      (cl-loop
+                       for file in file-list
+                       if (condition-case nil
+                              (when (file-exists-p file)
+                                (erase-buffer)
                                 (insert-file-contents file)
                                 (dolist (keyword keyword-list t)
                                   (goto-char (point-min))
-                                  ;; TODO: Add [[:space:]] on both
-                                  ;; sides.
-                                  (re-search-forward keyword))))
-                          (search-failed nil))
-                     collect file)))))
+                                  (re-search-forward keyword)))
+                            (search-failed nil))
+                       collect file))))))
     (cond
      ;; Search phrase is empty, simply return the full list.
      ((null keyword-list)
       (funcall callback file-list))
      ;; Have a shortcut and it's short enough, skip round 1 and go
      ;; straight to round 2.
-     ((and shortcut-file-list (< (length shortcut-file-list) 50))
+     ((and shortcut-file-list (< (length shortcut-file-list) 10))
       (funcall filter shortcut-file-list keyword-list))
      ;; Normal search, do round 1 then round 2.
      (t
