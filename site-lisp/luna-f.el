@@ -12,40 +12,23 @@
 
 (require 'seq)
 
-(defun luna-f-list-directory (dir &optional absolute)
+(defun luna-f-list-directory (dir &optional full)
   "Return a list of directories in DIR.
-Return absolute path if ABSOLUTE is t."
-  ;; FULL argument in ‘directory-files’ must be t,
-  ;; otherwise ‘file-directory-p’ doesn’t work
-  (mapcar (lambda (path)
-            (if absolute
-                path
-              (file-name-nondirectory path)))
-          (seq-filter (lambda (file)
-                        (and (not (string-match (rx "/" (** 1 2 ".") eol)
-                                                file))
-                             (file-directory-p file)))
-                      (directory-files dir t))))
+Return full path if FULL is non-nil."
+  (seq-filter #'file-directory-p
+              (directory-files
+               dir full directory-files-no-dot-files-regexp)))
 
-(defun luna-f-directory-files (dir &optional absolute)
+(defun luna-f-directory-files (dir &optional full)
   "Return a list of regular files in DIR.
-Return absolute path if ABSOLUTE is t."
-  (mapcar (lambda (path)
-            (if absolute
-                path
-              (file-name-nondirectory path)))
-          (seq-filter (lambda (file)
-                        (and (not (string-match (rx "/" (** 1 2 ".") eol)
-                                                file))
-                             (file-regular-p file)))
-                      (directory-files dir t))))
+Return full path if FULL is non-nil."
+  (seq-filter #'file-regular-p
+              (directory-files
+               dir full directory-files-no-dot-files-regexp)))
 
-(defun luna-f-join (&rest path-list)
-  "Join paths in PATH-LIST."
-  (if (eql (length path-list) 1)
-      (car path-list)
-    (expand-file-name (car (last path-list))
-                      (apply #'luna-f-join (butlast path-list)))))
+(defun luna-f-join (base file)
+  "Join together BASE and FILE."
+  (expand-file-name file base))
 
 (defun luna-f-content (path)
   "Read text of file at PATH."
@@ -117,16 +100,12 @@ Finally write visible region to file."
 
 (defun luna-f-subtract (base path)
   "Subtract BASE from PATH.
+Example:
 
-For exampple, if BASE is “~/p”, PATH is “/home/user/p/a”, return
-“/a”. The returned path could have trailing “/” or not, depending
-on whether PATH have one. Return nil if BASE is not a proper
-prefix of PATH."
-  ;; expand both to absolute path
-  (let ((base (file-truename base))
-        (path (file-truename path)))
-    (when (string-prefix-p base path)
-      (string-remove-prefix base path))))
+    (luna-f-subtract \"~\" \"~/.emacs\")
+-> \".emacs\"
+"
+  (file-relative-name path base))
 
 (defun luna-f-trim (path suffix)
   "Trim SUFFIX from PATH.
