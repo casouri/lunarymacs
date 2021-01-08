@@ -44,7 +44,10 @@
 
 (load-package zeft
   :commands zeft
-  :config (setq zeft-directory (expand-file-name "~/deft")))
+  :config
+  (setq zeft-directory (expand-file-name "~/deft"))
+  (add-hook 'zeft-find-file-hook #'auto-fill-mode)
+  (add-hook 'zeft-find-file-hook #'electric-quote-mode))
 
 (load-package bklink
   :commands bklink-minor-mode
