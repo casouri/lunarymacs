@@ -116,29 +116,25 @@ Use prefix argument (ARG) to force publish."
   (interactive)
   (luna-publish luna-blog-note-info force))
 
-(defun luna-new-note-blog (title)
-  "Make a new blog post with TITLE."
-  (interactive "MTitle: ")
+(defun luna-new-note-blog (dir-name)
+  "Make a new blog post with DIR-NAME."
+  (interactive "MDirectory name: ")
   (let* ((year (substring (current-time-string) 20))
-         (dir-file-name
-          (downcase (replace-regexp-in-string " " "-" title)))
          (year-path (luna-f-join (plist-get luna-blog-note-info
                                             :blog-site-base)
                                  year))
-         (dir-path (luna-f-join year-path
-                                dir-file-name))
-         (file-path (luna-f-join dir-path
-                                 "index.org")))
+         (dir-path (luna-f-join year-path dir-name))
+         (file-path (luna-f-join dir-path "index.org")))
     ;; Create the post’s dir and org file and insert basic information.
     (unless (file-exists-p year-path)
       (mkdir year-path))
     (mkdir dir-path)
     (find-file file-path)
-    (insert (format "#+SETUPFILE: ../../setup.org
-#+TITLE: %s
+    (insert "#+SETUPFILE: ../../setup.org
+#+TITLE:
 #+DATE:
 #+TAGS:
-" title))
+")
     (save-buffer)))
 
 ;;; Rock/day
