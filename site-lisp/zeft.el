@@ -245,6 +245,7 @@ FILE should be an absolute path."
   (let ((summary-len (floor (* 2.7 (1- (window-width)))))
         title full-summary summary)
     (with-current-buffer (get-buffer-create " *zeft work*")
+      (erase-buffer)
       (insert-file-contents file)
       (goto-char (point-min))
       (search-forward "#+TITLE: " (line-end-position) t)
