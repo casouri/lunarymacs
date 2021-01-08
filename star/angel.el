@@ -7,6 +7,9 @@
 (require 'utility)
 (require 'transform)
 
+(autoload 'iscroll-down "iscroll.el")
+(autoload 'iscroll-up "iscroll.el")
+
 ;;; Keys
 
 (luna-def-key
