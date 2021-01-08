@@ -41,12 +41,14 @@
 
 (load-package dired
   :defer
-  :hook (dired-mode-hook
-         . ((lambda () (require 'dired+))
-            auto-revert-mode
-            toggle-truncate-lines
-            ;; dired-omit-mode
-            dired-hide-details-mode))
+  :init
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (require 'dired+)
+              (auto-revert-mode)
+              (toggle-truncate-lines)
+              ;; (dired-omit-mode)
+              (dired-hide-details-mode)))
   :config
   ;; On Linux this sorts numbers in natural order.
   (setq dired-listing-switches "-lah1v"
