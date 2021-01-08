@@ -10,12 +10,9 @@
 ;;; Code:
 ;;
 
-(require 'luna-f)
 (require 'subr-x)
-;; remove this and ‘org-html-home/up-format’ won’t work right
 (require 'ox-html)
-(require 'rss-export)
-
+(require 'ox-blog)
 
 ;;; Post
 
@@ -27,12 +24,14 @@ options that can affect Org export."
         (html-file (expand-file-name "index.html" dir)))
     (when (and (file-exists-p org-file)
                (or force (file-newer-than-file-p org-file html-file)))
-      (luna-f-with-file org-file
+      (with-temp-buffer
+        (insert-file-contents org-file)
         (org-mode)
         ;; For relative links in org file.
         (let ((default-directory dir))
           (org-export-to-file 'post html-file nil nil nil nil
-                              project-info))))))
+                              (append project-info
+                                      (list :output-file html-file))))))))
 
 ;;; RSS
 
@@ -54,14 +53,17 @@ the root directory of the site, where the rss file resides."
       (when (or force ; force export
                 (not (file-exists-p rss-file)) ; rss doesn’t exist
                 (file-newer-than-file-p org-file rss-file)) ; org newer
-        (luna-f-with-file org-file
+        (with-temp-buffer
+          (insert-file-contents org-file)
           (org-mode)
           (org-export-to-file 'rss-item rss-file nil nil nil nil
                               ;; This list contains :blog-rss-link and
                               ;; :blog-site-root.
                               info-plist)))
       ;; Return file content.
-      (luna-f-content rss-file))))
+      (with-temp-buffer
+        (insert-file-contents rss-file)
+        (buffer-string)))))
 
 (defvar luna-publish-rss-template
   "<?xml version=\"1.0\" encoding=\"utf-8\"?>
@@ -116,7 +118,7 @@ Normally only export outdated RSS, if FORCE non-nil, always export."
           (let* ((path (plist-get post :path))
                  (host (plist-get project-info :blog-url-base))
                  (base (plist-get project-info :blog-site-base))
-                 (link (concat host (luna-f-subtract base path))))
+                 (link (concat host (file-relative-name path base))))
             (luna-publish-rss-export
              path (append `(:blog-rss-link ,link) project-info) force)))
         post-list))))))
@@ -145,13 +147,14 @@ We look at these environment variables:
 The list is sorted by date, hidden posts are ignored."
   (let (header-list)
     (dolist (dir dir-list)
-      (let ((org-file (luna-f-join dir "index.org"))
+      (let ((org-file (expand-file-name "index.org" dir))
             ;; Our custom options.
             (org-export-options-alist
              (append '((:tags . ("TAGS" "tags" "" space))
                        (:hide . ("HIDE" "hide" "" nil)))
                      org-export-options-alist)))
-        (luna-f-with-file org-file
+        (with-temp-buffer
+          (insert-file-contents org-file)
           ;; Some document level information.
           (let* ((env (org-export-get-environment))
                  (tag-list (split-string (plist-get env :tags)))
@@ -205,7 +208,7 @@ interactively, prefix argument indicates force publish."
       ;; Index page.
       (luna-publish-dir site-base project-info t)
       ;; RSS
-      (luna-publish-rss (luna-f-join site-base "rss.xml")
+      (luna-publish-rss (expand-file-name "rss.xml" site-base)
                         post-list project-info force))))
 
 (provide 'luna-publish)
