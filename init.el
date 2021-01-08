@@ -74,7 +74,6 @@
 (luna-load-relative "star/git.el")
 (luna-load-relative "star/dir.el")
 (luna-load-relative "star/org-mode.el")
-(luna-load-relative "star/org/blogs.el")
 (luna-load-relative "star/writing.el")
 (luna-load-relative "star/tex.el")
 (luna-load-relative "star/simple-mode.el")
@@ -148,7 +147,7 @@
 
 (luna-on "Brown"
   (push "~/p/casouri/elisp" load-path)
-  (autoload #'luna-publish "luna-blog"))
+  (autoload #'luna-publish "luna-blog" nil t))
 
 ;;; Local init
 
