@@ -17,8 +17,6 @@
         (wgrep . (:repo "mhayashi1120/Emacs-wgrep"))
         (ghelp . (:repo "casouri/ghelp" :option (:full-clone t)))
         (valign . (:repo "casouri/valign" :option (:full-clone t)))
-        (expand-region . (:repo "casouri/expand-region.el"
-                                :option (:full-clone t)))
         (multi-translate . (:repo "twlz0ne/multi-translate.el"
                                   :dependency (bing-dict
                                                google-translate
