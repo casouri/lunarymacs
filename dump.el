@@ -43,7 +43,6 @@
 ;;; Other files
 
 (load "kinsoku.el")
-(luna-load-relative "star/org/blogs.el")
 
 ;;; Dump
 
