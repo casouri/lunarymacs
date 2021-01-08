@@ -144,6 +144,12 @@
 (setq bidi-paragraph-direction 'left-to-right
       bidi-inhibit-bpa t)
 
+;;;; Blog
+
+(luna-on "Brown"
+  (push "~/p/casouri/elisp" load-path)
+  (autoload #'luna-publish "luna-blog"))
+
 ;;; Local init
 
 (let ((local-init (expand-file-name
