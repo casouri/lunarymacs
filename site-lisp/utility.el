@@ -152,9 +152,8 @@ E.g. SURNAME (c) to symbol ©."
 
 ;;; Auto insert
 
-(defvar luna-autoinsert-template (luna-f-join user-emacs-directory
-                                              "star"
-                                              "autoinsert-template.el")
+(defvar luna-autoinsert-template
+  (luna-f-join user-emacs-directory "star/autoinsert-template.el")
   "The template file.")
 
 (defun luna-autoinsert (description)
