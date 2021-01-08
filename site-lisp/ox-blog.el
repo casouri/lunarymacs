@@ -17,15 +17,35 @@
 
 (require 'ox-cjk-html)
 (require 'subr-x)
-(require 'luna-f)
 
-(defvar org-blog-postamble-format
-  '(("en" "<p class=\"author\">Written by %a</p>
-<p class=\"first-publish\">First Published in %d</p>
-<p class-\"last-modified\">Last modified in %C</p>
+(defun org-blog-like-button (info)
+  "Generate a like button."
+  (let ((path (plist-get info :output-file)))
+    (format "<div class=\"like-button\">
+<form action=\"/like\" method=\"post\">
+<input type=\"text\" name=\"path\" hidden value=\"%s\" />
+<button class=\"like\" type=\"submit\">❤ Like</button>
+</form>
+</div>"
+            (file-relative-name
+             path (plist-get info :blog-site-root)))))
+
+(defun org-blog-postamble (info)
+  "Generate a postamble."
+  (let* ((spec (org-html-format-spec info))
+         (author (cdr (assq ?a spec)))
+         (date (cdr (assq ?d spec)))
+         (modified-date (cdr (assq ?C spec))))
+    (concat (org-blog-like-button info)
+            (format "<div>
+<p class=\"author\">Written by %s</p>
+<p class=\"first-publish\">First Published in %s</p>
+<p class-\"last-modified\">Last modified in %s</p>
 <p>Send your comment to 
 <a href=\"mailto:archive.casouri.cat@gmail.com\">
-archive.casouri.cat@gmail.com</a></p>")))
+archive.casouri.cat@gmail.com</a></p>
+</div>"
+                    author date modified-date))))
 
 
 (defun org-blog-preamble (info)
@@ -62,14 +82,16 @@ archive.casouri.cat@gmail.com</a></p>")))
          (headline (org-element-put-property headline :CUSTOM_ID id)))
     (org-html-headline headline contents info)))
 
+(defun org-blog-link (link desc info)
+  "Normalize LINK before generating HTML."
+  (org-html-link (ucs-normalize-NFC-string link)
+                 desc info))
 
 ;;; Post
 
 (org-export-define-derived-backend 'post 'cjk-html
   ;; Overwrite html backend defaults.
-  :options-alist '((:html-postamble-format
-                    nil nil org-blog-postamble-format)
-                   (:html-postamble nil "html-postamble" t)
+  :options-alist '((:html-postamble nil nil 'org-blog-postamble t)
                    (:html-preamble nil nil 'org-blog-preamble)
                    (:html-head-include-scripts nil "html-scripts" nil)
                    (:html-head-include-default-style nil "html-style" nil)
@@ -82,7 +104,8 @@ archive.casouri.cat@gmail.com</a></p>")))
                    (:blog-link-license "BLOG_LINK_LICENSE" nil nil))
   :menu-entry '(?p "Export to blog post"
                    ((?h "As HTML file" org-blog-export-to-post)))
-  :translate-alist '((headline . org-blog-headline)))
+  :translate-alist '((headline . org-blog-headline)
+                     (link . org-blog-link)))
 
 (defun org-blog-export-to-post
     (&optional async subtreep visible-only body-only ext-plist)
@@ -98,7 +121,7 @@ archive.casouri.cat@gmail.com</a></p>")))
 
 ;;; RSS
 
-(defun org-blog-link (link desc info)
+(defun org-blog-abs-link (link desc info)
   "Change relative links to absolute ones."
   ;; https://orgmode.org/worg/dev/org-element-api.html#org85c642d
   (let ((path (org-element-property :path link))
@@ -109,7 +132,7 @@ archive.casouri.cat@gmail.com</a></p>")))
              ;; We want the final path to have a “/” at the beginning.
              (site-root (directory-file-name
                          (plist-get info :blog-site-root)))
-             (relative-path (luna-f-subtract site-root abs-path)))
+             (relative-path (file-relative-name abs-path site-root)))
         (setq link (org-element-put-property link :path relative-path))))
     ;; We bypass Org’s link dispatch. This way we get the desired
     ;; image format.
@@ -153,7 +176,7 @@ archive.casouri.cat@gmail.com</a></p>")))
 (org-export-define-derived-backend 'rss-item 'post
   :options-alist '((:blog-site-base "BLOG_SITE_BASE" nil "")
                    (:blog-rss-link "BLOG_RSS_LINK" nil ""))
-  :translate-alist '((link . org-blog-link)
+  :translate-alist '((link . org-blog-abs-link)
                      (template . org-blog-rss-item-template)))
 
 
