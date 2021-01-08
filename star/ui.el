@@ -105,7 +105,7 @@
 
 
 (load-package info+
-  :hook (Info-mode-hook . info-pretty-mode))
+  :config (info-pretty-mode))
 
 
 ;; (load-package treemacs
