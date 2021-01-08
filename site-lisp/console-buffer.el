@@ -24,7 +24,8 @@
 
 (defvar luna-console-buffer-alist '((emacs-lisp-mode . "*scratch*")
                                     (python-mode . "*Python*")
-                                    (sage-shell:sage-mode . "*Sage*"))
+                                    (sage-shell:sage-mode . "*Sage*")
+                                    (lisp-mode . console-buffer-sly))
   "An alist with element (major-mode . console buffer).")
 
 (defvar-local luna-console-buffer-p nil
@@ -37,19 +38,24 @@
   "Return the console buffer corresponding to MODE.
 Return nil if none exists."
   (if-let ((console-buffer (alist-get mode luna-console-buffer-alist)))
-      console-buffer
-    (message "No console buffer, use `luna-set-console-buffer' to set one")
+      (if (functionp console-buffer)
+          (funcall console-buffer)
+        console-buffer)
+    (message
+     "No console buffer, use `luna-set-console-buffer' to set one")
     nil))
 
 (defun luna-toggle-console ()
   "Toggle display of console buffer.
-When console window is live, jump between console window and previous window;
-when console window is not live, switch between console buffer and previous buffer."
+When console window is live, jump between console window and
+previous window; when console window is not live, switch between
+console buffer and previous buffer."
   (interactive)
   (if (window-live-p luna-console-window)
       ;; jump between console window and previous window
       (if luna-console-buffer-p
-          (if-let ((win (window-parameter luna-console-window 'luna-console-jump-back)))
+          (if-let ((win (window-parameter luna-console-window
+                                          'luna-console-jump-back)))
               (select-window win)
             (select-window (previous-window))
             (message "Could not find previous window, guess one"))
@@ -76,7 +82,15 @@ when console window is not live, switch between console buffer and previous buff
       (delete-window luna-console-window)
     (when-let ((buf (luna--get-console-buffer major-mode)))
       (setq luna-console-window
-            (display-buffer-at-bottom (get-buffer buf) '((window-height . 0.2)))))))
+            (display-buffer-at-bottom (get-buffer buf)
+                                      '((window-height . 0.2)))))))
+
+;;; Intergration
+
+(defun console-buffer-sly ()
+  "Return console buffer of sly."
+  (require 'sly)
+  (sly-mrepl--find-create (sly-current-connection)))
 
 (provide 'console-buffer)
 
