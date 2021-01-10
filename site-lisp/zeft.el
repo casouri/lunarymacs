@@ -108,7 +108,7 @@
     (setq default-directory zeft-directory
           zeft--last-window-config (current-window-configuration))
     (add-hook 'after-change-functions
-              (lambda (beg end len) (zeft-refresh)) 0 t)
+              (lambda (&rest _) (zeft-refresh)) 0 t)
     (add-hook 'window-size-change-functions #'zeft-refresh 0 t)
     (add-hook 'kill-buffer-hook
               (lambda ()
@@ -150,7 +150,7 @@
     ;; should be ok.
     (when (or (search-forward "Press RET to create a new note" nil t)
               (y-or-n-p (format "Create file `%s'.txt? " search-phrase)))
-      (zeft--view-file file-path t)
+      (find-file file-path)
       (unless exists-p
         (insert search-phrase "\n\n")
         (save-buffer)))))
@@ -194,8 +194,9 @@
 (defvar-local zeft--last-search-phrase ""
   "The search phrase used when we last refreshed Zeft buffer.")
 
-(defvar-local zeft--last-file-list nil
-  "The last matched files list.")
+(defvar-local zeft--last-file-list t
+  "The last matched files list. Nil indicates that the last list
+  is empty.")
 
 (defun zeft--get-search-phrase ()
   "Return the search phrase. Assumes current buffer is a zeft buffer."
@@ -331,14 +332,20 @@ clickable. FILE should be an absolute path."
   "Search for notes and display their summaries.
 If FORCE is non-nil, refresh even if the search phrase didn't change."
   (interactive)
-  (let ((search-phrase (zeft--get-search-phrase))
-        (buffer (current-buffer)))
-    ;; Only refresh when search phrase changes is long enough.
+  (let* ((search-phrase (zeft--get-search-phrase))
+         (buffer (current-buffer))
+         (incremental (string-prefix-p
+                       zeft--last-search-phrase search-phrase)))
     (when (and (derived-mode-p 'zeft-mode)
+               ;; Only refresh when search phrase changes is long
+               ;; enough.
                (or force
                    (and (not (equal search-phrase
                                     zeft--last-search-phrase))
-                        (not (< 0 (string-width search-phrase) 3)))))
+                        (not (< 0 (string-width search-phrase) 3))))
+               ;; If incremental and last list is empty, this list
+               ;; must be empty too.
+               (not (and incremental (null zeft--last-file-list))))
       (zeft--search
        search-phrase
        (lambda (file-list)
@@ -364,12 +371,13 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
                                     'read-only t))
                (zeft--highlight-search-phrase)
                (setq zeft--last-search-phrase search-phrase
-                     zeft--last-file-list file-list)
+                     zeft--last-file-list
+                     (if (null file-list) 'empty file-list))
                (set-buffer-modified-p nil))))
          (setq zeft--insert-done-time (current-time))
          (when zeft--debug-mode
            (with-temp-buffer
-             (insert (format "Grep: %f  Search: %f  Insert: %f  Seaching: %s\n"
+             (insert (format "Grep: %f Search: %f Insert: %f Total: %f Seaching: %s\n"
                              (time-to-seconds
                               (time-subtract zeft--grep-done-time
                                              zeft--start-time))
@@ -379,14 +387,15 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
                              (time-to-seconds
                               (time-subtract zeft--insert-done-time
                                              zeft--search-done-time))
+                             (time-to-seconds
+                              (time-subtract zeft--insert-done-time
+                                             zeft--start-time))
                              search-phrase))
-             (append-to-file (point-min) (point-max) "~/zeft-time"))))
+             (append-to-file
+              (point-min) (point-max) "/tmp/zeft-time"))))
        ;; If the current search phrase includes the previous search
        ;; phrase, we can just filter the last file-list.
-       (if (and zeft--last-search-phrase
-                (string-prefix-p
-                 zeft--last-search-phrase search-phrase))
-           zeft--last-file-list)))))
+       (when incremental zeft--last-file-list)))))
 
 ;;; Search
 
@@ -406,12 +415,13 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
   ;; list.
   (setq zeft--start-time (current-time))
   (let* ((keyword-list (split-string phrase))
-         (file-list (cl-remove-if-not
-                     (lambda (file)
-                       (and (file-regular-p file)
-                            (not (string-prefix-p
-                                  "." (file-name-base file)))))
-                     (directory-files zeft-directory t)))
+         (file-list (or shortcut-file-list
+                        (cl-remove-if-not
+                         (lambda (file)
+                           (and (file-regular-p file)
+                                (not (string-prefix-p
+                                      "." (file-name-base file)))))
+                         (directory-files zeft-directory t))))
          ;; Given a list of files, FILTER searches for rest of the
          ;; keywords. This is the filter function for round 2.
          (filter (lambda (file-list keyword-list)
@@ -426,7 +436,7 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
                                 (insert-file-contents file)
                                 (dolist (keyword keyword-list t)
                                   (goto-char (point-min))
-                                  (re-search-forward keyword)))
+                                  (search-forward keyword)))
                             (search-failed nil))
                        collect file))))))
     (cond
@@ -437,9 +447,9 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
       (funcall callback file-list))
      ;; Have a shortcut and it's short enough, skip round 1 and go
      ;; straight to round 2.
-     ((and shortcut-file-list (< (length shortcut-file-list) 10))
+     ((and file-list (< (length shortcut-file-list) 10))
       (setq zeft--grep-done-time (current-time))
-      (funcall filter shortcut-file-list keyword-list))
+      (funcall filter file-list keyword-list))
      ;; Normal search, do round 1 then round 2.
      (t
       (let* ((name (generate-new-buffer-name " *zeft grep*"))
