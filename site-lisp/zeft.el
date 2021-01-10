@@ -117,6 +117,16 @@
     (insert "\n\nInsert search phrase and press RET to search.")
     (goto-char (point-min))))
 
+;; Start search.
+(defvar zeft--start-time nil)
+;; Grep returns.
+(defvar zeft--grep-done-time nil)
+;; Search in Emacs finishes.
+(defvar zeft--search-done-time nil)
+;; Inserted all file excerpts.
+(defvar zeft--insert-done-time nil)
+(defvar zeft--debug-mode nil)
+
 ;;; Userland
 
 (defun zeft ()
@@ -331,7 +341,7 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
       (zeft--search
        search-phrase
        (lambda (file-list)
-         (setq zeft-search-done-time (current-time))
+         (setq zeft--search-done-time (current-time))
          (setq file-list
                (cl-sort file-list
                         #'file-newer-than-file-p))
@@ -353,18 +363,18 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
                (setq zeft--last-search-phrase search-phrase
                      zeft--last-file-list file-list)
                (set-buffer-modified-p nil))))
-         (setq zeft-insert-done-time (current-time))
+         (setq zeft--insert-done-time (current-time))
          (with-temp-buffer
            (insert (format "Grep: %f  Search: %f  Insert: %f  Seaching: %s\n"
                            (time-to-seconds
-                            (time-subtract zeft-grep-done-time
-                                           zeft-start-time))
+                            (time-subtract zeft--grep-done-time
+                                           zeft--start-time))
                            (time-to-seconds
-                            (time-subtract zeft-search-done-time
-                                           zeft-grep-done-time))
+                            (time-subtract zeft--search-done-time
+                                           zeft--grep-done-time))
                            (time-to-seconds
-                            (time-subtract zeft-insert-done-time
-                                           zeft-search-done-time))
+                            (time-subtract zeft--insert-done-time
+                                           zeft--search-done-time))
                            search-phrase))
            (append-to-file (point-min) (point-max) "~/zeft-time")))
        ;; If the current search phrase includes the previous search
@@ -390,7 +400,7 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
   ;; isn't too slow. If SHORTCUT-FILE-LIST is non-nil and short
   ;; enough, we skip round 1 and goes straight to round 2 with that
   ;; list.
-  (setq zeft-start-time (current-time))
+  (setq zeft--start-time (current-time))
   (let* ((keyword-list (split-string phrase))
          (file-list (cl-remove-if-not
                      (lambda (file)
@@ -418,13 +428,13 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
     (cond
      ;; Search phrase is empty, simply return the full list.
      ((null keyword-list)
-      (setq zeft-grep-done-time (current-time))
-      (setq zeft-search-done-time (current-time))
+      (setq zeft--grep-done-time (current-time))
+      (setq zeft--search-done-time (current-time))
       (funcall callback file-list))
      ;; Have a shortcut and it's short enough, skip round 1 and go
      ;; straight to round 2.
      ((and shortcut-file-list (< (length shortcut-file-list) 10))
-      (setq zeft-grep-done-time (current-time))
+      (setq zeft--grep-done-time (current-time))
       (funcall filter shortcut-file-list keyword-list))
      ;; Normal search, do round 1 then round 2.
      (t
@@ -453,7 +463,7 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
                             (with-current-buffer buf
                               (let ((files (split-string
                                             (buffer-string) "\n")))
-                                (setq zeft-grep-done-time (current-time))
+                                (setq zeft--grep-done-time (current-time))
                                 (funcall filter
                                          (remove "" files)
                                          (cdr keyword-list))))
