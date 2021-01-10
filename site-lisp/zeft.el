@@ -23,16 +23,16 @@
 ;; 
 ;; There are other motivations, like the desire for a interface
 ;; similar to Apple’s Note.app, where each file comes with a
-;; multi-line summary and there is another window previewing the
+;; multi-line excerpt and there is another window previewing the
 ;; currently selected file.
 ;;
 ;; Usage:
 ;;
 ;; Type M-x zeft RET, and you should see the Zeft buffer. Type in your
 ;; search phrase in the first line and the result will show up as you
-;; type. Press C-n and C-p to go through each file. You can open a
-;; file by pressing RET when the point is on a file, or click the file
-;; with mouse.
+;; type. Press C-n and C-p to go through each file. You can preview a
+;; file by pressing SPC when the point is on a file, or click the file
+;; with mouse. Press RET to open the file in the same window.
 ;;
 ;; Type C-c C-g to force a refresh. When point is on the search
 ;; phrase, press RET to create a file with the search phrase as
@@ -41,7 +41,8 @@
 ;; Note that:
 ;;
 ;; 1. Zeft uses grep, make sure it is installed in your system and can
-;;    be found by Emacs.
+;;    be found by Emacs. If you have rg on your system, Zeft
+;;    automatically uses rg.
 ;;
 ;; 2. Zeft starts filtering when the search phrase is at least 3
 ;;    characters long. To search with phrase shorter than that, use
@@ -77,7 +78,7 @@
   :group 'zeft)
 
 (defface zeft-highlight
-  '((t . (:inherit highlight :extend t)))
+  '((t . (:inherit underline :extend t)))
   "Face for highlighting in Zeft."
   :group 'zeft)
 
@@ -147,7 +148,7 @@
   "Overlay used for highlighting selected search result.")
 
 (defun zeft--highlight-file-at-point ()
-  "Activate (highlight) the file summary button at point."
+  "Activate (highlight) the file excerpt button at point."
   (let ((button (button-at (point))))
     ;; Create the overlay if it doesn't exist yet.
     (when (null zeft--select-overlay)
@@ -160,13 +161,13 @@
                   (button-start button) (button-end button))))
 
 (defun zeft-next ()
-  "Move to next file summary."
+  "Move to next file excerpt."
   (interactive)
   (when (forward-button 1 nil nil t)
     (zeft--highlight-file-at-point)))
 
 (defun zeft-previous ()
-  "Move to previous file summary."
+  "Move to previous file excertp."
   (interactive)
   (if (backward-button 1 nil nil t)
       (zeft--highlight-file-at-point)
@@ -191,7 +192,12 @@
     (goto-char (point-min))
     (buffer-substring-no-properties (point) (line-end-position))))
 
-(defun zeft--view-file (file &optional select)
+(defun zeft--find-file-at-point ()
+  "View file at point."
+  (interactive)
+  (find-file (button-get (button-at (point)) 'path)))
+
+(defun zeft--preview-file (file &optional select)
   "View FILE in another window.
 If SELECT is non-nil, select the buffer after displaying it."
   (interactive)
@@ -220,7 +226,7 @@ If SELECT is non-nil, select the buffer after displaying it."
       (zeft--highlight-matched keyword-list)
       (run-hooks 'zeft-find-file-hook))))
 
-(define-button-type 'zeft-summary
+(define-button-type 'zeft-excerpt
   'action (lambda (button)
             ;; If the file is no already highlighted, highlight it
             ;; first.
@@ -231,20 +237,43 @@ If SELECT is non-nil, select the buffer after displaying it."
                                 (overlay-end zeft--select-overlay))))
               (goto-char (button-start button))
               (zeft--highlight-file-at-point))
-            ;; Open the file.
-            (zeft--view-file (button-get button 'path)))
+            (zeft--preview-file (button-get button 'path)))
+  'keymap (let ((map (make-sparse-keymap)))
+            (set-keymap-parent map button-map)
+            (define-key map (kbd "RET") #'zeft--find-file-at-point)
+            (define-key map (kbd "SPC") #'push-button)
+            map)
   'help-echo "Open this file"
   'follow-link t
   'face 'default
   'mouse-face 'zeft-selection)
 
-(defun zeft--insert-file-summary (file)
-  "Insert a summary for FILE at point.
-This summary contains note title and except and is clickable.
-FILE should be an absolute path."
-  (let ((summary-len (floor (* 2.7 (1- (window-width)))))
-        title full-summary summary)
+(defun zeft--highlight-search-phrase ()
+  "Highlight search phrases in buffer."
+  (let ((keyword-list (split-string (zeft--get-search-phrase)))
+        (inhibit-read-only t))
+    (dolist (keyword keyword-list)
+      (goto-char (point-min))
+      (forward-line 2)
+      ;; We use overlay because overlay allows face composition.
+      ;; So we can have bold + underline.
+      (while (search-forward keyword nil t)
+        (let ((ov (make-overlay (match-beginning 0)
+                                (match-end 0))))
+          (overlay-put ov 'face 'zeft-highlight)
+          (overlay-put ov 'zeft-highlight t)
+          (overlay-put ov 'evaporate t))))))
+
+(defun zeft--insert-file-excerpt (file)
+  "Insert an excerpt for FILE at point.
+This excerpt contains note title and content except and is
+clickable. FILE should be an absolute path."
+  (let ((excerpt-len (floor (* 2.7 (1- (window-width)))))
+        (last-search-term
+         (car (last (split-string (zeft--get-search-phrase)))))
+        title excerpt)
     (with-current-buffer (get-buffer-create " *zeft work*")
+      (widen)
       (erase-buffer)
       (insert-file-contents file)
       (goto-char (point-min))
@@ -252,33 +281,34 @@ FILE should be an absolute path."
       (setq title (buffer-substring-no-properties
                    (point) (line-end-position)))
       (when (eq title "") (setq title "no title"))
-      (skip-chars-forward " \n\t")
-      ;; Grab the beginning of the file and replace whitespaces and
-      ;; newlines with whitespaces.
-      (setq full-summary (replace-regexp-in-string
-                          "[[:space:]]+"
-                          " "
+      (forward-line)
+      (narrow-to-region (point) (point-max))
+      ;; Grab excerpt.
+      (setq excerpt (string-trim
+                     (replace-regexp-in-string
+                      "[[:space:]]+"
+                      " "
+                      (if (and last-search-term
+                               (search-forward last-search-term nil t))
                           (buffer-substring-no-properties
-                           (point)
-                           (min (+ (point) (* 2 summary-len))
-                                (point-max)))))
-      ;; Cut the full summary two at most two lines.
-      (setq summary (if (<= (length full-summary) summary-len)
-                        full-summary
-                      ;; The length is an estimate, we don't need to
-                      ;; be precise.
-                      (concat (substring full-summary 0 summary-len)
-                              "..."))))
-    ;; Now we insert the summary
+                           (max (- (point) (/ excerpt-len 2))
+                                (point-min))
+                           (min (+ (point) (/ excerpt-len 2))
+                                (point-max)))
+                        (buffer-substring-no-properties
+                         (point)
+                         (min (+ (point) excerpt-len)
+                              (point-max))))))))
+    ;; Now we insert the excerpt
     (let ((start (point)))
       (insert (propertize title 'face '(:weight bold))
               "\n"
-              (propertize summary 'face '(:weight light))
+              (propertize excerpt 'face '(:weight light))
               "\n\n")
       ;; If we use overlay (with `make-button'), the button's face
       ;; will override the bold and light face we specified above.
       (make-text-button start (- (point) 2)
-                        :type 'zeft-summary
+                        :type 'zeft-excerpt
                         'path file))))
 
 (defun zeft-force-refresh ()
@@ -301,6 +331,7 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
       (zeft--search
        search-phrase
        (lambda (file-list)
+         (setq zeft-search-done-time (current-time))
          (setq file-list
                (cl-sort file-list
                         #'file-newer-than-file-p))
@@ -314,13 +345,28 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
                (let ((start (point)))
                  (if file-list
                      (dolist (file file-list)
-                       (zeft--insert-file-summary file))
+                       (zeft--insert-file-excerpt file))
                    (insert "Press RET to create a new note"))
                  (put-text-property (- start 2) (point)
                                     'read-only t))
+               (zeft--highlight-search-phrase)
                (setq zeft--last-search-phrase search-phrase
                      zeft--last-file-list file-list)
-               (set-buffer-modified-p nil)))))
+               (set-buffer-modified-p nil))))
+         (setq zeft-insert-done-time (current-time))
+         (with-temp-buffer
+           (insert (format "Grep: %f  Search: %f  Insert: %f  Seaching: %s\n"
+                           (time-to-seconds
+                            (time-subtract zeft-grep-done-time
+                                           zeft-start-time))
+                           (time-to-seconds
+                            (time-subtract zeft-search-done-time
+                                           zeft-grep-done-time))
+                           (time-to-seconds
+                            (time-subtract zeft-insert-done-time
+                                           zeft-search-done-time))
+                           search-phrase))
+           (append-to-file (point-min) (point-max) "~/zeft-time")))
        ;; If the current search phrase includes the previous search
        ;; phrase, we can just filter the last file-list.
        (if (and zeft--last-search-phrase
@@ -344,6 +390,7 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
   ;; isn't too slow. If SHORTCUT-FILE-LIST is non-nil and short
   ;; enough, we skip round 1 and goes straight to round 2 with that
   ;; list.
+  (setq zeft-start-time (current-time))
   (let* ((keyword-list (split-string phrase))
          (file-list (cl-remove-if-not
                      (lambda (file)
@@ -371,17 +418,23 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
     (cond
      ;; Search phrase is empty, simply return the full list.
      ((null keyword-list)
+      (setq zeft-grep-done-time (current-time))
+      (setq zeft-search-done-time (current-time))
       (funcall callback file-list))
      ;; Have a shortcut and it's short enough, skip round 1 and go
      ;; straight to round 2.
      ((and shortcut-file-list (< (length shortcut-file-list) 10))
+      (setq zeft-grep-done-time (current-time))
       (funcall filter shortcut-file-list keyword-list))
      ;; Normal search, do round 1 then round 2.
      (t
       (let* ((name (generate-new-buffer-name " *zeft grep*"))
+             (grep (if (executable-find "rg") "rg" "grep"))
              (process (apply
                        #'start-process
-                       name name "grep" "-ilFs"
+                       ;; Ignore case, List filenames, Fixed literals
+                       ;; (no regexp).
+                       name name grep "-ilFs"
                        ;; The phrase could span multiple lines
                        ;; (because of filling), so we only search for
                        ;; the part before first space as a preliminary
@@ -400,6 +453,7 @@ If SHORTCUT-FILE-LIST non-nil, filter upon that list."
                             (with-current-buffer buf
                               (let ((files (split-string
                                             (buffer-string) "\n")))
+                                (setq zeft-grep-done-time (current-time))
                                 (funcall filter
                                          (remove "" files)
                                          (cdr keyword-list))))
