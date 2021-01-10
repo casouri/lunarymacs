@@ -364,19 +364,20 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
                      zeft--last-file-list file-list)
                (set-buffer-modified-p nil))))
          (setq zeft--insert-done-time (current-time))
-         (with-temp-buffer
-           (insert (format "Grep: %f  Search: %f  Insert: %f  Seaching: %s\n"
-                           (time-to-seconds
-                            (time-subtract zeft--grep-done-time
-                                           zeft--start-time))
-                           (time-to-seconds
-                            (time-subtract zeft--search-done-time
-                                           zeft--grep-done-time))
-                           (time-to-seconds
-                            (time-subtract zeft--insert-done-time
-                                           zeft--search-done-time))
-                           search-phrase))
-           (append-to-file (point-min) (point-max) "~/zeft-time")))
+         (when zeft--debug-mode
+           (with-temp-buffer
+             (insert (format "Grep: %f  Search: %f  Insert: %f  Seaching: %s\n"
+                             (time-to-seconds
+                              (time-subtract zeft--grep-done-time
+                                             zeft--start-time))
+                             (time-to-seconds
+                              (time-subtract zeft--search-done-time
+                                             zeft--grep-done-time))
+                             (time-to-seconds
+                              (time-subtract zeft--insert-done-time
+                                             zeft--search-done-time))
+                             search-phrase))
+             (append-to-file (point-min) (point-max) "~/zeft-time"))))
        ;; If the current search phrase includes the previous search
        ;; phrase, we can just filter the last file-list.
        (if (and zeft--last-search-phrase
