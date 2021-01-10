@@ -166,7 +166,8 @@ If the file doesn't exist, create a buffer."
       (if (file-exists-p fullname)
           (find-file fullname)
         (switch-to-buffer (get-buffer-create fullname))
-        (insert file "\n\n")))
+        (when (eq (point) 1)
+          (insert file "\n\n"))))
     (when (eq major-mode 'fundamental-mode)
       (text-mode))
     (unless bklink-minor-mode
