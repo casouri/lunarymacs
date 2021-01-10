@@ -107,7 +107,8 @@
     (visual-line-mode)
     (setq default-directory zeft-directory
           zeft--last-window-config (current-window-configuration))
-    (add-hook 'post-command-hook #'zeft-refresh 0 t)
+    (add-hook 'after-change-functions
+              (lambda (beg end len) (zeft-refresh)) 0 t)
     (add-hook 'window-size-change-functions #'zeft-refresh 0 t)
     (add-hook 'kill-buffer-hook
               (lambda ()
@@ -346,7 +347,8 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
                (cl-sort file-list
                         #'file-newer-than-file-p))
          ;; Insert file summaries.
-         (let ((inhibit-read-only t))
+         (let ((inhibit-read-only t)
+               (inhibit-modification-hooks t))
            (with-current-buffer buffer
              (save-excursion
                (goto-char (point-min))
@@ -357,7 +359,8 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
                      (dolist (file file-list)
                        (zeft--insert-file-excerpt file))
                    (insert "Press RET to create a new note"))
-                 (put-text-property (- start 2) (point)
+                 ;; If we use (- start 2), emacs-rime cannot work.
+                 (put-text-property (- start 1) (point)
                                     'read-only t))
                (zeft--highlight-search-phrase)
                (setq zeft--last-search-phrase search-phrase
