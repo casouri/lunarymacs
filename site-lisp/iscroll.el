@@ -93,7 +93,7 @@ lines scrolled."
       ;; entered the command.
       (when (null scroll-amount)
         (setq scroll-amount (window-vscroll nil t)))
-      ;; `line-pixel-height' is expensive so we try to call it as few
+      ;; `line-pixel-height' is expensive so we try to call it as less
       ;; as possible.
       (when need-to-recalculate-img-height
         (setq img-height (line-pixel-height)
