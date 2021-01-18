@@ -149,10 +149,23 @@
   ftable-reformat)
 
 
+(defun company-complete-common-or-commit ()
+  "Insert the common part of all candidates, or commit the selection."
+  (interactive)
+  (when (company-manual-begin)
+    (let ((tick (buffer-chars-modified-tick)))
+      (call-interactively 'company-complete-common)
+      (when (eq tick (buffer-chars-modified-tick))
+        (call-interactively 'company-complete-selection)))))
+
 (luna-def-key
  :keymaps '(company-active-map company-search-map)
  "C-p" #'company-select-previous
  "C-n" #'company-select-next
+ "RET" nil
+ "<return>" nil
+ "TAB" #'company-complete-common-or-commit
+ "<tab>" #'company-complete-common-or-commit
  :keymaps 'company-search-map
  "<escape>" #'company-abort)
 
@@ -160,7 +173,7 @@
   :hook (prog-mode-hook . company-mode)
   :config
   (setq company-idle-delay 0.1)
-  (setq company-minimum-prefix-length 1
+  (setq company-minimum-prefix-length 2
         company-dabbrev-downcase nil
         company-tooltip-limit 15)
   ;; company dabbrev is annoying, make sure not to include it.
@@ -172,9 +185,7 @@
 (load-package rime
   :config
   (luna-on "Brown"
-    (setq rime-librime-root
-          (expand-file-name "librime/dist"
-                            user-emacs-directory)
+    (setq rime-librime-root "/opt/local/lib"
           rime-show-candidate 'posframe
           rime-posframe-style 'vertical
           rime-user-data-dir "/Users/yuan/Library/Rime")
