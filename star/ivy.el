@@ -40,8 +40,8 @@
   :commands swiper)
 
 (load-package counsel
+  :commands counsel-yank-pop
   :config
-  (counsel-mode)
   (push '(counsel-M-x . nil) ivy-initial-inputs-alist))
 
 ;; For M-x history.
