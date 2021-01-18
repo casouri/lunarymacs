@@ -19,32 +19,34 @@
 ;;   binder-toggle-sidebar
 ;;   binder-reveal-in-sidebar)
 
-;; (load-package deft
-;;   :commands deft
-;;   :config
-;;   (require 'iimg)
-;;   (require 'bklink)
-;;   (require 'color-outline)
-;;   :hook
-;;   (deft-open-file-hook . (color-outline-mode-maybe
-;;                           bklink-minor-mode
-;;                           auto-fill-mode))
-;;   (deft-cache-file-hook . iimg-clean-data)
-;;   :config
-;;   (defun iimg-clean-data ()
-;;     "Clear any iimg-data in current buffer."
-;;     (goto-char (point-min))
-;;     (while (re-search-forward iimg--data-regexp nil t)
-;;       (let ((inhibit-read-only t))
-;;         (delete-region (match-beginning 0) (match-end 0)))))
-;;   (push '(text-mode "#") color-outline-comment-char-alist)
-;;   (setq deft-directory (expand-file-name "~/deft/")
-;;         deft-use-filter-string-for-filename t))
+(load-package deft
+  :commands deft
+  :hook
+  (require 'iimg)
+  (deft-cache-file-hook . iimg-clean-data)
+  :config
+  (defun iimg-clean-data ()
+    "Clear any iimg-data in current buffer."
+    (goto-char (point-min))
+    (while (re-search-forward iimg--data-regexp nil t)
+      (let ((inhibit-read-only t))
+        (delete-region (match-beginning 0) (match-end 0)))))
+  (push '(text-mode "#") color-outline-comment-char-alist)
+  (setq deft-directory (expand-file-name "~/deft/")
+        deft-use-filter-string-for-filename t))
 
 
 (load-package zeft
   :commands zeft
   :config
+  (defun iimg-prune-image-data ()
+    "Clear any iimg-data in current buffer."
+    (require 'iimg)
+    (goto-char (point-min))
+    (while (re-search-forward iimg--data-regexp nil t)
+      (let ((inhibit-read-only t))
+        (delete-region (match-beginning 0) (match-end 0)))))
+  (add-hook 'zeft-load-file-hook #'iimg-prune-image-data)
   (setq zeft-directory (expand-file-name "~/deft"))
   (add-hook 'zeft-find-file-hook #'auto-fill-mode)
   (add-hook 'zeft-find-file-hook #'electric-quote-mode))
