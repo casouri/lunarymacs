@@ -24,7 +24,7 @@
 ;; search phrase in the first line and the result will show up as you
 ;; type. Press C-n and C-p to go through each file. You can preview a
 ;; file by pressing SPC when the point is on a file, or click the file
-;; with mouse. Press RET to open the file in the same window.
+;; with the mouse. Press RET to open the file in the same window.
 ;;
 ;; Type C-c C-g to force a refresh. When point is on the search
 ;; phrase, press RET to create a file with the search phrase as
@@ -33,15 +33,19 @@
 ;; Note that:
 ;;
 ;; 1. Zeft only looks for first-level files in ‘zeft-directory’. That is,
-;; files in sub-directories are not searched.
+;;    files in sub-directories are not searched.
 ;;
 ;; 2. Zeft creates new files by using the search phrase as the
-;;    filename and title, if you want otherwise, email me or redefine
+;;    filename and title, if you want otherwise, redefine
 ;;    ‘zeft-create-note’.
 ;;
 ;; 3. Zeft saves the current window configuration before switching to
 ;;    Zeft buffer. When Zeft buffer is killed, Zeft restores the saved
 ;;    window configuration.
+;;
+;; 4. Zeft only display the first 20 files when the search phrase is
+;;    empty, if you want to see all the files, force a refresh by
+;;    typing C-c C-g.
 
 ;;; Code:
 
@@ -172,7 +176,7 @@ saved file content."
 
 (defun zeft--highlight-file-at-point ()
   "Activate (highlight) the file excerpt button at point."
-  (let ((button (button-at (point))))
+  (when-let ((button (button-at (point))))
     ;; Create the overlay if it doesn't exist yet.
     (when (null zeft--select-overlay)
       (setq zeft--select-overlay (make-overlay (button-start button)
@@ -214,7 +218,8 @@ is empty.")
   "Return the search phrase. Assumes current buffer is a zeft buffer."
   (save-excursion
     (goto-char (point-min))
-    (buffer-substring-no-properties (point) (line-end-position))))
+    (string-trim
+     (buffer-substring-no-properties (point) (line-end-position)))))
 
 (defun zeft--find-file-at-point ()
   "View file at point."
@@ -355,39 +360,49 @@ clickable. FILE should be an absolute path."
   "Search for notes and display their summaries.
 If FORCE is non-nil, refresh even if the search phrase didn't change."
   (interactive)
-  (let* ((search-phrase (zeft--get-search-phrase)))
+  (let ((search-phrase (zeft--get-search-phrase)))
     (when (and (derived-mode-p 'zeft-mode)
                (or force (not (equal search-phrase
                                      zeft--last-search-phrase))))
-      (let* ((file-list
+      (let* ((phrase-empty (equal search-phrase ""))
+             (file-list
               (zeft--search
                search-phrase
-               ;; If the current search phrase includes the previous
-               ;; search phrase, we can just filter the last file-list.
-               (if (string-prefix-p zeft--last-search-phrase
-                                    search-phrase)
+               ;; If the current search phrase contains the previous
+               ;; search phrase, we can just use the last file-list.
+               (if (and (not phrase-empty)
+                        (string-prefix-p zeft--last-search-phrase
+                                         search-phrase))
                    zeft--last-file-list
                  nil)))
              (file-list (cl-sort file-list #'file-newer-than-file-p))
              (inhibit-read-only t)
-             (inhibit-modification-hooks t))
+             (inhibit-modification-hooks t)
+             (old-point (point)))
+        ;; Don’t display all files when the search phrase is empty.
+        (when (and (not force) phrase-empty)
+          (setq file-list (cl-subseq file-list 0 20)))
         ;; Insert file summaries.
-        (save-excursion
-          (goto-char (point-min))
-          (forward-line 2)
-          (delete-region (point) (point-max))
-          (let ((start (point)))
-            (if file-list
-                (dolist (file file-list)
-                  (zeft--insert-file-excerpt file))
-              (insert "Press RET to create a new note"))
-            ;; If we use (- start 2), emacs-rime cannot work.
-            (put-text-property (- start 1) (point)
-                               'read-only t))
-          (zeft--highlight-search-phrase)
-          (setq zeft--last-search-phrase search-phrase
-                zeft--last-file-list file-list)
-          (set-buffer-modified-p nil))))))
+        (goto-char (point-min))
+        (forward-line 2)
+        (delete-region (point) (point-max))
+        (let ((start (point)))
+          (if file-list
+              (dolist (file file-list)
+                (zeft--insert-file-excerpt file))
+            (insert "Press RET to create a new note"))
+          ;; If we use (- start 2), emacs-rime cannot work.
+          (put-text-property (- start 1) (point)
+                             'read-only t))
+        (zeft--highlight-search-phrase)
+        (setq zeft--last-search-phrase search-phrase
+              zeft--last-file-list file-list)
+        (set-buffer-modified-p nil)
+        ;; Save excursion wouldn’t work since we erased the buffer and
+        ;; re-inserted contents.
+        (goto-char old-point)
+        ;; Re-apply highlight.
+        (zeft--highlight-file-at-point)))))
 
 (defun zeft--search (phrase &optional shortcut-file-list)
   "Return a list of files that contains PHRASE.
