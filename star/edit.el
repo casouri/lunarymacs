@@ -61,13 +61,11 @@
 
 (load-package expand-region
   :config
-  ;; it interferes angel.el's region transient map
-  ;; specifically, the region-deactive-hook
-  ;; doesn't run right after the region highlight is off
+  ;; It interferes angel.el's region transient map specifically, the
+  ;; region-deactive-hook doesn't run right after the region highlight
+  ;; is off.
   (setq expand-region-fast-keys-enabled nil)
   :commands
-  expand-region
-  contract-region
   er/expand-region
   er/contract-region)
 
@@ -164,8 +162,7 @@
  "C-n" #'company-select-next
  "RET" nil
  "<return>" nil
- "TAB" #'company-complete-common-or-commit
- "<tab>" #'company-complete-common-or-commit
+ "="   #'company-complete-selection
  :keymaps 'company-search-map
  "<escape>" #'company-abort)
 
