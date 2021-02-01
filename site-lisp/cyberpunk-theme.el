@@ -1,6 +1,14 @@
-;;; -*- lexical-binding: t -*-
+;;; cyberpunk-theme.el --- Cyberpunk theme      -*- lexical-binding: t; -*-
 
-(eval-when-compile (require 'theme-util))
+;; Author: Yuan Fu <casouri@gmail.com>
+
+;;; This file is NOT part of GNU Emacs
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'theme-util)
 
 (deftheme cyberpunk
   "Cuberpunk theme.")
@@ -336,3 +344,4 @@
 
 (provide-theme 'cyberpunk)
 
+;;; cyberpunk-theme.el ends here

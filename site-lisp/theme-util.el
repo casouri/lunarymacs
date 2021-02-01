@@ -115,10 +115,11 @@ For example,
       (+ (expt (- r1 r2) 2)
          (expt (- g1 g2) 2)
          (expt (- b1 b2) 2))))
-  "Function (color1 color2) -> number that returns the distance between color1 and color2.
-There is no specification on the range of the returned number as long as greater number
-implies greater distance.
-Each color is like (R G B) where R, G, B are number.
+  "Function that returns the distance between color1 and color2.
+Should take two colors and return a number. There is no
+specification on the range of the returned number as long as
+greater number implies greater distance. Each color is like (R G
+B) where R, G, B are number.
 
 More on https://en.wikipedia.org/wiki/Color_difference")
 
@@ -130,13 +131,13 @@ COLOR’s are in the form of ”#RRGGBB”."
            (theme-util-color-str-to-list color2)))
 
 (defun theme-util-color-str-to-list (color)
-  "Convert ”#RRGGBB” to (R G B)."
+  "Convert COLOR in ”#RRGGBB” format to (R G B)."
   (list (string-to-number (substring color 1 3) 16)
         (string-to-number (substring color 3 5) 16)
         (string-to-number (substring color 5 7) 16)))
 
 (defun theme-util-color-list-to-str (color)
-  "Convert (R G B) to ”#RRGGBB”."
+  "Convert COLOR in (R G B) format to ”#RRGGBB”."
   (format "#%.2x%.2x%.2x" (nth 0 color) (nth 1 color) (nth 2 color)))
 
 (defun theme-util--closest-color-in-list (color color-list)
@@ -154,7 +155,7 @@ COLOR’s are in the form of ”#RRGGBB”."
   "Return the closest 8 bit color to COLOR."
   (theme-util-closest-color-in-list color theme-util--8-bit-color-list))
 
-(defun theme-util-closest-4-bit-color ()
+(defun theme-util-closest-4-bit-color (color)
   "Return the closest 4 bit color to COLOR."
   (theme-util-closest-color-in-list color theme-util--4-bit-color-list))
 
