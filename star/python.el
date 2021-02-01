@@ -2,7 +2,8 @@
 
 ;;; Config
 
-(setq python-indent-offset 4)
+(setq python-indent-offset 4
+      python-shell-completion-native-enable nil)
 
 ;;; Packages
 
@@ -18,8 +19,8 @@
   :extern "pyright npm install -g pyright"
   :defer
   :config
-  (add-to-list 'eglot-server-programs
-               '(python-mode . ("pyright-langserver" "--stdio")))
+  ;; (add-to-list 'eglot-server-programs
+  ;;              '(python-mode . ("pyright-langserver" "--stdio")))
   :init
   (add-hook 'python-mode-hook
             (lambda ()
