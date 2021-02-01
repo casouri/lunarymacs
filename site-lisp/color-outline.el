@@ -6,12 +6,13 @@
 
 ;;; Commentary:
 ;;
-;; This package provides a basic version of outshine.el, providing:
-;; 
-;;   1) Highlight each header level
-;;   2) outline folding
+;; This package is a basic version of outshine.el, it provides a quick
+;; and easy way of setting up headline patterns and integration with
+;; outline commands, highlighting of headlines and imenu support.
 ;;
-;; Usage: M-x color-outline-mode RET
+;; Usage:
+;;
+;; M-x color-outline-mode RET
 ;;
 ;; Header level is determined by the number of comment characters.
 ;; The first level header starts from 3 comment characters.
@@ -33,18 +34,20 @@
 ;;
 ;;     (color-outline-define-header MODE COMMENT-CHAR COMMENT-BEGIN)
 ;;
-;; COMMENT-CHAR for ‘python-mode’ is “#”, for example. It can be more
+;; For example, COMMENT-CHAR for ‘python-mode’ is “#”. It can be more
 ;; than one character. COMMENT-BEGIN is the (possibly empty) beginning
 ;; of the header. For example, in OCaml, comments are (* ... *). Then
 ;; COMMENT-BEGIN is “(” and COMMENT-CHAR is “*”.
 ;;
-;; You can also just edit ‘color-outline-comment-char-alist’.
+;; Instead of using ‘color-outline-define-header’, you can also modify
+;; ‘color-outline-comment-char-alist’ directly.
 
 ;;; Code:
 ;;
 
 (require 'cl-lib)
 (require 'subr-x)
+(require 'rx)
 
 (defvar color-outline-comment-char-alist '((c-mode "/")
                                            (python-mode "#")
@@ -82,7 +85,7 @@ group is <ANYCHAR>*.
 
 Return a plist
 
-    (:outline PATTERN :font-lock PATTERN-LIST :imenu PATTERN)
+    (:outline PATTERN :font-lock PATTERN-LIST)
 
 where PATTERN is suitable for `outline-regepx', PATTERN-LIST is suitable
 for `font-lock-add-keywords' (a list of specs)."
@@ -144,6 +147,7 @@ COMMENT-BEGIN is string pattern starting a comment."
                  (setq color-outline--keywords font-lock-keyword-list)
                  (setq color-outline--imenu-expression imenu-expression)
                  (outline-minor-mode))
+        ;; Don’t error in major mode hooks.
         (message "No color-outline pattern configured for %s"
                  major-mode))
     (kill-local-variable 'outline-regexp)
