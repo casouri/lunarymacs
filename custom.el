@@ -20,6 +20,7 @@
  '(delete-by-moving-to-trash t)
  '(dired-omit-files "\\`[.]?#\\|\\`[.][.]?" nil nil "Hide all dot files")
  '(display-line-numbers-width 3)
+ '(doc-view-resolution 300)
  '(ediff-split-window-function 'split-window-horizontally)
  '(ediff-window-setup-function 'ediff-setup-windows-plain)
  '(eldoc-display-truncation-message nil)
