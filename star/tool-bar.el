@@ -242,11 +242,12 @@
 
 ;;; Org Mode
 
-(define-key org-mode-map [tool-bar org-toggle-inline-images]
-  `(menu-item "Show image" org-toggle-inline-images
-              :help "Toggle inline image display"
-              :image ,(find-image '((:type png :file "org-toggle-inline-images.png")
-                                    (:type png :file "image.png")))))
+(with-eval-after-load 'org
+  (define-key org-mode-map [tool-bar org-toggle-inline-images]
+    `(menu-item "Show image" org-toggle-inline-images
+                :help "Toggle inline image display"
+                :image ,(find-image '((:type png :file "org-toggle-inline-images.png")
+                                      (:type png :file "image.png"))))))
 
 
 ;;; Text mode
