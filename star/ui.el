@@ -40,6 +40,11 @@
 (setq custom-theme-directory
       (expand-file-name "site-lisp" user-emacs-directory))
 
+(add-to-list 'display-buffer-alist
+             `(,(regexp-quote "*Warnings*")
+               . (display-buffer-in-side-window
+                  . ((side . bottom)))))
+
 ;;; Package
 
 (add-to-list 'luna-toggle-theme-list 'light)
@@ -98,10 +103,6 @@
 (load-package form-feed
   :hook ((emacs-lisp-mode-hook text-mode-hook special-mode-hook)
          . form-feed-mode))
-
-
-(load-package greenbar
-  :hook (comint-mode-hook . greenbar-mode))
 
 
 (load-package info+
