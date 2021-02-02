@@ -395,8 +395,9 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
           (put-text-property (- start 1) (point)
                              'read-only t))
         (zeft--highlight-search-phrase)
-        (setq zeft--last-search-phrase search-phrase
-              zeft--last-file-list file-list)
+        (setq zeft--last-search-phrase search-phrase)
+        (unless phrase-empty
+          (setq zeft--last-file-list file-list))
         (set-buffer-modified-p nil)
         ;; Save excursion wouldn’t work since we erased the buffer and
         ;; re-inserted contents.
