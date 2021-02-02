@@ -24,6 +24,8 @@
  '(ediff-split-window-function 'split-window-horizontally)
  '(ediff-window-setup-function 'ediff-setup-windows-plain)
  '(eldoc-display-truncation-message nil)
+ '(eldoc-echo-area-display-truncation-message nil)
+ '(eldoc-echo-area-prefer-doc-buffer t)
  '(eldoc-echo-area-use-multiline-p 3)
  '(eldoc-idle-delay 0.1)
  '(electric-pair-mode t)
