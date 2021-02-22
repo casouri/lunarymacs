@@ -116,8 +116,8 @@
               :image ,(find-image '((:type png :file "read-only-mode.png")
                                     (:type png :file "lock.png")))))
 
-(setf (alist-get 'tool-bar-right-mode minor-mode-map-alist)
-      tool-bar-right-map)
+;; (setf (alist-get 'tool-bar-right-mode minor-mode-map-alist)
+;;       tool-bar-right-map)
 
 ;;; Isearch
 
