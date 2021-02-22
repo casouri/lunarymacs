@@ -146,6 +146,11 @@
   (setf (alist-get 'scheme-mode luna-console-buffer-alist)
         "* Guile REPL *"))
 
+;; Racket
+(load-package racket-mode
+  :commands racket-mode
+  :mode "\\.rkt$")
+
 
 ;; C/C++
 (dolist (hook '(c-mode-hook c++-mode-hook))
