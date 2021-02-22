@@ -22,6 +22,9 @@
 (defvar luna-theme nil
   "The current theme.")
 
+(defvar luna-load-theme-hook ()
+  "Hook run after ‘luna-load-theme’.")
+
 (defun luna-switch-theme ()
   "Switch between themes in `luna-toggle-theme-list'."
   (interactive)
@@ -40,6 +43,7 @@
         ;; We can save a lot of time by only enabling the theme.
         (enable-theme theme)
       (load-theme theme t))
+    (run-hooks 'luna-load-theme-hook)
     (luna-local-set 'luna-theme theme)))
 
 ;;; Utilities
