@@ -53,10 +53,9 @@
 
 (load-package bklink
   :commands bklink-minor-mode
-  :hook
-  (bklink-minor-mode-hook
-   . (lambda () (if bklink-minor-mode (color-outline-mode-maybe))))
-  :config (setq bklink-more-match t))
+  :config 
+  (setq bklink-more-match t)
+  (add-hook 'bklink-minor-mode-hook #'color-outline-mode))
 
 (load-package iimg
   :hook (text-mode-hook . iimg-enable))
