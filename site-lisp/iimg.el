@@ -225,7 +225,8 @@ The image must already be in `iimg--data-alist'."
                          'read-only t)
       ;; This allows inserting after the image.
       (put-text-property (match-beginning 0) (match-end 0)
-                         'rear-nonsticky '(read-only display))))
+                         'rear-nonsticky
+                         '(read-only display iimg keymap))))
   (cons 'jit-lock-response (cons beg end)))
 
 (defun iimg--calculate-size (size)
