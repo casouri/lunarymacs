@@ -30,7 +30,9 @@
 ;;
 ;; To toggle each header, use outline commands.
 ;;
-;; Add support for new major modes by
+;; Ideally, ‘comment-start’ defined by major modes are enough for
+;; setting up color-outline, however, sometimes ‘comment-char’ is not
+;; sufficient. Then you can add support for new major modes by
 ;;
 ;;     (color-outline-define-header MODE COMMENT-CHAR COMMENT-BEGIN)
 ;;
@@ -41,6 +43,14 @@
 ;;
 ;; Instead of using ‘color-outline-define-header’, you can also modify
 ;; ‘color-outline-comment-char-alist’ directly.
+;;
+;; If you want buffer-local setting for color-outline, you can add a
+;; file-local variable ‘color-outline-local-comment-char’.
+;;
+;; Color-outline looks for comment char settings in the following order:
+;; 1. Buffer-local ‘color-outline-local-comment-char’
+;; 2. ‘color-outline-comment-char-alist’
+;; 3. ‘comment-start’ defined by the major mode.
 
 ;;; Code:
 ;;
@@ -49,18 +59,45 @@
 (require 'subr-x)
 (require 'rx)
 
-(defvar color-outline-comment-char-alist '((c-mode "/")
-                                           (python-mode "#")
-                                           (javascript-mode "/")
-                                           (css-mode "/")
-                                           (tuareg-mode "*" "(")
-                                           (shell-script-mode "#")
-                                           (sh-mode "#"))
-  "Stores custom comment character each major mode.
-For some major modes ‘comment-start’ is enough.")
+(defgroup color-outline
+  '((color-outline-comment-char-alist custom-variable)
+    (color-outline-disable-list custom-variable)
+    (color-outline-face-list custom-variable))
+  "Easy programming mode outline with visual highlight."
+  :group 'outline)
 
-(defvar color-outline-face-list '(outline-1 outline-2 outline-3 outline-4)
-  "Face for each level.")
+(defcustom color-outline-comment-char-alist
+  '((c-mode "/")
+    (python-mode "#")
+    (javascript-mode "/")
+    (css-mode "/")
+    (tuareg-mode "*" "(")
+    (shell-script-mode "#")
+    (sh-mode "#"))
+  "Stores custom comment character for each major mode.
+An alist of (MAJOR-MODE . (COMMENT-CHAR COMMENT-BEGIN))
+or (MAJOR-MODE . (COMMENT-CHAR)). For other major modes,
+‘comment-start’ is enough."
+  :type '(alist :key-type symbol
+                :value-type sexp)
+  :group 'color-outline)
+
+(defcustom color-outline-disable-list '(org-mode outline-mode)
+  "Color-outline mode is not enabled in these modes."
+  :type '(repeat symbol)
+  :group 'color-outline)
+
+(defcustom color-outline-face-list
+  '(outline-1 outline-2 outline-3 outline-4)
+  "Face for each level."
+  :type '(repeat symbol)
+  :group 'color-outline)
+
+(defvar-local color-outline-local-comment-char nil
+  "Overriding buffer local setting for color-outline comment char.
+This value takes the same form as the values in alist
+‘color-outline-comment-char-alist’. I.e., a list (COMMENT-CHAR
+COMMENT-BEGIN).")
 
 (defvar-local color-outline--keywords nil
   "We store font-lock keywords in this variable.
@@ -116,17 +153,13 @@ COMMENT-BEGIN is string pattern starting a comment."
   (setf (alist-get mode color-outline-comment-char-alist)
         (color-outline--create-pattern comment-char comment-begin)))
 
-(defun color-outline-mode-maybe ()
-  "Enable `color-outline-mode' but not in Org Mode."
-  (interactive)
-  (unless (derived-mode-p 'org-mode)
-    (color-outline-mode)))
-
 (define-minor-mode color-outline-mode
   "Color outline."
-  :lighter ""
-  (if color-outline-mode
-      (if-let* ((rule (or (alist-get major-mode
+  :lighter "Co"
+  (if (and color-outline-mode
+           (not (apply #'derived-mode-p color-outline-disable-list)))
+      (if-let* ((rule (or color-outline-local-comment-char
+                          (alist-get major-mode
                                      color-outline-comment-char-alist)
                           (list comment-start "")))
                 (comment-char (or (car rule) comment-start))
