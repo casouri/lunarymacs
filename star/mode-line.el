@@ -4,14 +4,22 @@
 
 (load-package minions)
 
+;; When we use ‘set-face-font’ to set the font, Emacs converts the
+;; font-spec is to a font-object, which we can later retrieve with
+;; ‘face-attribute’ and use for calculating the text width.
+(add-hook 'luna-load-theme-hook
+          (lambda ()
+            (set-face-font 'mode-line (font-spec :family "SF Pro Text"
+                                                 :weight 'light
+                                                 :height 130))))
+
 (defun luna-mode-line-with-padding (text)
   "Return TEXT with padding on the left.
 The padding pushes TEXT to the right edge of the mode-line."
   (let ((font (face-attribute 'mode-line :font)))
     (if (not (fontp font))
         " "
-      (let* ((font (face-attribute 'mode-line :font))
-             (glyph-list (font-get-glyphs font 0 (length text) text))
+      (let* ((glyph-list (font-get-glyphs font 0 (length text) text))
              (len (cl-reduce (lambda (len glyph)
                                (+ len (aref glyph 4)))
                              glyph-list
@@ -58,8 +66,13 @@ The padding pushes TEXT to the right edge of the mode-line."
                          (t
                           ,(if (display-graphic-p) "ΦωΦ" "OwO"))))
                   ,spaces
+                  (:propertize " " display (raise 0.3))
+                  (:propertize " " display (raise -0.3))
                   mode-line-misc-info
                   ,(if (display-graphic-p)
                        `(:eval (concat (luna-mode-line-with-padding
                                         ,percentage) "%%"))
                      `(:eval (concat ,spaces ,percentage "%%"))))))
+
+
+(setq-default header-line-format nil)
