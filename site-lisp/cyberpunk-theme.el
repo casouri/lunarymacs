@@ -85,6 +85,7 @@
         (trailing-whitespace  (nil nil ,red))
 
         (widget-field        (nil nil ,bg-alt))
+        (widget-inactive     (widget-field ,fg-weak))
         
         ;; see also builin-config.el (Customize) where I increase line
         ;; spacing and default face.
@@ -135,14 +136,9 @@
         (font-lock-regexp-grouping-backslash (nil ,blue2))
         (font-lock-regexp-grouping-construct (nil ,blue2))
 
-        (mode-line
-         (nil nil ,violet2)
-         (:font ,(font-spec :family "SF Pro Text" :size 13 :weight 'light)
-                :box (:line-width 3 :color ,violet2)))
+        (mode-line (nil nil ,violet2))
         (mode-line-inactive
-         (mode-line nil ,(overlay bg violet2 0.7) nil nil nil)
-         (:box (:line-width 3 :color ,(overlay bg violet2 0.7))))
-        (mode-line-highlight () (:box (:line-width 3 :color fg)))
+         (mode-line nil ,(overlay bg violet2 0.7) nil nil nil))
         (header-line (mode-line-inactive))
 
         ;; completion
@@ -322,8 +318,6 @@
         (avy-lead-face-0    (nil ,bg ,violet1))
         (avy-lead-face-1    (nil ,bg ,green))
         (avy-lead-face-2    (nil ,bg ,blue2))
-
-        (widget-inactive (default))
 
         (table-cell (defualt))
 

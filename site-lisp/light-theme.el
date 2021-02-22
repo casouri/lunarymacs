@@ -85,6 +85,9 @@
         (trailing-whitespace (nil nil ,red))
 
         (widget-field        (nil nil ,bg-alt))
+        (widget-inactive     (widget-field ,fg-weak))
+
+        (custom-variable-tag (custom-default) (:slant oblique))
         
         ;; see also builin-config.el (Customize) where I increase line
         ;; spacing and default face.
@@ -135,15 +138,9 @@
         (font-lock-regexp-grouping-backslash (nil ,blue2))
         (font-lock-regexp-grouping-construct (nil ,blue2))
 
-        (mode-line
-         (nil nil ,(darken bg 0.07))
-         (:font ,(font-spec :family "SF Pro Text" :size 13 :weight 'light)
-                :box (:line-width 3 :color ,(darken bg 0.07))))
-        (mode-line-inactive
-         (mode-line nil ,(darken bg 0.04) nil nil nil)
-         (:box (:line-width 3 :color ,(darken bg 0.04))))
-        (mode-line-highlight () (:box (:line-width 2 :color fg)))
-        (header-line (mode-line-inactive))
+        (mode-line (nil nil ,(darken bg 0.07)))
+        (mode-line-inactive (mode-line nil ,(darken bg 0.04) nil nil nil))
+        (header-line (mode-line) (:height 150))
 
         ;; completion
         (current-selection (nil ,bg ,blue2))
@@ -331,8 +328,6 @@
         (avy-lead-face-1    (nil ,bg ,orange))
         (avy-lead-face-2    (nil ,bg ,blue2))
 
-        (widget-inactive (default))
-
         (table-cell (defualt))
 
         (tab-line              (mode-line-inactive))
@@ -344,9 +339,9 @@
         (tab-line-tab-current
          (tab-line nil ,bg) (:box (:line-width 3 :color ,bg)))
 
-        (rime-default-face (tooltip) (:height 160))
+        (rime-default-face (tooltip) (:height 150))
         (rime-highlight-candidate-face ((bold rime-default-face)))
-        (rime-code-face ((variable-pitch rime-default-face)))))))
+        (rime-code-face (rime-default-face))))))
 
 (provide-theme 'light)
 
