@@ -10,12 +10,6 @@
    "M-l" #'windmove-right))
 
 (luna-def-key
- :leader
- "w" '("display")
- "wr" #'luna-desktop-read
- "tsb" #'sidebar-mode
-
- :---
  "s-y" #'luna-toggle-console
  "C-s-y" #'luna-toggle-console-window
 
@@ -29,10 +23,7 @@
  "s-k" #'windmove-up
  "s-l" #'windmove-right
  "s-s" #'save-buffer
- "s-w" #'delete-frame
-
- "<M-up>" #'outline-previous-visible-heading
- "<M-down>" #'outline-next-visible-heading)
+ "s-w" #'delete-frame)
 
 
 ;;; Config
@@ -65,7 +56,9 @@
   ;; Highlight only the most inner pair. Face is set in light-theme
   ;; and cyberpunk-theme.
   (setq highlight-parentheses-colors
-        (lambda () (list (face-attribute 'hl-paren-face :foreground))))
+        (lambda ()
+          (list (if (eq (frame-parameter nil 'background-mode) 'light)
+                    "red" "green"))))
   (global-highlight-parentheses-mode))
 
 
@@ -105,8 +98,8 @@
          . form-feed-mode))
 
 
-(load-package info+
-  :config (info-pretty-mode))
+;; (load-package info+
+;;   :hook (Info-mode-hook . info-pretty-mode))
 
 
 ;; (load-package treemacs
