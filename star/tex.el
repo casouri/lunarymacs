@@ -4,11 +4,11 @@
 
 (luna-def-key
  :keymaps 'TeX-mode-map
- "$" nil)
+ "$" nil
+ :keymaps 'latex-mode-map
+ "C-c p" #'latex-preview-update)
 
 ;;; Packages
-
-(add-to-list 'luna-package-list 'auctex)
 
 ;; (load-package cdlatex
 ;;   :hook (LaTeX-mode-hook . cdlatex-mode))
@@ -18,24 +18,21 @@
   :config
   (add-to-list 'eglot-server-programs '(latex-mode . ("digestif"))))
 
-(load-package xenops
-  :hook (latex-mode-hook . xenops-mode))
+;; This installs AucTex and messes up the hook, also it’s not all that
+;; good.
+;;
+;; (load-package xenops
+;;   :hook (latex-mode-hook . xenops-mode))
 
 ;;; Config
 
 (defun tex-mode-setup ()
-  (prettify-symbols-mode)
+  ;; (prettify-symbols-mode)
   ;; (variable-pitch-mode)
-  (olivetti-mode)
-  (olivetti-set-width 90)
+  ;; (olivetti-mode)
+  ;; (olivetti-set-width 90)
   (company-mode)
+  (outline-minor-mode)
   (eglot-ensure))
 
-;; This is AucTeX hooks and library.
-;; The built-in ones are tex-mode and tex-mode-hook.
-(with-eval-after-load 'latex
-  (add-hook 'LaTeX-mode-hook #'tex-mode-setup))
-
-(with-eval-after-load 'tex
-  (add-to-list 'TeX-command-list
-               '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t)))
+(add-hook 'latex-mode-hook #'tex-mode-setup)
