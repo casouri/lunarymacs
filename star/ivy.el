@@ -1,7 +1,5 @@
 ;; -*- lexical-binding: t; -*-
 
-(require 'luna-f)
-
 ;;; Note
 ;;
 ;; In ivy search session:
@@ -11,12 +9,13 @@
 ;;
 ;; In global map:
 ;; M-y : counsel-yank-pop (list kill-ring)
-
+;; C-o : counsel-mark-ring
 
 ;;; Key
 
 (luna-def-key
  "M-y" #'counsel-yank-pop
+ "C-x 8 RET" #'counsel-unicode-char
  :leader
  "ss" #'swiper)
 
@@ -45,19 +44,11 @@
   (push '(counsel-M-x . nil) ivy-initial-inputs-alist))
 
 ;; For M-x history.
-(load-package smex
-  :defer)
-
-;; ivy-prescient doesn’t support ivy anymore.
+(load-package smex :defer)
 
 ;; Use the forked version in site-lisp.
 (load-package recentf-ext
   :config (recentf-mode))
-
-(load-package ivy-xref
-  :config
-  (setq xref-show-definitions-function #'ivy-xref-show-defs)
-  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 (load-package pinyinlib
   :commands pinyinlib-build-regexp-string
