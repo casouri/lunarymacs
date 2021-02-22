@@ -1,3 +1,15 @@
+;;; angel.el --- Angel      -*- lexical-binding: t; -*-
+
+;; Author: Yuan Fu <casouri@gmail.com>
+
+;;; This file is NOT part of GNU Emacs
+
+;;; Commentary:
+;;
+
+;;; Code:
+;;
+
 ;; -*- lexical-binding: t -*-
 ;;
 ;; In the end, good defeats Evil.
@@ -29,6 +41,10 @@
  "s-/"   #'transform-previous-char
  "s-u"   #'revert-buffer
 
+ ;; Jump back
+ "C-o" #'pop-to-mark-command
+ "M-o" #'winner-undo
+
  ;; Remaps
  [remap backward-delete-char-untabify] #'luna-hungry-delete
  [remap delete-indentation] #'luna-hungry-delete
@@ -51,7 +67,6 @@
  "C-s-t" (kbd "C-M-t")
  "C-s-;" (kbd "C-M-;")
  ;; For some reason, keyboard macro doesn't work.
- "s-!"   #'shell-command
  "s-["   (kbd "M-[")
  "s-]"   (kbd "M-]")
  ;; Super -> Control
@@ -82,7 +97,8 @@
  "M-a"   #'backward-paragraph
  "M-e"   #'forward-paragraph
  "C-M-f" #'forward-sentence
- "C-M-b" #'backward-sentence)
+ "C-M-b" #'backward-sentence
+ "<tab>" #'tab-to-tab-stop)
 
 ;;; Scrolling
 
@@ -209,10 +225,9 @@ Edit the underlined region and type C-c C-c to start
 (defun luna-isearch-with-region ()
   "Use region as the isearch text."
   (when mark-active
-    (let ((region (funcall region-extract-function nil)))
-      (deactivate-mark)
-      (isearch-push-state)
-      (isearch-yank-string region))))
+    (kill-ring-save nil nil t)
+    (deactivate-mark)
+    (isearch-yank-kill)))
 
 (add-hook 'isearch-mode-hook #'luna-isearch-with-region)
 
@@ -279,3 +294,18 @@ Edit the underlined region and type C-c C-c to start
                  (insert "\n")
                  (indent-for-tab-command))
                 (t (insert " "))))))))
+
+;;; Jump back
+
+(defun mark-before (command)
+  "Add advice after COMMAND to push mark before it executes."
+  (advice-add command :before (lambda (&rest _) (push-mark))))
+
+(mark-before #'isearch-forward)
+(mark-before #'isearch-backward)
+(mark-before #'end-of-buffer)
+(mark-before #'beginning-of-buffer)
+(mark-before #'luna-jump-back)
+(mark-before #'counsel-imenu)
+
+;;; angel.el ends here
