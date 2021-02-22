@@ -9,7 +9,7 @@
 ;;   ;; iterm2 escape sequence
 ;;   (define-key input-decode-map "\e[1;Ci" [C-i]))
 
-;; translate iTerm sequences
+;; Translate iTerm sequences.
 (require 'cl-lib)
 (cl-loop for char from ?a to ?z
          do (define-key input-decode-map
@@ -28,51 +28,40 @@
  :leader
  ;; align
  "="  #'align-regexp
- ;; file
+ 
  "f" '("File")
  "fr"  #'luna-rename-file
- ;; buffer
+
  "b" '("Buffer")
  "bm"  '("message buffer" .
          (lambda () (interactive) (switch-to-buffer "*Messages*")))
  "bs"  '("scratch buffer" .
          (lambda () (interactive) (switch-to-buffer "*scratch*")))
- "bj" #'bookmark-jump
- ;; toggle
+
  "t" '("Toggle")
  "tt"  #'luna-switch-theme
  "tm"  #'toggle-frame-maximized
  "td"  #'toggle-debug-on-error
  "tl"  #'display-line-numbers-mode
- "tr" #'inhibit-read-only-mode
- "ti" #'info-pretty-mode
- "tf" #'auto-fill-mode
- ;; search
+
  "s" '("Search")
  "si"  #'imenu
- "sg"  #'grep
- ;; open
- "o" '("Open")
+
+ "o" '("Open/Org")
  "of" #'open-in-finder
  "oi" #'open-in-iterm
- ;; replace
+ "ots" #'org-time-stamp
+
  "r" '("Replace")
  "rq" #'query-replace
  "rr" #'replace-regexp
  "rs" #'replace-string
- ;; etc
+
  "ld" #'luna-dump
  "cw" #'count-words
  "cm" #'customize
  "fl" #'find-library
- "de" #'debug-on-entry
- "cd" #'cancel-debug-on-entry
  "ci" #'cowgirl-install
- "cd" #'cowgirl-delete
- "wu" #'winner-undo
- "wr" #'winner-redo
- "sc" #'shell-command
- "se" #'luna-sudo-edit
  "ps" '("profiler-start" . (lambda () (interactive)
                              (profiler-start 'cpu)))
  "pr" '("profiler-report" . (lambda () (interactive)
@@ -91,7 +80,7 @@
  "<down>" #'comint-next-input
 
  :keymaps 'minibuffer-local-map
- "<S-return>" '("insert newline" .
+ "C-<return>" '("insert newline" .
                 (lambda () (interactive) (insert "\n"))))
 
 (load-package which-key
