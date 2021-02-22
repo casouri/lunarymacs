@@ -44,7 +44,8 @@
               ;; 0.2 above, 0.2 below.
               (overlay-put ov 'line-height 1.2)
               (overlay-put ov 'line-spacing 0.2))
-            (buffer-face-set 'custom-default)))
+            (buffer-face-set 'custom-default)
+            (visual-line-mode)))
 
 ;;;; Littering
 (load-package no-littering
