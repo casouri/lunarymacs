@@ -180,17 +180,20 @@
 
 
 (load-package rime
+  :defer
   :config
   (luna-on "Brown"
-    (setq rime-librime-root "/opt/local/lib"
-          rime-show-candidate 'posframe
+    (setq rime-show-candidate 'posframe
           rime-posframe-style 'vertical
-          rime-user-data-dir "/Users/yuan/Library/Rime")
+          rime-user-data-dir "/Users/yuan/Library/Rime"
+          rime-show-preedit 'inline
+          rime-posframe-properties (list :font "Source Han Sans"
+                                         :weight 'light
+                                         :internal-border-width 10))
     (add-hook 'input-method-activate-hook
               (lambda () (interactive)
                 (setq-local cursor-type 'hbar)))
     (add-hook 'input-method-inactivate-hook
               (lambda () (interactive)
-                (kill-local-variable 'cursor-type)))
-    (rime-mode)))
+                (kill-local-variable 'cursor-type)))))
 
