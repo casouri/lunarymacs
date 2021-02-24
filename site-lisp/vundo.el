@@ -54,34 +54,50 @@ TYPE is the type of buffer you want."
 
 ;;; Undo list to mod list
 
-(defun vundo--pop-mod (ulist)
-  "Return (HEAD . REST).
-ULIST := nil* HEAD nil* REST.
-I.e., ULIST = 1-n nil + HEAD + 1-n nil + REST."
-  (let ((ul ulist)
-        head)
-    ;; Pop out initial nil's.
-    (while (null (car ul))
-      (setq ul (cdr ul)))
-    (setq head ul)
-    ;; "Collect" entries.
-    (while (car ul)
-      (setq ul (cdr ul)))
-    ;; Pop out nil's.
-    (while (and (not (null ul)) (null (car ul)))
-      (setq ul (cdr ul)))
-    (cons head ul)))
+(cl-defstruct vundo-mod-list
+  "Stores the undo list and the position of each modification."
+  mod-list
+  undo-list
+  map)
 
 (defun vundo--mod-list-from (undo-list)
   "Return a list of modifications in UNDO-LIST, earliest first.
 Each modification is an undo list, the modification it represents
 is at the top of that list."
-  (let (mod-list)
-    (while (and undo-list (consp undo-list))
-      (pcase-let ((`(,head . ,rest) (vundo--pop-mod undo-list)))
-        (push head mod-list)
-        (setq undo-list rest)))
-    mod-list))
+  (let (mod-list
+        (idx 0)
+        (len (length undo-list)))
+    (while (and (consp undo-list) (< idx len))
+      ;; Skip leading nils.
+      (while (null (nth idx undo-list))
+        (cl-incf idx))
+      (push idx mod-list)
+      ;; “Collect” entries.
+      (while (nth idx undo-list)
+        (cl-incf idx)))
+    (make-vundo-mod-list
+     :mod-list mod-list :undo-list undo-list)))
+
+(defun vundo--mod-list-nth (n mod-list)
+  "Return the undo-list from the beginning to the Nth modification...
+in MOD-LIST."
+  (if (eq n -1)
+      t
+    (let ((idx (nth n (vundo-mod-list-mod-list mod-list))))
+      (nthcdr idx (vundo-mod-list-undo-list mod-list)))))
+
+(defun vundo--mod-list-len (mod-list)
+  "Return the length of MOD-LIST."
+  (length (vundo-mod-list-mod-list mod-list)))
+
+(defun vundo--mod-list-pos (undo-list mod-list)
+  "Return the position of UNDO-LIST in MOD-LIST."
+  ;; TODO: use hash map.
+  (cl-loop for m from 0 to (vundo--mod-list-len mod-list)
+           if (equal (vundo--mod-list-nth m mod-list)
+                     undo-list)
+           return m
+           finally return nil))
 
 ;;; Mod list to equiv set list
 
@@ -143,8 +159,8 @@ modification m, B means before. Some states are equivalent, in
 which case they are in the same equivalence set."
   (let (equiv-set-list)
     (cl-loop
-     for mod in mod-list
-     for m = 0 then (1+ m)
+     for m from 0 to (1- (vundo--mod-list-len mod-list))
+     for mod = (vundo--mod-list-nth m mod-list)
      ;; Add (B m). Naturally (B i) = (A i-1), e.g., (B 2) = (A 1).
      do (if (eq m 0)
             ;; (push (list (vundo--B m)) equiv-set-list)
@@ -165,7 +181,7 @@ which case they are in the same equivalence set."
                       ;;  (vundo--A m) (vundo--B 0) equiv-set-list)
                       (vundo--equiv-set-merge
                        (vundo--A m) (vundo--A -1) equiv-set-list))
-              (if-let ((prev-m (seq-position mod-list prev)))
+              (if-let ((prev-m (vundo--mod-list-pos prev mod-list)))
                   (setq equiv-set-list
                         (vundo--equiv-set-merge
                          (vundo--A m) (vundo--A prev-m) equiv-set-list))
@@ -224,7 +240,7 @@ each value is the node struct."
                                 (vundo--A (1- m)) equiv-set-list))
             (normed-state-this (vundo--equiv-set-normalize
                                 (vundo--A m) equiv-set-list))
-            (mod (nth m mod-list)))
+            (mod (vundo--mod-list-nth m mod-list)))
         ;; Add NORMED-STATE-THIS. NORMED-STATE-PREV must already
         ;; exists.
         (unless (member normed-state-this normed-visited-states)
@@ -409,7 +425,7 @@ EQUIV-SET-LIST is used for normalizing STATE."
             vundo--orig-buffer orig-buffer)
       (vundo--draw-tree node-alist vundo-buffer)
       ;; Highlight current node.
-      (let* ((last-m (1- (length mod-list)))
+      (let* ((last-m (1- (vundo--mod-list-len mod-list)))
              (last-state (vundo--A last-m))
              (norm-last-state (vundo--equiv-set-normalize
                                last-state equiv-set-list))
@@ -492,12 +508,13 @@ after this function."
              ;; there exists a possible route, SOURCE-STATE must not
              ;; be (A -1).
              (undo-list-at-source
-              (nth (vundo--m source-state) mod-list))
+              (vundo--mod-list-nth (vundo--m source-state) mod-list))
              ;; The complete undo-list that stops at DEST-STATE. This
              ;; is used for recording in ‘undo-equiv-table’.
              (undo-list-at-dest
               (let ((idx (vundo--m dest-state)))
-                (if (eq idx -1) t (nth idx mod-list))))
+                (if (eq idx -1) t
+                  (vundo--mod-list-nth idx mod-list))))
              ;; We will undo these modifications.
              (planned-undo
               (vundo--latest-n-mod step undo-list-at-source)))
@@ -564,6 +581,13 @@ If ARG < 0, move forward."
   "Move to node above the current one. Move ARG steps."
   (interactive "p")
   (vundo-next (- arg)))
+
+;;; Trim undo tree
+
+
+
+
+;;; Debug
 
 (defun vundo--inspect ()
   "Print some useful info at point"
