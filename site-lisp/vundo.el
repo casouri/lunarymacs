@@ -56,39 +56,97 @@ TYPE is the type of buffer you want."
 
 (cl-defstruct vundo-mod-list
   "Stores the undo list and the position of each modification."
-  mod-list
-  undo-list
-  map)
+  mods
+  undos)
 
-(defun vundo--mod-list-from (undo-list)
+(defun vundo--mod-list-incremental (old-ulist old-mlist new-ulist)
+  "Update OLD-MLIST from OLD-ULIST to reflect NEW-ULIST.
+
+E.g.,
+
+\(let* ((old-ulist '(6 5 4 nil 3 2 1))
+       (new-ulist '(9 8 7 nil 6 5 4 nil 3 2 1))
+       (old-mlist (vundo--mod-list-from-1 old-ulist)))
+  (vundo--mod-list-incremental old-ulist old-mlist new-ulist))
+
+=> (8 4 0)
+
+\(let* ((old-ulist '(6 5 4 nil 3 2 1))
+       (new-ulist '(3 2 1))
+       (old-mlist (vundo--mod-list-from-1 old-ulist)))
+  (vundo--mod-list-incremental old-ulist old-mlist new-ulist))
+=> (0)"
+  (let ((len-new (length new-ulist))
+        (len-old (length old-ulist)))
+    (cond ((> len-new len-old)
+           (let* ((diff (seq-subseq new-ulist 0 (- len-new len-old)))
+                  (incf-mod-list (vundo--mod-list-from-1 diff))
+                  (shifted-old-mlist
+                   (mapcar (lambda (idx) (+ idx (length diff)))
+                           old-mlist)))
+             (append shifted-old-mlist incf-mod-list)))
+          ((< len-new len-old)
+           (let* ((diff (seq-subseq old-ulist 0 (- len-old len-new)))
+                  (decf-this-much (length (vundo--mod-list-from-1 diff)))
+                  (shifted-old-mlist
+                   (mapcar (lambda (idx) (- idx (length diff)))
+                           old-mlist)))
+             (seq-subseq shifted-old-mlist
+                         0 (- (length shifted-old-mlist)
+                              decf-this-much)))))))
+
+(defun vundo--mod-list-from-1 (undo-list)
+  "Return a list of modifications in UNDO-LIST, earliest first.
+Each modification is an index in UNDO-LIST. The modification it
+represents starts at that index.
+
+\(vundo--mod-list-from-1 '(9 8 7 nil 6 5 4 nil 3 2 1))
+=> (8 4 0)
+
+Each index points to 3, 6, 9, respectively."
+  (let* ((idx 0)
+         (len (length undo-list))
+         mod-list)
+    (catch 'ret
+      (while (and (consp undo-list) (< idx len))
+        ;; Skip leading nils.
+        (while (null (nth idx undo-list))
+          (cl-incf idx)
+          (if (= idx len) (throw 'ret nil)))
+        (push idx mod-list)
+        ;; “Collect” entries.
+        (while (nth idx undo-list)
+          (cl-incf idx)
+          (if (= idx len) (throw 'ret nil)))))
+    mod-list))
+
+(defun vundo--mod-list-from (undo-list &optional old-mod-list)
   "Return a list of modifications in UNDO-LIST, earliest first.
 Each modification is an undo list, the modification it represents
-is at the top of that list."
-  (let (mod-list
-        (idx 0)
-        (len (length undo-list)))
-    (while (and (consp undo-list) (< idx len))
-      ;; Skip leading nils.
-      (while (null (nth idx undo-list))
-        (cl-incf idx))
-      (push idx mod-list)
-      ;; “Collect” entries.
-      (while (nth idx undo-list)
-        (cl-incf idx)))
-    (make-vundo-mod-list
-     :mod-list mod-list :undo-list undo-list)))
+is at the top of that list.
+
+You can pass OLD-MOD-LIST to update it incrementally to UNDO-LIST."
+  (let* ((struct (or old-mod-list (make-vundo-mod-list)))
+         (old-ulist (vundo-mod-list-undos struct))
+         (old-mlist (vundo-mod-list-mods struct)))
+    (setf (vundo-mod-list-undos struct) undo-list
+          (vundo-mod-list-mods struct)
+          (if (eq undo-list t) t
+            (vundo--mod-list-incremental
+             old-ulist old-mlist undo-list)))
+    struct))
 
 (defun vundo--mod-list-nth (n mod-list)
   "Return the undo-list from the beginning to the Nth modification...
 in MOD-LIST."
   (if (eq n -1)
       t
-    (let ((idx (nth n (vundo-mod-list-mod-list mod-list))))
-      (nthcdr idx (vundo-mod-list-undo-list mod-list)))))
+    (let ((idx (nth n (vundo-mod-list-mods mod-list))))
+      (nthcdr idx (vundo-mod-list-undos mod-list)))))
 
 (defun vundo--mod-list-len (mod-list)
   "Return the length of MOD-LIST."
-  (length (vundo-mod-list-mod-list mod-list)))
+  (length (vundo-mod-list-mods mod-list)))
 
 (defun vundo--mod-list-pos (undo-list mod-list)
   "Return the position of UNDO-LIST in MOD-LIST."
@@ -142,7 +200,7 @@ of minimizing m, maximize it."
 
 (defun vundo--equiv-set-find-earliest (set &optional reverse)
   "Return state (A m) or (B m) in SET...
-... such that m is the minimum among all states in SET.
+...such that m is the minimum among all states in SET.
 
 If REVERSE is non-nil, return the state with largest m instead."
   (let ((s1 (pop set)))
@@ -227,7 +285,7 @@ KEY ALIST DEFAULT REMOVE TESTFN see ‘alist-get’."
 Return an alist of nodes. Each key is the normalized state (A m),
 each value is the node struct."
   (let* ((m 0)
-         (root (vundo--A -1))
+         (root (vundo--A (1- m)))
          ;; Visited states, each state is normalized.
          (normed-visited-states (list root))
          (node-alist (list (cons root
@@ -235,7 +293,7 @@ each value is the node struct."
                                   :states
                                   (vundo--equiv-set-find
                                    root equiv-set-list))))))
-    (while (vundo--equiv-set-find (vundo--A m) equiv-set-list)
+    (while (< m (vundo--mod-list-len mod-list))
       (let ((normed-state-prev (vundo--equiv-set-normalize
                                 (vundo--A (1- m)) equiv-set-list))
             (normed-state-this (vundo--equiv-set-normalize
@@ -268,7 +326,7 @@ each value is the node struct."
               (vundo--sort-children node-prev))
             ;; Add parent to child.
             (setf (vundo-node-parent node-this) node-prev))))
-      (setq m (1+ m)))
+      (cl-incf m))
     ;; Return node alist.
     node-alist))
 
@@ -408,16 +466,19 @@ EQUIV-SET-LIST is used for normalizing STATE."
 (defvar-local vundo--latest-node nil
   "The latest node.")
 
-(defun vundo--refresh-buffer (orig-buffer vundo-buffer)
-  "Refresh VUNDO-BUFFER with the undo history of ORIG-BUFFER."
+(defun vundo--refresh-buffer
+    (orig-buffer vundo-buffer &optional incremental)
+  "Refresh VUNDO-BUFFER with the undo history of ORIG-BUFFER.
+If INCREMENTAL non-nil, reuse some previously computed data."
   ;; If ‘buffer-undo-list’ is nil, then we do nothing.
-  (when-let* ((mod-list (vundo--mod-list-from
-                         (buffer-local-value
-                          'buffer-undo-list orig-buffer)))
-              (equiv-set-list (vundo--equiv-set-from mod-list))
-              (node-alist (vundo--tree-from equiv-set-list mod-list))
-              (inhibit-read-only t))
-    (with-current-buffer vundo-buffer
+  (with-current-buffer vundo-buffer
+    (when-let* ((mod-list (vundo--mod-list-from
+                           (buffer-local-value
+                            'buffer-undo-list orig-buffer)
+                           (if incremental vundo--mod-list)))
+                (equiv-set-list (vundo--equiv-set-from mod-list))
+                (node-alist (vundo--tree-from equiv-set-list mod-list))
+                (inhibit-read-only t))
       (vundo--mode)
       (setq vundo--mod-list mod-list
             vundo--equiv-set-list equiv-set-list
@@ -539,7 +600,8 @@ after calling this function."
                 ;; Strip leading nils.
                 (while (eq (car list) nil)
 	          (setq list (cdr list)))
-                (puthash list undo-list-at-dest undo-equiv-table))))))
+                (puthash list undo-list-at-dest undo-equiv-table))))
+          (set-window-point (get-buffer-window) (point))))
     ;; TODO
     (error "What?")))
 
@@ -564,7 +626,8 @@ If ARG < 0, move backward"
          node dest vundo--orig-buffer
          vundo--mod-list vundo--equiv-set-list)
         (vundo--refresh-buffer
-         vundo--orig-buffer (current-buffer))))))
+         vundo--orig-buffer (current-buffer)
+         'incremental)))))
 
 (defun vundo-backward (arg)
   "Move back ARG nodes in the undo tree.
@@ -589,7 +652,8 @@ If ARG < 0, move forward."
              node dest vundo--orig-buffer
              vundo--mod-list vundo--equiv-set-list)
             (vundo--refresh-buffer
-             vundo--orig-buffer (current-buffer)))))))
+             vundo--orig-buffer (current-buffer)
+             'incremental))))))
 
 (defun vundo-previous (arg)
   "Move to node above the current one. Move ARG steps."
@@ -599,7 +663,7 @@ If ARG < 0, move forward."
 ;;; Debug
 
 (defun vundo--inspect ()
-  "Print some useful info at point"
+  "Print some useful info at point."
   (interactive)
   (message "States: %s" (vundo-node-states (vundo--get-node-at-point))))
 
