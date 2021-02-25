@@ -491,11 +491,13 @@ Each modification is delimited by nil in UNDO-LIST."
       (cl-decf n))
     (seq-subseq undo-list start end)))
 
-(defun vundo--move-to-node (current dest orig-buffer mod-list)
+(defun vundo--move-to-node
+    (current dest orig-buffer mod-list equiv-set-list)
   "Move from CURRENT node to DEST node by undoing in ORIG-BUFFER.
 ORIG-BUFFER must be at CURRENT state. MOD-LIST is the list you
-get from ‘vundo--mod-list-from’. You should refresh vundo buffer
-after this function."
+get from ‘vundo--mod-list-from’. EQUIV-SET-LIST is what you get
+from ‘vundo--equiv-set-from’. You should refresh vundo buffer
+after calling this function."
   (if-let* ((source-state-set (vundo-node-states current))
             (dest-state-set (vundo-node-states dest))
             (route (vundo--calculate-shortest-route
@@ -522,12 +524,22 @@ after this function."
           ;; Undo. This will undo modifications in PLANNED-UNDO and
           ;; add new entries to ‘buffer-undo-list’.
           (primitive-undo step planned-undo)
-          ;; Update ‘undo-equiv-table’.
-          (let ((list buffer-undo-list))
-            ;; Strip leading nils.
-            (while (eq (car list) nil)
-	      (setq list (cdr list)))
-            (puthash list undo-list-at-dest undo-equiv-table))))
+          ;; Now we can try trimming ‘buffer-undo-list’.
+          (let ((latest-unique-state-m
+                 (seq-max (mapcar (lambda (set)
+                                    (vundo--m
+                                     (vundo--equiv-set-find-earliest
+                                      set)))
+                                  equiv-set-list))))
+            (if (>= (vundo--m dest-state) latest-unique-state-m)
+                ;; Can trim undo-list, trim to DEST.
+                (setq buffer-undo-list undo-list-at-dest)
+              ;; Can’t trim undo-list, update ‘undo-equiv-table’.
+              (let ((list buffer-undo-list))
+                ;; Strip leading nils.
+                (while (eq (car list) nil)
+	          (setq list (cdr list)))
+                (puthash list undo-list-at-dest undo-equiv-table))))))
     ;; TODO
     (error "What?")))
 
@@ -549,7 +561,8 @@ If ARG < 0, move backward"
         (cl-decf step))
       (unless (eq node dest)
         (vundo--move-to-node
-         node dest vundo--orig-buffer vundo--mod-list)
+         node dest vundo--orig-buffer
+         vundo--mod-list vundo--equiv-set-list)
         (vundo--refresh-buffer
          vundo--orig-buffer (current-buffer))))))
 
@@ -573,7 +586,8 @@ If ARG < 0, move forward."
                (dest (or (nth new-idx siblings) node)))
           (unless (eq node dest)
             (vundo--move-to-node
-             node dest vundo--orig-buffer vundo--mod-list)
+             node dest vundo--orig-buffer
+             vundo--mod-list vundo--equiv-set-list)
             (vundo--refresh-buffer
              vundo--orig-buffer (current-buffer)))))))
 
@@ -581,11 +595,6 @@ If ARG < 0, move forward."
   "Move to node above the current one. Move ARG steps."
   (interactive "p")
   (vundo-next (- arg)))
-
-;;; Trim undo tree
-
-
-
 
 ;;; Debug
 
