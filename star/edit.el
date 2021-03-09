@@ -125,6 +125,11 @@
   :commands iscroll-mode)
 
 
+(load-package vundo
+  :commands vundo
+  :config (push '(?└ . ?╰) vundo-translation-alist))
+
+
 (load-package tramp
   :defer
   :init
