@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: <pb
+# key: <pb
+# --
+{{{parabox_beg}}}
+$0
+{{{parabox_mid}}}
+
+{{{parabox_end}}}

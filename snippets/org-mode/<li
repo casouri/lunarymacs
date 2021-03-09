@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: <li
+# key: <li
+# --
+{{{limg($0)}}}
