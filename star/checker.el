@@ -28,7 +28,7 @@
 (load-package flyspell
   :config
   (setq flyspell-issue-message-flag nil)
-  ;; Add curely quotes so words like “didn’t” are proeprly handled.
+  ;; Add curely quotes so words like “didn’t” are properly handled.
   (push '(nil "[[:alpha:]]" "[^[:alpha:]]" "['’]" nil
               ("-B")
               nil utf-8)
