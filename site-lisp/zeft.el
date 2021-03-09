@@ -53,30 +53,45 @@
 
 ;;; Customize
 
+(defgroup zeft
+  '((zeft-directory custom-variable)
+    (zeft-find-file-hook custom-variable)
+    (zeft-selection custom-variable)
+    (zeft-inline-highlight custom-face)
+    (zeft-preview-highlight custom-face)
+    (zeft-load-file-hook custom-variable))
+  "Zeft note interface."
+  :group 'applications)
+
 (defcustom zeft-directory (expand-file-name "~/.deft")
   "Directory in where notes are stored. Must be a full path."
-  :group 'zeft
-  :type 'string)
+  :type 'directory
+  :group 'zeft)
 
 (defcustom zeft-find-file-hook nil
   "Hook run when Zeft opens a file."
-  :group 'zeft
-  :type 'list)
+  :type 'hook
+  :group 'zeft)
 
 (defface zeft-selection
   '((t . (:inherit region :extend t)))
   "Face for the current selected search result."
   :group 'zeft)
 
-(defface zeft-highlight
+(defface zeft-inline-highlight
   '((t . (:inherit underline :extend t)))
-  "Face for highlighting in Zeft."
+  "Face for inline highlighting in Zeft buffer."
+  :group 'zeft)
+
+(defface zeft-preview-highlight
+  '((t . (:inherit highlight :extend t)))
+  "Face for highlighting the preview buffer."
   :group 'zeft)
 
 (defcustom zeft-load-file-hook nil
   "Functions run before zeft loads a file into database."
-  :group 'zeft
-  :type 'list)
+  :type 'hook
+  :group 'zeft)
 
 ;;; Helpers
 
@@ -87,7 +102,7 @@
   "An alist of (FILENAME . FILE-CONTENT).")
 
 (defun zeft--work-buffer ()
-  "Return the work buffer for Zeft."
+  "Return the work buffer for Zeft. Used for holding file contents."
   (get-buffer-create " *zeft work*"))
 
 (defun zeft--buffer ()
@@ -289,7 +304,7 @@ If SELECT is non-nil, select the buffer after displaying it."
       (while (search-forward keyword nil t)
         (let ((ov (make-overlay (match-beginning 0)
                                 (match-end 0))))
-          (overlay-put ov 'face 'zeft-highlight)
+          (overlay-put ov 'face 'zeft-inline-highlight)
           (overlay-put ov 'zeft-highlight t)
           (overlay-put ov 'evaporate t))))))
 
@@ -304,7 +319,7 @@ clickable. FILE should be an absolute path."
     (with-current-buffer (zeft--work-buffer)
       (widen)
       (erase-buffer)
-      (insert-file-contents file)
+      (insert (alist-get file zeft--database nil nil #'equal))
       (goto-char (point-min))
       (search-forward "#+TITLE: " (line-end-position) t)
       (setq title (buffer-substring-no-properties
@@ -360,50 +375,67 @@ clickable. FILE should be an absolute path."
   "Search for notes and display their summaries.
 If FORCE is non-nil, refresh even if the search phrase didn't change."
   (interactive)
-  (let ((search-phrase (zeft--get-search-phrase)))
-    (when (and (derived-mode-p 'zeft-mode)
-               (or force (not (equal search-phrase
-                                     zeft--last-search-phrase))))
-      (let* ((phrase-empty (equal search-phrase ""))
-             (file-list
-              (zeft--search
-               search-phrase
-               ;; If the current search phrase contains the previous
-               ;; search phrase, we can just use the last file-list.
-               (if (and (not phrase-empty)
-                        (string-prefix-p zeft--last-search-phrase
-                                         search-phrase))
-                   zeft--last-file-list
-                 nil)))
-             (file-list (cl-sort file-list #'file-newer-than-file-p))
-             (inhibit-read-only t)
-             (inhibit-modification-hooks t)
-             (old-point (point)))
-        ;; Don’t display all files when the search phrase is empty.
-        (when (and (not force) phrase-empty)
-          (setq file-list (cl-subseq file-list 0 20)))
-        ;; Insert file summaries.
-        (goto-char (point-min))
-        (forward-line 2)
-        (delete-region (point) (point-max))
-        (let ((start (point)))
-          (if file-list
-              (dolist (file file-list)
-                (zeft--insert-file-excerpt file))
-            (insert "Press RET to create a new note"))
-          ;; If we use (- start 2), emacs-rime cannot work.
-          (put-text-property (- start 1) (point)
-                             'read-only t))
-        (zeft--highlight-search-phrase)
-        (setq zeft--last-search-phrase search-phrase)
-        (unless phrase-empty
-          (setq zeft--last-file-list file-list))
-        (set-buffer-modified-p nil)
-        ;; Save excursion wouldn’t work since we erased the buffer and
-        ;; re-inserted contents.
-        (goto-char old-point)
-        ;; Re-apply highlight.
-        (zeft--highlight-file-at-point)))))
+  (catch 'early-term
+    (let ((search-phrase (zeft--get-search-phrase)))
+      (when (and (derived-mode-p 'zeft-mode)
+                 (or force (not (equal search-phrase
+                                       zeft--last-search-phrase))))
+        (let* ((phrase-empty (equal search-phrase ""))
+               (file-list
+                (while-no-input
+                  (zeft--search
+                   search-phrase
+                   ;; If the current search phrase contains the previous
+                   ;; search phrase, we can just use the last file-list.
+                   (if (and (not phrase-empty)
+                            (string-prefix-p zeft--last-search-phrase
+                                             search-phrase))
+                       zeft--last-file-list
+                     nil)))))
+          ;; Early termination by ‘while-no-input’.
+          (if (eq file-list t) (throw 'early-term nil))
+          (let ((inhibit-read-only t)
+                (inhibit-modification-hooks t)
+                (orig-point (point))
+                new-content)
+            ;; Sort files.
+            (setq file-list (cl-sort file-list #'file-newer-than-file-p))
+            ;; Don’t display all files when the search phrase is empty.
+            (when (and (not force) phrase-empty)
+              (setq file-list (cl-subseq file-list 0 20)))
+            ;; Insert file summaries. We get the new content then
+            ;; insert it whole so that we can use ‘while-no-input’.
+            (setq new-content
+                  (if file-list
+                      (while-no-input
+                        (with-temp-buffer
+                          (dolist (file file-list)
+                            (zeft--insert-file-excerpt file))
+                          (buffer-string)))
+                    ;; NOTE: this string is referred in
+                    ;; ‘zeft-create-note’.
+                    "Press RET to create a new note"))
+            ;; Early termination by ‘while-no-input’.
+            (if (eq new-content t) (throw 'early-term nil))
+            ;; Actually insert the new content.
+            (goto-char (point-min))
+            (forward-line 2)
+            (delete-region (point) (point-max))
+            (let ((start (point)))
+              (insert new-content)
+              ;; If we use (- start 2), emacs-rime cannot work.
+              (put-text-property (- start 1) (point)
+                                 'read-only t))
+            (zeft--highlight-search-phrase)
+            (setq zeft--last-search-phrase search-phrase)
+            (unless phrase-empty
+              (setq zeft--last-file-list file-list))
+            (set-buffer-modified-p nil)
+            ;; Save excursion wouldn’t work since we erased the buffer
+            ;; and re-inserted contents.
+            (goto-char orig-point)
+            ;; Re-apply highlight.
+            (zeft--highlight-file-at-point)))))))
 
 (defun zeft--search (phrase &optional shortcut-file-list)
   "Return a list of files that contains PHRASE.
@@ -441,7 +473,7 @@ file is considered a hit."
       (while (search-forward keyword nil t)
         (let ((ov (make-overlay (match-beginning 0)
                                 (match-end 0))))
-          (overlay-put ov 'face 'zeft-highlight)
+          (overlay-put ov 'face 'zeft-preview-highlight)
           (overlay-put ov 'zeft-highlight t))))
     ;; Add cleanup hook.
     (add-hook 'window-selection-change-functions
