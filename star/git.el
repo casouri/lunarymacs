@@ -38,4 +38,3 @@
 
 (load-package magit-todos
   :hook (magit-mode . magit-todos-mode))
-
