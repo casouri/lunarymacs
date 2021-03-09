@@ -55,36 +55,61 @@
 
 ;;; Org config
 
+(defun beginning-of-sentence (arg)
+  "Go to the beginning of the current sentence.
+ARG is the numerical argument."
+  (interactive "p")
+  (backward-char)
+  (dotimes (_ arg)
+    (goto-char (beginning-of-thing 'sentence))))
+
+(defun end-of-sentence (arg)
+  "Go to the beginning of the current sentence.
+ARG is the numerical argument."
+  (interactive "p")
+  (forward-char)
+  (dotimes (_ arg)
+    (goto-char (end-of-thing 'sentence))))
+
+(defvar luna-prose-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-a") #'beginning-of-sentence)
+    (define-key map (kbd "C-e") #'end-of-sentence)
+    map)
+  "Mode map for ‘luna-prose-mode’.")
+
 (define-minor-mode luna-prose-mode
   "A mode that optimizes for prose editing."
   :lighter " PROSE"
+  :keymap luna-prose-mode-map
   (if luna-prose-mode
       (progn
         (variable-pitch-mode)
         (olivetti-mode)
         ;; (luna-scale-cjk-mode)
         (electric-pair-local-mode -1)
+        (electric-quote-local-mode)
         (setq-local cursor-type 'bar)
         ;; This is a global mode!
         ;; (require 'delicate-click)
         ;; (delicate-click-mode)
-        ;; (setq-local blink-cursor-interval 0.6)
-        ;; (blink-cursor-mode)
-        (setq-local line-spacing 0.15))
+        (setq-local line-spacing 0.15)
+        (company-mode -1)
+        (setq-local whitespace-style '(tab-mark))
+        (whitespace-mode))
+    (whitespace-mode -1)
+    (company-mode)
     (variable-pitch-mode -1)
     (olivetti-mode -1)
     ;; (luna-scale-cjk-mode -1)
     (electric-pair-local-mode)
+    (electric-quote-local-mode -1)
     (kill-local-variable 'line-spacing)
     (kill-local-variable 'cursor-type)))
 
 (defun luna-org-hook ()
   "Configuration for Org Mode."
-  (company-mode -1)
   (luna-prose-mode)
-  (electric-quote-local-mode)
-  (setq-local whitespace-style '(tab-mark))
-  (whitespace-mode)
   (require 'org-tempo))
 
 (add-hook 'org-mode-hook #'luna-org-hook)
