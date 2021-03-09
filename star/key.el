@@ -63,7 +63,7 @@
  "fl" #'find-library
  "ci" #'cowgirl-install
  "ps" '("profiler-start" . (lambda () (interactive)
-                             (profiler-start 'cpu)))
+                             (profiler-start 'cpu+mem)))
  "pr" '("profiler-report" . (lambda () (interactive)
                               (profiler-stop)
                               (profiler-report)))
