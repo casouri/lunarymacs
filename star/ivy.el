@@ -41,7 +41,8 @@
 (load-package counsel
   :config
   (counsel-mode)
-  (push '(counsel-M-x . nil) ivy-initial-inputs-alist))
+  (push '(counsel-M-x . nil) ivy-initial-inputs-alist)
+  (push '(counsel-mark-ring . nil) ivy-sort-functions-alist))
 
 ;; For M-x history.
 (load-package smex :defer)
