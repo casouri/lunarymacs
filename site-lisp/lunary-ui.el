@@ -92,7 +92,7 @@ e.g. :family :weight :size etc."
 (defvar luna-cjk-font nil
   "CJK font name (string) used by me. Cached by ‘luna-local’.")
 
-(defvar luna-cjk-font-scale 1.1
+(defvar luna-cjk-font-scale 1.3
   "The scale for CJK font. Used in ‘luna-scale-cjk’.")
 
 (defvar luna-font-alist
@@ -112,7 +112,7 @@ More info about spec in `font-spec'.")
 (defvar luna-cjk-font-alist
   ;; We don’t set font size, so the font size changes with default
   ;; font.
-  '(("Srouce Han Serif" . (:family "Source Han Serif SC"))
+  '(("Source Han Serif" . (:family "Source Han Serif SC"))
     ("GNU Unifont" . (:family "Unifont")))
   "Similar to `luna-font-alist' but used for CJK scripts.
 Use `luna-load-cjk-font' to load them.")
@@ -166,16 +166,12 @@ luna-local.el)."
 (define-minor-mode luna-scale-cjk-mode
   "Scale CJK font to align CJK font and ASCII font."
   :lighter ""
-  (if luna-scale-cjk-mode
-      (progn
-        (make-local-variable 'face-font-rescale-alist)
-        (when luna-font
-          (setf (alist-get (plist-get (alist-get (intern luna-cjk-font)
-                                                 luna-cjk-font-alist)
-                                      :family)
-                           face-font-rescale-alist)
-                luna-cjk-font-scale)))
-    (kill-local-variable 'face-font-rescale-alist)))
+  :global t
+  :group 'luna
+  (when luna-cjk-font
+    (setf (alist-get luna-cjk-font
+                     face-font-rescale-alist nil nil #'equal)
+          (if luna-scale-cjk-mode 1.3 nil))))
 
 (defun luna-enable-apple-emoji ()
   "Enable Apple emoji display."
