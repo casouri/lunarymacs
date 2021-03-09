@@ -297,9 +297,26 @@ Edit the underlined region and type C-c C-c to start
 
 ;;; Jump back
 
+(defun push-mark-unless (&rest _)
+  "Push a marker to `mark-ring'...
+...unless a marker in the same line already exists."
+  (interactive)
+  (let ((marker (catch 'ret
+                  (dolist (marker mark-ring)
+                    (if (<= (line-beginning-position)
+                            (marker-position marker)
+                            (line-end-position))
+                        (throw 'ret marker))))))
+    (if marker
+        (progn
+          (setq mark-ring (remove marker mark-ring))
+          (push marker mark-ring))
+      (push (point-marker) mark-ring))
+    (message "Mark set")))
+
 (defun mark-before (command)
   "Add advice after COMMAND to push mark before it executes."
-  (advice-add command :before (lambda (&rest _) (push-mark))))
+  (advice-add command :before #'push-mark-unless))
 
 (mark-before #'isearch-forward)
 (mark-before #'isearch-backward)
