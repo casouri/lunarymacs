@@ -1,4 +1,4 @@
-;;; %s --- %s      -*- lexical-binding: t; -*-
+;;; %s --- %s  -*- lexical-binding: t; -*-
 
 ;; Author: Yuan Fu <casouri@gmail.com>
 
