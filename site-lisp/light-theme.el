@@ -37,7 +37,7 @@
   (cl-flet ((darken #'theme-util-darken)
             (brighten #'theme-util-brighten)
             (overlay #'theme-util-color-overlay))
-    (let* ((bg        "#fafafa")
+    (let* ((bg        "#fefefe")
            ;; lighter than region
            (bg-alt    (darken bg 0.05))
            (fg        "#2b3239")
