@@ -43,8 +43,13 @@
         ;; We can save a lot of time by only enabling the theme.
         (enable-theme theme)
       (load-theme theme t))
-    (run-hooks 'luna-load-theme-hook)
     (luna-local-set 'luna-theme theme)))
+
+(defun luna-load-theme-advice (&rest _)
+  "Run hooks after ‘load-theme’."
+  (run-hooks 'luna-load-theme-hook))
+
+(advice-add #'load-theme :after #'luna-load-theme-advice)
 
 ;;; Utilities
 
