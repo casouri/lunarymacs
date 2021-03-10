@@ -9,9 +9,11 @@
 ;; ‘face-attribute’ and use for calculating the text width.
 (add-hook 'luna-load-theme-hook
           (lambda ()
-            (set-face-font 'mode-line (font-spec :family "SF Pro Text"
-                                                 :weight 'light
-                                                 :height 130))))
+            (set-face-font 'mode-line
+                           (font-spec :family "SF Pro Text"
+                                      :weight 'light
+                                      :height 130))))
+(add-hook 'after-init-hook (lambda () (run-hooks 'luna-load-theme-hook)))
 
 (defun luna-mode-line-with-padding (text)
   "Return TEXT with padding on the left.
