@@ -184,7 +184,8 @@ saved file content."
       (find-file file-path)
       (unless exists-p
         (insert search-phrase "\n\n")
-        (save-buffer)))))
+        (save-buffer))
+      (run-hooks 'zeft-find-file-hook))))
 
 (defvar-local zeft--select-overlay nil
   "Overlay used for highlighting selected search result.")
@@ -310,7 +311,7 @@ If SELECT is non-nil, select the buffer after displaying it."
 
 (defun zeft--insert-file-excerpt (file)
   "Insert an excerpt for FILE at point.
-This excerpt contains note title and content except and is
+This excerpt contains note title and content excerpt and is
 clickable. FILE should be an absolute path."
   (let ((excerpt-len (floor (* 2.7 (1- (window-width)))))
         (last-search-term
