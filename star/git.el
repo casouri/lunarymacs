@@ -17,7 +17,7 @@
   (add-hook 'text-mode-hook
             (lambda ()
               (when (equal (buffer-name) "COMMIT_EDITMSG")
-                (electric-quote-mode -1))))
+                (electric-quote-local-mode -1))))
 
   ;; Patch
   (defun magit-patch-apply-buffer (buffer &rest args)

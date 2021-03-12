@@ -48,8 +48,7 @@
         (delete-region (match-beginning 0) (match-end 0)))))
   (add-hook 'zeft-load-file-hook #'iimg-prune-image-data)
   (setq zeft-directory (expand-file-name "~/deft"))
-  (add-hook 'zeft-find-file-hook #'auto-fill-mode)
-  (add-hook 'zeft-find-file-hook #'electric-quote-mode))
+  (add-hook 'zeft-find-file-hook #'auto-fill-mode))
 
 (load-package bklink
   :commands bklink-minor-mode
