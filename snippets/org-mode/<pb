@@ -2,8 +2,8 @@
 # name: <pb
 # key: <pb
 # --
-{{{parabox_beg}}}
+{{{parabox_beg(50)}}}
 $0
-{{{parabox_mid}}}
+{{{parabox_mid(50)}}}
 
 {{{parabox_end}}}
