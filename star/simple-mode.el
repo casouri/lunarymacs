@@ -190,15 +190,15 @@
          . aggressive-indent-mode))
 
 
-(load-package quickrun
-  :commands
-  quickrun
-  quickrun-region
-  quickrun-with-arg
-  quickrun-shell
-  quickrun-compile-only
-  quickrun-replace-region
-  quickrun-autorun-mode)
+;; (load-package quickrun
+;;   :commands
+;;   quickrun
+;;   quickrun-region
+;;   quickrun-with-arg
+;;   quickrun-shell
+;;   quickrun-compile-only
+;;   quickrun-replace-region
+;;   quickrun-autorun-mode)
 
 
 ;; (load-package lsp-mode
