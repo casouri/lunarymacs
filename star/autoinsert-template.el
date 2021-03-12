@@ -5,10 +5,9 @@
 ;;; This file is NOT part of GNU Emacs
 
 ;;; Commentary:
-;;
 
 ;;; Code:
-;;
+
 
 (provide '%s)
 
