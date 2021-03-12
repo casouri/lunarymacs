@@ -73,8 +73,8 @@ ARG is the numerical argument."
 
 (defvar luna-prose-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-a") #'beginning-of-sentence)
-    (define-key map (kbd "C-e") #'end-of-sentence)
+    (define-key map (kbd "C-a") #'beginning-of-visual-line)
+    (define-key map (kbd "C-e") #'end-of-visual-line)
     map)
   "Mode map for ‘luna-prose-mode’.")
 
