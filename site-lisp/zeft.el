@@ -43,7 +43,7 @@
 ;;    Zeft buffer. When Zeft buffer is killed, Zeft restores the saved
 ;;    window configuration.
 ;;
-;; 4. Zeft only display the first 20 files when the search phrase is
+;; 4. Zeft only display the first 50 files when the search phrase is
 ;;    empty, if you want to see all the files, force a refresh by
 ;;    typing C-c C-g.
 
@@ -401,9 +401,10 @@ If FORCE is non-nil, refresh even if the search phrase didn't change."
                 new-content)
             ;; Sort files.
             (setq file-list (cl-sort file-list #'file-newer-than-file-p))
-            ;; Don’t display all files when the search phrase is empty.
+            ;; Don’t display all the files when the search phrase is
+            ;; empty.
             (when (and (not force) phrase-empty)
-              (setq file-list (cl-subseq file-list 0 20)))
+              (setq file-list (cl-subseq file-list 0 50)))
             ;; Insert file summaries. We get the new content then
             ;; insert it whole so that we can use ‘while-no-input’.
             (setq new-content
