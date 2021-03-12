@@ -29,8 +29,12 @@
 (load-package fish-mode
   :mode "\\.fish$")
 
-(add-hook 'after-save-hook
-          #'executable-make-buffer-file-executable-if-script-p)
+(add-hook 'shell-script-mode-hook
+          (lambda ()
+            (add-hook
+             'after-save-hook
+             #'executable-make-buffer-file-executable-if-script-p)))
+
 
 
 (load-package haskell-mode
