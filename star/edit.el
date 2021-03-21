@@ -6,6 +6,7 @@
 ;;; Key
 
 (luna-def-key
+ "C-x u" #'vundo
  :leader
  "hh" #'hs-hide-all
  "hs" #'hs-show-all
