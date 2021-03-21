@@ -72,3 +72,7 @@
   keycast-mode
   keycast-log-mode
   :init (setq keycast-insert-after 'mode-line-misc-info))
+
+;;;; Debug
+
+(setq print-circle t)
