@@ -4,6 +4,7 @@
 (luna-def-key
  :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
  "<S-return>" #'eval-defun
+ "_" #'elisp-dash
  :leader-prefix
  "eb" #'eval-buffer
  :---
@@ -17,6 +18,17 @@
     (end-of-defun)
     (skip-chars-backward "\n")
     (eval-print-last-sexp)))
+
+(defun elisp-dash ()
+  "Insert dash if previous char is capital.
+Bind this to _, for easily insert CAP-DASH without releasing Shift."
+  (interactive)
+  (if (and (eq last-command 'self-insert-command)
+           (eq (upcase (char-before))
+               (char-before)))
+      (insert "-")
+    (insert "_")))
+
 
 (load-package markdown-mode
   :mode "\\.md$" "\\.markdown$" "\\.mk$")
