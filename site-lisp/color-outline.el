@@ -70,7 +70,7 @@
   '((c-mode "/")
     (python-mode "#")
     (javascript-mode "/")
-    (css-mode "/")
+    (css-mode "*" "/")
     (tuareg-mode "*" "(")
     (shell-script-mode "#")
     (sh-mode "#"))
