@@ -5,11 +5,10 @@
 ;;; This file is NOT part of GNU Emacs
 
 ;;; Commentary:
-;;
+
 ;;; Commentary end
 
 ;;; Code:
-;;
 
 (require 'luna-f)
 (require 'org)
@@ -28,7 +27,8 @@
     (buffer-string)))
 
 (defun commentary--replace-match (beg end text)
-  "Replace the portion in buffer that begins with BEG and end with END with TEXT."
+  "Replace the portion in buffer between BEG and END with TEXT.
+BEG and END are regular expressions."
   (save-excursion
     (goto-char (point-min))
     (let ((beg (progn (re-search-forward beg nil t)
@@ -57,11 +57,30 @@
          ;; add semicolon to each line beginning
          ;; (commented-source (commentary--commented org-source))
          (commented-export (commentary--commented ascii-export)))
-    (commentary--replace-match "^;;; Commentary:" "^;;;* Commentary end"
-                      (format ";;; Commentary:\n;;\n%s\n;;\n;; Commentary end"
-                              (string-remove-suffix "\n"
-                                                    commented-export)))
-    ))
+    (commentary--replace-match
+     "^;;; Commentary:" "^;;;* Commentary end"
+     (format ";;; Commentary:\n;;\n%s\n;;\n;; Commentary end"
+             (string-remove-suffix "\n"
+                                   commented-export)))))
+
+(defun commentary-export-readme ()
+  "Export commentary to README.txt in the same directory."
+  (interactive)
+  (let ((commentary (save-excursion
+                      (goto-char (point-min))
+                      (when (search-forward ";;; Commentary:" nil t)
+                        (thing-at-point 'paragraph t)))))
+    (with-temp-buffer
+      (insert commentary)
+      ;; Un-comment.
+      (let ((comment-start ";"))
+        (comment-region (point-min) (point-max) (list 4)))
+      ;; Remove "Commentary:"
+      (goto-char (point-min))
+      (search-forward "Commentary:" nil t)
+      (skip-chars-forward " \n")
+      (delete-region (point-min) (point))
+      (write-file "README.txt"))))
 
 (provide 'commentary)
 
