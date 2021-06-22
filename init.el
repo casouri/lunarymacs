@@ -79,6 +79,7 @@
 (luna-load-relative "star/simple-mode.el")
 (luna-load-relative "star/highres-icon.el")
 (luna-load-relative "star/tool-bar.el")
+(luna-load-relative "star/blog.el")
 (require 'utility)
 
 ;;; Customize
@@ -135,19 +136,9 @@
         scroll-margin 0
         scroll-conservatively 5))
 
-;;;; Trash
-(luna-on "Brown"
-  (setq trash-directory "~/.Trash"))
-
 ;;;; Bidi
 (setq bidi-paragraph-direction 'left-to-right
       bidi-inhibit-bpa t)
-
-;;;; Blog
-
-(luna-on "Brown"
-  (push "~/p/casouri/elisp" load-path)
-  (autoload #'luna-publish "luna-blog" nil t))
 
 ;;; Local init
 
