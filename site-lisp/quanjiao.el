@@ -37,7 +37,8 @@ and restart `quanjiao-mode'.")
   :lighter ""
   (if quanjiao-mode
       (progn
-        (setq quanjiao--quote-face `((t . (:family ,quanjiao-font-family))))
+        (setq quanjiao--quote-face
+              `((t . (:family ,quanjiao-font-family))))
         (font-lock-add-keywords
          nil '((quanjiao-matcher . quanjiao--quote-face))))
     (font-lock-remove-keywords
