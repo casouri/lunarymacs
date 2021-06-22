@@ -115,7 +115,7 @@ buffer is not visiting a file."
 
 (defvar luna-special-symbol-alist
   '(("(c)" . "©") ("tm" . "™")  ("s" . "§") ("em" . "—") 
-    ("en" . "–") ("..." . "…") ("s<" . "⃖") ("s>" . "⃗") ("s^" . "ꜛ")
+    ("en" . "–") ("ddd" . "…") ("s<" . "⃖") ("s>" . "⃗") ("s^" . "ꜛ")
     ("sv" . "ꜜ") ("<" . "←") (">" . "→") ("^" . "↑") ("v" . "↓")
     ("l" . "‘") ("r" . "’") ("ll" . "“") ("rr" . "”") ("hand" . "☞")
     ;; paragraph separator
@@ -306,6 +306,25 @@ With DESCRIPTION of the package."
       ;; (message "AFTER: prefix-arg=%S current-prefix-arg=%S"
       ;;          prefix-arg current-prefix-arg)
       )))
+
+;;; UUID
+
+(defun uuid ()
+  "Insert an UUID."
+  (interactive)
+  (insert (string-trim (shell-command-to-string "uuid"))))
+
+;;; Command
+
+(defun new-command (name)
+  "Create a new command with NAME under ~/bin."
+  (interactive)
+  (find-file (concat "~/bin/" name))
+  (insert "#!/usr/bin/env bash\n")
+  (save-buffer)
+  (shell-script-mode)
+  (require 'executable)
+  (executable-make-buffer-file-executable-if-script-p))
 
 ;;; Provide
 
