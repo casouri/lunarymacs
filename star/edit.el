@@ -96,6 +96,7 @@
 (load-package yasnippet
   :config
   (yas-global-mode)
+  (yas--define-parents 'minibuffer-mode '(emacs-lisp-mode))
   (yas--define-parents 'minibuffer-inactive-mode '(emacs-lisp-mode))
   (with-eval-after-load 'hippie-exp
     (add-to-list 'hippie-expand-try-functions-list #'yas-expand)))
