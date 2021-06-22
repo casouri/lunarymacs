@@ -54,7 +54,12 @@
   (setq dired-listing-switches "-lah1v"
         dired-dwim-target t)
   (luna-on "Brown"
-    (setq dired-listing-switches "-lah")))
+    (setq dired-listing-switches "-lah"))
+  ;; Trash
+  (luna-on "Brown"
+    (defun system-move-file-to-trash (file)
+      "Trash FILE with “trash” command."
+      (call-process (executable-find "trash") nil 0 nil file))))
 
 ;;; Function
 
