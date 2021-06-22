@@ -4,10 +4,7 @@
 
 (luna-def-key
  :leader
- "rf" #'org-roam-find-file
- "ri" #'org-roam-insert
- "rb" #'org-roam-buffer-toggle-display
- "df" #'deft
+ "oc" #'org-capture
 
  :---
  :keymaps 'org-mode-map
@@ -124,3 +121,27 @@ ARG is the numerical argument."
                         (eq this-command 'org-time-stamp))))
                . (display-buffer-in-side-window
                   . ((side . bottom)))))
+
+;;; Org capture
+
+(load-package org-web-tools :defer t)
+
+(defun luna-capture-title ()
+  "Insert title and url."
+  (require 'org-web-tools)
+  (concat (org-web-tools--html-title
+           (org-web-tools--get-url (org-web-tools--get-first-url)))
+          "\n"
+          (org-web-tools--get-first-url)))
+
+(with-eval-after-load 'org-capture
+  (add-to-list
+   'org-capture-templates
+   '("w" "Web archive" plain
+     (file+function "~/deft/articles.org"
+                    (lambda ()
+                      (goto-char (point-min))
+                      (search-forward "articles")))
+     "%t\n%?%(luna-capture-title)"
+     :prepend t
+     :empty-lines 1)))
