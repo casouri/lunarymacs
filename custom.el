@@ -10,6 +10,7 @@
    ["#f0f0f0" "#e45649" "#50a14f" "#986801" "#4078f2" "#a626a4" "#0184bc" "#1b2229"])
  '(apropos-do-all t)
  '(auto-save-timeout 5)
+ '(backup-by-copying t nil nil "Prevent Emacs from breaking hard links.")
  '(blink-cursor-mode nil)
  '(compilation-always-kill t)
  '(compilation-ask-about-save nil)
@@ -99,7 +100,6 @@
     (cons 360 "#383a42")))
  '(vc-annotate-very-old-color nil)
  '(visible-cursor nil)
- '(winner-mode t)
  '(word-wrap-by-category t)
  '(xref-prompt-for-identifier
    '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame)))
@@ -109,7 +109,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "SF Mono" :foundry "nil" :slant normal :weight normal :height 130 :width normal))))
  '(ghelp-entry ((t :inherit nil)))
  '(info-body ((t (:inherit variable-pitch :height 1.1 :family "Charter"))))
  '(org-table ((t nil))))
