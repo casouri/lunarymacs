@@ -41,13 +41,6 @@ Bind this to _, for easily insert CAP-DASH without releasing Shift."
 (load-package fish-mode
   :mode "\\.fish$")
 
-(add-hook 'shell-script-mode-hook
-          (lambda ()
-            (add-hook
-             'after-save-hook
-             #'executable-make-buffer-file-executable-if-script-p)))
-
-
 
 (load-package haskell-mode
   :mode "\\.hs$"
@@ -165,7 +158,8 @@ Bind this to _, for easily insert CAP-DASH without releasing Shift."
 ;; Racket
 (load-package racket-mode
   :commands racket-mode
-  :mode "\\.rkt$")
+  :mode "\\.rkt$"
+  :hook (racket-mode-hook . aggressive-indent-mode))
 
 
 ;; C/C++
