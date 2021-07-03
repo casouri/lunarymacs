@@ -110,7 +110,11 @@ Bind this to _, for easily insert CAP-DASH without releasing Shift."
   :init
   (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'common-lisp-mode-hook #'sly-mode)
-  (setq inferior-lisp-program "sbcl"))
+  (setq inferior-lisp-program "sbcl")
+  (add-to-list 'display-buffer-alist
+               (cons "sly-xref for"
+                     (cons 'display-buffer-in-side-window
+                           '((side . bottom))))))
 
 
 
@@ -148,19 +152,23 @@ Bind this to _, for easily insert CAP-DASH without releasing Shift."
 ;; Note: C-c C-a to activate a #lang operation in a racket file.
 (load-package geiser
   :commands run-geiser
-  :config (add-hook 'geiser-repl-mode
-                    (lambda ()
-                      (setq-local company-idle-delay nil)))
+  :config
+  (add-hook 'geiser-repl-mode
+            (lambda ()
+              (setq-local company-idle-delay nil)))
+  (luna-def-key
+   :keymaps 'geiser-mode-map
+   "C-." nil))
+
+(load-package geiser-racket
+  :commands run-geiser run-racket)
+
+(load-package geiser-guile
+  :commands run-geiser run-guile
+  :config
   (require 'console-buffer)
   (setf (alist-get 'scheme-mode luna-console-buffer-alist)
         "* Guile REPL *"))
-
-;; Racket
-(load-package racket-mode
-  :commands racket-mode
-  :mode "\\.rkt$"
-  :hook (racket-mode-hook . aggressive-indent-mode))
-
 
 ;; C/C++
 (dolist (hook '(c-mode-hook c++-mode-hook))
