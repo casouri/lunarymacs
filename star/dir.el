@@ -3,6 +3,8 @@
 ;;; Key
 
 (luna-def-key
+ ;; f -> open file
+ ;; o -> open in other window
  :keymaps 'dired-mode-map
  "b" #'dired-up-directory
  "q" #'luna-quit-window
