@@ -94,7 +94,8 @@
 ;;;; Font
 (when (display-graphic-p)
   (luna-load-font)
-  (luna-load-cjk-font))
+  (luna-load-cjk-font)
+  (luna-scale-cjk-mode))
 (luna-on "Brown" (luna-enable-apple-emoji))
 
 ;;;; Server
