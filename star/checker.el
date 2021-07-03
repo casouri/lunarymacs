@@ -29,10 +29,14 @@
   :config
   (setq flyspell-issue-message-flag nil)
   ;; Add curely quotes so words like “didn’t” are properly handled.
-  (push '(nil "[[:alpha:]]" "[^[:alpha:]]" "['’]" nil
-              ("-B")
-              nil utf-8)
-        ispell-dictionary-alist)
+  ;; ispell-mode overwrites ‘ispell-dictionary-alist’ every time
+  ;; it is turned on so we need to modify the variable in the hook.
+  (add-hook 'flyspell-mode-hook
+            (lambda ()
+              (add-to-list 'ispell-dictionary-alist
+                           '(nil "[[:alpha:]]"
+                                 "[^[:alpha:]]"
+                                 "['’]" nil ("-B") nil utf-8))))
   :extern "aspell port install aspell; port install aspell-dict-en"
   :hook
   (text-mode-hook . flyspell-mode)
