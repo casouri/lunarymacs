@@ -7,7 +7,8 @@
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
-   ["#f0f0f0" "#e45649" "#50a14f" "#986801" "#4078f2" "#a626a4" "#0184bc" "#1b2229"])
+   ["#f0f0f0" "#e45649" "#50a14f" "#986801"
+    "#4078f2" "#a626a4" "#0184bc" "#1b2229"])
  '(apropos-do-all t)
  '(auto-save-timeout 5)
  '(backup-by-copying t nil nil "Prevent Emacs from breaking hard links.")
@@ -17,7 +18,7 @@
  '(confirm-nonexistent-file-or-buffer t)
  '(create-lockfiles nil)
  '(cursor-in-non-selected-windows nil)
- '(custom-safe-themes nil)
+ '(custom-safe-themes '())
  '(default-input-method "rime")
  '(delete-auto-save-files nil)
  '(delete-by-moving-to-trash t)
@@ -58,11 +59,27 @@
      ("gnu" . "https://elpa.gnu.org/packages/")
      ("org" . "https://orgmode.org/elpa/")))
  '(package-selected-packages
-   '(greenbar rainbow-delimiters rainbow-mode helpful pyvenv htmlize yaml-mode lua-mode aggressive-indent rg undo-tree selectrum pinyinlib avy yasnippet xr ws-butler writegood-mode which-key web-mode visual-regexp toc-org tide srefactor smex sly separedit sage-shell-mode restclient racket-mode quickrun proof-general php-mode pdf-tools org-download olivetti nyan-mode mips-mode minions memory-usage magit-todos magit-patch-changelog langtool ivy-xref highlight-parentheses haskell-mode google-translate git-timemachine git-link geiser fish-mode eglot diff-hl debbugs counsel company ccls buffer-move benchmark-init auto-pause auctex))
+   '(geiser-guile
+     geiser-racket adaptive-wrap vundo matlab-emacs
+     grammarbot beginner-guide zmq yaml-mode writegood-mode
+     async which-key web-mode visual-regexp toc-org s flycheck tide
+     ivy swiper sly dash-functional selectrum popup posframe rime rg
+     restclient request rainbow-delimiters quickrun pyvenv proof-general
+     pdf-tools package-lint org-download olivetti minions markdown-mode
+     f hl-todo magit magit-patch-changelog lua-mode ht lsp-mode keycast
+     jupyter highlight-parentheses elisp-refs helpful haskell-mode
+     goto-chg google-translate git-timemachine git-link geiser
+     flymake-grammarly fish-mode evil eldoc-box diff-hl debbugs
+     counsel company auctex eglot company-pollen pollen-mode elpher
+     org org-web-tools yasnippet ws-butler undo-tree srefactor smex
+     separedit sage-shell-mode rainbow-mode pinyinlib nyan-mode
+     mips-mode memory-usage magit-todos latex-preview-pane langtool
+     keyfreq ivy-xref iscroll htmlize expand-region dired-rsync ccls
+     buffer-move benchmark-init avy auto-pause aio aggressive-indent))
  '(recentf-max-saved-items 1000)
  '(ring-bell-function 'ignore)
- '(safe-local-variable-values '((git-commit-major-mode . git-commit-elisp-text-mode)))
- '(savehist-additional-variables '(tablist-named-filter extended-command-history))
+ '(savehist-additional-variables
+   '(tablist-named-filter extended-command-history))
  '(savehist-mode t)
  '(scroll-bar-mode nil)
  '(scroll-conservatively 1)
@@ -102,7 +119,9 @@
  '(visible-cursor nil)
  '(word-wrap-by-category t)
  '(xref-prompt-for-identifier
-   '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame)))
+   '(not xref-find-references xref-find-definitions
+         xref-find-definitions-other-window
+         xref-find-definitions-other-frame)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
