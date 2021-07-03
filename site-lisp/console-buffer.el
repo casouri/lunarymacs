@@ -26,13 +26,18 @@
                                     (python-mode . "*Python*")
                                     (sage-shell:sage-mode . "*Sage*")
                                     (lisp-mode . console-buffer-sly))
-  "An alist with element (major-mode . console buffer).")
+  "An alist with element (MAJOR-MODE . CONSOLE-BUFFER-NAME).
+If the buffer’s name is dynamic, CONSOLE-BUFFER-NAME can also be
+a function that returns the buffer.")
 
 (defvar-local luna-console-buffer-p nil
   "T if this buffer is a console buffer.")
 
-(defvar luna-console-window nil
-  "A window at bottom dedicated to console buffer.")
+(defun luna-console-window ()
+  "Return the window displaying the console buffer."
+  (if luna-console-buffer-p
+      (selected-window)
+    (get-buffer-window (luna--get-console-buffer major-mode))))
 
 (defun luna--get-console-buffer (mode)
   "Return the console buffer corresponding to MODE.
@@ -42,7 +47,7 @@ Return nil if none exists."
           (funcall console-buffer)
         console-buffer)
     (message
-     "No console buffer, use `luna-set-console-buffer' to set one")
+     "Coulen’t find the console buffer, use `luna-set-console-buffer' to set one")
     nil))
 
 (defun luna-toggle-console ()
@@ -51,20 +56,17 @@ When console window is live, jump between console window and
 previous window; when console window is not live, switch between
 console buffer and previous buffer."
   (interactive)
-  (if (window-live-p luna-console-window)
-      ;; jump between console window and previous window
-      (if luna-console-buffer-p
-          (if-let ((win (window-parameter luna-console-window
-                                          'luna-console-jump-back)))
-              (select-window win)
-            (select-window (previous-window))
-            (message "Could not find previous window, guess one"))
-        (let ((old-window (selected-window)))
-          (select-window luna-console-window)
-          (set-window-parameter nil 'luna-console-jump-back old-window)))
-    ;; switch between console buffer and previous buffer
-    (if luna-console-buffer-p
-        (previous-buffer)
+  (if luna-console-buffer-p
+      ;; We want to jump back, either by jumping to another window, or
+      ;; switching to previous buffer.
+      (if-let ((win (window-parameter (luna-console-window)
+                                      'luna-console-jump-back)))
+          (select-window win)
+        (previous-buffer))
+    ;; We want to jump to a console buffer, either by jumping to
+    ;; another window, or by switching to a console buffer.
+    (if (window-live-p (luna-console-window))
+        (select-window (luna-console-window))
       (when-let ((buf (luna--get-console-buffer major-mode)))
         (switch-to-buffer buf)
         (setq-local luna-console-buffer-p t)))))
@@ -78,12 +80,19 @@ console buffer and previous buffer."
 (defun luna-toggle-console-window ()
   "Toggle display of console window."
   (interactive)
-  (if (window-live-p luna-console-window)
-      (delete-window luna-console-window)
-    (when-let ((buf (luna--get-console-buffer major-mode)))
-      (setq luna-console-window
-            (display-buffer-at-bottom (get-buffer buf)
-                                      '((window-height . 0.2)))))))
+  (if (equal (selected-window) (luna-console-window))
+      (user-error "You are in the console window, maybe use luna-toggle-console instead")
+    (if (window-live-p (luna-console-window))
+        (if (window-prev-buffers luna-console-window)
+            (set-window-buffer
+             luna-console-window
+             (caar (window-prev-buffers (luna-console-window))))
+          (delete-window luna-console-window))
+      (when-let ((buf (luna--get-console-buffer major-mode)))
+        (setq luna-console-window
+              (display-buffer (get-buffer buf)
+                              '(display-buffer--maybe-pop-up-window
+                                . ((inhibit-same-window . t)))))))))
 
 ;;; Intergration
 
