@@ -71,14 +71,15 @@
   er/contract-region)
 
 
-(load-package isolate
-  :commands
-  isolate-quick-add
-  isolate-quick-change
-  isolate-quick-delete
-  isolate-long-add
-  isolate-long-change
-  isolate-long-delete)
+;; (add-to-list 'load-path "~/p/isolate")
+;; (load-package isolate
+;;   :commands
+;;   isolate-quick-add
+;;   isolate-quick-change
+;;   isolate-quick-delete
+;;   isolate-long-add
+;;   isolate-long-change
+;;   isolate-long-delete)
 
 
 (load-package diff-hl
