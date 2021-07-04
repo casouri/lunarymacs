@@ -1,5 +1,44 @@
 ;;; utility.el --- Utilities      -*- lexical-binding: t; -*-
 
+;; - ‘switch-buffer-same-major-mode’
+;;     Switch buffer among those with the same major mode.
+;; - ‘open-in-finder’
+;;     Open ‘default-directory’ in Finder.
+;; - ‘open-in-iterm’
+;;     Open ‘default-directory’ iTerm.
+;; - ‘luna-rename-file’
+;;     Renames current buffer and file it is visiting.
+;; - ‘luna-sudo-edit’
+;;     Edit currently visited file as root.
+;; - ‘luna-load-env’
+;;     Load PATH and CPATH from a file.
+;; - ‘luna-insert-special-symbol’
+;;     Insert special symbol at point, SURNAME is used to search for symbol.
+;; - ‘luna-make-accent-fn’
+;;     Return a command that insert “COMBINDING NAME” unicode char.
+;; - ‘luna-autoinsert’
+;;     Autoinsert what auto-insert inserts.
+;; - ‘cheatsheet-display’
+;;     Display cheat sheet for this major mode.
+;; - ‘copy-change-log’
+;;     No docstring.
+;; - ‘unfill-region’
+;;     Remove newlines in the region from BEG to END.
+;; - ‘windows-newline’
+;;     Set file to use windows newline (\r\n).
+;; - ‘read-key-command’
+;;     Read key.
+;; - ‘gif-animate’
+;;     Animate Gif in buffer.
+;; - ‘copy-next-command-output’
+;;     Prefix command to add the output of the next command to kill-ring.
+;; - ‘uuid’
+;;     Insert an UUID.
+;; - ‘new-bin’
+;;     Create a new command with NAME under ~/bin.
+;; - ‘insert-function-summary’
+;;     Insert a summary of all the functions defined in this file.
+
 (require 'lunary)
 (require 'luna-f)
 (require 'cl-lib)
@@ -187,7 +226,7 @@ With DESCRIPTION of the package."
 
 (defalias 'helpme 'cheatsheet-display)
 
-;;; ChangeLog
+;;; Misc commands
 
 (defun copy-change-log ()
   (interactive)
@@ -201,8 +240,6 @@ With DESCRIPTION of the package."
       (dolist (log changelog)
         (insert log))
       (kill-ring-save (point-min) (point-max)))))
-
-;;; Unfill
 
 ;; Copied straight from flywrap.el.
 (defun unfill-region (beg end)
@@ -229,25 +266,17 @@ With DESCRIPTION of the package."
               ;; Don’t separate CJK characters.
               (t (replace-match "")))))))
 
-;;; Windows newline
-
 (defun windows-newline ()
   "Set file to use windows newline (\\r\\n)."
   (interactive)
   (set-buffer-file-coding-system 'dos))
 
-;;; Kill
-
 (defalias 'copy 'kill-new)
-
-;;; Read key
 
 (defun read-key-command ()
   "Read key."
   (interactive)
   (read-key-sequence "Key: "))
-
-;;; Gif
 
 (defun gif-animate ()
   "Animate Gif in buffer."
@@ -256,9 +285,6 @@ With DESCRIPTION of the package."
     (save-excursion
       (goto-char (point-min))
       (image-animate (plist-get (text-properties-at (point)) 'display)))))
-
-
-;;; Prefix command
 
 ;; From Stefan M.
 (defun copy-next-command-output ()
@@ -307,16 +333,12 @@ With DESCRIPTION of the package."
       ;;          prefix-arg current-prefix-arg)
       )))
 
-;;; UUID
-
 (defun uuid ()
   "Insert an UUID."
   (interactive)
   (insert (string-trim (shell-command-to-string "uuid"))))
 
-;;; Command
-
-(defun new-command (name)
+(defun new-bin (name)
   "Create a new command with NAME under ~/bin."
   (interactive)
   (find-file (concat "~/bin/" name))
@@ -326,7 +348,22 @@ With DESCRIPTION of the package."
   (require 'executable)
   (executable-make-buffer-file-executable-if-script-p))
 
-;;; Provide
+(defun insert-function-summary ()
+  "Insert a summary of all the functions defined in this file."
+  (interactive)
+  (let ((found nil)
+        (start (point)))
+    (save-excursion
+      (while (re-search-forward
+              (rx bol "(defun " (group (+ (not (any " "))))) nil t)
+        (push (match-string-no-properties 1) found)))
+    (dolist (sym (reverse found))
+      (insert (format "- ‘%s’\n    %s\n" sym
+                      (car (split-string
+                            (or (documentation (intern sym))
+                                "No docstring.")
+                            "\n")))))
+    (comment-region start (point))))
 
 (provide 'utility)
 
