@@ -46,7 +46,9 @@
              (toggle-input-method))
  ;; "<tab>" #'rime-inline-ascii
  :keymaps 'rime-mode-map
- "C-`" #'rime-send-keybinding)
+ "C-`" #'rime-send-keybinding
+ :keymaps 'project-prefix-map
+ "g" #'luna-project-find-regexp)
 
 
 ;;; Package
@@ -205,3 +207,15 @@
               (lambda () (interactive)
                 (kill-local-variable 'cursor-type)))))
 
+(defun luna-project-find-regexp (regexp pattern)
+  (interactive (list (project--read-regexp)
+                     (read-from-minibuffer "Fiel Pattern: " "*.")))
+  (require 'xref)
+  (require 'grep)
+  (let* ((pr (project-current t))
+         (default-directory (project-root pr))
+         (files (project--files-in-directory
+                 default-directory nil pattern)))
+    (xref--show-xrefs
+     (apply-partially #'project--find-regexp-in-files regexp files)
+     nil)))

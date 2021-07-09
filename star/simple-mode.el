@@ -203,6 +203,16 @@ Bind this to _, for easily insert CAP-DASH without releasing Shift."
           lisp-mode-hook)
          . aggressive-indent-mode))
 
+(load-package citre
+  :init
+  (setq citre-ctags-program "uctags"
+        citre-readtags-program "ureadtags")
+  (add-hook 'haskell-mode-hook #'citre-mode)
+  :config
+  (luna-def-key
+   :keymaps 'citre-mode-map
+   "M-." #'citre-jump)
+  :commands citre-mode)
 
 ;; (load-package quickrun
 ;;   :commands

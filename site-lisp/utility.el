@@ -170,8 +170,8 @@ buffer is not visiting a file."
   "Alist used by `luna-insert-special-symbol'.")
 
 (defun luna-insert-special-symbol (surname)
-  "Insert special symbol at point, SURNAME is used to search for symbol.
-E.g. SURNAME (c) to symbol ©."
+  "Insert special symbol at point.
+SURNAME is used to search for symbol. E.g. SURNAME (c) to symbol ©."
   (interactive
    (list (car (split-string
                (completing-read
@@ -340,7 +340,7 @@ With DESCRIPTION of the package."
 
 (defun new-bin (name)
   "Create a new command with NAME under ~/bin."
-  (interactive)
+  (interactive "sName: ")
   (find-file (concat "~/bin/" name))
   (insert "#!/usr/bin/env bash\n")
   (save-buffer)

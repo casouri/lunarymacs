@@ -32,11 +32,11 @@
  "f" '("File")
  "fr"  #'luna-rename-file
 
- "b" '("Buffer")
- "bm"  '("message buffer" .
-         (lambda () (interactive) (switch-to-buffer "*Messages*")))
- "bs"  '("scratch buffer" .
-         (lambda () (interactive) (switch-to-buffer "*scratch*")))
+ "b" '("Buffer/bookmark")
+ "bm" '("message buffer" .
+        (lambda () (interactive) (switch-to-buffer "*Messages*")))
+ "bs" '("scratch buffer" .
+        (lambda () (interactive) (switch-to-buffer "*scratch*")))
 
  "t" '("Toggle")
  "tt"  #'luna-switch-theme

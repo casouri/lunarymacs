@@ -1,6 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 (load-package pollen-mode
+  :mode "\\.pm$"
   :config
   ;; Set parent to text-mode so electric-quote-mode works.
   (put 'pollen-mode 'derived-mode-parent 'text-mode)
@@ -34,8 +35,7 @@
         (when (eq (point) (line-beginning-position))
           (skip-syntax-forward "-"))))))
 
-(load-package company-pollen
-  :defer)
+(load-package company-pollen :defer t)
 
 ;;; Notes
 

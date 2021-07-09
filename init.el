@@ -78,7 +78,7 @@
 (luna-load-relative "star/tex.el")
 (luna-load-relative "star/simple-mode.el")
 (luna-load-relative "star/highres-icon.el")
-(luna-load-relative "star/tool-bar.el")
+;; (luna-load-relative "star/tool-bar.el")
 (luna-load-relative "star/blog.el")
 (require 'utility)
 

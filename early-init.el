@@ -31,7 +31,7 @@
   (push '(ns-transparent-titlebar . t) default-frame-alist))
 
 (when (display-graphic-p)
-  ;; (tool-bar-mode -1)
+  (tool-bar-mode -1)
   (scroll-bar-mode -1))
 
 ;; BTW, you have to enable menu bar on mac port,
@@ -40,6 +40,6 @@
 (when (not (display-graphic-p))
   (menu-bar-mode -1))
 
-;; (when window-system
+;; (when (display-graphic-p)
 ;;   (add-hook 'after-init-hook #'toggle-frame-maximized))
 
