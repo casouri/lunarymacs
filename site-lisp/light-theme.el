@@ -40,7 +40,8 @@
     (let* ((bg        "#fefefe")
            ;; lighter than region
            (bg-alt    (darken bg 0.05))
-           (fg        "#2b3239")
+           ;; (fg        "#2b3239")
+           (fg        "#000000")
            (fg-weak   "#9a9ea2")
            ;; (fg-strong "#0e0e0e")
            (blue1     "#0076D6") ; fg
@@ -132,7 +133,7 @@
         (font-lock-type-face                 (nil ,yellow))
         (font-lock-variable-name-face        (nil ,violet2))
         (font-lock-warning-face              (warning))
-        (font-lock-negation-char-face        (nil ,blue2))
+        (font-lock-negation-char-face        (warning))
         (font-lock-preprocessor-face         (nil ,blue2))
         (font-lock-preprocessor-char-face    (nil ,blue2))
         (font-lock-regexp-grouping-backslash (nil ,blue2))

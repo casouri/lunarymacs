@@ -207,15 +207,24 @@
               (lambda () (interactive)
                 (kill-local-variable 'cursor-type)))))
 
-(defun luna-project-find-regexp (regexp pattern)
-  (interactive (list (project--read-regexp)
-                     (read-from-minibuffer "Fiel Pattern: " "*.")))
-  (require 'xref)
-  (require 'grep)
-  (let* ((pr (project-current t))
-         (default-directory (project-root pr))
-         (files (project--files-in-directory
-                 default-directory nil pattern)))
-    (xref--show-xrefs
-     (apply-partially #'project--find-regexp-in-files regexp files)
-     nil)))
+
+(with-eval-after-load 'project
+  (setq project-vc-ignores ".ccls-cache/")
+  (defun luna-project-find-regexp (regexp pattern)
+    (interactive (list (project--read-regexp)
+                       (read-from-minibuffer
+                        "File Pattern: "
+                        (concat "*." (or (file-name-extension
+                                          (or (buffer-file-name)
+                                              ""))
+                                         "")))))
+    (require 'xref)
+    (require 'grep)
+    (let* ((pr (project-current t))
+           (default-directory (project-root pr))
+           (files (project--files-in-directory
+                   default-directory nil pattern)))
+      (xref--show-xrefs
+       (apply-partially #'project--find-regexp-in-files regexp files)
+       nil))))
+

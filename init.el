@@ -94,8 +94,7 @@
 ;;;; Font
 (when (display-graphic-p)
   (luna-load-font)
-  (luna-load-cjk-font)
-  (luna-scale-cjk-mode))
+  (luna-load-cjk-font))
 (luna-on "Brown" (luna-enable-apple-emoji))
 
 ;;;; Server
@@ -147,3 +146,60 @@
                    "local-init.el" user-emacs-directory)))
   (when (file-exists-p local-init)
     (load local-init)))
+
+(luna-on "Brown"
+  (push "~/p/tree-sitter-expr/json-module" load-path)
+  (push "~/p/tree-sitter-expr/c-module" load-path)
+  (require 'tree-sitter-json)
+  (require 'tree-sitter-c)
+  (require 'tree-sitter)
+
+  (defun tree-sitter-select-node (node)
+    (let ((beg (tree-sitter-node-beginning node))
+          (end (tree-sitter-node-end node)))
+      (push-mark end)
+      (activate-mark)
+      (goto-char beg)))
+
+  (defvar tree-sitter-expand-origin nil
+    "Point before ‘tree-sitter-expand’ ran.")
+
+  (defun tree-sitter-expand ()
+    (interactive)
+    (if (region-active-p)
+        (let ((node (tree-sitter-node-in-range
+                     (region-beginning) (region-end))))
+          (tree-sitter-select-node
+           (or (tree-sitter-node-parent node) root)))
+      (setq tree-sitter-expand-origin (point))
+      (tree-sitter-select-node
+       (tree-sitter-node-in-range
+        (point) (1+ (point))))))
+
+  (defun tree-sitter-shrink ()
+    (interactive)
+    (when (and (region-active-p) tree-sitter-expand-origin)
+      (let* ((beg (region-beginning))
+             (end (region-end))
+             (node (tree-sitter-node-in-range beg end))
+             ;; Find a child that contains the original point.
+             (child (car (tree-sitter-filter-child
+                          node (lambda (child)
+                                 (<= (tree-sitter-node-beginning child)
+                                     tree-sitter-expand-origin
+                                     (tree-sitter-node-end child)))))))
+        (if child
+            (tree-sitter-select-node child)
+          (deactivate-mark)))))
+
+  (luna-def-key "C-'" #'tree-sitter-expand
+                "C-;" #'tree-sitter-shrink)
+
+  (defun tree-sitter-show-buffer-tree ()
+    (interactive)
+    (let ((root-node (tree-sitter-parser-root-node
+                      (or (car tree-sitter-parser-list)
+                          (tree-sitter-create-parser (current-buffer) (tree-sitter-c))))))
+      (pop-to-buffer (get-buffer-create "*tree-sitter-show-tree*"))
+      (erase-buffer)
+      (insert (pp-to-string (read (tree-sitter-node-string root-node)))))))

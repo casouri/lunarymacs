@@ -16,7 +16,7 @@
 (define-minor-mode pause-minor-mode
   "Minor mode for pause facility."
   :keymap (let ((map (make-sparse-keymap)))
-            (define-key map (kbd "C-c C-c") #'exit-recursive-edit)
+            ;; C-c conflicts with many modes, better stick to C-M-c.
             (define-key map (kbd "C-g") #'abort-recursive-edit)
             map))
 

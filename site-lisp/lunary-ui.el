@@ -117,8 +117,8 @@ More info about spec in `font-spec'.")
 (defvar luna-cjk-font-alist
   ;; We don’t set font size, so the font size changes with default
   ;; font.
-  '(("Source Han Serif" . (:family "Source Han Serif SC"))
-    ("GNU Unifont" . (:family "Unifont")))
+  '(("Source Han Serif" . (:family "Source Han Serif SC" :size 13))
+    ("GNU Unifont" . (:family "Unifont" :size 13)))
   "Similar to `luna-font-alist' but used for CJK scripts.
 Use `luna-load-cjk-font' to load them.")
 

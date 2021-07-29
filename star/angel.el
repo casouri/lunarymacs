@@ -66,6 +66,7 @@
  "C-s-b" (kbd "C-M-b")
  "C-s-t" (kbd "C-M-t")
  "C-s-;" (kbd "C-M-;")
+ "C-s-c" (kbd "C-M-c")
  ;; For some reason, keyboard macro doesn't work.
  "s-["   (kbd "M-[")
  "s-]"   (kbd "M-]")
@@ -193,9 +194,9 @@ point reaches the beginning or end of the buffer, stop there."
 
 (defun query-replace+ (beg end &optional delete)
   "Select region between BEG and END and query replace it.
-Edit the underlined region and type C-c C-c to start
-`query-replace'. Type C-g to abort. If DELETE non-nil, delete
-region when invoked."
+Edit the underlined region and type C-M-c to start
+`query-replace'. Type C-g or C-] to abort. If DELETE non-nil,
+delete region when invoked."
   (interactive "r")
   (if (not (region-active-p))
       (message "Select the text to be replaced first")

@@ -67,12 +67,13 @@
   :group 'outline)
 
 (defcustom color-outline-comment-char-alist
-  '((c-mode "/")
+  '((c-mode "*" "/")
     (python-mode "#")
     (javascript-mode "/")
     (css-mode "*" "/")
     (tuareg-mode "*" "(")
     (shell-script-mode "#")
+    (web-mode "-" "<!")
     (sh-mode "#"))
   "Stores custom comment character for each major mode.
 An alist of (MAJOR-MODE . (COMMENT-CHAR COMMENT-BEGIN))
