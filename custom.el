@@ -72,6 +72,7 @@
  '(sentence-end-double-space nil)
  '(split-height-threshold nil)
  '(split-width-threshold 90)
+ '(tab-width 4)
  '(use-dialog-box nil)
  '(use-package-hook-name-suffix "")
  '(user-full-name "Yuan Fu")
