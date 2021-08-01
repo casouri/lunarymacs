@@ -35,12 +35,15 @@ We need to manually save and restore it. See manual for more info.")
 
 (defvar luna-dump-location-alist
   '((Emacs "/Applications/Emacs.app/Contents/MacOS/Emacs"
-           "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp")
+           "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp"
+           "/Applications/Emacs.app/Contents/MacOS/libexec/Emacs.pdmp")
     (Emacs-27 "/Applications/Emacs 27.app/Contents/MacOS/Emacs"
-              "/Applications/Emacs 27.app/Contents/MacOS/Emacs.pdmp")
-    (Emacs-gcc "/Applications/Emacs Native.app/Contents/MacOS/Emacs"
-               "/Applications/Emacs Native.app/Contents/MacOS/Emacs.pdmp"))
-  "An alist of (Name . LOCATION-LIST).")
+              "/Applications/Emacs 27.app/Contents/MacOS/Emacs.pdmp"
+              "/Applications/Emacs 27.app/Contents/MacOS/libexec/Emacs.pdmp"))
+  "An alist of (Name . LOCATION-LIST).
+LOCATION-LIST is (BINARY-PATH DUMP-PATH). BINARY-PATH is the path
+to the Emacs binary, DUMP-PATH is the path to the dump file, it
+cannot be “emacs.pdmp” because that’s the original dump’s name.")
 
 ;;; Loading functions
 
@@ -129,9 +132,10 @@ To make the change persist reboot, use
 
 ;;; Dump
 
-(defun luna-dump (emacs-location dump-location)
+(defun luna-dump (emacs-location dump-location orig-dump-location)
   "Dump Emacs.
-Run Emacs at EMACS-LOCATION and dump to DUMP-LOCATION."
+Run Emacs at EMACS-LOCATION and dump to DUMP-LOCATION.
+ORIG-DUMP-LOCATION is location of the original pre-built dump."
   (interactive
    (alist-get (intern (completing-read
                        "Location: "
@@ -147,6 +151,7 @@ Run Emacs at EMACS-LOCATION and dump to DUMP-LOCATION."
      :command
      (list emacs-location
            "--batch" "-Q"
+           "--dump-file" orig-dump-location
            "--eval"
            ;; Don’t add quote around!
            (format "(setq luna-dump-file \"%s\")" dump-location)
