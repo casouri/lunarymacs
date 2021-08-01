@@ -88,8 +88,8 @@
   (global-hl-todo-mode))
 
 
-(load-package sidebar
-  :commands sidebar-mode global-sidebar-mode)
+;; (load-package sidebar
+;;   :commands sidebar-mode global-sidebar-mode)
 
 
 ;; Use the site-lisp version.

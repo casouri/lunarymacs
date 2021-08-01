@@ -67,7 +67,7 @@
 (luna-load-relative "star/ui.el")
 (luna-load-relative "star/mode-line.el")
 (luna-load-relative "star/edit.el")
-(luna-load-relative "star/ivy.el")
+;; (luna-load-relative "star/ivy.el")
 (luna-load-relative "star/checker.el")
 (luna-load-relative "star/eglot.el")
 (luna-load-relative "star/python.el")
@@ -103,9 +103,6 @@
          (require 'server)
          (unless (eq (server-running-p) t)
            (server-start t t))))
-
-;;;; Vterm
-;; (luna-load-relative "star/term.el")
 
 ;;;; Macports
 (luna-on "Brown"
@@ -203,3 +200,7 @@
       (pop-to-buffer (get-buffer-create "*tree-sitter-show-tree*"))
       (erase-buffer)
       (insert (pp-to-string (read (tree-sitter-node-string root-node)))))))
+
+(put 'narrow-to-region 'disabled nil)
+
+
