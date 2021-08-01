@@ -144,7 +144,7 @@
   (when (file-exists-p local-init)
     (load local-init)))
 
-(luna-on "Brown"
+(when (featurep 'tree-sitter)
   (push "~/p/tree-sitter-expr/json-module" load-path)
   (push "~/p/tree-sitter-expr/c-module" load-path)
   (require 'tree-sitter-json)
