@@ -1,4 +1,6 @@
 ;; -*- lexical-binding: t -*-
+;;
+;; Simple config for programming modes.
 
 ;; Emacs Lisp
 (luna-def-key
