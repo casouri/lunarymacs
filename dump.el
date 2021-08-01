@@ -15,14 +15,15 @@
 (setq luna-dumped-load-path load-path
       luna-dumped t)
 
-(dolist (package '(ivy
-                   counsel org helpful company which-key
+(dolist (package '(org
+                   helpful company which-key
                    recentf-ext swiper aggressive-indent
                    winner elec-pair rainbow-delimiters
                    highlight-parentheses hl-todo buffer-move
                    savehist minions ws-butler
                    expand-region flyspell flycheck eglot
-                   yasnippet ivy-xref which-func savehist
+                   yasnippet which-func savehist
+                   consult vertico
                    ;; site-lisp
                    transform utility pause color-outline
                    outline+
