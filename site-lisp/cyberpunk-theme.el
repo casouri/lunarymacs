@@ -69,9 +69,6 @@
         (link-visited    (link ,violet1))
         (block       (nil nil ,bg-alt))
         
-        (variable-pitch () (:family "Charter" :height 155))
-        (fixed-pitch    () (:family "SF Mono" :height 130))
-        
         (vertical-border      (nil nil "black"))
         (lazy-highlight       (nil "white" nil nil bold))
         (highlight-fg-only-1  (nil ,blue2))
@@ -89,7 +86,6 @@
         
         ;; see also builin-config.el (Customize) where I increase line
         ;; spacing and default face.
-        (custom-default        () (:family "SF Pro Text" :height 140))
         (custom-button
          (custom-default ,(brighten fg 0.2) ,bg-alt)
          (:box (:line-width 3 :color ,bg-alt)))

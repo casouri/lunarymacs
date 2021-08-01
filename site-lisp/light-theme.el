@@ -18,13 +18,6 @@
  'custom-default
  'highlight-fg-only-2
  'highlight-fg-only-1
- 'red-bg-hl
- 'red-bg
- 'yellow-bg-hl
- 'yellow-bg
- 'green-bg-hl
- 'green-bg
- 'comp-scroll-bar
  'comp-mouse
  'selection-common
  'comp-common
@@ -51,7 +44,7 @@
            (red       "#E04E49")
            (yellow    "#987816")
            (violet1   "#b751b6") ; bg
-           (violet2   "#A8289C") ; fg 
+           (violet2   "#A8289C") ; fg
            ;; Note that this is not a cons cell.
            (tty       '((type nil))))
       `(;; builtin faces
@@ -144,9 +137,11 @@
         (comp-common       (nil ,violet2))
         (selection-common  (current-selection ,bg))
         (comp-mouse        (nil ,bg ,violet1))
+
+        (completions-common-part (highlight-fg-only-1))
         
         ;; package faces
-        
+
         (company-tooltip                     (tooltip))
         (company-tooltip-annotation          (company-tooltip))
         (company-tooltip-annotation-selection
@@ -165,16 +160,16 @@
         (company-preview-common              (company-preview))
         (company-preview-search              (company-preview))
         
-        (ivy-current-match                   (current-selection))
-        (ivy-minibuffer-match-face-1         (nil ,bg ,green))
-        (ivy-minibuffer-match-face-2         (nil ,bg ,orange))
-        (ivy-minibuffer-match-face-3         (nil ,bg ,orange))
-        (ivy-minibuffer-match-face-4         (nil ,bg ,orange))
-        (ivy-minibuffer-match-highlight      (ivy-current-match))
-        (ivy-virtual                         (default))
-        (ivy-subdir                          (default))
-        (ivy-remote                          (default))
-        (ivy-org                             (default))
+        ;; (ivy-current-match                   (current-selection))
+        ;; (ivy-minibuffer-match-face-1         (nil ,bg ,green))
+        ;; (ivy-minibuffer-match-face-2         (nil ,bg ,orange))
+        ;; (ivy-minibuffer-match-face-3         (nil ,bg ,orange))
+        ;; (ivy-minibuffer-match-face-4         (nil ,bg ,orange))
+        ;; (ivy-minibuffer-match-highlight      (ivy-current-match))
+        ;; (ivy-virtual                         (default))
+        ;; (ivy-subdir                          (default))
+        ;; (ivy-remote                          (default))
+        ;; (ivy-org                             (default))
 
         (magit-heading-highlight (nil nil ,bg-alt))
         (magit-heading-selection (nil ,bg ,(overlay bg orange 0.8)))
@@ -338,7 +333,14 @@
 
         (rime-default-face (tooltip) (:height 150))
         (rime-highlight-candidate-face ((bold rime-default-face)))
-        (rime-code-face (rime-default-face))))))
+        (rime-code-face (rime-default-face))
+
+        (orderless-match-face-0 (nil ,bg ,orange))
+        (orderless-match-face-1 (nil ,bg ,green))
+        (orderless-match-face-2 (nil ,bg ,orange))
+        (orderless-match-face-3 (nil ,bg ,green))
+        
+        ))))
 
 (provide-theme 'light)
 
