@@ -34,6 +34,7 @@
 
  ;; Control bindings
  "C-v"   #'set-mark-command
+ "C-x C-r" #'recursive-edit
 
  ;; Super bindings
  "s-n"   #'luna-scroll-up-reserve-point
@@ -67,6 +68,7 @@
  "C-s-t" (kbd "C-M-t")
  "C-s-;" (kbd "C-M-;")
  "C-s-c" (kbd "C-M-c")
+
  ;; For some reason, keyboard macro doesn't work.
  "s-["   (kbd "M-[")
  "s-]"   (kbd "M-]")

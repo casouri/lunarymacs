@@ -259,9 +259,6 @@
 
 
 (load-package consult
-  :config
-  (consult-binded-mode)
-  (setq consult-preview-key (kbd "C-o"))
   :init
   ;; Bindings are defined at the top.
   (defvar consult-binded-mode-map (make-sparse-keymap)
@@ -274,7 +271,10 @@
     :group 'convenience
     (if consult-binded-mode
         (message ":-)")
-      (message ";-)"))))
+      (message ";-)")))
+  :config
+  (consult-binded-mode)
+  (setq consult-preview-key (kbd "C-o")))
 
 
 (load-package recentf-ext
@@ -283,3 +283,9 @@
 
 (load-package vertico
   :config (vertico-mode))
+
+;; (load-package selectrum
+;;   :config (selectrum-mode))
+
+(load-package orderless
+  :init (setq completion-styles '(orderless)))
