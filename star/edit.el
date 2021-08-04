@@ -51,7 +51,7 @@
  "C-`" #'rime-send-keybinding
  :keymaps 'project-prefix-map
  "g" #'luna-project-find-regexp
- 
+
  :keymaps 'consult-binded-mode-map
  "C-x C-b" #'consult-buffer
  "M-y"     #'consult-yank-pop
@@ -82,6 +82,13 @@
   er/expand-region
   er/contract-region
   :init
+  (defun tree-sitter-select-node (node)
+    (let ((beg (tree-sitter-node-beginning node))
+          (end (tree-sitter-node-end node)))
+      (push-mark end)
+      (activate-mark)
+      (goto-char beg)))
+
   (defun er/tree-sitter-expand ()
     (interactive)
     (when (and (featurep 'tree-sitter)
@@ -284,8 +291,12 @@
 (load-package vertico
   :config (vertico-mode))
 
-;; (load-package selectrum
-;;   :config (selectrum-mode))
 
 (load-package orderless
   :init (setq completion-styles '(orderless)))
+
+
+(with-eval-after-load 'isearch
+  (defun luna-rcenter-advice (&rest _) (recenter))
+  (advice-add 'isearch-repeat-forward :after #'luna-rcenter-advice)
+  (advice-add 'isearch-repeat-backward :after #'luna-rcenter-advice))
