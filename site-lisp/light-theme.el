@@ -34,7 +34,7 @@
            ;; lighter than region
            (bg-alt    (darken bg 0.05))
            ;; (fg        "#2b3239")
-           (fg        "#000000")
+           (fg        "#080808")
            (fg-weak   "#9a9ea2")
            ;; (fg-strong "#0e0e0e")
            (blue1     "#0076D6") ; fg
@@ -50,7 +50,8 @@
       `(;; builtin faces
         (default     (nil ,fg ,bg))
         (region      (nil nil ,(overlay bg violet1 0.1)))
-        (highlight   (nil ,bg ,blue2))
+        ;; (highlight   (nil ,bg ,blue2))
+        (highlight   (nil nil ,(overlay bg blue1 0.1)))
         (cursor      (nil "white" "black"))
         (link        (nil ,blue1 nil nil))
         (match       (nil ,green nil nil bold))
@@ -138,7 +139,7 @@
         (selection-common  (current-selection ,bg))
         (comp-mouse        (nil ,bg ,violet1))
 
-        (completions-common-part (highlight-fg-only-1))
+        (completions-common-part (bold))
         
         ;; package faces
 
@@ -339,7 +340,9 @@
         (orderless-match-face-1 (nil ,bg ,green))
         (orderless-match-face-2 (nil ,bg ,orange))
         (orderless-match-face-3 (nil ,bg ,green))
-        
+
+        (consult-bookmark (consult-buffer))
+        (consult-file (consult-file))
         ))))
 
 (provide-theme 'light)

@@ -38,9 +38,6 @@
 
 ;;; Package
 
-(add-to-list 'luna-toggle-theme-list 'light)
-(add-to-list 'luna-toggle-theme-list 'cyberpunk)
-
 (load-package rainbow-delimiters
   :hook (prog-mode-hook . rainbow-delimiters-mode)
   :config (with-current-buffer (get-buffer-create "*scratch*")
@@ -130,3 +127,4 @@
                    ("" which-func-format " ")))
                 mode-line-misc-info)
         which-func-unknown " "))
+

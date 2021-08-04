@@ -5,7 +5,6 @@
 (add-to-list 'load-path
              (expand-file-name "site-lisp"
                                user-emacs-directory))
-(require 'luna-f)
 (require 'lunary)
 (require 'cowboy)
 (require 'package)
@@ -29,15 +28,14 @@
                   (save-excursion
                     (switch-to-buffer "*scratch*")
                     (goto-char (point-min))
-                    (insert ";; \t\t\tE M A C S\n")
-                    (insert (format ";; %s\n" (make-string 58 ?-)))
-                    (insert (format ";; Welcome to GNU Emacs %s. "
+                    (insert ";;          E M A C S\n")
+                    (insert ";;\n")
+                    (insert (format ";; Welcome to GNU Emacs %s.\n"
                                     emacs-version))
-                    (insert (format "Today is %s.\n"
+                    (insert (format ";; Today is %s.\n"
                                     (format-time-string "%A %Y.%-m.%-d")))
                     (insert ";;\n")
-                    (lisp-interaction-mode)
-                    (goto-char (point-max))))))
+                    (lisp-interaction-mode)))))
   ;; Add load-paths and load autoload files.
   (luna-load-relative "star/recipe.el")
   (package-initialize)
@@ -67,7 +65,6 @@
 (luna-load-relative "star/ui.el")
 (luna-load-relative "star/mode-line.el")
 (luna-load-relative "star/edit.el")
-;; (luna-load-relative "star/ivy.el")
 (luna-load-relative "star/checker.el")
 (luna-load-relative "star/eglot.el")
 (luna-load-relative "star/python.el")
@@ -78,7 +75,7 @@
 (luna-load-relative "star/tex.el")
 (luna-load-relative "star/simple-mode.el")
 (luna-load-relative "star/highres-icon.el")
-;; (luna-load-relative "star/tool-bar.el")
+(luna-load-relative "star/tool-bar.el")
 (luna-load-relative "star/blog.el")
 (require 'utility)
 
@@ -86,10 +83,14 @@
 
 ;;;; Misc
 (setq-default luna-format-on-save t)
+(setq bidi-paragraph-direction 'left-to-right
+      bidi-inhibit-bpa t)
 
 ;;;; Theme
 (when (window-system)
-  (luna-load-theme))
+  (if (featurep 'light)
+      (enable-theme 'light)
+    (load-theme 'light)))
 
 ;;;; Font
 (when (display-graphic-p)
@@ -97,21 +98,24 @@
   (luna-load-cjk-font))
 (luna-on "Brown" (luna-enable-apple-emoji))
 
+(set-face-font 'mode-line (font-spec :family "SF Pro"
+                                     :size 13
+                                     :weight 'light))
+
 ;;;; Server
 (run-with-idle-timer
  3 nil (lambda ()
          (require 'server)
-         (unless (eq (server-running-p) t)
+         (unless (server-running-p)
            (server-start t t))))
 
 ;;;; Macports
 (luna-on "Brown"
   (add-to-list 'load-path "/opt/local/share/emacs/site-lisp"))
 
-;;;; Emacs Mac port
+;;;; Mac
 (luna-on "Brown"
   (menu-bar-mode -1)
-  ;; (tool-bar-mode -1)
   (setq mac-option-modifier 'meta
         mac-command-modifier 'super
         mac-pass-command-to-system nil ; fix cmd h
@@ -131,11 +135,8 @@
   (setq scroll-up-aggressively 0.01
         scroll-down-aggressively 0.01
         scroll-margin 0
-        scroll-conservatively 5))
-
-;;;; Bidi
-(setq bidi-paragraph-direction 'left-to-right
-      bidi-inhibit-bpa t)
+        scroll-conservatively 5
+        redisplay-skip-fontification-on-input t))
 
 ;;; Local init
 
@@ -144,53 +145,15 @@
   (when (file-exists-p local-init)
     (load local-init)))
 
-(when (featurep 'tree-sitter)
+;;; Tree-sitter
+
+(when (boundp 'tree-sitter-create-parser)
   (push "~/p/tree-sitter-expr/json-module" load-path)
   (push "~/p/tree-sitter-expr/c-module" load-path)
   (require 'tree-sitter-json)
   (require 'tree-sitter-c)
   (require 'tree-sitter)
-
-  (defun tree-sitter-select-node (node)
-    (let ((beg (tree-sitter-node-beginning node))
-          (end (tree-sitter-node-end node)))
-      (push-mark end)
-      (activate-mark)
-      (goto-char beg)))
-
-  (defvar tree-sitter-expand-origin nil
-    "Point before ‘tree-sitter-expand’ ran.")
-
-  (defun tree-sitter-expand ()
-    (interactive)
-    (if (region-active-p)
-        (let ((node (tree-sitter-node-in-range
-                     (region-beginning) (region-end))))
-          (tree-sitter-select-node
-           (or (tree-sitter-node-parent node) root)))
-      (setq tree-sitter-expand-origin (point))
-      (tree-sitter-select-node
-       (tree-sitter-node-in-range
-        (point) (1+ (point))))))
-
-  (defun tree-sitter-shrink ()
-    (interactive)
-    (when (and (region-active-p) tree-sitter-expand-origin)
-      (let* ((beg (region-beginning))
-             (end (region-end))
-             (node (tree-sitter-node-in-range beg end))
-             ;; Find a child that contains the original point.
-             (child (car (tree-sitter-filter-child
-                          node (lambda (child)
-                                 (<= (tree-sitter-node-beginning child)
-                                     tree-sitter-expand-origin
-                                     (tree-sitter-node-end child)))))))
-        (if child
-            (tree-sitter-select-node child)
-          (deactivate-mark)))))
-
-  (luna-def-key "C-'" #'tree-sitter-expand
-                "C-;" #'tree-sitter-shrink)
+  (load "~/emacs/test/src/tree-sitter-tests.el")
 
   (defun tree-sitter-show-buffer-tree ()
     (interactive)
