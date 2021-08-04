@@ -4,16 +4,14 @@
 
 (load-package minions)
 
-;; When we use ‘set-face-font’ to set the font, Emacs converts the
-;; font-spec is to a font-object, which we can later retrieve with
-;; ‘face-attribute’ and use for calculating the text width.
-(add-hook 'luna-load-theme-hook
-          (lambda ()
-            (set-face-font 'mode-line
-                           (font-spec :family "SF Pro Text"
-                                      :weight 'light
-                                      :height 130))))
-(add-hook 'after-init-hook (lambda () (run-hooks 'luna-load-theme-hook)))
+(load-package bottom-line
+  :config
+  (setq window-divider-default-places 'bottom-only
+        window-divider-default-bottom-width 1)
+  (window-divider-mode)
+  (add-hook 'after-init-hook
+            (lambda () (set-face-attribute 'mode-line nil :background nil)))
+  (bottom-line-mode))
 
 (defun luna-mode-line-with-padding (text)
   "Return TEXT with padding on the left.
@@ -42,7 +40,7 @@ The padding pushes TEXT to the right edge of the mode-line."
         (concat "  " coding)
       "")))
 
-(setq-default mode-line-format
+(setq-default bottom-line-format
               (let* ((spaces
                       (propertize " " 'display '(space :width 1.5)))
                      (fringe (propertize
@@ -76,5 +74,6 @@ The padding pushes TEXT to the right edge of the mode-line."
                                         ,percentage) "%%"))
                      `(:eval (concat ,spaces ,percentage "%%"))))))
 
-
 (setq-default header-line-format nil)
+(setq-default mode-line-format nil)
+
