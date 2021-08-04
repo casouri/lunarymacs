@@ -43,6 +43,7 @@
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(kill-ring-max 100)
+ '(load-prefer-newer t)
  '(minibuffer-electric-default-mode t)
  '(mouse-scroll-delay 0)
  '(mouse-wheel-flip-direction t)
@@ -53,6 +54,8 @@
  '(org-fontify-quote-and-verse-blocks t)
  '(org-hide-emphasis-markers nil)
  '(org-image-actual-width '(300))
+ '(outline-minor-mode-cycle t)
+ '(outline-minor-mode-highlight 'override)
  '(package-archives
    '(("melpa" . "http://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")
@@ -99,6 +102,7 @@
     (cons 360 "#383a42")))
  '(vc-annotate-very-old-color nil)
  '(visible-cursor nil)
+ '(window-resize-pixelwise t)
  '(word-wrap-by-category t)
  '(xref-prompt-for-identifier
    '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame)))
