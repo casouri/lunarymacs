@@ -46,6 +46,8 @@
  "C-o" #'pop-to-mark-command
  "M-o" #'winner-undo
 
+ "C-x C-c" #'clean-exit
+
  ;; Remaps
  [remap backward-delete-char-untabify] #'luna-hungry-delete
  [remap delete-indentation] #'luna-hungry-delete
@@ -327,5 +329,23 @@ Edit the underlined region and type C-c C-c to start
 (mark-before #'beginning-of-buffer)
 (mark-before #'luna-jump-back)
 (mark-before #'counsel-imenu)
+
+;;; Clean exit
+
+(defun clean-exit ()
+  "Exit Emacs cleanly.
+If there are unsaved buffer, pop up a list for them to be saved
+before existing. Replaces ‘save-buffers-kill-terminal’."
+  (interactive)
+  (if (frame-parameter nil 'client)
+      (server-save-buffers-kill-terminal arg)
+    (if-let ((buf-list (seq-filter (lambda (buf)
+                                     (and (buffer-modified-p buf)
+                                          (buffer-file-name buf)))
+                                   (buffer-list))))
+        (progn
+          (pop-to-buffer (list-buffers-noselect t buf-list))
+          (message "s to save, C-k to kill, x to execute"))
+      (save-buffers-kill-emacs))))
 
 ;;; angel.el ends here
