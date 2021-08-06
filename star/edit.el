@@ -281,22 +281,28 @@
       (message ";-)")))
   :config
   (consult-binded-mode)
-  (setq consult-preview-key (kbd "C-o")))
+  (setq consult-preview-key (kbd "C-o"))
+  (consult-customize
+   consult-line :preview-key 'any))
 
 
 (load-package recentf-ext
   :config (recentf-mode))
 
 
-(load-package vertico
-  :config (vertico-mode))
+(load-package selectrum
+  :config
+  (selectrum-mode))
 
 
-(load-package orderless
-  :init (setq completion-styles '(orderless)))
+(load-package selectrum-prescient
+  :config
+  (selectrum-prescient-mode))
 
 
 (with-eval-after-load 'isearch
   (defun luna-rcenter-advice (&rest _) (recenter))
   (advice-add 'isearch-repeat-forward :after #'luna-rcenter-advice)
   (advice-add 'isearch-repeat-backward :after #'luna-rcenter-advice))
+
+
