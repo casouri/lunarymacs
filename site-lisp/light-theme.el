@@ -139,7 +139,7 @@
         (selection-common  (current-selection ,bg))
         (comp-mouse        (nil ,bg ,violet1))
 
-        (completions-common-part (bold))
+        (completions-common-part (nil ,bg ,orange))
         
         ;; package faces
 
@@ -336,10 +336,8 @@
         (rime-highlight-candidate-face ((bold rime-default-face)))
         (rime-code-face (rime-default-face))
 
-        (orderless-match-face-0 (nil ,bg ,orange))
-        (orderless-match-face-1 (nil ,bg ,green))
-        (orderless-match-face-2 (nil ,bg ,orange))
-        (orderless-match-face-3 (nil ,bg ,green))
+        (selectrum-prescient-primary-highlight (nil ,bg ,orange))
+        (selectrum-prescient-secondary-highlight (nil ,bg ,green))
 
         (consult-bookmark (consult-buffer))
         (consult-file (consult-file))
