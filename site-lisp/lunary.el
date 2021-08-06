@@ -34,9 +34,9 @@ A list of notes, really.")
 We need to manually save and restore it. See manual for more info.")
 
 (defvar luna-dump-location-alist
-  '((Emacs "/Applications/Emacs.app/Contents/MacOS/Emacs"
-           "/Applications/Emacs.app/Contents/MacOS/Emacs.pdmp"
-           "/Applications/Emacs.app/Contents/MacOS/libexec/Emacs.pdmp")
+  '((Emacs "/Users/yuan/emacs-head/nextstep/Emacs.app/Contents/MacOS/Emacs"
+           "/Users/yuan/emacs-head/nextstep/Emacs.app/Contents/MacOS/Emacs.pdmp"
+           "/Users/yuan/emacs-head/nextstep/Emacs.app/Contents/MacOS/libexec/Emacs.pdmp")
     (Emacs-27 "/Applications/Emacs 27.app/Contents/MacOS/Emacs"
               "/Applications/Emacs 27.app/Contents/MacOS/Emacs.pdmp"
               "/Applications/Emacs 27.app/Contents/MacOS/libexec/Emacs.pdmp"))
