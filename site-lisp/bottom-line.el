@@ -5,6 +5,30 @@
 ;;; This file is NOT part of GNU Emacs
 
 ;;; Commentary:
+;;
+;; This package displays a frame-global mode-line at the bottom of the
+;; frame.
+;;
+;; Recommended usage:
+;;
+;; 1. Disable normal mode-line.
+;;
+;;     (setq-default mode-line-format nil)
+;;
+;; 2. Show separation lines between vertically-split windows.
+;;
+;;     (setq window-divider-default-places 'bottom-only
+;;           window-divider-default-bottom-width 1)
+;;     (window-divider-mode)
+;;     (bottom-line-mode)
+;;
+;; 3. Set ‘bottom-line-format’.
+;;
+;;     (setq bottom-line-format "(Just like mode-line-format)")
+;;
+;; 4. Enable ‘bottom-line-mode’.
+;;
+;;     M-x bottom-line-mode RET
 
 ;;; Code:
 
@@ -19,15 +43,15 @@
 (defvar bottom-line-pixel-height 23
   "The pixel height of the bottom line.")
 
+(defvar bottom-line-format nil
+  "Like ‘mode-line-format’.")
+
 (defsubst bottom-line-buffer ()
   "Return the bottom line buffer."
   (get-buffer-create " *bottom-line*"))
 
 (defvar bottom-line-window nil
   "Window for bottom line.")
-
-(defvar bottom-line-format nil
-  "Like ‘mode-line-format’.")
 
 (define-minor-mode bottom-line-mode
   "Show a global mode-line at the bottom."
@@ -39,8 +63,9 @@
           (setq mode-line-format nil
                 window-size-fixed t))
         (setq bottom-line-window
-              (display-buffer-in-side-window
-               buf '((side . bottom)
+              (display-buffer-at-bottom
+               buf '((inhibit-same-window . t)
+                     (inhibit-switch-frame . t)
                      (window-height . 1)
                      (dedicated . t))))
         ;; Initialize window and buffer.
@@ -49,14 +74,22 @@
                               'no-delete-other-windows t)
         (setq-default mode-line-format nil)
         ;; This is actually pretty fast, so don’t worry.
-        (add-hook 'post-command-hook #'bottom-line-update))
+        (add-hook 'post-command-hook #'bottom-line-update)
+        ;; FIXME: debug.
+        (add-hook 'window-configuration-change-hook
+                  (lambda ()
+                    (when (and bottom-line-window
+                               (not (window-live-p bottom-line-window)))
+                      (debug)))
+                  nil t)
+        )
     (when bottom-line-window
       (delete-window bottom-line-window))
     (remove-hook 'post-command-hook #'bottom-line-update)))
 
 (defun bottom-line-update ()
   "Update the bottom line with current buffer’s mode-line."
-  (let ((line (format-mode-line bottom-line-format 'mode-line)))
+  (let ((line (format-mode-line bottom-line-format 'bottom-line)))
     (with-current-buffer (bottom-line-buffer)
       (erase-buffer)
       (insert line)

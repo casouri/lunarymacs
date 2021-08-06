@@ -115,16 +115,3 @@
   :commands
   luna-toggle-console
   luna-toggle-console-window)
-
-
-(load-package which-func
-  :config
-  (setq-default frame-title-format (list which-func-current))
-  (which-func-mode)
-  (setq mode-line-misc-info
-        (remove '(which-function-mode
-                  (which-func-mode
-                   ("" which-func-format " ")))
-                mode-line-misc-info)
-        which-func-unknown " "))
-

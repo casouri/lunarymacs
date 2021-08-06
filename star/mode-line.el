@@ -2,6 +2,8 @@
 
 (require 'subr-x)
 
+;;; Packages
+
 (load-package minions)
 
 (load-package bottom-line
@@ -10,8 +12,15 @@
         window-divider-default-bottom-width 1)
   (window-divider-mode)
   (add-hook 'after-init-hook
-            (lambda () (set-face-attribute 'mode-line nil :background nil)))
+            (lambda ()
+              (set-face-attribute 'mode-line nil :background nil)))
   (bottom-line-mode))
+
+(load-package which-func
+  :config
+  (which-func-mode))
+
+;;; Functions
 
 (defun luna-mode-line-with-padding (text)
   "Return TEXT with padding on the left.
@@ -39,6 +48,8 @@ The padding pushes TEXT to the right edge of the mode-line."
             (string-suffix-p "dos" coding))
         (concat "  " coding)
       "")))
+
+;;; Config
 
 (setq-default bottom-line-format
               (let* ((spaces
