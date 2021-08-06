@@ -147,7 +147,7 @@
 
 ;;; Tree-sitter
 
-(when (boundp 'tree-sitter-create-parser)
+(when (boundp 'tree-sitter-parser-list)
   (push "~/p/tree-sitter-expr/json-module" load-path)
   (push "~/p/tree-sitter-expr/c-module" load-path)
   (require 'tree-sitter-json)
