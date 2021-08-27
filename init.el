@@ -96,7 +96,7 @@
   (luna-load-cjk-font))
 (luna-on "Brown" (luna-enable-apple-emoji))
 
-(set-face-font 'mode-line (font-spec :family "SF Pro"
+(set-face-font 'mode-line (font-spec :family "SF Pro Text"
                                      :size 13
                                      :weight 'light))
 
