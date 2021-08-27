@@ -26,6 +26,7 @@
         ;; If in parenthesis, indent like lisp.
         (lisp-indent-line)
       (beginning-of-line)
+      ;; Skip white-spaces.
       (skip-syntax-forward "-")
       (let ((indent (if (looking-at "}")
                         (1- (car (syntax-ppss)))
@@ -60,14 +61,13 @@ The post in placed under <year>/DIR-NAME."
 
 ◊define-meta[date]{}
 ◊define-meta[uuid]{}
+◊define-meta[tags]{}
+◊define-meta[lang]{en}
 
-◊head{
-  ◊h2{}
+◊meta{
+  ◊title{}
 }
 
-◊body{
-  
-}◊;body
 ")
     (save-buffer)))
 

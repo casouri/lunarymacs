@@ -6,15 +6,15 @@
 
 (load-package minions)
 
-(load-package bottom-line
-  :config
-  (setq window-divider-default-places 'bottom-only
-        window-divider-default-bottom-width 1)
-  (window-divider-mode)
-  (add-hook 'after-init-hook
-            (lambda ()
-              (set-face-attribute 'mode-line nil :background nil)))
-  (bottom-line-mode))
+;; (load-package bottom-line
+;;   :config
+;;   (setq window-divider-default-places 'bottom-only
+;;         window-divider-default-bottom-width 1)
+;;   (window-divider-mode)
+;;   (add-hook 'after-init-hook
+;;             (lambda ()
+;;               (set-face-attribute 'mode-line nil :background nil)))
+;;   (bottom-line-mode))
 
 (load-package which-func
   :config
@@ -86,5 +86,5 @@ The padding pushes TEXT to the right edge of the mode-line."
                      `(:eval (concat ,spaces ,percentage "%%"))))))
 
 (setq-default header-line-format nil)
-(setq-default mode-line-format nil)
+(setq-default mode-line-format bottom-line-format)
 

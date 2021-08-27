@@ -23,7 +23,10 @@
  "s-k" #'windmove-up
  "s-l" #'windmove-right
  "s-s" #'save-buffer
- "s-w" #'delete-frame)
+ "s-w" #'delete-frame
+
+ ;; `winner-redo' is defined in angel.el as M-o.
+ "s-." #'winner-redo)
 
 
 ;;; Config
@@ -57,6 +60,10 @@
           (list (if (eq (frame-parameter nil 'background-mode) 'light)
                     "red" "green"))))
   (global-highlight-parentheses-mode))
+
+
+(load-package winner
+  :config (winner-mode))
 
 
 (load-package hl-todo

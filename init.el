@@ -8,13 +8,11 @@
 (require 'lunary)
 (require 'cowboy)
 (require 'package)
-(require 'luna-local)
 
 ;;; Custom & local
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (luna-safe-load custom-file)
-(luna-local-load)
 
 ;;; Dump
 
@@ -148,10 +146,12 @@
 ;;; Tree-sitter
 
 (when (boundp 'tree-sitter-parser-list)
-  (push "~/p/tree-sitter-expr/json-module" load-path)
-  (push "~/p/tree-sitter-expr/c-module" load-path)
+  (push "~/p/tree-sitter-expr/build-module/dist" load-path)
   (require 'tree-sitter-json)
   (require 'tree-sitter-c)
+  (require 'tree-sitter-html)
+  (require 'tree-sitter-css)
+  (require 'tree-sitter-javascript)
   (require 'tree-sitter)
   (load "~/emacs/test/src/tree-sitter-tests.el")
 

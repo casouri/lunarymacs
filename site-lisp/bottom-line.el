@@ -15,7 +15,7 @@
 ;;
 ;;     (setq-default mode-line-format nil)
 ;;
-;; 2. Show separation lines between vertically-split windows.
+;; 2. Draw separation lines between vertically-split windows.
 ;;
 ;;     (setq window-divider-default-places 'bottom-only
 ;;           window-divider-default-bottom-width 1)
@@ -24,11 +24,15 @@
 ;;
 ;; 3. Set ‘bottom-line-format’.
 ;;
-;;     (setq bottom-line-format "(Just like mode-line-format)")
+;;     (setq-default bottom-line-format "(Just like mode-line-format)")
 ;;
 ;; 4. Enable ‘bottom-line-mode’.
 ;;
 ;;     M-x bottom-line-mode RET
+;;
+;; Caveat:
+;;
+;; 1. Bottom side-windows will appear below bottom-line.
 
 ;;; Code:
 
@@ -43,7 +47,7 @@
 (defvar bottom-line-pixel-height 23
   "The pixel height of the bottom line.")
 
-(defvar bottom-line-format nil
+(defvar-local bottom-line-format nil
   "Like ‘mode-line-format’.")
 
 (defsubst bottom-line-buffer ()
@@ -74,30 +78,39 @@
                               'no-delete-other-windows t)
         (setq-default mode-line-format nil)
         ;; This is actually pretty fast, so don’t worry.
-        (add-hook 'post-command-hook #'bottom-line-update)
-        ;; FIXME: debug.
-        (add-hook 'window-configuration-change-hook
-                  (lambda ()
-                    (when (and bottom-line-window
-                               (not (window-live-p bottom-line-window)))
-                      (debug)))
-                  nil t)
-        )
+        (add-hook 'post-command-hook #'bottom-line-update 50)
+        (advice-add 'eldoc-minibuffer-message :after
+                    #'bottom--line-eldoc-advice))
     (when bottom-line-window
       (delete-window bottom-line-window))
-    (remove-hook 'post-command-hook #'bottom-line-update)))
+    (remove-hook 'post-command-hook #'bottom-line-update)
+    (advice-remove 'eldoc-minibuffer-message
+                   #'bottom--line-eldoc-advice)))
+
+(defvar-local bottom-line--string nil
+  "The content of the bottom-line.")
 
 (defun bottom-line-update ()
-  "Update the bottom line with current buffer’s mode-line."
-  (let ((line (format-mode-line bottom-line-format 'bottom-line)))
+  "Update the bottom line with current buffer’s information."
+  (unless (minibufferp)
+    (let ((line (format-mode-line bottom-line-format 'bottom-line)))
+      (with-current-buffer (bottom-line-buffer)
+        (erase-buffer)
+        (insert line)
+        (setq bottom-line--string line)
+        (let ((delta (- bottom-line-pixel-height
+                        (window-pixel-height bottom-line-window)))
+              (window-resize-pixelwise t))
+          (when (not (eql delta 0))
+            (window-resize bottom-line-window delta nil t t)))))))
+
+(defun bottom--line-eldoc-advice (&rest _)
+  "Show eldoc message in bottom-line."
+  (when (and bottom-line-mode (minibufferp))
     (with-current-buffer (bottom-line-buffer)
       (erase-buffer)
-      (insert line)
-      (let ((delta (- bottom-line-pixel-height
-                      (window-pixel-height bottom-line-window)))
-            (window-resize-pixelwise t))
-        (window-resize bottom-line-window delta nil t t)))))
-
+      (insert eldoc-mode-line-string
+              bottom-line--string))))
 
 (provide 'bottom-line)
 
