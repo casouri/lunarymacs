@@ -21,7 +21,7 @@
         (scroll-on-jump . (:http "https://gitlab.com/ideasman42/emacs-scroll-on-jump.git"))
         (emacs-svg-icon . (:repo "rougier/emacs-svg-icon"))
         ;; Full clones.
-        (expand-region . (:repo "casouri/expand-region"
+        (expand-region . (:repo "casouri/expand-region.el"
                                 :option (:full-clone t)))
         (deft . (:repo "casouri/deft" :option (:full-clone t)))
         (isolate . (:repo "casouri/isolate" :option (:full-clone t)))
@@ -30,4 +30,5 @@
         (ghelp . (:repo "casouri/ghelp" :option (:full-clone t)))
         (iscroll . (:repo "casouri/iscroll" :option (:full-clone t)))
         (valign . (:repo "casouri/valign" :option (:full-clone t)))
-        (zeft . (:repo "casouri/zeft" :option (:full-clone t)))))
+        (zeft . (:repo "casouri/zeft" :option (:full-clone t)))
+        (vundo . (:repo "casouri/vundo" :option (:full-clone t)))))
