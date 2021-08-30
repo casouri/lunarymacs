@@ -10,7 +10,7 @@
  "TAB" #'indent-for-tab-command
  "<C-tab>" '("insert-tab" . (lambda () (interactive) (insert "\t")))
  :leader
- "df" #'zeft)
+ "df" #'xeft)
 
 ;;; Packages
 
@@ -18,23 +18,6 @@
 ;;   :commands
 ;;   binder-toggle-sidebar
 ;;   binder-reveal-in-sidebar)
-
-(load-package deft
-  :commands deft
-  :hook
-  (require 'iimg)
-  (deft-cache-file-hook . iimg-clean-data)
-  :config
-  (defun iimg-clean-data ()
-    "Clear any iimg-data in current buffer."
-    (goto-char (point-min))
-    (while (re-search-forward iimg--data-regexp nil t)
-      (let ((inhibit-read-only t))
-        (delete-region (match-beginning 0) (match-end 0)))))
-  (push '(text-mode "#") color-outline-comment-char-alist)
-  (setq deft-directory (expand-file-name "~/deft/")
-        deft-use-filter-string-for-filename t))
-
 
 (load-package zeft
   :commands zeft
@@ -53,10 +36,7 @@
                       :inherit 'highlight))
 
 (load-package bklink
-  :commands bklink-minor-mode
-  :config 
-  (setq bklink-more-match t)
-  (add-hook 'bklink-minor-mode-hook #'color-outline-mode))
+  :commands bklink-minor-mode)
 
 (load-package iimg
   :hook (text-mode-hook . iimg-enable))
@@ -79,5 +59,22 @@
 ;;   (interactive)
 ;;   (shell-command-to-string
 ;;    (format "open dict://%s" (word-at-point))))
+
+(load-package xeft
+  :commands xeft
+  :config
+  (require 'xeft+)
+  (setq xeft-directory "~/deft"
+        xeft-database "~/deft/db")
+  (set-face-attribute 'xeft-inline-highlight nil
+                      :inherit 'highlight)
+  (defun xeft-setup ()
+    (auto-fill-mode)
+    (local-set-key (kbd "M-]") #'xeft+-jump-forward)
+    (local-set-key (kbd "M-[") #'xeft+-jump-backward)
+    (xeft+-show-nagivation))
+  (add-hook 'xeft-find-file-hook #'xeft-setup)
+  (add-hook 'bklink-minor-mode-hook #'xeft-setup)
+  (setq xeft-filename-fn #'xeft+-new-file))
 
 ;;; end
