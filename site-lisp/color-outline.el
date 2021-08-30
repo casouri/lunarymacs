@@ -68,6 +68,7 @@
 
 (defcustom color-outline-comment-char-alist
   '((c-mode "*" "/")
+    (c++-mode "*" "/")
     (python-mode "#")
     (javascript-mode "/")
     (css-mode "*" "/")
