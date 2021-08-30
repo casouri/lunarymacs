@@ -211,7 +211,16 @@ If the file doesn't exist, create a buffer."
   (goto-char beg)
   (while (and (re-search-forward bklink-regexp nil t)
               (< (point) end))
-    (let ((inhibit-read-only t))
+    (let* ((inhibit-read-only t)
+           (filename (concat
+                      (match-string-no-properties 2)
+                      (or (match-string-no-properties 3)
+                          "")))
+           (title (when (file-exists-p filename)
+                    (with-temp-buffer
+                      (insert-file-contents filename)
+                      (goto-char (point-min))
+                      (buffer-substring (point) (line-end-position))))))
       ;; Hide opening and closing delimiters and file extension.
       (with-silent-modifications
         ;; (put-text-property (match-beginning 0) (match-end 0)
@@ -219,6 +228,10 @@ If the file doesn't exist, create a buffer."
         (add-text-properties
          (match-beginning 1) (match-end 1)
          '(display "[" font-lock-face shadow face shadow))
+        (when (file-exists-p filename)
+          (add-text-properties
+           (match-beginning 2) (or (match-end 3) (match-end 2))
+           `(display ,title)))
         (add-text-properties
          (match-beginning 4) (match-end 4)
          '(display "]" font-lock-face shadow face shadow))
@@ -231,10 +244,7 @@ If the file doesn't exist, create a buffer."
         (make-text-button (match-end 1)
                           (match-beginning 4)
                           :type 'bklink
-                          'filename (concat
-                                     (match-string-no-properties 2)
-                                     (or (match-string-no-properties 3)
-                                         "")))))))
+                          'filename filename)))))
 
 (defun bklink-fontify-url (beg end)
   "Add clickable buttons to URLs between BEG and END.
