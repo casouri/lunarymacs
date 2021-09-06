@@ -63,18 +63,20 @@
 (load-package xeft
   :commands xeft
   :config
-  (require 'xeft+)
+  (require 'flique)
   (setq xeft-directory "~/deft"
         xeft-database "~/deft/db")
   (set-face-attribute 'xeft-inline-highlight nil
                       :inherit 'highlight)
   (defun xeft-setup ()
     (auto-fill-mode)
-    (local-set-key (kbd "M-]") #'xeft+-jump-forward)
-    (local-set-key (kbd "M-[") #'xeft+-jump-backward)
-    (xeft+-show-nagivation))
+    (flique-append-to-index (buffer-file-name))
+    (local-set-key (kbd "M-]") #'flique-forward)
+    (local-set-key (kbd "M-[") #'flique-backward)
+    (flique-show-navigation))
   (add-hook 'xeft-find-file-hook #'xeft-setup)
-  (add-hook 'bklink-minor-mode-hook #'xeft-setup)
-  (setq xeft-filename-fn #'xeft+-new-file))
+  (add-hook 'bklink-minor-mode-hook #'xeft-setup))
+
+(load-package flique :defer t)
 
 ;;; end
