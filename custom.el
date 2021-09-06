@@ -60,8 +60,7 @@
    '(("melpa" . "http://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")
      ("org" . "https://orgmode.org/elpa/")))
- '(package-selected-packages
-   '(rime citre geiser-guile geiser-racket adaptive-wrap vundo matlab-emacs grammarbot beginner-guide zmq yaml-mode writegood-mode async which-key web-mode visual-regexp toc-org s flycheck tide ivy swiper sly dash-functional selectrum popup posframe rg restclient request rainbow-delimiters quickrun pyvenv proof-general pdf-tools package-lint org-download olivetti minions markdown-mode f hl-todo magit magit-patch-changelog lua-mode ht lsp-mode keycast jupyter highlight-parentheses elisp-refs helpful haskell-mode goto-chg google-translate git-timemachine git-link geiser flymake-grammarly fish-mode evil eldoc-box diff-hl debbugs counsel company auctex eglot company-pollen pollen-mode elpher org org-web-tools yasnippet ws-butler undo-tree srefactor smex separedit sage-shell-mode rainbow-mode pinyinlib nyan-mode mips-mode memory-usage magit-todos latex-preview-pane langtool keyfreq ivy-xref iscroll htmlize expand-region dired-rsync ccls buffer-move benchmark-init avy auto-pause aio aggressive-indent))
+ '(package-selected-packages nil)
  '(recentf-max-saved-items 1000)
  '(ring-bell-function 'ignore)
  '(savehist-additional-variables '(tablist-named-filter extended-command-history))
