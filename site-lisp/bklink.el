@@ -60,10 +60,9 @@
 ;;   back-links to it without creating that file.
 ;; - When ‘bklink-show-back-link-on-start’ is non-nil, back-link
 ;;   summary is shown on startup.
-;; - When ‘bklink-more-match’ is non-nil, bklink also shows files that
-;;   include the phrase but not as a link.
 ;; - When ‘bklink-use-form-feed’ is non-nil, bklink uses form-feed
 ;;   character to delineate back-link summary.
+;; - Using id instead of title as filenames is a dumb idea.
 
 ;;; Code:
 
@@ -167,7 +166,7 @@ If the file doesn't exist, create a buffer."
           (find-file fullname)
         (switch-to-buffer (get-buffer-create fullname))
         (when (eq (point) 1)
-          (insert file "\n\n"))))
+          (insert (file-name-base file) "\n\n"))))
     (when (eq major-mode 'fundamental-mode)
       (text-mode))
     (unless bklink-minor-mode
@@ -215,12 +214,7 @@ If the file doesn't exist, create a buffer."
            (filename (concat
                       (match-string-no-properties 2)
                       (or (match-string-no-properties 3)
-                          "")))
-           (title (when (file-exists-p filename)
-                    (with-temp-buffer
-                      (insert-file-contents filename)
-                      (goto-char (point-min))
-                      (buffer-substring (point) (line-end-position))))))
+                          ""))))
       ;; Hide opening and closing delimiters and file extension.
       (with-silent-modifications
         ;; (put-text-property (match-beginning 0) (match-end 0)
@@ -228,10 +222,6 @@ If the file doesn't exist, create a buffer."
         (add-text-properties
          (match-beginning 1) (match-end 1)
          '(display "[" font-lock-face shadow face shadow))
-        (when (file-exists-p filename)
-          (add-text-properties
-           (match-beginning 2) (or (match-end 3) (match-end 2))
-           `(display ,title)))
         (add-text-properties
          (match-beginning 4) (match-end 4)
          '(display "]" font-lock-face shadow face shadow))
@@ -270,7 +260,7 @@ clickable and will use `browse-url' to open the URLs in question."
            ;; Non-greedy is important: otherwise we risk of
            ;; regexp stack overflow. That happened for buffers
            ;; when iimg data.
-           (+? digit) " linked references to " (+? anything)
+           (+? digit) " linked reference" (? "s") " to " (+? anything)
            (or "\x0C" (= 70 "-")) "\n"))
   "Regular expression that matches the beginning of a summary.")
 
@@ -294,15 +284,8 @@ THIS-FILE is the filename we are inserting summary into."
        (let* ((summary-start (point))
               (this-link (bklink--format-link this-file))
               (this-link-re
-               (if bklink-more-match
-                   ;; Prevent matching base64 string in iimg.
-                   (concat (rx (any " \n{"))
-                           (replace-regexp-in-string
-                            " " "[ \n]*"
-                            (file-name-base this-file))
-                           (rx (any " \n}")))
-                 (replace-regexp-in-string
-                  " " "[ \n]*" this-link)))
+               (replace-regexp-in-string
+                " " "[ \n]*" (regexp-quote this-link)))
               ;; A list of (FILE . SUMMARY). The grep search didn't
               ;; match against the complete link and we need to filter
               ;; out the false-positives here.
@@ -311,14 +294,13 @@ THIS-FILE is the filename we are inserting summary into."
                 (lambda (file)
                   (if (not (equal file this-file))
                       (with-temp-buffer
-                        (insert-file-contents file)
+                        (insert-file-contents file nil nil nil t)
                         (goto-char (point-min))
                         (if (re-search-forward this-link-re nil t)
-                            (when-let ((summary
-                                        (or (if (org-at-table-p)
-                                                (thing-at-point 'line)
-                                              (thing-at-point 'sentence))
-                                            "(No summary)")))
+                            (let ((summary
+                                   (or (string-trim
+                                        (thing-at-point 'line))
+                                       "(No summary)")))
                               (cons file summary))))))
                 files))
               (summary-list (remove nil summary-list))
@@ -327,9 +309,11 @@ THIS-FILE is the filename we are inserting summary into."
          (insert "\n"
                  (if bklink-use-form-feed "\x0C" (make-string 70 ?-))
                  "\n"
-                 ;; Plural might not be correct, but I don't care.
-                 (format "%d linked references to %s:\n"
-                         (length summary-list) this-link))
+                 (format "%d linked reference%s to %s:\n"
+                         (length summary-list)
+                         ;; Plural when more than one.
+                         (if (eq (length summary-list) 1) "" "s")
+                         this-link))
          (dolist (summary summary-list)
            (insert "\n")
            ;; Insert file link.
@@ -414,10 +398,10 @@ edit the link."
                            (bklink--get-file-list (buffer-file-name)))
                    nil nil (bklink--file-at-point))))
         (bklink--set-file-at-point file))
-    (let ((file (completing-read
-                 "File: "
-                 (mapcar #'file-name-base
-                         (bklink--get-file-list (buffer-file-name))))))
+    (let* ((file (completing-read
+                  "File: "
+                  (mapcar #'file-name-nondirectory
+                          (bklink--get-file-list (buffer-file-name))))))
       (insert (bklink--format-link file))))
   (bklink-minor-mode))
 
