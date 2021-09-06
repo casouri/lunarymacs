@@ -6,7 +6,12 @@
 
 ;;; Commentary:
 ;;
-;; Some utility for using Xeft as a zettelkasten tool.
+;; Some utility for using Xeft as a zettelkasten tool. This is
+;; entirely use to collect some related notes in a linear order, so I
+;; can move backward and forward between them. The nesting is purely
+;; for inserting new notes in between any two. Child/parent
+;; relationship don’t bear any meaning. Connecting and structuring
+;; notes is done by bklink.
 
 ;;; Code:
 
@@ -69,15 +74,24 @@ string if reaches “zero”."
       (concat n "a")
     (concat n "1")))
 
+(defun xeft+-lex-up (n)
+  "Return the value above N, e.g., 1a -> 1."
+  (if (or (string-match (rx (seq (+ digit) eol)) n)
+          (string-match (rx (seq (+ (any "a-z")) eol)) n))
+      (replace-match "" nil nil n)))
+
 (defun xeft+-nagivate (filename)
   "Return (PREV NEXT DOWN).
 PREV is the previous file of FILENAME in the series,
 NEXT and DOWN are the possible names for the next file.
-Return nil if FILENAME is not alphanumeric."
+Return nil if FILENAME is not alphanumeric.
+
+FILENAME can be a path, this function only takes the basename."
   (let* ((basename (file-name-base filename))
          (ext (file-name-extension filename))
          (stem (and (string-match
-                     (rx bol "x" (group (any "0-9a-z")) eol)
+                     (rx bol "x" (group (+ (any "0-9a-z")))
+                         "." (+ anychar) eol)
                      basename)
                     (match-string 1 basename))))
     (when stem
@@ -93,26 +107,37 @@ Return nil if FILENAME is not alphanumeric."
        ;; DOWN.
        (format "x%s%s"
                (xeft+-lex-down stem)
+               (if ext (concat "." ext) ""))
+       ;; UP.
+       (format "x%s%s"
+               (xeft+-lex-up stem)
                (if ext (concat "." ext) ""))))))
+
+(defun xeft+-find-next (filename &optional next-only)
+  "Find the next file of FILENAME.
+The next file can be the one after this file, or below it, or the
+one after the one above it.
+
+If NEXT-ONLY non-nil, don’t consider to one below this file."
+  (pcase-let ((`(,_ ,next ,down ,up) (xeft+-nagivate filename)))
+    (cond ((and (not next-only) (file-exists-p down)) down)
+          ((file-exists-p next) next)
+          (t (xeft+-find-next up t)))))
 
 (defun xeft+-jump-forward ()
   "Go to the next file, if exists."
   (interactive)
-  (pcase-let ((`(,_ ,next ,down) (xeft+-nagivate (buffer-file-name))))
-    (cond ((and next (file-exists-p down))
-           (find-file down)
-           (run-hooks 'xeft-find-file-hook)
-           (message "Jump forward"))
-          ((and down (file-exists-p next))
-           (find-file next)
-           (run-hooks 'xeft-find-file-hook)
-           (message "Jump forward"))
-          (t (message "Cannot find the next file")))))
+  (if-let ((next (xeft+-find-next (buffer-file-name))))
+      (progn
+        (find-file next)
+        (run-hooks 'xeft-find-file-hook)
+        (message "Jump forward"))
+    (message "Cannot find the next file")))
 
 (defun xeft+-jump-backward ()
   "Go to the previous file, if exists."
   (interactive)
-  (pcase-let ((`(,prev ,_ ,_) (xeft+-nagivate (buffer-file-name))))
+  (pcase-let ((`(,prev ,_ ,_ ,_) (xeft+-nagivate (buffer-file-name))))
     (if (or (not prev) (not (file-exists-p prev)))
         (message "Cannot find the previous file")
       (find-file prev)
@@ -143,6 +168,18 @@ Return nil if FILENAME is not alphanumeric."
               (propertize " " 'display '(raise 0.3))
               (propertize " " 'display '(raise -0.2)))
              'face '(:height 130))))))
+
+(defun xeft+-collect-kin (file &optional sibling-only)
+  "Collect FILE’s kin.
+A file kin includes its sibling and children in the numbering tree.
+If SIBLING-ONLY non-nil, do not collect children."
+  (pcase-let ((`(,_ ,next ,down) (xeft+-nagivate file))
+              (filename (file-name-nondirectory file)))
+    (if (file-exists-p file)
+        (append (list filename)
+                (if next (xeft+-collect-kin next sibling-only))
+                (if (and (not sibling-only) down)
+                    (xeft+-collect-kin down))))))
 
 (provide 'xeft+)
 
