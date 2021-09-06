@@ -55,7 +55,7 @@
  '(org-hide-emphasis-markers nil)
  '(org-image-actual-width '(300))
  '(outline-minor-mode-cycle t)
- '(outline-minor-mode-highlight 'override)
+ '(outline-minor-mode-highlight 'append)
  '(package-archives
    '(("melpa" . "http://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")
