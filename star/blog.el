@@ -14,9 +14,9 @@
   (visual-line-mode)
   (set (make-local-variable 'indent-line-function)
        #'pollen-indent-function)
-  (setq-local outline-regexp "◊\\(sub\\)?section"
+  (setq-local outline-regexp "◊\\(sub\\)?section{"
               outline-minor-mode-cycle t
-              outline-minor-mode-highlight 'override)
+              outline-minor-mode-highlight 'append)
   (outline-minor-mode))
 
 (defun pollen-indent-function ()
@@ -90,7 +90,7 @@ The post in placed under <year>/DIR-NAME."
 ◊define-meta[date]{}
 ◊define-meta[uuid]{}
 
-◊head{
+◊meta{
   ◊cover{◊cover-img{}}
   ◊artist{}
   ◊title{}
@@ -98,9 +98,12 @@ The post in placed under <year>/DIR-NAME."
   ◊year{}
 }
 
-◊body{
+◊lyrics{
 
-  ◊lyrics{
+}◊;lyrics
+")))
 
-  }◊;lyrics
-}◊;body")))
+(defun luna-open-album-dir ()
+  "Open ~/p/casouri/rock/day/album/."
+  (interactive)
+  (shell-command-to-string (format "open ~/p/casouri/rock/day/album/")))
