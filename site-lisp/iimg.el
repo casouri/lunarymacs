@@ -15,6 +15,12 @@
 ;; Why embed the image? This way everything is in a single file and I
 ;; feel safe.
 ;;
+;; Update: embedding the image in the text brings problems in indexing
+;; the text, the best alternative is to embed the image data in a
+;; separate supplement file “current-file-name.iimg”. If you want to
+;; insert a image and store the data in the supplement file, answer yes
+;; when asked when inserting the image.
+;;
 ;;;; To enable:
 ;;
 ;;     M-x iimg-enable RET
@@ -26,10 +32,10 @@
 ;; generates a unique string as the fallback.
 ;;
 ;; When you insert an image, the image appears at point is just a
-;; link, the actual base64 data is appended at the end of the file. I
-;; separate link and data because that way readers incapable of
-;; rendering inline images can still view the rest of the document
-;; without problems.
+;; link, the actual base64 data is appended at the end of the file (or
+;; in the supplement file). I separate link and data because that way
+;; readers incapable of rendering inline images can still view the
+;; rest of the document without problems.
 ;;
 ;;;; To resize an image:
 ;;
@@ -264,39 +270,59 @@ Calculation is done based on the current window."
 
 (defun iimg--load-image-data (beg end)
   "Load iimg data from BEG to END.
-Look for iimg-data’s and store them into `iimg--data-alist'."
+Look for iimg-data’s and store them into an alist, then return it."
   ;; This could be called from within `iimg--fontify', and we
   ;; don’t want to mess up its match data.
   (save-match-data
     (save-excursion
       (goto-char beg)
-      (while (re-search-forward iimg--data-regexp end t)
-        (let* ((beg (match-beginning 1))
-               (end (match-end 1))
-               (props (read (buffer-substring-no-properties beg end)))
-               (name (plist-get props :name))
-               (base64-string (plist-get props :data))
-               (image-data (base64-decode-string base64-string)))
-          (setf (alist-get name iimg--data-alist nil t #'equal)
-                image-data)
-          ;; We fontify data here because data are usually to long
-          ;; to be handled correctly by jit-lock.
-          (with-silent-modifications
-            (let ((beg (match-beginning 0))
-                  (end (match-end 0)))
-              (put-text-property
-               beg end 'display (format "[iimg data of %s]" name))
-              (put-text-property beg end 'read-only t)
-              ;; This allows inserting after the data.
-              (put-text-property beg end 'rear-nonsticky
-                                 '(read-only display))
-              (put-text-property beg end 'keymap iimg--data-keymap)
-              (put-text-property beg end 'iimg t))))))))
+      (let (alist)
+        (while (re-search-forward iimg--data-regexp end t)
+          (let* ((beg (match-beginning 1))
+                 (end (match-end 1))
+                 (props (read (buffer-substring-no-properties beg end)))
+                 (name (plist-get props :name))
+                 (base64-string (plist-get props :data))
+                 (image-data (base64-decode-string base64-string)))
+            (push (cons name image-data) alist)
+            ;; We fontify data here because data are usually to long
+            ;; to be handled correctly by jit-lock.
+            (with-silent-modifications
+              (let ((beg (match-beginning 0))
+                    (end (match-end 0)))
+                (put-text-property
+                 beg end 'display (format "[iimg data of %s]" name))
+                (put-text-property beg end 'read-only t)
+                ;; This allows inserting after the data.
+                (put-text-property beg end 'rear-nonsticky
+                                   '(read-only display))
+                (put-text-property beg end 'keymap iimg--data-keymap)
+                (put-text-property beg end 'iimg t)))))
+        alist))))
+
+(defun iimg--supplement-file (&optional create)
+  "Return the supplement-file if it exists, nil if not.
+If CREATE non-nil, create the file when it doesn’t exist."
+  (let ((supplement-file (concat (file-name-nondirectory
+                                  (buffer-file-name))
+                                 ".iimg")))
+    (if (and create (not (file-exists-p supplement-file)))
+        (with-temp-buffer
+          (write-file supplement-file)))
+    (if (file-exists-p supplement-file)
+        supplement-file
+      nil)))
 
 (defun iimg--data-of (name)
   "Get the image data of NAME (string)."
   (when (not iimg--data-alist)
-    (iimg--load-image-data (point-min) (point-max)))
+    (setq iimg--data-alist
+          (append (iimg--load-image-data (point-min) (point-max))
+                  (if-let ((file (iimg--supplement-file)))
+                      (with-temp-buffer
+                        (insert-file-contents file nil nil nil t)
+                        (iimg--load-image-data
+                         (point-min) (point-max)))))))
   (alist-get name iimg--data-alist nil nil #'equal))
 
 (defun iimg--replenish-slices ()
@@ -332,33 +358,49 @@ We don't save the slices under a link, so we need to add them back."
 
 ;;; Inserting and modifying
 
-(defun iimg-insert (file name)
+(defun iimg-insert (file name separate-file)
   "Insert FILE at point as an inline image.
 NAME is the name of the image, THUMBNAIL determines whether to
 display the image as a thumbnail, SIZE determines the size of the
-image. See Commentary for the format of NAME, THUMBNAIL, and SIZE."
+image. See Commentary for the format of NAME, THUMBNAIL, and SIZE.
+
+If SEPARATE-FILE non-nil, insert image data in a separate file
+that appends .iimg extension to the current buffer’s filename."
   (interactive
    (list (expand-file-name (read-file-name "Image: "))
          (let ((name (read-string "Caption/name for the image: ")))
            (if (equal name "")
                (format-time-string "%s")
-             name))))
+             name))
+         (y-or-n-p "Insert in separate file? ")))
   (let* ((data (with-temp-buffer
-                 (insert-file-contents-literally file)
+                 (insert-file-contents-literally file nil nil nil t)
                  (base64-encode-region (point-min) (point-max))
                  ;; TODO Check for max image file size?
                  (buffer-string)))
-         (data-string (iimg--format-data (list :name name :data data))))
-    ;; Insert data.
-    (save-excursion
-      (goto-char (point-max))
-      (when (text-property-any
-             (max (point-min) (1- (point))) (point) 'read-only t)
-        (goto-char
-         (previous-single-char-property-change (point) 'read-only)))
-      (let ((beg (point)))
-        (insert "\n" data-string "\n")
-        (iimg--load-image-data beg (point))))
+         (data-string (iimg--format-data (list :name name :data data)))
+         iimg-alist
+         (insert-fn
+          (lambda ()
+            ;; Insert data.
+            (save-excursion
+              (goto-char (point-max))
+              (when (text-property-any
+                     (max (point-min) (1- (point))) (point) 'read-only t)
+                (goto-char
+                 (previous-single-char-property-change
+                  (point) 'read-only)))
+              (let ((beg (point)))
+                (insert "\n" data-string "\n")
+                (setq iimg-alist (iimg--load-image-data beg (point))))))))
+    (if separate-file
+        (let ((supp-file (iimg--supplement-file t)))
+          (with-temp-buffer
+            (insert-file-contents supp-file nil nil nil t)
+            (funcall insert-fn)
+            (write-file supp-file)))
+      (funcall insert-fn))
+    (setq iimg--data-alist (append iimg-alist iimg--data-alist))
     ;; Insert link. We insert link after loading image data.
     (insert (iimg--format-link
              (list :name name :size '(width pixel 0.6)
@@ -495,7 +537,8 @@ Also refresh the image at point."
          file (let ((name (read-string "Caption/name for the image: ")))
                 (if (equal name "")
                     (format-time-string "%s")
-                  name))))))
+                  name))
+         (y-or-n-p "Insert in separate file? ")))))
 
 (provide 'iimg)
 
