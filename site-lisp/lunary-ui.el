@@ -109,7 +109,7 @@ e.g. :family :weight :size etc."
     ("Iosevka 13" . (:family "Iosevka" :size 14))
     ("JetBrains Mono 12" . (:family "JetBrains Mono" :size 12))
     ("Roboto Mono 12" . (:family "Roboto Mono" :size 12 :weight light))
-    ("IBM Plext Mono 13" . (:family "IBM Plex Mono" :size 13)))
+    ("IBM Plex Mono 13" . (:family "IBM Plex Mono" :size 13)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
 Key is a symbol as the name, value is a plist specifying the font spec.
 More info about spec in `font-spec'.")
