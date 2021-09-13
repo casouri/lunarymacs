@@ -55,7 +55,9 @@ Only add if FILE is not already in the index file."
       (unless (looking-back "\n" 1)
         (insert "\n"))
       (insert (file-name-nondirectory file))
-      (write-file "index.flique"))))
+      ;; If we use ‘write-file’, this buffer is associated with
+      ;; index.flique. (Changes from *flique index* to index.flique.)
+      (write-region (point-min) (point-max) "index.flique"))))
 
 (defun flique--next-file (filename step)
   "Return the next file of FILENAME. FILENAME cannot be a path.
@@ -120,6 +122,14 @@ backward."
     (goto-char (point-min))
     (re-search-forward (concat "^" (regexp-quote filename) "$") nil t)
     (beginning-of-line)))
+
+(define-derived-mode flique-mode fundamental-mode
+  "Flique"
+  "Editing flique index files."
+  (setq outline-regexp (rx "*"))
+  (outline-minor-mode))
+
+(add-to-list 'auto-mode-alist '("\\.flique\\'" . flique-mode))
 
 (provide 'flique)
 
