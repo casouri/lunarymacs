@@ -178,7 +178,8 @@ COMMENT-BEGIN is string pattern starting a comment."
                  (setq-local imenu-generic-expression
                              (cons imenu-expression
                                    imenu-generic-expression))
-                 (font-lock-add-keywords nil font-lock-keyword-list)
+                 (when (null outline-minor-mode-highlight)
+                   (font-lock-add-keywords nil font-lock-keyword-list))
                  (setq color-outline--keywords font-lock-keyword-list)
                  (setq color-outline--imenu-expression imenu-expression)
                  (outline-minor-mode))
