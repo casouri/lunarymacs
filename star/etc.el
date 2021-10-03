@@ -125,4 +125,4 @@
  '(window-resize-pixelwise t)
  '(word-wrap-by-category t)
  '(xref-prompt-for-identifier '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame))
- ))
+ )
