@@ -177,7 +177,8 @@ The image must already be in `iimg--data-alist'."
                       (iimg--calculate-size (or size '(width char 1.0))))))
     ;; Below `iimg--data-of' calls `iimg--load-image' which does
     ;; regexp search. I added `save-match-data' in `iimg--load-image'.
-    (apply #'create-image (iimg--data-of name) nil t size-spec)))
+    (or (apply #'create-image (iimg--data-of name) nil t size-spec)
+        (error "failed to create image"))))
 
 (defun iimg--fontify-1 (beg end display)
   "Add overlay to text between BEG and END with DISPLAY property."
