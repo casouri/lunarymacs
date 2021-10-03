@@ -50,8 +50,8 @@
       `(;; builtin faces
         (default     (nil ,fg ,bg))
         (region      (nil nil ,(overlay bg violet1 0.1)))
-        ;; (highlight   (nil ,bg ,blue2))
-        (highlight   (nil nil ,(overlay bg blue1 0.1)))
+        (highlight   (nil ,bg ,blue2))
+        ;; (highlight   (nil nil ,(overlay bg blue1 0.1)))
         (cursor      (nil "white" "black"))
         (link        (nil ,blue1 nil nil))
         (match       (nil ,green nil nil bold))

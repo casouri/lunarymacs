@@ -149,7 +149,8 @@
               (setq-local company-idle-delay nil)))
   (luna-def-key
    :keymaps 'geiser-mode-map
-   "C-." nil))
+   "C-." nil
+   "M-." nil))
 
 (load-package geiser-racket
   :commands run-geiser run-racket)
@@ -199,10 +200,6 @@
   (setq citre-ctags-program "uctags"
         citre-readtags-program "ureadtags")
   (add-hook 'haskell-mode-hook #'citre-mode)
-  :config
-  (luna-def-key
-   :keymaps 'citre-mode-map
-   "M-." #'citre-jump)
   :commands citre-mode)
 
 ;; (load-package quickrun

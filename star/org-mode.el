@@ -27,28 +27,24 @@
 (load-package valign
   :hook (org-mode-hook . valign-mode))
 
-;; (load-package org-backtick
-;;   :hook (org-mode-hook . org-backtick-mode))
-
-(luna-on "Brown"
-  (load-package orgmark
-    :load-path "~/p/OrgMark"
-    :commands orgmark-insert orgmark-edit orgmark-abort))
-
 (with-eval-after-load 'org-latex
   (add-to-list 'org-latex-packages-alist '("" "listings" nil))
   (setq org-latex-listings t)
   (setq org-latex-listings-options '(("breaklines" "true")))
   (setq org-latex-compiler "xelatex"))
 
-
 (load-package org
   :defer
-  :config (setq org-edit-src-content-indentation 0
-                org-adapt-indentation nil
-                ;; This program generates crisp images for latex
-                ;; preview.
-                org-preview-latex-default-process 'dvisvgm))
+  :config
+  (setq org-edit-src-content-indentation 0
+        org-adapt-indentation nil
+        ;; This program generates crisp images for latex
+        ;; preview.
+        org-preview-latex-default-process 'dvisvgm)
+  (setq org-fontify-quote-and-verse-blocks t)
+  (setq org-hide-emphasis-markers nil)
+  (setq org-image-actual-width '(300))
+  (add-hook 'org-mode-hook #'luna-org-hook))
 
 ;;; Org config
 
@@ -108,9 +104,6 @@ ARG is the numerical argument."
   "Configuration for Org Mode."
   (luna-prose-mode)
   (require 'org-tempo))
-
-(add-hook 'org-mode-hook #'luna-org-hook)
-(font-lock-add-keywords 'org-mode '(("^ *- " 0 'fixed-pitch)))
 
 ;;; Org calendar
 

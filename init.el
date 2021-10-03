@@ -13,6 +13,7 @@
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (luna-safe-load custom-file)
+(luna-local-load)
 
 ;;; Dump
 
@@ -77,12 +78,14 @@
 (luna-load-relative "star/blog.el")
 (require 'utility)
 
-;;; Customize
+;;; Server
+(run-with-idle-timer
+ 3 nil (lambda ()
+         (require 'server)
+         (unless (server-running-p)
+           (server-start t t))))
 
-;;;; Misc
-(setq-default luna-format-on-save t)
-(setq bidi-paragraph-direction 'left-to-right
-      bidi-inhibit-bpa t)
+;;; Customize
 
 ;;;; Theme
 (when (window-system)
@@ -91,21 +94,19 @@
     (load-theme 'light)))
 
 ;;;; Font
-(when (display-graphic-p)
-  (luna-load-font)
-  (luna-load-cjk-font))
-(luna-on "Brown" (luna-enable-apple-emoji))
+(luna-on "Brown"
+  (when (display-graphic-p)
+    (luna-load-font)
+    (luna-load-cjk-font))
+  (luna-on "Brown" (luna-enable-apple-emoji))
 
-(set-face-font 'mode-line (font-spec :family "SF Pro Text"
-                                     :size 13
-                                     :weight 'light))
-
-;;;; Server
-(run-with-idle-timer
- 3 nil (lambda ()
-         (require 'server)
-         (unless (server-running-p)
-           (server-start t t))))
+  (set-face-font 'mode-line
+                 (font-spec :family "SF Pro Text"
+                            :size 13
+                            :weight 'light))
+  ;; Face defined in etc.el.
+  (set-face-font 'custom-default
+                 (font-spec :family "SF Pro Text" :size 13)))
 
 ;;;; Macports
 (luna-on "Brown"
@@ -147,11 +148,6 @@
 
 (when (boundp 'tree-sitter-parser-list)
   (push "~/p/tree-sitter-expr/build-module/dist" load-path)
-  (require 'tree-sitter-json)
-  (require 'tree-sitter-c)
-  (require 'tree-sitter-html)
-  (require 'tree-sitter-css)
-  (require 'tree-sitter-javascript)
   (require 'tree-sitter)
   (load "~/emacs/test/src/tree-sitter-tests.el")
 
@@ -166,4 +162,12 @@
 
 (put 'narrow-to-region 'disabled nil)
 
+;;; Source
 
+(luna-on "Brown"
+  (setq source-directory (expand-file-name "~/emacs")))
+
+;;; External programs
+
+(luna-on "Brown"
+  (setq xref-search-program "rg"))

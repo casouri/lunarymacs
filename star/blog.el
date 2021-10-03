@@ -1,5 +1,9 @@
 ;; -*- lexical-binding: t -*-
 
+(luna-def-key
+ :keymaps 'pollen-mode-map
+ "<tab>" #'indent-for-tab-command)
+
 (load-package pollen-mode
   :mode "\\.pm$"
   :config

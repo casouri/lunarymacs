@@ -54,7 +54,10 @@
   :config
   ;; On Linux this sorts numbers in natural order.
   (setq dired-listing-switches "-lah1v"
-        dired-dwim-target t)
+        dired-dwim-target t
+        dired-kill-when-opening-new-dired-buffer t
+        ;; Hide dot files.
+        dired-omit-files "\\`[.]?#\\|\\`[.][.]?")
   (luna-when-mac
    (setq dired-listing-switches "-lah"))
   ;; Trash

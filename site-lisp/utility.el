@@ -164,7 +164,9 @@ buffer is not visiting a file."
     ;; zero-width space
     ("0" . "​")
     ;; thin space
-    ("thin" . " "))
+    ("thin" . " ")
+    ;; non-breaking hyphen
+    ("n-" . "‑"))
   ;; don’t use tab character because we use that for splitting
   ;; in ‘luna-insert-special-symbol’
   "Alist used by `luna-insert-special-symbol'.")
