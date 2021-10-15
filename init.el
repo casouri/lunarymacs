@@ -96,17 +96,13 @@
 ;;;; Font
 (luna-on "Brown"
   (when (display-graphic-p)
-    (luna-load-font)
-    (luna-load-cjk-font))
-  (luna-on "Brown" (luna-enable-apple-emoji))
-
-  (set-face-font 'mode-line
-                 (font-spec :family "SF Pro Text"
-                            :size 13
-                            :weight 'light))
-  ;; Face defined in etc.el.
-  (set-face-font 'custom-default
-                 (font-spec :family "SF Pro Text" :size 13)))
+	(luna-scale-cjk-mode)
+	(luna-enable-apple-emoji)
+    (luna-load-font 'default "IBM Plex Mono" 13)
+    (luna-load-font 'variable-pitch "SF Pro Text" 16)
+    (luna-load-font 'fixed-pitch "SF Pro Text" 16)
+    (luna-load-font 'mode-line "SF Pro Text" 13 :weight 'light)
+    (luna-load-saved-font)))
 
 ;;;; Macports
 (luna-on "Brown"

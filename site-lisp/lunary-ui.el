@@ -11,28 +11,16 @@
 ;;; Code:
 ;;
 
-(require 'luna-local)
 (require 'cl-lib)
+(require 'cus-edit)
 
 ;;; Theme
-
-(defvar luna-toggle-theme-list ()
-  "Themes that you can toggle bwtween by `luna-switch-theme'.")
 
 (defvar luna-theme nil
   "The current theme.")
 
 (defvar luna-load-theme-hook ()
   "Hook run after ‘luna-load-theme’.")
-
-(defun luna-switch-theme ()
-  "Switch between themes in `luna-toggle-theme-list'."
-  (interactive)
-  ;; Move the fist element to last.
-  (luna-load-theme (car luna-toggle-theme-list))
-  (setq luna-toggle-theme-list
-        (append (cdr luna-toggle-theme-list)
-                (list (car luna-toggle-theme-list)))))
 
 (defun luna-load-theme (&optional theme)
   "Load THEME or `luna-theme'."
@@ -43,13 +31,10 @@
         ;; We can save a lot of time by only enabling the theme.
         (enable-theme theme)
       (load-theme theme t))
-    (luna-local-set 'luna-theme theme)))
-
-(defun luna-load-theme-advice (&rest _)
-  "Run hooks after ‘load-theme’."
-  (run-hooks 'luna-load-theme-hook))
-
-(advice-add #'load-theme :after #'luna-load-theme-advice)
+    (custom-set-variables
+	 `(luna-theme ,theme nil nil
+				  "Automatically saved by ‘luna-load-theme’"))
+	(custom-save-all)))
 
 ;;; Utilities
 
@@ -85,98 +70,163 @@ delete the window."
 
 ;;; Font
 
-(defmacro luna-set-font (&rest config-list)
-  "Set font. CONFIG-LIST is the same as `font-spec' arguments.
+(defun luna-set-fontset-cjk-font (fontset font-spec)
+  "Make FONTSET use FONT-SPEC for CJK characters."
+  (dolist (charset '(kana han cjk-misc))
+    (set-fontset-font fontset charset font-spec)))
 
-e.g. :family :weight :size etc."
-  `(set-frame-font (font-spec ,@config-list) nil t))
+(defun luna-create-fontset (&rest spec)
+  "Create a fontset from SPEC.
+SPEC is the same as the arguments for ‘font-spec’. A :registry
+attribute is mandatory and should look like \"fontset-xxx\",
+where xxx is a unique name."
+  (create-fontset-from-fontset-spec
+   (font-xlfd-name
+	(apply #'font-spec spec))))
 
-(defvar luna-font nil
-  "Font name (string) used by me. Cached by ‘luna-local’.")
+(defun luna-define-fontset (ascii cjk name)
+  "Create a fontset NAME with ASCII and CJK font."
+  (let ((fontset name))
+	(luna-create-fontset :family ascii :registry fontset)
+	(luna-set-fontset-cjk-font fontset (font-spec :family cjk))
+	fontset))
 
-(defvar luna-cjk-font nil
-  "CJK font name (string) used by me. Cached by ‘luna-local’.")
+(defvar luna-font-settings nil
+  "A list of (FACE . FONT-NAME).
+FONT-NAMEs are keys in ‘luna-font-alist’.")
 
-(defvar luna-cjk-font-scale 1.3
-  "The scale for CJK font. Used in ‘luna-scale-cjk’.")
+(defvar luna-cjk-rescale-alist
+  '(("Source Han Serif SC" . 1.3)
+    ("Source Han Sans SC" . 1.3)
+    ("FZFW ZhuZi MinchoS" . 1.3))
+  "A list of font names that should be rescaled.")
 
 (defvar luna-font-alist
-  '(("SF Mono 13" . (:family "SF Mono" :size 13))
-    ("SF Mono 14" . (:family "SF Mono" :size 14))
+  `(("SF Mono" .
+     ,(luna-define-fontset
+       "SF Mono" "Source Han Serif SC" "fontset-sf mono"))
+    ("IBM Plex Mono" .
+     ,(luna-define-fontset
+       "IBM Plex Mono" "Source Han Serif SC" "fontset-ibm mono"))
+    ("SF Pro Text" .
+     ,(luna-define-fontset
+       "SF Pro Text" "Source Han Serif SC" "fontset-sf text"))
+    ("IBM Plex Sans" .
+     ,(luna-define-fontset
+       "IBM Plex Sans " "Source Han Serif SC" "fontset-ibm sans"))
+    
     ("GNU Unifont 15" . (:family "Unifont" :size 15))
     ("SF Mono Light 13" . (:family "SF Mono" :size 13 :weight light))
     ("PragmataPro 13" . (:family "PragmataPro Mono" :size 13))
     ("Iosevka 13" . (:family "Iosevka" :size 14))
     ("JetBrains Mono 12" . (:family "JetBrains Mono" :size 12))
     ("Roboto Mono 12" . (:family "Roboto Mono" :size 12 :weight light))
-    ("IBM Plex Mono 13" . (:family "IBM Plex Mono" :size 13)))
+    ("Charter 13" . (:family "Charter" :size 13)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
-Key is a symbol as the name, value is a plist specifying the font spec.
-More info about spec in `font-spec'.")
+Each element is like (FONT-NAME . FONT-DEF). FONT-DEF can be a
+fontset name, or a list of font specs that ‘font-spec’ accepts.")
 
 (defvar luna-cjk-font-alist
   ;; We don’t set font size, so the font size changes with default
   ;; font.
-  '(("Source Han Serif" . (:family "Source Han Serif SC" :size 13))
-    ("GNU Unifont" . (:family "Unifont" :size 13)))
+  '(("Source Han Serif 13" . (:family "Source Han Serif SC" :size 13))
+	("Source Han Sans 13" . (:family "Source Han Sans SC" :size 13))
+	("方正fW筑紫明朝 13" . (:family "FZFW ZhuZi MinchoS" :size 13))
+    ("GNU Unifont 13" . (:family "Unifont" :size 13)))
   "Similar to `luna-font-alist' but used for CJK scripts.
 Use `luna-load-cjk-font' to load them.")
 
-(defun luna-load-font (&optional font-name)
-  "Prompt for a font and set it.
-Fonts are specified in `luna-font-alist'. If FONT-NAME non-nil,
-use it instead. The font is saved to local file (see
-luna-local.el)."
-  (interactive
-   (list (completing-read
-          "Choose a font: "
-          (mapcar #'car luna-font-alist))))
-  (let* ((font-name (or font-name luna-font))
-         (font (apply #'font-spec
-                      (if font-name
-                          (alist-get font-name luna-font-alist
-                                     nil nil #'equal)
-                        ;; If font-name is nil (loading from local
-                        ;; file and don’t have it saved), use the
-                        ;; first font spec.
-                        (cdar luna-font-alist)))))
-    (set-frame-font font nil t)
-    ;; seems that there isn't a good way to get font-object directly
-    (add-to-list 'default-frame-alist
-                 `(font . ,(face-attribute 'default :font)))
-    (luna-local-set 'luna-font font-name)))
+(defun luna-load-font (face font-name size &rest attrs)
+  "Set font for FACE to FONT-NAME.
+If FONT-NAME is nil, use the first font in ‘luna-font-alist’.
+SIZE is the font size in pt. Add additional face attributes in
+ATTRS.
 
-(defun luna-load-cjk-font (&optional font-name)
-  "Prompt for a font and set it.
-Fonts are specified in `luna-cjk-font-alist'. If FONT-NAME non-nil,
-use it instead. The font is saved to local file (see
-luna-local.el)."
+If called interactively, the setting is saved to the custom file
+and can be reloaded by ‘luna-load-saved-font’."
   (interactive
-   (list (completing-read
-          "Choose a font: "
-          (mapcar #'car luna-cjk-font-alist))))
-  (let* ((font-name (or font-name luna-cjk-font))
-         (font-spec (apply #'font-spec
-                           (if font-name
-                               ;; If font-name is nil (loading from
-                               ;; local file and don’t have it saved),
-                               ;; use first font spec.
-                               (alist-get font-name luna-cjk-font-alist
-                                          nil nil #'equal)
-                             (cdar luna-cjk-font-alist)))))
-    (dolist (charset '(kana han cjk-misc))
-      (set-fontset-font t charset font-spec))
-    (luna-local-set 'luna-cjk-font font-name)))
+   (list (intern (completing-read
+                  "Face: " (face-list)))
+         (completing-read
+          "Font: " (mapcar #'car luna-font-alist))
+         (string-to-number (completing-read
+                            "Size: " nil nil nil nil nil "13"))))
+  (let* ((font (if (null font-name)
+                   (cdar luna-font-alist)
+                 (alist-get font-name luna-font-alist
+                            nil nil #'equal)))
+         (font-def (if (stringp font) font
+                     (apply #'font-spec font)))
+         (font-name (or font-name (caar luna-font-alist))))
+    ;; Emacs has a bug that prevents us from setting a fontset for the
+    ;; default face. Also, this needs to go before the
+    ;; ‘set-face-attribute’ form, otherwise attributes like :height
+    ;; are nullified.
+    (if (eq face 'default)
+        (set-frame-parameter nil 'font font-def))
+    (if (stringp font-def)
+        (apply #'set-face-attribute face nil
+               :font font-def
+               :fontset font-def
+               :height (* 10 size)
+               attrs)
+      (apply #'set-face-attribute face nil
+             :font font-def
+             :height (* 10 size)
+             attrs))
+    (setf (alist-get face luna-font-settings) (list font-name size))
+    (when (called-interactively-p 'any)
+      (custom-set-variables
+	   `(luna-font-settings
+	     ',luna-font-settings
+	     nil nil "Automatically saved by ‘luna-load-font’"))
+      (custom-save-all))))
+
+;; (defun luna-load-cjk-font (font-name fontset)
+;;   "Prompt for a font and set it for FONTSET.
+;; If FONT-NAME is nil, use the first font in ‘luna-cjk-font-alist’."
+;;   (interactive
+;;    (list (completing-read
+;;           "Choose a font: "
+;;           (mapcar #'car luna-cjk-font-alist))
+;; 		 (completing-read
+;; 		  "Choose a fontset: " luna-fontset-list)))
+;;   (let* ((font-name (or font-name (caar luna-cjk-font-alist)))
+;; 		 (font-spec (apply #'font-spec
+;;                            (if font-name
+;;                                (alist-get font-name luna-cjk-font-alist
+;;                                           nil nil #'equal)
+;; 							 ;; If both ‘font-name’ and
+;; 							 ;; ‘luna-cjk-font’ are nil, default to
+;; 							 ;; the first font in
+;; 							 ;; ‘luna-cjk-font-alist’.
+;;                              (cdar luna-cjk-font-alist)))))
+;;     (luna-set-fontset-cjk-font fontset font-spec)
+;; 	(setf (cadr (alist-get fontset luna-font-settings nil nil #'equal))
+;; 		  font-name)
+;; 	(custom-set-variables
+;; 	 `(luna-font-settings
+;; 	   ',luna-font-settings
+;; 	   nil nil "Automatically saved by ‘luna-load-font’"))
+;; 	(custom-save-all)))
+
+(defun luna-load-saved-font ()
+  "Load font settings saved in ‘luna-font-settings’."
+  (dolist (setting luna-font-settings)
+	(let ((face (car setting))
+		  (font-name (cadr setting))
+          (size (caddr setting)))
+	  (luna-load-font face font-name size))))
 
 (define-minor-mode luna-scale-cjk-mode
   "Scale CJK font to align CJK font and ASCII font."
   :lighter ""
   :global t
   :group 'luna
-  (when luna-cjk-font
-    (setf (alist-get luna-cjk-font
+  (dolist (setting luna-cjk-rescale-alist)
+	(setf (alist-get (car setting)
                      face-font-rescale-alist nil nil #'equal)
-          (if luna-scale-cjk-mode 1.3 nil))))
+		  (if luna-scale-cjk-mode (cdr setting) nil))))
 
 (defun luna-enable-apple-emoji ()
   "Enable Apple emoji display."
