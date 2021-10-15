@@ -7,8 +7,9 @@
  "C-c l" #'bklink-show-back-link
  "C-c i" #'bklink-insert
  :keymaps 'text-mode-map
- "TAB" #'indent-for-tab-command
+ ;; "<tab>" #'tab-to-tab-stop
  "<C-tab>" '("insert-tab" . (lambda () (interactive) (insert "\t")))
+ :clear
  :leader
  "df" #'xeft)
 

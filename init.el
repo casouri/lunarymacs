@@ -9,11 +9,10 @@
 (require 'cowboy)
 (require 'package)
 
-;;; Custom & local
+;;; Custom file
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (luna-safe-load custom-file)
-(luna-local-load)
 
 ;;; Dump
 
@@ -42,13 +41,11 @@
 
 ;;; Benchmark
 
-;; (require 'benchmark-init)
-;; (add-hook 'after-init-hook 'benchmark-init/deactivate)
-;; (benchmark-init/activate)
+(require 'benchmark-init)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
+(benchmark-init/activate)
 
 ;;; Configs
-
-;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (luna-key-def-preset :leader
   :keymaps 'override
@@ -131,7 +128,8 @@
         scroll-down-aggressively 0.01
         scroll-margin 0
         scroll-conservatively 5
-        redisplay-skip-fontification-on-input t))
+        redisplay-skip-fontification-on-input t)
+  (setq mouse-wheel-flip-direction t))
 
 ;;; Local init
 
@@ -166,4 +164,5 @@
 ;;; External programs
 
 (luna-on "Brown"
-  (setq xref-search-program "rg"))
+  (setq xref-search-program 'ripgrep))
+

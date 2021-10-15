@@ -102,8 +102,7 @@
  "M-a"   #'backward-paragraph
  "M-e"   #'forward-paragraph
  "C-M-f" #'forward-sentence
- "C-M-b" #'backward-sentence
- "<tab>" #'tab-to-tab-stop)
+ "C-M-b" #'backward-sentence)
 
 ;;; Scrolling
 

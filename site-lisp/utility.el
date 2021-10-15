@@ -1,5 +1,7 @@
 ;;; utility.el --- Utilities      -*- lexical-binding: t; -*-
 
+;; (Inserted with ‘insert-function-summary’.)
+;;
 ;; - ‘switch-buffer-same-major-mode’
 ;;     Switch buffer among those with the same major mode.
 ;; - ‘open-in-finder’
@@ -13,7 +15,7 @@
 ;; - ‘luna-load-env’
 ;;     Load PATH and CPATH from a file.
 ;; - ‘luna-insert-special-symbol’
-;;     Insert special symbol at point, SURNAME is used to search for symbol.
+;;     Insert special symbol at point.
 ;; - ‘luna-make-accent-fn’
 ;;     Return a command that insert “COMBINDING NAME” unicode char.
 ;; - ‘luna-autoinsert’
@@ -38,6 +40,8 @@
 ;;     Create a new command with NAME under ~/bin.
 ;; - ‘insert-function-summary’
 ;;     Insert a summary of all the functions defined in this file.
+;; - ‘lineup’
+;;     Align columns by whitespace.
 
 (require 'lunary)
 (require 'luna-f)
@@ -366,6 +370,12 @@ With DESCRIPTION of the package."
                                 "No docstring.")
                             "\n")))))
     (comment-region start (point))))
+
+(defun lineup (start end)
+  "Align columns by whitespace."
+  (interactive "r")
+  ;; From emacs-devel.
+  (align-regexp start end "\\(\\s-*\\)\\s-" 1 0 t))
 
 (provide 'utility)
 

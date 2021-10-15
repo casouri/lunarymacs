@@ -174,13 +174,21 @@
   (setq tramp-default-method "ssh")
   ;; `tramp-backup-directory-alist' is for remote backup on remote
   ;; machines, so it is not useful. The following is the real way:
-  ;; https://stackoverflow.com/questions/3893727/setting-emacs-tramp-to-store-local-backups
+  ;; REF: https://stackoverflow.com/questions/3893727/setting-emacs-tramp-to-store-local-backups
   (let ((backup-dir (expand-file-name
                      "var/tramp/backup" user-emacs-directory)))
     (unless (file-exists-p backup-dir)
       (mkdir backup-dir t))
     (add-to-list 'backup-directory-alist
-                 (cons tramp-file-name-regexp backup-dir))))
+                 (cons tramp-file-name-regexp backup-dir)))
+  :config
+  ;; Make sure TRAMP works with guix.
+  (setq tramp-remote-path
+        (append tramp-remote-path
+                '(tramp-own-remote-path
+                  "~/.guix-profile/bin" "~/.guix-profile/sbin"
+                  "/run/current-system/profile/bin" 
+                  "/run/current-system/profile/sbin"))))
 
 
 (load-package ftable
@@ -219,9 +227,9 @@
    "RET" nil
    "<return>" nil
    "="   #'company-complete-selection
+   "<tab>" #'company-complete-common-or-commit
    :keymaps 'company-search-map
    "<escape>" #'company-abort))
-
 
 (load-package rime
   :defer
@@ -292,7 +300,13 @@
 
 (load-package selectrum
   :config
-  (selectrum-mode))
+  (selectrum-mode)
+  (defun advice-selectrum--selection-highlight (oldfn str)
+    "Advice for ‘selectrum--selection-highlight’.
+Don’t append face, override the faec."
+    (propertize (copy-sequence str) 'face 'selectrum-current-candidate))
+  (advice-add #'selectrum--selection-highlight :around
+              #'advice-selectrum--selection-highlight))
 
 
 (load-package selectrum-prescient

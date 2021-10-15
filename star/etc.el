@@ -65,7 +65,6 @@
 (custom-set-variables
  ;; Use ‘sort-lines’ to sort the entries.
  ;; SYMBOL EXP NOW REQUEST COMMENT.
- '(print-circle t nil nil "Print circular data structures.")
  '(apropos-do-all t nil nil nil "Do a more comprehensive search")
  '(auto-save-timeout 5 nil nil nil "Auto-save every 5 seconds.")
  '(backup-by-copying t nil nil "Prevent Emacs from breaking hard links.")
@@ -95,6 +94,7 @@
  '(history-delete-duplicates t)
  '(history-length 500)
  '(idle-update-delay 0.5 nil nil "Idle time before update stuff on screen")
+ '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(kill-ring-max 100)
  '(load-prefer-newer t)
@@ -105,8 +105,9 @@
  '(mouse-wheel-tilt-scroll t)
  '(ns-pop-up-frames nil nil nil "This way emacsclient doesn't open new frames.")
  '(outline-minor-mode-cycle t)
- '(outline-minor-mode-highlight 'append)
+ '(outline-minor-mode-highlight 'override)
  '(package-archives '(("melpa" . "http://melpa.org/packages/") ("gnu" . "https://elpa.gnu.org/packages/") ("org" . "https://orgmode.org/elpa/")))
+ '(print-circle t nil nil "Print circular data structures.")
  '(recentf-max-saved-items 500)
  '(ring-bell-function 'ignore)
  '(savehist-mode t)
@@ -125,4 +126,5 @@
  '(window-resize-pixelwise t)
  '(word-wrap-by-category t)
  '(xref-prompt-for-identifier '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame))
+ ;; Ends here.
  )
