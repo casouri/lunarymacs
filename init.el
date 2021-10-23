@@ -70,7 +70,7 @@
 (luna-load-relative "star/writing.el")
 (luna-load-relative "star/tex.el")
 (luna-load-relative "star/simple-mode.el")
-(luna-load-relative "star/highres-icon.el")
+;; (luna-load-relative "star/highres-icon.el")
 ;; (luna-load-relative "star/tool-bar.el")
 (luna-load-relative "star/blog.el")
 (require 'utility)
@@ -97,7 +97,7 @@
 	(luna-enable-apple-emoji)
     (luna-load-font 'default "IBM Plex Mono" 13)
     (luna-load-font 'variable-pitch "SF Pro Text" 16)
-    (luna-load-font 'fixed-pitch "SF Pro Text" 16)
+    (luna-load-font 'fixed-pitch "IBM Plex Mono" 12)
     (luna-load-font 'mode-line "SF Pro Text" 13 :weight 'light)
     (luna-load-saved-font)))
 

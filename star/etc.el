@@ -32,15 +32,15 @@
   (erc-services-mode))
 
 ;;;; Customize
-(defface custom-default nil "")
-(add-hook 'Custom-mode-hook
-          (lambda ()
-            (let ((ov (make-overlay (point-min) (point-max))))
-              ;; 0.2 above, 0.2 below.
-              (overlay-put ov 'line-height 1.2)
-              (overlay-put ov 'line-spacing 0.2))
-            (buffer-face-set 'custom-default)
-            (toggle-truncate-lines 1)))
+;; (defface custom-default nil "")
+;; (add-hook 'Custom-mode-hook
+;;           (lambda ()
+;;             (let ((ov (make-overlay (point-min) (point-max))))
+;;               ;; 0.2 above, 0.2 below.
+;;               (overlay-put ov 'line-height 1.2)
+;;               (overlay-put ov 'line-spacing 0.2))
+;;             (buffer-face-set 'custom-default)
+;;             (toggle-truncate-lines 1)))
 
 ;;; Packages
 
