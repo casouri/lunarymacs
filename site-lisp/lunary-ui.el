@@ -70,27 +70,6 @@ delete the window."
 
 ;;; Font
 
-(defun luna-set-fontset-cjk-font (fontset font-spec)
-  "Make FONTSET use FONT-SPEC for CJK characters."
-  (dolist (charset '(kana han cjk-misc))
-    (set-fontset-font fontset charset font-spec)))
-
-(defun luna-create-fontset (&rest spec)
-  "Create a fontset from SPEC.
-SPEC is the same as the arguments for ‘font-spec’. A :registry
-attribute is mandatory and should look like \"fontset-xxx\",
-where xxx is a unique name."
-  (create-fontset-from-fontset-spec
-   (font-xlfd-name
-	(apply #'font-spec spec))))
-
-(defun luna-define-fontset (ascii cjk name)
-  "Create a fontset NAME with ASCII and CJK font."
-  (let ((fontset name))
-	(luna-create-fontset :family ascii :registry fontset)
-	(luna-set-fontset-cjk-font fontset (font-spec :family cjk))
-	fontset))
-
 (defvar luna-font-settings nil
   "A list of (FACE . FONT-NAME).
 FONT-NAMEs are keys in ‘luna-font-alist’.")
@@ -102,39 +81,39 @@ FONT-NAMEs are keys in ‘luna-font-alist’.")
   "A list of font names that should be rescaled.")
 
 (defvar luna-font-alist
-  `(("SF Mono" .
-     ,(luna-define-fontset
-       "SF Mono" "Source Han Serif SC" "fontset-sf mono"))
-    ("IBM Plex Mono" .
-     ,(luna-define-fontset
-       "IBM Plex Mono" "Source Han Serif SC" "fontset-ibm mono"))
-    ("SF Pro Text" .
-     ,(luna-define-fontset
-       "SF Pro Text" "Source Han Serif SC" "fontset-sf text"))
-    ("IBM Plex Sans" .
-     ,(luna-define-fontset
-       "IBM Plex Sans " "Source Han Serif SC" "fontset-ibm sans"))
-    
-    ("GNU Unifont 15" . (:family "Unifont" :size 15))
-    ("SF Mono Light 13" . (:family "SF Mono" :size 13 :weight light))
-    ("PragmataPro 13" . (:family "PragmataPro Mono" :size 13))
-    ("Iosevka 13" . (:family "Iosevka" :size 14))
-    ("JetBrains Mono 12" . (:family "JetBrains Mono" :size 12))
-    ("Roboto Mono 12" . (:family "Roboto Mono" :size 12 :weight light))
-    ("Charter 13" . (:family "Charter" :size 13)))
+  `(("SF Mono" . ("SF Mono" "Source Han Serif SC"))
+    ("IBM Plex Mono" . ("IBM Plex Mono" "Source Han Serif SC"))
+    ("SF Pro Text" . ("SF Pro Text" "Source Han Serif SC"))
+    ("IBM Plex Sans" . ("IBM Plex Sans" "Source Han Serif SC"))
+
+    ("方正fW筑紫明朝" . (nil "FZFW ZhuZi MinchoS"))
+    ("Source Han Serif" . (nil "Source Han Serif SC"))
+    ("Source Han Sans" . (nil "Source Han Sans SC"))
+
+    ("Charter 13" . ("Charter" nil :size 13))
+    ("GNU Unifont 15" . ("Unifont" nil :size 15))
+    ("SF Mono Light 13" . ("SF Mono" nil :size 13 :weight light))
+    ("PragmataPro 13" . ("PragmataPro Mono" nil :size 13))
+    ("Iosevka 13" . ("Iosevka" nil :size 14))
+    ("JetBrains Mono 12" . ("JetBrains Mono" nil :size 12))
+    ("Roboto Mono 12" . ("Roboto Mono" nil :size 12 :weight light)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
 Each element is like (FONT-NAME . FONT-DEF). FONT-DEF can be a
 fontset name, or a list of font specs that ‘font-spec’ accepts.")
 
-(defvar luna-cjk-font-alist
-  ;; We don’t set font size, so the font size changes with default
-  ;; font.
-  '(("Source Han Serif 13" . (:family "Source Han Serif SC" :size 13))
-	("Source Han Sans 13" . (:family "Source Han Sans SC" :size 13))
-	("方正fW筑紫明朝 13" . (:family "FZFW ZhuZi MinchoS" :size 13))
-    ("GNU Unifont 13" . (:family "Unifont" :size 13)))
-  "Similar to `luna-font-alist' but used for CJK scripts.
-Use `luna-load-cjk-font' to load them.")
+(defun luna-create-fontset (ascii-spec cjk-spec)
+  "Create a fontset NAME with ASCII-SPEC and CJK-SPEC font."
+  (let* ((fontset-name
+          (concat "fontset-" (downcase (plist-get ascii-spec :family))))
+         ;; ASCII font.
+         (fontset
+          (create-fontset-from-fontset-spec
+           (font-xlfd-name
+            (apply #'font-spec :registry fontset-name ascii-spec)))))
+    ;; CJK font.
+    (dolist (charset '(kana han cjk-misc))
+      (set-fontset-font fontset charset (apply #'font-spec cjk-spec)))
+    fontset))
 
 (defun luna-load-font (face font-name size &rest attrs)
   "Set font for FACE to FONT-NAME.
@@ -151,29 +130,32 @@ and can be reloaded by ‘luna-load-saved-font’."
           "Font: " (mapcar #'car luna-font-alist))
          (string-to-number (completing-read
                             "Size: " nil nil nil nil nil "13"))))
-  (let* ((font (if (null font-name)
-                   (cdar luna-font-alist)
-                 (alist-get font-name luna-font-alist
-                            nil nil #'equal)))
-         (font-def (if (stringp font) font
-                     (apply #'font-spec font)))
-         (font-name (or font-name (caar luna-font-alist))))
+  (let* ((font-spec (if (null font-name)
+                        (cdar luna-font-alist)
+                      (alist-get font-name luna-font-alist
+                                 nil nil #'equal)))
+         (ascii-family (car font-spec))
+         (cjk-family (cadr font-spec))
+         (rest-spec (append (cddr font-spec) attrs))
+         (rest-spec (setf (plist-get rest-spec :size) size))
+         (ascii-spec (and ascii-family
+                          `(:family ,ascii-family ,@rest-spec)))
+         (cjk-spec (and cjk-family `(:family ,cjk-family ,@rest-spec)))
+         (fontset (luna-create-fontset ascii-spec cjk-spec)))
     ;; Emacs has a bug that prevents us from setting a fontset for the
-    ;; default face. Also, this needs to go before the
-    ;; ‘set-face-attribute’ form, otherwise attributes like :height
-    ;; are nullified.
-    (if (eq face 'default)
-        (set-frame-parameter nil 'font font-def))
-    (if (stringp font-def)
-        (apply #'set-face-attribute face nil
-               :font font-def
-               :fontset font-def
-               :height (* 10 size)
-               attrs)
+    ;; default face, so we have to use ‘set-frame-parameter’. One of
+    ;; the reason why we create fontsets on-the-fly (by
+    ;; ‘luna-create-fontset’) is because we cannot set default face
+    ;; font and frame parameter in the same time, one always overrides
+    ;; another. With default face we cannot use fontset, with frame
+    ;; parameter we cannot set size dynamically...
+    (if (and (eq face 'default))
+        (set-frame-parameter nil 'font fontset)
       (apply #'set-face-attribute face nil
-             :font font-def
-             :height (* 10 size)
+             :font fontset
+             :fontset fontset
              attrs))
+    ;; Save the settings.
     (setf (alist-get face luna-font-settings) (list font-name size))
     (when (called-interactively-p 'any)
       (custom-set-variables
@@ -181,34 +163,6 @@ and can be reloaded by ‘luna-load-saved-font’."
 	     ',luna-font-settings
 	     nil nil "Automatically saved by ‘luna-load-font’"))
       (custom-save-all))))
-
-;; (defun luna-load-cjk-font (font-name fontset)
-;;   "Prompt for a font and set it for FONTSET.
-;; If FONT-NAME is nil, use the first font in ‘luna-cjk-font-alist’."
-;;   (interactive
-;;    (list (completing-read
-;;           "Choose a font: "
-;;           (mapcar #'car luna-cjk-font-alist))
-;; 		 (completing-read
-;; 		  "Choose a fontset: " luna-fontset-list)))
-;;   (let* ((font-name (or font-name (caar luna-cjk-font-alist)))
-;; 		 (font-spec (apply #'font-spec
-;;                            (if font-name
-;;                                (alist-get font-name luna-cjk-font-alist
-;;                                           nil nil #'equal)
-;; 							 ;; If both ‘font-name’ and
-;; 							 ;; ‘luna-cjk-font’ are nil, default to
-;; 							 ;; the first font in
-;; 							 ;; ‘luna-cjk-font-alist’.
-;;                              (cdar luna-cjk-font-alist)))))
-;;     (luna-set-fontset-cjk-font fontset font-spec)
-;; 	(setf (cadr (alist-get fontset luna-font-settings nil nil #'equal))
-;; 		  font-name)
-;; 	(custom-set-variables
-;; 	 `(luna-font-settings
-;; 	   ',luna-font-settings
-;; 	   nil nil "Automatically saved by ‘luna-load-font’"))
-;; 	(custom-save-all)))
 
 (defun luna-load-saved-font ()
   "Load font settings saved in ‘luna-font-settings’."
@@ -272,17 +226,6 @@ But, this function ignores all specifications in the ALIST."
     (set-window-buffer window buffer)
     (select-window window)
     (fit-window-to-buffer window max-height 0)))
-
-;;; Serif/sans serif
-
-(define-minor-mode luna-sans-mode
-  "Use sans-serif font for variable-pitch face."
-  :lighter ""
-  :global t
-  :group 'convenience
-  (if luna-sans-mode
-      (set-face-attribute 'variable-pitch nil :family "Helvetica")
-    (set-face-attribute 'variable-pitch nil :family "Charter")))
 
 ;;; Configs
 
