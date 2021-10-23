@@ -238,7 +238,9 @@
     (setq rime-show-candidate 'posframe
           rime-posframe-style 'vertical
           rime-user-data-dir "/Users/yuan/Library/Rime"
+          rime-librime-root "/opt/local"
           rime-show-preedit 'inline
+          rime-emacs-module-header-root "~/emacs-head/src"
           rime-posframe-properties (list :font "Source Han Sans"
                                          :weight 'light
                                          :internal-border-width 10))
