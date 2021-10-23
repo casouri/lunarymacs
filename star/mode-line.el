@@ -80,10 +80,12 @@ The padding pushes TEXT to the right edge of the mode-line."
                   (:propertize " " display (raise 0.3))
                   (:propertize " " display (raise -0.3))
                   mode-line-misc-info
-                  ,(if (display-graphic-p)
-                       `(:eval (concat (luna-mode-line-with-padding
-                                        ,percentage) "%%"))
-                     `(:eval (concat ,spaces ,percentage "%%"))))))
+                  ;; ‘luna-mode-line-with-padding’ is too brittle.
+                  ;; ,(if (display-graphic-p)
+                  ;;      `(:eval (concat (luna-mode-line-with-padding
+                  ;;                       ,percentage) "%%"))
+                  ;;    `(:eval (concat ,spaces ,percentage "%%")))
+                  (:eval (concat ,spaces ,percentage "%%")))))
 
 (setq-default header-line-format nil)
 (setq-default mode-line-format bottom-line-format)
