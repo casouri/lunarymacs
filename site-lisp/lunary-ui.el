@@ -138,7 +138,7 @@ and can be reloaded by ‘luna-load-saved-font’."
          (cjk-family (cadr font-spec))
          (rest-spec (append (cddr font-spec) attrs))
          ;; (rest-spec (setf (plist-get rest-spec :size) size))
-         (rest-spec (append `(:size ,size) rest-spec size))
+         (rest-spec (append `(:size ,size) rest-spec))
          (ascii-spec (and ascii-family
                           `(:family ,ascii-family ,@rest-spec)))
          (cjk-spec (and cjk-family `(:family ,cjk-family ,@rest-spec)))
