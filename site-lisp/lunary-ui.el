@@ -149,9 +149,16 @@ and can be reloaded by ‘luna-load-saved-font’."
     ;; ‘luna-create-fontset’) is because we cannot set default face
     ;; font and frame parameter in the same time, one always overrides
     ;; another. With default face we cannot use fontset, with frame
-    ;; parameter we cannot set size dynamically...
+    ;; parameter we cannot set size dynamically... Oh, and we need to
+    ;; add the form to ‘window-setup-hook’ because if this function
+    ;; runs before that (in init.el, for example), it doesn’t always
+    ;; work properly.
     (if (and (eq face 'default))
-        (set-frame-parameter nil 'font fontset)
+        (progn (set-frame-parameter nil 'font fontset)
+               (add-hook 'window-setup-hook
+                         `(lambda ()
+                            "Automatically inserted by ‘luna-load-font’."
+                            (set-frame-parameter nil 'font ,fontset))))
       (apply #'set-face-attribute face nil
              :font fontset
              :fontset fontset

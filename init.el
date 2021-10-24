@@ -99,10 +99,7 @@
     (luna-load-font 'variable-pitch "SF Pro Text" 16)
     (luna-load-font 'fixed-pitch "IBM Plex Mono" 12)
     (luna-load-font 'mode-line "SF Pro Text" 13 :weight 'light)
-    (luna-load-saved-font)
-    ;; Run again after frame parameters has setup for fontset to work.
-    (add-hook 'window-setup-hook
-              (lambda () (luna-load-font 'default "IBM Plex Mono" 13)))))
+    (luna-load-saved-font)))
 
 ;;;; Macports
 (luna-on "Brown"
