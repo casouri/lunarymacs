@@ -46,7 +46,7 @@
  "C-o" #'pop-to-mark-command
  "M-o" #'winner-undo
 
- "C-x C-c" #'clean-exit
+ ;; "C-x C-c" #'clean-exit
 
  ;; Remaps
  [remap backward-delete-char-untabify] #'luna-hungry-delete
