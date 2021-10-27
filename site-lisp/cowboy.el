@@ -203,8 +203,7 @@ OPTION-PLIST contains user options that each backend may use."
       (cowboy--with-warning
           (format "Error when installing %s: %%s" package)
         (cowgirl-ensure-refresh-content)
-        (package-install package t)
-        (message "Installed %s" package)))))
+        (package-install package t)))))
 
 (defun cowgirl-update (package)
   "Update PACKAGE."
