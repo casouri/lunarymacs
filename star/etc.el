@@ -10,6 +10,14 @@
 (put 'default-button 'follow-link t)
 (put 'narrow-to-page 'disabled nil)
 
+(advice-add #'enable-theme :after
+            (lambda (&rest _)
+              ;; Otherwise title bar’s text’s color doesn’t look right.
+              (when (featurep 'ns)
+                (set-frame-parameter
+                 nil 'ns-appearance
+                 (frame-parameter nil 'background-mode)))))
+
 ;;;; Term mouse
 ;; (unless (display-graphic-p)
 ;;   (require 'mouse)

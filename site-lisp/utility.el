@@ -272,7 +272,7 @@ With DESCRIPTION of the package."
               ;; Don’t separate CJK characters.
               (t (replace-match "")))))))
 
-(defun windows-newline ()
+(defun dos-newline ()
   "Set file to use windows newline (\\r\\n)."
   (interactive)
   (set-buffer-file-coding-system 'dos))
@@ -376,6 +376,24 @@ With DESCRIPTION of the package."
   (interactive "r")
   ;; From emacs-devel.
   (align-regexp start end "\\(\\s-*\\)\\s-" 1 0 t))
+
+(defun better-quit-window ()
+  "Quit from current window.
+If this window used to display another buffer with different
+major mode as the current one, switch to that buffer; if not,
+delete the window."
+  (interactive)
+  (cl-loop for buffer-info in (window-prev-buffers)
+           for buffer = (car buffer-info)
+           ;; If the buffer has different major mode, switch to it.
+           if (not (eq (buffer-local-value 'major-mode buffer)
+                       major-mode))
+           do (switch-to-buffer buffer)
+           and return nil
+           finally (delete-window)))
+
+
+
 
 (provide 'utility)
 
