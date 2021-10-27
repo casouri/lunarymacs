@@ -79,5 +79,3 @@
   (add-hook 'bklink-minor-mode-hook #'xeft-setup))
 
 (load-package flique :defer t)
-
-;;; end

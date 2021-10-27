@@ -7,20 +7,13 @@
 
 ;;; Packages
 
-;;;; Sagemath
-
 (load-package sage-shell-mode
   :init (add-to-list 'auto-mode-alist
                      '("\\.sage\\'" . sage-shell:sage-mode))
   :commands sage-shell-mode sage-shell:sage-mode)
 
-
 (load-package eglot
-  :extern "pyright npm install -g pyright"
   :defer
-  :config
-  ;; (add-to-list 'eglot-server-programs
-  ;;              '(python-mode . ("pyright-langserver" "--stdio")))
   :init
   (add-hook 'python-mode-hook
             (lambda ()

@@ -7,7 +7,6 @@
  ;; o -> open in other window
  :keymaps 'dired-mode-map
  "b" #'dired-up-directory
- "q" #'luna-quit-window
  "<s-mouse-1>" #'dired-toggle-mark-click
  "C-c C-o" #'luna-dired-open-file-at-point
  

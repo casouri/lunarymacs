@@ -25,7 +25,6 @@
       gc-cons-percentage 0.6
       auto-window-vscroll nil)
 
-;; from centaur
 (push '(vertical-scroll-bars . nil) default-frame-alist)
 (when (featurep 'ns)
   (push '(ns-transparent-titlebar . t) default-frame-alist))
@@ -34,9 +33,7 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1))
 
-;; BTW, you have to enable menu bar on mac port,
-;; otherwise emacs lost focus.
-
+;; Have to enable menu bar on mac port, otherwise emacs lost focus.
 (when (not (display-graphic-p))
   (menu-bar-mode -1))
 

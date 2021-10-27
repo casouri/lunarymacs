@@ -83,6 +83,8 @@
  "C-<return>" '("insert newline" .
                 (lambda () (interactive) (insert "\n"))))
 
+;;; Package
+
 (load-package which-key
   ;; We handle this in `luna-def-key'.
   ;; :init (setq which-key-enable-extended-define-key t)

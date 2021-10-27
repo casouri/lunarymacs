@@ -61,8 +61,8 @@
 (luna-load-relative "star/ui.el")
 (luna-load-relative "star/mode-line.el")
 (luna-load-relative "star/edit.el")
+(luna-load-relative "star/completion.el")
 (luna-load-relative "star/checker.el")
-(luna-load-relative "star/eglot.el")
 (luna-load-relative "star/python.el")
 (luna-load-relative "star/git.el")
 (luna-load-relative "star/dir.el")
@@ -70,8 +70,6 @@
 (luna-load-relative "star/writing.el")
 (luna-load-relative "star/tex.el")
 (luna-load-relative "star/simple-mode.el")
-;; (luna-load-relative "star/highres-icon.el")
-;; (luna-load-relative "star/tool-bar.el")
 (luna-load-relative "star/blog.el")
 (require 'utility)
 

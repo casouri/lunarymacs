@@ -85,8 +85,8 @@ The padding pushes TEXT to the right edge of the mode-line."
                   ;;      `(:eval (concat (luna-mode-line-with-padding
                   ;;                       ,percentage) "%%"))
                   ;;    `(:eval (concat ,spaces ,percentage "%%")))
-                  (:eval (concat ,spaces ,percentage "%%")))))
+                  (:eval (concat ,spaces "%l :: " ,percentage "%%")))))
 
 (setq-default header-line-format nil)
 (setq-default mode-line-format bottom-line-format)
-
+(setq-default frame-title-format "⚘ %f ⚘")
