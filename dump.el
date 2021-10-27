@@ -23,7 +23,7 @@
                    savehist minions ws-butler
                    expand-region flyspell flycheck eglot
                    yasnippet which-func savehist
-                   consult vertico selectrum selectrum-prescient
+                   consult selectrum selectrum-prescient
                    ;; site-lisp
                    transform utility pause color-outline
                    outline+

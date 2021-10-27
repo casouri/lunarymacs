@@ -81,16 +81,13 @@ FORMAT and BODY is the same as in ‘with-demoted-errors’."
 
 (defun cowgirl-installed-p (package)
   "Return t if PACKAGE (symbol) is installed, nil if not."
-  (if (cowgirl-use-cowboy package)
-      (cowboy-installed-p package)
-    (locate-file (symbol-name package) load-path
-                 '(".el" ".el.gz" ".so" ".so.gz"))))
+  (or (member package (cowgirl--installed-package-list))
+      (locate-file (symbol-name package) load-path
+                   '(".el" ".el.gz" ".so" ".so.gz"))))
 
 (defun cowboy-installed-p (package)
-  "Return t if PACKAGE (symbol) is installed, nil if not."
-  (and (member (symbol-name package)
-               (directory-files cowboy-package-dir))
-       t))
+  "Return non-nil if PACKAGE (symbol) is installed, nil if not."
+  (member package (cowboy--installed-package-list)))
 
 (defun cowboy--command (command dir &rest args)
   "Call process with COMMAND and ARGS in DIR."
@@ -100,48 +97,56 @@ FORMAT and BODY is the same as in ‘with-demoted-errors’."
                               args)))
         (error (buffer-string))))))
 
-(defun cowgirl--available-package-list ()
-  "Return a list of available packages as string."
-  (cowgirl-ensure-refresh-content)
-  (append (mapcar (lambda (pkg) (symbol-name (car pkg)))
-                  package-archive-contents)
-          (cowboy--available-package-list)))
+(defun cowgirl--downloaded-package-desc-list (package)
+  "Return package descriptions of downloaded PACKAGE (symbol)."
+  (or (alist-get package package-alist)
+      (alist-get package package--builtins)))
 
-(defun cowgirl--package-desc-list (package)
-  "Return package descriptions of PACKAGE, a symbol."
-  (alist-get package package-alist))
+(defun cowgirl--available-package-desc-list (package)
+  "Return package descriptions of PACKAGE (symbol)."
+  (alist-get package package-archive-contents))
 
 ;; From auto-package-update.el
 (defun cowgirl--up-to-date-p (package)
   "Return t if PACKAGE (symbol) is up-to-date."
   (when (and (package-installed-p package)
              (cadr (assq package package-archive-contents)))
-    (let* ((newest-desc (cadr (assq package package-archive-contents)))
-           (installed-desc (cadr (or (assq package package-alist)
-                                     (assq package package--builtins))))
-           (newest-version  (package-desc-version newest-desc))
-           (installed-version (package-desc-version installed-desc)))
-      (version-list-<= newest-version installed-version))))
+    (let* ((newest-desc
+            (car (cowgirl--available-package-desc-list package)))
+           (installed-desc
+            (car (cowgirl--downloaded-package-desc-list package))))
+      (equal newest-desc installed-desc))))
 
 (defun cowboy--available-package-list ()
-  "Return a list of available packages as string."
-  (mapcar (lambda (recipe) (symbol-name (car recipe)))
-          cowboy-recipe-alist))
+  "Return a list of available packages (symbols)."
+  (mapcar #'car cowboy-recipe-alist))
+
+(defun cowgirl--available-package-list ()
+  "Return a list of available packages (symbols)."
+  (cowgirl-ensure-refresh-content)
+  (let ((cowboy-packages (cowboy--available-package-list))
+        (elpa-packages (mapcar #'car package-archive-contents)))
+    ;; This is much faster than ‘cl-remove-duplicates’ because cowboy
+    ;; packages are relatively fewer.
+    (dolist (pkg cowboy-packages)
+      (cl-delete pkg elpa-packages))
+    (append cowboy-packages elpa-packages)))
+
+(defun cowboy--installed-package-list ()
+  "Return a list of installed packages (symbols)."
+  (mapcar #'intern (luna-f-list-directory cowboy-package-dir)))
 
 (defun cowgirl--installed-package-list ()
-  "Return a list of installed packages as string."
-  (append (mapcar (lambda (pkg) (symbol-name pkg))
-                  package-activated-list)
-          (cowboy--installed-package-list)))
+  "Return a list of installed packages (symbols)."
+  (cl-remove-duplicates
+   (append (mapcar #'car package-alist)
+           (mapcar #'car package--builtins)
+           (cowboy--installed-package-list))))
 
 (defun cowboy-delete-1 (package)
   "Delete PACKAGE (symbol)."
   (delete-directory
    (luna-f-join cowboy-package-dir (symbol-name package)) t t))
-
-(defun cowboy--installed-package-list ()
-  "Return a list of installed packages as string."
-  (luna-f-list-directory cowboy-package-dir))
 
 (defun cowboy--add-package-load-path (package)
   "Add PACKAGE (symbol) to `load-path'."
@@ -191,12 +196,15 @@ OPTION-PLIST contains user options that each backend may use."
   (interactive
    (list (intern (completing-read "Package: "
                                   (cowgirl--available-package-list)))))
-  (if (cowgirl-use-cowboy package)
-      (cowboy-install package option-plist)
-    (cowboy--with-warning (format "Error when installing %s: %%s" package)
-      (cowgirl-ensure-refresh-content)
-      (package-install package t)
-      (message "Installed %s" package))))
+  (if (cowgirl-installed-p package)
+      (message "Package %s is already installed")
+    (if (cowgirl-use-cowboy package)
+        (cowboy-install package option-plist)
+      (cowboy--with-warning
+          (format "Error when installing %s: %%s" package)
+        (cowgirl-ensure-refresh-content)
+        (package-install package t)
+        (message "Installed %s" package)))))
 
 (defun cowgirl-update (package)
   "Update PACKAGE."
@@ -209,8 +217,8 @@ OPTION-PLIST contains user options that each backend may use."
     (if (cowgirl--up-to-date-p package)
         (message "%s is up to date" package)
       (cowboy--with-warning (format "Error when updating %s: %%s" package)
-        (cowgirl-delete package)
-        (cowgirl-install package))
+        (package-install
+         (car (cowgirl--available-package-desc-list package))))
       (message "Updated %s" package))))
 
 (defun cowgirl-delete (package)
@@ -221,7 +229,7 @@ OPTION-PLIST contains user options that each backend may use."
   (if (cowgirl-use-cowboy package)
       (cowboy-delete package)
     (cowboy--with-warning (format "Error when deleting %s: %%s" package)
-      (dolist (desc (cowgirl--package-desc-list package))
+      (dolist (desc (cowgirl--downloaded-package-desc-list package))
         (package-delete desc t)
         (message "Deleted %s" package)))))
 
@@ -309,8 +317,7 @@ OPTION-PLIST contains user options that each backend may use."
                  (completing-read "Package: "
                                   (cowboy--installed-package-list)))))
   (cowboy--with-warning (format "Error when deleting %s: %%s" package)
-    (if (not (member (symbol-name package)
-                     (cowboy--installed-package-list)))
+    (if (not (member package (cowboy--installed-package-list)))
         (error "%s is not installed" package)
       (cowboy-delete-1 package)
       (message "Deleted %s" package))))
@@ -348,7 +355,7 @@ OPTION-PLIST contains user options that each backend may use."
   "Add load path for each package."
   (interactive)
   (dolist (pkg (cowboy--installed-package-list))
-    (cowboy--add-package-load-path (intern pkg))))
+    (cowboy--add-package-load-path pkg)))
 
 ;;; Fetchers
 
