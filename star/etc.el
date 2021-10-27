@@ -9,6 +9,7 @@
 ;; mouse-1 to follow link
 (put 'default-button 'follow-link t)
 (put 'narrow-to-page 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
 
 (advice-add #'enable-theme :after
             (lambda (&rest _)

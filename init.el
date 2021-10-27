@@ -2,9 +2,7 @@
 
 ;;; Init
 
-(add-to-list 'load-path
-             (expand-file-name "site-lisp"
-                               user-emacs-directory))
+(push (expand-file-name "site-lisp" user-emacs-directory) load-path)
 (require 'lunary)
 (require 'cowboy)
 (require 'package)
@@ -84,9 +82,7 @@
 
 ;;;; Theme
 (when (window-system)
-  (if (featurep 'light)
-      (enable-theme 'light)
-    (load-theme 'light)))
+  (luna-load-theme 'light))
 
 ;;;; Font
 (luna-on "Brown"
@@ -99,11 +95,7 @@
     (luna-load-font 'mode-line "SF Pro Text" 13 :weight 'light)
     (luna-load-saved-font)))
 
-;;;; Macports
-(luna-on "Brown"
-  (add-to-list 'load-path "/opt/local/share/emacs/site-lisp"))
-
-;;;; Mac
+;;;; Keys
 (luna-on "Brown"
   (menu-bar-mode -1)
   (setq mac-option-modifier 'meta
@@ -118,7 +110,10 @@
 (luna-on "Brown"
   (luna-load-env)
   ;; Because Apple.
-  (when (equal default-directory "/") (cd "~/")))
+  (when (equal default-directory "/") (cd "~/"))
+  (add-to-list 'load-path "/opt/local/share/emacs/site-lisp")
+  (setq source-directory (expand-file-name "~/emacs"))
+  (setq xref-search-program 'ripgrep))
 
 ;;;; Smooth scrolling
 (luna-on "Brown"
@@ -134,7 +129,7 @@
 (let ((local-init (expand-file-name
                    "local-init.el" user-emacs-directory)))
   (when (file-exists-p local-init)
-    (load local-init)))
+    (luna-safe-load local-init)))
 
 ;;; Tree-sitter
 
@@ -151,16 +146,3 @@
       (pop-to-buffer (get-buffer-create "*tree-sitter-show-tree*"))
       (erase-buffer)
       (insert (pp-to-string (read (tree-sitter-node-string root-node)))))))
-
-(put 'narrow-to-region 'disabled nil)
-
-;;; Source
-
-(luna-on "Brown"
-  (setq source-directory (expand-file-name "~/emacs")))
-
-;;; External programs
-
-(luna-on "Brown"
-  (setq xref-search-program 'ripgrep))
-
