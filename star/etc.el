@@ -21,16 +21,6 @@
 (global-set-key (kbd "<mouse-6>") #'mwheel-scroll)
 (global-set-key (kbd "<mouse-7>") #'mwheel-scroll)
 
-
-;;;; ERC
-(with-eval-after-load 'erc
-  (setq erc-nick "casouri"
-        erc-nickserv-passwords
-        '((freenode (("casouri" . "XF234567ic"))))
-        erc-prompt-for-nickserv-password nil)
-  (require 'erc-services)
-  (erc-services-mode))
-
 ;;;; Customize
 ;; (defface custom-default nil "")
 ;; (add-hook 'Custom-mode-hook

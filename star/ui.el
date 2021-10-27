@@ -2,6 +2,8 @@
 
 ;;; Key
 
+;;; Key
+
 (when (not (display-graphic-p))
   (luna-def-key
    "M-h" #'windmove-left
@@ -28,7 +30,6 @@
  ;; `winner-redo' is defined in angel.el as M-o.
  "s-." #'winner-redo)
 
-
 ;;; Config
 
 (setq custom-theme-directory
@@ -46,10 +47,8 @@
   :config (with-current-buffer (get-buffer-create "*scratch*")
             (rainbow-delimiters-mode)))
 
-
 (load-package rainbow-mode
   :commands rainbow-mode)
-
 
 (load-package highlight-parentheses
   :config
@@ -61,10 +60,8 @@
                     "red" "green"))))
   (global-highlight-parentheses-mode))
 
-
 (load-package winner
   :config (winner-mode))
-
 
 (load-package hl-todo
   :config
@@ -91,24 +88,14 @@
             ("NEXT" . ,success))))
   (global-hl-todo-mode))
 
-
-;; (load-package sidebar
-;;   :commands sidebar-mode global-sidebar-mode)
-
+(load-package diff-hl
+  :hook (prog-mode-hook . diff-hl-mode)
+  :config (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 ;; Use the site-lisp version.
 (load-package form-feed
   :hook ((emacs-lisp-mode-hook text-mode-hook special-mode-hook)
          . form-feed-mode))
-
-
-;; (load-package info+
-;;   :hook (Info-mode-hook . info-pretty-mode))
-
-
-;; (load-package treemacs
-;;   :config (treemacs-resize-icons 11))
-
 
 (load-package buffer-move
   :commands
@@ -116,7 +103,6 @@
   buf-move-dowan
   buf-move-left
   buf-move-right)
-
 
 (load-package console-buffer
   :commands

@@ -2,18 +2,12 @@
 ;;
 ;; Text editing, tools and everything.
 
-(require 'outline+)
+(require 'utility)
 
 ;;; Key
 
 (luna-def-key
- "C-x u" #'vundo
- :leader
- "ha" #'hideshow-toggle-all
- "hb" #'hs-toggle-hiding
- "rr" #'vr/replace
-
- :---
+ "C-x u"   #'vundo
  "C-h C-h" #'ghelp-describe
  "C-h r"   #'ghelp-resume
  "C-h o"   #'ghelp-describe-elisp
@@ -24,11 +18,17 @@
  "C-c '"   #'separedit
  "C-/"     #'undo-only
  "C-."     #'undo-redo
-
  "C-="     #'er/expand-region
  "C--"     #'er/contract-region
  "M-q"     #'ftable-fill
+ "C-c C-s" #'consult-line
 
+ :leader
+ "ha" #'hideshow-toggle-all
+ "hb" #'hs-toggle-hiding
+ "rr" #'vr/replace
+
+ :---
  :keymaps 'override
  "C-j"     #'avy-goto-word-1
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
@@ -59,17 +59,12 @@
  "ss"      #'consult-line
  "si"      #'consult-imenu)
 
-
 ;;; Package
+
+;;;; Movement
 
 (load-package avy
   :commands avy-goto-word-1)
-
-
-(load-package ws-butler
-  ;; global mode interferes with magit
-  :hook (prog-mode . ws-butler-mode))
-
 
 (load-package expand-region
   :config
@@ -102,45 +97,13 @@
                           (point) (1+ (point)))))
           (tree-sitter-select-node node))))))
 
+(load-package iscroll
+  :commands iscroll-mode)
 
-(load-package diff-hl
-  :hook (prog-mode-hook . diff-hl-mode)
-  :config (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
-
-
-(load-package separedit
-  :commands separedit
-  :config
-  (setq separedit-default-mode 'text-mode
-        separedit-remove-trailing-spaces-in-comment t))
-
-
-(load-package yasnippet
-  :config
-  (yas-global-mode)
-  (yas--define-parents 'minibuffer-mode '(emacs-lisp-mode))
-  (yas--define-parents 'minibuffer-inactive-mode '(emacs-lisp-mode))
-  (with-eval-after-load 'hippie-exp
-    (add-to-list 'hippie-expand-try-functions-list #'yas-expand)))
-
+;;;; Structure
 
 (load-package color-outline
   :hook (prog-mode-hook . color-outline-mode))
-
-
-(load-package visual-regexp
-  :commands
-  vr/replace
-  vr/query-replace
-  vr/mc-mark)
-
-
-(load-package ghelp
-  :commands
-  ghelp-describe
-  ghelp-describe-function
-  ghelp-describe-variable)
-
 
 (load-package hideshow
   :hook (prog-mode-hook . hs-minor-mode)
@@ -154,103 +117,6 @@
         (hs-show-all)
       (hs-hide-all))
     (setq hideshow-hidden (not hideshow-hidden))))
-
-
-(load-package helpful)
-
-
-(load-package iscroll
-  :commands iscroll-mode)
-
-
-(load-package vundo
-  :commands vundo
-  :config (push '(?└ . ?╰) vundo-translation-alist))
-
-
-(load-package tramp
-  :defer
-  :init
-  (setq tramp-default-method "ssh")
-  ;; `tramp-backup-directory-alist' is for remote backup on remote
-  ;; machines, so it is not useful. The following is the real way:
-  ;; REF: https://stackoverflow.com/questions/3893727/setting-emacs-tramp-to-store-local-backups
-  (let ((backup-dir (expand-file-name
-                     "var/tramp/backup" user-emacs-directory)))
-    (unless (file-exists-p backup-dir)
-      (mkdir backup-dir t))
-    (add-to-list 'backup-directory-alist
-                 (cons tramp-file-name-regexp backup-dir)))
-  :config
-  ;; Make sure TRAMP works with guix.
-  (setq tramp-remote-path
-        (append tramp-remote-path
-                '(tramp-own-remote-path
-                  "~/.guix-profile/bin" "~/.guix-profile/sbin"
-                  "/run/current-system/profile/bin" 
-                  "/run/current-system/profile/sbin"))))
-
-
-(load-package ftable
-  :commands
-  ftable-fill
-  ftable-edit-cell
-  ftable-reformat)
-
-
-(load-package company
-  :hook (prog-mode-hook . company-mode)
-  :config
-  (setq company-idle-delay 0.1)
-  (setq company-minimum-prefix-length 2
-        company-dabbrev-downcase nil
-        company-tooltip-limit 15)
-  ;; Company dabbrev is annoying, make sure not to include it.
-  (setq-default company-backends
-                '(company-capf company-files company-dabbrev-code))
-  (setq-default company-search-filtering t)
-
-  :init
-  (defun company-complete-common-or-commit ()
-    "Insert the common part of all candidates, or commit the selection."
-    (interactive)
-    (when (company-manual-begin)
-      (let ((tick (buffer-chars-modified-tick)))
-        (call-interactively 'company-complete-common)
-        (when (eq tick (buffer-chars-modified-tick))
-          (call-interactively 'company-complete-selection)))))
-
-  (luna-def-key
-   :keymaps '(company-active-map company-search-map)
-   "C-p" #'company-select-previous
-   "C-n" #'company-select-next
-   "RET" nil
-   "<return>" nil
-   "="   #'company-complete-selection
-   "<tab>" #'company-complete-common-or-commit
-   :keymaps 'company-search-map
-   "<escape>" #'company-abort))
-
-(load-package rime
-  :defer
-  :config
-  (luna-on "Brown"
-    (setq rime-show-candidate 'posframe
-          rime-posframe-style 'vertical
-          rime-user-data-dir "/Users/yuan/Library/Rime"
-          rime-librime-root "/opt/local"
-          rime-show-preedit 'inline
-          rime-emacs-module-header-root "~/emacs-head/src"
-          rime-posframe-properties (list :font "Source Han Sans"
-                                         :weight 'light
-                                         :internal-border-width 10))
-    (add-hook 'input-method-activate-hook
-              (lambda () (interactive)
-                (setq-local cursor-type 'hbar)))
-    (add-hook 'input-method-inactivate-hook
-              (lambda () (interactive)
-                (kill-local-variable 'cursor-type)))))
-
 
 (with-eval-after-load 'project
   (setq project-vc-ignores '(".ccls-cache/"))
@@ -274,51 +140,89 @@
        (apply-partially #'project--find-regexp-in-files regexp files)
        nil))))
 
+;;;; Search & replace
 
-(load-package consult
+(load-package visual-regexp
+  :commands
+  vr/replace
+  vr/query-replace
+  vr/mc-mark)
+
+;;;; Automation
+
+(load-package ftable
+  :commands
+  ftable-fill
+  ftable-edit-cell
+  ftable-reformat)
+
+(load-package ws-butler
+  ;; global mode interferes with magit
+  :hook (prog-mode . ws-butler-mode))
+
+(load-package separedit
+  :commands separedit
+  :config
+  (setq separedit-default-mode 'text-mode
+        separedit-remove-trailing-spaces-in-comment t))
+
+;;;; Undo & history
+
+(load-package vundo
+  :commands vundo
+  :config (push '(?└ . ?╰) vundo-translation-alist))
+
+(load-package undohist
+  :config (undohist-initialize))
+
+;;;; Application
+
+(load-package helpful)
+
+(load-package ghelp
+  :commands
+  ghelp-describe
+  ghelp-describe-function
+  ghelp-describe-variable)
+
+(load-package tramp
+  :defer
   :init
-  ;; Bindings are defined at the top.
-  (defvar consult-binded-mode-map (make-sparse-keymap)
-    "Minor mode map for ‘console-minor-mode’.")
-
-  (define-minor-mode consult-binded-mode
-    "Minor mode enabling consult commands."
-    :global t
-    :keymap consult-binded-mode-map
-    :group 'convenience
-    (if consult-binded-mode
-        (message ":-)")
-      (message ";-)")))
+  (setq tramp-default-method "ssh")
+  ;; `tramp-backup-directory-alist' is for remote backup on remote
+  ;; machines, so it is not useful. The following is the real way:
+  ;; REF: https://stackoverflow.com/questions/3893727/setting-emacs-tramp-to-store-local-backups
+  (let ((backup-dir (expand-file-name
+                     "var/tramp/backup" user-emacs-directory)))
+    (unless (file-exists-p backup-dir)
+      (mkdir backup-dir t))
+    (add-to-list 'backup-directory-alist
+                 (cons tramp-file-name-regexp backup-dir)))
   :config
-  (consult-binded-mode)
-  (setq consult-preview-key (kbd "C-o"))
-  (consult-customize
-   consult-line :preview-key 'any))
+  ;; Make sure TRAMP works with guix.
+  (setq tramp-remote-path
+        (append tramp-remote-path
+                '(tramp-own-remote-path
+                  "~/.guix-profile/bin" "~/.guix-profile/sbin"
+                  "/run/current-system/profile/bin" 
+                  "/run/current-system/profile/sbin"))))
 
-
-(load-package recentf-ext
-  :config (recentf-mode))
-
-
-(load-package selectrum
+(load-package rime
+  :defer
   :config
-  (selectrum-mode)
-  (defun advice-selectrum--selection-highlight (oldfn str)
-    "Advice for ‘selectrum--selection-highlight’.
-Don’t append face, override the faec."
-    (propertize (copy-sequence str) 'face 'selectrum-current-candidate))
-  (advice-add #'selectrum--selection-highlight :around
-              #'advice-selectrum--selection-highlight))
-
-
-(load-package selectrum-prescient
-  :config
-  (selectrum-prescient-mode))
-
-
-(with-eval-after-load 'isearch
-  (defun luna-rcenter-advice (&rest _) (recenter))
-  (advice-add 'isearch-repeat-forward :after #'luna-rcenter-advice)
-  (advice-add 'isearch-repeat-backward :after #'luna-rcenter-advice))
-
-
+  (luna-on "Brown"
+    (setq rime-show-candidate 'posframe
+          rime-posframe-style 'vertical
+          rime-user-data-dir "/Users/yuan/Library/Rime"
+          rime-librime-root "/opt/local"
+          rime-show-preedit 'inline
+          rime-emacs-module-header-root "~/emacs-head/src"
+          rime-posframe-properties (list :font "Source Han Sans"
+                                         :weight 'light
+                                         :internal-border-width 10))
+    (add-hook 'input-method-activate-hook
+              (lambda () (interactive)
+                (setq-local cursor-type 'hbar)))
+    (add-hook 'input-method-inactivate-hook
+              (lambda () (interactive)
+                (kill-local-variable 'cursor-type)))))

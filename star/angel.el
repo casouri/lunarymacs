@@ -1,23 +1,10 @@
-;;; angel.el --- Angel      -*- lexical-binding: t; -*-
-
-;; Author: Yuan Fu <casouri@gmail.com>
-
-;;; This file is NOT part of GNU Emacs
-
-;;; Commentary:
-;;
-
-;;; Code:
-;;
-
 ;; -*- lexical-binding: t -*-
 ;;
-;; In the end, good defeats Evil.
+;; In the end, Angel defeats Evil.
 
 (require 'pause)
 (require 'cl-lib)
 (require 'utility)
-(require 'transform)
 
 (autoload 'iscroll-down "iscroll.el")
 (autoload 'iscroll-up "iscroll.el")
@@ -39,7 +26,6 @@
  ;; Super bindings
  "s-n"   #'luna-scroll-up-reserve-point
  "s-p"   #'luna-scroll-down-reserve-point
- "s-/"   #'transform-previous-char
  "s-u"   #'revert-buffer
 
  ;; Jump back
@@ -233,6 +219,9 @@ Edit the underlined region and type C-c C-c to start
     (deactivate-mark)
     (isearch-yank-kill)))
 
+(defun luna-rcenter-advice (&rest _) (recenter))
+(advice-add 'isearch-repeat-forward :after #'luna-rcenter-advice)
+(advice-add 'isearch-repeat-backward :after #'luna-rcenter-advice)
 (add-hook 'isearch-mode-hook #'luna-isearch-with-region)
 
 ;;; Transient map in region (y p)
@@ -328,23 +317,3 @@ Edit the underlined region and type C-c C-c to start
 (mark-before #'beginning-of-buffer)
 (mark-before #'luna-jump-back)
 (mark-before #'counsel-imenu)
-
-;;; Clean exit
-
-(defun clean-exit ()
-  "Exit Emacs cleanly.
-If there are unsaved buffer, pop up a list for them to be saved
-before existing. Replaces ‘save-buffers-kill-terminal’."
-  (interactive)
-  (if (frame-parameter nil 'client)
-      (server-save-buffers-kill-terminal arg)
-    (if-let ((buf-list (seq-filter (lambda (buf)
-                                     (and (buffer-modified-p buf)
-                                          (buffer-file-name buf)))
-                                   (buffer-list))))
-        (progn
-          (pop-to-buffer (list-buffers-noselect t buf-list))
-          (message "s to save, C-k to kill, x to execute"))
-      (save-buffers-kill-emacs))))
-
-;;; angel.el ends here

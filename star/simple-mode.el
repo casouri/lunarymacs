@@ -202,6 +202,19 @@
   (add-hook 'haskell-mode-hook #'citre-mode)
   :commands citre-mode)
 
+(load-package eglot
+  ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
+  :commands eglot eglot-ensure
+  :config
+  (setq read-process-output-max (* 1024 1024))
+  ;; Otherwise eglot highlights documentations, which is annoying.
+  (push :documentHighlightProvider eglot-ignored-server-capabilites)
+  (luna-on "Brown"
+    (add-to-list 'eglot-server-programs
+                 '(c-mode . ("~/attic/ccls/Release/ccls")))
+    (add-to-list 'eglot-server-programs
+                 '(c++-mode . ("~/attic/ccls/Release/ccls")))))
+
 ;; (load-package quickrun
 ;;   :commands
 ;;   quickrun
