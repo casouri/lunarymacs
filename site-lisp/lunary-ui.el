@@ -22,19 +22,19 @@
 (defvar luna-load-theme-hook ()
   "Hook run after ‘luna-load-theme’.")
 
-(defun luna-load-theme (&optional theme)
+(defun luna-load-theme (theme)
   "Load THEME or `luna-theme'."
   (dolist (theme custom-enabled-themes)
     (disable-theme theme))
-  (when-let ((theme (or theme luna-theme (car luna-toggle-theme-list))))
-    (if (featurep (intern (format "%s-theme" theme)))
-        ;; We can save a lot of time by only enabling the theme.
-        (enable-theme theme)
-      (load-theme theme t))
-    (custom-set-variables
-	 `(luna-theme ,theme nil nil
-				  "Automatically saved by ‘luna-load-theme’"))
-	(custom-save-all)))
+  (if (featurep (intern (format "%s-theme" theme)))
+      ;; We can save a lot of time by only enabling the theme.
+      (enable-theme theme)
+    (load-theme theme t))
+  (custom-set-variables
+   `(luna-theme ,theme nil nil
+                "Automatically saved by ‘luna-load-theme’"))
+  (custom-save-all)
+  (run-hooks 'luna-load-theme-hook))
 
 ;;; Utilities
 
@@ -244,8 +244,6 @@ But, this function ignores all specifications in the ALIST."
                 (set-frame-parameter
                  nil 'ns-appearance
                  (frame-parameter nil 'background-mode)))))
-
-(define-key special-mode-map [remap quit-window] #'luna-quit-window)
 
 (provide 'lunary-ui)
 
