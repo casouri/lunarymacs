@@ -13,6 +13,10 @@
 
 (require 'lunary-ui)
 (require 'cowboy)
+(eval-when-compile
+  (require 'luna-load-package))
+(eval-when-compile
+  (require 'luna-key))
 
 ;;; Variables
 
@@ -23,7 +27,15 @@
 
 (defvar luna-external-program-list nil
   "List of external programs needed. Added by ‘load-package’.
-A list of notes, really.")
+Each element is a file path or program name (string).")
+
+(defvar luna-external-program-notes nil
+  "An alist of ((PROGRAM . DISTRIBUTION) . NOTES).
+PROGRAM is a string representing the command line program.
+DISTRIBUTION is a symbol representing the package distribution
+system where PROGRAM can be retrieved. It can be guix, macports,
+debian, etc. NOTES is a string containing the notes. It must not
+start or end with a newline.")
 
 (defvar luna-dumped nil
   "non-nil when a dump file is loaded.
@@ -65,15 +77,6 @@ ARGS are applied to ‘load'."
   (apply #'luna-safe-load
          (expand-file-name file user-emacs-directory) args))
 
-;;; Load package
-
-(eval-when-compile
-  (require 'luna-load-package))
-
-;;; Define key
-
-(eval-when-compile
-  (require 'luna-key))
 
 ;;; Package functions
 
@@ -159,54 +162,42 @@ ORIG-DUMP-LOCATION is location of the original pre-built dump."
                              "dump.el")))
     (display-buffer buf)))
 
-;;; Format on save
-
-(defvar luna-smart-format-alist ()
-  "Alist of format functions of each major mode.
-Each element should be a con cell of major mode symbol and function symbol.
-For example, '(python-mode . format-python)")
-
-(defvar-local luna-format-on-save nil
-  "Whether to format on save.")
-
-(defun luna-smart-format-buffer ()
-  "Only format buffer when `luna-format-on-save' is non-nil."
-  (interactive)
-  (when luna-format-on-save
-    (let ((format-func (alist-get major-mode luna-smart-format-alist)))
-      (when format-func
-        (funcall format-func)))))
-
-(add-hook 'after-save-hook #'luna-smart-format-buffer)
-
 ;;; External program
 
-(defun luna-check-external-program ()
-  "Check if external programs are available."
-  (interactive)
+(defun luna-check-external-program (distribution)
+  "Check if external programs are available.
+Distribution is the current package distribution (symbol), it can be
+guix, macports, debian, etc."
+  (interactive (list (intern (completing-read "Distribution: "
+                                              '(guix macports debian)))))
   (pop-to-buffer (get-buffer-create "*external program*"))
-  (erase-buffer)
-  (let* ((programs (mapcar (lambda (p)
-                             (car (split-string p)))
-                           luna-external-program-list))
-         (notes (mapcar (lambda (p)
-                          (string-join (cdr (split-string p)) " "))
-                        luna-external-program-list))
-         (max-len (apply #'max (mapcar #'length programs)))
-         (align (propertize
-                 " " 'display `(space :align-to ,(+ max-len 2)))))
-    (cl-loop for program in programs
-             for note in notes
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (cl-loop for program in luna-external-program-list
              if (not (or (executable-find program)
                          (file-exists-p program)))
-             do (progn
-                  (insert program align "is not available")
-                  (if (equal note "")
-                      (insert "\n")
-                    (insert ", it has a note: " note "\n"))))
+             do (let ((note (alist-get (cons program distribution)
+                                       luna-external-program-notes
+                                       nil nil #'equal)))
+                  (insert program " is not available")
+                  (if note
+                      (insert ", it has a note:\n\t"
+                              (string-join (split-string note "\n")
+                                           "\n\t")
+                              "\n")
+                    (insert "\n"))))
     (when (eq (point) (point-min))
       (insert "All good\n"))
     (special-mode)))
+
+(defun luna-note-extern (program distribution notes)
+  "Set the note for (PROGRAM . DISTRIBUTION) to NOTES.
+See ‘luna-external-program-notes’."
+  (declare (indent 2))
+  (setf (alist-get (cons program distribution)
+                   luna-external-program-notes
+                   nil nil #'equal)
+        notes))
 
 (provide 'lunary)
 
