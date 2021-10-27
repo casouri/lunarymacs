@@ -35,7 +35,7 @@
                            '(nil "[[:alpha:]]"
                                  "[^[:alpha:]]"
                                  "['’]" nil ("-B") nil utf-8))))
-  :extern "aspell port install aspell; port install aspell-dict-en"
+  :extern "aspell"
   :hook
   (text-mode-hook . flyspell-mode)
   (prog-mode-hook . flyspell-prog-mode))
