@@ -173,7 +173,9 @@
   :config (push '(?└ . ?╰) vundo-translation-alist))
 
 (load-package undohist
-  :config (undohist-initialize))
+  :config
+  (undohist-initialize)
+  (push "COMMIT_EDITMSG" undohist-ignored-files))
 
 ;;;; Application
 
