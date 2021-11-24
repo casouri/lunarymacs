@@ -17,8 +17,11 @@
 ;;; Packages
 
 (load-package flymake
-  ;; (emacs-lisp-mode-hook c-mode-hook c++-mode-hook python-mode-hook)
-  :hook (prog-mode . flymake-mode))
+  :defer t
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'flymake-mode)
+  (add-hook 'c-mode-hook #'flymake-mode)
+  (add-hook 'c++-mode-hook #'flymake-mode))
 
 
 ;; Install dictionaries: http://wordlist.aspell.net
@@ -40,11 +43,11 @@
   (text-mode-hook . flyspell-mode)
   (prog-mode-hook . flyspell-prog-mode))
 
-(luna-note-extern "aspell" 'macports
-  "sudo port install aspell aspell-dict-en")
-
-(luna-note-extern "aspell" 'guix
-  "guix install aspell aspell-dict-uk")
+(luna-note-extern "aspell"
+  "For macports:
+    sudo port install aspell aspell-dict-en
+For guix:
+    guix install aspell aspell-dict-uk")
 
 ;; Why no wucuo: Too many edge cases when you check buffer on a region
 ;; on save, and checking on post-command-hook is also more convenient.

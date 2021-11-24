@@ -26,12 +26,10 @@
 Each element is a file path or program name (string).")
 
 (defvar luna-external-program-notes nil
-  "An alist of ((PROGRAM . DISTRIBUTION) . NOTES).
-PROGRAM is a string representing the command line program.
-DISTRIBUTION is a symbol representing the package distribution
-system where PROGRAM can be retrieved. It can be guix, macports,
-debian, etc. NOTES is a string containing the notes. It must not
-start or end with a newline.")
+  "An alist of (PROGRAM . NOTES).
+PROGRAM is a string representing the command line program. NOTES
+is a string containing the notes. It must not start or end with a
+newline.")
 
 (defvar luna-dumped nil
   "non-nil when a dump file is loaded.
@@ -206,7 +204,7 @@ guix, macports, debian, etc."
     (cl-loop for program in luna-external-program-list
              if (not (or (executable-find program)
                          (file-exists-p program)))
-             do (let ((note (alist-get (cons program distribution)
+             do (let ((note (alist-get program
                                        luna-external-program-notes
                                        nil nil #'equal)))
                   (insert program " is not available")
@@ -220,12 +218,11 @@ guix, macports, debian, etc."
       (insert "All good\n"))
     (special-mode)))
 
-(defun luna-note-extern (program distribution notes)
-  "Set the note for (PROGRAM . DISTRIBUTION) to NOTES.
+(defun luna-note-extern (program notes)
+  "Set the note for PROGRAM to NOTES.
 See ‘luna-external-program-notes’."
-  (declare (indent 2))
-  (setf (alist-get (cons program distribution)
-                   luna-external-program-notes
+  (declare (indent 1))
+  (setf (alist-get program luna-external-program-notes
                    nil nil #'equal)
         notes))
 
