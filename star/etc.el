@@ -106,7 +106,6 @@
  '(outline-minor-mode-cycle t)
  '(outline-minor-mode-highlight 'override)
  '(package-archives '(("melpa" . "http://melpa.org/packages/") ("gnu" . "https://elpa.gnu.org/packages/") ("org" . "https://orgmode.org/elpa/")))
- '(print-circle t nil nil "Print circular data structures.")
  '(recentf-max-saved-items 500)
  '(ring-bell-function 'ignore)
  '(savehist-mode t)

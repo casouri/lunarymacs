@@ -2,10 +2,12 @@
 ;;
 ;; Simple config for programming modes.
 
+(require 'utility)
 ;; Emacs Lisp
 (luna-def-key
  :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
  "<S-return>" #'eval-defun
+ "<C-S-return>" #'eval-defun-and-next
  :leader-prefix
  "eb" #'eval-buffer
  :---
@@ -20,18 +22,14 @@
     (skip-chars-backward "\n")
     (eval-print-last-sexp)))
 
-
 (load-package markdown-mode
   :mode "\\.md$" "\\.markdown$" "\\.mk$")
-
 
 (load-package yaml-mode
   :mode "\\.yaml$")
 
-
 (load-package fish-mode
   :mode "\\.fish$")
-
 
 (load-package haskell-mode
   :mode "\\.hs$"
@@ -51,29 +49,26 @@
    :keymaps 'haskell-interactive-mode-map
    "C-a" #'haskell-interactive-mode-beginning))
 
+;; (luna-on "Brown"
+;;   (defun load-agda ()
+;;     (interactive)
+;;     (let ((coding-system-for-read 'utf-8))
+;;       (load-file
+;;        (shell-command-to-string "~/.cabal/bin/agda-mode locate"))
+;;       (agda2-mode)))
+;;   (add-to-list 'auto-mode-alist '("\\.l?agda\\'" . load-agda)))
 
-(luna-on "Brown"
-  (defun load-agda ()
-    (interactive)
-    (let ((coding-system-for-read 'utf-8))
-      (load-file
-       (shell-command-to-string "~/.cabal/bin/agda-mode locate"))
-      (agda2-mode)))
-  (add-to-list 'auto-mode-alist '("\\.l?agda\\'" . load-agda)))
+;; (luna-on "Brown"
+;;   (load-package matlab
+;;     :init
+;;     (setq matlab-shell-command
+;;           "/Applications/MATLAB_R2018b.app/Contents/MacOS/MATLAB")
+;;     (setq matlab-shell-command-switches (list "-nodesktop"))
+;;     ;; don’t enable company in matlab-shell-mode
+;;     :commands matlab-shell))
 
-(luna-on "Brown"
-  (load-package matlab
-    :init
-    (setq matlab-shell-command
-          "/Applications/MATLAB_R2018b.app/Contents/MacOS/MATLAB")
-    (setq matlab-shell-command-switches (list "-nodesktop"))
-    ;; don’t enable company in matlab-shell-mode
-    :commands matlab-shell))
-
-
-(load-package mips-mode
-  :mode "\\.mips$")
-
+;; (load-package mips-mode
+;;   :mode "\\.mips$")
 
 (load-package web-mode
   :init
@@ -94,8 +89,7 @@
   :config (setq web-mode-markup-indent-offset 2
                 web-mode-auto-close-style 2))
 
-
-;; common lisp
+;; Common lisp.
 (load-package sly
   :commands sly
   :init
@@ -107,13 +101,9 @@
                      (cons 'display-buffer-in-side-window
                            '((side . bottom))))))
 
-
-
 (load-package lua-mode
   :mode "\\.lua$"
   :interpreter "lua")
-
-
 
 ;; Javascript
 (setq js-indent-level 2)
@@ -139,7 +129,6 @@
             (whitespace-mode)))
 
 ;; Scheme
-;;
 ;; Note: C-c C-a to activate a #lang operation in a racket file.
 (load-package geiser
   :commands run-geiser

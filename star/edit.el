@@ -29,8 +29,8 @@
  "rr" #'vr/replace
 
  :---
- :keymaps 'override
- "C-j"     #'avy-goto-word-1
+ ;; :keymaps 'override
+ ;; "C-j"     #'avy-goto-word-1
  :keymaps '(outline-minor-mode-map org-mode-map outline-mode-map)
  "s-i"     #'outline-cycle
  "C-s-i"   #'outline-cycle-buffer
@@ -63,8 +63,8 @@
 
 ;;;; Movement
 
-(load-package avy
-  :commands avy-goto-word-1)
+;; (load-package avy
+;;   :commands avy-goto-word-1)
 
 (load-package expand-region
   :config
@@ -172,10 +172,10 @@
   :commands vundo
   :config (push '(?└ . ?╰) vundo-translation-alist))
 
-(load-package undohist
-  :config
-  (undohist-initialize)
-  (push "COMMIT_EDITMSG" undohist-ignored-files))
+;; (load-package undohist
+;;   :config
+;;   (undohist-initialize)
+;;   (push "COMMIT_EDITMSG" undohist-ignored-files))
 
 ;;;; Application
 
@@ -186,6 +186,20 @@
   ghelp-describe
   ghelp-describe-function
   ghelp-describe-variable)
+
+(load-package inspector
+  :commands inspect-expression
+  :config
+  (setq inspector-end-column 70)
+  (defun inspector-quit ()
+    "Quit the Emacs inspector."
+    (interactive)
+    (setq inspector-history nil)
+    (if (window-prev-buffers)
+        (quit-window)
+      (delete-window))))
+
+
 
 (load-package tramp
   :defer

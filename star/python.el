@@ -7,20 +7,27 @@
 
 ;;; Packages
 
-(load-package sage-shell-mode
-  :init (add-to-list 'auto-mode-alist
-                     '("\\.sage\\'" . sage-shell:sage-mode))
-  :commands sage-shell-mode sage-shell:sage-mode)
+;; (load-package sage-shell-mode
+;;   :init (add-to-list 'auto-mode-alist
+;;                      '("\\.sage\\'" . sage-shell:sage-mode))
+;;   :commands sage-shell-mode sage-shell:sage-mode)
+
+;; (add-hook 'python-mode-hook
+;;           (lambda ()
+;;             (when (and buffer-file-name
+;;                        (not (string-match "\\.sage$"
+;;                                           (buffer-file-name))))
+;;               (eglot-ensure))))
 
 (load-package eglot
   :defer
-  :init
-  (add-hook 'python-mode-hook
-            (lambda ()
-              (when (and buffer-file-name
-                         (not (string-match "\\.sage$"
-                                            (buffer-file-name))))
-                (eglot-ensure)))))
+  :config (push '(python-mode . ("pyright-langserver" "--stdio"))
+                eglot-server-programs)
+  :extern "pyright")
+
+(luna-note-extern "pyright"
+  "Python language server, install by
+npm install --global pyright")
 
 ;;;; Virtual env
 
@@ -34,17 +41,6 @@
 
 ;; if you set this to a absolute path, pyvenv won't work
 (setq python-shell-interpreter "python3")
-
-;;;; Quickrun
-;;
-;; note this is set after setting exec path
-
-(with-eval-after-load 'quickrun
-  (quickrun-add-command
-    "python"
-    '((:command . (lambda () python-shell-interpreter))
-      (:description . "Run python with the binary in `python-shell-interpreter'."))
-    :override t))
 
 ;;;; Mode line
 ;;

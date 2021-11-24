@@ -4,11 +4,7 @@
 
 (luna-def-key
  :leader
- "oc" #'org-capture
-
- :---
- :keymaps 'org-mode-map
- "C-c <tab>" #'outline-toggle-children)
+ "oc" #'org-capture)
 
 ;;; Packages
 

@@ -6,15 +6,15 @@
 
 (luna-def-key
  "s-/"     #'transform-previous-char
- 
  :keymaps '(company-active-map company-search-map)
- ;; "C-p" #'company-select-previous
- ;; "C-n" #'company-select-next
+ "C-p" #'company-select-previous
+ "C-n" #'company-select-next
+ "C-j" (lambda () (interactive) (company-abort) (next-line 1))
  "RET" (lambda () (interactive) (company-abort) (newline 1 t))
  "<return>" (lambda () (interactive) (company-abort) (newline 1 t))
  "=" #'company-complete-selection
  ;; "<tab>" #'company-complete-common-or-commit
- "<tab>" #'company-select-next
+ ;; "<tab>" #'company-select-next
  :keymaps 'company-search-map
  "<escape>" #'company-abort)
 

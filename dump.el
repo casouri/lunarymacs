@@ -26,7 +26,6 @@
                    consult selectrum selectrum-prescient
                    ;; site-lisp
                    transform utility pause color-outline
-                   outline+
                    ;; ranch
                    ghelp
                    ;; lib
