@@ -39,9 +39,9 @@
 
 ;;; Benchmark
 
-(require 'benchmark-init)
-(add-hook 'after-init-hook 'benchmark-init/deactivate)
-(benchmark-init/activate)
+;; (require 'benchmark-init)
+;; (add-hook 'after-init-hook 'benchmark-init/deactivate)
+;; (benchmark-init/activate)
 
 ;;; Configs
 
