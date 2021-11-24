@@ -258,21 +258,8 @@ See ‘luna-external-program-notes’."
       (set-fontset-font fontset charset (apply #'font-spec cjk-spec)))
     fontset))
 
-(defun luna-load-font (face font-name size &rest attrs)
-  "Set font for FACE to FONT-NAME.
-If FONT-NAME is nil, use the first font in ‘luna-font-alist’.
-SIZE is the font size in pt. Add additional face attributes in
-ATTRS.
-
-If called interactively, the setting is saved to the custom file
-and can be reloaded by ‘luna-load-saved-font’."
-  (interactive
-   (list (intern (completing-read
-                  "Face: " (face-list)))
-         (completing-read
-          "Font: " (mapcar #'car luna-font-alist))
-         (string-to-number (completing-read
-                            "Size: " nil nil nil nil nil "13"))))
+(defun luna-font-name-to-spec (font-name size &rest attrs)
+  "Translate FONT-NAME, SIZE and ATTRS to (ASCII-SPEC CJK-SPEC)."
   (let* ((font-spec (if (null font-name)
                         (cdar luna-font-alist)
                       (alist-get font-name luna-font-alist
@@ -284,44 +271,69 @@ and can be reloaded by ‘luna-load-saved-font’."
          (rest-spec (append `(:size ,size) rest-spec))
          (ascii-spec (and ascii-family
                           `(:family ,ascii-family ,@rest-spec)))
-         (cjk-spec (and cjk-family `(:family ,cjk-family ,@rest-spec)))
-         (fontset (luna-create-fontset ascii-spec cjk-spec)))
-    ;; Emacs has a bug that prevents us from setting a fontset for the
-    ;; default face, so we have to use ‘set-frame-parameter’. One of
-    ;; the reason why we create fontsets on-the-fly (by
-    ;; ‘luna-create-fontset’) is because we cannot set default face
-    ;; font and frame parameter in the same time, one always overrides
-    ;; another. With default face we cannot use fontset, with frame
-    ;; parameter we cannot set size dynamically... Oh, and we need to
-    ;; add the form to ‘window-setup-hook’ because if this function
-    ;; runs before that (in init.el, for example), it doesn’t always
-    ;; work properly.
-    (if (and (eq face 'default))
-        (progn (set-frame-parameter nil 'font fontset)
-               (add-hook 'window-setup-hook
-                         `(lambda ()
-                            "Automatically inserted by ‘luna-load-font’."
-                            (set-frame-parameter nil 'font ,fontset))))
+         (cjk-spec (and cjk-family `(:family ,cjk-family ,@rest-spec))))
+    (list ascii-spec cjk-spec)))
+
+(defun luna-load-default-font (font-name size &rest attrs)
+  "Set font for default face to FONT-NAME with SIZE and ATTRS.
+See ‘luna-load-font’."
+  ;; We use a separate function for default font because Emacs has a
+  ;; bug that prevents us from setting a fontset for the default face
+  ;; (although ‘set-frame-parameter’ works). So we just set default
+  ;; face with ASCII font and use default fontset for Unicode font.
+  (interactive
+   (list (completing-read
+          "Font: " (mapcar #'car luna-font-alist))
+         (string-to-number (completing-read
+                            "Size: " nil nil nil nil nil "13"))))
+  (let* ((specs (apply #'luna-font-name-to-spec font-name size attrs))
+         (ascii (apply #'font-spec (car specs)))
+         (cjk (apply #'font-spec (cadr specs))))
+    (set-face-attribute 'default nil :font ascii)
+    (set-fontset-font t 'han cjk)
+    (set-fontset-font t 'cjk-misc cjk)
+    (set-fontset-font t 'symbol cjk nil 'append)))
+
+(defun luna-load-font (face font-name size &rest attrs)
+  "Set font for FACE to FONT-NAME.
+If FONT-NAME is nil, use the first font in ‘luna-font-alist’.
+SIZE is the font size in pt. Add additional face attributes in
+ATTRS.
+
+Use ‘luna-save-font-settings’ to save font settings and use
+‘luna-load-saved-font’ to load them next time."
+  (interactive
+   (list (intern (completing-read
+                  "Face: " (face-list)))
+         (completing-read
+          "Font: " (mapcar #'car luna-font-alist))
+         (string-to-number (completing-read
+                            "Size: " nil nil nil nil nil "13"))))
+  (if (and (eq face 'default))
+      (apply #'luna-load-default-font font-name size attrs)
+    (let* ((fontset
+            (apply #'luna-create-fontset
+                   (apply #'luna-font-name-to-spec font-name size attrs))))
       (apply #'set-face-attribute face nil
              :font fontset
              :fontset fontset
-             attrs))
-    ;; Save the settings.
-    (setf (alist-get face luna-font-settings) (list font-name size))
-    (when (called-interactively-p 'any)
-      (custom-set-variables
-	   `(luna-font-settings
-	     ',luna-font-settings
-	     nil nil "Automatically saved by ‘luna-load-font’"))
-      (custom-save-all))))
+             attrs)))
+  ;; Save the settings.
+  (setf (alist-get face luna-font-settings) `(,font-name ,size ,@attrs))
+  (custom-set-variables
+   `(luna-font-settings
+	 ',luna-font-settings
+	 nil nil "Automatically saved by ‘luna-load-font’")))
+
+(defun luna-save-font-settings ()
+  "Save font-settings set by ‘luna-load-font’."
+  (interactive)
+  (custom-save-all))
 
 (defun luna-load-saved-font ()
   "Load font settings saved in ‘luna-font-settings’."
   (dolist (setting luna-font-settings)
-	(let ((face (car setting))
-		  (font-name (cadr setting))
-          (size (caddr setting)))
-	  (luna-load-font face font-name size))))
+	(apply #'luna-load-font setting)))
 
 (define-minor-mode luna-scale-cjk-mode
   "Scale CJK font to align CJK font and ASCII font."
@@ -335,7 +347,7 @@ and can be reloaded by ‘luna-load-saved-font’."
 
 (defun luna-enable-apple-emoji ()
   "Enable Apple emoji display."
-  (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
+  (set-fontset-font t 'emoji (font-spec :family "Apple Color Emoji")
                     nil 'prepend))
 
 

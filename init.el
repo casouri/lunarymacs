@@ -89,11 +89,10 @@
   (when (display-graphic-p)
 	(luna-scale-cjk-mode)
 	(luna-enable-apple-emoji)
-    (luna-load-font 'default "IBM Plex Mono" 13)
+    (luna-load-font 'default "IBM Plex Mono" 13 :weight 'medium)
+    (luna-load-font 'fixed-pitch "IBM Plex Mono" 13 :weight 'medium)
     (luna-load-font 'variable-pitch "SF Pro Text" 16)
-    (luna-load-font 'fixed-pitch "IBM Plex Mono" 12)
-    (luna-load-font 'mode-line "SF Pro Text" 13 :weight 'light)
-    (luna-load-saved-font)))
+    (luna-load-font 'mode-line "SF Pro Text" 13 :weight 'light)))
 
 ;;;; Keys
 (luna-on "Brown"
