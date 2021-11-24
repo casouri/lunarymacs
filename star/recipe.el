@@ -2,6 +2,7 @@
 
 (setq cowboy-recipe-alist
       '((matlab . (:http "https://git.code.sf.net/p/matlab-emacs/src"))
+        (inspector . (:repo "mmontone/emacs-inspector"))
         ;; Full clones.
         (expand-region . (:repo "casouri/expand-region.el"
                                 :option (:full-clone t)))
