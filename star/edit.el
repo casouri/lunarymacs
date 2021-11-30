@@ -97,8 +97,8 @@
                           (point) (1+ (point)))))
           (tree-sitter-select-node node))))))
 
-(load-package iscroll
-  :commands iscroll-mode)
+;; (load-package iscroll
+;;   :commands iscroll-mode)
 
 ;;;; Structure
 
@@ -169,8 +169,7 @@
 ;;;; Undo & history
 
 (load-package vundo
-  :commands vundo
-  :config (push '(?└ . ?╰) vundo-translation-alist))
+  :commands vundo)
 
 ;; (load-package undohist
 ;;   :config
