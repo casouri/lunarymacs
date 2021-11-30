@@ -60,7 +60,7 @@ FONT-NAMEs are keys in ‘luna-font-alist’.")
 
 (defvar luna-cjk-rescale-alist
   '(("Source Han Serif SC" . 1.3)
-    ("Source Han Sans SC" . 1.3)
+    ;; ("Source Han Sans SC" . 1.3)
     ("FZFW ZhuZi MinchoS" . 1.3))
   "A list of font names that should be rescaled.")
 
