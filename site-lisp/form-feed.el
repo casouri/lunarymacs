@@ -104,9 +104,9 @@ columns.  A value of -1 would leave the last column empty."
 ;;; Functions
 
 (defun form-feed-fontify (beg end)
-  "Fonfity page breaks."
+  "Fonfity page breaks at beginning of line between BEG and END."
   (goto-char beg)
-  (while (re-search-forward "" end t)
+  (while (re-search-forward "^" end t)
     (put-text-property (match-beginning 0) (match-end 0)
                        'font-lock-face 'form-feed-line)
     (put-text-property (match-beginning 0) (match-end 0)
