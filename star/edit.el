@@ -97,9 +97,6 @@
                           (point) (1+ (point)))))
           (tree-sitter-select-node node))))))
 
-;; (load-package iscroll
-;;   :commands iscroll-mode)
-
 ;;;; Structure
 
 (load-package color-outline

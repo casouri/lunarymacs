@@ -15,11 +15,6 @@
 
 ;;; Packages
 
-;; (load-package binder
-;;   :commands
-;;   binder-toggle-sidebar
-;;   binder-reveal-in-sidebar)
-
 (load-package zeft
   :commands zeft
   :config
@@ -45,22 +40,6 @@
 (load-package quanjiao
   :hook (text-mode-hook . quanjiao-mode))
 
-(load-package iscroll
-  :hook (text-mode-hook . iscroll-mode)
-  :config
-  (setq iscroll-preserve-screen-position t))
-
-;; (load-package multi-translate
-;;   :commands multi-translate-at-point
-;;   :config (push 'youdao multi-translate-word-backends)
-;;   :init (defalias 'mtran 'multi-translate-at-point))
-
-;; (defun dic ()
-;;   "Open Dictionary.app and lookup word at point."
-;;   (interactive)
-;;   (shell-command-to-string
-;;    (format "open dict://%s" (word-at-point))))
-
 (load-package xeft
   :commands xeft
   :config
@@ -79,3 +58,28 @@
   (add-hook 'bklink-minor-mode-hook #'xeft-setup))
 
 (load-package flique :defer t)
+
+;;; Deprecated
+
+(when nil
+  (load-package binder
+    :commands
+    binder-toggle-sidebar
+    binder-reveal-in-sidebar)
+
+  (load-package iscroll
+    :hook (text-mode-hook . iscroll-mode)
+    :config
+    (setq iscroll-preserve-screen-position t))
+
+  (load-package multi-translate
+    :commands multi-translate-at-point
+    :config (push 'youdao multi-translate-word-backends)
+    :init (defalias 'mtran 'multi-translate-at-point))
+
+  (defun dic ()
+    "Open Dictionary.app and lookup word at point."
+    (interactive)
+    (shell-command-to-string
+     (format "open dict://%s" (word-at-point))))
+  )
