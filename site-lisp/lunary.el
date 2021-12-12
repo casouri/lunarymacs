@@ -69,6 +69,7 @@ FONT-NAMEs are keys in ‘luna-font-alist’.")
     ("IBM Plex Mono" . ("IBM Plex Mono" "Source Han Serif SC"))
     ("SF Pro Text" . ("SF Pro Text" "Source Han Serif SC"))
     ("IBM Plex Sans" . ("IBM Plex Sans" "Source Han Serif SC"))
+    ("Dossier" . ("Dossier" "Source Han Serif SC"))
 
     ("方正fW筑紫明朝" . (nil "FZFW ZhuZi MinchoS"))
     ("Source Han Serif" . (nil "Source Han Serif SC"))
