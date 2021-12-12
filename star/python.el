@@ -74,3 +74,17 @@ npm install --global pyright")
                               (featurep 'pyvenv))
                          (list "  " pyvenv-mode-line-indicator "  ")
                        "")))
+
+;;;; Mod
+
+(with-eval-after-load 'python
+  (defun python-indent-dedent-line-backspace (arg)
+    "De-indent current line or delete.
+Argument ARG is passed to `backward-delete-char-untabify' when
+point is not in between the indentation. If region is active,
+delete not indent."
+    (interactive "*p")
+    (if (region-active-p)
+        (backward-delete-char-untabify arg)
+      (when (null (python-indent-dedent-line))
+        (backward-delete-char-untabify arg)))))
