@@ -118,8 +118,6 @@
 (luna-on "Brown"
   (setq scroll-up-aggressively 0.01
         scroll-down-aggressively 0.01
-        scroll-margin 0
-        scroll-conservatively 5
         redisplay-skip-fontification-on-input t)
   (setq mouse-wheel-flip-direction t))
 
