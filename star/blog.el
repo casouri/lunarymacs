@@ -21,7 +21,15 @@
   (setq-local outline-regexp "◊\\(sub\\)?section{"
               outline-minor-mode-cycle t
               outline-minor-mode-highlight 'append)
-  (outline-minor-mode))
+  (variable-pitch-mode)
+  (when (featurep 'highlight-parentheses)
+    (highlight-parentheses-mode -1))
+  (outline-minor-mode)
+  (font-lock-add-keywords
+   nil `((,(rx (seq "◊" (+ (not (any "[" "{"))))) 0 'fixed-pitch prepend)
+         (,(rx (or "[" "]" "{" "}")) 0 'fixed-pitch prepend))
+   'append)
+  (jit-lock-register #'pollen-fontify-code))
 
 (defun pollen-indent-function ()
   "Indent function for Pollen source."
@@ -40,7 +48,27 @@
         (when (eq (point) (line-beginning-position))
           (skip-syntax-forward "-"))))))
 
-(load-package company-pollen :defer t)
+(defun pollen-fontify-code (start end)
+  "Fontify code and bcode with fixed-pitch."
+  (while (re-search-forward "◊b?code{" end t)
+    (let ((start (point))
+          (depth (car (syntax-ppss))))
+      (while (and (search-forward "}" nil t)
+                  ;; Skip "}" in strings.
+                  (or (nth 3 (syntax-ppss))
+                      ;; Skip "}" in comments.
+                      (nth 4 (syntax-ppss))
+                      ;; Skip nested "}". (syntax-ppss (1- (point)))
+                      ;; moves point back, so we use (point) rather
+                      ;; than (1- (point)).
+                      (not (eq (car (syntax-ppss (point)))
+                               (1- depth))))))
+      (when (looking-back "}" 1)
+        (put-text-property start (1- (point))
+                           'font-lock-face 'fixed-pitch)
+        (put-text-property start (1- (point)) 'face 'fixed-pitch))))
+  `(jit-lock-bounds start . ,(point)))
+
 
 ;;; Notes
 
