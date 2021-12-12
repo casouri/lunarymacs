@@ -133,7 +133,7 @@
 Keeps the relative position of point against window."
   (interactive)
   ;; (luna-scroll-setup-optimize)
-  (if (derived-mode-p 'prog-mode)
+  (if t
       ;; This is actually better than
       ;; `scroll-preserve-screen-position'.
       (progn (scroll-down 3)
@@ -147,7 +147,7 @@ Keeps the relative position of point against window."
 Keeps the relative position of point against window."
   (interactive)
   ;; (luna-scroll-setup-optimize)
-  (if (derived-mode-p 'prog-mode)
+  (if t
       (progn (scroll-up 3)
              (vertical-motion 3))
     (iscroll-up 2))
