@@ -6,9 +6,6 @@
 (require 'cl-lib)
 (require 'utility)
 
-(autoload 'iscroll-down "iscroll.el")
-(autoload 'iscroll-up "iscroll.el")
-
 ;;; Keys
 
 (luna-def-key
@@ -105,12 +102,8 @@
   "Scroll down `luna-scroll-amount' lines.
 Keeps the relative position of point against window."
   (interactive)
-  (if t
-      ;; This is actually better than
-      ;; `scroll-preserve-screen-position'.
-      (progn (scroll-down 3)
-             (vertical-motion -3))
-    (iscroll-down 2))
+  (scroll-down 3)
+  (vertical-motion -3)
   ;; Prevent me from accidentally inserting n and p.
   (set-transient-map luna-scroll-map t))
 
@@ -118,10 +111,8 @@ Keeps the relative position of point against window."
   "Scroll up `luna-scroll-amount' lines.
 Keeps the relative position of point against window."
   (interactive)
-  (if t
-      (progn (scroll-up 3)
-             (vertical-motion 3))
-    (iscroll-up 2))
+  (scroll-up 3)
+  (vertical-motion 3)
   (set-transient-map luna-scroll-map t))
 
 ;;; Better C-a
@@ -166,12 +157,13 @@ delete region when invoked."
       (deactivate-mark)
       (when delete (delete-region beg end))
       (overlay-put ov 'face '(:underline t))
-      (pause
-        (query-replace string (buffer-substring-no-properties
-                               (overlay-start ov)
-                               (overlay-end ov)))
-        nil
-        (delete-overlay ov)))))
+      (let ((post-command-hook nil))
+        (pause
+          (query-replace string (buffer-substring-no-properties
+                                 (overlay-start ov)
+                                 (overlay-end ov)))
+          nil
+          (delete-overlay ov))))))
 
 (defun query-replace+delete (beg end)
   "Delete region between BEG and END and query replace it.
@@ -190,7 +182,9 @@ Edit the underlined region and type C-c C-c to start
     (deactivate-mark)
     (isearch-yank-kill)))
 
-(defun luna-rcenter-advice (&rest _) (recenter))
+(defun luna-rcenter-advice (&rest _)
+  "If point goes out of the window, recenter rather than move just enough."
+  (when (pos-visible-in-window-p) (recenter)))
 (advice-add 'isearch-repeat-forward :after #'luna-rcenter-advice)
 (advice-add 'isearch-repeat-backward :after #'luna-rcenter-advice)
 (add-hook 'isearch-mode-hook #'luna-isearch-with-region)
@@ -217,14 +211,7 @@ Edit the underlined region and type C-c C-c to start
          (kill-new (buffer-substring b e))
          (message "Region saved")))
  "r" #'query-replace+
- "R" #'query-replace+delete
- ;; isolate
- "s" #'isolate-quick-add
- "S" #'isolate-long-add
- "d" #'isolate-quick-delete
- "D" #'isolate-long-delete
- "c" #'isolate-quick-change
- "C" #'isolate-long-change)
+ "R" #'query-replace+delete)
 
 ;;; Hungrey delete
 
@@ -262,8 +249,7 @@ Edit the underlined region and type C-c C-c to start
 ;;; Jump back
 
 (defun push-mark-unless (&rest _)
-  "Push a marker to `mark-ring'...
-...unless a marker in the same line already exists."
+  "Push a marker to `mark-ring' unless a marker in the same line already exists."
   (interactive)
   (let ((marker (catch 'ret
                   (dolist (marker mark-ring)
@@ -279,7 +265,7 @@ Edit the underlined region and type C-c C-c to start
     (message "Mark set")))
 
 (defun mark-before (command)
-  "Add advice after COMMAND to push mark before it executes."
+  "Add advice for COMMAND to push mark before it executes."
   (advice-add command :before #'push-mark-unless))
 
 (mark-before #'isearch-forward)

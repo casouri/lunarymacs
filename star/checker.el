@@ -62,7 +62,3 @@ For guix:
 ;; on save, and checking on post-command-hook is also more convenient.
 ;; For example, iimg doesn’t work with wucuo: it checks the base64
 ;; strings and hangs Emacs on save.
-
-(load-package writegood-mode
-  :hook (text-mode . writegood-mode))
-
