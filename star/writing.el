@@ -9,6 +9,8 @@
  :keymaps 'text-mode-map
  ;; "<tab>" #'tab-to-tab-stop
  "<C-tab>" '("insert-tab" . (lambda () (interactive) (insert "\t")))
+ :keymaps 'Texinfo-mode-map
+ "C-c l" #'texinfo-caps-to-vars
  :clear
  :leader
  "df" #'xeft)
@@ -58,6 +60,16 @@
   (add-hook 'bklink-minor-mode-hook #'xeft-setup))
 
 (load-package flique :defer t)
+
+(with-eval-after-load 'texinfo
+  (defun texinfo-caps-to-vars ()
+    "Transform NAME at point to @var{name}."
+    (interactive)
+    (skip-chars-forward " ")
+    (let ((var (thing-at-point 'word))
+          (bounds (bounds-of-thing-at-point 'word)))
+      (delete-region (car bounds) (cdr bounds))
+      (insert (format "@var{%s}" (downcase var))))))
 
 ;;; Deprecated
 
