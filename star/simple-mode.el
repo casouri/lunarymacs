@@ -3,6 +3,7 @@
 ;; Simple config for programming modes.
 
 (require 'utility)
+
 ;; Emacs Lisp
 (luna-def-key
  :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
@@ -49,27 +50,6 @@
    :keymaps 'haskell-interactive-mode-map
    "C-a" #'haskell-interactive-mode-beginning))
 
-;; (luna-on "Brown"
-;;   (defun load-agda ()
-;;     (interactive)
-;;     (let ((coding-system-for-read 'utf-8))
-;;       (load-file
-;;        (shell-command-to-string "~/.cabal/bin/agda-mode locate"))
-;;       (agda2-mode)))
-;;   (add-to-list 'auto-mode-alist '("\\.l?agda\\'" . load-agda)))
-
-;; (luna-on "Brown"
-;;   (load-package matlab
-;;     :init
-;;     (setq matlab-shell-command
-;;           "/Applications/MATLAB_R2018b.app/Contents/MacOS/MATLAB")
-;;     (setq matlab-shell-command-switches (list "-nodesktop"))
-;;     ;; don’t enable company in matlab-shell-mode
-;;     :commands matlab-shell))
-
-;; (load-package mips-mode
-;;   :mode "\\.mips$")
-
 (load-package web-mode
   :init
   (add-to-list 'luna-package-list 'flycheck t)
@@ -107,20 +87,6 @@
 
 ;; Javascript
 (setq js-indent-level 2)
-
-(load-package tide
-  :hook ((js-mode-hook. typescript-mode-hook) . setup-tide-mode))
-
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode)
-  (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-  (setq-local flycheck-check-syntax-automatically '(save mode-enabled))
-  (setq-local company-tooltip-align-annotations t)
-  (tide-hl-identifier-mode +1)
-  (add-to-list 'luna-smart-format-alist '(typescript-mode . tide-format-before-save))
-  (add-to-list 'luna-smart-format-alist '(js-mode . tide-format-before-save)))
 
 ;; Makefile
 (add-hook 'makefile-mode-hook
@@ -174,6 +140,12 @@
 (add-hook 'nxml-mode-hook #'setup-xml)
 (add-hook 'sgml-mode-hook #'setup-xml)
 
+;; Rust
+(load-package rust-mode
+  :mode "\\.rs$"
+  :config
+  (add-hook 'rust-mode-hook #'eglot-ensure))
+
 ;;; General package
 
 (load-package aggressive-indent
@@ -198,11 +170,14 @@
   (setq read-process-output-max (* 1024 1024))
   ;; Otherwise eglot highlights documentations, which is annoying.
   (push :documentHighlightProvider eglot-ignored-server-capabilites)
+  ;; Has to be here because needs ‘eglot-server-programs’ loaded.
   (luna-on "Brown"
     (add-to-list 'eglot-server-programs
                  '(c-mode . ("~/attic/ccls/Release/ccls")))
     (add-to-list 'eglot-server-programs
-                 '(c++-mode . ("~/attic/ccls/Release/ccls")))))
+                 '(c++-mode . ("~/attic/ccls/Release/ccls")))
+    (add-to-list 'eglot-server-programs
+                 '(rust-mode . ("rust-analyzer")))))
 
 ;; (load-package quickrun
 ;;   :commands

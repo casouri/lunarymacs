@@ -57,6 +57,7 @@
  "rr" #'replace-regexp
  "rs" #'replace-string
 
+ "cc" #'compile
  "ld" #'luna-dump
  "cw" #'count-words
  "cm" #'customize
