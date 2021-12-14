@@ -39,6 +39,10 @@ newline.")
   "By default dump files doesn’t save ‘load-path’.
 We need to manually save and restore it. See manual for more info.")
 
+(defvar luna-env-vars nil
+  "When dumping, load environment from shell into this variable.
+At startup, load environment from this variable.")
+
 (defvar luna-dump-location-alist
   '((Emacs
      "/Users/yuan/emacs-head/nextstep/Emacs.app/Contents/MacOS/Emacs"

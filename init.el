@@ -84,37 +84,32 @@
 (when (window-system)
   (luna-load-theme 'light))
 
-;;;; Font
 (luna-on "Brown"
+;;;; Font
   (when (display-graphic-p)
+    (set-frame-width (selected-frame) 150)
+    (set-frame-height (selected-frame) 44)
 	(luna-enable-apple-emoji)
     (luna-load-font 'default "IBM Plex Mono" 13 :weight 'medium)
     (luna-load-font 'fixed-pitch "IBM Plex Mono" 13 :weight 'medium)
     (luna-load-font 'variable-pitch "SF Pro Text" 16)
-    (luna-load-font 'mode-line "SF Pro Text" 13 :weight 'light)))
-
+    (luna-load-font 'mode-line "SF Pro Text" 13 :weight 'light))
 ;;;; Keys
-(luna-on "Brown"
-  (menu-bar-mode -1)
   (setq mac-option-modifier 'meta
         mac-command-modifier 'super
         mac-pass-command-to-system nil ; fix cmd h
         mac-system-move-file-to-trash-use-finder t)
-
   (global-set-key (kbd "s-c") #'kill-ring-save)
-  (global-set-key (kbd "s-v") #'yank))
-
-;;;; ENV
-(luna-on "Brown"
-  (luna-load-env)
-  ;; Because Apple.
-  (when (equal default-directory "/") (cd "~/"))
+  (global-set-key (kbd "s-v") #'yank)
+;;;; Environment
+  (if luna-dumped
+      (dolist (var luna-env-vars)
+        (exec-path-from-shell-setenv (car var) (cdr var)))
+    (exec-path-from-shell-initialize))
   (add-to-list 'load-path "/opt/local/share/emacs/site-lisp")
   (setq source-directory (expand-file-name "~/emacs"))
-  (setq xref-search-program 'ripgrep))
-
-;;;; Smooth scrolling
-(luna-on "Brown"
+  (setq xref-search-program 'ripgrep)
+;;;; Scrolling
   (setq scroll-up-aggressively 0.01
         scroll-down-aggressively 0.01
         redisplay-skip-fontification-on-input t)

@@ -34,6 +34,12 @@
 
 (require 'no-littering)
 
+;;; Env
+
+(require 'exec-path-from-shell)
+(setq luna-env-vars (exec-path-from-shell-getenvs
+                     exec-path-from-shell-variables))
+
 ;;; Theme
 
 (add-to-list 'custom-theme-load-path
