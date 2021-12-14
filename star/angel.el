@@ -101,38 +101,10 @@
     map)
   "Transient map for `luna-scroll-mode'.")
 
-(defvar luna-scroll-optimized-command-list
-  '(luna-scroll-down-reserve-point
-    luna-scroll-up-reserve-point
-    iscroll-next-line
-    iscroll-next-line)
-  "Commands that inhibit `post-command-hook'.")
-
-(defsubst luna-scroll-setup-optimize ()
-  "Setup optimization and return the recover function."
-  ;; Inhibit flyspell jit-lock and other stuff when scrolling. In
-  ;; particular, flyspell is very slow.
-  (declare (indent 1))
-  (let* ((post-command-hook-backup post-command-hook)
-         (pre-command-hook-backup pre-command-hook)
-         (recover-fn
-          (lambda ()
-            (when (not (memq this-command
-                             luna-scroll-optimized-command-list))
-              (setq post-command-hook
-                    post-command-hook-backup
-                    pre-command-hook
-                    pre-command-hook-backup)))))
-    (when (not (memq last-command luna-scroll-optimized-command-list))
-      ;; First in a series of luna scroll commands. Empty
-      ;; `post-command-hook' and add a hook to recover it.
-      (add-hook 'post-command-hook recover-fn 0 t))))
-
 (defun luna-scroll-down-reserve-point ()
   "Scroll down `luna-scroll-amount' lines.
 Keeps the relative position of point against window."
   (interactive)
-  ;; (luna-scroll-setup-optimize)
   (if t
       ;; This is actually better than
       ;; `scroll-preserve-screen-position'.
@@ -146,7 +118,6 @@ Keeps the relative position of point against window."
   "Scroll up `luna-scroll-amount' lines.
 Keeps the relative position of point against window."
   (interactive)
-  ;; (luna-scroll-setup-optimize)
   (if t
       (progn (scroll-up 3)
              (vertical-motion 3))

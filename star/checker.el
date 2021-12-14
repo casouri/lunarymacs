@@ -24,6 +24,11 @@
   (add-hook 'c++-mode-hook #'flymake-mode))
 
 
+(defvar flyspell-skip-commands
+  '(scroll-down scroll-up next-line previous-line luna-scroll-up-reserve-point
+                luna-scroll-down-reserve-point)
+  "Don’t run ‘flyspell-post-command-hook’ after these commands.")
+
 ;; Install dictionaries: http://wordlist.aspell.net
 ;; or by macports.
 (load-package flyspell
@@ -38,6 +43,10 @@
                            '(nil "[[:alpha:]]"
                                  "[^[:alpha:]]"
                                  "['’]" nil ("-B") nil utf-8))))
+  (advice-add 'flyspell-post-command-hook :around
+              (lambda (oldfn &rest args)
+                (unless (memq this-command flyspell-skip-commands)
+                  (apply oldfn args))))
   :extern "aspell"
   :hook
   (text-mode-hook . flyspell-mode)
