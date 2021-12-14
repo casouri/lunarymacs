@@ -60,9 +60,11 @@ The padding pushes TEXT to the right edge of the mode-line."
                   (:propertize "%[%b%]" face (:weight bold))
                   (:eval (luna-mode-line-coding-system))
                   ,spaces
+                  ,(propertize " " 'display '(raise 0.3))
                   ,(if (featurep 'minions)
                        'minions-mode-line-modes
                      'mode-line-modes)
+                  ,(propertize " " 'display '(raise -0.3))
                   ,spaces
                   (:eval (if (buffer-modified-p)
                              ,(if (display-graphic-p) "ΦAΦ" "OAO")
@@ -72,8 +74,6 @@ The padding pushes TEXT to the right edge of the mode-line."
                   (:eval (concat (luna-mode-line-with-padding ,percentage)
                                  "%%"))
                   ;; (:eval (concat ,spaces "(%l) " ,percentage "%%"))
-                  (:propertize " " display (raise 0.3))
-                  (:propertize " " display (raise -0.3))
                   )))
 
 (setq-default header-line-format nil)
