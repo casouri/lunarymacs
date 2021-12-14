@@ -87,7 +87,6 @@
 ;;;; Font
 (luna-on "Brown"
   (when (display-graphic-p)
-	(luna-scale-cjk-mode)
 	(luna-enable-apple-emoji)
     (luna-load-font 'default "IBM Plex Mono" 13 :weight 'medium)
     (luna-load-font 'fixed-pitch "IBM Plex Mono" 13 :weight 'medium)

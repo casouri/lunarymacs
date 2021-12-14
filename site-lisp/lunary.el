@@ -65,26 +65,31 @@ FONT-NAMEs are keys in ‘luna-font-alist’.")
   "A list of font names that should be rescaled.")
 
 (defvar luna-font-alist
-  `(("SF Mono" . ("SF Mono" "Source Han Serif SC"))
-    ("IBM Plex Mono" . ("IBM Plex Mono" "Source Han Serif SC"))
-    ("SF Pro Text" . ("SF Pro Text" "Source Han Serif SC"))
-    ("IBM Plex Sans" . ("IBM Plex Sans" "Source Han Serif SC"))
-    ("Dossier" . ("Dossier" "Source Han Serif SC"))
+  `(("SF Mono" . ("SF Mono" "Source Han Serif SC" 1.3))
+    ("IBM Plex Mono" . ("IBM Plex Mono" "Source Han Serif SC" 1.2))
+    ("SF Pro Text" . ("SF Pro Text" "Source Han Serif SC" 1.1))
+    ("IBM Plex Sans" . ("IBM Plex Sans" "Source Han Serif SC" 1.1))
+    ("Dossier" . ("Dossier" "Source Han Serif SC" 1.3))
 
-    ("方正fW筑紫明朝" . (nil "FZFW ZhuZi MinchoS"))
-    ("Source Han Serif" . (nil "Source Han Serif SC"))
-    ("Source Han Sans" . (nil "Source Han Sans SC"))
+    ("方正fW筑紫明朝" . (nil "FZFW ZhuZi MinchoS" 1))
+    ("Source Han Serif" . (nil "Source Han Serif SC" 1))
+    ("Source Han Sans" . (nil "Source Han Sans SC" 1))
 
-    ("Charter 13" . ("Charter" nil :size 13))
-    ("GNU Unifont 15" . ("Unifont" nil :size 15))
-    ("SF Mono Light 13" . ("SF Mono" nil :size 13 :weight light))
-    ("PragmataPro 13" . ("PragmataPro Mono" nil :size 13))
+    ("Charter 13" . ("Charter" nil 1 :size 13))
+    ("GNU Unifont 15" . ("Unifont" nil 1 :size 15))
+    ("SF Mono Light 13" . ("SF Mono" nil 1 :size 13 :weight light))
+    ("PragmataPro 13" . ("PragmataPro Mono" nil 1 :size 13))
     ("Iosevka 13" . ("Iosevka" nil :size 14))
-    ("JetBrains Mono 12" . ("JetBrains Mono" nil :size 12))
-    ("Roboto Mono 12" . ("Roboto Mono" nil :size 12 :weight light)))
+    ("JetBrains Mono 12" . ("JetBrains Mono" nil 1 :size 12))
+    ("Roboto Mono 12" . ("Roboto Mono" nil 1 :size 12 :weight light)))
   "An alist of all the fonts you can switch between by `luna-load-font'.
-Each element is like (FONT-NAME . FONT-DEF). FONT-DEF can be a
-fontset name, or a list of font specs that ‘font-spec’ accepts.")
+Each element is like
+
+    (FONT-NAME . (ASCII-NAME CJK-NAME CJK-SCALE))
+
+FONT-NAME is the display name, ASCII-NAME is the ASCII font
+family name, CJK-NAME is the CJK font family name, CJK-SCALE is
+the CJK font rescale ratio.")
 
 (defvar luna-load-theme-hook nil
   "Hook run after ‘luna-load-theme’.")
@@ -265,14 +270,18 @@ See ‘luna-external-program-notes’."
                         (cdar luna-font-alist)
                       (alist-get font-name luna-font-alist
                                  nil nil #'equal)))
-         (ascii-family (car font-spec))
-         (cjk-family (cadr font-spec))
-         (rest-spec (append (cddr font-spec) attrs))
+         (ascii-family (nth 0 font-spec))
+         (cjk-family (nth 1 font-spec))
+         (cjk-scale (nth 2 font-spec))
+         (rest-spec (append (nthcdr 3 font-spec) attrs))
          ;; (rest-spec (setf (plist-get rest-spec :size) size))
-         (rest-spec (append `(:size ,size) rest-spec))
+         (ascii-rest-spec (append `(:size ,size) rest-spec))
+         (cjk-rest-spec (append `(:size ,(* cjk-scale size))
+                                rest-spec))
          (ascii-spec (and ascii-family
-                          `(:family ,ascii-family ,@rest-spec)))
-         (cjk-spec (and cjk-family `(:family ,cjk-family ,@rest-spec))))
+                          `(:family ,ascii-family ,@ascii-rest-spec)))
+         (cjk-spec (and cjk-family
+                        `(:family ,cjk-family ,@cjk-rest-spec))))
     (list ascii-spec cjk-spec)))
 
 (defun luna-load-default-font (font-name size &rest attrs)
