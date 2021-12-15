@@ -154,8 +154,10 @@
   ftable-reformat)
 
 (load-package ws-butler
-  ;; global mode interferes with magit
-  :hook (prog-mode . ws-butler-mode))
+  ;; Global mode interferes with magit.
+  :hook
+  (prog-mode-hook . ws-butler-mode)
+  (text-mode-hook . ws-butler-mode))
 
 (load-package separedit
   :commands separedit
