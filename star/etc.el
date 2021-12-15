@@ -85,7 +85,6 @@
  '(eldoc-echo-area-use-multiline-p 2)
  '(eldoc-idle-delay 0.1)
  '(electric-pair-mode t)
- '(electric-quote-mode t)
  '(enable-recursive-minibuffers t)
  '(fast-but-imprecise-scrolling t)
  '(global-so-long-mode t)

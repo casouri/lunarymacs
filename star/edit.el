@@ -163,6 +163,9 @@
   (setq separedit-default-mode 'text-mode
         separedit-remove-trailing-spaces-in-comment t))
 
+(add-hook 'prog-mode-hook #'electric-quote-local-mode)
+(add-hook 'text-mode-hook #'electric-quote-local-mode)
+
 ;;;; Undo & history
 
 (load-package vundo
