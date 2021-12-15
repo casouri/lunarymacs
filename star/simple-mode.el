@@ -156,13 +156,6 @@
           lisp-mode-hook)
          . aggressive-indent-mode))
 
-(load-package citre
-  :init
-  (setq citre-ctags-program "uctags"
-        citre-readtags-program "ureadtags")
-  (add-hook 'haskell-mode-hook #'citre-mode)
-  :commands citre-mode)
-
 (load-package eglot
   ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
   :commands eglot eglot-ensure
@@ -178,19 +171,3 @@
                  '(c++-mode . ("~/attic/ccls/Release/ccls")))
     (add-to-list 'eglot-server-programs
                  '(rust-mode . ("rust-analyzer")))))
-
-;; (load-package quickrun
-;;   :commands
-;;   quickrun
-;;   quickrun-region
-;;   quickrun-with-arg
-;;   quickrun-shell
-;;   quickrun-compile-only
-;;   quickrun-replace-region
-;;   quickrun-autorun-mode)
-
-
-;; (load-package lsp-mode
-;;   :init (setq lsp-keymap-prefix "C-SPC l")
-;;   :config (setq lsp-auto-guess-root t)
-;;   :commands (lsp))
