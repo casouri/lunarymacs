@@ -52,10 +52,6 @@
 
 (load-package web-mode
   :init
-  (add-to-list 'luna-package-list 'flycheck t)
-  (with-eval-after-load 'flycheck
-    (flycheck-add-mode 'html-tidy 'web-mode))
-  (add-hook 'web-mode-hook #'flycheck-mode)
   (add-hook 'css-mode-hook #'aggressive-indent-mode)
   :mode
   "\\.phtml\\'"
@@ -118,11 +114,13 @@
         "* Guile REPL *"))
 
 ;; C/C++
-(dolist (hook '(c-mode-hook c++-mode-hook))
-  (add-hook hook (lambda ()
-                   (setq-local company-transformers nil)
-                   (setq-local comment-multi-line t)
-                   (eglot-ensure))))
+(defun setup-c ()
+  "Setup for ‘c-mode’ and ‘c++-mode’."
+  (setq-local company-transformers nil)
+  (setq-local comment-multi-line t)
+  (eglot-ensure))
+(add-hook 'c-mode-hook #'setup-c)
+(add-hook 'c++-mode-hook #'setup-c)
 
 ;; XML
 (defun setup-xml ()
@@ -144,7 +142,11 @@
 (load-package rust-mode
   :mode "\\.rs$"
   :config
-  (add-hook 'rust-mode-hook #'eglot-ensure))
+  (add-hook 'rust-mode-hook #'setup-rust)
+  (defun setup-rust ()
+    "Setup for ‘rust-mode’."
+    (eglot-ensure)
+    (electric-quote-local-mode -1)))
 
 ;;; General package
 
