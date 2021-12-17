@@ -37,4 +37,4 @@
   :after magit)
 
 (load-package magit-todos
-  :hook (magit-mode . magit-todos-mode))
+  :autoload-hook (magit-mode . magit-todos-mode))

@@ -21,7 +21,7 @@
   :commands olivetti-mode)
 
 (load-package valign
-  :hook (org-mode-hook . valign-mode))
+  :autoload-hook (org-mode-hook . valign-mode))
 
 (with-eval-after-load 'org-latex
   (add-to-list 'org-latex-packages-alist '("" "listings" nil))

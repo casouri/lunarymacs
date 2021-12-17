@@ -100,10 +100,10 @@
 ;;;; Structure
 
 (load-package color-outline
-  :hook (prog-mode-hook . color-outline-mode))
+  :autoload-hook (prog-mode-hook . color-outline-mode))
 
 (load-package hideshow
-  :hook (prog-mode-hook . hs-minor-mode)
+  :autoload-hook (prog-mode-hook . hs-minor-mode)
   :init
   (defvar-local hideshow-hidden nil
     "Non-nil if the buffer has hiding on.")
@@ -155,7 +155,7 @@
 
 (load-package ws-butler
   ;; Global mode interferes with magit.
-  :hook
+  :autoload-hook
   (prog-mode-hook . ws-butler-mode)
   (text-mode-hook . ws-butler-mode))
 

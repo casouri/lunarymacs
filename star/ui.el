@@ -43,7 +43,7 @@
 ;;; Package
 
 (load-package rainbow-delimiters
-  :hook (prog-mode-hook . rainbow-delimiters-mode)
+  :autoload-hook (prog-mode-hook . rainbow-delimiters-mode)
   :config (with-current-buffer (get-buffer-create "*scratch*")
             (rainbow-delimiters-mode)))
 
@@ -89,13 +89,13 @@
   (global-hl-todo-mode))
 
 (load-package diff-hl
-  :hook (prog-mode-hook . diff-hl-mode)
+  :autoload-hook (prog-mode-hook . diff-hl-mode)
   :config (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 ;; Use the site-lisp version.
 (load-package form-feed
-  :hook ((emacs-lisp-mode-hook text-mode-hook special-mode-hook)
-         . form-feed-mode))
+  :autoload-hook ((emacs-lisp-mode-hook text-mode-hook special-mode-hook)
+                  . form-feed-mode))
 
 (load-package buffer-move
   :commands

@@ -11,7 +11,7 @@
 ;;; Packages
 
 ;; (load-package cdlatex
-;;   :hook (LaTeX-mode-hook . cdlatex-mode))
+;;   :autoload-hook (LaTeX-mode-hook . cdlatex-mode))
 
 (load-package eglot
   :defer
@@ -22,7 +22,7 @@
 ;; good.
 ;;
 ;; (load-package xenops
-;;   :hook (latex-mode-hook . xenops-mode))
+;;   :autoload-hook (latex-mode-hook . xenops-mode))
 
 ;;; Config
 

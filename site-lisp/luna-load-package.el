@@ -79,14 +79,15 @@ Return a list of (autoload ...) forms."
                         ;; ARG is either (hook . fn) or
                         ;;               ((hook ...) . fn) or
                         ;;               (hook . (fn ...))
-                        (:hook (mapcan (lambda (arg)
-                                         (let ((fn (cdr arg)))
-                                           (if (or (symbolp fn)
-                                                   ;; Handle lambda.
-                                                   (functionp fn))
-                                               (list fn)
-                                             fn)))
-                                       arg-list))
+                        (:autoload-hook
+                         (mapcan (lambda (arg)
+                                   (let ((fn (cdr arg)))
+                                     (if (or (symbolp fn)
+                                             ;; Handle lambda.
+                                             (functionp fn))
+                                         (list fn)
+                                       fn)))
+                                 arg-list))
                         ;; ARG is either ".xxx" or (".xxx" . mode)
                         (:mode (mapcar (lambda (arg)
                                          (if (stringp arg)
@@ -104,24 +105,24 @@ Return a list of (autoload ...) forms."
 PACKAGE is the package you are loading.
 Available COMMAND:
 
-  :init         Run right away.
-  :config       Run after package loads.
-  :hook         Each arguments is (HOOK . FUNC)
-                HOOK and FUNC can be a symbol or a list of symbols.
-  :load-path    Add load paths.
-  :mode         Add (ARG . PACKAGE) to ‘auto-mode-alist’. If ARG is
-                already a cons, add ARG to ‘auto-mode-alist’.
-  :commands     Add autoload for this command.
-  :after        Require after this package loads.
-  :defer        Don’t require the package, doesn’t need arguments.
-  :extern       Add ARG to `luna-external-program-list'. ARG should
-                be a string \"PROGRAM NOTE\". PROGRAM is a command
-                or file path.
+  :init          Run right away.
+  :config        Run after package loads.
+  :autoload-hook Each arguments is (HOOK . FUNC)
+                 HOOK and FUNC can be a symbol or a list of symbols.
+  :load-path     Add load paths.
+  :mode          Add (ARG . PACKAGE) to ‘auto-mode-alist’. If ARG is
+                 already a cons, add ARG to ‘auto-mode-alist’.
+  :commands      Add autoload for this command.
+  :after         Require after this package loads.
+  :defer         Don’t require the package, doesn’t need arguments.
+  :extern        Add ARG to `luna-external-program-list'. ARG should
+                 be a string \"PROGRAM NOTE\". PROGRAM is a command
+                 or file path.
 
 Each COMMAND can take zero or more ARG. Among these commands,
-:hook, :commands, and :after expect literal arguments, :init,
-:config, :load-path, :extern expect s-expressions, which are
-evaluated after expansion of the macro.
+:autoload-hook, :commands, and :after expect literal arguments,
+:init, :config, :load-path, :extern expect s-expressions, which
+are evaluated after expansion of the macro.
 
 ARGS.
 
@@ -140,7 +141,8 @@ ARGS.
                  (:init arg-list)
                  (:config `((with-eval-after-load ',package
                               ,@arg-list)))
-                 (:hook (luna-load-package--handle-hook arg-list package))
+                 (:autoload-hook
+                  (luna-load-package--handle-hook arg-list package))
                  (:mode
                   ;; ARG is either ".xxx" or (".xxx" . mode)
                   (mapcar
@@ -176,7 +178,7 @@ ARGS.
                         (memq :commands commands)
                         (memq :after commands)
                         (memq :mode commands)
-                        (memq :hook commands)))))
+                        (memq :autoload-hook commands)))))
     `(condition-case err
          (progn
            ;; We need to add load-path before checking

@@ -48,7 +48,7 @@
                 (unless (memq this-command flyspell-skip-commands)
                   (apply oldfn args))))
   :extern "aspell"
-  :hook
+  :autoload-hook
   (text-mode-hook . flyspell-mode)
   (prog-mode-hook . flyspell-prog-mode))
 

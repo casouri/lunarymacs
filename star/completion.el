@@ -32,7 +32,7 @@
     (add-to-list 'hippie-expand-try-functions-list #'yas-expand)))
 
 (load-package company
-  :hook (prog-mode-hook . company-mode)
+  :autoload-hook (prog-mode-hook . company-mode)
   :config
   (setq company-idle-delay 0.1)
   (setq company-minimum-prefix-length 2

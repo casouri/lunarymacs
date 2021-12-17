@@ -37,10 +37,10 @@
   :commands bklink-minor-mode)
 
 (load-package iimg
-  :hook (text-mode-hook . iimg-enable))
+  :autoload-hook (text-mode-hook . iimg-enable))
 
 (load-package quanjiao
-  :hook (text-mode-hook . quanjiao-mode))
+  :autoload-hook (text-mode-hook . quanjiao-mode))
 
 (load-package xeft
   :commands xeft
@@ -80,7 +80,7 @@
     binder-reveal-in-sidebar)
 
   (load-package iscroll
-    :hook (text-mode-hook . iscroll-mode)
+    :autoload-hook (text-mode-hook . iscroll-mode)
     :config
     (setq iscroll-preserve-screen-position t))
 

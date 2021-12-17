@@ -152,11 +152,11 @@
 
 (load-package aggressive-indent
   :commands aggressive-indent-mode
-  :hook ((emacs-lisp-mode-hook
-          lisp-interaction-mode-hook
-          scheme-mode-hook
-          lisp-mode-hook)
-         . aggressive-indent-mode))
+  :autoload-hook ((emacs-lisp-mode-hook
+                   lisp-interaction-mode-hook
+                   scheme-mode-hook
+                   lisp-mode-hook)
+                  . aggressive-indent-mode))
 
 (load-package eglot
   ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
