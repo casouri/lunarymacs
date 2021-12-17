@@ -170,4 +170,11 @@
     (add-to-list 'eglot-server-programs
                  '(c++-mode . ("~/attic/ccls/Release/ccls")))
     (add-to-list 'eglot-server-programs
-                 '(rust-mode . ("rust-analyzer")))))
+                 '(rust-mode . ("rust-analyzer"))))
+  (defun eglot-restart ()
+    "Restart the current server"
+    (interactive)
+    (if-let ((server (eglot-current-server)))
+        (progn (eglot-shutdown server)
+               (eglot-ensure))
+      (user-error "Current buffer doesn’t have a server"))))
