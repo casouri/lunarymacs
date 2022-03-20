@@ -122,19 +122,3 @@
                    "local-init.el" user-emacs-directory)))
   (when (file-exists-p local-init)
     (luna-safe-load local-init)))
-
-;;; Tree-sitter
-
-(when (boundp 'tree-sitter-parser-list)
-  (push "~/p/tree-sitter-expr/build-module/dist" load-path)
-  (require 'tree-sitter)
-  (load "~/emacs/test/src/tree-sitter-tests.el")
-
-  (defun tree-sitter-show-buffer-tree ()
-    (interactive)
-    (let ((root-node (tree-sitter-parser-root-node
-                      (or (car tree-sitter-parser-list)
-                          (tree-sitter-create-parser (current-buffer) (tree-sitter-c))))))
-      (pop-to-buffer (get-buffer-create "*tree-sitter-show-tree*"))
-      (erase-buffer)
-      (insert (pp-to-string (read (tree-sitter-node-string root-node)))))))
