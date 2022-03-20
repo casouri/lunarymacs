@@ -102,6 +102,19 @@
             (setq-local whitespace-style '(tab-mark))
             (whitespace-mode)))
 
+;; JSON
+(load-package flymake-json
+  :extern "jsonlint"
+  :autoload-hook
+  (js-mode-hook . flymake-json-maybe-load)
+  (json-mode-hook . flymake-json-load))
+
+(luna-note-extern "jsonlint"
+  "First install npm:
+    sudo port install nodejs15
+Then jslint:
+    npm install jsonlint -g")
+
 ;; Scheme
 ;; Note: C-c C-a to activate a #lang operation in a racket file.
 (load-package geiser
@@ -153,12 +166,21 @@
 ;; Rust
 (load-package rust-mode
   :mode "\\.rs$"
+  :hook (rust-mode-hook . setup-rust)
   :config
-  (add-hook 'rust-mode-hook #'setup-rust)
   (defun setup-rust ()
     "Setup for ‘rust-mode’."
     (eglot-ensure)
     (electric-quote-local-mode -1)))
+
+;; Go
+(load-package go-mode
+  :mode "\\.go$"
+  :hook (go-mode-hook . setup-go)
+  :config
+  (defun setup-go ()
+    "Setup for ‘go-mode’."
+    (eglot-ensure)))
 
 ;;; General package
 
