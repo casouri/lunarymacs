@@ -39,10 +39,11 @@ return: ((:command . (args args args)) (:command . (args)))."
 
 (defun luna-load-package--handle-hook (arg-list package)
   "Handle hook arguments.
-Each ARG in ARG-LIST is a cons (HOOK . FUNCTION).
-HOOK can be either a single hook or a list of hooks.
-FUNCTION can also be either a single function or a list of them.
-PACKAGE is the package we are configuring."
+Each ARG in ARG-LIST is a cons (HOOK . FUNCTION). HOOK can be
+either a single hook or a list of hooks. FUNCTION can also be
+either a single function or a list of them. PACKAGE is the
+package we are configuring, autoload will be added for it, unless
+PACKAGE is nil."
   (let (ret-list hook-list func-list)
     (dolist (arg arg-list)
       (let ((hook (car arg))
@@ -61,7 +62,10 @@ PACKAGE is the package we are configuring."
         ;; Make it load the package before execution.
         (let ((func (if (not (symbolp func))
                         ;; We don't want closure.
-                        `(lambda () (require ',package) (funcall ,func))
+                        (if package
+                            `(lambda () (require ',package)
+                               (funcall ,func))
+                          `(lambda () (funcall ,func)))
                       func)))
           (dolist (hook hook-list)
             (push `(add-hook ',hook #',func) ret-list)))))
@@ -107,8 +111,9 @@ Available COMMAND:
 
   :init          Run right away.
   :config        Run after package loads.
-  :autoload-hook Each arguments is (HOOK . FUNC)
+  :hook          Each arguments is (HOOK . FUNC)
                  HOOK and FUNC can be a symbol or a list of symbols.
+  :autoload-hook Like :hook but the FUNC autoloads the package.
   :load-path     Add load paths.
   :mode          Add (ARG . PACKAGE) to ‘auto-mode-alist’. If ARG is
                  already a cons, add ARG to ‘auto-mode-alist’.
@@ -116,8 +121,8 @@ Available COMMAND:
   :after         Require after this package loads.
   :defer         Don’t require the package, doesn’t need arguments.
   :extern        Add ARG to `luna-external-program-list'. ARG should
-                 be a string \"PROGRAM NOTE\". PROGRAM is a command
-                 or file path.
+                 be a string \"PROGRAM\".  Use ‘luna-note-extern’ to
+                 add note for PROGRAM.
 
 Each COMMAND can take zero or more ARG. Among these commands,
 :autoload-hook, :commands, and :after expect literal arguments,
@@ -141,7 +146,7 @@ ARGS.
                  (:init arg-list)
                  (:config `((with-eval-after-load ',package
                               ,@arg-list)))
-                 (:autoload-hook
+                 ((or :hook :autoload-hook)
                   (luna-load-package--handle-hook arg-list package))
                  (:mode
                   ;; ARG is either ".xxx" or (".xxx" . mode)
