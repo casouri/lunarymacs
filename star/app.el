@@ -6,7 +6,8 @@
   (setq erc-nick "casouri"
         erc-nickserv-passwords
         '((freenode (("casouri" . "XF234567ic"))))
-        erc-prompt-for-nickserv-password nil)
+        erc-prompt-for-nickserv-password nil
+        erc-fill-column "70")
   (require 'erc-services)
   (erc-services-mode))
 
@@ -71,3 +72,10 @@
     (add-hook 'input-method-inactivate-hook
               (lambda () (interactive)
                 (kill-local-variable 'cursor-type)))))
+
+(with-eval-after-load 'gnus
+  (setq gnus-select-method
+        '(nntp "news.gmane.io" (nntp-port-number 119))))
+
+(load-package restclient
+  :commands restclient-mode)

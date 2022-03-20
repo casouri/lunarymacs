@@ -69,6 +69,7 @@
 (luna-load-relative "star/tex.el")
 (luna-load-relative "star/simple-mode.el")
 (luna-load-relative "star/blog.el")
+(luna-load-relative "star/app.el")
 (require 'utility)
 
 ;;; Server
