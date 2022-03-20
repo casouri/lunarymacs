@@ -103,8 +103,12 @@
   :autoload-hook (prog-mode-hook . color-outline-mode))
 
 (load-package hideshow
-  :autoload-hook (prog-mode-hook . hs-minor-mode)
-  :init
+  :autoload-hook (prog-mode-hook . safe-hs-minor-mode)
+  :config
+  (defun safe-hs-minor-mode ()
+    "Enable ‘hs-minor-mode’ but don’t signal error."
+    (when (and comment-start comment-end)
+      (hs-minor-mode)))
   (defvar-local hideshow-hidden nil
     "Non-nil if the buffer has hiding on.")
   (defun hideshow-toggle-all ()
@@ -116,26 +120,25 @@
     (setq hideshow-hidden (not hideshow-hidden))))
 
 (with-eval-after-load 'project
-  (setq project-vc-ignores '(".ccls-cache/"))
-  (defun luna-project-find-regexp (regexp pattern)
-    (interactive (list (project--read-regexp)
-                       (read-from-minibuffer
-                        "File Pattern: "
-                        (concat "*." (or (file-name-extension
-                                          (or (buffer-file-name)
-                                              ""))
-                                         "")))))
-    (require 'xref)
-    (require 'grep)
-    (let* ((pr (project-current t))
-           (default-directory (project-root pr))
-           (files (project--files-in-directory
-                   default-directory
-                   (project-ignores pr default-directory)
-                   pattern)))
-      (xref--show-xrefs
-       (apply-partially #'project--find-regexp-in-files regexp files)
-       nil))))
+  (add-to-list 'project-vc-ignores ".ccls-cache/"))
+
+(defun luna-project-find-regexp (regexp pattern)
+  (interactive (list (project--read-regexp)
+                     (read-from-minibuffer
+                      "File Pattern: "
+                      (concat "*." (or (file-name-extension
+                                        (or (buffer-file-name)
+                                            ""))
+                                       "")))))
+  (require 'grep)
+  (let* ((proj (project-current t))
+         (root (project-root proj))
+         (grep-find-ignored-files
+          (append (mapcar (lambda (pattern)
+                            (concat "*" pattern))
+                          project-vc-ignores)
+                  grep-find-ignored-files)))
+    (rgrep regexp pattern root)))
 
 ;;;; Search & replace
 
@@ -144,6 +147,19 @@
   vr/replace
   vr/query-replace
   vr/mc-mark)
+
+;; C-g doesn’t seem to work right.
+;; (load-package ctrlf
+;;   :config
+;;   (ctrlf-mode)
+;;   (setq ctrlf-auto-recenter t
+;;         ctrlf-default-search-style 'fuzzy
+;;         ctrlf-show-match-count-at-eol nil
+;;         ctrlf-highlight-current-line nil)
+;;   (set-face-attribute 'ctrlf-highlight-active nil
+;;                       :inherit 'highlight)
+;;   (set-face-attribute 'ctrlf-highlight-passive nil
+;;                       :inherit 'default :weight 'bold))
 
 ;;;; Automation
 
@@ -164,6 +180,9 @@
   :config
   (setq separedit-default-mode 'text-mode
         separedit-remove-trailing-spaces-in-comment t))
+
+(load-package after-save
+  :autoload-hook (prog-mode-hook . after-save-mode))
 
 (add-hook 'prog-mode-hook #'electric-quote-local-mode)
 (add-hook 'text-mode-hook #'electric-quote-local-mode)

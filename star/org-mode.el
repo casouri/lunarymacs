@@ -99,6 +99,7 @@ ARG is the numerical argument."
 (defun luna-org-hook ()
   "Configuration for Org Mode."
   (luna-prose-mode)
+  (electric-indent-local-mode -1)
   (require 'org-tempo))
 
 ;;; Org calendar

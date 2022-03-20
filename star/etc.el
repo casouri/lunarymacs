@@ -112,7 +112,7 @@
  '(savehist-mode t)
  '(scroll-bar-mode nil)
  '(scroll-conservatively 1)
- '(scroll-margin 4)
+ '(scroll-margin 1)
  '(scroll-preserve-screen-position nil)
  '(send-mail-function 'mailclient-send-it)
  '(sentence-end-double-space nil)

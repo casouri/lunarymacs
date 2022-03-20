@@ -77,7 +77,7 @@
         (trailing-whitespace (nil nil ,red))
 
         (widget-field        (nil nil ,bg-alt))
-        (widget-inactive     (widget-field ,fg-weak))
+        (widget-inactive     (nil ,fg-weak))
 
         (custom-variable-tag (custom-default) (:slant oblique))
         
