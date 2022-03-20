@@ -82,6 +82,17 @@
   :mode "\\.lua$"
   :interpreter "lua")
 
+;; Shell
+(defun shell-chmod ()
+  "Make this shell script executable."
+  (interactive)
+  (if (derived-mode-p 'sh-mode 'shell-script-mode)
+      (message "%s" (shell-command-to-string
+                     (format "chmod +x %s" (buffer-file-name))))
+    (user-error "Not in shell-script-mode")))
+
+(defalias 'make-executable 'shell-chmod)
+
 ;; Javascript
 (setq js-indent-level 2)
 
