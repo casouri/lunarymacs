@@ -260,7 +260,7 @@ clickable and will use `browse-url' to open the URLs in question."
            ;; Non-greedy is important: otherwise we risk of
            ;; regexp stack overflow. That happened for buffers
            ;; when iimg data.
-           (+? digit) " linked reference" (? "s") " to " (+? anything)
+           (+? digit) " linked reference" (? "s") (+? anything)
            (or "\x0C" (= 70 "-")) "\n"))
   "Regular expression that matches the beginning of a summary.")
 
@@ -309,7 +309,7 @@ THIS-FILE is the filename we are inserting summary into."
          (insert "\n"
                  (if bklink-use-form-feed "\x0C" (make-string 70 ?-))
                  "\n"
-                 (format "%d linked reference%s to %s:\n"
+                 (format "%d linked reference%s:\n"
                          (length summary-list)
                          ;; Plural when more than one.
                          (if (eq (length summary-list) 1) "" "s")
