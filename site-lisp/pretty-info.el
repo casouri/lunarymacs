@@ -1,4 +1,4 @@
-;;; info+.el --- Prettier Info      -*- lexical-binding: t; -*-
+;;; pretty-info.el --- Prettier Info      -*- lexical-binding: t; -*-
 
 ;; Author: Yuan Fu <casouri@gmail.com>
 
@@ -299,8 +299,6 @@ Moves point."
   (when (derived-mode-p 'Info-mode)
     (revert-buffer nil t)))
 
+(provide 'pretty-info)
 
-
-(provide 'info+)
-
-;;; info+.el ends here
+;;; pretty-info.el ends here
