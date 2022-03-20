@@ -42,6 +42,50 @@
 ;;     Insert a summary of all the functions defined in this file.
 ;; - ‘lineup’
 ;;     Align columns by whitespace.
+;; - ‘switch-buffer-same-major-mode’
+;;     Switch buffer among those with the same major mode.
+;; - ‘open-in-finder’
+;;     Open ‘default-directory’ in Finder.
+;; - ‘open-in-iterm’
+;;     Open ‘default-directory’ iTerm.
+;; - ‘luna-rename-file’
+;;     Renames current buffer and file it is visiting.
+;; - ‘luna-sudo-edit’
+;;     Edit currently visited file as root.
+;; - ‘luna-load-env’
+;;     Load PATH and CPATH from a file.
+;; - ‘luna-insert-special-symbol’
+;;     Insert special symbol at point.
+;; - ‘luna-make-accent-fn’
+;;     Return a command that insert “COMBINDING NAME” unicode char.
+;; - ‘luna-autoinsert’
+;;     Autoinsert what auto-insert inserts.
+;; - ‘cheatsheet-display’
+;;     Display cheat sheet for this major mode.
+;; - ‘copy-change-log’
+;;     No docstring.
+;; - ‘unfill-region’
+;;     Remove newlines in the region from BEG to END.
+;; - ‘dos-newline’
+;;     Set file to use windows newline (\r\n).
+;; - ‘read-key-command’
+;;     Read key.
+;; - ‘gif-animate’
+;;     Animate Gif in buffer.
+;; - ‘copy-next-command-output’
+;;     Prefix command to add the output of the next command to kill-ring.
+;; - ‘uuid’
+;;     Insert an UUID.
+;; - ‘new-bin’
+;;     Create a new command with NAME under ~/bin.
+;; - ‘insert-function-summary’
+;;     Insert a summary of all the functions defined in this file.
+;; - ‘lineup’
+;;     Align columns by whitespace.
+;; - ‘better-quit-window’
+;;     Quit from current window.
+;; - ‘regexp-count’
+;;     Count the number of occurrences that matches REGEXP.
 
 (require 'lunary)
 (require 'luna-f)
@@ -392,7 +436,36 @@ delete the window."
            and return nil
            finally (delete-window)))
 
+(defun regexp-count (regexp)
+  "Count the number of occurrences that matches REGEXP.
+Count from point to end of buffer."
+  (interactive "sRegexp: ")
+  (save-excursion
+    (let ((count 0))
+      (while (re-search-forward regexp nil t)
+        (cl-incf count))
+      (message "%s occurrences of %s" count regexp))))
 
+(defun regexp-collect (regexp group)
+  "Collect matches of REGEXP to kill-ring.
+GROUP is the group number of the match you want to collect. Use 0
+for whole match."
+  (interactive "sRegexp: \nnGroup: ")
+  (save-excursion
+    (let ((string "")
+          (count 0))
+      (while (re-search-forward regexp nil t)
+        (let ((match (match-string group)))
+          (when (null match)
+            (user-error
+             "Cannot find the matched group, is group number correct?"))
+          (setq string (concat string "\n" match))
+          (cl-incf count)))
+      (with-temp-buffer
+        (insert string)
+        (kill-ring-save (point-min) (point-max)))
+      (message "Collected %s occurrences of %s to kill-ring"
+               count regexp))))
 
 
 (provide 'utility)
