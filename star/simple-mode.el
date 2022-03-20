@@ -71,7 +71,8 @@
   :init
   (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'common-lisp-mode-hook #'sly-mode)
-  (setq inferior-lisp-program "sbcl")
+  (setq inferior-lisp-program "ros run")
+  (luna-safe-load (expand-file-name "~/.roswell/helper.el"))
   (add-to-list 'display-buffer-alist
                (cons "sly-xref for"
                      (cons 'display-buffer-in-side-window
