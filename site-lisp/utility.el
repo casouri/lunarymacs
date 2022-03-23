@@ -467,6 +467,20 @@ for whole match."
       (message "Collected %s occurrences of %s to kill-ring"
                count regexp))))
 
+(defun insert-webpage-ref (url)
+  "Insert a URL with its title."
+  (interactive (list (read-string "URL: " (current-kill 0) nil)))
+  (require 'dom)
+  (let (title dom)
+    (with-current-buffer (url-retrieve-synchronously url)
+      (setq dom (libxml-parse-html-region (point-min) (point-max)))
+      (setq title (cl-caddr (car (dom-by-tag dom 'title)))))
+    (insert (replace-regexp-in-string
+             "[ \t\n\r]+" " "
+             (string-trim (string-replace "\n" " " title)))
+            "\n"
+            url)))
+
 
 (provide 'utility)
 
