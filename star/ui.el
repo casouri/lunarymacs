@@ -2,11 +2,9 @@
 
 ;;; Key
 
-;;; Key
-
 (when (not (display-graphic-p))
   (luna-def-key
-   "M-h" #'windmove-left
+   "m-h" #'windmove-left
    "M-j" #'windmove-down
    "M-k" #'windmove-up
    "M-l" #'windmove-right))

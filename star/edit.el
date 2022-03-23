@@ -8,12 +8,6 @@
 
 (luna-def-key
  "C-x u"   #'vundo
- "C-h C-h" #'ghelp-describe
- "C-h r"   #'ghelp-resume
- "C-h o"   #'ghelp-describe-elisp
- "C-h f"   #'ghelp-describe-function
- "C-h v"   #'ghelp-describe-variable
- "C-h k"   #'ghelp-describe-key
  "C-x i"   #'luna-insert-special-symbol
  "C-c '"   #'separedit
  "C-/"     #'undo-only
@@ -21,7 +15,6 @@
  "C-="     #'er/expand-region
  "C--"     #'er/contract-region
  "M-q"     #'ftable-fill
- "C-c C-s" #'consult-line
 
  :leader
  "ha" #'hideshow-toggle-all

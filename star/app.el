@@ -2,10 +2,18 @@
 ;;
 ;; Standalone applications.
 
+;;; Key
+
+(luna-def-key
+ "C-h C-h" #'ghelp-describe
+ "C-h r"   #'ghelp-resume
+ "C-h o"   #'ghelp-describe-elisp
+ "C-h f"   #'ghelp-describe-function
+ "C-h v"   #'ghelp-describe-variable
+ "C-h k"   #'ghelp-describe-key)
+
 (with-eval-after-load 'erc
   (setq erc-nick "casouri"
-        erc-nickserv-passwords
-        '((freenode (("casouri" . "XF234567ic"))))
         erc-prompt-for-nickserv-password nil
         erc-fill-column "70")
   (require 'erc-services)
