@@ -6,9 +6,10 @@
 
 ;;; Commentary:
 ;;
+;; This is not used anymore, vanilla functions can do most of what I
+;; want and there is no point requiring an extra package.
 
 ;;; Code:
-;;
 
 (require 'seq)
 

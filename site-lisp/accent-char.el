@@ -6,9 +6,9 @@
 
 ;;; Commentary:
 ;;
+;; Written for Chen Yi for typing Spanish.
 
 ;;; Code:
-;;
 
 (defvar accent-char-mapping
   '(?a ?á ?e ?é ?i ?í ?o ?ó ?u ?ú ?ú ?ü ?U ?Ü ?A ?Á

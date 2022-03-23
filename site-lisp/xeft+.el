@@ -12,6 +12,8 @@
 ;; for inserting new notes in between any two. Child/parent
 ;; relationship don’t bear any meaning. Connecting and structuring
 ;; notes is done by bklink.
+;;
+;; Not very useful, not used anymore.
 
 ;;; Code:
 
