@@ -32,8 +32,6 @@
                    subr-x cl-lib seq pcase svg))
   (require package))
 
-(require 'no-littering)
-
 ;;; Env
 
 (require 'exec-path-from-shell)

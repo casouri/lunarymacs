@@ -18,20 +18,7 @@
     (progn
       (setq load-path luna-dumped-load-path)
       (global-font-lock-mode)
-      (transient-mark-mode)
-      (add-hook 'after-init-hook
-                (lambda ()
-                  (save-excursion
-                    (switch-to-buffer "*scratch*")
-                    (goto-char (point-min))
-                    (insert ";;          E M A C S\n")
-                    (insert ";;\n")
-                    (insert (format ";; Welcome to GNU Emacs %s.\n"
-                                    emacs-version))
-                    (insert (format ";; Today is %s.\n"
-                                    (format-time-string "%A %Y.%-m.%-d")))
-                    (insert ";;\n")
-                    (lisp-interaction-mode)))))
+      (transient-mark-mode))
   ;; Add load-paths and load autoload files.
   (luna-load-relative "star/recipe.el")
   (package-initialize)
@@ -52,7 +39,6 @@
 (luna-key-def-preset :leader-prefix
   :prefix (if (display-graphic-p) "C-SPC" "C-@"))
 
-(require 'no-littering)
 (luna-load-relative "star/etc.el")
 (luna-load-relative "star/key.el")
 (luna-load-relative "star/angel.el")
