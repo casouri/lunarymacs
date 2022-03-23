@@ -24,53 +24,45 @@ M-x luna-install-all RET
 
 | [[https://archive.casouri.cat/note/2020/simple-(back)-links-in-any-file/index.html][bklink.el]]         | Simple Roam-like back-links.                  |
 | [[https://archive.casouri.cat/note/2020/embed-images-in-text-files/index.html][iimg.el]]           | Embed images in text files as base64 strings. |
-| iscroll.el        | Smooth scrolling over images.            |
-| delicate-click.el | More accurate mouse clicks.                   |
+| iscroll.el        | Smooth scrolling over images.                 |
 | quanjiao.el       | 智能全角引号。                                |
 | [[https://archive.casouri.cat/note/2020/insert-math-symbol-in-emacs/index.html][transform.el]]      | TeXmacs-like symbol insertion.                |
 | [[https://archive.casouri.cat/note/2021/yet-another-note-searching-interface:-zeft/index.html][zeft.el]]           | Note searching interface like Deft.           |
+| xeft              | Blazing fast note searching interface. |
 
 *Programming aid*
 
-| color-outline.el     | Outline for programming modes.               |
-| commentary.el        | Sync README.org and Commentary.              |
+| color-outline.el | Outline for programming modes. (Vanilla can do this now) |
+| commentary.el    | Sync README.org and Commentary.                          |
 
 *Lunarymacs specific*
 
-| cowboy.el            | Home-brew package manager.    |
-| cyberpunk-theme.el   | A dark custom color theme.    |
-| light-theme.el       | A light custom color theme    |
-| luna-local.el        | Session persistent variables. |
-| [[https://archive.casouri.cat/note/2020/home-brew-use-package/index.html][luna-load-package.el]] | Home-brew use-package.el.     |
-| [[https://archive.casouri.cat/note/2020/home-brew-define-key/index.html][luna-key.el]]          | Home-brew general.el.         |
-| [[https://archive.casouri.cat/note/2020/emacs-theme-utility/index.html][theme-util.el]]        | Some utilities for defining themes.          |
-
-*Built-in improvements*
-
-| dired+.el   | Convenience dired commands.             |
-| info+.el    | Prettify Info buffers.                  |
-| outline+.el | Cycle outline headers like in Org mode. |
+| cowboy.el            | Home-brew package manager.                       |
+| cyberpunk-theme.el   | A dark custom color theme.                       |
+| light-theme.el       | A light custom color theme                       |
+| luna-local.el        | Session persistent variables. (Not used anymore) |
+| [[https://archive.casouri.cat/note/2020/home-brew-use-package/index.html][luna-load-package.el]] | Home-brew use-package.el.                        |
+| [[https://archive.casouri.cat/note/2020/home-brew-define-key/index.html][luna-key.el]]          | Home-brew general.el.                            |
+| [[https://archive.casouri.cat/note/2020/emacs-theme-utility/index.html][theme-util.el]]        | Some utilities for defining themes.              |
+| utility.el           | All sorts of utility functions.                  |
 
 *Etc*
 
-| form-feed.el         | My fork of form-feed.el                      |
-| recentf-ext.el       | My fork of recentf-ext.el                    |
-| face-attr.el         | Set/get face attributes from face text prop. |
-| pause.el             | Light wrapper around recursive edit.         |
-| sidebar.el           | Show an outline sidebar.                     |
+| form-feed.el   | My fork of form-feed.el                      |
+| recentf-ext.el | My fork of recentf-ext.el                    |
+| face-attr.el   | Set/get face attributes from face text prop. |
+| pause.el       | Light wrapper around recursive edit.         |
 
+There are more, take a look in =site-lisp= ;-)
 
 * Structure
 #+begin_example
 ~/.emacs.d/
-├── var                 data files, set by no-littering
-├── etc                 config files, set by no-littering
-├── cheatsheet          cheatsheet files
+├── cheatsheet          cheatsheet files (M-x cheatsheet-display)
 ├── custom.el           custom file
 ├── dump.el             init file for dumping
 ├── early-init.el
 ├── init.el
-├── local.el            stores session persistent data
 ├── elpa                downloaded packages
 ├── ranch               package downloaded by cowboy.el
 ├── site-lisp           local packages
