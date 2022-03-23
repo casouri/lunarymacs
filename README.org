@@ -69,3 +69,27 @@ There are more, take a look in =site-lisp= ;-)
 ├── snippets            yasnippet snippets
 └── star                configuration files
 #+end_example
+
+*Stars*
+
+#+begin_example
+├── angel.el                Basic editing ehancements
+├── app.el                  Emacs applications like ERC and GNUS
+├── blog.el                 Utilities for writing my blog
+├── checker.el              Config for checkers (flymake, ispell)
+├── completion.el           Config for completions (company, ivy)
+├── deprecated              Deprecated configs
+├── dir.el                  Dired configs
+├── edit.el                 Editing ehancement packages
+├── etc.el                  Setting variables
+├── git.el                  Magit and vc config
+├── key.el                  Global key-bindings
+├── mode-line.el            Mode-line config
+├── org-mode.el             Org-mode config
+├── python.el               Python config
+├── recipe.el               Cowboy package retrival recipes
+├── simple-mode.el          Configs for programming modes
+├── tex.el                  TeX config
+├── ui.el                   UI enhancement packages
+└── writing.el              Note-taking packages
+#+end_example
