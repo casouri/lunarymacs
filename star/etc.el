@@ -53,12 +53,6 @@
 
 (load-package benchmark-init :defer)
 
-(load-package keycast
-  :commands
-  keycast-mode
-  keycast-log-mode
-  :init (setq keycast-insert-after 'mode-line-misc-info))
-
 ;;; Custom
 
 (custom-set-variables

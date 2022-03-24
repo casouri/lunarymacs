@@ -12,6 +12,14 @@
  "C-h v"   #'ghelp-describe-variable
  "C-h k"   #'ghelp-describe-key)
 
+;;; Package
+
+(load-package keycast
+  :commands
+  keycast-mode
+  keycast-log-mode
+  :init (setq keycast-insert-after 'mode-line-misc-info))
+
 (with-eval-after-load 'erc
   (setq erc-nick "casouri"
         erc-prompt-for-nickserv-password nil
