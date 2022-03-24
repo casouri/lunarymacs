@@ -5,7 +5,6 @@
 (add-to-list 'load-path
              (expand-file-name "site-lisp"
                                user-emacs-directory))
-(require 'luna-f)
 (require 'lunary)
 (require 'cowboy)
 ;; recipe.el is needed for adding subdir’s to load-path
@@ -24,6 +23,7 @@
                    expand-region flyspell flycheck eglot
                    yasnippet which-func savehist
                    consult selectrum selectrum-prescient
+                   no-littering
                    ;; site-lisp
                    transform utility pause color-outline
                    ;; ranch
