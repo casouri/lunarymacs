@@ -2,8 +2,6 @@
 ;;
 ;; Text editing, tools and everything.
 
-(require 'utility)
-
 ;;; Key
 
 (luna-def-key
