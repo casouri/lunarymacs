@@ -6,12 +6,18 @@
  "gs" #'magit-status
  "gf" '("file")
  "gfc" #'magit-file-checkout
- "gfl" #'magit-log-buffer-file)
+ "gfl" #'magit-log-buffer-file
+ :--
+ :keymaps 'magit-mode-map
+ "<tab>" #'magit-section-toggle)
 
 (load-package magit
   :commands magit-status
   :config
-  (define-key magit-mode-map (kbd "<tab>") 'magit-section-toggle)
+  ;; Speed up magit in large repos.
+  (setq magit-refresh-status-buffer nil
+        ;; Show refined diff.
+        magit-diff-refine-hunk t)
 
   ;; Disable electric-quote-mode in commit message buffer.
   (add-hook 'text-mode-hook
