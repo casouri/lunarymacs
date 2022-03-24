@@ -185,10 +185,5 @@
 (load-package vundo
   :commands vundo)
 
-;; (load-package undohist
-;;   :config
-;;   (undohist-initialize)
-;;   (push "COMMIT_EDITMSG" undohist-ignored-files))
-
-
-
+(load-package undo-hl
+  :autoload-hook ((prog-mode-hook text-mode-hook) . undo-hl-mode))
