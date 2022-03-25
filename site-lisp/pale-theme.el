@@ -15,11 +15,6 @@
 
 (theme-util-deffaces
  'block
- 'custom-default
- 'comp-mouse
- 'selection-common
- 'comp-common
- 'current-selection
  'magit-heading-selection
  'magit-heading-highlight)
 
@@ -38,7 +33,8 @@
            (fg-weak "#9a9ea2")
 
            (hl-weak bg-tooltip)
-           (hl-normal "#e8e800")
+           (hl-normal "#ffffb4")
+           (hl-strong "#e8e800")
            (hl-fg "#987816")
 
            (warning "#DA7A48")
@@ -55,7 +51,7 @@
       `(;; builtin faces
         (default     (nil ,fg ,bg))
         (region      (nil nil ,bg-region))
-        (highlight   (nil nil ,hl-normal))
+        (highlight   (nil nil ,hl-strong))
         (cursor      (nil "white" "black"))
         (match       (nil ,ok nil nil bold))
         (error       (nil ,err))
@@ -74,8 +70,8 @@
 
         (vertical-border     (nil nil "black"))
         (minibuffer-prompt   ,bold)
-        (isearch             (nil nil ,hl-normal))
-        (lazy-highlight      (nil nil ,hl-normal))
+        (isearch             (nil nil ,hl-strong))
+        (lazy-highlight      (nil nil ,hl-strong))
         (isearch-fail        (error))
         (show-paren-match    ,bold)
         (trailing-whitespace (nil nil ,err))
@@ -91,8 +87,8 @@
          (nil nil ,bg-tooltip)
          (:box (:line-width 3 :color ,bg-tooltip)))
         (custom-button-mouse
-         (custom-button nil ,bg-block)
-         (:box (:line-width 3 :color ,bg-block)))
+         (custom-button nil ,hl-strong)
+         (:box (:line-width 3 :color ,hl-strong)))
         (custom-button-pressed
          (custom-button nil ,bg-region)
          (:box (:line-width 3 :color ,bg-region)))
@@ -143,7 +139,7 @@
         (company-tooltip-common ((company-tooltip bold)))
         (company-tooltip-common-selection ((company-selection bold)))
         (company-tooltip-mouse ((company-tooltip underline)))
-        (company-tooltip-selection (company-tooltip nil ,hl-normal))
+        (company-tooltip-selection (company-tooltip nil ,hl-strong))
         (company-scrollbar-bg                (company-tooltip))
         (company-scrollbar-fg                (company-tooltip nil ,bg-region))
         (company-preview                     (shadow))
@@ -257,7 +253,7 @@
         (smerge-base    (magit-diff-base))
         (smerge-markers (nil nil nil nil bold))
 
-        (which-key-key-face                   (nil ,hl-normal))
+        (which-key-key-face                   (nil nil ,hl-strong))
         (which-key-group-description-face     ())
         (which-key-command-description-face   ())
         (which-key-local-map-description-face ())
@@ -331,7 +327,7 @@
         (rime-code-face (rime-default-face))
 
         (selectrum-prescient-primary-highlight (nil nil ,hl-normal))
-        (selectrum-prescient-secondary-highlight (nil nil ,hl-weak))
+        (selectrum-prescient-secondary-highlight (nil nil ,hl-normal))
 
         (consult-bookmark (consult-buffer))
         (consult-file (consult-file))
