@@ -69,7 +69,7 @@
 
 ;;;; Theme
 (when (window-system)
-  (luna-load-theme 'light))
+  (luna-load-theme 'pale))
 
 (luna-on "Brown"
 ;;;; Font

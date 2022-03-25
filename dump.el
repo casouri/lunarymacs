@@ -43,6 +43,7 @@
 (add-to-list 'custom-theme-load-path
              (expand-file-name "site-lisp" user-emacs-directory))
 (load-theme 'light t t)
+(load-theme 'pale t t)
 (load-theme 'cyberpunk t t)
 
 ;;; Other files

@@ -206,7 +206,7 @@
         (magit-diff-file-heading-selection (magit-heading-selection))
         
         (magit-diff-hunk-heading
-         (nil ,bg ,(overlay bg violet2 0.2)))
+         (nil ,bg ,(overlay bg violet2 0.5)))
         (magit-diff-hunk-heading-highlight
          (nil ,bg ,(overlay bg violet2 0.8)))
         (magit-diff-hunk-heading-selection (magit-heading-selection))
