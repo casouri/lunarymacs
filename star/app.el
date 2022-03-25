@@ -113,3 +113,10 @@
 
 (load-package restclient
   :commands restclient-mode)
+
+(defun luna-customize-setup ()
+  "Setup function for Customize."
+  (buffer-face-set '(:family "SF Pro Text" :height 150))
+  (setq truncate-lines t
+        line-spacing 0.2))
+(add-hook 'Custom-mode-hook #'luna-customize-setup)
