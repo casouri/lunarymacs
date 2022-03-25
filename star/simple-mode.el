@@ -13,7 +13,11 @@
  "eb" #'eval-buffer
  :---
  :keymaps 'lisp-interaction-mode-map
- "<S-return>" #'eval-print-sexp-at-point)
+ "<S-return>" #'eval-print-sexp-at-point
+ :---
+ :keymaps 'web-mode-map
+ "C-M-f" #'web-mode-element-next
+ "C-M-b" #'web-mode-element-previous)
 
 (defun eval-print-sexp-at-point ()
   "Evaluate top level sexp at point and print."
