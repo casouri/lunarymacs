@@ -184,4 +184,4 @@
   :commands vundo)
 
 (load-package undo-hl
-  :autoload-hook ((prog-mode-hook text-mode-hook) . undo-hl-mode))
+  :autoload-hook (prog-mode-hook . undo-hl-mode))
