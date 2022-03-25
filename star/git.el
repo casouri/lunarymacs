@@ -7,7 +7,7 @@
  "gf" '("file")
  "gfc" #'magit-file-checkout
  "gfl" #'magit-log-buffer-file
- :--
+ :---
  :keymaps 'magit-mode-map
  "<tab>" #'magit-section-toggle)
 

@@ -98,7 +98,7 @@
  '(mouse-wheel-tilt-scroll t)
  '(ns-pop-up-frames nil nil nil "This way emacsclient doesn't open new frames.")
  '(outline-minor-mode-cycle t)
- '(outline-minor-mode-highlight 'override)
+ ;; '(outline-minor-mode-highlight 'override)
  '(package-archives '(("melpa" . "http://melpa.org/packages/") ("gnu" . "https://elpa.gnu.org/packages/") ("org" . "https://orgmode.org/elpa/")))
  '(pixel-scroll-precision-mode t)
  '(recentf-max-saved-items 500)
