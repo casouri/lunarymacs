@@ -181,7 +181,12 @@
 ;;;; Undo & history
 
 (load-package vundo
-  :commands vundo)
+  :commands vundo
+  :config
+  (setf (alist-get 'selected-node vundo-glyph-alist) ?X
+        (alist-get 'node vundo-glyph-alist) ?O)
+  (set-face-attribute 'vundo-default nil :family "PragmataPro Mono"))
 
 (load-package undo-hl
-  :autoload-hook (prog-mode-hook . undo-hl-mode))
+  :autoload-hook (prog-mode-hook . undo-hl-mode)
+  :config (setq undo-hl-mininum-edit-size 10))
