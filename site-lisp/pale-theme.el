@@ -112,7 +112,7 @@
         (font-lock-doc-face                  (shadow))
         (font-lock-constant-face             ,italic)
         (font-lock-keyword-face              (nil "darkred"))
-        (font-lock-string-face               (shadow))
+        (font-lock-string-face               ())
         (font-lock-type-face                 (nil "#987816"))
         (font-lock-variable-name-face        ,bold)
         (font-lock-function-name-face        ,bold)
@@ -131,6 +131,11 @@
         (completions-common-part ,bold)
 
         ;; package faces
+
+        (flyspell-duplicate () (:underline
+                                (:style wave :color ,hl-fg)))
+        (flyspell-incorrect () (:underline
+                                (:style wave :color ,hl-fg)))
 
         (company-tooltip                     (tooltip))
         (company-tooltip-annotation          (company-tooltip))
@@ -176,6 +181,7 @@
         (magit-diff-hunk-region            (region))
         ;; this also determines the hunk region boundary
         (magit-diff-lines-heading          (nil ,bg ,err))
+        (magit-diff-revision-summary       ,bold)
 
         (magit-bisect-bad        (error))
         (magit-bisect-good       (success))
