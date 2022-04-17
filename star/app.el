@@ -51,7 +51,11 @@
   :commands
   ghelp-describe
   ghelp-describe-function
-  ghelp-describe-variable)
+  ghelp-describe-variable
+  :config
+  (defun luna-ghelp-hook ()
+    (setq truncate-lines t))
+  :hook (ghelp-mode-hook . luna-ghelp-hook))
 
 (load-package inspector
   :commands inspect-expression

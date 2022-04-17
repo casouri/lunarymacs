@@ -189,4 +189,6 @@
 
 (load-package undo-hl
   :autoload-hook (prog-mode-hook . undo-hl-mode)
-  :config (setq undo-hl-mininum-edit-size 10))
+  :config (setq undo-hl-mininum-edit-size 10)
+  (add-to-list 'undo-hl-undo-commands 'vundo-forward)
+  (add-to-list 'undo-hl-undo-commands 'vundo-backward))

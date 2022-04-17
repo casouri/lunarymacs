@@ -481,6 +481,12 @@ for whole match."
             "\n"
             url)))
 
+(defun filter-lines (regexp)
+  "Show only lines that match REGEXP.
+Like ‘keep-lines’ but only hides non-matching lines. So this
+function also works for read-only buffers."
+  (interactive "sRegexp: ")
+  )
 
 (provide 'utility)
 

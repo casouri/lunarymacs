@@ -98,7 +98,16 @@
 (defalias 'make-executable 'shell-chmod)
 
 ;; Javascript
-(setq js-indent-level 2)
+(setq js-indent-level 2
+      typescript-indent-level 2)
+(load-package tide
+  :autoload-hook (typescript-mode-hook . luna-setup-tide))
+(defun luna-setup-tide ()
+  "Setup for tide."
+  (tide-setup)
+  (flycheck-mode)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (setq company-tooltip-align-annotations t))
 
 ;; Makefile
 (add-hook 'makefile-mode-hook
@@ -175,6 +184,10 @@ Then jslint:
   (defun setup-rust ()
     "Setup for ‘rust-mode’."
     (eglot-ensure)
+    ;; For some reason format-on-save is turned on and I can’t turn it
+    ;; off. And I don’t want to manually revert buffer after every
+    ;; fucking save.
+    (auto-revert-mode)
     (electric-quote-local-mode -1)))
 
 ;; Go
@@ -201,8 +214,13 @@ Then jslint:
   :commands eglot eglot-ensure
   :config
   (setq read-process-output-max (* 1024 1024))
-  ;; Otherwise eglot highlights documentations, which is annoying.
-  (push :documentHighlightProvider eglot-ignored-server-capabilites)
+  ;; Otherwise eglot highlights symbols, which is annoying.
+  (add-to-list 'eglot-ignored-server-capabilities
+               :documentHighlightProvider)
+  (add-to-list 'eglot-ignored-server-capabilities
+               :documentFormattingProvider)
+  (add-to-list 'eglot-ignored-server-capabilities
+               :documentRangeFormattingProvider)
   ;; Has to be here because needs ‘eglot-server-programs’ loaded.
   (luna-on "Brown"
     (add-to-list 'eglot-server-programs
