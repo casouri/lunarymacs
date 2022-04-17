@@ -40,7 +40,7 @@ BEG and END are regular expressions."
                  (insert text))
         (error "Could find matched region")))))
 
-(defun commentary-import-readme ()
+(defun commentary-import-readme-org ()
   "Import commentary from README.org file in the same directory."
   (interactive)
   (let* ((org-source (luna-f-content
@@ -58,10 +58,24 @@ BEG and END are regular expressions."
          ;; (commented-source (commentary--commented org-source))
          (commented-export (commentary--commented ascii-export)))
     (commentary--replace-match
-     "^;;; Commentary:" "^;;;* Commentary end"
-     (format ";;; Commentary:\n;;\n%s\n;;\n;; Commentary end"
-             (string-remove-suffix "\n"
-                                   commented-export)))))
+     "^;;; Commentary:" "\n\n"
+     (format ";;; Commentary:\n;;\n%s\n\n"
+             (string-remove-suffix "\n" commented-export)))))
+
+(defun commentary-import-readme-txt ()
+  "Import commentary from README.txt file in the same directory."
+  (interactive)
+  (let* ((pt (point))
+         (text (luna-f-content
+                (luna-f-join default-directory "README.txt")))
+         ;; add semicolon to each line beginning
+         ;; (commented-source (commentary--commented org-source))
+         (commented-export (commentary--commented text)))
+    (commentary--replace-match
+     "^;;; Commentary:" "\n\n"
+     (format ";;; Commentary:\n;;\n%s\n\n"
+             (string-remove-suffix "\n" commented-export)))
+    (goto-char pt)))
 
 (defun commentary-export-readme ()
   "Export commentary to README.txt in the same directory."
