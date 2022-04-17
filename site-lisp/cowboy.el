@@ -197,7 +197,7 @@ OPTION-PLIST contains user options that each backend may use."
    (list (intern (completing-read "Package: "
                                   (cowgirl--available-package-list)))))
   (if (cowgirl-installed-p package)
-      (message "Package %s is already installed")
+      (message "Package %s is already installed" package)
     (if (cowgirl-use-cowboy package)
         (cowboy-install package option-plist)
       (cowboy--with-warning
