@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: <newerr
+# key: <newerr
+# --
+export class $1Error extends Error {
+    constructor(m: string) {
+        super(m);
+        this.name = "$1Error";
+        Object.setPrototypeOf(this, $1Error.prototype);
+    }
+}
