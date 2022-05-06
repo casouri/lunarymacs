@@ -101,8 +101,7 @@
 ;; Javascript
 (setq js-indent-level 2
       typescript-indent-level 2)
-(load-package typescript-mode
-  :download-name 'tide
+(load-package tide
   :autoload-hook (typescript-mode-hook . luna-setup-tide))
 (defun luna-setup-tide ()
   "Setup for tide."
