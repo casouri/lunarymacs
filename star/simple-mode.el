@@ -182,6 +182,9 @@ Then jslint:
   :mode "\\.rs$"
   :hook (rust-mode-hook . setup-rust)
   :config
+  ;; If I format buffer before save, rustfmt won’t format in my back.
+  ;; Eat this rustfmt!!
+  (setq rust-format-on-save t)
   (defun setup-rust ()
     "Setup for ‘rust-mode’."
     (eglot-ensure)
