@@ -25,7 +25,7 @@
 (defun luna-mode-line-with-padding (text)
   "Return TEXT with padding on the left.
 The padding pushes TEXT to the right edge of the mode-line."
-  (if (display-graphic-p)
+  (if (and (>= emacs-major-version 29) (display-graphic-p))
       (let* ((len (string-pixel-width text))
              (space-prop
               `(space :align-to (- (+ right right-margin) (,len))))
