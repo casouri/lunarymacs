@@ -15,4 +15,5 @@
         (xeft . (:repo "casouri/xeft" :option (:full-clone t)))
         (vundo . (:repo "casouri/vundo" :option (:full-clone t)))
         (undo-hl . (:repo "casouri/undo-hl" :option (:full-clone t)))
-        (stimmung-themes . (:repo "motform/stimmung-themes" :option (:full-clone t)))))
+        (stimmung-themes . (:repo "motform/stimmung-themes" :option (:full-clone t)))
+        (typescript-mode . (:repo "emacs-typescript/typescript.el" :option (:full-clone t :branch "feature/tsx-support")))))
