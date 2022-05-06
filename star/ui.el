@@ -86,6 +86,10 @@
             ("NEXT" . ,success))))
   (global-hl-todo-mode))
 
+(load-package annotate
+  :commands annotate-mode
+  :config (setq annotate-annotation-position-policy :new-line))
+
 (load-package diff-hl
   :autoload-hook (prog-mode-hook . diff-hl-mode)
   :config (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
