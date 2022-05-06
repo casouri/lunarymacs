@@ -367,7 +367,8 @@ OPTION-PLIST contains installation options.
 In OPTION-PLIST, if :full-clone is t, full clone.
 
 In RECIPE, :repo is of form \"user/repo\"."
-  (let ((full-clone (plist-get option-plist :full-clone)))
+  (let ((full-clone (plist-get option-plist :full-clone))
+        (branch (plist-get option-plist :branch)))
     (apply
      #'cowboy--command
      (remove
@@ -379,12 +380,14 @@ In RECIPE, :repo is of form \"user/repo\"."
                         (plist-get recipe :repo))
               (or (plist-get recipe :http)
                   (error "No :repo nor :http in recipe: %s" recipe)))
+            (if branch "--branch")
+            (if branch branch)
             (symbol-name package))))))
 
 (defun cowboy--github-shallowp (package)
   "Return t if PACKAGE (a symbol) is shallow cloned, nil if not."
   (let ((default-directory
-          (luna-f-join cowboy-package-dir (symbol-name package))))
+         (luna-f-join cowboy-package-dir (symbol-name package))))
     (with-temp-buffer
       (and (eq 0 (funcall #'call-process "git" nil t nil
                           "rev-parse" "--is-shallow-repository"))
