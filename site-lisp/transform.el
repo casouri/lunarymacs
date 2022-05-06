@@ -27,7 +27,8 @@
                            "Rℝ Zℤ Qℚ Nℕ Cℂ"
                            "aαΑ∀ bβΒ gγΓ dδΔ eεΕ∃ zζΖ hηΗ qθΘ"
                            "iιΙ kκΚ lλΛ mμΜ nνΝ∩ xξΞ oοΟ pπΠ"
-                           "rρΡ sσΣ tτΤ yυΥ fφΦ cχΧ uψΨ∪ wωΩ")
+                           "rρΡ sσΣ tτΤ yυΥ fφΦ cχΧ uψΨ∪ wωΩ"
+                           "←⃖⇐⟵⟸ →⃗⇒⟶⟹")
                          " ")))
   "Each element of the list is a list of related variants.")
 
@@ -37,7 +38,8 @@
                                       (mapcar #'identity s))
                                     (split-string (cdr c)))))
           '((?_ . "<≤ ⊂⊆ ⊏⊑ >≥ ⊃⊇ ⊐⊒")
-            (?/ . "=≠ <≮ ≤≰ ∈∉ ⊂⊄ ⊆⊈ >≯ ≥≱ ∋∌ ⊃⊅ ⊇⊉")))
+            (?/ . "=≠ <≮ ≤≰ ∈∉ ⊂⊄ ⊆⊈ >≯ ≥≱ ∋∌ ⊃⊅ ⊇⊉")
+            (?- . "<← >→")))
   
   "Each car is the accent modifier, cdr is a list ((ORIGINAL ACCENT) ...).")
 
@@ -135,8 +137,8 @@ Highlight the one marked by INDEX."
 (defun transform-previous-char ()
   "Transform char before point.
 
-If previous char is “/” or “_”, apply ‘transform-accent-previous-char’
-instead.
+If previous char is “/” or “_” or “-”, apply
+‘transform-accent-previous-char’ instead.
 
 If previous previous char is “_” or “^” and previous char is a number,
 apply transform ‘transform-supsub-previous-char’ instead."
