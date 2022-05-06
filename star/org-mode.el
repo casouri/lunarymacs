@@ -37,14 +37,15 @@
         ;; This program generates crisp images for latex
         ;; preview.
         org-preview-latex-default-process 'dvisvgm)
-  (require 'ox-latex)
-  (add-to-list 'org-latex-classes
-               '("extarticle" "\\documentclass[11pt]{extarticle}"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+                 '("extarticle" "\\documentclass[11pt]{extarticle}"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
   (setq org-fontify-quote-and-verse-blocks t)
   (setq org-hide-emphasis-markers nil)
   (setq org-image-actual-width '(300))
