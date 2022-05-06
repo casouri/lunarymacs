@@ -69,15 +69,15 @@ FONT-NAMEs are keys in ‘luna-font-alist’.")
   "A list of font names that should be rescaled.")
 
 (defvar luna-font-alist
-  `(("SF Mono" . ("SF Mono" "Source Han Serif" 1.3))
-    ("IBM Plex Mono" . ("IBM Plex Mono" "Source Han Serif" 1.2))
-    ("SF Pro Text" . ("SF Pro Text" "Source Han Serif" 1.1))
-    ("IBM Plex Sans" . ("IBM Plex Sans" "Source Han Serif" 1.1))
-    ("Dossier" . ("Dossier" "Source Han Serif" 1.3))
+  `(("SF Mono" . ("SF Mono" "Source Han Serif SC" 1.3))
+    ("IBM Plex Mono" . ("IBM Plex Mono" "Source Han Serif SC" 1.2))
+    ("SF Pro Text" . ("SF Pro Text" "Source Han Serif SC" 1.1))
+    ("IBM Plex Sans" . ("IBM Plex Sans" "Source Han Serif SC" 1.1))
+    ("Dossier" . ("Dossier" "Source Han Serif SC" 1.3))
 
     ("方正fW筑紫明朝" . (nil "FZFW ZhuZi MinchoS" 1))
-    ("Source Han Serif" . (nil "Source Han Serif" 1))
-    ("Source Han Sans" . (nil "Source Han Sans" 1))
+    ("Source Han Serif" . (nil "Source Han Serif SC" 1))
+    ("Source Han Sans" . (nil "Source Han Sans SC" 1))
 
     ("Charter 13" . ("Charter" nil 1 :size 13))
     ("GNU Unifont 15" . ("Unifont" nil 1 :size 15))
