@@ -99,16 +99,17 @@
 (defalias 'make-executable 'shell-chmod)
 
 ;; Javascript
-;; (setq js-indent-level 2
-;;       typescript-indent-level 2)
-;; (load-package tide
-;;   :autoload-hook (typescript-mode-hook . luna-setup-tide))
-;; (defun luna-setup-tide ()
-;;   "Setup for tide."
-;;   (tide-setup)
-;;   (flycheck-mode)
-;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
-;;   (setq company-tooltip-align-annotations t))
+(setq js-indent-level 2
+      typescript-indent-level 2)
+(load-package typescript-mode
+  :download-name 'tide
+  :autoload-hook (typescript-mode-hook . luna-setup-tide))
+(defun luna-setup-tide ()
+  "Setup for tide."
+  (tide-setup)
+  (flycheck-mode)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (setq company-tooltip-align-annotations t))
 
 ;; Makefile
 (add-hook 'makefile-mode-hook
