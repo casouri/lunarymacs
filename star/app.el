@@ -21,9 +21,10 @@
   :init (setq keycast-insert-after 'mode-line-misc-info))
 
 (with-eval-after-load 'erc
-  (setq erc-nick "casouri"
+  (setq erc-nick "yuan"
         erc-prompt-for-nickserv-password nil
-        erc-fill-column "70")
+        erc-fill-column 70
+        erc-port 6667)
   (require 'erc-services)
   (erc-services-mode))
 
