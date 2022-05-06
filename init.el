@@ -18,7 +18,12 @@
     (progn
       (setq load-path luna-dumped-load-path)
       (global-font-lock-mode)
-      (transient-mark-mode))
+      (transient-mark-mode)
+      ;; Re-run mode hooks.
+      (add-hook 'after-init-hook
+                (lambda ()
+                  (switch-to-buffer "*scratch*")
+                  (lisp-interaction-mode))))
   ;; Add load-paths and load autoload files.
   (luna-load-relative "star/recipe.el")
   (package-initialize)
