@@ -336,6 +336,10 @@
 
         (consult-bookmark (consult-buffer))
         (consult-file (consult-file))
+
+        (erc-notice-face (nil "SlateBlue")) ; Get rid of bold.
+        (erc-timestamp-face (nil ,ok)) ; Use darker green.
+        (erc-current-nic-face (nil "SlateBlue")) ; Use darker blue.
         ))))
 
 (provide-theme 'pale)
