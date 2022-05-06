@@ -123,9 +123,6 @@ Available COMMAND:
   :extern        Add ARG to `luna-external-program-list'. ARG should
                  be a string \"PROGRAM\".  Use ‘luna-note-extern’ to
                  add note for PROGRAM.
-  :download-name If the name used to download the package is
-                 different from the package name, use this. The
-                 download name should be an unquoted symbol.
 
 Each COMMAND can take zero or more ARG. Among these commands,
 :autoload-hook, :commands, and :after expect literal arguments,
@@ -138,10 +135,6 @@ ARGS.
   (declare (indent 1))
   ;; Group commands and arguments together.
   (let* ((arg-list (luna-split-command-args args))
-         ;; The name used to download the package, PACKAGE is the
-         ;; package name, but sometimes it is different from the
-         ;; download name... (Eg, typescript-mode & tide).
-         (package-download-name package)
          ;; Translate commands & arguments to valid
          ;; config code.
          (body
@@ -151,9 +144,6 @@ ARGS.
                    (arg-list (cdr arg)))
                (pcase command
                  (:init arg-list)
-                 (:download-name
-                  (setq package-download-name (car arg-list))
-                  nil)
                  (:config `((with-eval-after-load ',package
                               ,@arg-list)))
                  ((or :hook :autoload-hook)
@@ -199,7 +189,7 @@ ARGS.
            ;; We need to add load-path before checking
            ;; if the package is installed or not.
            ,@load-path-form
-           (add-to-list 'luna-package-list ',package-download-name)
+           (add-to-list 'luna-package-list ',package)
            (when (not (luna-installed-p ',package))
              (error "%s not installed" ',package))
            ,@autoload-list
