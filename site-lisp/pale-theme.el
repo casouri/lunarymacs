@@ -188,7 +188,7 @@
         (magit-bisect-skip       (warning))
         (magit-blame-date        (nil ,hl-fg))
         (magit-blame-heading     (magit-heading-highlight))
-        (magit-branch-current    ())
+        (magit-branch-current    (warning))
         (magit-branch-local      ,bold)
         (magit-branch-remote     ,bold)
         (magit-cherry-equivalent (success))
