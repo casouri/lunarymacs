@@ -283,7 +283,7 @@ If there are unsaved buffer, pop up a list for them to be saved
 before existing. Replaces ‘save-buffers-kill-terminal’."
   (interactive)
   (if (frame-parameter nil 'client)
-      (server-save-buffers-kill-terminal arg)
+      (server-save-buffers-kill-terminal)
     (if-let ((buf-list (seq-filter (lambda (buf)
                                      (and (buffer-modified-p buf)
                                           (buffer-file-name buf)))
