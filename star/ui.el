@@ -4,7 +4,7 @@
 
 (when (not (display-graphic-p))
   (luna-def-key
-   "m-h" #'windmove-left
+   "M-h" #'windmove-left
    "M-j" #'windmove-down
    "M-k" #'windmove-up
    "M-l" #'windmove-right))
