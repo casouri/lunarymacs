@@ -87,6 +87,12 @@ title but isn't a link.
 For example, for Emacs.txt, we match not only [{Emacs.txt}],
 but also Emacs.")
 
+(defvar bklink-summary-read-only-p t
+  "If non-nil, bklink marks the summary read-only.")
+
+(defvar bklink-prune-summary-p t
+  "If non-nil, bklink prunes summary when save.")
+
 ;;; Backstage
 
 (defvar bklink-regexp (rx (seq (group "[{")
@@ -192,8 +198,9 @@ If the file doesn't exist, create a buffer."
       (progn (jit-lock-register #'bklink-fontify)
              (unless (derived-mode-p 'org-mode 'markdown-mode)
                (jit-lock-register #'bklink-fontify-url))
-             (add-hook 'write-file-functions
-                       #'bklink--write-file-function 90 t)
+             (when bklink-prune-summary-p
+               (add-hook 'write-file-functions
+                         #'bklink--write-file-function 90 t))
              ;; (add-hook 'fill-nobreak-predicate #'bklink--nobreak-p 90 t)
              (if (and bklink-show-back-link-on-start
                       (not bklink-show-back-link))
@@ -326,7 +333,8 @@ THIS-FILE is the filename we are inserting summary into."
              (indent-rigidly beg (point) 2))
            (insert "\n"))
          (insert (if bklink-use-form-feed "\x0C" (make-string 70 ?-)))
-         (put-text-property summary-start (point) 'read-only t)
+         (put-text-property summary-start (point)
+                            'read-only bklink-summary-read-only-p)
          ;; Add an non-read-only newline so the user and other
          ;; commands can append text at the end of the file.
          (insert "\n")

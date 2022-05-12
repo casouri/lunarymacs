@@ -112,6 +112,9 @@ IMAGE-DATA is the image binary data.")
 (defvar iimg-multi-line t
   "Render image in multiple lines.")
 
+(defvar iimg-prune-slices-p t
+  "If non-nil, iims prunes image slices when save.")
+
 (defvar iimg--data-regexp (rx (seq "({iimg-data "
                                    (group (+? anything))
                                    "})"))
@@ -525,7 +528,8 @@ Also refresh the image at point."
   (setq-local dnd-protocol-alist
               (cons '("^file:" . iimg-dnd-open-file)
                     dnd-protocol-alist))
-  (add-hook 'write-file-functions #'iimg--prune-slices 90 t)
+  (when iimg-prune-slices-p
+    (add-hook 'write-file-functions #'iimg--prune-slices 90 t))
   (iimg--replenish-slices))
 
 ;;; Drag and drop

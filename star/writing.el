@@ -34,10 +34,13 @@
                       :inherit 'highlight))
 
 (load-package bklink
-  :commands bklink-minor-mode)
+  :commands bklink-minor-mode
+  :config (setq bklink-summary-read-only-p nil
+                bklink-prune-summary-p nil))
 
 (load-package iimg
-  :autoload-hook (text-mode-hook . iimg-enable))
+  :autoload-hook (text-mode-hook . iimg-enable)
+  :config (setq iimg-prune-slices-p nil))
 
 (load-package quanjiao
   :autoload-hook (text-mode-hook . quanjiao-mode))
