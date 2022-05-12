@@ -25,6 +25,9 @@
  "s-s" #'save-buffer
  "s-w" #'delete-frame
 
+ "s-F" #'tab-bar-switch-to-next-tab
+ "s-B" #'tab-bar-switch-to-prev-tab
+
  ;; `winner-redo' is defined in angel.el as M-o.
  "s-." #'winner-redo)
 
@@ -110,3 +113,22 @@
   :commands
   luna-toggle-console
   luna-toggle-console-window)
+
+(load-package tab-bar-echo-area
+  :autoload-hook (tab-bar-mode-hook . tab-bar-echo-area-mode)
+  :config (setq tab-bar-tab-name-function #'luna-tab-bar-name))
+
+(defun luna-tab-bar-name ()
+  "Construct tab name by major mode and buffer name."
+  (with-current-buffer (window-buffer (minibuffer-selected-window))
+    (format "%s: %s" (format-mode-line mode-name) (buffer-name))))
+
+(defun luna-tab-bar-init ()
+  "Create basic tabs on startup."
+  (tab-bar-rename-tab "lisp")
+  (tab-bar-new-tab)
+  (tab-bar-rename-tab "nav")
+  (tab-bar-new-tab)
+  (tab-bar-rename-tab "work"))
+
+(add-hook 'after-init-hook #'luna-tab-bar-init 90)
