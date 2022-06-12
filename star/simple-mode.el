@@ -237,10 +237,15 @@ Then jslint:
                  '(c++-mode . ("~/attic/ccls/Release/ccls")))
     (add-to-list 'eglot-server-programs
                  '(rust-mode . ("rust-analyzer"))))
-  (defun eglot-restart ()
-    "Restart the current server"
-    (interactive)
-    (if-let ((server (eglot-current-server)))
-        (progn (eglot-shutdown server)
-               (eglot-ensure))
-      (user-error "Current buffer doesn’t have a server"))))
+  ;; Show error message when hovering by point. (By default error
+  ;; messages are only shown when hovering by cursor).
+  (add-hook 'eglot-managed-mode-hook
+            (lambda ()
+              ;; Show flymake diagnostics first.
+              (setq eldoc-documentation-functions
+                    (cons #'flymake-eldoc-function
+                          (remove #'flymake-eldoc-function
+                                  eldoc-documentation-functions)))
+              ;; Show all eldoc feedback.
+              (setq eldoc-documentation-strategy
+                    #'eldoc-documentation-compose))))
