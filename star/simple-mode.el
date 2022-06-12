@@ -192,6 +192,8 @@ Then jslint:
     ;; off. And I don’t want to manually revert buffer after every
     ;; fucking save.
     (auto-revert-mode)
+    ;; rustfmt’s line limit is too large.
+    (toggle-word-wrap)
     (electric-quote-local-mode -1)))
 
 ;; Go
