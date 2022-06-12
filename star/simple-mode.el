@@ -205,6 +205,8 @@ Then jslint:
     "Setup for ‘go-mode’."
     (eglot-ensure)))
 
+(load-package protobuf-mode :mode "\\.proto")
+
 ;;; General package
 
 (load-package aggressive-indent
