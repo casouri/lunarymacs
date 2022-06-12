@@ -4,7 +4,14 @@
 
 (luna-def-key
  :leader
- "oc" #'org-capture)
+ "oc" #'org-capture
+ :---
+ :keymaps 'org-mode-map
+ "C-c [" #'org-ref-insert-cite-link
+ "C-c ]" #'org-ref-insert-ref-link
+ "C-c \\" #'org-ref-insert-label-link
+ :keymaps 'olivetti-mode-map
+ "C-c \\" nil)
 
 ;;; Packages
 
@@ -17,7 +24,8 @@
   org-html-export-as-html)
 
 (load-package olivetti
-  :init (setq-default olivetti-body-width 74)
+  :config
+  (setq-default olivetti-body-width 74)
   :commands olivetti-mode)
 
 (load-package valign
@@ -50,6 +58,15 @@
   (setq org-hide-emphasis-markers nil)
   (setq org-image-actual-width '(300))
   (add-hook 'org-mode-hook #'luna-org-hook))
+
+(load-package bibtex
+  :config
+  (setq bibtex-dialect 'biblatex)
+  (luna-on "Brown"
+    (setq bibtex-completion-bibliography '("~/config/bib/zotero.bib"))))
+
+(load-package org-ref
+  :commands org-ref-insert-cite-link)
 
 ;;; Org config
 
@@ -109,7 +126,8 @@ ARG is the numerical argument."
   "Configuration for Org Mode."
   (luna-prose-mode)
   (electric-indent-local-mode -1)
-  (require 'org-tempo))
+  (require 'org-tempo)
+  (require 'org-ref))
 
 ;;; Org calendar
 
