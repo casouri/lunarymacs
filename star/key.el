@@ -32,11 +32,13 @@
  "f" '("File")
  "fr"  #'luna-rename-file
 
- "b" '("Buffer/bookmark")
+ "b" '("Buffer")
  "bm" '("message buffer" .
         (lambda () (interactive) (switch-to-buffer "*Messages*")))
  "bs" '("scratch buffer" .
         (lambda () (interactive) (switch-to-buffer "*scratch*")))
+ "bn" '("note buffer" .
+        (lambda () (interactive) (switch-to-buffer "*note*") (text-mode)))
 
  "t" '("Toggle")
  "tt"  #'luna-switch-theme
@@ -50,13 +52,21 @@
  "o" '("Open/Org")
  "of" #'open-in-finder
  "oi" #'open-in-iterm
- "ots" #'org-time-stamp
+ "ot" #'org-time-stamp
 
  "r" '("Replace")
  "rq" #'query-replace
  "rr" #'replace-regexp
  "rs" #'replace-string
 
+ "e" '("Eval")
+ "l" '("Luna/load")
+ "p" '("Profile")
+ "h" '("Hide")
+
+ "lf" #'luna-load-font
+ "lt" #'luna-load-theme
+ "se" #'luna-sudo-edit
  "cc" #'compile
  "ld" #'luna-dump
  "cw" #'count-words
