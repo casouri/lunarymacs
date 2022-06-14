@@ -139,4 +139,4 @@
   (defun remap-mono-font-size ()
     "Remap ‘fixed-pitch’ face according to current text scaling."
     (face-remap--remap-face 'fixed-pitch)
-  (add-hook 'text-scale-mode-hook #'remap-mono-font-size))
+    (add-hook 'text-scale-mode-hook #'remap-mono-font-size)))
