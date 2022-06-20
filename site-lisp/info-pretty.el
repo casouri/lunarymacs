@@ -41,16 +41,20 @@
 ;; | Definition indent
 ;; | Code
 
-(defface info-body `((t . (:inherit (variable-pitch default)
-                                    :height 1.2)))
-  "Face for body text in Info buffer."
-  :group 'info)
+(defgroup info-pretty nil
+  "Prettify info mode.")
 
-(defface info-inline-code `((t . (:inherit widget-field)))
-  "Face for inline code in Info buffer."
-  :group 'info)
+(defface info-pretty-body `((t . (:inherit (variable-pitch default)
+                                           :height 1.0)))
+  "Face for body text in Info buffer.")
 
-(defun Info--next-block ()
+(defface info-pretty-inline-code `((t . (:inherit widget-field)))
+  "Face for inline code in Info buffer.")
+
+(defface info-pretty-variable `((t . (:inherit italic)))
+  "Face for variables in a function definition.")
+
+(defun info-pretty--next-block ()
   "Return (BEG . END) of next text block after point.
 Move point to BEG.
 If search failed, return nil."
@@ -70,7 +74,7 @@ If search failed, return nil."
         (cons beg end))
     (search-failed nil)))
 
-(defsubst Info--menu-entry-detail-beg (limit)
+(defsubst info-pretty--menu-entry-detail-beg (limit)
   "Go to the beginning of the entry detail before LIMIT.
 Assumes the point is at BOL.
 Return nil if not found"
@@ -78,21 +82,21 @@ Return nil if not found"
    (rx (seq "*" " " (+ (not (any "\n"))) (group (>= 2 " "))))
    limit t))
 
-(defun Info--block-type (beg end)
+(defun info-pretty--block-type (beg end)
   "Return the type of the block between BEG and END.
 Moves point."
   ;;       Code block
   (cl-labels ((indent () (- (point) (line-beginning-position)))
               (visual-indent
-               () (car (window-text-pixel-size
-                        nil (line-beginning-position) (point)))))
+                () (car (window-text-pixel-size
+                         nil (line-beginning-position) (point)))))
     (cond ((progn (goto-char beg)
                   (looking-at "* Menu:"))
            '(MenuHeader))
           ;; Menu (header or entry)
           ((progn (goto-char beg)
                   (looking-at "\\*"))
-           (if (Info--menu-entry-detail-beg (line-end-position))
+           (if (info-pretty--menu-entry-detail-beg (line-end-position))
                `(MenuEntry ,(visual-indent))
              '(MenuEntry 0)))
           ;; Definition
@@ -145,14 +149,14 @@ Moves point."
              (skip-chars-forward " ")
              `(Code)))))
 
-(defun Info--remove-indent ()
+(defun info-pretty--remove-indent ()
   "Remove the spaces at the beginning of this line."
   (goto-char (line-beginning-position))
   (skip-chars-forward " ")
   ;; (delete-region (line-beginning-position) (point))
   (put-text-property (line-beginning-position) (point) 'display ""))
 
-(defun Info--remove-line-breaks (beg end)
+(defun info-pretty--remove-line-breaks (beg end)
   "Remove hard line breaks between BEG and END.
 Moves point."
   (goto-char end)
@@ -170,8 +174,16 @@ Moves point."
         (when (< (point) end-mark)
           (put-text-property p (point) 'display " "))))))
 
-(defun Info--unfontify-quote (beg end)
-  "Remove info-body face from quoted text between BEG and END."
+(defun info-pretty--fontify-variable (beg end)
+  "Convert capital words to italics between BEG and END."
+  (goto-char beg)
+  (while (re-search-forward "\\<[A-Z0-9+=*/-]+?\\>" end t)
+    (downcase-region (match-beginning 0) (match-end 0))
+    (put-text-property (match-beginning 0) (match-end 0)
+                       'font-lock-face 'info-pretty-variable)))
+
+(defun info-pretty--unfontify-quote (beg end)
+  "Remove info-pretty-body face from quoted text between BEG and END."
   (goto-char beg)
   (while (re-search-forward
           (rx (or (seq "`" (+? anychar) "'")
@@ -184,15 +196,15 @@ Moves point."
                      'font-lock-face)
       (put-text-property (or (match-beginning 1) (match-beginning 0))
                          (or (match-end 1) (match-end 0))
-                         'font-lock-face 'info-inline-code))))
+                         'font-lock-face 'info-pretty-inline-code))))
 
-(defun Info--fontify-block (beg end type)
+(defun info-pretty--fontify-block (beg end type)
   "Fontify block between BEG and END of TYPE.
 Moves point."
   (goto-char beg)
   (pcase type
     (`(Body ,indent1 ,indent2)
-     (put-text-property beg end 'font-lock-face 'info-body)
+     (put-text-property beg end 'font-lock-face 'info-pretty-body)
      (when (not (eq indent1 0))
        (put-text-property beg end 'line-prefix `(space :width ,indent1)))
      ;; We make the whole block indent the same, ignoring indent2.
@@ -202,7 +214,7 @@ Moves point."
      ;; effect.
      (put-text-property beg (1+ end) 'line-spacing 0.3)
      ;; This function messes positions up, has to run at the end.
-     (Info--remove-line-breaks beg end))
+     (info-pretty--remove-line-breaks beg end))
 
     (`(BulletBody ,indent1 ,indent2)
      (let ((case-fold-search nil))
@@ -211,19 +223,19 @@ Moves point."
                                        (seq digit ". ")
                                        (seq upper ". "))))))
      ;; We want to keep the bullet in default font.
-     (put-text-property (point) end 'font-lock-face 'info-body)
+     (put-text-property (point) end 'font-lock-face 'info-pretty-body)
      (when (not (eq indent1 0))
        (put-text-property beg end 'line-prefix `(space :width ,indent1)))
      ;; We add 2 to indent1 to align rest body with the bullet.
      (put-text-property beg end 'wrap-prefix `(space :width ,indent2))
      (put-text-property beg (1+ end) 'line-spacing 0.3)
-     (Info--remove-line-breaks beg end))
+     (info-pretty--remove-line-breaks beg end))
 
     (`(MenuHeader))
 
     (`(MenuEntry ,align)
      ;; First, align first line’s detail.
-     (when (Info--menu-entry-detail-beg end)
+     (when (info-pretty--menu-entry-detail-beg end)
        ;; matched range is the white space between subject and detail.
        ;; (put-text-property
        ;;  (match-beginning 1) (match-end 1)
@@ -231,39 +243,39 @@ Moves point."
        ;; We skip over the stars. Because info-menu-star is monospaced
        ;; and we want to keep the stars consistent.
        (put-text-property
-        (match-end 1) end 'font-lock-face 'info-body)
+        (match-end 1) end 'font-lock-face 'info-pretty-body)
        ;; Add 1 to end so the newline can get the property.
        (put-text-property beg (min (1+ end) (point-max))
                           'line-spacing 0.3)
        (put-text-property
         (match-end 1) (min (1+ end) (point-max))
         'wrap-prefix `(space :align-to (,align)))
-       (Info--remove-line-breaks (match-end 1) end)))
+       (info-pretty--remove-line-breaks (match-end 1) end)))
 
     (`(DetailList ,indent1 ,indent2)
-     (Info--remove-indent)
+     (info-pretty--remove-indent)
      (goto-char beg)
      (search-forward "\n")
      (let ((p (point)))
        (put-text-property beg (1+ end) 'line-spacing 0.3)
-       (put-text-property p end 'font-lock-face 'info-body)
+       (put-text-property p end 'font-lock-face 'info-pretty-body)
        (put-text-property p end 'line-prefix `(space :width ,indent2))
        (put-text-property p end 'wrap-prefix `(space :width ,indent2))
        (put-text-property beg (1- p) 'line-prefix
                           `(space :width ,indent1))
-       (Info--remove-line-breaks p end)))
+       (info-pretty--remove-line-breaks p end)))
 
     (`(Definition ,indent)
      (re-search-forward "\n +")
      (let ((p (point)))
        (put-text-property beg (1+ end) 'line-spacing 0.3)
-       (put-text-property p end 'font-lock-face 'info-body)
+       (put-text-property p end 'font-lock-face 'info-pretty-body)
        (put-text-property p end 'line-prefix `(space :width ,indent))
        (put-text-property p end 'wrap-prefix `(space :width ,indent))
-       (Info--remove-line-breaks p end)))
+       (info-pretty--remove-line-breaks p end)))
     (`(Code ,indent) (ignore indent))))
 
-(defun Info--prettify-buffer ()
+(defun info-pretty--prettify-buffer ()
   "Prettify Info buffer."
   (interactive)
   (save-excursion
@@ -271,7 +283,7 @@ Moves point."
       (goto-char (point-min))
       (re-search-forward "[=-\\*]$")
       (let (region)
-        (while (setq region (Info--next-block))
+        (while (setq region (info-pretty--next-block))
           (let ((beg (car region))
                 (end (cdr region))
                 end-mark)
@@ -279,23 +291,23 @@ Moves point."
             (set-marker end-mark end)
             (condition-case nil
                 (progn
-                  (Info--fontify-block
-                   beg end (Info--block-type beg end))
-                  (Info--unfontify-quote beg end-mark))
+                  (info-pretty--fontify-block
+                   beg end (info-pretty--block-type beg end))
+                  (info-pretty--unfontify-quote beg end-mark))
               ((debug search-failed)
                (message "Failed to fontify block %d %d" beg end)))
             (goto-char end-mark))))
       (Info-fontify-node)
       (visual-line-mode)
-      (face-remap-add-relative 'link '(:inherit info-body)))))
+      (face-remap-add-relative 'link '(:inherit info-pretty-body)))))
 
 (define-minor-mode info-pretty-mode
   "Prettified Info."
   :global t
   :lighter ""
   (if info-pretty-mode
-      (add-hook 'Info-selection-hook #'Info--prettify-buffer)
-    (remove-hook 'Info-selection-hook #'Info--prettify-buffer))
+      (add-hook 'Info-selection-hook #'info-pretty--prettify-buffer)
+    (remove-hook 'Info-selection-hook #'info-pretty--prettify-buffer))
   (when (derived-mode-p 'Info-mode)
     (revert-buffer nil t)))
 
