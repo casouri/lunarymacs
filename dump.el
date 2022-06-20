@@ -20,7 +20,7 @@
                    winner elec-pair rainbow-delimiters
                    highlight-parentheses hl-todo buffer-move
                    savehist minions ws-butler
-                   expand-region flyspell flycheck eglot
+                   expand-region flyspell eglot
                    yasnippet which-func savehist
                    consult selectrum selectrum-prescient
                    no-littering
