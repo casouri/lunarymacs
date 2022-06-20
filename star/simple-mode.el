@@ -232,9 +232,7 @@ Then jslint:
   ;; Has to be here because needs ‘eglot-server-programs’ loaded.
   (luna-on "Brown"
     (add-to-list 'eglot-server-programs
-                 '(c-mode . ("~/attic/ccls/Release/ccls")))
-    (add-to-list 'eglot-server-programs
-                 '(c++-mode . ("~/attic/ccls/Release/ccls")))
+                 '((c-mode c++-mode) . ("ccls-clang-10")))
     (add-to-list 'eglot-server-programs
                  '(rust-mode . ("rust-analyzer"))))
   ;; Show error message when hovering by point. (By default error
