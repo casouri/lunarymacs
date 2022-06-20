@@ -72,7 +72,12 @@
     (let ((var (thing-at-point 'word))
           (bounds (bounds-of-thing-at-point 'word)))
       (delete-region (car bounds) (cdr bounds))
-      (insert (format "@var{%s}" (downcase var))))))
+      (insert (format "@var{%s}" (downcase var)))))
+  (defun setup-texinfo ()
+    "Setup for texinfo mode."
+    (electric-quote-local-mode -1))
+
+  (add-hook 'texinfo-mode-hook #'setup-texinfo))
 
 ;;; Deprecated
 
