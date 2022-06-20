@@ -240,6 +240,7 @@ See ‘luna-external-program-notes’."
 
 (defun luna-load-theme (theme)
   "Load THEME or `luna-theme'."
+  (interactive)
   (dolist (theme custom-enabled-themes)
     (disable-theme theme))
   (if (featurep (intern (format "%s-theme" theme)))
