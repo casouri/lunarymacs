@@ -83,13 +83,12 @@
 	(luna-enable-apple-emoji)
     (luna-load-font 'default "IBM Plex Mono" 13 :weight 'medium)
     (luna-load-font 'fixed-pitch "IBM Plex Mono" 13 :weight 'medium)
-    (luna-load-font 'variable-pitch "SF Pro Text" 16)
+    (luna-load-font 'variable-pitch "Academica" 16)
     (luna-load-font 'mode-line "SF Pro Text" 13 :weight 'light)
-    (advice-add #'load-theme
-                :after (lambda (&rest _)
-                         (luna-load-font
-                          'mode-line
-                          "SF Pro Text" 13 :weight 'light))))
+    (add-hook 'luna-load-theme-hook
+              (lambda ()
+                (luna-load-font
+                 'mode-line "SF Pro Text" 13 :weight 'light))))
 ;;;; Frame
   (when (display-graphic-p)
     (set-frame-width (selected-frame) 150)
