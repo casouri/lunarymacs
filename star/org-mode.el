@@ -57,6 +57,7 @@
   (setq org-fontify-quote-and-verse-blocks t)
   (setq org-hide-emphasis-markers nil)
   (setq org-image-actual-width '(300))
+  (set-face-attribute 'org-meta-line nil :family "SF Pro Text")
   (add-hook 'org-mode-hook #'luna-org-hook))
 
 (load-package bibtex
