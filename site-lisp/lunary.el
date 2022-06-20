@@ -74,6 +74,7 @@ FONT-NAMEs are keys in ‘luna-font-alist’.")
     ("SF Pro Text" . ("SF Pro Text" "Source Han Serif SC" 1.1))
     ("IBM Plex Sans" . ("IBM Plex Sans" "Source Han Serif SC" 1.1))
     ("Dossier" . ("Dossier" "Source Han Serif SC" 1.3))
+    ("Academica" . ("Academica Book" "Source Han Serif SC" 1.3))
 
     ("方正fW筑紫明朝" . (nil "FZFW ZhuZi MinchoS" 1))
     ("Source Han Serif" . (nil "Source Han Serif SC" 1))
@@ -240,7 +241,11 @@ See ‘luna-external-program-notes’."
 
 (defun luna-load-theme (theme)
   "Load THEME or `luna-theme'."
-  (interactive)
+  (interactive
+   (list
+    (intern (completing-read "Theme: "
+                             (mapcar #'symbol-name
+				                     (custom-available-themes))))))
   (dolist (theme custom-enabled-themes)
     (disable-theme theme))
   (if (featurep (intern (format "%s-theme" theme)))
