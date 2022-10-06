@@ -59,6 +59,7 @@
  '(cursor-type '(box . 10))
  '(delete-auto-save-files nil)
  '(delete-by-moving-to-trash t)
+ '(dictionary-use-single-buffer t)
  '(display-line-numbers-width 3)
  '(doc-view-resolution 300)
  '(ediff-split-window-function 'split-window-horizontally)
