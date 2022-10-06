@@ -18,7 +18,7 @@
 
 (load-package which-func
   :config
-  (which-func-mode))
+  (which-function-mode))
 
 ;;; Functions
 
