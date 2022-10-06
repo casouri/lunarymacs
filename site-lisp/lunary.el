@@ -74,7 +74,7 @@ FONT-NAMEs are keys in ‘luna-font-alist’.")
     ("SF Pro Text" . ("SF Pro Text" "Source Han Serif SC" 1.1))
     ("IBM Plex Sans" . ("IBM Plex Sans" "Source Han Serif SC" 1.1))
     ("Dossier" . ("Dossier" "Source Han Serif SC" 1.3))
-    ("Academica" . ("Academica Book" "Source Han Serif SC" 1.3))
+    ("Academica" . ("Academica Book" "Source Han Serif SC" 1.0))
 
     ("方正fW筑紫明朝" . (nil "FZFW ZhuZi MinchoS" 1))
     ("Source Han Serif" . (nil "Source Han Serif SC" 1))
