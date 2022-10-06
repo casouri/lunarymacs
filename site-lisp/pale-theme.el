@@ -340,7 +340,10 @@
         (erc-notice-face (nil "SlateBlue")) ; Get rid of bold.
         (erc-timestamp-face (nil ,ok)) ; Use darker green.
         (erc-current-nic-face (nil "SlateBlue")) ; Use darker blue.
-        ))))
+
+        (dictionary-word-definition-face (variable-pitch))
+        (dictionary-word-entry-face (variable-pitch nil nil nil bold))
+        (dictionary-reference-face ((variable-pitch link)))))))
 
 (provide-theme 'pale)
 
