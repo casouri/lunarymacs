@@ -1,9 +1,0 @@
-# -*- mode: snippet -*-
-# name: _example
-# key: _example
-# --
-@example
-@group
-$0
-@end group
-@end example
