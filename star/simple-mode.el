@@ -132,6 +132,7 @@ Then jslint:
 ;; Scheme
 ;; Note: C-c C-a to activate a #lang operation in a racket file.
 (load-package geiser
+  :extern "racket-language-server"
   :commands run-geiser
   :config
   (add-hook 'geiser-repl-mode
@@ -141,6 +142,9 @@ Then jslint:
    :keymaps 'geiser-mode-map
    "C-." nil
    "M-." nil))
+
+(luna-note-extern "racket-language-server"
+  "raco pkg install racket-langserver")
 
 (load-package geiser-racket
   :commands run-geiser run-racket)
