@@ -44,3 +44,16 @@
 
 (load-package magit-todos
   :autoload-hook (magit-mode . magit-todos-mode))
+
+(load-package git-link
+  :commands
+  git-link
+  git-link-commit
+  git-link-homepage
+  github-link
+  github-link-commit
+  github-link-homepage
+  :init
+  (defalias 'github-link 'git-link)
+  (defalias 'github-link-commit 'git-link-commit)
+  (defalias 'github-link-homepage 'git-link-hoempage))
