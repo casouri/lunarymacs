@@ -102,12 +102,12 @@
           rime-librime-root "/opt/local"
           rime-show-preedit 'inline
           rime-emacs-module-header-root "~/emacs-head/src"
-          rime-posframe-properties (list :font "Source Han Sans"
+          rime-posframe-properties (list :font "Source Han Sans SC"
                                          :weight 'light
                                          :internal-border-width 10))
     (add-hook 'input-method-activate-hook
               (lambda () (interactive)
-                (setq-local cursor-type 'hbar)))
+                (setq-local cursor-type 'hollow)))
     (add-hook 'input-method-inactivate-hook
               (lambda () (interactive)
                 (kill-local-variable 'cursor-type)))))
