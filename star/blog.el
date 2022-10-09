@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t -*-
 
-(luna-def-key
+(luna-key-def
  :keymaps 'pollen-mode-map
  "<tab>" #'indent-for-tab-command)
 

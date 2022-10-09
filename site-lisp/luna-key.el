@@ -139,7 +139,7 @@ to non-nil."
           (add-hook 'after-load-functions
                     #'luna-key-define-postponed-binding))))))
 
-(defun luna-def-key (&rest args)
+(defun luna-key-def (&rest args)
   "Define key.
 
 The :keymaps and :prefix modifiers specifies the keymaps and
@@ -148,7 +148,7 @@ the definitions after them, and their effect lasts until another
 modifier overrides them. For example, to define KEY1 in MAP1 and
 KEY2 in MAP2:
 
-  (luna-def-key
+  (luna-key-def
    :keymaps 'MAP1
    KEY1 DEF1
    :keymaps 'MAP2n

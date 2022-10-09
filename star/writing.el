@@ -2,7 +2,7 @@
 
 ;;; Keys
 
-(luna-def-key
+(luna-key-def
  :keymaps 'bklink-minor-mode-map
  "C-c l" #'bklink-show-back-link
  "C-c i" #'bklink-insert

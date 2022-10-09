@@ -2,7 +2,7 @@
 
 ;;; Keys
 
-(luna-def-key
+(luna-key-def
  :keymaps 'TeX-mode-map
  "$" nil
  :keymaps 'latex-mode-map

@@ -3,7 +3,7 @@
 ;;; Key
 ;;
 
-(luna-def-key
+(luna-key-def
  :keymaps 'flyspell-mode-map
  "C-;" #'flyspell-auto-correct-previous-word
  [down-mouse-3] #'flyspell-correct-word

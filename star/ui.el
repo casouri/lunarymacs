@@ -3,13 +3,13 @@
 ;;; Key
 
 (when (not (display-graphic-p))
-  (luna-def-key
+  (luna-key-def
    "M-h" #'windmove-left
    "M-j" #'windmove-down
    "M-k" #'windmove-up
    "M-l" #'windmove-right))
 
-(luna-def-key
+(luna-key-def
  "s-y" #'luna-toggle-console
  "C-s-y" #'luna-toggle-console-window
 

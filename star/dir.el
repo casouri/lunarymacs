@@ -2,7 +2,7 @@
 
 ;;; Key
 
-(luna-def-key
+(luna-key-def
  ;; f -> open file
  ;; o -> open in other window
  :keymaps 'dired-mode-map

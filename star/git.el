@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t -*-
 
-(luna-def-key
+(luna-key-def
  :leader
  "g"  '("git")
  "gs" #'magit-status

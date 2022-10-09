@@ -4,7 +4,7 @@
 
 ;;; Key
 
-(luna-def-key
+(luna-key-def
  "s-/"     #'transform-previous-char
  :keymaps '(company-active-map company-search-map)
  "C-p" #'company-select-previous

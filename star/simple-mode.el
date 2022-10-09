@@ -5,7 +5,7 @@
 (require 'utility)
 
 ;; Emacs Lisp
-(luna-def-key
+(luna-key-def
  :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
  "<S-return>" #'eval-defun
  "<C-S-return>" #'eval-defun-and-next
@@ -42,7 +42,7 @@
   ;; http://haskell.github.io/haskell-mode/manual/latest/Interactive-Haskell.html#Interactive-Haskell
   (require 'console-buffer)
   (add-to-list 'luna-console-buffer-alist '(haskell-mode . "*haskell*"))
-  (luna-def-key
+  (luna-key-def
    :keymaps 'haskell-mode-map
    "C-c C-l" #'haskell-process-load-file
    "C-c `"   #'haskell-interactive-bring
@@ -138,7 +138,7 @@ Then jslint:
   (add-hook 'geiser-repl-mode
             (lambda ()
               (setq-local company-idle-delay nil)))
-  (luna-def-key
+  (luna-key-def
    :keymaps 'geiser-mode-map
    "C-." nil
    "M-." nil))

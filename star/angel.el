@@ -8,7 +8,7 @@
 
 ;;; Keys
 
-(luna-def-key
+(luna-key-def
  ;; Meta bindings
  "M-n"   #'scroll-up
  "M-p"   #'scroll-down
@@ -192,9 +192,9 @@ Edit the underlined region and type C-c C-c to start
 
 ;;; Transient map in region (y p)
 
-;; Unlike `emulation-mode-map-alists', luna-def-key allows more
+;; Unlike `emulation-mode-map-alists', luna-key-def allows more
 ;; flexibility for the predicate.
-(luna-def-key
+(luna-key-def
  :when (lambda ()
          (and mark-active (not (derived-mode-p 'magit-status-mode))))
  :keymaps 'override

@@ -4,7 +4,7 @@
 
 ;;; Key
 
-(luna-def-key
+(luna-key-def
  "C-x u"   #'vundo
  "C-x i"   #'luna-insert-special-symbol
  "C-c '"   #'separedit

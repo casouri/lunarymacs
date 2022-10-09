@@ -2,7 +2,7 @@
 
 ;;; Keys
 
-(luna-def-key
+(luna-key-def
  :leader
  "oc" #'org-capture
  :---

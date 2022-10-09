@@ -24,7 +24,7 @@
 
 ;;; Key
 
-(luna-def-key
+(luna-key-def
  :leader
  ;; align
  "="  #'align-regexp
@@ -97,7 +97,7 @@
 ;;; Package
 
 (load-package which-key
-  ;; We handle this in `luna-def-key'.
+  ;; We handle this in `luna-key-def'.
   ;; :init (setq which-key-enable-extended-define-key t)
   :config
   (which-key-mode))
