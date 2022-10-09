@@ -123,16 +123,6 @@
   (with-current-buffer (window-buffer (minibuffer-selected-window))
     (format "%s: %s" (format-mode-line mode-name) (buffer-name))))
 
-(defun luna-tab-bar-init ()
-  "Create basic tabs on startup."
-  (tab-bar-rename-tab "lisp")
-  (tab-bar-new-tab)
-  (tab-bar-rename-tab "nav")
-  (tab-bar-new-tab)
-  (tab-bar-rename-tab "work"))
-
-(add-hook 'after-init-hook #'luna-tab-bar-init 90)
-
 (with-eval-after-load 'face-remap
   (setq text-scale-remap-header-line t)
   ;; Also remap monospace font.
