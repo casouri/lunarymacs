@@ -401,8 +401,11 @@ In RECIPE, :repo is of form \"user/repo\"."
         (cowboy-delete-1 package)
         (cowboy--github-install package recipe))
     (cowboy--command "git"
-                     (luna-f-join cowboy-package-dir (symbol-name package))
-                     "pull" "--rebase")))
+                     (luna-f-join cowboy-package-dir
+                                  (symbol-name package))
+                     "pull" "--rebase"
+                     "origin" (or (plist-get recipe :branch)
+                                  "master"))))
 
 ;;;; URL
 
