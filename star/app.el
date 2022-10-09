@@ -28,25 +28,7 @@
   (require 'erc-services)
   (erc-services-mode))
 
-(load-package helpful
-  :config
-  ;; FIXME: workaround before PR merges.
-  ;; https://github.com/Wilfred/helpful/issues/282
-  (defvar read-symbol-positions-list nil)
-  (defun helpful--autoloaded-p (sym buf)
-    "Return non-nil if function SYM is autoloaded."
-    (-when-let (file-name (buffer-file-name buf))
-      (setq file-name (s-chop-suffix ".gz" file-name))
-      (help-fns--autoloaded-p sym)))
-  (defun helpful--skip-advice (docstring)
-    "Remove mentions of advice from DOCSTRING."
-    (let* ((lines (s-lines docstring))
-           (relevant-lines
-            (--take-while
-             (not (or (s-starts-with-p ":around advice:" it)
-                      (s-starts-with-p "This function has :around advice:" it)))
-             lines)))
-      (s-trim (s-join "\n" relevant-lines)))))
+(load-package helpful :defer)
 
 (load-package ghelp
   :commands
@@ -92,25 +74,25 @@
                   "/run/current-system/profile/bin"
                   "/run/current-system/profile/sbin"))))
 
-(load-package rime
-  :defer
-  :config
-  (luna-on "Brown"
-    (setq rime-show-candidate 'posframe
-          rime-posframe-style 'vertical
-          rime-user-data-dir "/Users/yuan/Library/Rime"
-          rime-librime-root "/opt/local"
-          rime-show-preedit 'inline
-          rime-emacs-module-header-root "~/emacs-head/src"
-          rime-posframe-properties (list :font "Source Han Sans SC"
-                                         :weight 'light
-                                         :internal-border-width 10))
-    (add-hook 'input-method-activate-hook
-              (lambda () (interactive)
-                (setq-local cursor-type 'hollow)))
-    (add-hook 'input-method-inactivate-hook
-              (lambda () (interactive)
-                (kill-local-variable 'cursor-type)))))
+;; (load-package rime
+;;   :defer
+;;   :config
+;;   (luna-on "Brown"
+;;     (setq rime-show-candidate 'posframe
+;;           rime-posframe-style 'vertical
+;;           rime-user-data-dir "/Users/yuan/Library/Rime"
+;;           rime-librime-root "/opt/local"
+;;           rime-show-preedit 'inline
+;;           rime-emacs-module-header-root "~/emacs-head/src"
+;;           rime-posframe-properties (list :font "Source Han Sans SC"
+;;                                          :weight 'light
+;;                                          :internal-border-width 10))
+;;     (add-hook 'input-method-activate-hook
+;;               (lambda () (interactive)
+;;                 (setq-local cursor-type 'hollow)))
+;;     (add-hook 'input-method-inactivate-hook
+;;               (lambda () (interactive)
+;;                 (kill-local-variable 'cursor-type)))))
 
 (with-eval-after-load 'gnus
   (setq gnus-select-method
@@ -125,3 +107,6 @@
   (setq truncate-lines t
         line-spacing 0.2))
 (add-hook 'Custom-mode-hook #'luna-customize-setup)
+
+(load-package vterm
+  :commands vterm)

@@ -29,14 +29,6 @@
 (when (featurep 'ns)
   (push '(ns-transparent-titlebar . t) default-frame-alist))
 
-(when (display-graphic-p)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1))
-
 ;; Have to enable menu bar on mac port, otherwise emacs lost focus.
-(when (not (display-graphic-p))
-  (menu-bar-mode -1))
-
-;; (when (display-graphic-p)
-;;   (add-hook 'after-init-hook #'toggle-frame-maximized))
-
+;; (when (not (display-graphic-p))
+;;   (menu-bar-mode -1))

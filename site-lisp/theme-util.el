@@ -163,7 +163,8 @@ COLOR’s are in the form of ”#RRGGBB”."
   "Return a color made of COLOR-ABOVE with alpha ALPHA placed above COLOR-BASE.
 Both COLOR’S are like ”#RRGGBB”, ALPHA is a float between 0 and 1."
   (theme-util-color-list-to-str
-   (cl-labels ((comp (base above alpha) (+ (* base (- 1 alpha)) (* above alpha)))
+   (cl-labels ((comp (base above alpha)
+                 (+ (* base (- 1 alpha)) (* above alpha)))
                (bound (color) (cond ((> color 255) 255)
                                     ((< color 0) 0)
                                     (t color))))

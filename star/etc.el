@@ -42,6 +42,8 @@
 
 (load-package benchmark-init :defer)
 
+(load-package exec-path-from-shell :defer)
+
 ;;; Custom
 
 (custom-set-variables
@@ -106,10 +108,10 @@
  '(tab-bar-show nil)
  '(tab-width 4)
  '(use-dialog-box nil)
+ '(use-system-tooltips nil)
  '(user-full-name "Yuan Fu")
  '(user-mail-address "casouri@gmail.com")
  '(window-resize-pixelwise t)
  '(word-wrap-by-category t)
- '(xref-prompt-for-identifier '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame))
- ;; Ends here.
+ '(xref-prompt-for-identifier '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame));; Ends here.
  )

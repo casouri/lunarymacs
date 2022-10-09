@@ -182,11 +182,12 @@ Edit the underlined region and type C-c C-c to start
     (deactivate-mark)
     (isearch-yank-kill)))
 
-(defun luna-rcenter-advice (&rest _)
-  "If point goes out of the window, recenter rather than move just enough."
+(defun luna-recenter-advice (&rest _)
+  "If point goes out of the window, recenter."
   (when (pos-visible-in-window-p) (recenter)))
-(advice-add 'isearch-repeat-forward :after #'luna-rcenter-advice)
-(advice-add 'isearch-repeat-backward :after #'luna-rcenter-advice)
+
+(advice-add 'isearch-repeat-forward :after #'luna-recenter-advice)
+(advice-add 'isearch-repeat-backward :after #'luna-recenter-advice)
 (add-hook 'isearch-mode-hook #'luna-isearch-with-region)
 
 ;;; Transient map in region (y p)

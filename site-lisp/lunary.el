@@ -172,6 +172,14 @@ To make the change persist reboot, use
            (member (system-name) ,host))
      ,@body))
 
+(defun luna-run-server ()
+  "Run server in idle timer."
+  (run-with-idle-timer
+   3 nil (lambda ()
+           (require 'server)
+           (unless (server-running-p)
+             (server-start t t)))))
+
 ;;; Dump
 
 (defun luna-dump (emacs-location dump-location orig-dump-location)

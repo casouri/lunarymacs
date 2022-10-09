@@ -63,15 +63,9 @@
 (luna-load-relative "star/app.el")
 (require 'utility)
 
-;;; Server
-(run-with-idle-timer
- 3 nil (lambda ()
-         (require 'server)
-         (unless (server-running-p)
-           (server-start t t))))
-
 ;;; Customize
-
+;;;; Server
+(luna-run-server)
 ;;;; Theme
 (when (window-system)
   (luna-load-theme 'pale))
@@ -79,7 +73,7 @@
 (luna-on "Brown"
 ;;;; Font
   (when (display-graphic-p)
-	(luna-enable-apple-emoji)
+    (luna-enable-apple-emoji)
     (luna-load-font 'default "IBM Plex Mono" 13 :weight 'medium)
     (luna-load-font 'fixed-pitch "IBM Plex Mono" 13 :weight 'medium)
     (luna-load-font 'variable-pitch "Academica" 16)

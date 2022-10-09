@@ -190,8 +190,8 @@ ARGS.
            ;; if the package is installed or not.
            ,@load-path-form
            (add-to-list 'luna-package-list ',package)
-           (when (not (luna-installed-p ',package))
-             (error "%s not installed" ',package))
+           ;; (when (not (luna-installed-p ',package))
+           ;;   (error "%s not installed" ',package))
            ,@autoload-list
            ,@body
            ,(unless defer-p `(require ',package)))

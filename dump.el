@@ -16,7 +16,7 @@
 
 (dolist (package '(org
                    helpful company which-key
-                   recentf-ext swiper aggressive-indent
+                   recentf-ext aggressive-indent
                    winner elec-pair rainbow-delimiters
                    highlight-parentheses hl-todo buffer-move
                    savehist minions ws-butler
