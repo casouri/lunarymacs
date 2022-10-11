@@ -34,12 +34,13 @@
            (hl-weak bg-tooltip)
            (hl-normal "#ffffb4")
            (hl-strong "#e8e800")
+
+           ;; Colors indented for foreground are less pronouced.
            (hl-fg "#987816")
+           (red-fg "DarkRed")
+           (blue-fg "SlateBlue")
 
-           (yellow "#987816")
-           (red "DarkRed")
-           (blue "SlateBlue")
-
+           ;; Warning and error are brighter to catch attention.x
            (warning "#DA7A48")
            (err     "#E04E49")
            (ok      "#489446")
@@ -115,9 +116,9 @@
         (font-lock-comment-delimiter-face    (font-lock-comment-face))
         (font-lock-doc-face                  (shadow))
         (font-lock-constant-face             ,italic)
-        (font-lock-keyword-face              (nil ,red))
+        (font-lock-keyword-face              (nil ,red-fg))
         (font-lock-string-face               ())
-        (font-lock-type-face                 (nil "#987816"))
+        (font-lock-type-face                 (nil ,hl-fg))
         (font-lock-variable-name-face        ,bold)
         (font-lock-function-name-face        ,bold)
         (font-lock-warning-face              (error))
@@ -127,7 +128,7 @@
         (font-lock-regexp-grouping-backslash ,bold)
         (font-lock-regexp-grouping-construct ,bold)
 
-        (sh-quoted-exec (nil ,red))
+        (sh-quoted-exec (nil ,red-fg))
 
         (mode-line (nil nil ,bg-tooltip))
         (mode-line-inactive (mode-line nil ,bg-block))
@@ -343,13 +344,28 @@
         (consult-bookmark (consult-buffer))
         (consult-file (consult-file))
 
-        (erc-notice-face (nil ,red)) ; Get rid of bold.
+        (erc-notice-face (nil ,red-fg)) ; Get rid of bold.
         (erc-timestamp-face (nil ,ok)) ; Use darker green.
-        (erc-current-nic-face (nil ,red)) ; Use darker blue.
+        (erc-current-nic-face (nil ,red-fg)) ; Use darker blue.
 
         (dictionary-word-definition-face (variable-pitch))
         (dictionary-word-entry-face (variable-pitch nil nil nil bold))
-        (dictionary-reference-face ((variable-pitch link)))))))
+        (dictionary-reference-face ((variable-pitch link)))
+
+        (gnus-summary-normal-unread (variable-pitch))
+        (gnus-summary-normal-read
+         (gnus-summary-normal-unread ,ok))
+        (gnus-summary-normal-undownloaded
+         (gnus-summary-normal-unread ,red-fg))
+        (gnus-summary-normal-ticked
+         (gnus-summary-normal-unread ,hl-fg))
+        (gnus-summary-normal-ancient
+         (gnus-summary-normal-unread ,blue-fg))
+
+        (debbugs-gnu-new (nil ,err))
+        (debbugs-gnu-handled (nil ,ok))
+        (debbugs-gnu-tagged (nil ,err))
+        ))))
 
 (provide-theme 'pale)
 
