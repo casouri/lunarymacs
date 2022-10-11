@@ -152,6 +152,8 @@
 ;;   (set-face-attribute 'ctrlf-highlight-passive nil
 ;;                       :inherit 'default :weight 'bold))
 
+(load-package wgrep :defer)
+
 ;;;; Automation
 
 (load-package ftable
@@ -187,8 +189,8 @@
         (alist-get 'node vundo-glyph-alist) ?O)
   (set-face-attribute 'vundo-default nil :family "PragmataPro Mono"))
 
-(load-package undo-hl
-  :autoload-hook (prog-mode-hook . undo-hl-mode)
-  :config (setq undo-hl-mininum-edit-size 10)
-  (add-to-list 'undo-hl-undo-commands 'vundo-forward)
-  (add-to-list 'undo-hl-undo-commands 'vundo-backward))
+;; (load-package undo-hl
+;;   :autoload-hook (prog-mode-hook . undo-hl-mode)
+;;   :config (setq undo-hl-mininum-edit-size 10)
+;;   (add-to-list 'undo-hl-undo-commands 'vundo-forward)
+;;   (add-to-list 'undo-hl-undo-commands 'vundo-backward))
