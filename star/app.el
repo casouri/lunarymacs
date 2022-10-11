@@ -96,7 +96,10 @@
 
 (with-eval-after-load 'gnus
   (setq gnus-select-method
-        '(nntp "news.gmane.io" (nntp-port-number 119))))
+        '(nntp "news.gmane.io" (nntp-port-number 119))
+        gnus-visible-headers "^From:\\|^Subject:"
+        gnus-use-full-window nil
+        gnus-summary-line-format "%U%R%z%(%*%[%n%]%) %s\n"))
 
 (load-package restclient
   :commands restclient-mode)
