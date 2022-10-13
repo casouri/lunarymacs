@@ -25,13 +25,15 @@
 
 
 (defvar flyspell-skip-commands
-  '(scroll-down scroll-up next-line previous-line luna-scroll-up-reserve-point
-                luna-scroll-down-reserve-point)
+  '( scroll-down scroll-up next-line previous-line
+     luna-scroll-up-reserve-point
+     luna-scroll-down-reserve-point)
   "Don’t run ‘flyspell-post-command-hook’ after these commands.")
 
 ;; Install dictionaries: http://wordlist.aspell.net
 ;; or by macports.
 (load-package flyspell
+  :extern "aspell"
   :config
   (setq flyspell-issue-message-flag nil)
   ;; Add curely quotes so words like “didn’t” are properly handled.
@@ -47,7 +49,6 @@
               (lambda (oldfn &rest args)
                 (unless (memq this-command flyspell-skip-commands)
                   (apply oldfn args))))
-  :extern "aspell"
   :autoload-hook
   (text-mode-hook . flyspell-mode)
   (prog-mode-hook . flyspell-prog-mode))
