@@ -14,7 +14,6 @@
   "Pale theme.")
 
 (theme-util-deffaces
- 'block
  'magit-heading-selection
  'magit-heading-highlight)
 
@@ -52,8 +51,8 @@
            (underline '(nil nil nil t))
            (italic '(nil nil nil nil nil italic))
            (light '(nil nil nil nil semi-light)))
-      `(;; builtin faces
-        (default     (nil ,fg ,bg))
+;;; Builtin faces
+      `((default     (nil ,fg ,bg))
         (region      (nil nil ,bg-region))
         (highlight   (nil nil ,hl-strong))
         (cursor      (nil "white" "black"))
@@ -67,7 +66,6 @@
         (vertical-border (nil ,bg-tooltip ,bg-tooltip) nil ,tty)
         (link        (nil nil ,hl-weak))
         (link-visited (link))
-        (block       (nil nil ,bg-block))
         (bold ,bold)
         (underline ,underline)
         (italic ,italic)
@@ -82,8 +80,6 @@
 
         (widget-field        (nil nil ,bg-block))
         (widget-inactive     (nil ,fg-weak))
-
-
 
         ;; See also builin-config.el (Customize) where I increase line
         ;; spacing and default face.
@@ -134,10 +130,14 @@
         (mode-line-inactive (mode-line nil ,bg-block))
         (header-line (mode-line) (:height 150))
 
-        ;; completion
-        (completions-common-part ,bold)
+        (tab-bar (mode-line nil ,bg) (:height 160))
+        (tab-bar-tab (tab-bar nil ,bg))
+        (tab-bar-tab-inactive (tab-bar nil ,bg-block))
+        (tab-bar-tab-group-current (tab-bar-tab nil nil nil bold))
+        (tab-bar-tab-group-inactive (tab-bar-tab-inactive))
+        (tab-bar-tab-ungrouped (tab-bar-tab-inactive))
 
-        ;; package faces
+;;; Packages
 
         (flyspell-duplicate () (:underline
                                 (:style wave :color ,hl-fg)))
@@ -156,17 +156,6 @@
         (company-preview                     (shadow))
         (company-preview-common              (company-preview))
         (company-preview-search              (company-preview))
-
-        ;; (ivy-current-match                   (current-selection))
-        ;; (ivy-minibuffer-match-face-1         (nil ,bg ,green))
-        ;; (ivy-minibuffer-match-face-2         (nil ,bg ,orange))
-        ;; (ivy-minibuffer-match-face-3         (nil ,bg ,orange))
-        ;; (ivy-minibuffer-match-face-4         (nil ,bg ,orange))
-        ;; (ivy-minibuffer-match-highlight      (ivy-current-match))
-        ;; (ivy-virtual                         (default))
-        ;; (ivy-subdir                          (default))
-        ;; (ivy-remote                          (default))
-        ;; (ivy-org                             (default))
 
         (magit-heading-highlight (nil nil ,bg-tooltip) (:extend t))
         (magit-heading-selection (nil nil ,bg-block) (:extend t))
@@ -248,14 +237,6 @@
         ;; (magit-signature-revoked         (nil ,orange))
         ;; (magit-signature-untrusted       (nil ,orange))
 
-
-        ;; (rainbow-delimiters-depth-1-face (nil ,blue2))
-        ;; (rainbow-delimiters-depth-2-face (nil ,violet2))
-        ;; (rainbow-delimiters-depth-3-face (nil ,green))
-        ;; (rainbow-delimiters-depth-4-face (nil ,orange))
-        ;; (rainbow-delimiters-depth-5-face (nil ,violet2))
-        ;; (rainbow-delimiters-depth-6-face (nil ,yellow))
-        ;; (rainbow-delimiters-depth-7-face (nil ,blue2))
         (rainbow-delimiters-unmatched-face (nil ,err))
         (rainbow-delimiters-mismatched-face
          (rainbow-delimiters-unmatched-face))
@@ -296,7 +277,7 @@
 
         (org-verbatim         (fixed-pitch))
         (org-code             (org-verbatim))
-        (org-block            ((org-verbatim block)) (:extend t))
+        (org-block            (org-verbatim nil ,bg-block) (:extend t))
         (org-block-begin-line ((org-block org-meta-line)))
         (org-block-end-line   ((org-block org-meta-line)))
         (org-formula          (fixed-pitch))
@@ -317,22 +298,6 @@
         (line-number-current-line (nil nil ,bg-block))
         (line-number-major-tick   (line-number))
         (line-number-minor-tick   (line-number))
-
-        ;; (avy-lead-face      (nil ,bg ,red))
-        ;; (avy-lead-face-0    (nil ,bg ,green))
-        ;; (avy-lead-face-1    (nil ,bg ,orange))
-        ;; (avy-lead-face-2    (nil ,bg ,blue2))
-
-        (table-cell ())
-
-        ;; (tab-line              (mode-line-inactive))
-        ;; (tab-line-tab          (tab-line))
-        ;; (tab-line-tab-inactive (tab-line-tab))
-        ;; (tab-line-highlight
-        ;;  (tab-line nil ,(darken bg 0.15))
-        ;;  (:box (:line-width 3 :color ,(darken bg 0.15))))
-        ;; (tab-line-tab-current
-        ;;  (tab-line nil ,bg) (:box (:line-width 3 :color ,bg)))
 
         (rime-default-face (tooltip) (:height 150))
         (rime-highlight-candidate-face ((bold rime-default-face)))
