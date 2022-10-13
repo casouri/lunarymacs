@@ -29,7 +29,10 @@
  "s-B" #'tab-bar-switch-to-prev-tab
 
  ;; `winner-redo' is defined in angel.el as M-o.
- "s-." #'winner-redo)
+ "s-." #'winner-redo
+
+ :leader
+ "tr" #'tab-rename)
 
 ;;; Config
 
@@ -114,9 +117,13 @@
   luna-toggle-console
   luna-toggle-console-window)
 
-(load-package tab-bar-echo-area
-  :autoload-hook (tab-bar-mode-hook . tab-bar-echo-area-mode)
-  :config (setq tab-bar-tab-name-function #'luna-tab-bar-name))
+;; (load-package tab-bar-echo-area
+;;   :autoload-hook (tab-bar-mode-hook . tab-bar-echo-area-mode)
+;;   :config (setq tab-bar-tab-name-function #'luna-tab-bar-name))
+
+(with-eval-after-load 'tab-bar-mode
+  (setq tab-bar-close-button-show nil)
+  (setq-default tab-bar-show t))
 
 (defun luna-tab-bar-name ()
   "Construct tab name by major mode and buffer name."
