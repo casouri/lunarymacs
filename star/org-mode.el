@@ -9,9 +9,7 @@
  :keymaps 'org-mode-map
  "C-c [" #'org-ref-insert-cite-link
  "C-c ]" #'org-ref-insert-ref-link
- "C-c \\" #'org-ref-insert-label-link
- :keymaps 'olivetti-mode-map
- "C-c \\" nil)
+ "C-c \\" #'org-ref-insert-label-link)
 
 ;;; Packages
 
@@ -22,11 +20,6 @@
   :commands
   org-html-export-to-html
   org-html-export-as-html)
-
-(load-package olivetti
-  :config
-  (setq-default olivetti-body-width 74)
-  :commands olivetti-mode)
 
 (load-package valign
   :autoload-hook (org-mode-hook . valign-mode))
@@ -101,7 +94,6 @@ ARG is the numerical argument."
   (if luna-prose-mode
       (progn
         (variable-pitch-mode)
-        (olivetti-mode)
         ;; (luna-scale-cjk-mode)
         (electric-pair-local-mode -1)
         (electric-quote-local-mode)
@@ -116,7 +108,6 @@ ARG is the numerical argument."
     (whitespace-mode -1)
     (company-mode)
     (variable-pitch-mode -1)
-    (olivetti-mode -1)
     ;; (luna-scale-cjk-mode -1)
     (electric-pair-local-mode)
     (electric-quote-local-mode -1)
