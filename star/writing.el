@@ -9,7 +9,7 @@
  :keymaps 'text-mode-map
  ;; "<tab>" #'tab-to-tab-stop
  "<C-tab>" '("insert-tab" . (lambda () (interactive) (insert "\t")))
- :keymaps 'Texinfo-mode-map
+ :keymaps 'texinfo-mode-map
  "C-c l" #'texinfo-caps-to-vars
  :clear
  :leader
