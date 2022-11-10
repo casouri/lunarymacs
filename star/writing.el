@@ -35,7 +35,7 @@
 
 (load-package bklink
   :commands bklink-minor-mode
-  :config (setq bklink-summary-read-only-p nil
+  :config (setq bklink-summary-read-only-p t
                 bklink-prune-summary-p nil))
 
 (load-package iimg
@@ -48,17 +48,12 @@
 (load-package xeft
   :commands xeft
   :config
-  (require 'flique)
   (setq xeft-directory "~/deft"
         xeft-database "~/deft/db")
   (set-face-attribute 'xeft-inline-highlight nil
                       :inherit 'highlight)
   (defun xeft-setup ()
-    (auto-fill-mode)
-    (flique-append-to-index (buffer-file-name))
-    (local-set-key (kbd "M-]") #'flique-forward)
-    (local-set-key (kbd "M-[") #'flique-backward)
-    (flique-show-navigation))
+    (auto-fill-mode))
   (add-hook 'xeft-find-file-hook #'xeft-setup)
   (add-hook 'bklink-minor-mode-hook #'xeft-setup))
 
