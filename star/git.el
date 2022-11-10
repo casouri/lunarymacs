@@ -16,15 +16,22 @@
   :config
   ;; Speed up magit in large repos.
   (setq magit-refresh-status-buffer nil
-        ;; Show refined diff.
-        magit-diff-refine-hunk t)
+        ;; Don’t show refined hunk for performance, but we can use D t
+        ;; in the diff buffer to toggle it.
+        magit-diff-refine-hunk nil)
+  ;; The tags header is slow when there are 10k+ headers (1+ sec).
+  (remove-hook 'magit-status-headers-hook #'magit-insert-tags-header)
+  ;; Speed up log buffer: disable --graph, set -n to 128, C-x C-s to
+  ;; save preference.
+  ;;
+  ;; Profile with ‘magit-toggle-verbose-refresh’.
 
-  ;; Disable electric-quote-mode in commit message buffer.
-  (add-hook 'text-mode-hook
-            (lambda ()
-              (when (equal (buffer-name) "COMMIT_EDITMSG")
-                (electric-quote-local-mode -1))))
-
+  (defun electric-quote-local-mode-advice (fn &rest args)
+    "Disable electric-quote-mode in commit message buffer."
+    (unless (equal (buffer-name) "COMMIT_EDITMSG")
+      (apply fn args)))
+  (advice-add 'electric-quote-local-mode :around
+              #'electric-quote-local-mode-advice)
   ;; Patch
   (defun magit-patch-apply-buffer (buffer &rest args)
     "Apply the patch buffer BUFFER."
@@ -41,9 +48,6 @@
 
 (load-package magit-patch-changelog
   :after magit)
-
-(load-package magit-todos
-  :autoload-hook (magit-mode . magit-todos-mode))
 
 (load-package git-link
   :commands
