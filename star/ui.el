@@ -121,10 +121,9 @@
 ;;   :autoload-hook (tab-bar-mode-hook . tab-bar-echo-area-mode)
 ;;   :config (setq tab-bar-tab-name-function #'luna-tab-bar-name))
 
-(with-eval-after-load 'tab-bar-mode
-  (setq tab-bar-close-button-show nil)
-  (setq-default tab-bar-show t
-                tab-bar-new-button-show nil))
+(setq-default tab-bar-show t
+              tab-bar-close-button-show nil
+              tab-bar-new-button-show nil)
 
 (defun luna-tab-bar-name ()
   "Construct tab name by major mode and buffer name."

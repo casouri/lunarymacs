@@ -58,7 +58,7 @@
  '(confirm-nonexistent-file-or-buffer t)
  '(create-lockfiles nil)
  '(cursor-in-non-selected-windows nil)
- '(cursor-type 'bar)
+ '(cursor-type '(box . 15))
  '(delete-auto-save-files nil)
  '(delete-by-moving-to-trash t)
  '(dictionary-use-single-buffer t)

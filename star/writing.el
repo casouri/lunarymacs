@@ -70,7 +70,11 @@
       (insert (format "@var{%s}" (downcase var)))))
   (defun setup-texinfo ()
     "Setup for texinfo mode."
-    (electric-quote-local-mode -1))
+    (electric-quote-local-mode -1)
+    (setq-local outline-regexp (rx (or "@heading" "@subheading" "@defun" "@defvar" "@section" "@subsection" "@subsubsection")))
+    (setq-local outline-minor-mode-highlight 'append)
+    (setq-local outline-level (lambda () 2))
+    (outline-minor-mode))
 
   (add-hook 'texinfo-mode-hook #'setup-texinfo))
 

@@ -123,6 +123,7 @@ The post in placed under <year>/DIR-NAME."
 ◊define-meta[uuid]{}
 
 ◊meta{
+  ◊day{}
   ◊cover{◊cover-img{}}
   ◊artist{}
   ◊title{}
