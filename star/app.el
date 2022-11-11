@@ -113,3 +113,6 @@
 
 (load-package vterm
   :commands vterm)
+
+(load-package dwim-shell-command
+  :config (require 'dwim-shell-commands))
