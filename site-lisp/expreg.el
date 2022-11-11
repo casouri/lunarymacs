@@ -52,21 +52,18 @@ This should be a list of (BEG . END).")
   "The regions we’ve expanded past.
 This should be a list of (BEG . END).")
 
-(defvar expreg--transient-map
-  (let ((map (make-sparse-keymap)))
-    (keymap-set map "M-=" #'expreg-expand)
-    (keymap-set map "M--" #'expreg-contract)
-    map)
-  "Transient map activated when expanding region.")
-
 (defun expreg-expand ()
   "Expand region."
   (interactive)
   ;; Checking for last-command isn’t strictly necessary, but nice to
   ;; have.
-  (when (or (not (memq last-command '(expreg-expand expreg-contract)))
-            (and (null expreg--next-regions)
-                 (null expreg--prev-regions)))
+  (when (not (and (region-active-p)
+                  (eq (region-beginning) (caar expreg--prev-regions))
+                  (eq (region-end) (cdar expreg--prev-regions))))
+    (setq-local expreg--next-regions nil)
+    (setq-local expreg--prev-regions nil))
+  (when (and (null expreg--next-regions)
+             (null expreg--prev-regions))
     (let* ((orig (point))
            (regions (mapcan #'funcall expreg-functions))
            (regions (cl-remove-if-not
@@ -75,11 +72,7 @@ This should be a list of (BEG . END).")
                      regions))
            (regions (expreg--sort-regions regions))
            (regions (cl-remove-duplicates regions :test #'equal)))
-      (setq-local expreg--next-regions regions)
-      (set-transient-map expreg--transient-map
-                         t (lambda ()
-                             (setq-local expreg--next-regions nil)
-                             (setq-local expreg--prev-regions nil)))))
+      (setq-local expreg--next-regions regions)))
   ;; Go past all the regions that are smaller than the current region,
   ;; if region is active.
   (when (region-active-p)
@@ -215,14 +208,25 @@ This should be a list of (BEG . END).")
                                (push (cons beg end) result)
                                t)
                       (scan-error nil))))
-        (save-excursion
-          (forward-sexp)
-          (setq end (point))
-          (backward-sexp)
-          (when (eq (point) orig)
-            (push (cons (point) end) result)))
-        (while (and (inside-list)
-                    (outside-list))))
+        (condition-case nil
+            (progn
+              ;; Point at beginning of a list.
+              (save-excursion
+                (forward-sexp)
+                (setq end (point))
+                (backward-sexp)
+                (when (eq (point) orig)
+                  (push (cons (point) end) result)))
+              ;; Point at end of a list.
+              (save-excursion
+                (backward-sexp)
+                (setq beg (point))
+                (forward-sexp)
+                (when (eq (point) orig)
+                  (push (cons beg (point)) result))))
+          (scan-error nil))
+        (inside-list)
+        (while (outside-list)))
       result)))
 
 (defun expreg--comment ()
@@ -251,6 +255,10 @@ This should be a list of (BEG . END).")
       (goto-char beg)
       (skip-chars-backward " \t")
       (setq beg (point))
+
+      (goto-char end)
+      (skip-chars-backward " \t")
+      (setq end (point))
 
       (when (or forward-succeeded backward-succeeded)
         (push (cons beg end) result))
