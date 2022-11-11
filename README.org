@@ -27,13 +27,12 @@ M-x luna-install-all RET
 | iscroll.el        | Smooth scrolling over images.                 |
 | quanjiao.el       | 智能全角引号。                                |
 | [[https://archive.casouri.cat/note/2020/insert-math-symbol-in-emacs/index.html][transform.el]]      | TeXmacs-like symbol insertion.                |
-| [[https://archive.casouri.cat/note/2021/yet-another-note-searching-interface:-zeft/index.html][zeft.el]]           | Note searching interface like Deft.           |
-| xeft              | Blazing fast note searching interface. |
+| expreg.el | My take on expand-region. |
 
 *Programming aid*
 
-| color-outline.el | Outline for programming modes. (Vanilla can do this now) |
-| commentary.el    | Sync README.org and Commentary.                          |
+| color-outline.el | Outline for programming modes. (Vanilla Emas can do this now) |
+| commentary.el    | Sync README.org and Commentary.                               |
 
 *Lunarymacs specific*
 
@@ -48,8 +47,8 @@ M-x luna-install-all RET
 
 *Etc*
 
-| form-feed.el   | My fork of form-feed.el                      |
-| recentf-ext.el | My fork of recentf-ext.el                    |
+| form-feed.el   | Fork of form-feed.el                         |
+| recentf-ext.el | Fork of recentf-ext.el                       |
 | face-attr.el   | Set/get face attributes from face text prop. |
 | pause.el       | Light wrapper around recursive edit.         |
 
