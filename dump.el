@@ -20,10 +20,10 @@
                    winner elec-pair rainbow-delimiters
                    highlight-parentheses hl-todo buffer-move
                    savehist minions ws-butler
-                   expand-region flyspell eglot
+                   flyspell eglot
                    yasnippet which-func savehist
                    consult selectrum selectrum-prescient
-                   no-littering
+                   no-littering dwim-shell-command dwim-shell-commands
                    ;; site-lisp
                    transform utility pause color-outline
                    ;; ranch
