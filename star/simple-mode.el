@@ -132,22 +132,12 @@ Then jslint:
 ;; Scheme
 ;; Note: C-c C-a to activate a #lang operation in a racket file.
 (load-package geiser
-  :extern "racket-language-server"
   :commands run-geiser
   :config
-  (add-hook 'geiser-repl-mode
-            (lambda ()
-              (setq-local company-idle-delay nil)))
   (luna-key-def
    :keymaps 'geiser-mode-map
    "C-." nil
    "M-." nil))
-
-(luna-note-extern "racket-language-server"
-  "raco pkg install racket-langserver")
-
-(load-package geiser-racket
-  :commands run-geiser run-racket)
 
 (load-package geiser-guile
   :commands run-geiser run-guile
@@ -155,6 +145,17 @@ Then jslint:
   (require 'console-buffer)
   (setf (alist-get 'scheme-mode luna-console-buffer-alist)
         "* Guile REPL *"))
+
+(load-package racket-mode
+  :extern "racket-langserver"
+  :hook (racket-mode-hook . setup-racket))
+
+(defun setup-racket ()
+  "Setup racket."
+  (eglot-ensure))
+
+(luna-note-extern "racket-langserver"
+  "raco pkg install racket-langserver")
 
 ;; C/C++
 (defun setup-c ()
