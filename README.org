@@ -52,6 +52,11 @@ M-x luna-install-all RET
 | face-attr.el   | Set/get face attributes from face text prop. |
 | pause.el       | Light wrapper around recursive edit.         |
 
+*Themes*
+| pale.el      | A quiet light theme.                      |
+| light.el     | Doom light theme knock-off (unmaintained) |
+| cyberpunk.el | Neon dark them (unmaintained)             |
+
 There are more, take a look in =site-lisp= ;-)
 
 * Structure
