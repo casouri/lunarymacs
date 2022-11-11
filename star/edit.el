@@ -10,8 +10,8 @@
  "C-c '"   #'separedit
  "C-/"     #'undo-only
  "C-."     #'undo-redo
- "C-="     #'er/expand-region
- "C--"     #'er/contract-region
+ "C-="     #'expreg-expand
+ "C--"     #'expreg-contract
  "M-q"     #'ftable-fill
 
  :leader
@@ -57,36 +57,8 @@
 ;; (load-package avy
 ;;   :commands avy-goto-word-1)
 
-(load-package expand-region
-  :config
-  ;; It interferes angel.el's region transient map. Specifically, the
-  ;; region-deactive-hook doesn't run right after the region highlight
-  ;; is off.
-  (setq expand-region-fast-keys-enabled nil)
-  (push #'er/tree-sitter-expand er/try-expand-list)
-  :commands
-  er/expand-region
-  er/contract-region
-  :init
-  (defun tree-sitter-select-node (node)
-    (let ((beg (tree-sitter-node-beginning node))
-          (end (tree-sitter-node-end node)))
-      (push-mark end)
-      (activate-mark)
-      (goto-char beg)))
-
-  (defun er/tree-sitter-expand ()
-    (interactive)
-    (when (and (featurep 'tree-sitter)
-               (car tree-sitter-parser-list))
-      (if (region-active-p)
-          (when-let ((node (tree-sitter-node-in-range
-                            (region-beginning) (region-end))))
-            (tree-sitter-select-node
-             (or (tree-sitter-node-parent node) root)))
-        (when-let ((node (tree-sitter-node-in-range
-                          (point) (1+ (point)))))
-          (tree-sitter-select-node node))))))
+(load-package expreg
+  :commands expreg-expand expreg-contract)
 
 ;;;; Structure
 
