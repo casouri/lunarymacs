@@ -5,6 +5,24 @@
 ;;; This file is NOT part of GNU Emacs
 
 ;;; Commentary:
+;;
+;; This is just like expand-region, but much simpler. Bind
+;; ‘expreg-expand’ and ‘expreg-contract’ and start using it.
+;;
+;; It works roughly as follows: ‘expreg-expand’ collects a list of
+;; possible expansions on startup with functions in
+;; ‘expreg-functions’. Then it sorts them by each region’s size. It
+;; also removes duplicates, etc. Then this list is stored in
+;; ‘expreg--next-regions’.
+;;
+;; To expand, we pop a region from ‘expreg--next-regions’, set point
+;; and mark accordingly, and push this region to
+;; ‘expreg--prev-regions’. So the head of ‘expreg--prev-regions’
+;; should always equal the current region.
+;;
+;; ‘expreg-contract’ does just the opposite: it pops a region from
+;; ‘expreg--prev-regions’, push it to ‘expreg--next-regions’, and set
+;; the current region to the head of ‘expreg--prev-regions’.
 
 ;;; Code:
 
@@ -121,10 +139,10 @@ This should be a list of (BEG . END).")
           result
           beg end)
       ;; (1) subwords in camel-case.
-      (subword-forward)
-      (setq end (point))
       (subword-backward)
       (setq beg (point))
+      (subword-forward)
+      (setq end (point))
       (push (cons beg end) result)
 
       ;; (2) subwords by “-” or “_”.
@@ -137,9 +155,9 @@ This should be a list of (BEG . END).")
 
       ;; (3) symbol-at-point
       (goto-char orig)
-      (forward-symbol 1)
+      (skip-syntax-forward "w_")
       (setq end (point))
-      (forward-symbol -1)
+      (skip-syntax-backward "w_")
       (setq beg (point))
       (push (cons beg end) result)
 
@@ -208,16 +226,22 @@ This should be a list of (BEG . END).")
                                (push (cons beg end) result)
                                t)
                       (scan-error nil))))
+        ;; Point at beginning of a sexp.
         (condition-case nil
             (progn
-              ;; Point at beginning of a list.
               (save-excursion
                 (forward-sexp)
                 (setq end (point))
                 (backward-sexp)
+                ;; Skip "'" and "#'", etc.
+                (skip-syntax-forward "'")
                 (when (eq (point) orig)
-                  (push (cons (point) end) result)))
-              ;; Point at end of a list.
+                  (skip-syntax-backward "'")
+                  (push (cons (point) end) result))))
+          (scan-error nil))
+        ;; Point at end of a sexp.
+        (condition-case nil
+            (progn
               (save-excursion
                 (backward-sexp)
                 (setq beg (point))
@@ -232,7 +256,8 @@ This should be a list of (BEG . END).")
 (defun expreg--comment ()
   "Return a list of regions containing comment."
   (save-excursion
-    (let ((beg (point))
+    (let ((orig (point))
+          (beg (point))
           (end (point))
           start result
           forward-succeeded backward-succeeded)
@@ -252,15 +277,21 @@ This should be a list of (BEG . END).")
         (setq beg (point))
         (setq backward-succeeded t))
 
+      ;; Move BEG to BOL.
       (goto-char beg)
       (skip-chars-backward " \t")
       (setq beg (point))
 
+      ;; Move END to BOL.
       (goto-char end)
       (skip-chars-backward " \t")
       (setq end (point))
 
-      (when (or forward-succeeded backward-succeeded)
+      (when (and (or forward-succeeded backward-succeeded)
+                 ;; If we are at the BOL of the line below a comment,
+                 ;; don’t include this comment. (END will be at the
+                 ;; BOL of the line after the comment.)
+                 (< orig end))
         (push (cons beg end) result))
       result)))
 
