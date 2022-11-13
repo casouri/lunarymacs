@@ -198,8 +198,19 @@ This should be a list of (BEG . END).")
                     ;; Push the region inside the list. Leaves point
                     ;; at the beginning. Return t if success, nil if
                     ;; fail.
-                    (if (> (car (syntax-ppss)) 0)
-                        ;; Don’t run if at top-level.
+                    (if (eq (car (syntax-ppss)) 0)
+                        ;; Don’t run if at top-level
+                        nil
+                      (if (nth 3 (syntax-ppss))
+                          ;; Inside a string
+                          (ignore-errors
+                            (goto-char (nth 8 (syntax-ppss)))
+                            (setq beg (1+ (point)))
+                            (forward-sexp)
+                            (setq end (1- (point)))
+                            (push (cons beg end) result)
+                            (goto-char beg))
+                        ;; Not inside a string.
                         (let ((start (point)) beg end)
 
                           (while (condition-case nil
@@ -211,24 +222,33 @@ This should be a list of (BEG . END).")
                                      (progn (backward-sexp) t)
                                    (scan-error nil)))
                           (setq beg (point))
-                          (push (cons beg end) result)
-                          t)
-                      nil))
+                          (push (cons beg end) result)))
+                      t))
                   (outside-list ()
                     ;; Assumes point at beginning of inside a list.
                     ;; Push the region covering the list. Return t if
                     ;; success, nil if fail.
                     (condition-case nil
-                        (progn (backward-up-list)
-                               (setq beg (point))
-                               (forward-sexp)
-                               (setq end (point))
-                               (push (cons beg end) result)
-                               t)
+                        (if (nth 3 (syntax-ppss))
+                            ;; Inside a string
+                            (progn
+                              (goto-char (nth 8 (syntax-ppss)))
+                              (setq beg (point))
+                              (forward-sexp)
+                              (setq end (point))
+                              (push (cons beg end) result)
+                              t)
+                          ;; Not inside a string.
+                          (backward-up-list)
+                          (setq beg (point))
+                          (forward-sexp)
+                          (setq end (point))
+                          (push (cons beg end) result)
+                          t)
                       (scan-error nil))))
-        ;; Point at beginning of a sexp.
-        (condition-case nil
-            (progn
+        (when (null (nth 3 (syntax-ppss)))
+          ;; Point at beginning of a sexp.
+          (condition-case nil
               (save-excursion
                 (forward-sexp)
                 (setq end (point))
@@ -237,18 +257,17 @@ This should be a list of (BEG . END).")
                 (skip-syntax-forward "'")
                 (when (eq (point) orig)
                   (skip-syntax-backward "'")
-                  (push (cons (point) end) result))))
-          (scan-error nil))
-        ;; Point at end of a sexp.
-        (condition-case nil
-            (progn
+                  (push (cons (point) end) result)))
+            (scan-error nil))
+          ;; Point at end of a sexp.
+          (condition-case nil
               (save-excursion
                 (backward-sexp)
                 (setq beg (point))
                 (forward-sexp)
                 (when (eq (point) orig)
-                  (push (cons beg (point)) result))))
-          (scan-error nil))
+                  (push (cons beg (point)) result)))
+            (scan-error nil)))
         (inside-list)
         (while (outside-list)))
       result)))
