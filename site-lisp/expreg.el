@@ -23,6 +23,16 @@
 ;; ‘expreg-contract’ does just the opposite: it pops a region from
 ;; ‘expreg--prev-regions’, push it to ‘expreg--next-regions’, and set
 ;; the current region to the head of ‘expreg--prev-regions’.
+;;
+;; For better debugability, each region is of the form
+;;
+;;     (FN . (BEG . END))
+;;
+;; where FN is the function produced this region. So accessing BEG is
+;; ‘cadr’, accessing END is ‘cddr’.
+;;
+;; Credit: I stole a lot of ideas on how to expand lists and strings
+;; from ‘expand-region’
 
 ;;; Code:
 
@@ -33,7 +43,7 @@
 ;;; Cutom options and variables
 
 (defvar-local expreg-functions
-    '( expreg--word expreg--sexp expreg--treesit
+    '( expreg--word expreg--list expreg--string expreg--treesit
        expreg--comment expreg--paragraph)
   "A list of expansion functions.
 Each function is called with no arguments and should return a
@@ -47,14 +57,14 @@ as ones where BEG equals END, etc, these will be filtered out by
 (defun expreg--sort-regions (regions)
   "Sort REGIONS by their span."
   (cl-sort regions (lambda (a b)
-                     (< (- (cdr a) (car a))
-                        (- (cdr b) (car b))))))
+                     (< (- (cddr a) (cadr a))
+                        (- (cddr b) (cadr b))))))
 
 (defun expreg--valid-p (region orig)
   "Return non-nil if REGION = (BEG . END) valid regarding ORIG.
 ORIG is the current position."
-  (let ((beg (car region))
-        (end (cdr region)))
+  (let ((beg (cadr region))
+        (end (cddr region)))
     (and (<= beg orig end) (< beg end))))
 
 ;;; Expand/contract
@@ -76,8 +86,10 @@ This should be a list of (BEG . END).")
   ;; Checking for last-command isn’t strictly necessary, but nice to
   ;; have.
   (when (not (and (region-active-p)
-                  (eq (region-beginning) (caar expreg--prev-regions))
-                  (eq (region-end) (cdar expreg--prev-regions))))
+                  (eq (region-beginning)
+                      (cadr (car expreg--prev-regions)))
+                  (eq (region-end)
+                      (cddr (car expreg--prev-regions)))))
     (setq-local expreg--next-regions nil)
     (setq-local expreg--prev-regions nil))
   (when (and (null expreg--next-regions)
@@ -95,8 +107,8 @@ This should be a list of (BEG . END).")
   ;; if region is active.
   (when (region-active-p)
     (while (and expreg--next-regions
-                (let ((beg (caar expreg--next-regions))
-                      (end (cdar expreg--next-regions)))
+                (let ((beg (cadr (car expreg--next-regions)))
+                      (end (cddr (car expreg--next-regions))))
                   (and (<= (region-beginning) beg)
                        (<= end (region-end)))))
       ;; Pop from next-regions, push into prev-regions.
@@ -104,11 +116,12 @@ This should be a list of (BEG . END).")
             expreg--prev-regions)))
   (when expreg--next-regions
     (let ((region (pop expreg--next-regions)))
-      (set-mark (cdr region))
-      (goto-char (car region))
+      (set-mark (cddr region))
+      (goto-char (cadr region))
       (push region expreg--prev-regions)))
   (when expreg--verbose
-    (message "next: %S\nprev: %S"
+    (message "blame: %s\nnext: %S\nprev: %S"
+             (caar expreg--prev-regions)
              expreg--next-regions expreg--prev-regions)))
 
 (defun expreg-contract ()
@@ -117,8 +130,8 @@ This should be a list of (BEG . END).")
   (when (and (region-active-p)
              (> (length expreg--prev-regions) 1))
     (push (pop expreg--prev-regions) expreg--next-regions)
-    (set-mark (cdar expreg--prev-regions))
-    (goto-char (caar expreg--prev-regions)))
+    (set-mark (cddr (car expreg--prev-regions)))
+    (goto-char (cadr (car expreg--prev-regions))))
   (when expreg--verbose
     (message "next: %S\nprev: %S"
              expreg--next-regions expreg--prev-regions)))
@@ -143,7 +156,7 @@ This should be a list of (BEG . END).")
       (setq beg (point))
       (subword-forward)
       (setq end (point))
-      (push (cons beg end) result)
+      (push `(word . ,(cons beg end)) result)
 
       ;; (2) subwords by “-” or “_”.
       (goto-char orig)
@@ -151,7 +164,7 @@ This should be a list of (BEG . END).")
       (setq end (point))
       (skip-syntax-backward "w")
       (setq beg (point))
-      (push (cons beg end) result)
+      (push `(word . ,(cons beg end)) result)
 
       ;; (3) symbol-at-point
       (goto-char orig)
@@ -159,7 +172,7 @@ This should be a list of (BEG . END).")
       (setq end (point))
       (skip-syntax-backward "w_")
       (setq beg (point))
-      (push (cons beg end) result)
+      (push `(word . ,(cons beg end)) result)
 
       ;; (4) within whitespace & paren. (Allow word constituents, symbol
       ;; constituents, punctuation.)
@@ -168,7 +181,7 @@ This should be a list of (BEG . END).")
       (setq end (point))
       (skip-syntax-backward "w_.")
       (setq beg (point))
-      (push (cons beg end) result)
+      (push `(word . ,(cons beg end)) result)
       (goto-char orig)
       ;; Return!
       result)))
@@ -185,92 +198,103 @@ This should be a list of (BEG . END).")
         (let ((beg (treesit-node-start node))
               (end (treesit-node-end node)))
           (when (not (treesit-node-eq node root))
-            (push (cons beg end) result)))
+            (push `(treesit . ,(cons beg end)) result)))
         (setq node (treesit-node-parent node)))
       result)))
 
-(defun expreg--sexp ()
+(defun expreg--inside-list ()
+  "Return a list of one region marking inside the list, or nil.
+Assumes point not in string."
+  (unless (nth 3 (syntax-ppss))
+    (when (> (car (syntax-ppss)) 0)
+      (let (beg)
+        (save-excursion
+          (goto-char (nth 1 (syntax-ppss)))
+          (save-excursion
+            (forward-char)
+            (skip-syntax-forward "-")
+            (setq beg (point)))
+          (forward-list)
+          (backward-char)
+          (skip-syntax-backward "-")
+          (list `(inside-list . ,(cons beg (point)))))))))
+
+(defun expreg--list-at-point ()
+  "Return a list of one region marking the list at point, or nil.
+Point should be at the beginning or end of a list."
+  (unless (nth 3 (syntax-ppss))
+    (save-excursion
+      ;; If at the end of a list and not the beginning of another one,
+      ;; move to the beginning of the list.
+      (when (and (eq (char-syntax (or (char-before) ?x)) 41)
+                 (not (eq (char-syntax (or (char-after) ?x)) 40)))
+        (ignore-errors (backward-list 1)))
+      (when (eq (char-syntax (char-after)) 40)
+        (save-excursion
+          (condition-case nil
+              (let ((beg (point)))
+                (forward-list)
+                (list `(list-at-point . ,(cons beg (point)))))
+            (scan-error nil)))))))
+
+(defun expreg--outside-list ()
+  "Return a list of one region marking outside the list, or nil.
+If find something, leave point at the beginning of the list."
+  (let (beg end)
+    (when (> (car (syntax-ppss)) 0)
+      (save-excursion
+        ;; If point inside a list but not at the beginning of one, move to
+        ;; the beginning of enclosing list.
+        (when (> (car (syntax-ppss)) 0)
+          (goto-char (nth 1 (syntax-ppss))))
+        (setq beg (point))
+        (forward-list)
+        (setq end (point)))
+      (when (and beg end)
+        (goto-char beg)
+        (list `(outside-list . ,(cons beg end)))))))
+
+(defun expreg--string ()
+  "Return regions marking the inside and outside of the string."
+  (let ( outside-beg outside-end
+         inside-beg inside-end)
+    (save-excursion
+      ;; Inside a string? Move to beginning.
+      (if (nth 3 (syntax-ppss))
+          (goto-char (nth 8 (syntax-ppss)))
+        ;; Not inside a string, but at the end of a string and not at
+        ;; the beginning of another one? Move to beginning.
+        (when (and (eq (char-syntax (or (char-before) ?x)) 34)
+                   (not (eq (char-syntax (or (char-after) ?x)) 34)))
+          (ignore-errors (backward-sexp))))
+      ;; Not inside a string and at the beginning of one.
+      (when (and (not (nth 3 (syntax-ppss)))
+                 (eq (char-syntax (or (char-after) ?x)) 34))
+        (setq outside-beg (point))
+        (forward-sexp)
+        (when (eq (char-syntax (or (char-before) ?x)) 34)
+          (setq outside-end (point))
+          (backward-char)
+          (setq inside-end (point))
+          (goto-char outside-beg)
+          (forward-char)
+          (setq inside-beg (point))
+          ;; It’s ok if point is at outside string and we return a
+          ;; region marking inside the string: expreg will filter the
+          ;; inside one out.
+          (list `(string . ,(cons outside-beg outside-end))
+                `(string . ,(cons inside-beg inside-end))))))))
+
+(defun expreg--list ()
   "Return a list of regions determined by sexp level."
   (save-excursion
-    (let ((orig (point))
-          result beg end)
-      (cl-labels ((inside-list ()
-                    ;; Push the region inside the list. Leaves point
-                    ;; at the beginning. Return t if success, nil if
-                    ;; fail.
-                    (if (eq (car (syntax-ppss)) 0)
-                        ;; Don’t run if at top-level
-                        nil
-                      (if (nth 3 (syntax-ppss))
-                          ;; Inside a string
-                          (ignore-errors
-                            (goto-char (nth 8 (syntax-ppss)))
-                            (setq beg (1+ (point)))
-                            (forward-sexp)
-                            (setq end (1- (point)))
-                            (push (cons beg end) result)
-                            (goto-char beg))
-                        ;; Not inside a string.
-                        (let ((start (point)) beg end)
-
-                          (while (condition-case nil
-                                     (progn (forward-sexp) t)
-                                   (scan-error nil)))
-                          (setq end (point))
-                          (goto-char start)
-                          (while (condition-case nil
-                                     (progn (backward-sexp) t)
-                                   (scan-error nil)))
-                          (setq beg (point))
-                          (push (cons beg end) result)))
-                      t))
-                  (outside-list ()
-                    ;; Assumes point at beginning of inside a list.
-                    ;; Push the region covering the list. Return t if
-                    ;; success, nil if fail.
-                    (condition-case nil
-                        (if (nth 3 (syntax-ppss))
-                            ;; Inside a string
-                            (progn
-                              (goto-char (nth 8 (syntax-ppss)))
-                              (setq beg (point))
-                              (forward-sexp)
-                              (setq end (point))
-                              (push (cons beg end) result)
-                              t)
-                          ;; Not inside a string.
-                          (backward-up-list)
-                          (setq beg (point))
-                          (forward-sexp)
-                          (setq end (point))
-                          (push (cons beg end) result)
-                          t)
-                      (scan-error nil))))
-        (when (null (nth 3 (syntax-ppss)))
-          ;; Point at beginning of a sexp.
-          (condition-case nil
-              (save-excursion
-                (forward-sexp)
-                (setq end (point))
-                (backward-sexp)
-                ;; Skip "'" and "#'", etc.
-                (skip-syntax-forward "'")
-                (when (eq (point) orig)
-                  (skip-syntax-backward "'")
-                  (push (cons (point) end) result)))
-            (scan-error nil))
-          ;; Point at end of a sexp.
-          (condition-case nil
-              (save-excursion
-                (backward-sexp)
-                (setq beg (point))
-                (forward-sexp)
-                (when (eq (point) orig)
-                  (push (cons beg (point)) result)))
-            (scan-error nil)))
-        (inside-list)
-        (while (outside-list)))
-      result)))
+    (let ((inside-list (expreg--inside-list))
+          (list-at-point (expreg--list-at-point))
+          outside-list lst)
+      (while (setq lst (expreg--outside-list))
+        (setq outside-list
+              (append outside-list lst)))
+      (append list-at-point inside-list outside-list))))
 
 (defun expreg--comment ()
   "Return a list of regions containing comment."
@@ -311,26 +335,30 @@ This should be a list of (BEG . END).")
                  ;; don’t include this comment. (END will be at the
                  ;; BOL of the line after the comment.)
                  (< orig end))
-        (push (cons beg end) result))
+        (push `(comment . ,(cons beg end)) result))
       result)))
 
 (defun expreg--paragraph ()
   "Return a list of regions containing paragraphs."
   (save-excursion
-    (let (beg end result)
+    (let ((orig (point))
+          beg end result)
       (if (or (derived-mode-p 'prog-mode)
               beginning-of-defun-function)
           (when (beginning-of-defun)
             (setq beg (point))
             (end-of-defun)
             (setq end (point))
-            (push (cons beg end) result))
+            ;; If we are at the BOL right below a defun, don’t mark
+            ;; that defun.
+            (unless (eq orig end)
+              (push `(paragraph . ,(cons beg end)) result)))
         (backward-paragraph)
         (skip-syntax-forward "-")
         (setq beg (point))
         (forward-paragraph)
         (setq end (point))
-        (push (cons beg end) result))
+        (push `(paragraph . ,(cons beg end)) result))
       result)))
 
 
