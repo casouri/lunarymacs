@@ -47,7 +47,6 @@
  "C-x C-b" #'consult-buffer
  "M-y"     #'consult-yank-pop
  :leader
- "ss"      #'consult-line
  "si"      #'consult-imenu)
 
 ;;; Package
@@ -111,19 +110,6 @@
   vr/query-replace
   vr/mc-mark)
 
-;; C-g doesn’t seem to work right.
-;; (load-package ctrlf
-;;   :config
-;;   (ctrlf-mode)
-;;   (setq ctrlf-auto-recenter t
-;;         ctrlf-default-search-style 'fuzzy
-;;         ctrlf-show-match-count-at-eol nil
-;;         ctrlf-highlight-current-line nil)
-;;   (set-face-attribute 'ctrlf-highlight-active nil
-;;                       :inherit 'highlight)
-;;   (set-face-attribute 'ctrlf-highlight-passive nil
-;;                       :inherit 'default :weight 'bold))
-
 (load-package wgrep :defer)
 
 ;;;; Automation
@@ -159,7 +145,7 @@
   :config
   (setf (alist-get 'selected-node vundo-glyph-alist) ?X
         (alist-get 'node vundo-glyph-alist) ?O)
-  (set-face-attribute 'vundo-default nil :family "PragmataPro Mono"))
+  (set-face-font 'vundo-default "PragmataPro Mono"))
 
 ;; (load-package undo-hl
 ;;   :autoload-hook (prog-mode-hook . undo-hl-mode)
