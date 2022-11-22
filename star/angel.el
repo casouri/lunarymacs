@@ -5,6 +5,7 @@
 (require 'pause)
 (require 'cl-lib)
 (require 'utility)
+(require 'subword)
 
 ;;; Keys
 
@@ -33,6 +34,7 @@
 
  ;; Remaps
  [remap backward-delete-char-untabify] #'luna-hungry-delete
+ [remap delete-backward-char] #'luna-hungry-delete
  [remap delete-indentation] #'luna-hungry-delete
  [remap c-electric-backspace] #'luna-hungry-delete
  [remap move-beginning-of-line] #'smarter-move-beginning-of-line
@@ -40,8 +42,8 @@
  ;; Super -> Meta
  "s-<backspace>" (kbd "M-<backspace>")
  "s-d"   (kbd "M-d")
- "s-f"   (kbd "M-f")
- "s-b"   (kbd "M-b")
+ "s-f"   #'subword-forward
+ "s-b"   #'subword-backward
  "s-a"   (kbd "M-a")
  "s-e"   (kbd "M-e")
  "s-w"   (kbd "M-w")
