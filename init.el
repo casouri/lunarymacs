@@ -115,3 +115,45 @@
                    "local-init.el" user-emacs-directory)))
   (when (file-exists-p local-init)
     (luna-safe-load local-init)))
+
+;;; Debug
+
+(require 'treesit)
+(push '(css-mode . css-ts-mode) major-mode-remap-alist)
+(push '(python-mode . python-ts-mode) major-mode-remap-alist)
+(push '(javascript-mode . js-ts-mode) major-mode-remap-alist)
+(push '(c-mode . c-ts-mode) major-mode-remap-alist)
+(push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+
+;; (setq treesit--font-lock-verbose t)
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs '((c-ts-mode c++-ts-mode) "ccls-clang-10")))
+
+(add-hook 'prog-mode-hook #'general-ts-mode-setup)
+(add-hook 'c-ts-mode-hook #'c-ts-setup)
+(add-hook 'css-ts-mode-hook 'ts-css-setup)
+
+(defun general-ts-mode-setup ()
+  (treesit-font-lock-recompute-features
+   nil
+   '(property bracket delimiter operator variable function)))
+
+(defun c-ts-setup ()
+  (setq-local electric-quote-comment nil)
+  (setq-local electric-quote-string nil)
+  (indent-tabs-mode)
+  (bug-reference-prog-mode)
+  (setq-local fill-paragraph-function #'ts-c-fill-paragraph)
+  (treesit-font-lock-recompute-features '(emacs-devel)))
+
+(defun ts-c-fill-paragraph (&optional arg)
+  (interactive)
+  (let ((node (treesit-node-at (point))))
+    (when (equal (treesit-node-type node) "comment")
+      (fill-region
+       (treesit-node-start node) (treesit-node-end node)))
+    t))
+
+(defun ts-css-setup ()
+  (treesit-font-lock-recompute-features nil '(variable function)))
