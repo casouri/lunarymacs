@@ -21,7 +21,7 @@
 
 (load-package eglot
   :defer
-  :config (push '(python-mode . ("pyright-langserver" "--stdio"))
+  :config (push '(python-base-mode . ("pyright-langserver" "--stdio"))
                 eglot-server-programs)
   :extern "pyright")
 
@@ -88,3 +88,8 @@ delete not indent."
         (backward-delete-char-untabify arg)
       (when (null (python-indent-dedent-line))
         (backward-delete-char-untabify arg)))))
+
+(defun setup-python ()
+  (eglot-ensure))
+
+(add-hook 'python-base-mode-hook #'setup-python)
