@@ -33,6 +33,8 @@
 ;;
 ;; Credit: I stole a lot of ideas on how to expand lists and strings
 ;; from ‘expand-region’
+;;
+;; TODO: Don’t select minibuffer prompt.
 
 ;;; Code:
 
@@ -226,13 +228,16 @@ Point should be at the beginning or end of a list."
     (save-excursion
       ;; If at the end of a list and not the beginning of another one,
       ;; move to the beginning of the list.
+      ;; Corresponding char for each int: 40=(, 39=', 41=).
       (when (and (eq (char-syntax (or (char-before) ?x)) 41)
-                 (not (eq (char-syntax (or (char-after) ?x)) 40)))
+                 (not (memq (char-syntax (or (char-after) ?x)) '(39 40))))
         (ignore-errors (backward-list 1)))
-      (when (eq (char-syntax (char-after)) 40)
+      (when (memq (char-syntax (or (char-after) ?x)) '(39 40))
         (save-excursion
           (condition-case nil
-              (let ((beg (point)))
+              (let ((beg (if (eq (char-syntax (or (char-before) ?x)) 39)
+                             (1- (point))
+                           (point))))
                 (forward-list)
                 (list `(list-at-point . ,(cons beg (point)))))
             (scan-error nil)))))))
