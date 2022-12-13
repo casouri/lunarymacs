@@ -40,25 +40,19 @@
  [remap move-beginning-of-line] #'smarter-move-beginning-of-line
 
  ;; Super -> Meta
- "s-<backspace>" (kbd "M-<backspace>")
- "s-d"   (kbd "M-d")
+ "s-<backspace>" #'backward-kill-word
+ "s-d"   #'kill-word
  "s-f"   #'subword-forward
  "s-b"   #'subword-backward
- "s-a"   (kbd "M-a")
- "s-e"   (kbd "M-e")
- "s-w"   (kbd "M-w")
+ "s-a"   #'beginning-of-defun
+ "s-e"   #'end-of-defun
+ "s-w"   #'kill-ring-save
  "s-q"   (kbd "M-q")
- "C-s-p" (kbd "C-M-p")
- "C-s-n" (kbd "C-M-n")
- "C-s-f" (kbd "C-M-f")
- "C-s-b" (kbd "C-M-b")
- "C-s-t" (kbd "C-M-t")
- "C-s-;" (kbd "C-M-;")
- "C-s-c" (kbd "C-M-c")
+ "C-s-c" #'exit-recursive-edit
 
  ;; For some reason, keyboard macro doesn't work.
- "s-["   (kbd "M-[")
- "s-]"   (kbd "M-]")
+ "s-["   #'forward-page
+ "s-]"   #'backward-page
  ;; Super -> Control
  "s-\\"  (kbd "C-\\")
 
