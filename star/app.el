@@ -35,6 +35,7 @@
   ghelp-describe
   ghelp-describe-function
   ghelp-describe-variable
+  ghelp-describe-key
   :config
   (defun luna-ghelp-hook ()
     (setq truncate-lines t))
