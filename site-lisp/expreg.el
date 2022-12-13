@@ -32,9 +32,7 @@
 ;; ‘cadr’, accessing END is ‘cddr’.
 ;;
 ;; Credit: I stole a lot of ideas on how to expand lists and strings
-;; from ‘expand-region’
-;;
-;; TODO: Don’t select minibuffer prompt.
+;; from ‘expand-region’ :-)
 
 ;;; Code:
 
