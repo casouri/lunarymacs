@@ -46,9 +46,6 @@
   (transient-append-suffix 'magit-patch-apply "a"
     '("b" "Apply patch in buffer" magit-patch-apply-buffer)))
 
-(load-package magit-patch-changelog
-  :after magit)
-
 (load-package git-link
   :commands
   git-link
