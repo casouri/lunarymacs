@@ -150,7 +150,6 @@ This should be a list of (BEG . END).")
   ;;   within a word anymore...)
   (save-excursion
     (let ((orig (point))
-          (inhibit-point-motion-hooks t)
           result
           beg end)
       ;; (1) subwords in camel-case.
@@ -348,22 +347,25 @@ If find something, leave point at the beginning of the list."
   (save-excursion
     (let ((orig (point))
           beg end result)
-      (if (or (derived-mode-p 'prog-mode)
-              beginning-of-defun-function)
-          (when (beginning-of-defun)
-            (setq beg (point))
-            (end-of-defun)
-            (setq end (point))
-            ;; If we are at the BOL right below a defun, don’t mark
-            ;; that defun.
-            (unless (eq orig end)
-              (push `(paragraph . ,(cons beg end)) result)))
+      (cond
+       ((or (derived-mode-p 'prog-mode)
+            beginning-of-defun-function)
+        (when (beginning-of-defun)
+          (setq beg (point))
+          (end-of-defun)
+          (setq end (point))
+          ;; If we are at the BOL right below a defun, don’t mark
+          ;; that defun.
+          (unless (eq orig end)
+            (push `(paragraph . ,(cons beg end)) result))))
+       ((or (derived-mode-p 'text-mode)
+            (eq major-mode 'fundamental-mode))
         (backward-paragraph)
         (skip-syntax-forward "-")
         (setq beg (point))
         (forward-paragraph)
         (setq end (point))
-        (push `(paragraph . ,(cons beg end)) result))
+        (push `(paragraph . ,(cons beg end)) result)))
       result)))
 
 
