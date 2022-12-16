@@ -65,7 +65,9 @@ as ones where BEG equals END, etc, these will be filtered out by
 ORIG is the current position."
   (let ((beg (cadr region))
         (end (cddr region)))
-    (and (<= beg orig end) (< beg end))))
+    (and (<= beg orig end)
+         (< beg end)
+         (< 1 (- end beg) 8000))))
 
 ;;; Expand/contract
 
@@ -305,22 +307,20 @@ If find something, leave point at the beginning of the list."
           (beg (point))
           (end (point))
           start result
-          forward-succeeded backward-succeeded)
+          forward-succeeded)
       ;; Go backward to the beginning of a comment (if exists).
       (while (nth 4 (syntax-ppss))
         (backward-char))
       (setq start (point))
 
       ;; Now we are either at the beginning of a comment, or not on a
-      ;; comment at all.
+      ;; comment at all. (When there are multiple lines of comment,
+      ;; each line is an individual comment.)
       (while (forward-comment 1)
         (setq end (point))
         (setq forward-succeeded t))
-
-      (goto-char start)
       (while (forward-comment -1)
-        (setq beg (point))
-        (setq backward-succeeded t))
+        (setq beg (point)))
 
       ;; Move BEG to BOL.
       (goto-char beg)
@@ -332,7 +332,7 @@ If find something, leave point at the beginning of the list."
       (skip-chars-backward " \t")
       (setq end (point))
 
-      (when (and (or forward-succeeded backward-succeeded)
+      (when (and forward-succeeded
                  ;; If we are at the BOL of the line below a comment,
                  ;; don’t include this comment. (END will be at the
                  ;; BOL of the line after the comment.)
