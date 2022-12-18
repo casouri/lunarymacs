@@ -100,7 +100,8 @@
         '(nntp "news.gmane.io" (nntp-port-number 119))
         gnus-visible-headers "^From:\\|^Subject:"
         gnus-use-full-window nil
-        gnus-summary-line-format "%U%R%z%(%*%[%n%]%) %s\n"))
+        gnus-summary-line-format "%U%R%z%(%*%[%n%]%) %s\n"
+        gnus-show-threads nil))
 
 (load-package restclient
   :commands restclient-mode)

@@ -49,6 +49,8 @@
  "s-w"   #'kill-ring-save
  "s-q"   (kbd "M-q")
  "C-s-c" #'exit-recursive-edit
+ "C-s-f" #'forward-sexp
+ "C-s-b" #'backward-sexp
 
  ;; For some reason, keyboard macro doesn't work.
  "s-["   #'forward-page
