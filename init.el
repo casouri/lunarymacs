@@ -137,7 +137,10 @@
 (defun general-ts-mode-setup ()
   (treesit-font-lock-recompute-features
    nil
-   '(property bracket delimiter operator variable function)))
+   '(property bracket delimiter operator variable function))
+  (when (derived-mode-p 'css-ts-mode)
+    (treesit-font-lock-recompute-features
+     '(property))))
 
 (defun c-ts-setup ()
   (setq-local electric-quote-comment nil)
@@ -145,15 +148,24 @@
   (indent-tabs-mode)
   (bug-reference-prog-mode)
   (setq-local fill-paragraph-function #'ts-c-fill-paragraph)
-  (treesit-font-lock-recompute-features '(emacs-devel)))
+  (treesit-font-lock-recompute-features '(emacs-devel))
+  (eglot-soft-ensure))
 
 (defun ts-c-fill-paragraph (&optional arg)
   (interactive)
-  (let ((node (treesit-node-at (point))))
+  (let* ((node (treesit-node-at (point)))
+         (start (treesit-node-start node))
+         (end (treesit-node-end node))
+         (pstart (save-excursion
+                   (forward-paragraph -1)
+                   (skip-syntax-forward "-")
+                   (point)))
+         (pend (save-excursion
+                 (forward-paragraph 1)
+                 (point))))
     (when (equal (treesit-node-type node) "comment")
-      (fill-region
-       (treesit-node-start node) (treesit-node-end node)))
+      (fill-region (max start pstart) (min end pend)))
     t))
 
 (defun ts-css-setup ()
-  (treesit-font-lock-recompute-features nil '(variable function)))
+  (treesit-font-lock-recompute-features '(property) '(variable function)))
