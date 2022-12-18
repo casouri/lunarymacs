@@ -6,8 +6,10 @@
 
 ;;; Commentary:
 ;;
-;; This is just like expand-region, but much simpler. Bind
-;; ‘expreg-expand’ and ‘expreg-contract’ and start using it.
+;; This is just like expand-region, but simpler and easier to debug.
+;; Bind ‘expreg-expand’ and ‘expreg-contract’ and start using it.
+
+;;; Developer
 ;;
 ;; It works roughly as follows: ‘expreg-expand’ collects a list of
 ;; possible expansions on startup with functions in
@@ -153,10 +155,10 @@ This should be a list of (BEG . END).")
           result
           beg end)
       ;; (1) subwords in camel-case.
-      (subword-backward)
-      (setq beg (point))
       (subword-forward)
       (setq end (point))
+      (subword-backward)
+      (setq beg (point))
       (push `(word . ,(cons beg end)) result)
 
       ;; (2) subwords by “-” or “_”.
@@ -245,18 +247,20 @@ Point should be at the beginning or end of a list."
   "Return a list of one region marking outside the list, or nil.
 If find something, leave point at the beginning of the list."
   (let (beg end)
-    (when (> (car (syntax-ppss)) 0)
-      (save-excursion
-        ;; If point inside a list but not at the beginning of one, move to
-        ;; the beginning of enclosing list.
+    (condition-case nil
         (when (> (car (syntax-ppss)) 0)
-          (goto-char (nth 1 (syntax-ppss))))
-        (setq beg (point))
-        (forward-list)
-        (setq end (point)))
-      (when (and beg end)
-        (goto-char beg)
-        (list `(outside-list . ,(cons beg end)))))))
+          (save-excursion
+            ;; If point inside a list but not at the beginning of one,
+            ;; move to the beginning of enclosing list.
+            (when (> (car (syntax-ppss)) 0)
+              (goto-char (nth 1 (syntax-ppss))))
+            (setq beg (point))
+            (forward-list)
+            (setq end (point)))
+          (when (and beg end)
+            (goto-char beg)
+            (list `(outside-list . ,(cons beg end)))))
+      (scan-error nil))))
 
 (defun expreg--string ()
   "Return regions marking the inside and outside of the string."
@@ -306,13 +310,10 @@ If find something, leave point at the beginning of the list."
     (let ((orig (point))
           (beg (point))
           (end (point))
-          start result
-          forward-succeeded)
+          result forward-succeeded)
       ;; Go backward to the beginning of a comment (if exists).
       (while (nth 4 (syntax-ppss))
         (backward-char))
-      (setq start (point))
-
       ;; Now we are either at the beginning of a comment, or not on a
       ;; comment at all. (When there are multiple lines of comment,
       ;; each line is an individual comment.)
@@ -343,28 +344,32 @@ If find something, leave point at the beginning of the list."
 (defun expreg--paragraph ()
   "Return a list of regions containing paragraphs."
   (save-excursion
-    (let ((orig (point))
-          beg end result)
-      (cond
-       ((or (derived-mode-p 'prog-mode)
-            beginning-of-defun-function)
-        (when (beginning-of-defun)
-          (setq beg (point))
-          (end-of-defun)
-          (setq end (point))
-          ;; If we are at the BOL right below a defun, don’t mark
-          ;; that defun.
-          (unless (eq orig end)
-            (push `(paragraph . ,(cons beg end)) result))))
-       ((or (derived-mode-p 'text-mode)
-            (eq major-mode 'fundamental-mode))
-        (backward-paragraph)
-        (skip-syntax-forward "-")
-        (setq beg (point))
-        (forward-paragraph)
-        (setq end (point))
-        (push `(paragraph . ,(cons beg end)) result)))
-      result)))
+    (condition-case nil
+        (let ((orig (point))
+              beg end result)
+          (cond
+           ;; Using defun.
+           ((or (derived-mode-p 'prog-mode)
+                beginning-of-defun-function)
+            (when (beginning-of-defun)
+              (setq beg (point))
+              (end-of-defun)
+              (setq end (point))
+              ;; If we are at the BOL right below a defun, don’t mark
+              ;; that defun.
+              (unless (eq orig end)
+                (push `(paragraph . ,(cons beg end)) result))))
+           ;; Use paragraph.
+           ((or (derived-mode-p 'text-mode)
+                (eq major-mode 'fundamental-mode))
+            (backward-paragraph)
+            (skip-syntax-forward "-")
+            (setq beg (point))
+            (forward-paragraph)
+            (setq end (point))
+            (push `(paragraph . ,(cons beg end)) result)))
+          result)
+      (scan-error nil))))
 
 
 (provide 'expreg)
