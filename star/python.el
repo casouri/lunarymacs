@@ -90,6 +90,6 @@ delete not indent."
         (backward-delete-char-untabify arg)))))
 
 (defun setup-python ()
-  (eglot-ensure))
+  (eglot-soft-ensure))
 
 (add-hook 'python-base-mode-hook #'setup-python)
