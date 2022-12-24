@@ -69,7 +69,21 @@ ORIG is the current position."
         (end (cddr region)))
     (and (<= beg orig end)
          (< beg end)
-         (< 1 (- end beg) 8000))))
+         ;; We don’t filter out regions that’s only one character
+         ;; long, because there are useful regions of that size.
+         ;; Consider ‘c-ts-mode--looking-at-star’, the "c" is one
+         ;; character long but we don’t want to skip it: my muscle
+         ;; remembers to hit C-= twice to mark a symbol, skipping "c"
+         ;; messes that up.
+         ;; (< 1 (- end beg) 8000)
+
+         ;; If the region is only one character long, and the
+         ;; character is stuff like bracket, escape char, quote, etc,
+         ;; filter it out. This is usually returned by
+         ;; ‘expreg--treesit’.
+         (not (and (eq (- end beg) 1)
+                   (not (memq (char-syntax (char-after beg))
+                              '(?- ?w ?_))))))))
 
 ;;; Expand/contract
 
@@ -159,7 +173,11 @@ This should be a list of (BEG . END).")
       (setq end (point))
       (subword-backward)
       (setq beg (point))
-      (push `(word . ,(cons beg end)) result)
+      (skip-syntax-forward "w")
+      ;; Make sure we stay in the word boundary.
+      ;; ‘subword-backward/forward’ could go through parenthesis, etc.
+      (when (eq (point) end)
+        (push `(word . ,(cons beg end)) result))
 
       ;; (2) subwords by “-” or “_”.
       (goto-char orig)
