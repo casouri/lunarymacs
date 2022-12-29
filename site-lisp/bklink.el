@@ -69,6 +69,7 @@
 (require 'cl-lib)
 ;; For `with-buffer-modified-unmodified'.
 (require 'bookmark)
+(require 'browse-url)
 
 ;;; Customize
 
@@ -95,10 +96,10 @@ but also Emacs.")
 
 ;;; Backstage
 
-(defvar bklink-regexp (rx (seq (group "[{")
+(defvar bklink-regexp (rx (seq (group "[[bklink:")
                                (group (+? (not (any "/"))))
                                (group (? (or ".txt" ".org" ".md")))
-                               (group "}]")))
+                               (group "]]")))
   "Regular expression that matches a bklink.
 
 Group 1 is opening delimiter.
@@ -319,8 +320,7 @@ THIS-FILE is the filename we are inserting summary into."
                  (format "%d linked reference%s:\n"
                          (length summary-list)
                          ;; Plural when more than one.
-                         (if (eq (length summary-list) 1) "" "s")
-                         this-link))
+                         (if (eq (length summary-list) 1) "" "s")))
          (dolist (summary summary-list)
            (insert "\n")
            ;; Insert file link.
@@ -494,6 +494,26 @@ The files to replace are in PATH-FILE"
           (while (re-search-forward link-re nil t)
             (replace-match new-link)))
         (write-file file)))))
+
+(defun bklink--upgrade ()
+  (goto-char (point-min))
+  (while (re-search-forward (rx (group "[{")
+                                (group (+ anychar))
+                                (group "}]"))
+                            nil t)
+    (replace-match "]]" nil nil nil 3)
+    (replace-match "[[bklink:" nil nil nil 1)))
+
+(defun bklink--upgrade-all ()
+  (with-temp-buffer
+    (dolist (file (directory-files default-directory))
+      (ignore-errors
+        (when (and (file-regular-p file)
+                   (not (equal (file-name-extension file) "iimg")))
+          (erase-buffer)
+          (insert-file-contents-literally file)
+          (bklink--upgrade)
+          (write-region (point-min) (point-max) file))))))
 
 (provide 'bklink)
 
