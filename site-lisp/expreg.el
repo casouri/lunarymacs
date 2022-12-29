@@ -226,19 +226,21 @@ This should be a list of (BEG . END).")
 (defun expreg--inside-list ()
   "Return a list of one region marking inside the list, or nil.
 Assumes point not in string."
-  (unless (nth 3 (syntax-ppss))
-    (when (> (car (syntax-ppss)) 0)
-      (let (beg)
-        (save-excursion
-          (goto-char (nth 1 (syntax-ppss)))
-          (save-excursion
-            (forward-char)
-            (skip-syntax-forward "-")
-            (setq beg (point)))
-          (forward-list)
-          (backward-char)
-          (skip-syntax-backward "-")
-          (list `(inside-list . ,(cons beg (point)))))))))
+  (condition-case nil
+      (unless (nth 3 (syntax-ppss))
+        (when (> (car (syntax-ppss)) 0)
+          (let (beg)
+            (save-excursion
+              (goto-char (nth 1 (syntax-ppss)))
+              (save-excursion
+                (forward-char)
+                (skip-syntax-forward "-")
+                (setq beg (point)))
+              (forward-list)
+              (backward-char)
+              (skip-syntax-backward "-")
+              (list `(inside-list . ,(cons beg (point))))))))
+    (scan-error nil)))
 
 (defun expreg--list-at-point ()
   "Return a list of one region marking the list at point, or nil.
