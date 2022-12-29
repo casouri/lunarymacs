@@ -112,7 +112,7 @@ Change this variable and
 
 (defsubst bklink--format-link (file)
   "Format FILE into a bklink. Basically [[FILE]]."
-  (format "[{%s}]" file))
+  (format "[[bklink:%s]]" file))
 
 (defun bklink--get-file-list (file)
   "Return a list of files that’s in the same project with FILE.
