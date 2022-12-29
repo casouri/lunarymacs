@@ -16,8 +16,9 @@
   "Enable a bunch of modes for Pollen mode."
   (electric-indent-local-mode)
   (visual-line-mode)
-  (set (make-local-variable 'indent-line-function)
-       #'pollen-indent-function)
+  (setq-local indent-line-function
+              #'pollen-indent-function)
+  (setq-local comment-start "◊; ")
   (setq-local outline-regexp "◊\\(sub\\)?section{"
               outline-minor-mode-cycle t
               outline-minor-mode-highlight 'append)
@@ -49,24 +50,29 @@
           (skip-syntax-forward "-"))))))
 
 (defun pollen-fontify-code (start end)
-  "Fontify code and bcode with fixed-pitch."
+  "Fontify ◊code and ◊bcode with fixed-pitch."
+  (goto-char start)
   (while (re-search-forward "◊b?code{" end t)
-    (let ((start (point))
-          (depth (car (syntax-ppss))))
-      (while (and (search-forward "}" nil t)
-                  ;; Skip "}" in strings.
-                  (or (nth 3 (syntax-ppss))
-                      ;; Skip "}" in comments.
-                      (nth 4 (syntax-ppss))
-                      ;; Skip nested "}". (syntax-ppss (1- (point)))
-                      ;; moves point back, so we use (point) rather
-                      ;; than (1- (point)).
-                      (not (eq (car (syntax-ppss (point)))
-                               (1- depth))))))
-      (when (looking-back "}" 1)
-        (put-text-property start (1- (point))
-                           'font-lock-face 'fixed-pitch)
-        (put-text-property start (1- (point)) 'face 'fixed-pitch))))
+    (unless (or (nth 3 (syntax-ppss))
+                (nth 4 (syntax-ppss)))
+      (let ((start (point))
+            (depth (car (syntax-ppss))))
+        (while (and (search-forward "}" nil t)
+                    ;; Skip "}" in strings.
+                    (or (nth 3 (syntax-ppss))
+                        ;; Skip "}" in comments.
+                        (nth 4 (syntax-ppss))
+                        ;; Skip nested "}". (syntax-ppss (1- (point)))
+                        ;; moves point back, so we use (point) rather
+                        ;; than (1- (point)).
+                        (not (eq (car (syntax-ppss (point)))
+                                 (1- depth))))))
+        (when (looking-back "}" 1)
+          (put-text-property start (1- (point))
+                             'font-lock-face 'fixed-pitch)
+          (put-text-property start (1- (point)) 'face 'fixed-pitch)
+          (put-text-property start (1- (point))
+                             'jit-lock-defer-multiline t)))))
   `(jit-lock-bounds start . ,(point)))
 
 
