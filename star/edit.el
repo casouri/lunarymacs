@@ -47,7 +47,8 @@
  "C-x C-b" #'consult-buffer
  "M-y"     #'consult-yank-pop
  :leader
- "si"      #'consult-imenu)
+ "si"      #'consult-imenu
+ "ss"      #'consult-line)
 
 ;;; Package
 
