@@ -40,8 +40,8 @@
  [remap move-beginning-of-line] #'smarter-move-beginning-of-line
 
  ;; Super -> Meta
- "s-<backspace>" #'backward-kill-word
- "s-d"   #'kill-word
+ "s-<backspace>" #'backward-delete-word
+ "s-d"   #'delete-word
  "s-f"   #'subword-forward
  "s-b"   #'subword-backward
  "s-a"   #'beginning-of-defun
@@ -112,6 +112,26 @@ Keeps the relative position of point against window."
   (scroll-up 3)
   (vertical-motion 3)
   (set-transient-map luna-scroll-map t))
+
+;;; Delete word
+;;
+;; You copy some stuff from the browser and want to paste it in some
+;; file: you switch to Emacs, C-x C-f, and kill some word, oops, your
+;; stuff is overwrote by the word. I rarely encounter a case where I’d
+;; want to use the word I killed, so delete-word seems more useful to
+;; me.
+
+(defun delete-word (arg)
+  "Delete a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (forward-word arg) (point))))
+
+(defun backward-delete-word (arg)
+  "Delete a word backwards.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-word (- arg)))
 
 ;;; Better C-a
 
