@@ -111,7 +111,7 @@ Change this variable and
 `bklink--format-link' to change link format.")
 
 (defsubst bklink--format-link (file)
-  "Format FILE into a bklink. Basically [[FILE]]."
+  "Format FILE into a bklink. Basically [[bklink:FILE]]."
   (format "[[bklink:%s]]" file))
 
 (defun bklink--get-file-list (file)
