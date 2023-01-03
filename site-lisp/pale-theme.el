@@ -5,6 +5,9 @@
 ;;; This file is NOT part of GNU Emacs
 
 ;;; Commentary:
+;;
+;; A quieter theme with ink-on-paper feel. It uses more bold, italic,
+;; and gray for contrast in place of different colors.
 
 ;;; Code:
 
@@ -37,7 +40,7 @@
            ;; Colors indented for foreground are less pronouced.
            (hl-fg "#987816")
            (red-fg "DarkRed")
-           (blue-fg "SlateBlue")
+           (blue-fg "#0000bb")
 
            ;; Warning and error are brighter to catch attention.x
            (warning "#DA7A48")
@@ -81,8 +84,8 @@
         (widget-field        (nil nil ,bg-block))
         (widget-inactive     (nil ,fg-weak))
 
-        ;; See also builin-config.el (Customize) where I increase line
-        ;; spacing and default face.
+        ;; See also builtin-config.el (Customize) where I increase line
+        ;; spacing and change font.
         (custom-button
          (nil nil ,bg-tooltip)
          (:box (:line-width 3 :color ,bg-tooltip)))
@@ -99,7 +102,7 @@
         (custom-variable-tag   ,italic)
         (custom-face-tag       (custom-variable-tag))
         (custom-group-subtitle (custom-variable-tag))
-        (custom-group-tag      ((nil info-title-3)))
+        (custom-group-tag      (nil))
         (custom-invalid        (nil ,err))
         (custom-modified       (nil ,warning))
         (custom-rogue          (nil ,warning))
@@ -184,7 +187,7 @@
         (magit-bisect-skip       (warning))
         (magit-blame-date        (nil ,hl-fg))
         (magit-blame-heading     (magit-heading-highlight))
-        (magit-branch-current    (warning))
+        (magit-branch-current    (nil ,red-fg))
         (magit-branch-local      ,bold)
         (magit-branch-remote     ,bold)
         (magit-cherry-equivalent (success))
