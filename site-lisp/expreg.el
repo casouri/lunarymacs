@@ -227,7 +227,10 @@ This should be a list of (BEG . END).")
   "Return a list of one region marking inside the list, or nil.
 Assumes point not in string."
   (condition-case nil
-      (unless (nth 3 (syntax-ppss))
+      (progn
+        ;; Inside a string? Move out of it first.
+        (when (nth 3 (syntax-ppss))
+          (goto-char (nth 8 (syntax-ppss))))
         (when (> (car (syntax-ppss)) 0)
           (let (beg)
             (save-excursion

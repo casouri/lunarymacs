@@ -52,8 +52,11 @@
         xeft-database "~/deft/db")
   (set-face-attribute 'xeft-inline-highlight nil
                       :inherit 'highlight)
+  (defun xeft-ui-setup ()
+    (face-remap-set-base 'default '(:family "IBM Plex Sans" :height 160)))
   (defun xeft-setup ()
     (auto-fill-mode))
+  (add-hook 'xeft-mode-hook #'xeft-ui-setup)
   (add-hook 'xeft-find-file-hook #'xeft-setup)
   (add-hook 'bklink-minor-mode-hook #'xeft-setup))
 
