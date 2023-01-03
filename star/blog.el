@@ -14,6 +14,8 @@
 
 (defun setup-pollen ()
   "Enable a bunch of modes for Pollen mode."
+  (flyspell-mode)
+  (electric-quote-local-mode 1)
   (electric-indent-local-mode)
   (visual-line-mode)
   (setq-local indent-line-function
@@ -73,7 +75,7 @@
           (put-text-property start (1- (point)) 'face 'fixed-pitch)
           (put-text-property start (1- (point))
                              'jit-lock-defer-multiline t)))))
-  `(jit-lock-bounds start . ,(point)))
+  `(jit-lock-bounds ,start . ,(point)))
 
 
 ;;; Notes
