@@ -53,8 +53,10 @@
  "C-s-b" #'backward-sexp
 
  ;; For some reason, keyboard macro doesn't work.
- "s-["   #'forward-page
- "s-]"   #'backward-page
+ ;; "s-["   #'forward-page
+ ;; "s-]"   #'backward-page
+ "s-["   #'outline-backward-same-level
+ "s-]"   #'outline-forward-same-level
  ;; Super -> Control
  "s-\\"  (kbd "C-\\")
 
