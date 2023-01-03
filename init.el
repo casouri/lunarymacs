@@ -78,11 +78,20 @@
     (luna-load-font 'fixed-pitch "IBM Plex Mono" 13 :weight 'medium)
     (luna-load-font 'variable-pitch "Academica" 16)
     (luna-load-font 'fixed-pitch-serif "IBM Plex Mono" 13)
-    (luna-load-font 'mode-line "SF Pro Text" 13 :weight 'light)
+    (luna-load-font 'mode-line "IBM Plex Sans" 13
+                    :weight 'regular :height 140)
     (add-hook 'luna-load-theme-hook
               (lambda ()
-                (luna-load-font
-                 'mode-line "SF Pro Text" 13 :weight 'light))))
+                (luna-load-font 'mode-line "IBM Plex Sans" 13
+                                :weight 'regular :height 140)))
+    (with-eval-after-load 'xeft
+      (luna-load-font-spec
+       'xeft-excerpt-title
+       '("IBM Plex Sans" "Source Han Sans SC" 1
+         (:weight semi-bold) (:weight medium))
+       16)
+      (luna-load-font
+       'xeft-excerpt-body "IBM Plex Sans" 16)))
 ;;;; Frame
   (when (display-graphic-p)
     (set-frame-width (selected-frame) 150)
