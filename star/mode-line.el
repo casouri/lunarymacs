@@ -57,20 +57,20 @@ The padding pushes TEXT to the right edge of the mode-line."
                 `(,fringe
                   (:eval (if (window-dedicated-p) "🚷" ""))
                   (:eval (if buffer-read-only "🔒" ""))
-                  (:propertize "%[%b%]" face (:weight bold))
+                  (:propertize "%[%b%]" face (:weight semi-bold))
                   (:eval (luna-mode-line-coding-system))
                   ,spaces
-                  ,(propertize " " 'display '(raise 0.3))
                   ,(if (featurep 'minions)
                        'minions-mode-line-modes
                      'mode-line-modes)
-                  ,(propertize " " 'display '(raise -0.3))
                   ,spaces
                   (:eval (if (buffer-modified-p)
                              ,(if (display-graphic-p) "ΦAΦ" "OAO")
-                           ,(if (display-graphic-p) "ΦωΦ" "OwO")))
+                           ,(if (display-graphic-p) "ΦwΦ" "OwO")))
                   ,spaces
                   mode-line-misc-info
+                  ,(propertize " " 'display '(raise 0.3))
+                  ,(propertize " " 'display '(raise -0.3))
                   (:eval (concat (luna-mode-line-with-padding ,percentage)
                                  "%%"))
                   ;; (:eval (concat ,spaces "(%l) " ,percentage "%%"))
