@@ -156,25 +156,8 @@
   (setq-local electric-quote-string nil)
   (indent-tabs-mode)
   (bug-reference-prog-mode)
-  (setq-local fill-paragraph-function #'ts-c-fill-paragraph)
   (treesit-font-lock-recompute-features '(emacs-devel))
   (eglot-soft-ensure))
-
-(defun ts-c-fill-paragraph (&optional arg)
-  (interactive)
-  (let* ((node (treesit-node-at (point)))
-         (start (treesit-node-start node))
-         (end (treesit-node-end node))
-         (pstart (save-excursion
-                   (forward-paragraph -1)
-                   (skip-syntax-forward "-")
-                   (point)))
-         (pend (save-excursion
-                 (forward-paragraph 1)
-                 (point))))
-    (when (equal (treesit-node-type node) "comment")
-      (fill-region (max start pstart) (min end pend)))
-    t))
 
 (defun ts-css-setup ()
   (treesit-font-lock-recompute-features '(property) '(variable function)))
