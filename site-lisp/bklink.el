@@ -7,9 +7,8 @@
 ;;; Commentary:
 ;;
 ;; In org-roam, you can show back links -- a list of files that
-;; contains a link to the current file. The idea is nice but I don’t
-;; like how org-roam and zetteldeft implement things. Hence this
-;; minimal package.
+;; contains a link to the current file. The idea is nice but I have
+;; different idea on how to implement it. Hence this package.
 ;;
 ;; Some assumptions about the files that contains bklink:
 ;;
@@ -17,25 +16,30 @@
 ;;     to uniquely identify files.
 ;;  2. There is no sub-directories.
 ;;  3. There aren’t a ton of files. We use grep to search for links,
-;;     no caching (though not hard to add one).
-;;  4. filenames don’t contain “}]”.
+;;     no caching.
 ;;
 ;; Advantages:
 ;;
 ;;  1. Filename as link, no id, no database.
-;;  2. Works for multiple directories without configuration.
+;;  2. Works for multiple directories without configuration, it’s just
+;;     that files can only link to files in the same directory.
 ;;  3. Works for any file format.
-;;  4. Back-link summary is not saved to the file.
 ;;
 ;; To use with Deft:
 ;;
 ;;     (add-hook 'deft-open-file-hook #'bklink-minor-mode)
 ;;     (setq deft-use-filter-string-for-filename t)
 ;;
+;; To use with Xeft:
+;;
+;;     (add-hook 'xeft-find-file-hook #'bklink-minor-mode)
+;;
+;; Or use dir-local variable.
+;;
 ;; Usage:
 ;;
-;; Link format is [{filename.ext}]. Extension is optional.
-;; Links are displayed as [filename] with 'link face.
+;; Link format is [[bklink:filename.ext]]. Extension is optional.
+;; Links are displayed as [filename] with ‘link’ face.
 ;;
 ;; Insert a link to another file or edit a link:
 ;;
@@ -43,7 +47,7 @@
 ;;
 ;; Show back-links:
 ;;
-;;     M-x bklink-show-back-link RET
+;;     M-x bklink-summary-mode RET
 ;;
 ;; Rename all links to the current file:
 ;;
@@ -55,14 +59,15 @@
 ;;
 ;; - If a link doesn’t have extension, bklink appends “.txt” to it
 ;;   when searching for the corresponding file.
-;; - If the file a link points to doesn’t exist, bklink doesn’t create
+;; - If a link points to non-exist file, bklink doesn’t create
 ;;   that file. Instead, bklink creates a buffer, and you can show
 ;;   back-links to it without creating that file.
 ;; - When ‘bklink-show-back-link-on-start’ is non-nil, back-link
 ;;   summary is shown on startup.
 ;; - When ‘bklink-use-form-feed’ is non-nil, bklink uses form-feed
 ;;   character to delineate back-link summary.
-;; - Using id instead of title as filenames is a dumb idea.
+;; - Using id instead of title as filenames is a dumb idea. Tried it,
+;;   didn’t work well.
 
 ;;; Code:
 
@@ -85,14 +90,14 @@
 Besides explicitly links, we also include text that matches the
 title but isn't a link.
 
-For example, for Emacs.txt, we match not only [{Emacs.txt}],
+For example, for Emacs.txt, we match not only [[bklink:Emacs.txt]],
 but also Emacs.")
 
 (defvar bklink-summary-read-only-p t
   "If non-nil, bklink marks the summary read-only.")
 
 (defvar bklink-prune-summary-p t
-  "If non-nil, bklink prunes summary when save.")
+  "If non-nil, summary is not saved to disk.")
 
 ;;; Backstage
 
@@ -191,21 +196,24 @@ If the file doesn't exist, create a buffer."
 
 ;;;; Highlight links
 
+(defvar bklink-summary-mode)
+
+;;;###autoload
 (define-minor-mode bklink-minor-mode
   "Recognizes bklinks."
   :lighter ""
   :keymap (make-sparse-keymap)
   (if bklink-minor-mode
-      (progn (jit-lock-register #'bklink-fontify)
-             (unless (derived-mode-p 'org-mode 'markdown-mode)
-               (jit-lock-register #'bklink-fontify-url))
-             (when bklink-prune-summary-p
-               (add-hook 'write-file-functions
-                         #'bklink--write-file-function 90 t))
-             ;; (add-hook 'fill-nobreak-predicate #'bklink--nobreak-p 90 t)
-             (if (and bklink-show-back-link-on-start
-                      (not bklink-show-back-link))
-                 (bklink-show-back-link)))
+      (progn
+        (jit-lock-register #'bklink-fontify)
+        (jit-lock-register #'bklink-fontify-url)
+        (when bklink-prune-summary-p
+          (add-hook 'write-file-functions
+                    #'bklink--write-file-function 90 t))
+        ;; (add-hook 'fill-nobreak-predicate #'bklink--nobreak-p 90 t)
+        (if (and bklink-show-back-link-on-start
+                 (not bklink-summary-mode))
+            (bklink-summary-mode)))
     (jit-lock-unregister #'bklink-fontify)
     (jit-lock-unregister #'bklink-fontify-url)
     ;; (remove-hook 'fill-nobreak-predicate #'bklink--nobreak-p t)
@@ -216,7 +224,8 @@ If the file doesn't exist, create a buffer."
 (defun bklink-fontify (beg end)
   "Highlight bklinks between BEG and END."
   (goto-char beg)
-  (while (and (re-search-forward bklink-regexp nil t)
+  (while (and (not (derived-mode-p 'org-mode))
+              (re-search-forward bklink-regexp nil t)
               (< (point) end))
     (let* ((inhibit-read-only t)
            (filename (concat
@@ -250,7 +259,8 @@ Everything that matches `browse-url-button-regexp' will be made
 clickable and will use `browse-url' to open the URLs in question."
   ;; Change face to font-lock-face.
   (goto-char beg)
-  (while (re-search-forward browse-url-button-regexp end t)
+  (while (and (not (derived-mode-p 'org-mode 'markdown-mode))
+              (re-search-forward browse-url-button-regexp end t))
     (make-text-button (match-beginning 0)
                       (match-end 0)
                       :type 'bklink-url
@@ -392,8 +402,20 @@ THIS-FILE is the filename we are inserting summary into."
                      event)))))
     (set-process-sentinel process sentinal)))
 
+;;; Orglink
+
+;;;###autoload
+(with-eval-after-load 'org
+  (org-link-set-parameters
+   "bklink"
+   :follow #'org-link-open-as-file
+   :export (lambda (path _desc _backend _info)
+             path)
+   :store #'ignore))
+
 ;;; Userland
 
+;;;###autoload
 (defun bklink-insert ()
   "Insert a link to a file.
 If point not on a link, insert a new link, if already on a link,
@@ -413,15 +435,16 @@ edit the link."
       (insert (bklink--format-link file))))
   (bklink-minor-mode))
 
-(define-minor-mode bklink-show-back-link
-  "Toggle display of a buffer that show back-links.
+;;;###autoload
+(define-minor-mode bklink-summary-mode
+  "Toggle display of back-links summary at the end of a buffer.
 The back-links are links to the files that has a link to this file."
   :lighter ""
   (unless (executable-find "grep")
     (user-error "Displaying back-link needs grep but we cannot find it"))
   (unless bklink-minor-mode
     (user-error "Bklink-minor-mode is not on"))
-  (if bklink-show-back-link
+  (if bklink-summary-mode
       ;; The buffer could be not having a file.
       (if-let ((file (or (buffer-file-name) (buffer-name)))
                (buffer (current-buffer)))
@@ -435,6 +458,7 @@ The back-links are links to the files that has a link to this file."
      (save-excursion
        (bklink--prune-back-link-summary)))))
 
+;;;###autoload
 (defun bklink-rename (new-name)
   "Rename current file to NEW-NAME.
 Rename bklinks that points to the current file point to NEW-NAME.
@@ -497,9 +521,9 @@ The files to replace are in PATH-FILE"
 
 (defun bklink--upgrade ()
   (goto-char (point-min))
-  (while (re-search-forward (rx (group "[{")
+  (while (re-search-forward (rx (group "[[bklink:")
                                 (group (+ anychar))
-                                (group "}]"))
+                                (group "]]"))
                             nil t)
     (replace-match "]]" nil nil nil 3)
     (replace-match "[[bklink:" nil nil nil 1)))
