@@ -95,6 +95,7 @@ ARG is the numerical argument."
       (progn
         (variable-pitch-mode)
         ;; (luna-scale-cjk-mode)
+        (visual-line-mode)
         (electric-pair-local-mode -1)
         (electric-quote-local-mode)
         (setq-local cursor-type 'bar)
@@ -108,6 +109,7 @@ ARG is the numerical argument."
     (whitespace-mode -1)
     (company-mode)
     (variable-pitch-mode -1)
+    (visual-line-mode -1)
     ;; (luna-scale-cjk-mode -1)
     (electric-pair-local-mode)
     (electric-quote-local-mode -1)
