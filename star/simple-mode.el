@@ -183,23 +183,23 @@ Then jslint:
 (add-hook 'sgml-mode-hook #'setup-xml)
 
 ;; Rust
-(load-package rust-mode
-  :mode "\\.rs$"
-  :hook (rust-mode-hook . setup-rust)
-  :config
-  ;; If I format buffer before save, rustfmt won’t format in my back.
-  ;; Eat this rustfmt!!
-  (setq rust-format-on-save t)
-  (defun setup-rust ()
-    "Setup for ‘rust-mode’."
-    (eglot-soft-ensure)
-    ;; For some reason format-on-save is turned on and I can’t turn it
-    ;; off. And I don’t want to manually revert buffer after every
-    ;; fucking save.
-    (auto-revert-mode)
-    ;; rustfmt’s line limit is too large.
-    (toggle-word-wrap)
-    (electric-quote-local-mode -1)))
+;; (load-package rust-mode
+;;   :mode "\\.rs$"
+;;   :hook (rust-mode-hook . setup-rust)
+;;   :config
+;;   ;; If I format buffer before save, rustfmt won’t format in my back.
+;;   ;; Eat this rustfmt!!
+;;   (setq rust-format-on-save t)
+;;   (defun setup-rust ()
+;;     "Setup for ‘rust-mode’."
+;;     (eglot-soft-ensure)
+;;     ;; For some reason format-on-save is turned on and I can’t turn it
+;;     ;; off. And I don’t want to manually revert buffer after every
+;;     ;; fucking save.
+;;     (auto-revert-mode)
+;;     ;; rustfmt’s line limit is too large.
+;;     (toggle-word-wrap)
+;;     (electric-quote-local-mode -1)))
 
 ;; Go
 (load-package go-mode
@@ -239,7 +239,7 @@ Then jslint:
     (add-to-list 'eglot-server-programs
                  '((c-mode c++-mode) . ("ccls-clang-10")))
     (add-to-list 'eglot-server-programs
-                 '(rust-mode . ("rust-analyzer"))))
+                 '(rust-ts-mode . ("rust-analyzer"))))
   ;; Show error message when hovering by point. (By default error
   ;; messages are only shown when hovering by cursor).
   (add-hook 'eglot-managed-mode-hook
