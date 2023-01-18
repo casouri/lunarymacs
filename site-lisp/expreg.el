@@ -62,28 +62,33 @@ as ones where BEG equals END, etc, these will be filtered out by
                      (< (- (cddr a) (cadr a))
                         (- (cddr b) (cadr b))))))
 
+(defvar expreg--validation-white-list '(list-at-point)
+  "Regions produced by functions in this list skips filtering.")
+
 (defun expreg--valid-p (region orig)
   "Return non-nil if REGION = (BEG . END) valid regarding ORIG.
 ORIG is the current position."
-  (let ((beg (cadr region))
+  (let ((producer (car region))
+        (beg (cadr region))
         (end (cddr region)))
-    (and (<= beg orig end)
-         (< beg end)
-         ;; We don’t filter out regions that’s only one character
-         ;; long, because there are useful regions of that size.
-         ;; Consider ‘c-ts-mode--looking-at-star’, the "c" is one
-         ;; character long but we don’t want to skip it: my muscle
-         ;; remembers to hit C-= twice to mark a symbol, skipping "c"
-         ;; messes that up.
-         ;; (< 1 (- end beg) 8000)
+    (or (memq producer expreg--validation-white-list)
+        (and (<= beg orig end)
+             (< beg end)
+             ;; We don’t filter out regions that’s only one character
+             ;; long, because there are useful regions of that size.
+             ;; Consider ‘c-ts-mode--looking-at-star’, the "c" is one
+             ;; character long but we don’t want to skip it: my muscle
+             ;; remembers to hit C-= twice to mark a symbol, skipping "c"
+             ;; messes that up.
+             ;; (< 1 (- end beg) 8000)
 
-         ;; If the region is only one character long, and the
-         ;; character is stuff like bracket, escape char, quote, etc,
-         ;; filter it out. This is usually returned by
-         ;; ‘expreg--treesit’.
-         (not (and (eq (- end beg) 1)
-                   (not (memq (char-syntax (char-after beg))
-                              '(?- ?w ?_))))))))
+             ;; If the region is only one character long, and the
+             ;; character is stuff like bracket, escape char, quote, etc,
+             ;; filter it out. This is usually returned by
+             ;; ‘expreg--treesit’.
+             (not (and (eq (- end beg) 1)
+                       (not (memq (char-syntax (char-after beg))
+                                  '(?- ?w ?_)))))))))
 
 ;;; Expand/contract
 
@@ -250,6 +255,14 @@ Assumes point not in string."
 Point should be at the beginning or end of a list."
   (unless (nth 3 (syntax-ppss))
     (save-excursion
+      ;; Even if point is not at the beginning of a list, but before a
+      ;; list (with only spaces between), we want to return a region
+      ;; covering that list after point, for convenience. But because
+      ;; this region will not cover point, it will not pass the
+      ;; filtering, so this function needs to be added to
+      ;; ‘expreg--validation-white-list’.
+      (when (looking-at (rx (syntax whitespace)))
+        (skip-syntax-forward "-"))
       ;; If at the end of a list and not the beginning of another one,
       ;; move to the beginning of the list.
       ;; Corresponding char for each int: 40=(, 39=', 41=).
