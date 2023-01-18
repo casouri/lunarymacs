@@ -137,7 +137,11 @@
 ;; (setq treesit--font-lock-verbose t)
 
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs '((c-ts-mode c++-ts-mode) "ccls-clang-10")))
+  (add-to-list 'eglot-server-programs
+               '((c-ts-mode c++-ts-mode) "ccls-clang-10"))
+  (add-to-list 'eglot-server-programs
+               '((javascript-mode typescript-ts-mode)
+                 "typescript-language-server" "--stdio")))
 
 (add-hook 'prog-mode-hook #'general-ts-mode-setup)
 (add-hook 'c-ts-mode-hook #'c-ts-setup)
