@@ -302,32 +302,34 @@ If find something, leave point at the beginning of the list."
   "Return regions marking the inside and outside of the string."
   (let ( outside-beg outside-end
          inside-beg inside-end)
-    (save-excursion
-      ;; Inside a string? Move to beginning.
-      (if (nth 3 (syntax-ppss))
-          (goto-char (nth 8 (syntax-ppss)))
-        ;; Not inside a string, but at the end of a string and not at
-        ;; the beginning of another one? Move to beginning.
-        (when (and (eq (char-syntax (or (char-before) ?x)) 34)
-                   (not (eq (char-syntax (or (char-after) ?x)) 34)))
-          (ignore-errors (backward-sexp))))
-      ;; Not inside a string and at the beginning of one.
-      (when (and (not (nth 3 (syntax-ppss)))
-                 (eq (char-syntax (or (char-after) ?x)) 34))
-        (setq outside-beg (point))
-        (forward-sexp)
-        (when (eq (char-syntax (or (char-before) ?x)) 34)
-          (setq outside-end (point))
-          (backward-char)
-          (setq inside-end (point))
-          (goto-char outside-beg)
-          (forward-char)
-          (setq inside-beg (point))
-          ;; It’s ok if point is at outside string and we return a
-          ;; region marking inside the string: expreg will filter the
-          ;; inside one out.
-          (list `(string . ,(cons outside-beg outside-end))
-                `(string . ,(cons inside-beg inside-end))))))))
+    (condition-case nil
+        (save-excursion
+          (if (nth 3 (syntax-ppss))
+              ;; Inside a string? Move to beginning.
+              (goto-char (nth 8 (syntax-ppss)))
+            ;; Not inside a string, but at the end of a string and not at
+            ;; the beginning of another one? Move to beginning.
+            (when (and (eq (char-syntax (or (char-before) ?x)) 34)
+                       (not (eq (char-syntax (or (char-after) ?x)) 34)))
+              (backward-sexp)))
+          ;; Not inside a string and at the beginning of one.
+          (when (and (not (nth 3 (syntax-ppss)))
+                     (eq (char-syntax (or (char-after) ?x)) 34))
+            (setq outside-beg (point))
+            (forward-sexp)
+            (when (eq (char-syntax (or (char-before) ?x)) 34)
+              (setq outside-end (point))
+              (backward-char)
+              (setq inside-end (point))
+              (goto-char outside-beg)
+              (forward-char)
+              (setq inside-beg (point))
+              ;; It’s ok if point is at outside string and we return a
+              ;; region marking inside the string: expreg will filter the
+              ;; inside one out.
+              (list `(string . ,(cons outside-beg outside-end))
+                    `(string . ,(cons inside-beg inside-end))))))
+      (scan-error nil))))
 
 (defun expreg--list ()
   "Return a list of regions determined by sexp level."
