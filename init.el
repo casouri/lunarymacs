@@ -156,8 +156,7 @@
   (setq-local electric-quote-string nil)
   (indent-tabs-mode)
   (bug-reference-prog-mode)
-  (treesit-font-lock-recompute-features '(emacs-devel))
-  (eglot-soft-ensure))
+  (treesit-font-lock-recompute-features '(emacs-devel)))
 
 (defun ts-css-setup ()
   (treesit-font-lock-recompute-features '(property) '(variable function)))
