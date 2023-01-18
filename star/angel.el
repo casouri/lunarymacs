@@ -39,6 +39,10 @@
  [remap c-electric-backspace] #'luna-hungry-delete
  [remap move-beginning-of-line] #'smarter-move-beginning-of-line
 
+ ;; Meta
+ "M-<backspace>" #'backward-delete-word
+ "M-d"   #'delete-word
+
  ;; Super -> Meta
  "s-<backspace>" #'backward-delete-word
  "s-d"   #'delete-word
