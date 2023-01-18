@@ -111,7 +111,7 @@ The post in placed under <year>/DIR-NAME."
 ")
     (save-buffer)))
 
-(defvar luna-rock-src "~/p/casouri/rock/day/src/"
+(defvar luna-rock-src "~/p/casouri/rock/day/collection"
   "Source directory for Rock/Day.")
 
 (defun luna-new-rock ()
