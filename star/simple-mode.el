@@ -6,9 +6,14 @@
 
 ;; Emacs Lisp
 (luna-key-def
+ :leader
+ "eg" #'eglot
+ :---
  :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
  "<S-return>" #'eval-defun
  "<C-S-return>" #'eval-defun-and-next
+ :---
+ :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
  :leader-prefix
  "eb" #'eval-buffer
  :---
@@ -152,7 +157,7 @@ Then jslint:
 
 (defun setup-racket ()
   "Setup racket."
-  (eglot-soft-ensure))
+  nil)
 
 (luna-note-extern "racket-langserver"
   "raco pkg install racket-langserver")
@@ -161,8 +166,7 @@ Then jslint:
 (defun setup-c ()
   "Setup for ‘c-mode’ and ‘c++-mode’."
   (setq-local company-transformers nil)
-  (setq-local comment-multi-line t)
-  (eglot-soft-ensure))
+  (setq-local comment-multi-line t))
 (add-hook 'c-mode-hook #'setup-c)
 (add-hook 'c++-mode-hook #'setup-c)
 
@@ -192,7 +196,6 @@ Then jslint:
 ;;   (setq rust-format-on-save t)
 ;;   (defun setup-rust ()
 ;;     "Setup for ‘rust-mode’."
-;;     (eglot-soft-ensure)
 ;;     ;; For some reason format-on-save is turned on and I can’t turn it
 ;;     ;; off. And I don’t want to manually revert buffer after every
 ;;     ;; fucking save.
@@ -208,7 +211,7 @@ Then jslint:
   :config
   (defun setup-go ()
     "Setup for ‘go-mode’."
-    (eglot-soft-ensure)))
+    nil))
 
 (load-package protobuf-mode :mode "\\.proto")
 
@@ -224,7 +227,6 @@ Then jslint:
 
 (load-package eglot
   ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
-  :commands eglot eglot-soft-ensure
   :config
   (setq read-process-output-max (* 1024 1024))
   ;; Otherwise eglot highlights symbols, which is annoying.
@@ -252,10 +254,3 @@ Then jslint:
               ;; Show all eldoc feedback.
               (setq eldoc-documentation-strategy
                     #'eldoc-documentation-compose))))
-
-(defun eglot-soft-ensure ()
-  "Turn on eglot when there is an exising server for the current project."
-  (require 'eglot)
-  (when-let* ((project (project-current))
-              (eglot-server (gethash project eglot--servers-by-project)))
-    (eglot-ensure)))
