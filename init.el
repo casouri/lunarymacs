@@ -118,6 +118,13 @@
         redisplay-skip-fontification-on-input t)
   (setq mouse-wheel-flip-direction t))
 
+;;; Linux
+
+(luna-on "blanche"
+  (setq source-directory (expand-file-name "~/emacs"))
+  (setq x-super-keysym 'ctrl)
+  (setq x-ctrl-keysym 'super))
+
 ;;; Local init
 
 (let ((local-init (expand-file-name
