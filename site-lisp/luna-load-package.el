@@ -190,10 +190,11 @@ ARGS.
            ;; if the package is installed or not.
            ,@load-path-form
            (add-to-list 'luna-package-list ',package)
-           ;; Don’t setup the pacakge if it is not installed.
-           ;; (Especially autoloads, otherwise Emacs autoloads
-           ;; non-existant functions.)
-           (when (luna-installed-p ',package)
+           ;; Terminate early and not setup package, if it is not
+           ;; installed, otherwise Emacs might autoload non-existent
+           ;; function, etc.
+           (if (not (luna-installed-p ',package))
+               (error "%s not installed" ',package)
              ,@autoload-list
              ,@body
              ,(unless defer-p `(require ',package))))
