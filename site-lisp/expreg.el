@@ -261,7 +261,8 @@ Point should be at the beginning or end of a list."
       ;; this region will not cover point, it will not pass the
       ;; filtering, so this function needs to be added to
       ;; ‘expreg--validation-white-list’.
-      (when (looking-at (rx (syntax whitespace)))
+      (when (and (looking-at (rx (syntax whitespace)))
+                 (not (looking-back ")" 1)))
         (skip-syntax-forward "-"))
       ;; If at the end of a list and not the beginning of another one,
       ;; move to the beginning of the list.
