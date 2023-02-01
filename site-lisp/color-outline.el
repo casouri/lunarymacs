@@ -80,7 +80,8 @@
     (tuareg-mode "*" "(")
     (shell-script-mode "#")
     (web-mode "-" "<!")
-    (sh-mode "#"))
+    (sh-mode "#")
+    (rust-ts-mode "*" "// "))
   "Stores custom comment character for each major mode.
 An alist of (MAJOR-MODE . (COMMENT-CHAR COMMENT-BEGIN))
 or (MAJOR-MODE . (COMMENT-CHAR)). For other major modes,
