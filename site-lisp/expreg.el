@@ -40,7 +40,9 @@
 
 (require 'subword)
 (require 'treesit)
-(require 'cl-lib)
+(eval-when-compile
+  (require 'cl-lib)
+  (require 'seq))
 
 ;;; Cutom options and variables
 
@@ -90,6 +92,42 @@ ORIG is the current position."
                        (not (memq (char-syntax (char-after beg))
                                   '(?- ?w ?_)))))))))
 
+(defun expreg--filter-regions (regions orig)
+  "Filter out invalid regions in REGIONS regarding ORIG.
+ORIG is the current position. Each region is (BEG . END)."
+  (let (orig-at-beg-of-something
+        orig-at-end-of-something)
+    (setq regions (seq-filter
+                   (lambda (region)
+                     (expreg--valid-p region orig))
+                   regions))
+
+    ;; It is important that this runs after the first filter. If this
+    ;; is t, it means there are some REGION that starts/ends at ORIG.
+    (dolist (region regions)
+      (when (eq (cadr region) orig)
+        (setq orig-at-beg-of-something t))
+      (when (eq (cddr region) orig)
+        (setq orig-at-end-of-something t)))
+
+    ;; If there are regions that start at ORIG, filter out
+    ;; regions that ends at ORIG.
+    (setq regions (cl-remove-if
+                   (lambda (region)
+                     (and orig-at-beg-of-something
+                          (eq (cddr region) orig)))
+                   regions))
+
+    ;; OTOH, if there are regions that ends at ORIG, filter out
+    ;; regions that starts AFTER ORIGN, eg, special cases in
+    ;; ‘expreg--list-at-point’.
+    (setq regions (cl-remove-if
+                   (lambda (region)
+                     (and orig-at-end-of-something
+                          (> (cadr region) orig)))
+                   regions))
+    regions))
+
 ;;; Expand/contract
 
 (defvar-local expreg--verbose nil
@@ -119,10 +157,7 @@ This should be a list of (BEG . END).")
              (null expreg--prev-regions))
     (let* ((orig (point))
            (regions (mapcan #'funcall expreg-functions))
-           (regions (cl-remove-if-not
-                     (lambda (region)
-                       (expreg--valid-p region orig))
-                     regions))
+           (regions (expreg--filter-regions regions orig))
            (regions (expreg--sort-regions regions))
            (regions (cl-remove-duplicates regions :test #'equal)))
       (setq-local expreg--next-regions regions)))
@@ -181,7 +216,7 @@ This should be a list of (BEG . END).")
       (skip-syntax-forward "w")
       ;; Make sure we stay in the word boundary.
       ;; ‘subword-backward/forward’ could go through parenthesis, etc.
-      (when (eq (point) end)
+      (when (>= (point) end)
         (push `(word . ,(cons beg end)) result))
 
       ;; (2) subwords by “-” or “_”.
@@ -201,11 +236,11 @@ This should be a list of (BEG . END).")
       (push `(word . ,(cons beg end)) result)
 
       ;; (4) within whitespace & paren. (Allow word constituents, symbol
-      ;; constituents, punctuation.)
+      ;; constituents, punctuation, prefix (#' and ' in Elisp).)
       (goto-char orig)
-      (skip-syntax-forward "w_.")
+      (skip-syntax-forward "w_.'")
       (setq end (point))
-      (skip-syntax-backward "w_.")
+      (skip-syntax-backward "w_.'")
       (setq beg (point))
       (push `(word . ,(cons beg end)) result)
       (goto-char orig)
@@ -236,18 +271,25 @@ Assumes point not in string."
         ;; Inside a string? Move out of it first.
         (when (nth 3 (syntax-ppss))
           (goto-char (nth 8 (syntax-ppss))))
+
         (when (> (car (syntax-ppss)) 0)
-          (let (beg)
+          (let (beg end beg-w-spc end-w-spc)
             (save-excursion
               (goto-char (nth 1 (syntax-ppss)))
               (save-excursion
                 (forward-char)
+                (setq beg-w-spc (point))
                 (skip-syntax-forward "-")
                 (setq beg (point)))
+
               (forward-list)
               (backward-char)
+              (setq end-w-spc (point))
               (skip-syntax-backward "-")
-              (list `(inside-list . ,(cons beg (point))))))))
+              (setq end (point))
+
+              `((inside-list . ,(cons beg end))
+                (inside-list . ,(cons beg-w-spc end-w-spc)))))))
     (scan-error nil)))
 
 (defun expreg--list-at-point ()
