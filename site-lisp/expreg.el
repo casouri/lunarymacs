@@ -179,6 +179,7 @@ This should be a list of (BEG . END).")
     (setq-local expreg--next-regions nil)
     (setq-local expreg--prev-regions nil))
 
+  ;; If we are not already in the middle of expansions, compute them.
   (when (and (null expreg--next-regions)
              (null expreg--prev-regions))
     (let* ((orig (point))
@@ -200,6 +201,7 @@ This should be a list of (BEG . END).")
       (push (pop expreg--next-regions)
             expreg--prev-regions)))
 
+  ;; Expand to the next expansion.
   (when expreg--next-regions
     (let ((region (pop expreg--next-regions)))
       (set-mark (cddr region))
@@ -245,10 +247,22 @@ This should be a list of (BEG . END).")
       (subword-backward)
       (setq beg (point))
       (skip-syntax-forward "w")
-      ;; Make sure we stay in the word boundary.
+      ;; Make sure we stay in the word boundary. Because
       ;; ‘subword-backward/forward’ could go through parenthesis, etc.
       (when (>= (point) end)
-        (push `(word . ,(cons beg end)) result))
+        (push `(word-subword . ,(cons beg end)) result))
+
+      ;; Because ‘subword-backward/forward’ could go through
+      ;; parenthesis, etc, we need to run it in reverse to handle the
+      ;; case where point is at the end of a word.
+      (goto-char orig)
+      (subword-backward)
+      (setq beg (point))
+      (subword-forward)
+      (setq end (point))
+      (skip-syntax-backward "w")
+      (when (<= (point) beg)
+        (push `(word-subword-backward . ,(cons beg end)) result))
 
       ;; (2) subwords by “-” or “_”.
       (goto-char orig)
@@ -256,7 +270,7 @@ This should be a list of (BEG . END).")
       (setq end (point))
       (skip-syntax-backward "w")
       (setq beg (point))
-      (push `(word . ,(cons beg end)) result)
+      (push `(word-symbol-subword . ,(cons beg end)) result)
 
       ;; (3) symbol-at-point
       (goto-char orig)
@@ -264,7 +278,7 @@ This should be a list of (BEG . END).")
       (setq end (point))
       (skip-syntax-backward "w_")
       (setq beg (point))
-      (push `(word . ,(cons beg end)) result)
+      (push `(word-symbol . ,(cons beg end)) result)
 
       ;; (4) within whitespace & paren. (Allow word constituents, symbol
       ;; constituents, punctuation, prefix (#' and ' in Elisp).)
@@ -273,8 +287,8 @@ This should be a list of (BEG . END).")
       (setq end (point))
       (skip-syntax-backward "w_.'")
       (setq beg (point))
-      (push `(word . ,(cons beg end)) result)
-      (goto-char orig)
+      (push `(word-inside-space . ,(cons beg end)) result)
+
       ;; Return!
       result)))
 
@@ -500,7 +514,6 @@ Note that the inside of outer layer lists are not captured."
         (let ((orig (point))
               beg end result)
           (cond
-
            ;; Using defun.
            ((or (derived-mode-p 'prog-mode)
                 beginning-of-defun-function)
@@ -512,7 +525,7 @@ Note that the inside of outer layer lists are not captured."
               ;; If we are at the BOL right below a defun, don’t mark
               ;; that defun.
               (unless (eq orig end)
-                (push `(paragraph . ,(cons beg end)) result))))
+                (push `(paragraph-defun . ,(cons beg end)) result))))
 
            ;; Use paragraph.
            ((or (derived-mode-p 'text-mode)
