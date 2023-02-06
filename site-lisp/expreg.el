@@ -6,8 +6,9 @@
 
 ;;; Commentary:
 ;;
-;; This is just like expand-region, but simpler and easier to debug.
-;; Bind ‘expreg-expand’ and ‘expreg-contract’ and start using it.
+;; This is just like expand-region, but (1) we generate all regions at
+;; once, and (2) should be easier to debug. Bind ‘expreg-expand’ and
+;; ‘expreg-contract’ and start using it.
 
 ;;; Developer
 ;;
@@ -426,40 +427,32 @@ This routine returns the following regions:
 3. The outside of every layer of enclosing list
 
 Note that the inside of outer layer lists are not captured."
-  (let ((inside-list (expreg--inside-list))
-        (list-at-point (expreg--list-at-point))
-        outside-list lst return-value)
-
-    (save-excursion
-      (while (setq lst (expreg--outside-list))
-        (setq outside-list
-              (nconc outside-list lst))))
-
-    (setq return-value
-          (nconc list-at-point inside-list outside-list))
-
-    ;; If point is inside a string, we narrow to the inside of that
-    ;; string and compute again.
+  (let (inside-results)
     (when (expreg--inside-string-p)
+      ;; If point is inside a string, we narrow to the inside of that
+      ;; string and compute again.
       (save-restriction
         (let ((orig (point))
               (string-start (expreg--start-of-comment-or-string)))
+
           ;; Narrow to inside list.
           (goto-char string-start)
           (forward-sexp)
           (narrow-to-region (1+ string-start) (1- (point)))
           (goto-char orig)
+          (setq inside-results (expreg--list)))))
 
-          (setq inside-list (expreg--inside-list))
-          (setq list-at-point (expreg--list-at-point)))
+    ;; Normal computation.
+    (let ((inside-list (expreg--inside-list))
+          (list-at-point (expreg--list-at-point))
+          outside-list lst)
 
-        ;; Re-compute outside-list.
-        (setq outside-list nil)
-        (while (setq lst (expreg--outside-list))
-          (setq outside-list
-                (nconc outside-list lst)))))
+      ;; Compute outer-list.
+      (while (setq lst (expreg--outside-list))
+        (setq outside-list
+              (nconc lst outside-list)))
 
-    (nconc inside-list list-at-point outside-list return-value)))
+      (nconc inside-results inside-list list-at-point outside-list))))
 
 (defun expreg--comment ()
   "Return a list of regions containing comment."
