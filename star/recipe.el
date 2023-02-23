@@ -6,7 +6,8 @@
         ;; Full clones.
         (expand-region . (:repo "casouri/expand-region.el"
                                 :option (:full-clone t)))
-        (eglot . (:repo "joaotavora/eglot" :option (:full-clone t)))
+        (lspce . (:repo "https://github.com/zbelial/lspce.git"
+                        :option (:full-clone t)))
         (isolate . (:repo "casouri/isolate" :option (:full-clone t)))
         (ftable . (:repo "casouri/ftable" :option (:full-clone t)))
         (ghelp . (:repo "casouri/ghelp" :option (:full-clone t)))
