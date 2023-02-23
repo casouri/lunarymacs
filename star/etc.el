@@ -75,6 +75,7 @@
  '(enable-recursive-minibuffers t)
  '(fast-but-imprecise-scrolling t)
  '(global-so-long-mode t)
+ '(global-subword-mode t)
  '(help-window-select t)
  '(history-delete-duplicates t)
  '(history-length 500)
