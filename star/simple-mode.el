@@ -8,6 +8,7 @@
 (luna-key-def
  :leader
  "eg" #'eglot
+ "lc" #'lspce-mode
  :---
  :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
  "<S-return>" #'eval-defun
@@ -106,14 +107,14 @@
 ;; Javascript
 (setq js-indent-level 2
       typescript-indent-level 2)
-(load-package tide
-  :autoload-hook (typescript-mode-hook . luna-setup-tide))
-(defun luna-setup-tide ()
-  "Setup for tide."
-  (tide-setup)
-  (flycheck-mode)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (setq company-tooltip-align-annotations t))
+;; (load-package tide
+;;   :autoload-hook (typescript-mode-hook . luna-setup-tide))
+;; (defun luna-setup-tide ()
+;;   "Setup for tide."
+;;   (tide-setup)
+;;   (flycheck-mode)
+;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;;   (setq company-tooltip-align-annotations t))
 
 ;; Makefile
 (add-hook 'makefile-mode-hook
@@ -136,22 +137,23 @@ Then jslint:
 
 ;; Scheme
 ;; Note: C-c C-a to activate a #lang operation in a racket file.
-(load-package geiser
-  :commands run-geiser
-  :config
-  (luna-key-def
-   :keymaps 'geiser-mode-map
-   "C-." nil
-   "M-." nil))
+;; (load-package geiser
+;;   :commands run-geiser
+;;   :config
+;;   (luna-key-def
+;;    :keymaps 'geiser-mode-map
+;;    "C-." nil
+;;    "M-." nil))
 
-(load-package geiser-guile
-  :commands run-geiser run-guile
-  :config
-  (require 'console-buffer)
-  (setf (alist-get 'scheme-mode luna-console-buffer-alist)
-        "* Guile REPL *"))
+;; (load-package geiser-guile
+;;   :commands run-geiser run-guile
+;;   :config
+;;   (require 'console-buffer)
+;;   (setf (alist-get 'scheme-mode luna-console-buffer-alist)
+;;         "* Guile REPL *"))
 
 (load-package racket-mode
+  :mode "\\.rkt\\'"
   :extern "racket-langserver"
   :hook (racket-mode-hook . setup-racket))
 
@@ -204,6 +206,10 @@ Then jslint:
 ;;     (toggle-word-wrap)
 ;;     (electric-quote-local-mode -1)))
 
+(load-package rust-ts-mode
+  :mode "\\.rs\\'"
+  :hook (rust-ts-mode-hook . toggle-truncate-lines))
+
 ;; Go
 (load-package go-mode
   :mode "\\.go$"
@@ -222,6 +228,7 @@ Then jslint:
   :autoload-hook ((emacs-lisp-mode-hook
                    lisp-interaction-mode-hook
                    scheme-mode-hook
+                   racket-mode-hook
                    lisp-mode-hook)
                   . aggressive-indent-mode))
 
@@ -253,4 +260,18 @@ Then jslint:
                                   eldoc-documentation-functions)))
               ;; Show all eldoc feedback.
               (setq eldoc-documentation-strategy
-                    #'eldoc-documentation-compose))))
+                    #'eldoc-documentation-compose)
+              (eglot-inlay-hints-mode))))
+
+
+(load-package lspce
+  :commands lspce-mode
+  :init
+  (defun lspce-compile (path)
+    "Compile the dynamic modules used by lspce at PATH."
+    (interactive (list (read-directory-name "Repository path: ")))
+    (let ((default-directory path))
+      (compile "cargo build --release; ln -fs target/release/liblspce_module.dylib lspce-module.dylib")))
+  :config
+  (add-to-list 'lspce-server-programs
+               '("racket" "racket" "-l racket-langserver")))
