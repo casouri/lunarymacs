@@ -140,6 +140,7 @@
 (push '(javascript-mode . js-ts-mode) major-mode-remap-alist)
 (push '(c-mode . c-ts-mode) major-mode-remap-alist)
 (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+(push '(toml-mode . toml-ts-mode) major-mode-remap-alist)
 
 ;; (setq treesit--font-lock-verbose t)
 
@@ -147,7 +148,7 @@
   (add-to-list 'eglot-server-programs
                '((c-ts-mode c++-ts-mode) "ccls-clang-10"))
   (add-to-list 'eglot-server-programs
-               '((javascript-mode typescript-ts-mode)
+               '((js-ts-mode typescript-ts-mode)
                  "typescript-language-server" "--stdio")))
 
 (add-hook 'prog-mode-hook #'general-ts-mode-setup)
