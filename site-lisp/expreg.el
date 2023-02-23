@@ -16,7 +16,8 @@
 ;; possible expansions on startup with functions in
 ;; ‘expreg-functions’. Then it sorts them by each region’s size. It
 ;; also removes duplicates, etc. Then this list is stored in
-;; ‘expreg--next-regions’.
+;; ‘expreg--next-regions’. (There could be better sorting algorithms,
+;; but so far I haven’t seen the need for one.)
 ;;
 ;; To expand, we pop a region from ‘expreg--next-regions’, set point
 ;; and mark accordingly, and push this region to
@@ -32,7 +33,10 @@
 ;;     (FN . (BEG . END))
 ;;
 ;; where FN is the function produced this region. So accessing BEG is
-;; ‘cadr’, accessing END is ‘cddr’.
+;; ‘cadr’, accessing END is ‘cddr’. Sometimes FN is the function name
+;; plus some further descriptions, eg, word, word--symbol,
+;; word--within-space are all produced by ‘expreg--word’. I use double
+;; dash to indicate the additional descriptor.
 ;;
 ;; Credit: I stole a lot of ideas on how to expand lists and strings
 ;; from ‘expand-region’ :-)
@@ -48,14 +52,17 @@
 ;;; Cutom options and variables
 
 (defvar-local expreg-functions
-    '( expreg--word expreg--list expreg--string expreg--treesit
-       expreg--comment expreg--paragraph)
+    '( expreg--subword expreg--word expreg--list expreg--string
+       expreg--treesit expreg--comment expreg--paragraph)
   "A list of expansion functions.
+
 Each function is called with no arguments and should return a
 list of (BEG . END). The list don’t have to be sorted, and can
 have duplicates. It’s also fine to include invalid regions, such
 as ones where BEG equals END, etc, these will be filtered out by
-‘expreg-expand’.")
+‘expreg-expand’.
+
+The function could move point, but shouldn’t return any error.")
 
 ;;; Helper functions
 
@@ -183,7 +190,9 @@ This should be a list of (BEG . END).")
   (when (and (null expreg--next-regions)
              (null expreg--prev-regions))
     (let* ((orig (point))
-           (regions (mapcan #'funcall expreg-functions))
+           (regions (mapcan (lambda (fn) (save-excursion
+                                           (funcall fn)))
+                            expreg-functions))
            (regions (expreg--filter-regions regions orig))
            (regions (expreg--sort-regions regions))
            (regions (cl-remove-duplicates regions :test #'equal)))
@@ -229,19 +238,14 @@ This should be a list of (BEG . END).")
 
 ;;; Expansion functions
 
-(defun expreg--word ()
-  "Return a list of regions within the word at point."
-  ;; - subwords in camel-case.
-  ;; - subwords by “-” or “_”.
-  ;; - symbol-at-point
-  ;; - within whitespace & paren/quote (but can contain punctuation)
-  ;;   (“10–20”, “1.2”, “1,2”, etc). (This is technically not always
-  ;;   within a word anymore...)
-  (save-excursion
+(defun expreg--subword ()
+  "Return a list of regions of the CamelCase subword at point.
+Only return something if ‘subword-mode’ is on, to keep consistency."
+  (when subword-mode
     (let ((orig (point))
-          result
-          beg end)
-      ;; (1) subwords in camel-case.
+          beg end result)
+
+      ;; Go forward then backward.
       (subword-forward)
       (setq end (point))
       (subword-backward)
@@ -250,7 +254,7 @@ This should be a list of (BEG . END).")
       ;; Make sure we stay in the word boundary. Because
       ;; ‘subword-backward/forward’ could go through parenthesis, etc.
       (when (>= (point) end)
-        (push `(word-subword . ,(cons beg end)) result))
+        (push `(subword--forward . ,(cons beg end)) result))
 
       ;; Because ‘subword-backward/forward’ could go through
       ;; parenthesis, etc, we need to run it in reverse to handle the
@@ -262,35 +266,49 @@ This should be a list of (BEG . END).")
       (setq end (point))
       (skip-syntax-backward "w")
       (when (<= (point) beg)
-        (push `(word-subword-backward . ,(cons beg end)) result))
+        (push `(subword--backward . ,(cons beg end)) result))
 
-      ;; (2) subwords by “-” or “_”.
-      (goto-char orig)
-      (skip-syntax-forward "w")
-      (setq end (point))
-      (skip-syntax-backward "w")
-      (setq beg (point))
-      (push `(word-symbol-subword . ,(cons beg end)) result)
-
-      ;; (3) symbol-at-point
-      (goto-char orig)
-      (skip-syntax-forward "w_")
-      (setq end (point))
-      (skip-syntax-backward "w_")
-      (setq beg (point))
-      (push `(word-symbol . ,(cons beg end)) result)
-
-      ;; (4) within whitespace & paren. (Allow word constituents, symbol
-      ;; constituents, punctuation, prefix (#' and ' in Elisp).)
-      (goto-char orig)
-      (skip-syntax-forward "w_.'")
-      (setq end (point))
-      (skip-syntax-backward "w_.'")
-      (setq beg (point))
-      (push `(word-inside-space . ,(cons beg end)) result)
-
-      ;; Return!
       result)))
+
+(defun expreg--word ()
+  "Return a list of regions within the word at point."
+  ;; - subwords in camel-case (when ‘subword-mode’ is on).
+  ;; - subwords by “-” or “_”.
+  ;; - symbol-at-point
+  ;; - within whitespace & paren/quote (but can contain punctuation)
+  ;;   (“10–20”, “1.2”, “1,2”, etc). (This is technically not always
+  ;;   within a word anymore...)
+  (let ((orig (point))
+        result
+        beg end)
+
+    ;; (2) subwords by “-” or “_”.
+    (goto-char orig)
+    (skip-syntax-forward "w")
+    (setq end (point))
+    (skip-syntax-backward "w")
+    (setq beg (point))
+    (push `(word--plain . ,(cons beg end)) result)
+
+    ;; (3) symbol-at-point
+    (goto-char orig)
+    (skip-syntax-forward "w_")
+    (setq end (point))
+    (skip-syntax-backward "w_")
+    (setq beg (point))
+    (push `(word--symbol . ,(cons beg end)) result)
+
+    ;; (4) within whitespace & paren. (Allow word constituents, symbol
+    ;; constituents, punctuation, prefix (#' and ' in Elisp).)
+    (goto-char orig)
+    (skip-syntax-forward "w_.'")
+    (setq end (point))
+    (skip-syntax-backward "w_.'")
+    (setq beg (point))
+    (push `(word--within-space . ,(cons beg end)) result)
+
+    ;; Return!
+    result))
 
 (defun expreg--treesit ()
   "Return a list of regions according to tree-sitter."
@@ -370,7 +388,8 @@ point."
                            (1- (point))
                          (point))))
               (forward-list)
-              (list `(list-at-point . ,(cons beg (point))))))))))
+              (list `(list-at-point . ,(cons beg (point)))))))
+      (scan-error nil))))
 
 (defun expreg--outside-list ()
   "Return a list of one region marking outside the list, or nil.
@@ -399,7 +418,7 @@ If find something, leave point at the beginning of the list."
          inside-beg inside-end)
 
     (condition-case nil
-        (save-excursion
+        (progn
           (if (expreg--inside-string-p)
               ;; Inside a string? Move to beginning.
               (goto-char (expreg--start-of-comment-or-string))
@@ -470,76 +489,74 @@ Note that the inside of outer layer lists are not captured."
 
 (defun expreg--comment ()
   "Return a list of regions containing comment."
-  (save-excursion
-    (let ((orig (point))
-          (beg (point))
-          (end (point))
-          result forward-succeeded)
+  (let ((orig (point))
+        (beg (point))
+        (end (point))
+        result forward-succeeded)
 
-      ;; Go backward to the beginning of a comment (if exists).
-      (while (expreg--inside-comment-p)
-        (backward-char))
+    ;; Go backward to the beginning of a comment (if exists).
+    (while (expreg--inside-comment-p)
+      (backward-char))
 
-      ;; Now we are either at the beginning of a comment, or not on a
-      ;; comment at all. (When there are multiple lines of comment,
-      ;; each line is an individual comment.)
-      (while (forward-comment 1)
-        (setq end (point))
-        (setq forward-succeeded t))
-      (while (forward-comment -1)
-        (setq beg (point)))
-
-      ;; Move BEG to BOL.
-      (goto-char beg)
-      (skip-chars-backward " \t")
-      (setq beg (point))
-
-      ;; Move END to BOL.
-      (goto-char end)
-      (skip-chars-backward " \t")
+    ;; Now we are either at the beginning of a comment, or not on a
+    ;; comment at all. (When there are multiple lines of comment,
+    ;; each line is an individual comment.)
+    (while (forward-comment 1)
       (setq end (point))
+      (setq forward-succeeded t))
+    (while (forward-comment -1)
+      (setq beg (point)))
 
-      (when (and forward-succeeded
-                 ;; If we are at the BOL of the line below a comment,
-                 ;; don’t include this comment. (END will be at the
-                 ;; BOL of the line after the comment.)
-                 (< orig end))
-        (push `(comment . ,(cons beg end)) result))
-      result)))
+    ;; Move BEG to BOL.
+    (goto-char beg)
+    (skip-chars-backward " \t")
+    (setq beg (point))
+
+    ;; Move END to BOL.
+    (goto-char end)
+    (skip-chars-backward " \t")
+    (setq end (point))
+
+    (when (and forward-succeeded
+               ;; If we are at the BOL of the line below a comment,
+               ;; don’t include this comment. (END will be at the
+               ;; BOL of the line after the comment.)
+               (< orig end))
+      (push `(comment . ,(cons beg end)) result))
+    result))
 
 (defun expreg--paragraph ()
   "Return a list of regions containing paragraphs."
-  (save-excursion
-    (condition-case nil
-        (let ((orig (point))
-              beg end result)
-          (cond
-           ;; Using defun.
-           ((or (derived-mode-p 'prog-mode)
-                beginning-of-defun-function)
+  (condition-case nil
+      (let ((orig (point))
+            beg end result)
+        (cond
+         ;; Using defun.
+         ((or (derived-mode-p 'prog-mode)
+              beginning-of-defun-function)
 
-            (when (beginning-of-defun)
-              (setq beg (point))
-              (end-of-defun)
-              (setq end (point))
-              ;; If we are at the BOL right below a defun, don’t mark
-              ;; that defun.
-              (unless (eq orig end)
-                (push `(paragraph-defun . ,(cons beg end)) result))))
-
-           ;; Use paragraph.
-           ((or (derived-mode-p 'text-mode)
-                (eq major-mode 'fundamental-mode))
-
-            (backward-paragraph)
-            (skip-syntax-forward "-")
+          (when (beginning-of-defun)
             (setq beg (point))
-            (forward-paragraph)
+            (end-of-defun)
             (setq end (point))
-            (push `(paragraph . ,(cons beg end)) result)))
+            ;; If we are at the BOL right below a defun, don’t mark
+            ;; that defun.
+            (unless (eq orig end)
+              (push `(paragraph-defun . ,(cons beg end)) result))))
 
-          result)
-      (scan-error nil))))
+         ;; Use paragraph.
+         ((or (derived-mode-p 'text-mode)
+              (eq major-mode 'fundamental-mode))
+
+          (backward-paragraph)
+          (skip-syntax-forward "-")
+          (setq beg (point))
+          (forward-paragraph)
+          (setq end (point))
+          (push `(paragraph . ,(cons beg end)) result)))
+
+        result)
+    (scan-error nil)))
 
 
 (provide 'expreg)
