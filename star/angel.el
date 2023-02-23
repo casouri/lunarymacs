@@ -5,7 +5,6 @@
 (require 'pause)
 (require 'cl-lib)
 (require 'utility)
-(require 'subword)
 
 ;;; Keys
 
@@ -46,8 +45,8 @@
  ;; Super -> Meta
  "s-<backspace>" #'backward-delete-word
  "s-d"   #'delete-word
- "s-f"   #'subword-forward
- "s-b"   #'subword-backward
+ "s-f"   #'forward-word
+ "s-b"   #'backward-word
  "s-a"   #'beginning-of-defun
  "s-e"   #'end-of-defun
  "s-w"   #'kill-ring-save
