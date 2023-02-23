@@ -4,7 +4,7 @@
 
 (luna-key-def
  :keymaps 'bklink-minor-mode-map
- "C-c l" #'bklink-show-back-link
+ "C-c l" #'bklink-summary-mode
  "C-c i" #'bklink-insert
  :keymaps 'text-mode-map
  ;; "<tab>" #'tab-to-tab-stop
