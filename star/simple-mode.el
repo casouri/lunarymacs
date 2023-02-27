@@ -23,7 +23,9 @@
  :---
  :keymaps 'web-mode-map
  "C-M-f" #'web-mode-element-next
- "C-M-b" #'web-mode-element-previous)
+ "C-M-b" #'web-mode-element-previous
+ :leader
+ "ob" #'browse-url-of-file)
 
 (defun eval-print-sexp-at-point ()
   "Evaluate top level sexp at point and print."
@@ -104,17 +106,15 @@
 
 (defalias 'make-executable 'shell-chmod)
 
-;; Javascript
-(setq js-indent-level 2
-      typescript-indent-level 2)
-;; (load-package tide
-;;   :autoload-hook (typescript-mode-hook . luna-setup-tide))
-;; (defun luna-setup-tide ()
-;;   "Setup for tide."
-;;   (tide-setup)
-;;   (flycheck-mode)
-;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
-;;   (setq company-tooltip-align-annotations t))
+;; Javascript/Typescript
+(add-hook 'tsx-ts-mode-hook #'setup-typescript)
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
+(defun setup-typescript ()
+  "Setup for ‘tsx-ts-mode’."
+  ;; typescript-language-server sens immense amounts of noise over the
+  ;; wire, which leads to bad lagging.
+  (setq-local eglot-events-buffer-size 0))
 
 ;; Makefile
 (add-hook 'makefile-mode-hook
@@ -126,7 +126,9 @@
 (load-package flymake-json
   :extern "jsonlint"
   :autoload-hook
-  (js-mode-hook . flymake-json-maybe-load)
+  (( js-mode-hook js-ts-mode-hook
+     tsx-ts-mode-hook typescript-ts-mode-hook)
+   . flymake-json-maybe-load)
   (json-mode-hook . flymake-json-load))
 
 (luna-note-extern "jsonlint"
@@ -208,7 +210,26 @@ Then jslint:
 
 (load-package rust-ts-mode
   :mode "\\.rs\\'"
-  :hook (rust-ts-mode-hook . toggle-truncate-lines))
+  :hook
+  (rust-ts-mode-hook . toggle-truncate-lines)
+  (rust-ts-mode-hook . setup-rust))
+
+(defun setup-rust ()
+  "Setup for ‘rust-ts-mode’."
+  ;; https://rust-analyzer.github.io/manual.html#configuration
+  (setq-local eglot-workspace-configuration
+              '(:rust-analyzer
+                ( :procMacro (:enable t :ignored ("async_trait"))
+                  :cargo (:buildScripts (:enable t))))
+              eglot-events-buffer-size 0))
+
+(with-eval-after-load 'eglot
+  ;; This allows Eglot to send configurations to Rust LSP.
+  ;; https://github.com/joaotavora/eglot/discussions/845
+  (cl-defmethod eglot-initialization-options ((server eglot-lsp-server))
+    (if (equal '(rust-mode) (eglot--major-modes server))
+        eglot-workspace-configuration
+      eglot--{})))
 
 ;; Go
 (load-package go-mode
@@ -273,5 +294,8 @@ Then jslint:
     (let ((default-directory path))
       (compile "cargo build --release; ln -fs target/release/liblspce_module.dylib lspce-module.dylib")))
   :config
+  (setq lspce-send-changes-idle-time 1)
+  (lspce-set-log-file "/tmp/lspce.log")
+  (lspce-enable-logging)
   (add-to-list 'lspce-server-programs
                '("racket" "racket" "-l racket-langserver")))
