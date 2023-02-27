@@ -6,8 +6,11 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>$1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="$1">
+    <link rel="icon" type="image/png" href="$2">
+    <title>$3</title>
   </head>
-  <body>$2
+  <body>$4
   </body>
 </html>
