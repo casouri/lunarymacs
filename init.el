@@ -141,6 +141,8 @@
 (push '(c-mode . c-ts-mode) major-mode-remap-alist)
 (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
 (push '(toml-mode . toml-ts-mode) major-mode-remap-alist)
+(push '(tsx-mode . tsx-ts-mode) major-mode-remap-alist)
+(push '(typescript-mode . tsx-ts-mode) major-mode-remap-alist)
 
 ;; (setq treesit--font-lock-verbose t)
 
