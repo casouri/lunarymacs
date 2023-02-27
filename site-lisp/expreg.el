@@ -492,7 +492,7 @@ Note that the inside of outer layer lists are not captured."
   (let ((orig (point))
         (beg (point))
         (end (point))
-        result forward-succeeded)
+        result forward-succeeded trailing-comment-p)
 
     ;; Go backward to the beginning of a comment (if exists).
     (while (expreg--inside-comment-p)
@@ -507,15 +507,19 @@ Note that the inside of outer layer lists are not captured."
     (while (forward-comment -1)
       (setq beg (point)))
 
-    ;; Move BEG to BOL.
     (goto-char beg)
-    (skip-chars-backward " \t")
-    (setq beg (point))
+    (setq trailing-comment-p
+          (not (looking-back (rx bol (* whitespace))
+                             (line-beginning-position))))
+    (when (not trailing-comment-p)
+      ;; Move BEG to BOL.
+      (skip-chars-backward " \t")
+      (setq beg (point))
 
-    ;; Move END to BOL.
-    (goto-char end)
-    (skip-chars-backward " \t")
-    (setq end (point))
+      ;; Move END to BOL.
+      (goto-char end)
+      (skip-chars-backward " \t")
+      (setq end (point)))
 
     (when (and forward-succeeded
                ;; If we are at the BOL of the line below a comment,
