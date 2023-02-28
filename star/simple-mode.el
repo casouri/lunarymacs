@@ -255,47 +255,41 @@ Then jslint:
 
 (load-package eglot
   ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
+  :hook (eglot-managed-mode-hook . setup-eglot)
   :config
   (setq read-process-output-max (* 1024 1024))
+
   ;; Otherwise eglot highlights symbols, which is annoying.
   (add-to-list 'eglot-ignored-server-capabilities
                :documentHighlightProvider)
+  ;; We don’t need reformating, thanks.
   (add-to-list 'eglot-ignored-server-capabilities
                :documentFormattingProvider)
   (add-to-list 'eglot-ignored-server-capabilities
                :documentRangeFormattingProvider)
-  ;; Has to be here because needs ‘eglot-server-programs’ loaded.
+
   (luna-on "Brown"
     (add-to-list 'eglot-server-programs
                  '((c-mode c++-mode) . ("ccls-clang-10")))
     (add-to-list 'eglot-server-programs
                  '(rust-ts-mode . ("rust-analyzer"))))
-  ;; Show error message when hovering by point. (By default error
-  ;; messages are only shown when hovering by cursor).
-  (add-hook 'eglot-managed-mode-hook
-            (lambda ()
-              ;; Show flymake diagnostics first.
-              (setq eldoc-documentation-functions
-                    (cons #'flymake-eldoc-function
-                          (remove #'flymake-eldoc-function
-                                  eldoc-documentation-functions)))
-              ;; Show all eldoc feedback.
-              (setq eldoc-documentation-strategy
-                    #'eldoc-documentation-compose)
-              (eglot-inlay-hints-mode))))
 
+  (defun setup-eglot ()
+    "Setup for eglot."
+    ;; Show error message when hovering by point. (By default error
+    ;; messages are only shown when hovering by cursor). Show flymake
+    ;; diagnostics first.
+    (setq eldoc-documentation-functions
+          (cons #'flymake-eldoc-function
+                (remove #'flymake-eldoc-function
+                        eldoc-documentation-functions)))
+    ;; Show all eldoc feedback.
+    (setq eldoc-documentation-strategy
+          #'eldoc-documentation-compose)
+    ;; (eglot-inlay-hints-mode)
+    ))
 
-(load-package lspce
-  :commands lspce-mode
-  :init
-  (defun lspce-compile (path)
-    "Compile the dynamic modules used by lspce at PATH."
-    (interactive (list (read-directory-name "Repository path: ")))
-    (let ((default-directory path))
-      (compile "cargo build --release; ln -fs target/release/liblspce_module.dylib lspce-module.dylib")))
-  :config
-  (setq lspce-send-changes-idle-time 1)
-  (lspce-set-log-file "/tmp/lspce.log")
-  (lspce-enable-logging)
-  (add-to-list 'lspce-server-programs
-               '("racket" "racket" "-l racket-langserver")))
+(load-package eldoc-box
+  :commands
+  eldoc-box-hover-mode
+  eldoc-box-help-at-point)
