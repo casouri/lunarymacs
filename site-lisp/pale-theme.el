@@ -34,7 +34,7 @@
            (fg-weak "#9a9ea2")
 
            (hl-weak bg-tooltip)
-           (hl-normal "#ffffb4")
+           (hl-normal "#F5F573")
            (hl-strong "#e8e800")
 
            ;; Colors indented for foreground are less pronouced.
