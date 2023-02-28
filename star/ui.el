@@ -44,6 +44,8 @@
                . (display-buffer-in-side-window
                   . ((side . bottom)))))
 
+(setq-default line-spacing 0.1)
+
 ;;; Package
 
 (load-package rainbow-delimiters
