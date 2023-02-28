@@ -27,7 +27,10 @@
  "C-s-f" #'web-mode-tag-next
  "C-s-b" #'web-mode-tag-previous
  :leader
- "ob" #'browse-url-of-file)
+ "ob" #'browse-url-of-file
+ :---
+ :keymaps 'eglot-mode-map
+ "C-h C-h" #'eldoc-box-help-at-point)
 
 (defun eval-print-sexp-at-point ()
   "Evaluate top level sexp at point and print."
