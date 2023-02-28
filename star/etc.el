@@ -69,7 +69,7 @@
  '(eldoc-display-truncation-message nil)
  '(eldoc-echo-area-display-truncation-message nil)
  '(eldoc-echo-area-prefer-doc-buffer t)
- '(eldoc-echo-area-use-multiline-p 2)
+ '(eldoc-echo-area-use-multiline-p nil)
  '(eldoc-idle-delay 0.1)
  '(electric-pair-mode t)
  '(enable-recursive-minibuffers t)
