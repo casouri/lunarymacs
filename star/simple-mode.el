@@ -22,8 +22,10 @@
  "<S-return>" #'eval-print-sexp-at-point
  :---
  :keymaps 'web-mode-map
- "C-M-f" #'web-mode-element-next
- "C-M-b" #'web-mode-element-previous
+ "C-M-f" #'web-mode-tag-next
+ "C-M-b" #'web-mode-tag-previous
+ "C-s-f" #'web-mode-tag-next
+ "C-s-b" #'web-mode-tag-previous
  :leader
  "ob" #'browse-url-of-file)
 
@@ -62,6 +64,8 @@
    :keymaps 'haskell-interactive-mode-map
    "C-a" #'haskell-interactive-mode-beginning))
 
+(load-package emmet-mode :defer t)
+
 (load-package web-mode
   :init
   (add-hook 'css-mode-hook #'aggressive-indent-mode)
@@ -74,8 +78,15 @@
   "\\.mustache\\'"
   "\\.djhtml\\'"
   "\\.html?\\'"
-  :config (setq web-mode-markup-indent-offset 2
-                web-mode-auto-close-style 2))
+  :hook (web-mode-hook . setup-web)
+  :config
+  (setq web-mode-markup-indent-offset 2
+        web-mode-auto-close-style 2)
+  (defun setup-web ()
+    "Setup for ‘web-mode’."
+    ;; This way expreg can use tree-sitter for expansion.
+    (ignore-errors (treesit-parser-create 'html))
+    (emmet-mode)))
 
 ;; Common lisp.
 (load-package sly
@@ -107,6 +118,7 @@
 (defalias 'make-executable 'shell-chmod)
 
 ;; Javascript/Typescript
+(setq-default js-indent-level 2)
 (add-hook 'tsx-ts-mode-hook #'setup-typescript)
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
