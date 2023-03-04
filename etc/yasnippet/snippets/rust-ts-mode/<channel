@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: <channel
+# key: <channel
+# --
+let (tx, rx) = mpsc::channel($0);
