@@ -234,17 +234,21 @@ Then jslint:
   ;; https://rust-analyzer.github.io/manual.html#configuration
   (setq-local eglot-workspace-configuration
               '(:rust-analyzer
-                ( :procMacro (:enable t :ignored ("async_trait"))
-                  :cargo (:buildScripts (:enable t))))
-              eglot-events-buffer-size 0))
+                ( :procMacro ( :attributes (:enable t)
+                               :enable t)
+                  :cargo (:buildScripts (:enable t))
+                  :diagnostics (:disabled ["unresolved-proc-macro"
+                                           "unresolved-macro-call"])))))
 
 (with-eval-after-load 'eglot
-  ;; This allows Eglot to send configurations to Rust LSP.
+  (defclass eglot-rust-analyzer (eglot-lsp-server) ()
+    :documentation "A custom class for rust-analyzer.")
+  ;; Rust-analyzer needs the workspaceConfiguration sent as
+  ;; initializationOptions at startup.
   ;; https://github.com/joaotavora/eglot/discussions/845
-  (cl-defmethod eglot-initialization-options ((server eglot-lsp-server))
-    (if (equal '(rust-mode) (eglot--major-modes server))
-        eglot-workspace-configuration
-      eglot--{})))
+  (cl-defmethod eglot-initialization-options
+    ((server eglot-rust-analyzer))
+    eglot-workspace-configuration))
 
 ;; Go
 (load-package go-mode
@@ -272,22 +276,18 @@ Then jslint:
   ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
   :hook (eglot-managed-mode-hook . setup-eglot)
   :config
-  (setq read-process-output-max (* 1024 1024))
+  (setq-default read-process-output-max (* 1024 1024)
+                eglot-events-buffer-size 0)
 
   ;; Otherwise eglot highlights symbols, which is annoying.
   (add-to-list 'eglot-ignored-server-capabilities
                :documentHighlightProvider)
-  ;; We don’t need reformating, thanks.
-  (add-to-list 'eglot-ignored-server-capabilities
-               :documentFormattingProvider)
-  (add-to-list 'eglot-ignored-server-capabilities
-               :documentRangeFormattingProvider)
 
   (luna-on "Brown"
     (add-to-list 'eglot-server-programs
                  '((c-mode c++-mode) . ("ccls-clang-10")))
     (add-to-list 'eglot-server-programs
-                 '(rust-ts-mode . ("rust-analyzer"))))
+                 '(rust-ts-mode . (eglot-rust-analyzer "rust-analyzer"))))
 
   (defun setup-eglot ()
     "Setup for eglot."
@@ -307,4 +307,7 @@ Then jslint:
 (load-package eldoc-box
   :commands
   eldoc-box-hover-mode
-  eldoc-box-help-at-point)
+  eldoc-box-help-at-point
+  :config
+  (set-face-attribute 'eldoc-box-body nil
+                      :family "IBM Plex Sans" :height 140))
