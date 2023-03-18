@@ -21,7 +21,9 @@
   :init
   (add-hook 'emacs-lisp-mode-hook #'flymake-mode)
   (add-hook 'c-mode-hook #'flymake-mode)
-  (add-hook 'c++-mode-hook #'flymake-mode))
+  (add-hook 'c++-mode-hook #'flymake-mode)
+  :config
+  (setq flymake-mode-line-lighter "S"))
 
 
 (defvar flyspell-skip-commands
