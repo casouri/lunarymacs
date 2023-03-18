@@ -107,14 +107,14 @@ columns.  A value of -1 would leave the last column empty."
   "Fonfity page breaks at beginning of line between BEG and END."
   (goto-char beg)
   (while (re-search-forward "^" end t)
-    (put-text-property (match-beginning 0) (match-end 0)
-                       'font-lock-face 'form-feed-line)
-    (put-text-property (match-beginning 0) (match-end 0)
-                       'display `(space :width ,form-feed--line-width))))
+    (add-text-properties (match-beginning 0) (match-end 0)
+                         `( font-lock-face form-feed-line
+                            display (space :width ,form-feed--line-width)
+                            rear-non-sticky t))))
 
 ;;;###autoload
 (define-minor-mode form-feed-mode
-  "Toggle form-feed-mode.
+  "Toggle special rendering of form feed characters.
 
 This minor mode displays page delimiters which usually appear as ^L
 glyphs on a single line as horizontal lines spanning the entire
