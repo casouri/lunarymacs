@@ -83,15 +83,7 @@
     (add-hook 'luna-load-theme-hook
               (lambda ()
                 (luna-load-font 'mode-line "IBM Plex Sans" 13
-                                :weight 'regular :height 140)))
-    (with-eval-after-load 'xeft
-      (luna-load-font-spec
-       'xeft-excerpt-title
-       '("IBM Plex Sans" "Source Han Sans SC" 1
-         (:weight semi-bold) (:weight medium))
-       16)
-      (luna-load-font
-       'xeft-excerpt-body "IBM Plex Sans" 16)))
+                                :weight 'regular :height 140))))
 ;;;; Frame
   (when (display-graphic-p)
     (set-frame-width (selected-frame) 150)

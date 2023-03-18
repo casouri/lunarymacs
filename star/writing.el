@@ -55,7 +55,14 @@
   (defun xeft-setup ()
     (auto-fill-mode))
   (add-hook 'xeft-find-file-hook #'xeft-setup)
-  (add-hook 'bklink-minor-mode-hook #'xeft-setup))
+  (add-hook 'bklink-minor-mode-hook #'xeft-setup)
+  (luna-load-font-spec
+   'xeft-excerpt-title
+   '("IBM Plex Sans" "Source Han Sans SC" 1
+     (:weight semi-bold) (:weight medium))
+   16)
+  (luna-load-font
+   'xeft-excerpt-body "IBM Plex Sans" 16))
 
 (load-package flique :defer t)
 
