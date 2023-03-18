@@ -47,7 +47,7 @@ The padding pushes TEXT to the right edge of the mode-line."
 
 (setq-default mode-line-format
               (let* ((spaces
-                      (propertize " " 'display '(space :width 1.5)))
+                      (propertize " " 'display '(space :width 1.2)))
                      (fringe (propertize
                               " " 'display '(space :width fringe)))
                      (percentage
@@ -60,17 +60,23 @@ The padding pushes TEXT to the right edge of the mode-line."
                   (:propertize "%[%b%]" face (:weight semi-bold))
                   (:eval (luna-mode-line-coding-system))
                   ,spaces
-                  ,(if (featurep 'minions)
+                  ,(if (boundp 'minions-mode-line-modes)
                        'minions-mode-line-modes
                      'mode-line-modes)
                   ,spaces
                   (:eval (if (buffer-modified-p)
                              ,(if (display-graphic-p) "ΦAΦ" "OAO")
                            ,(if (display-graphic-p) "ΦwΦ" "OwO")))
-                  ,spaces
+                  (flymake-mode
+                   (,spaces
+                    flymake-mode-line-title
+                    flymake-mode-line-exception
+                    flymake-mode-line-counters))
+                  ,(if (display-graphic-p)
+                       (list (propertize "  " 'display '(raise 0.3))
+                             (propertize " " 'display '(raise -0.3)))
+                     " ")
                   mode-line-misc-info
-                  ,(propertize " " 'display '(raise 0.3))
-                  ,(propertize " " 'display '(raise -0.3))
                   (:eval (concat (luna-mode-line-with-padding ,percentage)
                                  "%%"))
                   ;; (:eval (concat ,spaces "(%l) " ,percentage "%%"))
