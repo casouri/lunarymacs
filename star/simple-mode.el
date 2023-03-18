@@ -227,28 +227,22 @@ Then jslint:
   :mode "\\.rs\\'"
   :hook
   (rust-ts-mode-hook . toggle-truncate-lines)
-  (rust-ts-mode-hook . setup-rust))
-
-(defun setup-rust ()
-  "Setup for ‘rust-ts-mode’."
-  ;; https://rust-analyzer.github.io/manual.html#configuration
-  (setq-local eglot-workspace-configuration
-              '(:rust-analyzer
-                ( :procMacro ( :attributes (:enable t)
-                               :enable t)
-                  :cargo (:buildScripts (:enable t))
-                  :diagnostics (:disabled ["unresolved-proc-macro"
-                                           "unresolved-macro-call"])))))
-
-(with-eval-after-load 'eglot
-  (defclass eglot-rust-analyzer (eglot-lsp-server) ()
-    :documentation "A custom class for rust-analyzer.")
-  ;; Rust-analyzer needs the workspaceConfiguration sent as
-  ;; initializationOptions at startup.
-  ;; https://github.com/joaotavora/eglot/discussions/845
-  (cl-defmethod eglot-initialization-options
-    ((server eglot-rust-analyzer))
-    eglot-workspace-configuration))
+  (rust-ts-mode-hook . setup-rust)
+  :init
+  (defvar rust-analyzer-config
+    ;; https://rust-analyzer.github.io/manual.html#configuration
+    '(:rust-analyzer
+      ( :procMacro ( :attributes (:enable t)
+                     :enable t)
+        :cargo (:buildScripts (:enable t))
+        :diagnostics (:disabled ["unresolved-proc-macro"
+                                 "unresolved-macro-call"])))
+    "Configuration for rust-analyzer as :initializationOption.")
+  :config
+  (defun setup-rust ()
+    "Setup for ‘rust-ts-mode’."
+    (add-hook 'rust-ts-mode-hook #'eglot-format-buffer 0 t)
+    (electric-quote-local-mode -1)))
 
 ;; Go
 (load-package go-mode
@@ -282,12 +276,16 @@ Then jslint:
   ;; Otherwise eglot highlights symbols, which is annoying.
   (add-to-list 'eglot-ignored-server-capabilities
                :documentHighlightProvider)
+  (add-to-list 'eglot-ignored-server-capabilities
+               :inlayHintProvider)
 
   (luna-on "Brown"
     (add-to-list 'eglot-server-programs
                  '((c-mode c++-mode) . ("ccls-clang-10")))
     (add-to-list 'eglot-server-programs
-                 '(rust-ts-mode . (eglot-rust-analyzer "rust-analyzer"))))
+                 `(rust-ts-mode . ("rust-analyzer"
+                                   :initializationOptions
+                                   ,rust-analyzer-config))))
 
   (defun setup-eglot ()
     "Setup for eglot."
