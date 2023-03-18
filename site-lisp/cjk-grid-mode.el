@@ -24,8 +24,9 @@
   "Return non-nil if CHAR is a CJK character."
   (let ((entry (aref (category-table) char)))
     ;; Use ‘describe-categories’ for a full list of categories.
-    ;; Another way is to use char-script-table, which is not as
-    ;; convenient.
+    ;; Another way is to use ‘char-script-table’ (see
+    ;; ‘script-representative-chars’ for possible scripts), which is
+    ;; not as convenient.
     (or (aref entry ?c) ; Chinese
         (aref entry ?h) ; Korean
         (aref entry ?j) ; Japanese
