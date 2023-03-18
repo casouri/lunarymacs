@@ -371,7 +371,7 @@ point."
           ;; point, it will not pass the filtering, so this function
           ;; needs to be added to ‘expreg--validation-white-list’.
           (when (and (looking-at (rx (syntax whitespace)))
-                     (not (looking-back ")" 1)))
+                     (not (eq 41 (char-syntax (or (char-before) ?x)))))
             (skip-syntax-forward "-"))
 
           ;; If at the end of a list and not the beginning of another
