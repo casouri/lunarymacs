@@ -37,22 +37,8 @@
     (newline)))
 
 (load-package consult
-  :init
-  ;; Bindings are defined at the top.
-  (defvar consult-binded-mode-map (make-sparse-keymap)
-    "Minor mode map for ‘console-minor-mode’.")
-
-  (define-minor-mode consult-binded-mode
-    "Minor mode enabling consult commands."
-    :global t
-    :keymap consult-binded-mode-map
-    :group 'convenience
-    (if consult-binded-mode
-        (message ":-)")
-      (message ";-)")))
   :config
-  (consult-binded-mode)
-  (setq consult-preview-key (kbd "C-o"))
+  (setq consult-preview-key nil)
   (consult-customize
    consult-line :preview-key 'any))
 
