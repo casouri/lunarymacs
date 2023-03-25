@@ -140,6 +140,7 @@
         (comp-mouse        (nil ,bg ,violet1))
 
         (completions-common-part (nil ,bg ,orange))
+        (completions-first-difference (bold))
         
         ;; package faces
 
@@ -160,7 +161,11 @@
         (company-preview                     (highlight-fg-only-1))
         (company-preview-common              (company-preview))
         (company-preview-search              (company-preview))
-        
+
+        (corfu-default (tooltip))
+        (corfu-current (completions-highlight))
+        (corfu-border  (nil nil ,fg-weak))
+
         ;; (ivy-current-match                   (current-selection))
         ;; (ivy-minibuffer-match-face-1         (nil ,bg ,green))
         ;; (ivy-minibuffer-match-face-2         (nil ,bg ,orange))
