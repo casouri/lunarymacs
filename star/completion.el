@@ -6,17 +6,9 @@
 
 (luna-key-def
  "s-/"     #'transform-previous-char
- :keymaps '(company-active-map company-search-map)
- "C-p" #'company-select-previous
- "C-n" #'company-select-next
- "C-j" (lambda () (interactive) (company-abort) (next-line 1))
- "RET" (lambda () (interactive) (company-abort) (newline 1 t))
- "<return>" (lambda () (interactive) (company-abort) (newline 1 t))
- "=" #'company-complete-selection
- ;; "<tab>" #'company-complete-common-or-commit
- ;; "<tab>" #'company-select-next
- :keymaps 'company-search-map
- "<escape>" #'company-abort)
+ :keymaps 'corfu-map
+ "=" #'corfu-insert
+ "RET" #'corfu-quit-and-newline)
 
 ;;; Package
 
@@ -31,27 +23,14 @@
   (with-eval-after-load 'hippie-exp
     (add-to-list 'hippie-expand-try-functions-list #'yas-expand)))
 
-(load-package company
-  :autoload-hook (prog-mode-hook . company-mode)
+(load-package corfu
+  :autoload-hook (prog-mode-hook . corfu-mode)
   :config
-  (setq company-idle-delay 0.1)
-  (setq company-minimum-prefix-length 2
-        company-dabbrev-downcase nil
-        company-tooltip-limit 15)
-  ;; Company dabbrev is annoying, make sure not to include it.
-  (setq-default company-backends
-                '(company-capf company-files company-dabbrev-code))
-  (setq-default company-search-filtering t)
-
-  :init
-  (defun company-complete-common-or-commit ()
-    "Insert the common part of all candidates, or commit the selection."
-    (interactive)
-    (when (company-manual-begin)
-      (let ((tick (buffer-chars-modified-tick)))
-        (call-interactively 'company-complete-common)
-        (when (eq tick (buffer-chars-modified-tick))
-          (call-interactively 'company-complete-selection))))))
+  (setq corfu-auto t
+        corfu-auto-delay 0.1)
+  (defun corfu-quit-and-newline ()
+    (corfu-quit)
+    (newline)))
 
 (load-package consult
   :init
