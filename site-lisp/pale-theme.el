@@ -140,6 +140,9 @@
         (tab-bar-tab-group-inactive (tab-bar-tab-inactive))
         (tab-bar-tab-ungrouped (tab-bar-tab-inactive))
 
+        (completions-common-part (shadow))
+        (completions-first-difference (bold))
+
 ;;; Packages
 
         (flyspell-duplicate () (:underline
@@ -159,6 +162,10 @@
         (company-preview                     (shadow))
         (company-preview-common              (company-preview))
         (company-preview-search              (company-preview))
+
+        (corfu-default (tooltip))
+        (corfu-current (completions-highlight))
+        (corfu-border  (nil nil ,fg-weak))
 
         (magit-heading-highlight (nil nil ,bg-tooltip) (:extend t))
         (magit-heading-selection (nil nil ,bg-block) (:extend t))
