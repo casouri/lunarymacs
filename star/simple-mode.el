@@ -122,14 +122,54 @@
 
 ;; Javascript/Typescript
 (setq-default js-indent-level 2)
-(add-hook 'tsx-ts-mode-hook #'setup-typescript)
+(add-hook 'tsx-ts-mode-hook #'setup-tsx)
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
-(defun setup-typescript ()
+(set-face-attribute 'typescript-ts-mode-jsx-tag-face nil :inherit 'shadow)
+(set-face-attribute 'typescript-ts-mode-jsx-attribute-face nil
+                    :inherit 'font-lock-type-face)
+
+(defun setup-tsx ()
   "Setup for ‘tsx-ts-mode’."
   ;; typescript-language-server sens immense amounts of noise over the
   ;; wire, which leads to bad lagging.
-  (setq-local eglot-events-buffer-size 0))
+  (setq-local eglot-events-buffer-size 0)
+  ;; Too many completions.
+  (setq-local company-prefix 3)
+  (add-hook 'post-command-hook #'tsx-tag-complete 0 t))
+
+(defvar tsx-tag--void-elements
+  ;; From ‘web-mode-void-elements’.
+  '("area" "base" "br" "col" "command" "embed" "hr" "img" "input" "keygen"
+    "link" "meta" "param" "source" "track" "wbr" "tmpl_var"))
+
+(defun tsx-tag-complete (&rest _)
+  "Complete HTML tags."
+  (cond ((and (eq this-command 'self-insert-command)
+              (eq (char-before) ?>))
+         ;; <div| --(type ">")--> <div>|</div>
+         (let* ((node (treesit-node-prev-sibling (treesit-node-at (point))))
+                (type (treesit-node-text
+                       (treesit-node-child-by-field-name node "name"))))
+           (when (equal (treesit-node-type node) "jsx_opening_element")
+             (save-excursion
+               (if (member type tsx-tag--void-elements)
+                   (progn (backward-char)
+                          (insert "/"))
+                 (save-excursion
+                   (insert (format "</%s>" type))))))))
+        ;; <div>|</div> --(type "RET")-->
+        ;; <div>
+        ;;   |
+        ;; </div>
+        ((eq this-command 'newline)
+         (let ((node (treesit-node-parent (treesit-node-at (point)))))
+           (when (and (eq (point) (treesit-node-start node))
+                      (equal (treesit-node-type node) "jsx_closing_element"))
+             (newline)
+             (indent-for-tab-command)
+             (forward-line -1)
+             (indent-for-tab-command))))))
 
 ;; Makefile
 (add-hook 'makefile-mode-hook
@@ -308,4 +348,17 @@ Then jslint:
   eldoc-box-help-at-point
   :config
   (set-face-attribute 'eldoc-box-body nil
-                      :family "IBM Plex Sans" :height 140))
+                      :family "IBM Plex Sans" :height 140)
+  (setq eldoc-doc-buffer-separator
+        (propertize "-" 'display '(space :align-to right)
+                    'face '(:strike-through t)
+                    'font-lock-face '(:strike-through t))))
+
+(load-package apheleia
+  :extern "prettier"
+  :autoload-hooks
+  ((tsx-ts-mode typescript-ts-mode js-ts-mode js-mode)
+   . apheleia-mode))
+
+(luna-note-extern "prettier"
+  "npm install prettier")
