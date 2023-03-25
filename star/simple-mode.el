@@ -125,9 +125,10 @@
 (add-hook 'tsx-ts-mode-hook #'setup-tsx)
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
-(set-face-attribute 'typescript-ts-mode-jsx-tag-face nil :inherit 'shadow)
-(set-face-attribute 'typescript-ts-mode-jsx-attribute-face nil
-                    :inherit 'font-lock-type-face)
+(with-eval-after-load 'tsx-ts-mode
+  (set-face-attribute 'typescript-ts-jsx-tag-face nil :inherit 'shadow)
+  (set-face-attribute 'typescript-ts-jsx-attribute-face nil
+                      :inherit 'font-lock-type-face))
 
 (defun setup-tsx ()
   "Setup for ‘tsx-ts-mode’."
