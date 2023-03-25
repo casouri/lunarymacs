@@ -137,7 +137,8 @@
 (defun open-in-finder ()
   "Open ‘default-directory’ in Finder."
   (interactive)
-  (shell-command (format "open '%s'" default-directory))
+  (shell-command (format "open '%s'"
+                         (expand-file-name default-directory)))
   ;; For some reason, we need to explicitly switch to Finder.
   (shell-command
    "osascript -e 'tell application \"Finder\" to activate'"))
