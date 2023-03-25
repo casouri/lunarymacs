@@ -26,9 +26,13 @@
 (load-package corfu
   :autoload-hook (prog-mode-hook . corfu-mode)
   :config
+  ;; (setq completion-styles '(basic))
   (setq corfu-auto t
-        corfu-auto-delay 0.1)
+        corfu-auto-delay 0.1
+        corfu-auto-prefix 2)
   (defun corfu-quit-and-newline ()
+    "Quit corfu and insert newline."
+    (interactive)
     (corfu-quit)
     (newline)))
 
