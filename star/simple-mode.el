@@ -149,16 +149,24 @@
   (cond ((and (eq this-command 'self-insert-command)
               (eq (char-before) ?>))
          ;; <div| --(type ">")--> <div>|</div>
-         (let* ((node (treesit-node-prev-sibling (treesit-node-at (point))))
-                (type (treesit-node-text
-                       (treesit-node-child-by-field-name node "name"))))
+         (let* ((pos (point))
+                (node (treesit-search-forward
+                       (treesit-node-at pos)
+                       (lambda (n)
+                         (<= (treesit-node-end n) pos))
+                       t t)))
+           (when (equal (treesit-node-type node) ">")
+             (setq node (treesit-node-parent node)))
            (when (equal (treesit-node-type node) "jsx_opening_element")
-             (save-excursion
-               (if (member type tsx-tag--void-elements)
-                   (progn (backward-char)
-                          (insert "/"))
-                 (save-excursion
-                   (insert (format "</%s>" type))))))))
+             (let ((type (treesit-node-text
+                          (treesit-node-child-by-field-name node "name"))))
+               (save-excursion
+                 (if (or (member type tsx-tag--void-elements)
+                         (<= ?A (aref type 0) ?Z))
+                     (progn (backward-char)
+                            (insert "/"))
+                   (save-excursion
+                     (insert (format "</%s>" type)))))))))
         ;; <div>|</div> --(type "RET")-->
         ;; <div>
         ;;   |
