@@ -167,6 +167,11 @@
         (corfu-current (completions-highlight))
         (corfu-border  (nil nil ,fg-weak))
 
+        (orderless-match-face-0 (shadow))
+        (orderless-match-face-1 (orderless-match-face-0))
+        (orderless-match-face-2 (orderless-match-face-0))
+        (orderless-match-face-3 (orderless-match-face-0))
+
         (magit-heading-highlight (nil nil ,bg-tooltip) (:extend t))
         (magit-heading-selection (nil nil ,bg-block) (:extend t))
 
