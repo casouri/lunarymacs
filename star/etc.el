@@ -79,6 +79,7 @@
  '(help-window-select t)
  '(history-delete-duplicates t)
  '(history-length 500)
+ '(icon-preference '(image symbol text))
  '(idle-update-delay 0.5 nil nil "Idle time before update stuff on screen")
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
