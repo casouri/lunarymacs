@@ -139,3 +139,17 @@
     "Remap ‘fixed-pitch’ face according to current text scaling."
     (face-remap--remap-face 'fixed-pitch)
     (add-hook 'text-scale-mode-hook #'remap-mono-font-size)))
+
+(load-package xidebar
+  :config
+  (set-face-attribute
+   'xidebar-body nil
+   :family "IBM Plex Sans"
+   :weight 'regular
+   :height 0.9
+   :background "grey95")
+  (set-face-attribute
+   'xidebar-jmenu-section-header nil
+   :background "gray90")
+  (setq xidebar-file-icon-function
+        #'xidebar-file-icon-vscode-file-only))
