@@ -65,23 +65,6 @@
 (load-package color-outline
   :autoload-hook (prog-mode-hook . color-outline-mode))
 
-(load-package hideshow
-  :autoload-hook (prog-mode-hook . safe-hs-minor-mode)
-  :config
-  (defun safe-hs-minor-mode ()
-    "Enable ‘hs-minor-mode’ but don’t signal error."
-    (when (and comment-start comment-end)
-      (hs-minor-mode)))
-  (defvar-local hideshow-hidden nil
-    "Non-nil if the buffer has hiding on.")
-  (defun hideshow-toggle-all ()
-    "Toggle hideshow status for the current buffer."
-    (interactive)
-    (if hideshow-hidden
-        (hs-show-all)
-      (hs-hide-all))
-    (setq hideshow-hidden (not hideshow-hidden))))
-
 (with-eval-after-load 'project
   (add-to-list 'project-vc-ignores ".ccls-cache/"))
 
@@ -102,6 +85,20 @@
                           project-vc-ignores)
                   grep-find-ignored-files)))
     (rgrep regexp pattern root)))
+
+(load-package consult
+  :config
+  (setq consult-preview-key nil)
+  (consult-customize
+   consult-line :preview-key 'any)
+
+  (defvar consult-binded-mode-map (make-sparse-keymap))
+  (define-minor-mode consult-binded-mode
+    "Enabled consult bindings."
+    :lighter ""
+    :global t
+    :keymap consult-binded-mode-map)
+  (consult-binded-mode))
 
 ;;;; Search & replace
 

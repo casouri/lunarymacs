@@ -8,7 +8,11 @@
  "s-/"     #'transform-previous-char
  :keymaps 'corfu-map
  "=" #'corfu-insert
- "RET" #'corfu-quit-and-newline)
+ "RET" #'corfu-quit-and-newline
+ "C-a" nil
+ "C-e" nil
+ [remap move-beginning-of-line] nil
+ [remap move-end-of-line] nil)
 
 ;;; Package
 
@@ -28,33 +32,39 @@
   :config
   ;; (setq completion-styles '(basic))
   (setq corfu-auto t
-        corfu-auto-delay 0.1
+        corfu-auto-delay 0
         corfu-auto-prefix 2)
   (defun corfu-quit-and-newline ()
     "Quit corfu and insert newline."
     (interactive)
     (corfu-quit)
-    (newline)))
-
-(load-package consult
-  :config
-  (setq consult-preview-key nil)
-  (consult-customize
-   consult-line :preview-key 'any))
+    (newline 1 t)))
 
 (load-package recentf-ext
   :config (recentf-mode))
 
-(load-package selectrum
+(load-package vertico
   :config
-  (selectrum-mode)
-  (defun advice-selectrum--selection-highlight (oldfn str)
-    "Advice for ‘selectrum--selection-highlight’.
-Don’t append face, override the faec."
-    (propertize (copy-sequence str) 'face 'selectrum-current-candidate))
-  (advice-add #'selectrum--selection-highlight :around
-              #'advice-selectrum--selection-highlight))
+  (vertico-mode))
 
-(load-package selectrum-prescient
+(load-package orderless
   :config
-  (selectrum-prescient-mode))
+  (setq completion-styles '(orderless basic))
+  (setq completion-category-overrides
+        '((file (styles basic partial-completion))
+          (email
+           (styles orderless substring partial-completion))
+          (eglot
+           (styles flex basic))
+          (buffer
+           (styles orderless basic substring))
+          (unicode-name
+           (styles orderless basic substring))
+          (project-file
+           (styles orderless substring))
+          (xref-location
+           (styles orderless substring))
+          (info-menu
+           (styles orderless basic substring))
+          (symbol-help
+           (styles orderless basic shorthand substring)))))
