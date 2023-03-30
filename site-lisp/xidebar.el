@@ -347,7 +347,7 @@ WIDTH is the pixel width of the icon. OPEN-P is described in
       (xidebar-file-icon-ascii beg width path open-p)
     (put-text-property
      beg (+ beg 1)
-     'display (let ((img (vscode-icon-for-file path)))
+     'display (let ((img (vscode-icon-for-file path t open-p)))
                 (setf (image-property img :width) (- width 2))
                 (setf (image-property img :scale) nil)
                 img))
@@ -497,9 +497,15 @@ SOURCE-WINDOW is set to the xidebar buffer’s source window."
     (xidebar--display-buffer-setup-window
      (xidebar--create (selected-window)))))
 
-(defun xidebar-refresh ()
+(defun xidebar-refresh (&optional update)
   "Refresh the xidebar in this frame/window configuration.
-Use the selected window as the new source window."
+
+Use the selected window as the new source window.
+
+Normally this function only makes sure the xidebar content
+matches the new source window, but if UPDATE is t, also update
+the content to make sure the content reflects the latest state of
+the source window (new files, new functions, etc)."
   (interactive)
   (when (funcall xidebar-refresh-predicate)
     (when-let* ((xidebar-window (xidebar--get-window))
@@ -519,7 +525,8 @@ Use the selected window as the new source window."
         (xidebar--render xidebar--current-mode
                          source-window
                          xidebar-window)
-        (xidebar--update xidebar--current-mode source-window)
+        (when update
+          (xidebar--update xidebar--current-mode source-window))
         (setq xidebar--source-window source-window)))))
 
 (defun xidebar-should-refresh-p ()
@@ -547,11 +554,15 @@ Use the selected window as the new source window."
 
 ;;; Monitor
 
-(defun xidebar-on-window-select (frame)
-  "Update xidebar when any window is selected in FRAME.
-Set the currently selected window as the source window."
+(defun xidebar--on-window-select (frame)
+  "Refresh xidebar when any window is selected in FRAME.
+Use the selected window as the source window for the xidebar."
   (ignore frame)
   (xidebar-refresh))
+
+(defun xidebar--on-idle-timer ()
+  "Refresh the content of the xidebar."
+  (xidebar-refresh t))
 
 (defvar xidebar--monitor-timer nil
   "A timer used by ‘xidebar-monitor-mode’.")
@@ -562,12 +573,13 @@ Set the currently selected window as the source window."
   (if xidebar-monitor-mode
       (progn
         (add-hook 'window-selection-change-functions
-                  #'xidebar-on-window-select 0)
+                  #'xidebar--on-window-select 0)
         (setq xidebar--monitor-timer
-              (run-with-idle-timer 5 t #'xidebar-refresh)))
+              (run-with-idle-timer
+               5 t #'xidebar--on-idle-timer)))
 
     (add-hook 'window-selection-change-functions
-              #'xidebar-on-window-select)
+              #'xidebar--on-window-select)
     (when xidebar--monitor-timer
       (cancel-timer xidebar--monitor-timer))))
 
