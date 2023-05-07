@@ -359,14 +359,17 @@ Then jslint:
   (set-face-attribute 'eldoc-box-body nil
                       :family "IBM Plex Sans" :height 140)
   (setq eldoc-doc-buffer-separator
-        (propertize "-" 'display '(space :align-to right)
-                    'face '(:strike-through t)
-                    'font-lock-face '(:strike-through t))))
+        (concat "\n"
+                (propertize "-" 'display '(space :align-to right)
+                            'face '(:strike-through t)
+                            'font-lock-face '(:strike-through t))
+                "\n")))
 
 (load-package apheleia
   :extern "prettier"
-  :autoload-hooks
-  ((tsx-ts-mode typescript-ts-mode js-ts-mode js-mode)
+  :autoload-hook
+  (( tsx-ts-mode-hook typescript-ts-mode-hook
+     js-ts-mode-hook js-mode-hook)
    . apheleia-mode))
 
 (luna-note-extern "prettier"
