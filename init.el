@@ -80,6 +80,9 @@
     (luna-load-font 'fixed-pitch-serif "IBM Plex Mono" 13)
     (luna-load-font 'mode-line "IBM Plex Sans" 13
                     :weight 'regular :height 140)
+    (with-eval-after-load 'shortdoc
+      (luna-load-font 'shortdoc-section "IBM Plex Sans" 13
+                      :weight 'medium :height 150))
     (add-hook 'luna-load-theme-hook
               (lambda ()
                 (luna-load-font 'mode-line "IBM Plex Sans" 13
@@ -96,6 +99,8 @@
         mac-system-move-file-to-trash-use-finder t)
   (global-set-key (kbd "s-c") #'kill-ring-save)
   (global-set-key (kbd "s-v") #'yank)
+  ;; I sometimes hit this by accident.
+  (global-set-key (kbd "s-H") #'ignore)
 ;;;; Environment
   (if luna-dumped
       (dolist (var luna-env-vars)
@@ -124,7 +129,7 @@
   (when (file-exists-p local-init)
     (luna-safe-load local-init)))
 
-;;; Debug
+;;; Devel
 
 (require 'treesit)
 (push '(css-mode . css-ts-mode) major-mode-remap-alist)
@@ -134,8 +139,8 @@
 (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
 (push '(toml-mode . toml-ts-mode) major-mode-remap-alist)
 (push '(tsx-mode . tsx-ts-mode) major-mode-remap-alist)
-(push '(typescript-mode . typescript-ts-mode) major-mode-remap-alist)
-(push '(javascript-mode . typescript-ts-mode) major-mode-remap-alist)
+(push '(typescript-mode . tsx-ts-mode) major-mode-remap-alist)
+(push '(javascript-mode . tsx-ts-mode) major-mode-remap-alist)
 
 ;; (setq treesit--font-lock-verbose t)
 
@@ -167,3 +172,6 @@
 
 (defun ts-css-setup ()
   (treesit-font-lock-recompute-features '(property) '(variable function)))
+
+;; (when (equal default-directory "~/emacs-head/")
+;;   (luna-load-font 'default "PragmataPro" 13))
