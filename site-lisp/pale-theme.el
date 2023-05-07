@@ -30,7 +30,7 @@
            (bg-block "gray90")
            (bg-region "gray85")
 
-           (fg  "#111111")
+           (fg  "#000000")
            (fg-weak "#9a9ea2")
 
            (hl-weak bg-tooltip)
