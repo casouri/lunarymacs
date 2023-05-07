@@ -147,9 +147,10 @@
    :family "IBM Plex Sans"
    :weight 'regular
    :height 0.9
-   :background "grey95")
+   :background "grey97"
+   :foreground "grey20")
   (set-face-attribute
    'xidebar-jmenu-section-header nil
    :background "gray90")
   (setq xidebar-file-icon-function
-        #'xidebar-file-icon-vscode-file-only))
+        #'xidebar-file-icon-vscode))
