@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: <component
+# key: <component
+# --
+
+type $1Props = {
+
+};
+
+const $1 = ({}: $1Props) => {
+    return ($0);
+}
+
+export default $1;
