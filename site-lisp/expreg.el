@@ -1,14 +1,35 @@
 ;;; expreg.el --- Simple expand region  -*- lexical-binding: t; -*-
 
+;; Copyright (C) 2022 Free Software Foundation, Inc.
+;;
 ;; Author: Yuan Fu <casouri@gmail.com>
-
-;;; This file is NOT part of GNU Emacs
+;; Maintainer: Yuan Fu <casouri@gmail.com>
+;; URL: https://github.com/casouri/expreg
+;; Version: 1.0.0
+;; Keywords: text, editing
+;; Package-Requires: ((emacs "29.1"))
+;;
+;; This file is part of GNU Emacs.
+;;
+;; GNU Emacs is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; GNU Emacs is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 ;;
 ;; This is just like expand-region, but (1) we generate all regions at
-;; once, and (2) should be easier to debug. Bind ‘expreg-expand’ and
-;; ‘expreg-contract’ and start using it.
+;; once, and (2) should be easier to debug, and (3) we out-source
+;; language-specific expansions to tree-sitter. Bind ‘expreg-expand’
+;; and ‘expreg-contract’ and start using it.
 
 ;;; Developer
 ;;
@@ -123,11 +144,11 @@ ORIG is the current position. Each region is (BEG . END)."
     ;; If there are regions that start at ORIG, filter out
     ;; regions that ends at ORIG.
     (ignore orig-at-beg-of-something)
-    ;; (setq regions (cl-remove-if
-    ;;                (lambda (region)
-    ;;                  (and orig-at-beg-of-something
-    ;;                       (eq (cddr region) orig)))
-    ;;                regions))
+    (setq regions (cl-remove-if
+                   (lambda (region)
+                     (and orig-at-beg-of-something
+                          (eq (cddr region) orig)))
+                   regions))
 
     ;; OTOH, if there are regions that ends at ORIG, filter out
     ;; regions that starts AFTER ORIGN, eg, special cases in
@@ -469,44 +490,46 @@ Note that the inside of outer layer lists are not captured.
 
 If INHIBIT-RECURSE is non-nil, it doesn’t try to narrow to the
 current string/comment and get lists inside."
-  (let (inside-results inside-string)
-    (when (and (not inhibit-recurse)
-               (or (setq inside-string (expreg--inside-string-p))
-                   (expreg--inside-comment-p)))
-      ;; If point is inside a string, we narrow to the inside of that
-      ;; string and compute again.
-      (save-restriction
-        (let ((orig (point))
-              (string-start (expreg--start-of-comment-or-string)))
+  (condition-case nil
+      (let (inside-results inside-string)
+        (when (and (not inhibit-recurse)
+                   (or (setq inside-string (expreg--inside-string-p))
+                       (expreg--inside-comment-p)))
+          ;; If point is inside a string, we narrow to the inside of
+          ;; that string and compute again.
+          (save-restriction
+            (let ((orig (point))
+                  (string-start (expreg--start-of-comment-or-string)))
 
-          ;; Narrow to inside list.
-          (goto-char string-start)
-          ;; (forward-sexp)
-          (if inside-string
-              ;; We could use ‘forward-sexp’, but narrowing plus
-              ;; ‘forward-sexp’ with a treesit backend would cause
-              ;; tree-sitter re-parse on the narrowed region and then
-              ;; re-parse on the widened region.
-              (goto-char (or (scan-sexps (point) 1)
-                             (buffer-end 1)))
-            (forward-comment (buffer-size)))
-          (if inside-string
-              (narrow-to-region (1+ string-start) (1- (point)))
-            (narrow-to-region string-start (point)))
-          (goto-char orig)
-          (setq inside-results (expreg--list t)))))
+              ;; Narrow to inside list.
+              (goto-char string-start)
+              ;; (forward-sexp)
+              (if inside-string
+                  ;; We could use ‘forward-sexp’, but narrowing plus
+                  ;; ‘forward-sexp’ with a treesit backend would cause
+                  ;; tree-sitter re-parse on the narrowed region and
+                  ;; then re-parse on the widened region.
+                  (goto-char (or (scan-sexps (point) 1)
+                                 (buffer-end 1)))
+                (forward-comment (buffer-size)))
+              (if inside-string
+                  (narrow-to-region (1+ string-start) (1- (point)))
+                (narrow-to-region string-start (point)))
+              (goto-char orig)
+              (setq inside-results (expreg--list t)))))
 
-    ;; Normal computation.
-    (let ((inside-list (expreg--inside-list))
-          (list-at-point (expreg--list-at-point))
-          outside-list lst)
+        ;; Normal computation.
+        (let ((inside-list (expreg--inside-list))
+              (list-at-point (expreg--list-at-point))
+              outside-list lst)
 
-      ;; Compute outer-list.
-      (while (setq lst (expreg--outside-list))
-        (setq outside-list
-              (nconc lst outside-list)))
+          ;; Compute outer-list.
+          (while (setq lst (expreg--outside-list))
+            (setq outside-list
+                  (nconc lst outside-list)))
 
-      (nconc inside-results inside-list list-at-point outside-list))))
+          (nconc inside-results inside-list list-at-point outside-list)))
+    (scan-error nil)))
 
 (defun expreg--comment ()
   "Return a list of regions containing comment."
@@ -551,7 +574,7 @@ current string/comment and get lists inside."
     result))
 
 (defun expreg--paragraph ()
-  "Return a list of regions containing paragraphs."
+  "Return a list of regions containing paragraphs or defuns."
   (condition-case nil
       (let ((orig (point))
             beg end result)
