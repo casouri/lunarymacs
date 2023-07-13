@@ -290,8 +290,8 @@ Then jslint:
   :config
   (defun setup-rust ()
     "Setup for ‘rust-ts-mode’."
-    (add-hook 'rust-ts-mode-hook #'eglot-format-buffer 0 t)
-    (electric-quote-local-mode -1)))
+    (electric-quote-local-mode -1)
+    (add-hook 'before-save-hook #'eglot-format-buffer 0 t)))
 
 ;; Go
 (load-package go-mode
