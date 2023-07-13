@@ -141,6 +141,7 @@
     (add-hook 'text-scale-mode-hook #'remap-mono-font-size)))
 
 (load-package xidebar
+  :commands xidebar-mode
   :config
   (set-face-attribute
    'xidebar-body nil
@@ -154,3 +155,8 @@
    :background "gray90")
   (setq xidebar-file-icon-function
         #'xidebar-file-icon-vscode))
+
+(load-package breadcrumb
+  :init (setq-default frame-title-format
+                      '((:eval (breadcrumb-project-crumbs))
+                        (:eval (breadcrumb-imenu-crumbs)))))

@@ -83,4 +83,3 @@ The padding pushes TEXT to the right edge of the mode-line."
                   )))
 
 (setq-default header-line-format nil)
-(setq-default frame-title-format "⚘ %f ⚘")
