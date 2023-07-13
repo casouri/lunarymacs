@@ -189,6 +189,11 @@ buffer is not visiting a file."
                          (ido-read-file-name "Find file(as root): ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
+(defun luna-open-directory ()
+  "Open the current directory in dired."
+  (interactive)
+  (dired default-directory))
+
 ;;; ENV
 
 (defun luna-load-env ()

@@ -13,6 +13,7 @@
  "C-="     #'expreg-expand
  "C--"     #'expreg-contract
  "M-q"     #'ftable-fill
+ "C-x C-d" #'luna-open-directory
 
  :leader
  "ha" #'hideshow-toggle-all
