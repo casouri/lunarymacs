@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: <box-sizing
+# key: <box-sizing
+# --
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
