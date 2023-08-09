@@ -159,4 +159,5 @@
 (load-package breadcrumb
   :init (setq-default frame-title-format
                       '((:eval (breadcrumb-project-crumbs))
+                        " : "
                         (:eval (breadcrumb-imenu-crumbs)))))

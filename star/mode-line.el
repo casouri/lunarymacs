@@ -16,10 +16,6 @@
 ;;               (set-face-attribute 'mode-line nil :background nil)))
 ;;   (bottom-line-mode))
 
-(load-package which-func
-  :config
-  (which-function-mode))
-
 ;;; Functions
 
 (defun luna-mode-line-with-padding (text)

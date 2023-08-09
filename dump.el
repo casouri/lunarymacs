@@ -20,8 +20,7 @@
                    winner elec-pair rainbow-delimiters
                    highlight-parentheses hl-todo buffer-move
                    savehist minions ws-butler
-                   flyspell eglot
-                   yasnippet which-func savehist
+                   flyspell eglot yasnippet savehist
                    consult selectrum selectrum-prescient
                    no-littering dwim-shell-command dwim-shell-commands
                    ;; site-lisp
