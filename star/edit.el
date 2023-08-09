@@ -49,7 +49,11 @@
  "M-y"     #'consult-yank-pop
  :leader
  "si"      #'consult-imenu
- "ss"      #'consult-line)
+ "ss"      #'consult-line
+
+ :---
+ :keymaps 'rg-mode-map
+ "G" #'rg-rerun-change-query)
 
 ;;; Package
 
@@ -128,6 +132,8 @@
   vr/mc-mark)
 
 (load-package wgrep :defer)
+
+(load-package rg :commands rg)
 
 ;;;; Automation
 
