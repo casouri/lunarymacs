@@ -37,10 +37,10 @@
            (hl-normal "#F5F573")
            (hl-strong "#e8e800")
 
-           ;; Colors indented for foreground are less pronouced.
-           (hl-fg "#987816")
+           ;; Colors indented for foreground are less pronounced.
+           (hl-fg "#8C6E14")
            (red-fg "DarkRed")
-           (blue-fg "#0000bb")
+           (blue-fg "#122DC2")
 
            ;; Warning and error are brighter to catch attention.x
            (warning "#DA7A48")
@@ -118,6 +118,7 @@
         (font-lock-keyword-face              (nil ,red-fg))
         (font-lock-string-face               ())
         (font-lock-type-face                 (nil ,hl-fg))
+        ;; (font-lock-type-face                 (nil ,blue-fg))
         (font-lock-variable-name-face        ,bold)
         (font-lock-function-name-face        ,bold)
         (font-lock-warning-face              (error))
