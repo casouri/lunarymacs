@@ -19,6 +19,7 @@
  "ha" #'hideshow-toggle-all
  "hb" #'hs-toggle-hiding
  "rr" #'vr/replace
+ "dg" #'deadgrep
 
  :---
  ;; :keymaps 'override
@@ -49,11 +50,7 @@
  "M-y"     #'consult-yank-pop
  :leader
  "si"      #'consult-imenu
- "ss"      #'consult-line
-
- :---
- :keymaps 'rg-mode-map
- "G" #'rg-rerun-change-query)
+ "ss"      #'consult-line)
 
 ;;; Package
 
@@ -133,7 +130,7 @@
 
 (load-package wgrep :defer)
 
-(load-package rg :commands rg)
+(load-package deadgrep :commands deadgrep)
 
 ;;;; Automation
 
