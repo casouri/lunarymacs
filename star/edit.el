@@ -20,6 +20,7 @@
  "hb" #'hs-toggle-hiding
  "rr" #'vr/replace
  "dg" #'deadgrep
+ "ff" #'treesit-fold-toggle
 
  :---
  ;; :keymaps 'override
@@ -119,6 +120,9 @@
     :global t
     :keymap consult-binded-mode-map)
   (consult-binded-mode))
+
+(load-package treesit-fold
+  :commands treesit-fold-toggle)
 
 ;;;; Search & replace
 
