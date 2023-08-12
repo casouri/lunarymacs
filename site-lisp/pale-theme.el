@@ -41,6 +41,7 @@
            (hl-fg "#8C6E14")
            (red-fg "DarkRed")
            (blue-fg "#122DC2")
+           (green-fg "#007345")
 
            ;; Warning and error are brighter to catch attention.x
            (warning "#DA7A48")
@@ -117,8 +118,9 @@
         (font-lock-constant-face             ,italic)
         (font-lock-keyword-face              (nil ,red-fg))
         (font-lock-string-face               ())
-        (font-lock-type-face                 (nil ,hl-fg))
+        ;; (font-lock-type-face                 (nil ,hl-fg))
         ;; (font-lock-type-face                 (nil ,blue-fg))
+        (font-lock-type-face                 (nil ,green-fg))
         (font-lock-variable-name-face        ,bold)
         (font-lock-function-name-face        ,bold)
         (font-lock-warning-face              (error))
