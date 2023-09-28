@@ -102,6 +102,7 @@ ARG is the numerical argument."
         ;; This is a global mode!
         ;; (require 'delicate-click)
         ;; (delicate-click-mode)
+        (setq-local mouse-prefer-closest-glyph t)
         (setq-local line-spacing 0.15)
         (company-mode -1)
         (setq-local whitespace-style '(tab-mark))
@@ -113,6 +114,7 @@ ARG is the numerical argument."
     ;; (luna-scale-cjk-mode -1)
     (electric-pair-local-mode)
     (electric-quote-local-mode -1)
+    (kill-local-variable 'mouse-prefer-closest-glyph)
     (kill-local-variable 'line-spacing)
     (kill-local-variable 'cursor-type)))
 
