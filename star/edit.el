@@ -86,8 +86,11 @@
       (and dir (cons 'language-aware dir))))
   (cl-defmethod project-root ((project (head language-aware)))
     (cdr project))
+  ;; Add it after vc. VC handles ignored files the much better. If
+  ;; there are a ton of small files and they are not properly ignored,
+  ;; project-files stucks and eglot start up freezes.
   (add-hook 'project-find-functions
-	        #'project-try-language-aware))
+	        #'project-try-language-aware 50))
 
 (defun luna-project-find-regexp (regexp pattern)
   (interactive (list (project--read-regexp)
