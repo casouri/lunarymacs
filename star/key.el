@@ -52,7 +52,6 @@
  "o" '("Open/Org")
  "of" #'open-in-finder
  "oi" #'open-in-iterm
- "ot" #'org-time-stamp
 
  "r" '("Replace")
  "rq" #'query-replace
