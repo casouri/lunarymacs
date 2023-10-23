@@ -274,9 +274,7 @@ Then jslint:
 
 (load-package rust-ts-mode
   :mode "\\.rs\\'"
-  :hook
-  (rust-ts-mode-hook . toggle-truncate-lines)
-  (rust-ts-mode-hook . setup-rust)
+  :hook (rust-ts-mode-hook . setup-rust)
   :init
   (defvar rust-analyzer-config
     ;; https://rust-analyzer.github.io/manual.html#configuration
@@ -285,11 +283,18 @@ Then jslint:
                      :enable t)
         :cargo (:buildScripts (:enable t))
         :diagnostics (:disabled ["unresolved-proc-macro"
-                                 "unresolved-macro-call"])))
+                                 "unresolved-macro-call"])
+        :editor (:formatOnType :json-false)
+        :completion (:privateEditable (:enable t))
+        ;; Whether to enforce the import granularity setting for all
+        ;; files. If set to false rust-analyzer will try to keep
+        ;; import styles consistent per file.
+        :imports (:granularity (:enforce t))))
     "Configuration for rust-analyzer as :initializationOption.")
   :config
   (defun setup-rust ()
     "Setup for ‘rust-ts-mode’."
+    (toggle-truncate-lines -1)
     (electric-quote-local-mode -1)
     (add-hook 'before-save-hook #'eglot-format-buffer 0 t)))
 
