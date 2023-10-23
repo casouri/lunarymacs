@@ -31,7 +31,7 @@
     (highlight-parentheses-mode -1))
   (outline-minor-mode)
   (font-lock-add-keywords
-   nil `((,(rx (seq "◊" (+ (not (any "[" "{"))))) 0 'fixed-pitch prepend)
+   nil `((,(rx (seq "◊" (+ (not (any "[" "{" " " "," "."))))) 0 'fixed-pitch prepend)
          (,(rx (or "[" "]" "{" "}")) 0 'fixed-pitch prepend))
    'append)
   (jit-lock-register #'pollen-fontify-code))
