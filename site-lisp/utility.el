@@ -427,7 +427,7 @@ With DESCRIPTION of the package."
     (comment-region start (point))))
 
 (defun lineup (start end)
-  "Align columns by whitespace."
+  "Align columns by whitespace between START and END."
   (interactive "r")
   ;; From emacs-devel.
   (align-regexp start end "\\(\\s-*\\)\\s-" 1 0 t))
@@ -492,12 +492,7 @@ for whole match."
             "\n"
             url)))
 
-(defun filter-lines (regexp)
-  "Show only lines that match REGEXP.
-Like ‘keep-lines’ but only hides non-matching lines. So this
-function also works for read-only buffers."
-  (interactive "sRegexp: ")
-  )
+(defalias 'filter-lines #'keep-lines)
 
 (provide 'utility)
 
