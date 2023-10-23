@@ -5,6 +5,7 @@
 (luna-key-def
  :leader
  "oc" #'org-capture
+ "ot" #'org-time-stamp
  :---
  :keymaps 'org-mode-map
  "C-c [" #'org-ref-insert-cite-link
@@ -32,6 +33,7 @@
 
 (load-package org
   :defer
+  :commands org-time-stamp
   :config
   (setq org-edit-src-content-indentation 0
         org-adapt-indentation nil
