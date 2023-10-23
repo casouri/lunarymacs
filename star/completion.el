@@ -6,13 +6,17 @@
 
 (luna-key-def
  "s-/"     #'transform-previous-char
- :keymaps 'corfu-map
- "=" #'corfu-insert
- "RET" #'corfu-quit-and-newline
- "C-a" nil
- "C-e" nil
- [remap move-beginning-of-line] nil
- [remap move-end-of-line] nil)
+ :keymaps '(company-active-map company-search-map)
+ "C-p" #'company-select-previous
+ "C-n" #'company-select-next
+ "C-j" (lambda () (interactive) (company-abort) (next-line 1))
+ "RET" (lambda () (interactive) (company-abort) (newline 1 t))
+ "<return>" (lambda () (interactive) (company-abort) (newline 1 t))
+ "=" #'company-complete-selection
+ ;; "<tab>" #'company-complete-common-or-commit
+ ;; "<tab>" #'company-select-next
+ :keymaps 'company-search-map
+ "<escape>" #'company-abort)
 
 ;;; Package
 
@@ -27,18 +31,47 @@
   (with-eval-after-load 'hippie-exp
     (add-to-list 'hippie-expand-try-functions-list #'yas-expand)))
 
-(load-package corfu
-  :autoload-hook (prog-mode-hook . corfu-mode)
+(load-package company
+  :autoload-hook (prog-mode-hook . company-mode)
   :config
-  ;; (setq completion-styles '(basic))
-  (setq corfu-auto t
-        corfu-auto-delay 0
-        corfu-auto-prefix 2)
-  (defun corfu-quit-and-newline ()
-    "Quit corfu and insert newline."
+  (setq company-idle-delay 0.1)
+  (setq company-minimum-prefix-length 2
+        company-dabbrev-downcase nil
+        company-tooltip-limit 15)
+  ;; Company dabbrev is annoying, make sure not to include it.
+  (setq-default company-backends
+                '(company-capf company-files company-dabbrev-code))
+  (setq-default company-search-filtering t)
+
+  :init
+  (defun company-complete-common-or-commit ()
+    "Insert the common part of all candidates, or commit the selection."
     (interactive)
-    (corfu-quit)
-    (newline 1 t)))
+    (when (company-manual-begin)
+      (let ((tick (buffer-chars-modified-tick)))
+        (call-interactively 'company-complete-common)
+        (when (eq tick (buffer-chars-modified-tick))
+          (call-interactively 'company-complete-selection))))))
+
+(load-package consult
+  :init
+  ;; Bindings are defined at the top.
+  (defvar consult-binded-mode-map (make-sparse-keymap)
+    "Minor mode map for ‘console-minor-mode’.")
+
+  (define-minor-mode consult-binded-mode
+    "Minor mode enabling consult commands."
+    :global t
+    :keymap consult-binded-mode-map
+    :group 'convenience
+    (if consult-binded-mode
+        (message ":-)")
+      (message ";-)")))
+  :config
+  (consult-binded-mode)
+  (setq consult-preview-key (kbd "C-o"))
+  (consult-customize
+   consult-line :preview-key 'any))
 
 (load-package recentf-ext
   :config (recentf-mode))
