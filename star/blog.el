@@ -4,6 +4,8 @@
  :keymaps 'pollen-mode-map
  "<tab>" #'indent-for-tab-command)
 
+(load-package company-pollen :defer t)
+
 (load-package pollen-mode
   :mode "\\.pm$"
   :config
@@ -46,10 +48,11 @@
       (let ((indent (if (looking-at "}")
                         (1- (car (syntax-ppss)))
                       (car (syntax-ppss)))))
-        (indent-line-to (* 2 indent))
-        (goto-char mark)
-        (when (eq (point) (line-beginning-position))
-          (skip-syntax-forward "-"))))))
+        (when (> indent 0)
+          (indent-line-to (* 2 indent))
+          (goto-char mark)
+          (when (eq (point) (line-beginning-position))
+            (skip-syntax-forward "-")))))))
 
 (defun pollen-fontify-code (start end)
   "Fontify ◊code and ◊bcode with fixed-pitch."
