@@ -9,7 +9,7 @@
  :keymaps 'corfu-map
  "=" #'corfu-insert
  "RET" #'corfu-quit-and-newline
- "C-a" nil
+ "C-a" #'corfu-c-a
  "C-e" nil
  [remap move-beginning-of-line] nil
  [remap move-end-of-line] nil)
@@ -34,11 +34,18 @@
   (setq corfu-auto t
         corfu-auto-delay 0
         corfu-auto-prefix 2)
+
   (defun corfu-quit-and-newline ()
     "Quit corfu and insert newline."
     (interactive)
     (corfu-quit)
-    (newline 1 t)))
+    (newline 1 t))
+
+  (defun corfu-c-a (&rest _)
+    "Go to beginning of completion and quit corfu."
+    (interactive)
+    (corfu-prompt-beginning 1)
+    (corfu-quit)))
 
 (load-package recentf-ext
   :config (recentf-mode))
