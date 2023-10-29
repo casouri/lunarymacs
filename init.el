@@ -172,6 +172,3 @@
 
 (defun ts-css-setup ()
   (treesit-font-lock-recompute-features '(property) '(variable function)))
-
-;; (when (equal default-directory "~/emacs-head/")
-;;   (luna-load-font 'default "PragmataPro" 13))
