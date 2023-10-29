@@ -12,7 +12,7 @@
   (propertize "TIME\nTO\nSTRETCH" 'face '(:height 1200))
   "The reminder to show.")
 
-(defvar stretch-reminder--buffer "*rest reminder*"
+(defvar stretch-reminder--buffer "*stretch reminder*"
   "Buffer name of the alert buffer.")
 
 (defvar stretch-alert--idle-timer nil
