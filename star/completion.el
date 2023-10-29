@@ -62,7 +62,7 @@
           (email
            (styles orderless substring partial-completion))
           (eglot
-           (styles flex basic))
+           (styles basic))
           (buffer
            (styles orderless basic substring))
           (unicode-name

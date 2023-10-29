@@ -296,7 +296,17 @@ Then jslint:
     "Setup for ‘rust-ts-mode’."
     (toggle-truncate-lines -1)
     (electric-quote-local-mode -1)
-    (add-hook 'before-save-hook #'eglot-format-buffer 0 t)))
+    (add-hook 'before-save-hook #'eglot-format-buffer 0 t)
+    (setq-local treesit-simple-imenu-settings
+                `(("Enum" "\\`enum_item\\'" nil nil)
+                  ("Type" "\\`type_item\\'" nil nil)
+                  ("Struct" "\\`struct_item\\'" nil nil)
+                  ("Fn" ,(rx bos
+                             (or "function_item"
+                                 "impl_item"
+                                 "mod_item")
+                             eos)
+                   nil nil)))))
 
 ;; Go
 (load-package go-mode
