@@ -45,6 +45,7 @@
   "Reminds you to stretch every 30 minutes."
   :global t
   :lighter ""
+  :group 'applications
   (when stretch-reminder-mode
     (setq stretch-alert--scheduler-timer
           (run-with-timer (* 60 30) (* 60 30)
