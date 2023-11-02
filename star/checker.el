@@ -40,12 +40,20 @@
 ;; or by macports.
 (load-package flyspell
   :extern "aspell"
+  :autoload-hook
+  (text-mode-hook . flyspell-mode)
+  (prog-mode-hook . flyspell-prog-mode)
   :config
   (setq flyspell-issue-message-flag nil)
   (when (executable-find "aspell")
     (setq ispell-program-name "aspell"
           ispell-extra-args '( "-W" "3" "--sug-mode=ultra" "--lang=en_US"
-                               "--camel-case")))
+                               "--camel-case"))
+    ;; Check spelling for symbols too, but only if we have aspell
+    ;; (which can check camelcase.)
+    (add-to-list 'flyspell-prog-text-faces 'font-lock-variable-name-face)
+    (add-to-list 'flyspell-prog-text-faces 'font-lock-function-name-face)
+    (add-to-list 'flyspell-prog-text-faces 'font-lock-type-face))
 
   ;; Add curely quotes so words like “didn’t” are properly handled.
   ;; ispell-mode overwrites ‘ispell-dictionary-alist’ every time
@@ -59,11 +67,7 @@
   (advice-add 'flyspell-post-command-hook :around
               (lambda (oldfn &rest args)
                 (unless (memq this-command flyspell-skip-commands)
-                  (apply oldfn args))))
-  :autoload-hook
-  (text-mode-hook . flyspell-mode)
-  ;; Even for prog-modes, we want to spell check symbols.
-  (prog-mode-hook . flyspell-mode))
+                  (apply oldfn args)))))
 
 (luna-note-extern "aspell"
   "For macports:
@@ -72,6 +76,9 @@ For guix:
     guix install aspell aspell-dict-uk")
 
 ;; Why no wucuo: Too many edge cases when you check buffer on a region
-;; on save, and checking on post-command-hook is also more convenient.
-;; For example, iimg doesn’t work with wucuo: it checks the base64
-;; strings and hangs Emacs on save.
+;; on save, and checking on post-command-hook gives much better user
+;; experience. I don’t want to see spell warning for words far away
+;; from the point, I just want to see spell warning for the words I’m
+;; typing right now. And I want to see spell warning as soon as I
+;; typed a word. Wucuo sucks at both. Also, iimg doesn’t work with
+;; wucuo: it checks the base64 strings and hangs Emacs on save.
