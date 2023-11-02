@@ -12,7 +12,11 @@
  "C-M-i" nil
  "C-c $" nil
  :keymaps 'flyspell-mouse-map
- [mouse-2] nil)
+ [mouse-2] nil
+ :---
+ :leader
+ ;; Mnemonics: "list errors"
+ "le" #'flymake-show-buffer-diagnostics)
 
 ;;; Packages
 
