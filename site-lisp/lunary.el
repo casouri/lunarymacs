@@ -202,12 +202,9 @@ ORIG-DUMP-LOCATION is location of the original pre-built dump."
 
 ;;; External program
 
-(defun luna-check-external-program (distribution)
-  "Check if external programs are available.
-Distribution is the current package distribution (symbol), it can be
-guix, macports, debian, etc."
-  (interactive (list (intern (completing-read "Distribution: "
-                                              '(guix macports debian)))))
+(defun luna-check-external-program ()
+  "Check if external programs are available."
+  (interactive)
   (pop-to-buffer (get-buffer-create "*external program*"))
   (let ((inhibit-read-only t))
     (erase-buffer)
