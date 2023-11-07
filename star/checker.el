@@ -48,12 +48,16 @@
   (when (executable-find "aspell")
     (setq ispell-program-name "aspell"
           ispell-extra-args '( "-W" "3" "--sug-mode=ultra" "--lang=en_US"
-                               "--camel-case"))
+                               ;; run-together allows compound words
+                               ;; like "viewport".
+                               "--camel-case" "--run-together"))
     ;; Check spelling for symbols too, but only if we have aspell
     ;; (which can check camelcase.)
     (add-to-list 'flyspell-prog-text-faces 'font-lock-variable-name-face)
     (add-to-list 'flyspell-prog-text-faces 'font-lock-function-name-face)
-    (add-to-list 'flyspell-prog-text-faces 'font-lock-type-face))
+    (add-to-list 'flyspell-prog-text-faces 'font-lock-type-face)
+    ;; Variable and function use don’t have faces on.
+    (add-to-list 'flyspell-prog-text-faces nil))
 
   ;; Add curely quotes so words like “didn’t” are properly handled.
   ;; ispell-mode overwrites ‘ispell-dictionary-alist’ every time
