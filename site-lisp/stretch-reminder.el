@@ -46,10 +46,10 @@
   :global t
   :lighter ""
   :group 'applications
-  (when stretch-reminder-mode
-    (setq stretch-alert--scheduler-timer
-          (run-with-timer (* 60 30) (* 60 30)
-                          #'stretch-reminder--schedule-reminder))
+  (if stretch-reminder-mode
+      (setq stretch-alert--scheduler-timer
+            (run-with-timer (* 60 30) (* 60 30)
+                            #'stretch-reminder--schedule-reminder))
     (when stretch-alert--scheduler-timer
       (cancel-timer stretch-alert--scheduler-timer))))
 
