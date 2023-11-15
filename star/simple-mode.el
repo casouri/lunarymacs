@@ -371,8 +371,12 @@ Then jslint:
   eldoc-box-hover-mode
   eldoc-box-help-at-point
   :config
+  (set-face-attribute 'eldoc-box-border nil
+                      :background "darkgray")
   (set-face-attribute 'eldoc-box-body nil
                       :family "IBM Plex Sans" :height 140)
+  (set-face-attribute 'eldoc-box-markdown-separator nil
+                      :foreground "darkgray")
   (setq eldoc-doc-buffer-separator
         (concat "\n"
                 (propertize "-" 'display '(space :align-to right)
