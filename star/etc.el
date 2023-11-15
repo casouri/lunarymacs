@@ -38,7 +38,12 @@
     (add-to-list 'recentf-exclude no-littering-var-directory)
     (add-to-list 'recentf-exclude no-littering-etc-directory))
   (setq auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+  (let ((backup-dir (expand-file-name "backup"
+                                      no-littering-var-directory)))
+    (unless (file-exists-p backup-dir)
+      (mkdir backup-dir t))
+    (add-to-list 'backup-directory-alist `("." . ,backup-dir))))
 
 (load-package benchmark-init :defer)
 
