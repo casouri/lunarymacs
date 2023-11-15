@@ -122,7 +122,12 @@
     :lighter ""
     :global t
     :keymap consult-binded-mode-map)
-  (consult-binded-mode))
+  (consult-binded-mode)
+
+  (defun consult-imenu--set-imenu-alist (&rest _)
+    "Populate ‘imenu--index-alist’ for other packages to use."
+    (setq imenu--index-alist consult-imenu--cache))
+  (advice-add #'consult-imenu :after #'consult-imenu--set-imenu-alist ))
 
 (load-package treesit-fold
   :commands treesit-fold-toggle)
