@@ -119,6 +119,9 @@
  '(user-full-name "Yuan Fu")
  '(user-mail-address "casouri@gmail.com")
  '(window-resize-pixelwise t)
+ '(window-divider-mode t)
+ '(window-divider-default-right-width 1)
+ '(window-divider-default-bottom-width 1)
  '(word-wrap-by-category t)
  '(xref-prompt-for-identifier '(not xref-find-references xref-find-definitions xref-find-definitions-other-window xref-find-definitions-other-frame));; Ends here.
  )

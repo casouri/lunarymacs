@@ -26,11 +26,11 @@
             (brighten #'theme-util-brighten)
             (overlay #'theme-util-color-overlay))
     (let* ((bg "#ffffff")
-           (bg-tooltip "gray92")
-           (bg-block "gray90")
-           (bg-region "gray85")
+           (bg-tooltip "gray95")
+           (bg-block "gray92")
+           (bg-region "gray90")
 
-           (fg  "#000000")
+           (fg  "#1c1c1c")
            (fg-weak "#9a9ea2")
 
            (hl-weak bg-tooltip)
@@ -40,7 +40,7 @@
            ;; Colors indented for foreground are less pronounced.
            (hl-fg "#8C6E14")
            (red-fg "DarkRed")
-           (blue-fg "#122DC2")
+           (blue-fg "#00509b")
            (green-fg "#007345")
 
            ;; Warning and error are brighter to catch attention.x
@@ -75,6 +75,7 @@
         (italic ,italic)
 
         (vertical-border     (nil nil "black"))
+        (window-divider      (nil "gray85"))
         (minibuffer-prompt   ,bold)
         (isearch             (nil nil ,hl-strong))
         (lazy-highlight      (nil nil ,hl-strong))
