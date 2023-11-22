@@ -119,18 +119,16 @@
   luna-toggle-console
   luna-toggle-console-window)
 
-;; (load-package tab-bar-echo-area
-;;   :autoload-hook (tab-bar-mode-hook . tab-bar-echo-area-mode)
-;;   :config (setq tab-bar-tab-name-function #'luna-tab-bar-name))
-
-(setq-default tab-bar-show t
-              tab-bar-close-button-show nil
-              tab-bar-new-button-show nil)
-
-(defun luna-tab-bar-name ()
-  "Construct tab name by major mode and buffer name."
-  (with-current-buffer (window-buffer (minibuffer-selected-window))
-    (format "%s: %s" (format-mode-line mode-name) (buffer-name))))
+(with-eval-after-load 'tab-bar
+  (setq-default tab-bar-show t
+                tab-bar-close-button-show nil
+                tab-bar-new-button-show nil)
+  (setq tab-bar-tab-name-function #'tab-bar-tall-name)
+  (defun tab-bar-tall-name ()
+    "Make the default tab taller"
+    (concat (propertize " " 'display '(raise 0.3))
+            (tab-bar-tab-name-current)
+            (propertize " " 'display '(raise -0.3)))))
 
 (with-eval-after-load 'face-remap
   (setq text-scale-remap-header-line t)

@@ -79,6 +79,7 @@
     (luna-load-font 'variable-pitch "Academica" 16)
     (luna-load-font 'fixed-pitch-serif "IBM Plex Mono" 13)
     (luna-load-font 'mode-line "SF Pro Text" 12 :weight 'regular :height 125)
+    (luna-load-font 'tab-bar "SF Pro Text" 14 :weight 'regular)
     (with-eval-after-load 'shortdoc
       (luna-load-font 'shortdoc-section "IBM Plex Sans" 13
                       :weight 'medium :height 150))
