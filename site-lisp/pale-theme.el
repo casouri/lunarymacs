@@ -137,7 +137,7 @@
         (mode-line-inactive (mode-line nil ,bg-block))
         (header-line (mode-line) (:height 150))
 
-        (tab-bar (mode-line nil ,bg) (:height 160))
+        (tab-bar (mode-line nil ,bg) (:height 140))
         (tab-bar-tab          (tab-bar nil ,bg)
                               (:box (:line-width 1 :color ,blue-fg)))
         (tab-bar-tab-inactive (tab-bar ,fg-weak ,bg)
