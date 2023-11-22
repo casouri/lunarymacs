@@ -138,13 +138,13 @@
         (header-line (mode-line) (:height 150))
 
         (tab-bar (mode-line nil ,bg) (:height 160))
-        (tab-bar-tab (tab-bar nil ,bg)
-                     (:box (:line-width 1 :color ,blue-fg)))
-        (tab-bar-tab-inactive (tab-bar nil "gray96")
+        (tab-bar-tab          (tab-bar nil ,bg)
+                              (:box (:line-width 1 :color ,blue-fg)))
+        (tab-bar-tab-inactive (tab-bar ,fg-weak ,bg)
                               (:box (:line-width 1 :color "gray90")))
-        (tab-bar-tab-group-current (tab-bar-tab nil nil nil bold))
+        (tab-bar-tab-group-current  (tab-bar-tab nil nil nil bold))
         (tab-bar-tab-group-inactive (tab-bar-tab-inactive))
-        (tab-bar-tab-ungrouped (tab-bar-tab-inactive))
+        (tab-bar-tab-ungrouped      (tab-bar-tab-inactive))
 
         (completions-common-part (shadow))
         (completions-first-difference (bold))
