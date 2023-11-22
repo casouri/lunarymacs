@@ -9,6 +9,7 @@
  :leader
  "eg" #'eglot
  "lc" #'lspce-mode
+ "ca" #'eglot-code-actions
  :---
  :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
  "<S-return>" #'eval-defun
