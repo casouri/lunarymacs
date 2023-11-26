@@ -40,7 +40,7 @@
            ;; Colors indented for foreground are less pronounced.
            (hl-fg "#8C6E14")
            (red-fg "DarkRed")
-           (blue-fg "#00509b")
+           (blue-fg "#004f9b")
            (green-fg "#007345")
 
            ;; Warning and error are brighter to catch attention.x
