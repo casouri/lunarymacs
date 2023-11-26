@@ -103,6 +103,7 @@
  '(recentf-max-saved-items 500)
  '(ring-bell-function 'ignore)
  '(savehist-mode t)
+ '(savehist-autosave-interval 30)
  '(scroll-bar-mode nil)
  '(scroll-conservatively 1)
  '(scroll-margin 1)
