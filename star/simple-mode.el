@@ -4,6 +4,8 @@
 
 (require 'utility)
 
+;;; Key
+
 ;; Emacs Lisp
 (luna-key-def
  :leader
@@ -40,6 +42,8 @@
     (end-of-defun)
     (skip-chars-backward "\n")
     (eval-print-last-sexp)))
+
+;;; Package
 
 (load-package markdown-mode
   :mode "\\.md$" "\\.markdown$" "\\.mk$")
@@ -394,3 +398,16 @@ Then jslint:
 
 (luna-note-extern "prettier"
   "npm install prettier")
+
+(with-eval-after-load 'xref
+  ;; Jumping to the destination automatically closes the xref window.
+  (defun xref-goto-xref-advice (old-fn &optional no-quit)
+    "Reverse the effect of prefix argument."
+    (funcall old-fn (not no-quit)))
+  (advice-add #'xref-goto-xref :around #'xref-goto-xref-advice)
+
+  ;; Xref window at bottom.
+  (add-to-list 'display-buffer-alist
+               (cons "*xref*"
+                     (cons 'display-buffer-in-side-window
+                           '((side . bottom))))))
