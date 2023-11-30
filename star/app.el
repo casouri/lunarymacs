@@ -28,7 +28,13 @@
   (require 'erc-services)
   (erc-services-mode))
 
-(load-package helpful :defer)
+(load-package helpful
+  :defer
+  ;; Defend against the scan-error.
+  :config
+  (advice-add 'helpful--source :around
+              (lambda (fn &rest args)
+                (ignore-errors (funcall fn args)))))
 
 (load-package ghelp
   :commands
