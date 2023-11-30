@@ -48,7 +48,9 @@
     (corfu-quit)))
 
 (load-package recentf-ext
-  :config (recentf-mode))
+  :config
+  (recentf-mode)
+  (run-with-timer 300 300 #'recentf-save-list))
 
 (load-package vertico
   :config
