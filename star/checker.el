@@ -27,7 +27,7 @@
   (add-hook 'c-mode-hook #'flymake-mode)
   (add-hook 'c++-mode-hook #'flymake-mode)
   :config
-  (setq flymake-mode-line-lighter "S"))
+  (setq flymake-mode-line-lighter ""))
 
 
 (defvar flyspell-skip-commands
