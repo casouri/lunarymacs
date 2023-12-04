@@ -130,6 +130,7 @@
         (font-lock-preprocessor-char-face    ())
         (font-lock-regexp-grouping-backslash ,bold)
         (font-lock-regexp-grouping-construct ,bold)
+        (elisp-shorthand-font-lock-face      ,bold)
 
         (sh-quoted-exec (nil ,red-fg))
 
