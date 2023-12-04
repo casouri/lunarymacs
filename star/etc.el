@@ -106,7 +106,7 @@
  '(savehist-autosave-interval 30)
  '(scroll-bar-mode nil)
  '(scroll-conservatively 1)
- '(scroll-margin 1)
+ '(scroll-margin 0 nil nil "If set to anything larger than 0, ‘pixel-scroll-precision-mode’ causes jitterring when scrolling if point is at the edge of the screen.")
  '(scroll-preserve-screen-position nil)
  '(send-mail-function 'mailclient-send-it)
  '(sentence-end-double-space nil)
