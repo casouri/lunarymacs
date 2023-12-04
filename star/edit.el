@@ -112,7 +112,8 @@
 
 (load-package consult
   :config
-  (setq consult-preview-key nil)
+  (setq consult-preview-key nil
+        consult--buffer-display #'switch-to-buffer-in-tab)
   (consult-customize
    consult-line :preview-key 'any)
 
@@ -127,7 +128,8 @@
   (defun consult-imenu--set-imenu-alist (&rest _)
     "Populate ‘imenu--index-alist’ for other packages to use."
     (setq imenu--index-alist consult-imenu--cache))
-  (advice-add #'consult-imenu :after #'consult-imenu--set-imenu-alist ))
+  (advice-add #'consult-imenu :after #'consult-imenu--set-imenu-alist))
+
 
 (load-package treesit-fold
   :commands treesit-fold-toggle)
