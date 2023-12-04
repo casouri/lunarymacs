@@ -63,6 +63,7 @@ collect."
                 (stbit--get-buffers (cdr tree))))
     nil))
 
+;;;###autoload
 (defun switch-to-buffer-in-tab (buffer &optional norecord force-same-window)
   "Switch to BUFFER if it exists in some tab in current frame.
 

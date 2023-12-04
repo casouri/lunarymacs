@@ -112,6 +112,7 @@
 
 (load-package consult
   :config
+  (autoload #'switch-to-buffer-in-tab "switch-to-buffer-in-tab.el")
   (setq consult-preview-key nil
         consult--buffer-display #'switch-to-buffer-in-tab)
   (consult-customize
