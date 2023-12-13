@@ -1,4 +1,4 @@
-;;; pretty-info.el --- Prettier Info      -*- lexical-binding: t; -*-
+;;; info-pretty.el --- Prettier Info      -*- lexical-binding: t; -*-
 
 ;; Author: Yuan Fu <casouri@gmail.com>
 
@@ -53,6 +53,9 @@
 
 (defface info-pretty-variable `((t . (:inherit italic)))
   "Face for variables in a function definition.")
+
+(defvar-local info-pretty--face-remap-cookie nil
+  "Cookie returned by face-remap-add-relative.")
 
 (defun info-pretty--next-block ()
   "Return (BEG . END) of next text block after point.
@@ -299,7 +302,9 @@ Moves point."
             (goto-char end-mark))))
       (Info-fontify-node)
       (visual-line-mode)
-      (face-remap-add-relative 'link '(:inherit info-pretty-body)))))
+      (unless info-pretty--face-remap-cookie
+        (setq info-pretty--face-remap-cookie
+              (face-remap-add-relative 'link 'info-pretty-body))))))
 
 (define-minor-mode info-pretty-mode
   "Prettified Info."
@@ -311,6 +316,6 @@ Moves point."
   (when (derived-mode-p 'Info-mode)
     (revert-buffer nil t)))
 
-(provide 'pretty-info)
+(provide 'info-pretty)
 
-;;; pretty-info.el ends here
+;;; info-pretty.el ends here
