@@ -241,7 +241,7 @@ See ‘luna-external-program-notes’."
    (list
     (intern (completing-read "Theme: "
                              (mapcar #'symbol-name
-				                     (custom-available-themes))))))
+                                     (custom-available-themes))))))
   (dolist (theme custom-enabled-themes)
     (disable-theme theme))
   (if (featurep (intern (format "%s-theme" theme)))
@@ -303,19 +303,19 @@ SCJK-SCALE is nil, don’t add size attributes to the CJK spec."
                         `(:family ,cjk-family ,@cjk-extra-spec))))
     (list ascii-spec cjk-spec)))
 
-(defun luna-load-default-font (font-spec size &rest attrs)
-  "Set font for default face to FONT-SPEC with SIZE and ATTRS.
+(defun luna-load-default-font (font-name size &rest attrs)
+  "Set font for default face to FONT-NAME with SIZE and ATTRS.
 See ‘luna-load-font’."
   ;; We use a separate function for default font because Emacs has a
   ;; bug that prevents us from setting a fontset for the default face
   ;; (although ‘set-frame-parameter’ works). So we just set default
   ;; face with ASCII font and use default fontset for Unicode font.
   (interactive
-   (list (completing-read
-          "Font: " (mapcar #'car luna-font-alist))
-         (string-to-number (completing-read
-                            "Size: " nil nil nil nil nil "13"))))
-  (let* ((specs (luna-font-expand-spec font-spec size))
+   (list (completing-read "Font: " (mapcar #'car luna-font-alist) nil t)
+         (read-number "Size: " 13)))
+  (let* ((specs (luna-font-expand-spec
+                 (alist-get font-name luna-font-alist nil nil #'equal)
+                 size))
          (ascii (apply #'font-spec (car specs)))
          (cjk (apply #'font-spec (cadr specs))))
     (apply #'set-face-attribute 'default nil :font ascii attrs)
@@ -352,10 +352,8 @@ ATTRS."
   (interactive
    (list (intern (completing-read
                   "Face: " (face-list)))
-         (completing-read
-          "Font: " (mapcar #'car luna-font-alist))
-         (string-to-number (completing-read
-                            "Size: " nil nil nil nil nil "13"))))
+         (completing-read "Font: " (mapcar #'car luna-font-alist) nil t)
+         (read-number "Size: " 13)))
   (let* ((font-spec (alist-get font-name luna-font-alist
                                nil nil #'equal))
          (fontset
