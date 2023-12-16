@@ -303,8 +303,8 @@ SCJK-SCALE is nil, don’t add size attributes to the CJK spec."
                         `(:family ,cjk-family ,@cjk-extra-spec))))
     (list ascii-spec cjk-spec)))
 
-(defun luna-load-default-font (font-name size &rest attrs)
-  "Set font for default face to FONT-NAME with SIZE and ATTRS.
+(defun luna-load-default-font (font-spec size &rest attrs)
+  "Set font for default face to FONT-SPEC with SIZE and ATTRS.
 See ‘luna-load-font’."
   ;; We use a separate function for default font because Emacs has a
   ;; bug that prevents us from setting a fontset for the default face
@@ -313,9 +313,7 @@ See ‘luna-load-font’."
   (interactive
    (list (completing-read "Font: " (mapcar #'car luna-font-alist) nil t)
          (read-number "Size: " 13)))
-  (let* ((specs (luna-font-expand-spec
-                 (alist-get font-name luna-font-alist nil nil #'equal)
-                 size))
+  (let* ((specs (luna-font-expand-spec font-spec size))
          (ascii (apply #'font-spec (car specs)))
          (cjk (apply #'font-spec (cadr specs))))
     (apply #'set-face-attribute 'default nil :font ascii attrs)
@@ -323,26 +321,6 @@ See ‘luna-load-font’."
     (set-fontset-font t 'han cjk)
     (set-fontset-font t 'cjk-misc cjk)
     (set-fontset-font t 'symbol cjk nil 'append)))
-
-(defun luna-load-font-spec (face font-spec size &rest attrs)
-  "Load a FONT-SPEC for FACE.
-
-FONT-SPEC should be a list (ASCII-FAMILY CJK-FAMILY CJK-SCALE
-ASCII-SPEC CJK-SPEC), where ASCII-FAMILY is a ASCII font family,
-CJK-FAMILY is the CJK font family, and SCJK-SCALE is the scale
-factor of CJK font. ASCII-SPEC and CJK-SPEC are extra spec for
-ASCII and CJK."
-  (if (and (eq face 'default))
-      (apply #'luna-load-default-font font-spec size attrs)
-    (let* ((fontset
-            (apply #'luna-create-fontset
-                   (luna-font-expand-spec font-spec size))))
-      (apply #'set-face-attribute face nil
-             ;; We must set both ‘:font’ and ‘fontset’ for both ASCII
-             ;; and non-ascii spec to take effect.
-             :font fontset
-             :fontset fontset
-             attrs))))
 
 (defun luna-load-font (face font-name size &rest attrs)
   "Set font for FACE to FONT-NAME.
