@@ -16,7 +16,8 @@
  :---
  :leader
  ;; Mnemonics: "list errors"
- "le" #'flymake-show-buffer-diagnostics)
+ "le" #'flymake-show-buffer-diagnostics
+ "pe" #'flymake-show-project-diagnostics)
 
 ;;; Packages
 
