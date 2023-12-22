@@ -311,8 +311,11 @@ See ‘luna-load-font’."
   ;; (although ‘set-frame-parameter’ works). So we just set default
   ;; face with ASCII font and use default fontset for Unicode font.
   (interactive
-   (list (completing-read "Font: " (mapcar #'car luna-font-alist) nil t)
-         (read-number "Size: " 13)))
+   (let ((font-name (completing-read
+                     "Font: " (mapcar #'car luna-font-alist) nil t))
+         (font-size (read-number "Size: " 13)))
+     (list (alist-get font-name luna-font-alist nil nil #'equal)
+           font-size)))
   (let* ((specs (luna-font-expand-spec font-spec size))
          (ascii (apply #'font-spec (car specs)))
          (cjk (apply #'font-spec (cadr specs))))
@@ -321,6 +324,26 @@ See ‘luna-load-font’."
     (set-fontset-font t 'han cjk)
     (set-fontset-font t 'cjk-misc cjk)
     (set-fontset-font t 'symbol cjk nil 'append)))
+
+(defun luna-load-font-spec (face font-spec size &rest attrs)
+  "Load a FONT-SPEC for FACE.
+
+FONT-SPEC should be a list (ASCII-FAMILY CJK-FAMILY CJK-SCALE
+ASCII-SPEC CJK-SPEC), where ASCII-FAMILY is a ASCII font family,
+CJK-FAMILY is the CJK font family, and SCJK-SCALE is the scale
+factor of CJK font. ASCII-SPEC and CJK-SPEC are extra spec for
+ASCII and CJK."
+  (if (and (eq face 'default))
+      (apply #'luna-load-default-font font-spec size attrs)
+    (let* ((fontset
+            (apply #'luna-create-fontset
+                   (luna-font-expand-spec font-spec size))))
+      (apply #'set-face-attribute face nil
+             ;; We must set both ‘:font’ and ‘fontset’ for both ASCII
+             ;; and non-ascii spec to take effect.
+             :font fontset
+             :fontset fontset
+             attrs))))
 
 (defun luna-load-font (face font-name size &rest attrs)
   "Set font for FACE to FONT-NAME.
