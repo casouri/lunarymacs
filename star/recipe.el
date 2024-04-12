@@ -9,6 +9,7 @@
                                 :option (:full-clone t)))
         (eldoc-box . (:repo "casouri/eldoc-box"
                             :option (:full-clone t)))
+        (eglot-booster . (:repo "jdtsmith/eglot-booster"))
         (isolate . (:repo "casouri/isolate" :option (:full-clone t)))
         (ftable . (:repo "casouri/ftable" :option (:full-clone t)))
         (ghelp . (:repo "casouri/ghelp" :option (:full-clone t)))
