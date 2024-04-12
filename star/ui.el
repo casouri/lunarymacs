@@ -154,8 +154,8 @@
   (setq xidebar-file-icon-function
         #'xidebar-file-icon-vscode))
 
-(load-package breadcrumb
-  :init (setq-default frame-title-format
-                      '((:eval (breadcrumb-project-crumbs))
-                        (:eval (and imenu--index-alist
-                                    (concat "  ◊  " (breadcrumb-imenu-crumbs)))))))
+;; (load-package breadcrumb
+;;   :init (setq-default frame-title-format
+;;                       '((:eval (breadcrumb-project-crumbs))
+;;                         (:eval (and imenu--index-alist
+;;                                     (concat "  ◊  " (breadcrumb-imenu-crumbs)))))))
