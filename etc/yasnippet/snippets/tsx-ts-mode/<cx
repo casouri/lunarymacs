@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: <cx
+# key: <cx
+# --
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);

@@ -3,11 +3,16 @@
 # key: <component
 # --
 
-type $1Props = {
+import { useState } from 'react';
+import { Button } from '@walmart-web/livingdesign-components';
+import { Plus } from '@livingdesign/icons';
+
+
+type Props = {
 
 };
 
-const $1 = ({}: $1Props) => {
+const $1 = ({}: Props) => {
     return ($0);
 }
 

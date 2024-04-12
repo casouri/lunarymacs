@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: <styles
+# key: <styles
+# --
+import styles from './`(file-name-base (or buffer-file-name ""))`.module.scss';
