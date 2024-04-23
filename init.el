@@ -167,7 +167,9 @@
   (setq-local electric-quote-string nil)
   (indent-tabs-mode)
   (bug-reference-prog-mode)
-  (treesit-font-lock-recompute-features '(emacs-devel)))
+  (treesit-font-lock-recompute-features '(emacs-devel))
+  (setq outline-search-function nil)
+  (setq c-ts-mode-emacs-sources-support nil))
 
 (defun ts-css-setup ()
   (treesit-font-lock-recompute-features '(property) '(variable function)))
