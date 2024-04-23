@@ -102,12 +102,14 @@
 ;;                 (kill-local-variable 'cursor-type)))))
 
 (with-eval-after-load 'gnus
-  (setq gnus-select-method
-        '(nntp "news.gmane.io" (nntp-port-number 119))
-        gnus-visible-headers "^From:\\|^Subject:"
+  (setq gnus-visible-headers "^From:\\|^Subject:"
         gnus-use-full-window nil
         gnus-summary-line-format "%U%R%z%(%*%[%n%]%) %s\n"
-        gnus-show-threads nil))
+        gnus-show-threads nil)
+  (setq gnus-select-method
+        '(nntp "news.gmane.io" (nntp-port-number 119)))
+  (setq gnus-secondary-select-methods
+        '((nnmaildir "maildir" (directory "/Users/yuan/nnmaildir/Gmail")))))
 
 (load-package restclient
   :commands restclient-mode)
