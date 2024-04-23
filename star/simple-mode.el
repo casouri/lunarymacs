@@ -152,38 +152,27 @@
 (defun tsx-tag-complete (&rest _)
   "Complete HTML tags."
   (cond ((and (eq this-command 'self-insert-command)
-              (eq (char-before) ?>))
+              (eq (char-before) ?>)
+              (not (looking-back (rx "/>")
+                                 (max (point-min) (- (point) 2))))
+              ;; This doesn’t handle edge cases like <> in strings,
+              ;; but is good enough.
+              (looking-back (rx "<" (group (+ (not (any "<>")))) ">")
+                            (line-beginning-position)))
          ;; <div| --(type ">")--> <div>|</div>
-         (let* ((pos (point))
-                (node (treesit-search-forward
-                       (treesit-node-at pos)
-                       (lambda (n)
-                         (<= (treesit-node-end n) pos))
-                       t t)))
-           (when (equal (treesit-node-type node) ">")
-             (setq node (treesit-node-parent node)))
-           (when (equal (treesit-node-type node) "jsx_opening_element")
-             (let ((type (treesit-node-text
-                          (treesit-node-child-by-field-name node "name"))))
-               (save-excursion
-                 (if (or (member type tsx-tag--void-elements)
-                         (<= ?A (aref type 0) ?Z))
-                     (progn (backward-char)
-                            (insert "/"))
-                   (save-excursion
-                     (insert (format "</%s>" type)))))))))
+         (let ((tag-content (match-string 1)))
+           (save-excursion
+             (insert (format "</%s>" tag-content)))))
         ;; <div>|</div> --(type "RET")-->
         ;; <div>
         ;;   |
         ;; </div>
-        ((eq this-command 'newline)
-         (let ((node (treesit-node-parent (treesit-node-at (point)))))
-           (when (and (eq (point) (treesit-node-start node))
-                      (equal (treesit-node-type node) "jsx_closing_element"))
-             (newline)
-             (indent-for-tab-command)
-             (forward-line -1)
-             (indent-for-tab-command))))))
+        ((and (eq this-command 'newline)
+              (looking-at (rx "</" (* (not (any "<>"))) ">")))
+         (newline)
+         (indent-for-tab-command)
+         (forward-line -1)
+         (indent-for-tab-command))))
 
 ;; Makefile
 (add-hook 'makefile-mode-hook
@@ -335,18 +324,35 @@ Then jslint:
                    lisp-mode-hook)
                   . aggressive-indent-mode))
 
+(load-package eglot-booster
+  :extern "emacs-lsp-booster"
+  :after eglot
+  :config	(eglot-booster-mode))
+
+(luna-note-extern "emacs-lsp-booster"
+  "git clone https://github.com/blahgeek/emacs-lsp-booster.git
+cd emacs-lsp-booster/
+cargo build --release
+cp target/release/emacs-lsp-booster ~/bin")
+
 (load-package eglot
   ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
   :hook (eglot-managed-mode-hook . setup-eglot)
   :config
   (setq-default read-process-output-max (* 1024 1024)
-                eglot-events-buffer-size 0)
+                eglot-events-buffer-size 0
+                eglot-events-buffer-config '(:size 0 :format full))
 
   ;; Otherwise eglot highlights symbols, which is annoying.
   (add-to-list 'eglot-ignored-server-capabilities
                :documentHighlightProvider)
+  ;; No thanks.
   (add-to-list 'eglot-ignored-server-capabilities
                :inlayHintProvider)
+  ;; In ‘c-ts-mode’, this feature calls eglot--hover-info, which calls
+  ;;  c-ts-mode to fontify some text on every keypress.
+  (add-to-list 'eglot-ignored-server-capabilities
+               :textDocument/hover)
 
   (luna-on "Brown"
     (add-to-list 'eglot-server-programs
