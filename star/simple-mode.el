@@ -153,8 +153,19 @@
   "Complete HTML tags."
   (cond ((and (eq this-command 'self-insert-command)
               (eq (char-before) ?>)
+              ;; Excludes <img/>.
               (not (looking-back (rx "/>")
                                  (max (point-min) (- (point) 2))))
+              ;; Excludes =>.
+              (not (looking-back "=" (max (point-min) (1- (point)))))
+              ;; Exclude <T>.
+              (not (let* ((node (treesit-node-at
+                                 (max (point-min) (1- (point)))))
+                          (type (treesit-node-type
+                                 (treesit-node-parent node))))
+                     (and type (string-match-p
+                                (rx (or "type_parameters" "type_arguments"))
+                                type))))
               ;; This doesn’t handle edge cases like <> in strings,
               ;; but is good enough.
               (looking-back (rx "<" (group (+ (not (any "<>")))) ">")
