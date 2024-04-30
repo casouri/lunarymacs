@@ -157,7 +157,7 @@
               (not (looking-back (rx "/>")
                                  (max (point-min) (- (point) 2))))
               ;; Excludes =>.
-              (not (looking-back "=" (max (point-min) (1- (point)))))
+              (not (looking-back "=>" (max (point-min) (- (point) 2))))
               ;; Exclude <T>.
               (not (let* ((node (treesit-node-at
                                  (max (point-min) (1- (point)))))
