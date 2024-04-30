@@ -157,7 +157,7 @@
 (defun general-ts-mode-setup ()
   (treesit-font-lock-recompute-features
    nil
-   '(property bracket delimiter operator variable function))
+   '(property bracket delimiter operator variable function error))
   (when (derived-mode-p 'css-ts-mode)
     (treesit-font-lock-recompute-features
      '(property))))
