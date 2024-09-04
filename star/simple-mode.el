@@ -128,7 +128,7 @@
 ;; Javascript/Typescript
 (setq-default js-indent-level 2)
 (add-hook 'tsx-ts-mode-hook #'setup-tsx)
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
 (with-eval-after-load 'tsx-ts-mode
   (set-face-attribute 'typescript-ts-jsx-tag-face nil :inherit 'shadow)
@@ -371,7 +371,12 @@ cp target/release/emacs-lsp-booster ~/bin")
     (add-to-list 'eglot-server-programs
                  `(rust-ts-mode . ("rust-analyzer"
                                    :initializationOptions
-                                   ,rust-analyzer-config))))
+                                   ,rust-analyzer-config)))
+    (add-to-list 'eglot-server-programs
+                 `((tsx-ts-mode typescript-ts-mode js-ts-mode)
+                   . ("typescript-language-server" "--stdio"
+                      :initializationOptions
+                      ,typescript-lsp-config))))
 
   (defun setup-eglot ()
     "Setup for eglot."
