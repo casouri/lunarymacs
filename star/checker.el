@@ -28,7 +28,12 @@
   (add-hook 'c-mode-hook #'flymake-mode)
   (add-hook 'c++-mode-hook #'flymake-mode)
   :config
-  (setq flymake-mode-line-lighter ""))
+  (setq flymake-mode-line-lighter "")
+  ;; Don’t show in a bottom window.
+  (add-to-list 'display-buffer-alist
+               (cons '(major-mode . flymake-diagnostics-buffer-mode)
+                     '(display-buffer-use-some-window
+                       . ((inhibit-same-window . t))))))
 
 
 (defvar flyspell-skip-commands
