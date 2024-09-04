@@ -112,7 +112,11 @@
         '((nnmaildir "maildir" (directory "/Users/yuan/nnmaildir/Gmail")))))
 
 (load-package restclient
-  :commands restclient-mode)
+  :commands restclient-mode
+  :hook (restclient-mode-hook . color-outline-mode)
+  :config
+  (set-face-attribute 'restclient-variable-name-face nil
+                      :inherit 'font-lock-type-face))
 
 (defun luna-customize-setup ()
   "Setup function for Customize."
