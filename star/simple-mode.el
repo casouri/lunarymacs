@@ -430,6 +430,6 @@ cp target/release/emacs-lsp-booster ~/bin")
 
   ;; Xref window at bottom.
   (add-to-list 'display-buffer-alist
-               (cons "*xref*"
+               (cons (rx "*xref*")
                      (cons 'display-buffer-in-side-window
                            '((side . bottom))))))
