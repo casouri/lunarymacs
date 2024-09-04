@@ -367,7 +367,7 @@ cp target/release/emacs-lsp-booster ~/bin")
 
   (luna-on "Brown"
     (add-to-list 'eglot-server-programs
-                 '((c-mode c++-mode) . ("ccls-clang-10")))
+                 '((c-mode c++-mode) . ("ccls-clang-14")))
     (add-to-list 'eglot-server-programs
                  `(rust-ts-mode . ("rust-analyzer"
                                    :initializationOptions
