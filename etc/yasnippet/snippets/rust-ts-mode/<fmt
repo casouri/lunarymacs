@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: <fmt
+# key: <fmt
+# --
+format!($0)
