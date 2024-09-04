@@ -7,6 +7,7 @@
 (luna-key-def
  "s-/"     #'transform-previous-char
  :keymaps 'corfu-map
+ "TAB" #'corfu-insert
  "=" #'corfu-insert
  "RET" #'corfu-quit-and-newline
  "C-a" #'corfu-c-a
