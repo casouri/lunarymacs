@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: <importcolor
+# key: <importcolor
+# --
+@import '@livingdesign/tokens/dist/scss/light/_globals';

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: <state
+# key: <state
+# --
+const [$1, $1] = useState($0);

@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: <story
+# key: <story
+# --
+import type { Meta } from '@storybook/react';
+import { useState } from 'react';
+import $1 from './$1';
+
+const meta: Meta<typeof $1> = {
+  component: $1,
+};
+export default meta;
+
+export const Default = () => {
+  return null;
+}

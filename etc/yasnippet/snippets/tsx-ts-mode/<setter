@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: <setter
+# key: <setter
+# --
+Dispatch<SetStateAction<$0>>

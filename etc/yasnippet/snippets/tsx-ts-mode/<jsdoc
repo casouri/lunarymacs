@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: <jsdoc
+# key: <jsdoc
+# --
+/**
+ * $1
+ * @param {$2} $0
+ */
