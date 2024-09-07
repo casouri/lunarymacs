@@ -183,8 +183,8 @@ chain is nil, return ALIST."
 (defvar-local query-builder--endpoint nil
   "The endpoint URL.")
 
-(defvar-local query-builder--initial-query nil
-  "The initial strin GraphQL query we’re building upon.")
+(defvar-local query-builder--initial-body nil
+  "The initial GraphQL request body the builder started with.")
 
 (defvar-local query-builder--restclient-state nil
   "The states of restclient request that initiated this query builder.
@@ -799,10 +799,10 @@ states. QUERY-STRING doesn’t have trailing whitespace/newline.")
   "Save the current UI state to query cache."
   (unless query-builder--endpoint
     (signal 'query-builder-error '("Current buffer doesn’t have a saved GraphQL endpoint (‘query-builder--endpoint’)")))
-  (unless query-builder--initial-query
-    (signal 'query-builder-error '("Current buffer doesn’t have a saved initial query (‘query-builder--initial-query’)")))
+  (unless query-builder--initial-body
+    (signal 'query-builder-error '("Current buffer doesn’t have a saved initial query (‘query-builder--initial-body’)")))
 
-  (setf (alist-get (list query-builder--endpoint query-builder--initial-query)
+  (setf (alist-get (list query-builder--endpoint query-builder--initial-body)
                    query-builder--data-store nil t #'equal)
         query-builder--ui-state))
 
@@ -839,16 +839,10 @@ This function is supposed to be called by
                                                 (cons 'buffer buf)
                                                 (cons 'point pos)))
     (when (and body (not (equal body "")))
-      (let* ((json-object (json-parse-string body :object-type 'alist))
-             (query-string (string-trim (alist-get 'query json-object)))
-             (ui-state (and query-string
-                            (alist-get (list url query-string)
-                                       query-builder--data-store
-                                       nil t #'equal))))
-        (unless query-string
-          (signal 'query-builder-parse-error
-                  '("Can’t find “query” field in the body")))
-        (setq query-builder--initial-query query-string)
+      (let ((ui-state (alist-get (list url (string-trim body))
+                                 query-builder--data-store
+                                 nil t #'equal)))
+        (setq query-builder--initial-body body)
         (if (null ui-state)
             (message "Can’t resume the query, query builder can only resume query built by itself, it can’t parse an existing query")
           (setq query-builder--ui-state ui-state)
@@ -873,12 +867,15 @@ And quit the query builder."
                          (query-builder--construct-query-object
                           (query-builder--get-all-marked-field-paths
                            query-builder--ui-state)
+                          (query-builder--get-all-marked-arg-values
+                           query-builder--ui-state)
                           nil))
                         " }"))
          (new-body (json-serialize `((query . ,query)) )))
-    (setf (alist-get (list query-builder--endpoint query-builder--initial-query)
+    (setf (alist-get (list query-builder--endpoint (string-trim new-body))
                      query-builder--data-store nil t #'equal)
           query-builder--ui-state)
+    (query-builder--save-data-store)
     (when buffer
       (with-current-buffer buffer
         (goto-char pos)
@@ -890,7 +887,7 @@ And quit the query builder."
 
           (unless (search-forward body nil t)
             (signal 'query-builder-error '("Can’t find the original request body")))
-          (replace-match new-body)
+          (replace-match new-body t t)
           (insert "\n")))))
 
   (when query-builder--orig-window-config

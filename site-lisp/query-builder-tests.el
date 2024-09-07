@@ -41,30 +41,68 @@
                        ("types" "chart" "feed")
                        ("events" "feed" "feed")
                        ("uuid" "events" "feed" "feed"))))
-    (should (equal (query-builder--construct-query-object field-paths nil)
-                   '(("alerts" ("alerts" ("alertName")))
-                     ("books" ("author"))
-                     ("feed"
-                      ("feed" ("events" ("uuid")))
-                      ("chart" ("types"))))))))
+    (should (equal (query-builder--construct-query-object field-paths nil nil)
+                   '(( :name "alerts"
+                       :fields (( :name "alerts"
+                                  :fields (( :name "alertName"
+                                             :fields nil
+                                             :args nil))
+                                  :args nil))
+                       :args nil)
+                     ( :name "books"
+                       :fields (( :name "author"
+                                  :fields nil
+                                  :args nil))
+                       :args nil)
+                     ( :name "feed"
+                       :fields (( :name "feed"
+                                  :fields (( :name "events"
+                                             :fields (( :name "uuid"
+                                                        :fields nil
+                                                        :args nil))
+                                             :args nil))
+                                  :args nil)
+                                ( :name "chart"
+                                  :fields (( :name "types"
+                                             :fields nil
+                                             :args nil))
+                                  :args nil))
+                       :args nil))))))
 
 (ert-deftest query-builder-serialize ()
   "Test for query serializer."
-  (should (equal (query-builder--serialize-query-object
-                  '(("alerts" ("alerts" ("alertName")))
-                    ("books" ("author"))
-                    ("feed"
-                     ("feed" ("events" ("uuid")))
-                     ("chart" ("types")))))
-                 "alerts { alerts { alertName } } books { author } feed { feed { events { uuid } } chart { types } }"))
-  (should (equal (query-builder--serialize-query-object
-                  '(("alerts" ("alerts" ("alertName")))
-                    ("books" ("author"))
-                    ("feed"
-                     ("feed" ("events" ("uuid")))
-                     ("chart" ("types"))))
-                  0)
-                 "alerts {
+  (let ((query-object '(( :name "alerts"
+                          :fields (( :name "alerts"
+                                     :fields (( :name "alertName"
+                                                :fields nil
+                                                :args nil))
+                                     :args nil))
+                          :args nil)
+                        ( :name "books"
+                          :fields (( :name "author"
+                                     :fields nil
+                                     :args nil))
+                          :args nil)
+                        ( :name "feed"
+                          :fields (( :name "feed"
+                                     :fields (( :name "events"
+                                                :fields (( :name "uuid"
+                                                           :fields nil
+                                                           :args nil))
+                                                :args nil))
+                                     :args nil)
+                                   ( :name "chart"
+                                     :fields (( :name "types"
+                                                :fields nil
+                                                :args nil))
+                                     :args nil))
+                          :args nil))))
+    (should (equal (query-builder--serialize-query-object query-object)
+                   "alerts { alerts { alertName } } books { author } feed { feed { events { uuid } } chart { types } }"))
+
+
+    (should (equal (query-builder--serialize-query-object query-object 0)
+                   "alerts {
   alerts {
     alertName
   }
@@ -82,7 +120,7 @@ feed {
     types
   }
 }
-")))
+"))))
 
 (ert-deftest query-builder--construct-query-object-with-args ()
   "Test constructing query object with args mixed in."
