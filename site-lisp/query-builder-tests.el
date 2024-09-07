@@ -28,7 +28,7 @@
   (should (equal (query-builder--alist-get nil '((a . ((b . ((c . 1)))))))
                  '((a . ((b . ((c . 1)))))))))
 
-(ert-deftest query-builder-build-queriy-object ()
+(ert-deftest query-builder-build-query-object ()
   "Test for building query."
   (let ((field-paths '(("alerts")
                        ("alerts" "alerts")
@@ -158,11 +158,17 @@ feed {
 (ert-deftest query-builder--serialize-query-with-args ()
   "Test serializing queries with args."
   (should (equal (query-builder--serialize-query-object
-                  '( :name "filter"
-                     :fields (( :name "crqNumber"
-                                :val "aaabbb")
-                              ( :name "crqStatus"
-                                :val "bbbccc")))
+                  '(( :name "feed"
+                      :fields (( :name "feed"
+                                 :fields (( :name "offset"
+                                            :fields nil
+                                            :args nil))
+                                 :args (( :name "filter"
+                                          :fields (( :name "crqNumber"
+                                                     :val "aaabbb")
+                                                   ( :name "crqStatus"
+                                                     :val "bbbccc"))))))
+                      :args nil))
                   0)
                  "feed {
   feed(filter: { crqNumber: \"aaabbb\", crqStatus: \"bbbccc\" }) {
