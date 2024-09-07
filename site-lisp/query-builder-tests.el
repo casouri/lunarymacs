@@ -84,4 +84,53 @@ feed {
 }
 ")))
 
+(ert-deftest query-builder--construct-query-object-with-args ()
+  "Test constructing query object with args mixed in."
+  (let ((field-paths '(("feed") ("feed" "feed") ("offset" "feed" "feed")))
+        (args '(( :path ("filter" "feed" "feed")
+                  :arg-val nil)
+                ( :path ("crqNumber" "filter" "feed" "feed")
+                  :arg-val "aaabbb")
+                ( :path ("crqStatus" "filter" "feed" "feed")
+                  :arg-val "bbbccc"))))
+    (should (equal (query-builder--construct-query-object
+                    field-paths arg-values nil)
+                   '(( :name "feed"
+                       :fields (( :name "feed"
+                                  :fields (( :name "offset"
+                                             :fields nil
+                                             :args nil))
+                                  :args (( :name "filter"
+                                           :fields (( :name "crqNumber"
+                                                      :val "aaabbb")
+                                                    ( :name "crqStatus"
+                                                      :val "bbbccc"))))))
+                       :args nil))))))
+
+(ert-deftest query-builder--serialize-arg ()
+  "Test serializing arg object."
+  (should (equal (query-builder--serialize-arg-object
+                  '( :name "filter"
+                     :fields (( :name "crqNumber"
+                                :val "aaabbb")
+                              ( :name "crqStatus"
+                                :val "bbbccc"))))
+                 "filter: { crqNumber: \"aaabbb\", crqStatus: \"bbbccc\" }")))
+
+(ert-deftest query-builder--serialize-query-with-args ()
+  "Test serializing queries with args."
+  (should (equal (query-builder--serialize-query-object
+                  '( :name "filter"
+                     :fields (( :name "crqNumber"
+                                :val "aaabbb")
+                              ( :name "crqStatus"
+                                :val "bbbccc")))
+                  0)
+                 "feed {
+  feed(filter: { crqNumber: \"aaabbb\", crqStatus: \"bbbccc\" }) {
+    offset
+  }
+}
+")))
+
 ;;; query-builder-tests.el ends here

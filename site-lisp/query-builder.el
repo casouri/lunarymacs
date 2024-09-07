@@ -17,23 +17,29 @@
 (defgroup query-builder nil
   "GraphQL query builder.")
 
-(defface query-builder-field-name-face
+(defface query-builder-field-name
   (let ((display t)
-        (atts '(:family "SF Pro Text" :height 1.2)))
+        (atts nil))
     `((,display . ,atts)))
   "Face for the name of each field in a query.")
 
-(defface query-builder-marked-field-name-face
+(defface query-builder-marked-field-name
   (let ((display t)
-        (atts '(:inherit query-builder-field-name-face :weight bold)))
+        (atts '(:inherit query-builder-field-name :weight bold)))
     `((,display . ,atts)))
   "Face for the name of a marked field in a query.")
 
-(defface query-builder-field-type-face
+(defface query-builder-field-type
   (let ((display t)
         (atts '(:inherit shadow)))
     `((,display . ,atts)))
   "Face for the type shown after each field.")
+
+(defface query-builder-arg-marker
+  (let ((display t)
+        (atts '(:inherit warning)))
+    `((,display . ,atts)))
+  "Face for the ARG marker in front of a arg for a field.")
 
 (defvar query-builder-marker-marked "[*] "
   "A string used to mark a marked field.")
@@ -43,7 +49,7 @@
 
 (defvar query-builder-query-and-mutation-query
   "
-query Introspect {
+query QueryAndMutation {
     __schema {
         queryType {
             name
@@ -53,7 +59,21 @@ query Introspect {
         }
         types {
             name
+            inputFields {
+                name
+                type {
+                    ...TypeRef
+                }
+            }
             fields(includeDeprecated: true) {
+                args {
+                    name
+                    type {
+                        name
+                        kind
+                        ...TypeRef
+                    }
+                }
                 name
                 isDeprecated
                 type {
@@ -62,26 +82,28 @@ query Introspect {
                     ofType {
                         name
                         kind
-                        ofType {
-                            name
-                            kind
-                            ofType {
-                                name
-                                kind
-                                ofType {
-                                    name
-                                    kind
-                                }
-                            }
-                        }
+                        ...TypeRef
                     }
                 }
             }
         }
     }
-    overview {
-        popId
-        popName
+}
+
+fragment TypeRef on __Type {
+    kind
+    name
+    ofType {
+        kind
+        name
+        ofType {
+            kind
+            name
+            ofType {
+                kind
+                name
+            }
+        }
     }
 }
 "
@@ -139,9 +161,11 @@ chain is nil, return ALIST."
 
 ;;;; Retreiving and inspecting schema
 ;;
-;; FIELD := (Field FIELD-NAME FIELD-TYPE)
+;; FIELD := (Field FIELD-NAME FIELD-TYPE ARGS)
 ;; FIELD-NAME := <string>
 ;; FIELD-TYPE := (Type <string>) | (List FIELD-TYPE) | (Non-null FIELD-TYPE)
+;; ARGS := [INPUT-FIELD]
+;; INPUT-FIELD := (InputField FIELD-NAME FIELD-TYPE)
 ;;
 ;; Notes:
 ;;
@@ -183,9 +207,18 @@ TYPE is a JSON object from the schema."
                      (alist-get 'ofType type))))
     ("NON_NULL" `(Non-null ,(query-builder--decode-type
                              (alist-get 'ofType type))))
-    ((or "OBJECT" "SCALAR" "ENUM" "UNION" "INTERFACE") (alist-get 'name type))
+    ((or "OBJECT" "INPUT_OBJECT" "SCALAR" "ENUM" "UNION" "INTERFACE")
+     (alist-get 'name type))
     (kind (signal 'query-builder-schema-error
                   (list "Unexpected kind of a type" kind type)))))
+
+(defun query-builder--check-type (type target)
+  "Return t if TYPE is a TARGET type.
+TARGET can be \"String\", \"Int\", or \"Boolean\"."
+  (pcase type
+    ((pred stringp) (equal type target))
+    (`(List ,inner-type) (query-builder--type-string-p inner-type))
+    (`(Non-null ,inner-type) (query-builder--type-string-p inner-type))))
 
 (defun query-builder--get-schema (url &optional headers)
   "Reuturn the schema at URL as a JSON object.
@@ -213,66 +246,82 @@ Return each query in the form of (Field FIELD-NAME FIELD-TYPE)."
          (query-builder--alist-get '(data __schema queryType name) schema)))
     (query-builder--get-fields-for-type schema query-type-name)))
 
-(defun query-builder--get-fields-for-type (schema type-name)
+(defun query-builder--make-field (field)
+  "Createa a (Field FIELD-NAME FIELD-TYPE ARGS) from FIELD.
+FIELD is an alist with ‘name’, ‘type’ as its keys."
+  (let* ((name (query-builder--alist-get '(name) field))
+         (type (query-builder--decode-type
+                (query-builder--alist-get '(type) field)))
+         (args (query-builder--alist-get '(args) field)))
+    `(Field ,name ,type ,(when args
+                           (mapcar #'query-builder--make-field args)))))
+
+(defun query-builder--get-fields-for-type
+    (schema type-name &optional input-fields)
   "Get the list of fields for TYPE-NAME in SCHEMA.
 
 SCHEMA is a JSON object returned from ‘queery-builder--get-schema’.
-Return each field in the form of (Field FIELD-NAME FIELD-TYPE)."
+Return each field in the form of (Field FIELD-NAME FIELD-TYPE).
+
+If input-fields is non-nil, get input fields instead."
   (let* ((type-obj
           (seq-find (lambda (type)
                       (equal (query-builder--alist-get '(name) type)
                              type-name))
                     (query-builder--alist-get '(data __schema types) schema)))
-         (fields (query-builder--alist-get '(fields) type-obj)))
-    (seq-map
-     (lambda (field)
-       (let ((name (query-builder--alist-get '(name) field))
-             (type (query-builder--decode-type
-                    (query-builder--alist-get '(type) field))))
-         `(Field ,name ,type)))
-     fields)))
+         (fields (query-builder--alist-get (if input-fields '(inputFields)
+                                             '(fields))
+                                           type-obj)))
+    (seq-map #'query-builder--make-field fields)))
 
 ;;;; Building query
 
 (defun query-builder--get-all-marked-field-paths (ui-state)
   "Get all the field paths that are marked in UI-STATE.
 
-;; Reverse every field path so the root field comes first, and sort field
-;; paths so shorter field paths comes first, and field paths with the same
-;; prefix stays together.
-"
+Return a list of field paths, each field path is like (FIELD-NAME ...),
+eg, (\"A\" \"B\")."
   (let (results)
     (pcase-dolist (`(,field-path . ,states) ui-state)
       (when (alist-get 'marked states)
         (push field-path results)))
-    results
-    ;; (seq-sort (lambda (path-a path-b)
-    ;;             (if (< (length path-a) (length path-b))
-    ;;                 t
-    ;;               (catch 'less
-    ;;                 (dolist (zip (cl-mapcar #'cons path-a path-b))
-    ;;                   (when (not (equal (car zip) (cdr zip)))
-    ;;                     (throw 'less (string< (car zip) (cdr zip))))))))
-    ;;           (seq-map #'reverse results))
-    ))
+    results))
 
-(defun query-builder--construct-query-object (field-paths suffix)
-  "Build a JSON object out of FIELD-PATHS.
-Return a JSON object made of all the field paths that ends with
-SUFFIX.
+(defun query-builder--get-all-marked-arg-values (ui-state)
+  "Get all the arg values with their field path that are marked in UI-STATE.
+Return a list of (:path FIELD-PATH :arg-val VALUE). Value of :arg-val
+could be nil if the field path is of an input that is an input object."
+  (let (results)
+    (pcase-dolist (`(,field-path . ,states) ui-state)
+      (when (alist-get 'arg-marked states)
+        (push `(:path ,field-path :arg-val ,(alist-get 'arg-val states))
+              results)))
+    results))
+
+(defun query-builder--construct-query-object (field-paths args root)
+  "Build a JSON object rooted ar ROOT from FIELD-PATHS.
+
+ROOT is a field-path, we want to construct a subgraph rooted at the
+field that ROOT represents.
+
+ARGS is a list of (:path FIELD-PATH :arg-val VAL).
 
 FIELD-PATHS: (\"A\") (\"B\" \"A\") (\"C\" \"A\") (\"D\")
-Return: JSON object that encodes { A: { B: nil, C: nil }, D: nil }"
+Return: JSON object that encodes { A: { B: nil, C: nil }, D: nil }
+
+Reuturn a plist (:name FIELD-NAME :fields FIELDS-OF-FIELD :args
+ARGS-OF-FIELD), where FIELDS-OF-FIELD is a list of the above plist.
+ARGS-OF-FIELD is a list of (:name ARG-NAME :fields FIELDS-OF-ARG),
+or (:name ARG-NAME :val ARG-VAL) if the arg is a leaf arg."
   ;; TODO: Stratify FIELD-PATHS by length.
-  (let* ((suffix-len (if suffix (length suffix) 0))
-         (field (car suffix))
+  (let* ((root-len (if root (length root) 0))
+         (field-name (car root))
          (immediate-children
-          (if (eq suffix-len 0)
+          (if (eq root-len 0)
               (seq-filter (lambda (field-path) (eq (length field-path) 1))
                           field-paths)
             (seq-filter (lambda (field-path)
-                          (and (eq (length field-path) (1+ suffix-len))
-                               (equal (cdr field-path) suffix)))
+                          (equal (cdr field-path) root))
                         field-paths)))
          ;; If there’s no immediate children, SUBGRAPHS would be nil,
          ;; if there are, SUBGRAPHS will be an alist, where each
@@ -280,9 +329,49 @@ Return: JSON object that encodes { A: { B: nil, C: nil }, D: nil }"
          ;; values.
          (subgraphs (mapcar (lambda (child)
                               (query-builder--construct-query-object
-                               field-paths child))
+                               field-paths args child))
+                            immediate-children))
+         ;; Does this field has args? If it does, construct the arg
+         ;; object.
+         (args-of-this-field (seq-filter (lambda (arg)
+                                           (equal (cdr (plist-get arg :path))
+                                                  root))
+                                         args))
+         (arg-objects (mapcar (lambda (arg)
+                                (query-builder--construct-args-object
+                                 args arg))
+                              args-of-this-field)))
+    (if field-name
+        (list :name field-name :fields subgraphs :args arg-objects)
+      subgraphs)))
+
+(defun query-builder--construct-args-object (args root)
+  "Construct a JSON object rooted at ROOT from ARGS.
+
+ROOT has the form (:path FIELD-PATH :arg-val VAL).
+
+Similar to ‘query-builder--construct-query-object’, this function builds
+a subgraph for ROOT, but for args.
+
+Return (:name ARG-NAME :fields SUBGRAPH), where SUBGRAPH is an alist
+of (:name ARG-NAME :fields SUBGRAPH), or for leaf args, (:name ARG-NAME
+:val ARG-VAL)."
+  (let* ((root-path (plist-get root :path))
+         (root-len (length root-path))
+         (root-arg-name (car root-path))
+         (immediate-children
+          ;; ARG = (:path FIELD-PATH :arg-val VAL)
+          (seq-filter (lambda (arg)
+                        (equal (cdr (plist-get arg :path)) root-path))
+                      args))
+         ;; CHILD = (:path FIELD-PATH :arg-val VAL)
+         (subgraphs (mapcar (lambda (child)
+                              (query-builder--construct-args-object
+                               args child))
                             immediate-children)))
-    (if field (cons field subgraphs) subgraphs)))
+    (if subgraphs
+        (list :name root-arg-name :fields subgraphs)
+      (list :name root-arg-name :val (plist-get root :arg-val)))))
 
 (defun query-builder--serialize-query-object (query-object &optional indent)
   "Serialize QUERY-OBJECT to a GraphQL query string.
@@ -291,23 +380,64 @@ If INDENT is non-nil, it should be the indent level, a number, and this
 function will pretty print the query."
   (let ((indent-string (if indent (make-string (* 2 indent) ?\s) nil)))
     (string-join
-     (mapcar (lambda (child)
-               (let ((name (car child))
-                     (sub-fields (cdr child)))
-                 (if sub-fields
-                     (if indent-string
-                         (concat indent-string name " {\n"
-                                 (query-builder--serialize-query-object
-                                  sub-fields (and indent (1+ indent)))
-                                 indent-string "}\n")
-                       (format "%s { %s }" name
-                               (query-builder--serialize-query-object
-                                sub-fields)))
-                   (if indent-string
-                       (concat indent-string name "\n")
-                     name))))
-             query-object)
+     (mapcar
+      (lambda (child)
+        (let* ((name (plist-get child :name))
+               (sub-fields (plist-get child :fields))
+               (args (plist-get child :args))
+               (serialized-args
+                (if args
+                    (concat
+                     "("
+                     (string-join
+                      (mapcar #'query-builder--serialize-arg-object args)
+                      ", ")
+                     ")")
+                  "")))
+          (if sub-fields
+              (if indent-string
+                  (concat indent-string name serialized-args " {\n"
+                          (query-builder--serialize-query-object
+                           sub-fields (and indent (1+ indent)))
+                          indent-string "}\n")
+                (format "%s%s { %s }"
+                        name
+                        serialized-args
+                        (query-builder--serialize-query-object
+                         sub-fields)))
+            (if indent-string
+                (concat indent-string name "\n")
+              name))))
+      query-object)
      (if indent nil " "))))
+
+(defun query-builder--serialize-arg-object (arg-object)
+  "Serialize ARG-OBJECT to a GraphQL arg.
+
+ARG-OBJECT should has the form of (:name ARG-NAME :fields ARG-FIELDS)
+or (:name ARG-NAME :val ARG-VAL). ARG-FIELDS has the same form as
+ARG-OBJECT.
+
+Return a string that looks like “NAME: VAL”."
+  (let* ((fields (plist-get arg-object :fields))
+         (serialized-fields (when fields
+                              (concat "{ "
+                                      (string-join
+                                       (mapcar #'query-builder--serialize-arg-object
+                                               fields)
+                                       ", ")
+                                      " }")))
+         (val (plist-get arg-object :val))
+         (serialized-val (when val
+                           (pcase val
+                             ('t "true")
+                             (':false "false")
+                             ((pred numberp) (number-to-string val))
+                             ((pred stringp) (format "\"%s\"" val))
+                             (_ (signal 'query-builder-serialize-error
+                                        `("Unrecognized arg value" ,val)))))))
+    (format "%s: %s" (plist-get arg-object :name)
+            (or serialized-fields serialized-val))))
 
 ;;;; UI: drawing UI, toggling fields
 
@@ -360,48 +490,66 @@ FIELDS and PARENT-FIELD-PATH are the same as in
                  (t (string< (nth 1 a) (nth 1 b))))))
             fields))
 
-(defun query-builder--insert-fields (fields indent-level parent-field-path)
+(defun query-builder--insert-fields
+    (fields indent-level parent-field-path &optional arg-p)
   "Insert FIELDS at point.
 Each field in FIELDS should be for the form
 
-    (Field FIELD-NAME FIELD-TYPE)
+    (Field FIELD-NAME FIELD-TYPE ARGS)
 
 INDENT-LEVEL is the nesting level of the fields. PARENT-FIELD-PATH is the
 field path to the parent of fields. It’s used for constructing the field
 path of each field in FIELDS. Specifically, each fields field path
-is (cons FIELD-NAME PARENT-FIELED-PATH)."
-  (pcase-dolist (`(Field ,name ,type)
+is (cons FIELD-NAME PARENT-FIELED-PATH).
+
+If ARG-P is non-nil, FIELDS are actually args, insert ARG marker in
+front of each field."
+  (pcase-dolist (`(Field ,name ,type ,args)
                  (query-builder--sort-by-marked fields parent-field-path))
     (let* ((field-path (cons name parent-field-path))
-           (marked (query-builder--get-state field-path 'marked)))
+           (marked (if arg-p
+                       (query-builder--get-state field-path 'arg-marked)
+                     (query-builder--get-state field-path 'marked)))
+           (arg-val (and arg-p
+                         (query-builder--get-state field-path 'arg-val))))
       (insert (propertize
                (concat
                 (make-string (* 2 indent-level) ?\s)
                 (if marked
                     query-builder-marker-marked
                   query-builder-marker-unmarked)
+                (if arg-p
+                    (propertize "ARG " 'face 'query-builder-arg-marker)
+                  "")
                 (propertize (or name "N/A")
                             'face (if marked
-                                      'query-builder-marked-field-name-face
-                                    'query-builder-field-name-face))
+                                      'query-builder-marked-field-name
+                                    'query-builder-field-name))
                 " "
                 (propertize (query-builder--render-type (or type "N/A"))
-                            'face 'query-builder-field-type-face))
+                            'face 'query-builder-field-type)
+                (if arg-val (query-builder--format-arg-val arg-val) ""))
                'query-builder-field-path field-path
                'query-builder-field-name name
                'query-builder-field-type type
                'query-builder-indent-level indent-level
+               'query-builder-arg-p arg-p
+               'query-builder-args args
                'keymap query-builder-field-map)
               "\n")
       ;; Insert subfields if this field is expanded.
       (when (and query-builder--schema
-                 (query-builder--get-state field-path 'expanded))
+                 (query-builder--get-state field-path
+                                           (if arg-p 'arg-expanded 'expanded)))
+        ;; Insert args.
+        (query-builder--insert-fields args (1+ indent-level) field-path t)
+        ;; Insert subfields.
         (query-builder--insert-fields
          (query-builder--get-fields-for-type
           query-builder--schema
-          (query-builder--render-type type t))
+          (query-builder--render-type type t) arg-p)
          (1+ indent-level)
-         field-path)))))
+         field-path arg-p)))))
 
 (defun query-builder--remove-fields-after-point (indent-level)
   "Remove fields after point that has an indent-level higher than INDENT-LEVEL.
@@ -423,33 +571,43 @@ current line satisfies the requirement."
 If FLAG is 1 or -1, expand or collapse regardless of current expansion
 state."
   (interactive)
-  (let ((inhibit-read-only t)
-        (orig-point (point))
-        (flag (or flag 0)))
-    (let ((expanded (query-builder--get-state-at-point 'expanded))
-          (indent-level (get-text-property (point) 'query-builder-indent-level))
-          (field-type (query-builder--render-type
-                       (get-text-property (point) 'query-builder-field-type)
-                       t))
-          (field-path (get-text-property (point) 'query-builder-field-path)))
-      (when (or (< flag 0)
-                (and (eq flag 0) expanded))
-        (query-builder--set-state-at-point 'expanded nil)
-        (when indent-level
-          (query-builder--remove-fields-after-point indent-level)))
-      (when (or (> flag 0)
-                (and (eq flag 0) (not expanded)))
-        (query-builder--set-state-at-point 'expanded t)
-        (when (and indent-level field-path field-type query-builder--schema)
-          (let ((fields (query-builder--get-fields-for-type
-                         query-builder--schema field-type)))
-            ;; Only show message when this command is called
-            ;; interactively.
-            (when (and (eq flag 0) (null fields))
-              (message "Can’t find any fields for %s" field-type))
-            (forward-line 1)
-            (query-builder--insert-fields
-             fields (1+ indent-level) field-path)))))
+  (let* ((inhibit-read-only t)
+         (orig-point (point))
+         (flag (or flag 0))
+         (arg-p (get-text-property (point) 'query-builder-arg-p))
+         (args (get-text-property (point) 'query-builder-args))
+         (expanded (query-builder--get-state-at-point
+                    (if arg-p 'arg-expanded 'expanded)))
+         (indent-level (get-text-property (point) 'query-builder-indent-level))
+         (field-type (query-builder--render-type
+                      (get-text-property (point) 'query-builder-field-type)
+                      t))
+         (field-path (get-text-property (point) 'query-builder-field-path)))
+    ;; Collapse.
+    (when (or (< flag 0)
+              (and (eq flag 0) expanded))
+      (query-builder--set-state-at-point (if arg-p 'arg-expanded 'expanded) nil)
+      (when indent-level
+        (query-builder--remove-fields-after-point indent-level)))
+    ;; Expand.
+    (when (or (> flag 0)
+              (and (eq flag 0) (not expanded)))
+      (query-builder--set-state-at-point (if arg-p 'arg-expanded 'expanded) t)
+      (when (and indent-level field-path field-type query-builder--schema)
+        (let ((fields (query-builder--get-fields-for-type
+                       query-builder--schema field-type arg-p)))
+          ;; Only show message when this command is called
+          ;; interactively.
+          (when (and (eq flag 0) (null fields))
+            (message "Can’t find any fields for %s" field-type))
+          (forward-line 1)
+          ;; Insert args.
+          (query-builder--insert-fields
+           args (1+ indent-level) field-path t)
+          ;; Insert fields, if this field is an arg, then its fielld
+          ;; must be args too.
+          (query-builder--insert-fields
+           fields (1+ indent-level) field-path arg-p))))
     (goto-char orig-point)))
 
 ;; If a field is marked, it will be included in the final query that
@@ -459,21 +617,23 @@ state."
   "Mark the field at point."
   (interactive)
   (save-excursion
-    (let ((marked (query-builder--get-state-at-point 'marked))
-          (inhibit-read-only t)
-          (props nil))
+    (let* ((arg-p (get-text-property (point) 'query-builder-arg-p))
+           (marked (query-builder--get-state-at-point
+                    (if arg-p 'arg-marked 'marked)))
+           (inhibit-read-only t)
+           (props nil))
       (when (not marked)
-        (query-builder--set-state-at-point 'marked t)
+        (query-builder--set-state-at-point (if arg-p 'arg-marked 'marked) t)
         (forward-line 0)
         (setq props (text-properties-at (point)))
         (when (search-forward query-builder-marker-unmarked nil t)
           (replace-match (apply #'propertize query-builder-marker-marked
                                 props)))
         (when-let ((match (text-property-search-forward
-                           'face 'query-builder-field-name-face #'eq)))
+                           'face 'query-builder-field-name #'eq)))
           (put-text-property (prop-match-beginning match)
                              (prop-match-end match)
-                             'face 'query-builder-marked-field-name-face))))
+                             'face 'query-builder-marked-field-name))))
     (query-builder-toggle-expanded 1))
   (forward-line 1))
 
@@ -481,22 +641,74 @@ state."
   "Unmark the field at point."
   (interactive)
   (save-excursion
-    (let ((marked (query-builder--get-state-at-point 'marked))
-          (inhibit-read-only t)
-          (props nil))
+    (let* ((arg-p (get-text-property (point) 'query-builder-arg-p))
+           (marked (query-builder--get-state-at-point
+                    (if arg-p 'arg-marked 'marked)))
+           (inhibit-read-only t)
+           (props nil))
       (when marked
-        (query-builder--set-state-at-point 'marked nil)
+        (query-builder--set-state-at-point (if arg-p 'arg-marked 'marked) nil)
+        (when arg-p
+          (query-builder--set-state-at-point 'arg-val nil))
         (forward-line 0)
         (setq props (text-properties-at (point)))
         (when (search-forward query-builder-marker-marked nil t)
           (replace-match (apply #'propertize query-builder-marker-unmarked
                                 props)))
         (when-let ((match (text-property-search-forward
-                           'face 'query-builder-marked-field-name-face #'eq)))
+                           'face 'query-builder-marked-field-name #'eq)))
           (put-text-property (prop-match-beginning match)
                              (prop-match-end match)
-                             'face 'query-builder-field-name-face)))))
+                             'face 'query-builder-field-name))
+        (when-let ((match (text-property-search-forward
+                           'face 'query-builder-field-type #'eq)))
+          (delete-region (prop-match-end match) (pos-eol))))))
   (forward-line 1))
+
+(defsubst query-builder--format-arg-val (val)
+  "Format value of an arg, VAL.
+VAL can be a string, a number, t, or :false."
+  (format " [%s]" (pcase val
+                    ('t "true")
+                    (':false "false")
+                    (_ val))))
+
+(defun query-builder-set-arg ()
+  "Set the value for the arg at point."
+  (interactive)
+  (save-excursion
+    (let* ((arg-p (get-text-property (point) 'query-builder-arg-p))
+           (type (get-text-property (point) 'query-builder-field-type))
+           (inhibit-read-only t)
+           (props nil)
+           (old-val (query-builder--get-state-at-point 'arg-val)))
+      (when arg-p
+        (if (not (string-match-p (rx bos
+                                     (or "String" "Int" "Boolean" "Float" "ID")
+                                     (* "!")
+                                     eos)
+                                 (query-builder--render-type type)))
+            (message "Editing %s is not supported"
+                     (query-builder--render-type type))
+          (let* ((val (pcase (query-builder--render-type type t)
+                        ((or "String" "ID") (read-string "Value: " old-val))
+                        ((or "Int" "Float") (string-to-number
+                                             (read-string "Value: ") old-val))
+                        ("Boolean" (let ((val (completing-read
+                                               "Value: "
+                                               '("true" "false") nil t
+                                               (pcase old-val
+                                                 ('t "true")
+                                                 (':false "false")))))
+                                     (if (equal val "true") t :false))))))
+            (query-builder--set-state-at-point 'arg-val val)
+            (forward-line 0)
+            (setq props (text-properties-at (point)))
+            (when-let ((match (text-property-search-forward
+                               'face 'query-builder-field-type #'eq)))
+              (delete-region (prop-match-end match) (pos-eol))
+              (insert (apply #'propertize (query-builder--format-arg-val val)
+                             props)))))))))
 
 (defun query-builder-toggle-marked-all ()
   "Mark/unmark all the fields under this field."
@@ -509,6 +721,8 @@ state."
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "g") #'query-builder-refresh)
     (define-key map (kbd "r") #'query-builder-reorder)
+    (define-key map (kbd "C-c C-c") #'query-builder-save-and-quit)
+    (define-key map (kbd "v") #'query-builder-set-arg)
     map)
   "Mode map for ‘query-builder-mode’.")
 
