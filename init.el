@@ -74,18 +74,18 @@
 ;;;; Font
   (when (display-graphic-p)
     (luna-enable-apple-emoji)
-    (luna-load-font 'default "IBM Plex Mono" 13 :weight 'medium)
-    (luna-load-font 'fixed-pitch "IBM Plex Mono" 13 :weight 'medium)
+    (luna-load-font 'default "Cascadia" 14)
+    (luna-load-font 'fixed-pitch "Cascadia" 14)
     (luna-load-font 'variable-pitch "Academica" 16)
-    (luna-load-font 'fixed-pitch-serif "IBM Plex Mono" 13)
-    (luna-load-font 'mode-line "SF Pro Text" 12 :weight 'regular :height 125)
+    (luna-load-font 'fixed-pitch-serif "Cascadia" 14)
+    (luna-load-font 'mode-line "Arial" 12 :weight 'regular :height 125)
     (with-eval-after-load 'shortdoc
-      (luna-load-font 'shortdoc-section "IBM Plex Sans" 13
+      (luna-load-font 'shortdoc-section "Arial" 13
                       :weight 'medium :height 150))
     (add-hook 'luna-load-theme-hook
               (lambda ()
-                (luna-load-font 'mode-line "IBM Plex Sans" 13
-                                :weight 'regular :height 140))))
+                (luna-load-font 'mode-line "Arial" 12
+                                :weight 'regular :height 125))))
 ;;;; Frame
   (when (display-graphic-p)
     (set-frame-width (selected-frame) 150)
@@ -145,7 +145,7 @@
 
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
-               '((c-ts-mode c++-ts-mode) "ccls-clang-10"))
+               '((c-ts-mode c++-ts-mode) "ccls-clang-14"))
   (add-to-list 'eglot-server-programs
                '((js-ts-mode typescript-ts-mode)
                  "typescript-language-server" "--stdio")))
@@ -155,10 +155,10 @@
 (add-hook 'css-ts-mode-hook 'ts-css-setup)
 
 (defun general-ts-mode-setup ()
-  (treesit-font-lock-recompute-features
-   nil
-   '(property bracket delimiter operator variable function))
-  (when (derived-mode-p '(css-ts-mode tsx-ts-mode))
+  ;; (treesit-font-lock-recompute-features
+  ;;  nil
+  ;;  '(property bracket delimiter operator variable function error))
+  (when (derived-mode-p 'css-ts-mode)
     (treesit-font-lock-recompute-features
      '(property))))
 
@@ -173,3 +173,32 @@
 
 (defun ts-css-setup ()
   (treesit-font-lock-recompute-features '(property) '(variable function)))
+
+(defun luna-ts-largest-node-at-point ()
+  "Get the largest node that starts at point."
+  (let* ((node (treesit-node-at (point)))
+         (next (treesit-node-parent node)))
+    (while (and next (eq (point) (treesit-node-start next)))
+      (setq node next
+            next (treesit-node-parent next)))
+    node))
+
+(defun luna-ts-which-function-eldoc (&optional callback)
+  "Eldoc documentation function, shows function at point."
+  (when treesit-simple-imenu-settings
+    (let ((node (treesit-node-at (point)))
+          (stack nil))
+      (while node
+        (pcase-dolist (`(,category ,regexp ,pred ,name-fn)
+                       treesit-simple-imenu-settings)
+          (let ((matcher (if pred (cons regexp pred) regexp)))
+            (when (treesit-node-match-p node matcher)
+              (push (cons category
+                          (funcall (or name-fn #'treesit-defun-name) node))
+                    stack))))
+        (setq node (treesit-node-parent node)))
+      ;; Now STACK is a list of (CATEGORY . FUNC/CLASS/VAR-NAME).
+      (string-join (mapcar (lambda (level)
+                             (format "%s.%s" (car level) (cdr level)))
+                           stack)
+                   "\n"))))
