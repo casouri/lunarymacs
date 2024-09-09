@@ -4,6 +4,7 @@
  :leader
  "g"  '("git")
  "gs" #'magit-status
+ "gw" #'pick-magit-status
  "gf" '("file")
  "gfc" #'magit-file-checkout
  "gfl" #'magit-log-buffer-file
@@ -58,3 +59,16 @@
   (defalias 'github-link 'git-link)
   (defalias 'github-link-commit 'git-link-commit)
   (defalias 'github-link-homepage 'git-link-hoempage))
+
+(defun pick-magit-status ()
+  "Pick a currently open magit status buffer."
+  (interactive)
+  (require 'seq)
+  (let* ((buf-list
+          (mapcar #'buffer-name
+                  (seq-filter (lambda (buffer)
+                                (eq (buffer-local-value 'major-mode buffer)
+                                    'magit-status-mode))
+                              (buffer-list))))
+         (choice (completing-read "Pick: " buf-list nil t)))
+    (switch-to-buffer choice)))
