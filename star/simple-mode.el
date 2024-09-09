@@ -374,9 +374,7 @@ cp target/release/emacs-lsp-booster ~/bin")
                                    ,rust-analyzer-config)))
     (add-to-list 'eglot-server-programs
                  `((tsx-ts-mode typescript-ts-mode js-ts-mode)
-                   . ("typescript-language-server" "--stdio"
-                      :initializationOptions
-                      ,typescript-lsp-config))))
+                   . ("typescript-language-server" "--stdio"))))
 
   (defun setup-eglot ()
     "Setup for eglot."
