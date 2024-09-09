@@ -10,7 +10,9 @@
  "C-h o"   #'ghelp-describe-elisp
  "C-h f"   #'ghelp-describe-function
  "C-h v"   #'ghelp-describe-variable
- "C-h k"   #'ghelp-describe-key)
+ "C-h k"   #'ghelp-describe-key
+ :keymaps 'restclient-mode-map
+ "C-c C-e" #'restclient-query-builder)
 
 ;;; Package
 
@@ -113,10 +115,21 @@
 
 (load-package restclient
   :commands restclient-mode
-  :hook (restclient-mode-hook . color-outline-mode)
+  :hook
+  (restclient-mode-hook . color-outline-mode)
+  (restclient-mode-hook . restclient-setup)
   :config
   (set-face-attribute 'restclient-variable-name-face nil
-                      :inherit 'font-lock-type-face))
+                      :inherit 'font-lock-type-face)
+  (defun restclient-setup ()
+    "Setup restclient buffer."
+    (face-remap-set-base 'outline-1 '(:inherit shadow :height 1.4))
+    (face-remap-set-base 'outline-2 '(:inherit shadow :height 1.2))))
+
+(load-package company-restclient
+  :hook (restclient-mode-hook . company-mode)
+  :after restclient
+  :config (add-to-list 'company-backends 'company-restclient))
 
 (defun luna-customize-setup ()
   "Setup function for Customize."
