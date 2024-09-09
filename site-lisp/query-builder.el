@@ -831,18 +831,25 @@ This function is supposed to be called by
     (query-builder--load-data-store))
 
   (let ((buf (current-buffer))
-        (window-config (current-window-configuration)))
+        (window-config (current-window-configuration))
+        ;; This is a bit hacky, but it’s the only way to get the
+        ;; original body before restclient substitutes variables in
+        ;; it.
+        (unsubstituted-body
+         (let ((cmax (restclient-current-max)))
+           (restclient-parse-body
+            (buffer-substring (min (point) cmax) cmax) nil))))
 
     (query-builder url headers)
     (setq query-builder--orig-window-config window-config)
-    (setq query-builder--restclient-state (list (cons 'body body)
+    (setq query-builder--restclient-state (list (cons 'body unsubstituted-body)
                                                 (cons 'buffer buf)
                                                 (cons 'point pos)))
-    (when (and body (not (equal body "")))
-      (let ((ui-state (alist-get (list url (string-trim body))
+    (when (and unsubstituted-body (not (equal unsubstituted-body "")))
+      (let ((ui-state (alist-get (list url (string-trim unsubstituted-body))
                                  query-builder--data-store
                                  nil t #'equal)))
-        (setq query-builder--initial-body body)
+        (setq query-builder--initial-body (string-trim unsubstituted-body))
         (if (null ui-state)
             (message "Can’t resume the query, query builder can only resume query built by itself, it can’t parse an existing query")
           (setq query-builder--ui-state ui-state)
@@ -883,12 +890,17 @@ And quit the query builder."
         (if (or (null body) (equal body ""))
             (if (re-search-forward restclient-method-url-regexp (point-max) t)
                 (insert "\n\n" new-body)
-              (signal 'query-builder-error '("Can’t find the original request’s header")))
+              (signal 'query-builder-error '("Can’t find the original request header")))
 
-          (unless (search-forward body nil t)
-            (signal 'query-builder-error '("Can’t find the original request body")))
-          (replace-match new-body t t)
-          (insert "\n")))))
+          (if (search-forward body nil t)
+              (progn
+                (replace-match new-body t t)
+                (insert "\n"))
+            (if (yes-or-no-p "Can’t find the original request body, insert at the end? ")
+                (progn
+                  (goto-char (restclient-current-max))
+                  (insert new-body "\n"))
+              (signal 'query-builder-error '("Can’t find the original request body"))))))))
 
   (when query-builder--orig-window-config
     (set-window-configuration query-builder--orig-window-config)))
