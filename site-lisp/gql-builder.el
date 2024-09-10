@@ -13,6 +13,7 @@
 
 (require 'plz)
 (require 'url-parse)
+(require 'rx)
 
 (defgroup gql-builder nil
   "GraphQL query builder.")
@@ -121,9 +122,19 @@ In terms of JSON, (\"fieldB\" \"fieldA\") corresponds to
 
 {
   \"fieldA\": {
-    \"fieldB\": ...
+    \"fieldB\": <- This field.
   }
-}")
+}
+
+Right now we have the following state keys:
+- expanded: Whether the field is expanded.
+- arg-expanded: Whether the arg is expanded.
+- marked: Whether the field is marked.
+- arg-marked: Whether the arg is marked.
+- arv-val: Arg value for the arg.
+
+I’m not sure if fields and args can have the same name without conflict
+in GraphQL; just to be safe, I used different keys for fields and args.")
 
 (defsubst gql-builder--get-state (field-path key)
   "Get the value for the GraphQL field at FIELD-PATH.
@@ -450,7 +461,7 @@ Return a string that looks like “NAME: VAL”."
                              (_ (signal 'gql-builder-serialize-error
                                         `("Unrecognized arg value" ,val)))))))
     (format "%s: %s" (plist-get arg-object :name)
-            (or serialized-fields serialized-val))))
+            (or serialized-fields serialized-val "null"))))
 
 ;;;; UI: drawing UI, toggling fields
 
@@ -630,21 +641,8 @@ state."
     (when (or (> flag 0)
               (and (eq flag 0) (not expanded)))
       (gql-builder--set-state-at-point (if arg-p 'arg-expanded 'expanded) t)
-      (when (and indent-level field-path field-type gql-builder--schema)
-        (let ((fields (gql-builder--get-fields-for-type
-                       gql-builder--schema field-type arg-p)))
-          ;; Only show message when this command is called
-          ;; interactively.
-          (when (and (eq flag 0) (null fields))
-            (message "Can’t find any fields for %s" field-type))
-          (forward-line 1)
-          ;; Insert args.
-          (gql-builder--insert-fields
-           args (1+ indent-level) field-path t)
-          ;; Insert fields, if this field is an arg, then its fielld
-          ;; must be args too.
-          (gql-builder--insert-fields
-           fields (1+ indent-level) field-path arg-p))))
+      (let ((top-level-field-name (car (last field-path))))
+        (gql-builder--redraw-top-level-field top-level-field-name)))
     (goto-char orig-point)))
 
 ;; If a field is marked, it will be included in the final query that
@@ -653,25 +651,26 @@ state."
 (defun gql-builder-mark ()
   "Mark the field at point."
   (interactive)
-  (save-excursion
-    (let* ((arg-p (get-text-property (point) 'gql-builder-arg-p))
-           (marked (gql-builder--get-state-at-point
-                    (if arg-p 'arg-marked 'marked)))
-           (inhibit-read-only t)
-           (props nil))
-      (when (not marked)
-        (gql-builder--set-state-at-point (if arg-p 'arg-marked 'marked) t)
-        (forward-line 0)
-        (setq props (text-properties-at (point)))
-        (when (search-forward gql-builder-marker-unmarked nil t)
-          (replace-match (apply #'propertize gql-builder-marker-marked
-                                props)))
-        (when-let ((match (text-property-search-forward
-                           'face 'gql-builder-field-name #'eq)))
-          (put-text-property (prop-match-beginning match)
-                             (prop-match-end match)
-                             'face 'gql-builder-marked-field-name))))
-    (gql-builder-toggle-expanded 1))
+  (let* ((arg-p (get-text-property (point) 'gql-builder-arg-p))
+         (marked (gql-builder--get-state-at-point
+                  (if arg-p 'arg-marked 'marked)))
+         (inhibit-read-only t)
+         (props nil)
+         (orig-pos (point)))
+    (when (not marked)
+      (gql-builder--set-state-at-point (if arg-p 'arg-marked 'marked) t)
+      (forward-line 0)
+      (setq props (text-properties-at (point)))
+      (when (search-forward gql-builder-marker-unmarked nil t)
+        (replace-match (apply #'propertize gql-builder-marker-marked
+                              props)))
+      (when-let ((match (text-property-search-forward
+                         'face 'gql-builder-field-name #'eq)))
+        (put-text-property (prop-match-beginning match)
+                           (prop-match-end match)
+                           'face 'gql-builder-marked-field-name)))
+    (gql-builder-toggle-expanded 1)
+    (goto-char orig-pos))
   (forward-line 1))
 
 (defun gql-builder-unmark ()
@@ -708,6 +707,7 @@ VAL can be a string, a number, t, or :false."
   (format " [%s]" (pcase val
                     ('t "true")
                     (':false "false")
+                    ((pred stringp) (format "\"%s\"" val))
                     (_ val))))
 
 (defun gql-builder-set-arg ()
@@ -725,19 +725,30 @@ VAL can be a string, a number, t, or :false."
                                      (* "!")
                                      eos)
                                  (gql-builder--render-type type)))
-            (message "Editing %s is not supported"
+            (message "Editing array arg is not supported"
                      (gql-builder--render-type type))
           (let* ((val (pcase (gql-builder--render-type type t)
                         ((or "String" "ID") (read-string "Value: " old-val))
-                        ((or "Int" "Float") (string-to-number
-                                             (read-string "Value: ") old-val))
+                        ((or "Int" "Float")
+                         (let ((val (read-string "Value: "
+                                                 (if (numberp old-val)
+                                                     (number-to-string old-val)
+                                                   old-val))))
+                           (if (string-match-p (rx bos ":") val)
+                               val
+                             (string-to-number val))))
                         ("Boolean" (let ((val (completing-read
                                                "Value: "
-                                               '("true" "false") nil t
+                                               '("true" "false") nil nil
                                                (pcase old-val
                                                  ('t "true")
                                                  (':false "false")))))
-                                     (if (equal val "true") t :false))))))
+                                     ;; This allows user to enter a
+                                     ;; restclient variable.
+                                     (pcase val
+                                       ("true" t)
+                                       ("false" :false)
+                                       (_ val)))))))
             (gql-builder--set-state-at-point 'arg-val val)
             (forward-line 0)
             (setq props (text-properties-at (point)))
@@ -760,6 +771,7 @@ VAL can be a string, a number, t, or :false."
     (define-key map (kbd "r") #'gql-builder-reorder)
     (define-key map (kbd "C-c C-c") #'gql-builder-save-and-quit)
     (define-key map (kbd "v") #'gql-builder-set-arg)
+    (define-key map (kbd "E") #'gql-builder-show-query)
     map)
   "Mode map for ‘gql-builder-mode’.")
 
@@ -814,6 +826,31 @@ looks like ((\"Content-Type\" . \"application/json\"))."
       (gql-builder--insert-fields
        (gql-builder--get-all-queries gql-builder--schema) 0 nil))
     (goto-char (min orig-point (point-max)))))
+
+(defun gql-builder-show-query ()
+  "Show the GraphQL query this builder will generate."
+  (interactive)
+  (let ((inner-query (gql-builder--serialize-query-object
+                      (gql-builder--construct-query-object
+                       (gql-builder--get-all-marked-field-paths
+                        gql-builder--ui-state)
+                       (gql-builder--get-all-marked-arg-values
+                        gql-builder--ui-state)
+                       nil)
+                      0)))
+    (pop-to-buffer "*gql-builder show query*")
+    (let ((inhibit-read-only t))
+      (erase-buffer)
+      (insert inner-query)
+      (goto-char (point-min))
+      (insert "  ")
+      (while (eq 0 (forward-line 1))
+        (unless (looking-at (rx (* whitespace) eol))
+          (insert "  ")))
+      (insert "}")
+      (goto-char (point-min))
+      (insert "{\n"))
+    (special-mode)))
 
 ;;; Restclient integration
 
