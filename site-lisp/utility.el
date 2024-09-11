@@ -250,6 +250,30 @@ SURNAME is used to search for symbol. E.g. SURNAME (c) to symbol ©."
 
 ;; (global-set-key (kbd "C-x 9 -") (luna-make-accent-fn "MACRON"))
 
+(defun luna-insert-line-numbers (beg end)
+  "Insert line numbers before each linne bewteen BEG and END.
+
+If region is active, BEG and END are set to the beginning and end of the
+region."
+  (interactive "r")
+  (let ((line-count 0)
+        (digit 1)
+        (count 1))
+    (save-excursion
+      (goto-char beg)
+      (while (and (< (point) end)
+                  (eq (forward-line 1) 0))
+        (cl-incf line-count))
+      (setq digit (length (number-to-string line-count)))
+      (goto-char beg)
+      (forward-line 0)
+      (insert (string-pad "1" digit nil t) " ")
+      (cl-incf count)
+      (while (and (< count (1+ line-count))
+                  (eq (forward-line 1) 0))
+        (insert (string-pad (number-to-string count) digit nil t) " ")
+        (cl-incf count)))))
+
 ;;; Auto insert
 
 (defvar luna-autoinsert-template
@@ -493,6 +517,8 @@ for whole match."
             url)))
 
 (defalias 'filter-lines #'keep-lines)
+
+
 
 (provide 'utility)
 
