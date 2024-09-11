@@ -182,6 +182,9 @@ COMMENT-BEGIN is string pattern starting a comment."
                  (setq-local outline-level
                              (lambda () (1+ (/ (length (match-string 1))
                                                (length comment-char)))))
+                 ;; Make sure treesit.el’s outline setting doesn’t
+                 ;; linger on.
+                 (setq-local outline-search-function nil)
                  (setq-local imenu-generic-expression
                              (cons imenu-expression
                                    imenu-generic-expression))
