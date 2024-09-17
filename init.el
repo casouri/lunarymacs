@@ -147,7 +147,7 @@
   (add-to-list 'eglot-server-programs
                '((c-ts-mode c++-ts-mode) "ccls-clang-14"))
   (add-to-list 'eglot-server-programs
-               '((js-ts-mode typescript-ts-mode)
+               '((js-ts-mode typescript-ts-mode tsx-ts-mode)
                  "typescript-language-server" "--stdio")))
 
 (add-hook 'prog-mode-hook #'general-ts-mode-setup)

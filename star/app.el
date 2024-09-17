@@ -12,7 +12,7 @@
  "C-h v"   #'ghelp-describe-variable
  "C-h k"   #'ghelp-describe-key
  :keymaps 'restclient-mode-map
- "C-c C-e" #'restclient-query-builder)
+ "C-c C-e" #'restclient-gql-builder)
 
 ;;; Package
 
@@ -119,6 +119,7 @@
   (restclient-mode-hook . color-outline-mode)
   (restclient-mode-hook . restclient-setup)
   :config
+  (require 'gql-builder)
   (set-face-attribute 'restclient-variable-name-face nil
                       :inherit 'font-lock-type-face)
   (defun restclient-setup ()
