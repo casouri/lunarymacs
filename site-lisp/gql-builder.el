@@ -641,8 +641,21 @@ state."
     (when (or (> flag 0)
               (and (eq flag 0) (not expanded)))
       (gql-builder--set-state-at-point (if arg-p 'arg-expanded 'expanded) t)
-      (let ((top-level-field-name (car (last field-path))))
-        (gql-builder--redraw-top-level-field top-level-field-name)))
+      (when (and indent-level field-path field-type gql-builder--schema)
+        (let ((fields (gql-builder--get-fields-for-type
+                       gql-builder--schema field-type arg-p)))
+          ;; Only show message when this command is called
+          ;; interactively.
+          (when (and (eq flag 0) (null fields))
+            (message "Can’t find any fields for %s" field-type))
+          (forward-line 1)
+          ;; Insert args.
+          (gql-builder--insert-fields
+           args (1+ indent-level) field-path t)
+          ;; Insert fields, if this field is an arg, then its fielld
+          ;; must be args too.
+          (gql-builder--insert-fields
+           fields (1+ indent-level) field-path arg-p))))
     (goto-char orig-point)))
 
 ;; If a field is marked, it will be included in the final query that
