@@ -33,7 +33,9 @@
  "ob" #'browse-url-of-file
  :---
  :keymaps 'eglot-mode-map
- "C-h C-h" #'eldoc-box-help-at-point)
+ "C-h C-h" #'eldoc-box-help-at-point
+ :keymaps '(tsx-ts-mode-map typescript-ts-mode-map)
+ "C-c C-l" #'insert-console-log)
 
 (defun eval-print-sexp-at-point ()
   "Evaluate top level sexp at point and print."
@@ -143,6 +145,22 @@
   ;; Too many completions.
   (setq-local company-prefix 3)
   (add-hook 'post-command-hook #'tsx-tag-complete 0 t))
+
+(defun insert-console-log ()
+  "Insert a console.log with first item in kill ring."
+  (interactive)
+  (let ((text (or (current-kill 0 t) ""))
+        beg end)
+    (insert "console.log(")
+    (setq beg (point))
+    (insert (if (> (length text) 100)
+                ""
+              text))
+    (setq end (point))
+    (insert ");")
+    (unless (eq beg end)
+      (goto-char beg)
+      (push-mark end t t))))
 
 (defvar tsx-tag--void-elements
   ;; From ‘web-mode-void-elements’.
