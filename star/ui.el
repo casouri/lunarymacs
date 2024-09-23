@@ -44,7 +44,7 @@
                . (display-buffer-in-side-window
                   . ((side . bottom)))))
 
-(setq-default line-spacing 0.1)
+(setq-default line-spacing 0.2)
 
 ;;; Package
 
