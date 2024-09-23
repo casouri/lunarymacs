@@ -188,11 +188,11 @@
         (magit-section-secondary-heading
          (magit-section-heading nil nil nil light))
 
-        (magit-diff-file-heading           ,bold)
+        (magit-diff-file-heading           (nil ,blue-fg nil nil semi-bold))
         (magit-diff-file-heading-highlight (magit-heading-highlight))
         (magit-diff-file-heading-selection (magit-heading-selection))
 
-        (magit-diff-hunk-heading           ,italic)
+        (magit-diff-hunk-heading           (nil ,blue-fg nil nil nil italic))
         (magit-diff-hunk-heading-highlight (magit-heading-highlight))
         (magit-diff-hunk-heading-selection (magit-heading-selection))
         ;; selected hunk region
