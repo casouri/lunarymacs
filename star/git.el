@@ -14,6 +14,9 @@
 
 (load-package magit
   :commands magit-status
+  :hook (git-commit-setup-hook . setup-magit-commit-buffer)
+  ;; Speed up log buffer: disable --graph, set -n to 128, C-x C-s to
+  ;; save preference.
   :config
   ;; Speed up magit in large repos.
   (setq magit-refresh-status-buffer nil
@@ -21,31 +24,12 @@
         ;; in the diff buffer to toggle it.
         magit-diff-refine-hunk nil)
   ;; The tags header is slow when there are 10k+ headers (1+ sec).
-  (remove-hook 'magit-status-headers-hook #'magit-insert-tags-header)
-  ;; Speed up log buffer: disable --graph, set -n to 128, C-x C-s to
-  ;; save preference.
-  ;;
-  ;; Profile with ‘magit-toggle-verbose-refresh’.
+  (remove-hook 'magit-status-headers-hook #'magit-insert-tags-header))
 
-  (defun electric-quote-local-mode-advice (fn &rest args)
-    "Disable electric-quote-mode in commit message buffer."
-    (unless (equal (buffer-name) "COMMIT_EDITMSG")
-      (apply fn args)))
-  (advice-add 'electric-quote-local-mode :around
-              #'electric-quote-local-mode-advice)
-  ;; Patch
-  (defun magit-patch-apply-buffer (buffer &rest args)
-    "Apply the patch buffer BUFFER."
-    (interactive
-     (list (read-buffer "Apply patch in buffer: " nil t)
-           (transient-args 'magit-patch-apply)))
-    (with-temp-buffer
-      (insert-buffer-substring-no-properties buffer)
-      (magit-run-git-with-input "apply" args "-")
-      (magit-refresh)))
-  (require 'magit-patch)
-  (transient-append-suffix 'magit-patch-apply "a"
-    '("b" "Apply patch in buffer" magit-patch-apply-buffer)))
+(defun setup-magit-commit-buffer ()
+  "Setup magit commit message buffer."
+  (setq fill-column 64)
+  (electric-quote-local-mode -1))
 
 (load-package git-link
   :commands
