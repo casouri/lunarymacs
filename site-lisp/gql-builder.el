@@ -8,6 +8,8 @@
 ;;
 ;; GraphQL reference: https://spec.graphql.org/October2021/#sec-Introspection
 ;;
+;; TODO:
+;; 1. Add support union
 
 ;;; Code:
 
@@ -49,8 +51,7 @@
   "A string used to mark an unmarded field.")
 
 (defvar gql-builder-query-and-mutation-query
-  "
-query QueryAndMutation {
+  "query QueryAndMutation {
     __schema {
         queryType {
             name
@@ -87,10 +88,21 @@ query QueryAndMutation {
                     }
                 }
             }
+            interfaces {
+                ...TypeRef
+            }
+            enumValues(includeDeprecated: true) {
+                name
+                description
+                isDeprecated
+                deprecationReason
+            }
+            possibleTypes {
+                ...TypeRef
+            }
         }
     }
 }
-
 fragment TypeRef on __Type {
     kind
     name
@@ -106,9 +118,8 @@ fragment TypeRef on __Type {
             }
         }
     }
-}
-"
-  "Query we use to get all the queries and mutations.")
+}"
+  "Query we use to get all the queries, mutations, and types.")
 
 ;;;; UI state
 
