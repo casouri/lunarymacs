@@ -4,7 +4,10 @@
           (let ((old-list file-name-handler-alist)
                 ;; If x10, half of cpu time is spent on gc when
                 ;; scrolling.
-                (threshold (* 100 gc-cons-threshold))
+                ;; (threshold (* 100 gc-cons-threshold))
+                ;; Let’s try a smaller number, more frequent gc means
+                ;; shorter gc pause.
+                (threshold (* 2 gc-cons-threshold))
                 (percentage gc-cons-percentage))
             (lambda ()
               (message "Emacs ready in %s with %d garbage collections."
