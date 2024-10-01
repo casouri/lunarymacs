@@ -386,6 +386,43 @@ Sans as the CJK font."
   (interactive "MFont: ")
   (face-remap-set-base 'default `(:family ,font)))
 
+;;; Profile
+
+(defmacro luna-print-time (message &rest body)
+  "Measure time elapsed in BODY and print it out with MESSAGE."
+  (declare (indent 1))
+  (let ((time-var (gensym)))
+    `(progn
+       (setq ,time-var (current-time))
+       ,@body
+       (message "%s %s"
+                ,message (float-time
+                          (time-subtract (current-time) ,time-var))))))
+
+;;; Splash screen
+
+(defun luna-splash-screen ()
+  "Draw a splash screen buffer and return it."
+  (with-current-buffer (get-buffer-create "*startup*")
+    (let* ((image (create-image
+                   (expand-file-name
+                    "splash.svg" user-emacs-directory)))
+           (window-width (window-body-width))
+           (padding (floor (/ (- window-width
+                                 (car (image-size image)))
+                              2)))
+           (greeting "welcome home")
+           (greeting-padding
+            (floor (/ (- window-width
+                         (length greeting))
+                      2))))
+      (message "%s" padding)
+      (insert (make-string padding ?\s))
+      (insert-image image)
+      (insert "\n" (make-string greeting-padding ?\s) greeting)
+      (special-mode))
+    (setq-local cursor-type nil)
+    (current-buffer)))
 
 (provide 'lunary)
 

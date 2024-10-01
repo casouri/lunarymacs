@@ -88,7 +88,6 @@
  '(icon-preference '(image symbol emoji text))
  '(idle-update-delay 0.5 nil nil "Idle time before update stuff on screen")
  '(indent-tabs-mode nil)
- '(inhibit-startup-screen t)
  '(kill-ring-max 100)
  '(load-prefer-newer t)
  '(make-cursor-line-fully-visible nil)

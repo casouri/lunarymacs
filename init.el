@@ -62,6 +62,7 @@
 (luna-load-relative "star/blog.el")
 (luna-load-relative "star/app.el")
 (require 'utility)
+(setq initial-buffer-choice #'luna-splash-screen)
 
 ;;; Customize
 ;;;; Server
