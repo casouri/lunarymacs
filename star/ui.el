@@ -87,6 +87,7 @@
             ("TRY" . ,warning)
             ("TODO" . ,warning)
             ("TEMP" . ,warning)
+            ("BIG" . ,warning)
             ("GOOD" . ,success)
             ("DONE" . ,success)
             ("NOTE" . ,success)
