@@ -282,7 +282,7 @@ Return each query in the form of (Field FIELD-NAME FIELD-TYPE ARGS)."
     (gql-builder--get-fields-for-type schema query-type-name)))
 
 (defun gql-builder--make-field (field)
-  "Createa a (Field FIELD-NAME FIELD-TYPE ARGS) from FIELD.
+  "Create a (Field FIELD-NAME FIELD-TYPE ARGS) from FIELD.
 FIELD is an alist with ‘name’, ‘type’ as its keys."
   (let* ((name (gql-builder--alist-get '(name) field))
          (type (gql-builder--decode-type
@@ -290,6 +290,12 @@ FIELD is an alist with ‘name’, ‘type’ as its keys."
          (args (gql-builder--alist-get '(args) field)))
     `(Field ,name ,type ,(when args
                            (mapcar #'gql-builder--make-field args)))))
+
+(defun gql-builder--make-possible-type-field (possible-type)
+  "Create a (Field FIELD-NAME FIELD-TYPE ARGS) from POSSIBLE-TYPE.
+FIELD is an alist with ‘name’, ‘kind’ as its keys."
+  (let* ((name (gql-builder--alist-get '(name) possible-type)))
+    `(Field ,(format "... on %s" name) ,name)))
 
 (defun gql-builder--get-fields-for-type
     (schema type-name &optional input-fields)
@@ -305,9 +311,16 @@ If input-fields is non-nil, get input fields instead."
                              type-name))
                     (gql-builder--alist-get '(data __schema types) schema)))
          (fields (gql-builder--alist-get (if input-fields '(inputFields)
-                                             '(fields))
-                                           type-obj)))
-    (seq-map #'gql-builder--make-field fields)))
+                                           '(fields))
+                                         type-obj))
+         (possible-types
+          (and (not input-fields)
+               (gql-builder--alist-get '(possibleTypes) type-obj))))
+    (cond
+     (fields
+      (seq-map #'gql-builder--make-field fields))
+     ((and (null input-fields) possible-types)
+      (seq-map #'gql-builder--make-possible-type-field possible-types)))))
 
 ;;;; Building query
 
@@ -585,7 +598,9 @@ front of each field."
                                       'gql-builder-marked-field-name
                                     'gql-builder-field-name))
                 " "
-                (propertize (gql-builder--render-type (or type "N/A"))
+                (propertize (if (string-match-p (rx bos "...") name)
+                                ""
+                                (gql-builder--render-type (or type "N/A")))
                             'face 'gql-builder-field-type)
                 (if arg-val (gql-builder--format-arg-val arg-val) ""))
                'gql-builder-field-path field-path
@@ -599,7 +614,7 @@ front of each field."
       ;; Insert subfields if this field is expanded.
       (when (and gql-builder--schema
                  (gql-builder--get-state field-path
-                                           (if arg-p 'arg-expanded 'expanded)))
+                                         (if arg-p 'arg-expanded 'expanded)))
         ;; Insert args.
         (gql-builder--insert-fields args (1+ indent-level) field-path t)
         ;; Insert subfields.
