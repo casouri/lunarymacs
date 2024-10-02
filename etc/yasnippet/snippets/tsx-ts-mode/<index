@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: <index
+# key: <index
+# --
+import `(file-name-base (substring default-directory 0 -1))` from './`(file-name-base (substring default-directory 0 -1))`';
+
+export default `(file-name-base (substring default-directory 0 -1))`;
