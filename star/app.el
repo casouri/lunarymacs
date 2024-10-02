@@ -124,8 +124,8 @@
                       :inherit 'font-lock-type-face)
   (defun restclient-setup ()
     "Setup restclient buffer."
-    (face-remap-set-base 'outline-1 '(:inherit shadow :height 1.4))
-    (face-remap-set-base 'outline-2 '(:inherit shadow :height 1.2))))
+    (face-remap-set-base 'outline-1 '(:inherit font-lock-function-name-face :height 1.4))
+    (face-remap-set-base 'outline-2 '(:inherit font-lock-function-name-face :height 1.2))))
 
 (load-package company-restclient
   :hook (restclient-mode-hook . company-mode)
