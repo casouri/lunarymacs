@@ -138,6 +138,14 @@
                       :inherit 'font-lock-type-face))
 
 (defun setup-tsx ()
+  "Setup tsx and typescript modes."
+  (let ((pred `(not ,(rx (or "," ";" "[" "]" "{" "}" "." "-" "=" "+" "*" "!" "^" "&" "|" "&&" "||")))))
+    (dolist (lang '(typescript tsx jsx javascript))
+      (push `(sexp ,pred) (alist-get lang treesit-thing-settings)))))
+
+(add-hook 'tsx-ts-mode-hook #'setup-tsx)
+
+(defun setup-tsx ()
   "Setup for ‘tsx-ts-mode’."
   ;; typescript-language-server sens immense amounts of noise over the
   ;; wire, which leads to bad lagging.
