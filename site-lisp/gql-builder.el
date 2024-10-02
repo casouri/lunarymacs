@@ -928,7 +928,7 @@ POS is the position of point when user invoked ‘restclient-gql-builder’.
 This function is supposed to be called by
 ‘restclient-http-parse-current-and-do’."
   (unless (equal method "POST")
-    (signal 'gql-builder-error '("GraphQL request should be POST request")))
+    (signal 'gql-builder-error '("GraphQL request should have GQL for the method")))
 
   (unless gql-builder--data-store
     (gql-builder--load-data-store))
@@ -946,8 +946,8 @@ This function is supposed to be called by
     (gql-builder url headers)
     (setq gql-builder--orig-window-config window-config)
     (setq gql-builder--restclient-state (list (cons 'body unsubstituted-body)
-                                                (cons 'buffer buf)
-                                                (cons 'point pos)))
+                                              (cons 'buffer buf)
+                                              (cons 'point pos)))
     (when (and unsubstituted-body (not (equal unsubstituted-body "")))
       (let ((ui-state (alist-get (list url (string-trim unsubstituted-body))
                                  gql-builder--data-store
@@ -972,16 +972,17 @@ And quit the query builder."
   (let* ((body (alist-get 'body gql-builder--restclient-state))
          (buffer (alist-get 'buffer gql-builder--restclient-state))
          (pos (alist-get 'point gql-builder--restclient-state))
-         (query (concat "{ "
+         (query (concat "{\n"
                         (gql-builder--serialize-query-object
                          (gql-builder--construct-query-object
                           (gql-builder--get-all-marked-field-paths
                            gql-builder--ui-state)
                           (gql-builder--get-all-marked-arg-values
                            gql-builder--ui-state)
-                          nil))
-                        " }"))
-         (new-body (json-serialize `((query . ,query)) )))
+                          nil)
+                         1)
+                        "}"))
+         (new-body query))
     (setf (alist-get (list gql-builder--endpoint (string-trim new-body))
                      gql-builder--data-store nil t #'equal)
           gql-builder--ui-state)
