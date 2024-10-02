@@ -20,4 +20,5 @@
         (vundo . (:repo "casouri/vundo" :option (:full-clone t)))
         (undo-hl . (:repo "casouri/undo-hl" :option (:full-clone t)))
         (stimmung-themes . (:repo "motform/stimmung-themes" :option (:full-clone t)))
-        (haskell-ts-mode . (:http "https://codeberg.org/pranshu/haskell-ts-mode.git"))))
+        (haskell-ts-mode . (:http "https://codeberg.org/pranshu/haskell-ts-mode.git"))
+        (restclient . (:http "https://github.com/casouri/restclient.el.git"))))
