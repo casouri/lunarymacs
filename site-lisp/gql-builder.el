@@ -475,17 +475,9 @@ Return a string that looks like “NAME: VAL”."
                                                fields)
                                        ", ")
                                       " }")))
-         (val (plist-get arg-object :val))
-         (serialized-val (when val
-                           (pcase val
-                             ('t "true")
-                             (':false "false")
-                             ((pred numberp) (number-to-string val))
-                             ((pred stringp) (format "\"%s\"" val))
-                             (_ (signal 'gql-builder-serialize-error
-                                        `("Unrecognized arg value" ,val)))))))
+         (val (plist-get arg-object :val)))
     (format "%s: %s" (plist-get arg-object :name)
-            (or serialized-fields serialized-val "null"))))
+            (or serialized-fields val "null"))))
 
 ;;;; UI: drawing UI, toggling fields
 
@@ -744,11 +736,7 @@ state."
 (defsubst gql-builder--format-arg-val (val)
   "Format value of an arg, VAL.
 VAL can be a string, a number, t, or :false."
-  (format " [%s]" (pcase val
-                    ('t "true")
-                    (':false "false")
-                    ((pred stringp) (format "\"%s\"" val))
-                    (_ val))))
+  (format " [%s]" val))
 
 (defun gql-builder-set-arg ()
   "Set the value for the arg at point."
@@ -765,30 +753,9 @@ VAL can be a string, a number, t, or :false."
                                      (* "!")
                                      eos)
                                  (gql-builder--render-type type)))
-            (message "Editing array arg is not supported"
+            (message "Editing array arg is not supported: %s"
                      (gql-builder--render-type type))
-          (let* ((val (pcase (gql-builder--render-type type t)
-                        ((or "String" "ID") (read-string "Value: " old-val))
-                        ((or "Int" "Float")
-                         (let ((val (read-string "Value: "
-                                                 (if (numberp old-val)
-                                                     (number-to-string old-val)
-                                                   old-val))))
-                           (if (string-match-p (rx bos ":") val)
-                               val
-                             (string-to-number val))))
-                        ("Boolean" (let ((val (completing-read
-                                               "Value: "
-                                               '("true" "false") nil nil
-                                               (pcase old-val
-                                                 ('t "true")
-                                                 (':false "false")))))
-                                     ;; This allows user to enter a
-                                     ;; restclient variable.
-                                     (pcase val
-                                       ("true" t)
-                                       ("false" :false)
-                                       (_ val)))))))
+          (let* ((val (read-string "Value: " old-val)))
             (gql-builder--set-state-at-point 'arg-val val)
             (forward-line 0)
             (setq props (text-properties-at (point)))
