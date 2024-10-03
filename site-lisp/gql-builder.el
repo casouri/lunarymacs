@@ -585,16 +585,15 @@ front of each field."
                 (if arg-p
                     (propertize "ARG " 'face 'gql-builder-arg-marker)
                   "")
-                (propertize (or (if (string-match-p (rx "... on") name)
-                                    "... on"
-                                  name)
-                                "N/A")
+                (propertize (or name "N/A")
                             'face (if marked
                                       'gql-builder-marked-field-name
                                     'gql-builder-field-name))
                 " "
-                (propertize (gql-builder--render-type (or type "N/A"))
-                            'face 'gql-builder-field-type)
+                (if (string-match-p (rx bol "...") name)
+                    ""
+                  (propertize (gql-builder--render-type (or type "N/A"))
+                              'face 'gql-builder-field-type))
                 (if arg-val (gql-builder--format-arg-val arg-val) ""))
                'gql-builder-field-path field-path
                'gql-builder-field-name name
