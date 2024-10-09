@@ -909,7 +909,7 @@ POS is the position of point when user invoked ‘restclient-gql-builder’.
 
 This function is supposed to be called by
 ‘restclient-http-parse-current-and-do’."
-  (unless (equal method "POST")
+  (unless (equal method "GQL")
     (signal 'gql-builder-error '("GraphQL request should have GQL for the method")))
 
   (unless gql-builder--data-store
@@ -974,10 +974,18 @@ And quit the query builder."
         (goto-char pos)
         (goto-char (restclient-current-min))
         (if (or (null body) (equal body ""))
-            (if (re-search-forward restclient-method-url-regexp (point-max) t)
-                (insert "\n\n" new-body)
-              (signal 'gql-builder-error '("Can’t find the original request header")))
-
+            ;; Empty body
+            (if (not (re-search-forward
+                      restclient-method-url-regexp (point-max) t))
+                (signal 'gql-builder-error
+                        '("Can’t find the original request header"))
+              (forward-line)
+              (while (or (looking-at restclient-response-hook-regexp)
+                         (and (looking-at restclient-header-regexp) (not (looking-at restclient-empty-line-regexp)))
+                         (looking-at restclient-use-var-regexp))
+                (forward-line))
+              (insert "\n" new-body))
+          ;; Non-empty body
           (if (search-forward body nil t)
               (progn
                 (replace-match new-body t t)
