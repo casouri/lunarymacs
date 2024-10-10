@@ -899,7 +899,7 @@ states. QUERY-STRING doesn’t have trailing whitespace/newline.")
         (mkdir dir t)))
     (with-temp-buffer
       (print gql-builder--data-store (current-buffer))
-      (write-file gql-builder--data-store-location))))
+      (write-region (point-min) (point-max) gql-builder--data-store-location))))
 
 (defun gql-builder--restclient-show-gql-builder
     (method url headers body pos)
