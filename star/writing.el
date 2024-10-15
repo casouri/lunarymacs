@@ -85,6 +85,13 @@
 
   (add-hook 'texinfo-mode-hook #'setup-texinfo))
 
+(defun setup-text-mode ()
+  "Setup for ‘text-mode’."
+  ;; Stolen from ‘markdown-mode’, this way we can fill individual list
+  ;; items.
+  (setq paragraph-start "\f\\|[ 	\f]*$\\|\\(?:[ 	]*>\\)+[ 	\f]*$\\|[ 	]*[*+-][ 	]+\\|[ 	]*\\(?:[0-9]+\\|#\\)\\.[ 	]+\\|[ 	]*\\[\\S-*\\]:[ 	]+\\|[ 	]*:[ 	]+\\|^|"))
+(add-hook 'text-mode-hook #'setup-text-mode)
+
 ;;; Deprecated
 
 (when nil
