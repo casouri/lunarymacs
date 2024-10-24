@@ -120,6 +120,13 @@ Eg, if xidebar opens a file, it’s in this window.")
   'mouse-face 'region
   'help-echo "Jump to location")
 
+(define-button-type 'xidebar-jmenu-header
+  'follow-link t
+  'action #'xidebar--jmenu-button-action
+  'face 'xidebar-jmenu-section-header
+  'mouse-face 'highlight
+  'help-echo "Jump to location")
+
 (defun xidebar--jmenu-button-action (button)
   "Jump to the location represented by BUTTON."
   (let ((marker (button-get button 'marker)))
@@ -186,8 +193,9 @@ Return a list of (MARKER LABEL TYPE)."
                                'marker marker)
            (insert "\n")))
         ('header
-         (insert (propertize label 'face
-                             'xidebar-jmenu-section-header))
+         (insert-text-button label
+                             'type 'xidebar-jmenu-header
+                             'marker marker)
          (setq last-header-pos marker)
          (insert "\n"))))))
 
