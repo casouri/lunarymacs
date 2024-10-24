@@ -146,6 +146,16 @@
   ;; typescript-language-server sens immense amounts of noise over the
   ;; wire, which leads to bad lagging.
   (setq-local eglot-events-buffer-size 0)
+  (push (car (treesit-font-lock-rules
+              :language 'tsx
+              :override t
+              :feature 'template-delimiter
+              '((template_substitution ["${" "}"] @font-lock-escape-face))))
+        treesit-font-lock-settings)
+  (treesit-font-lock-recompute-features '(template-delimiter))
+  (face-remap-set-base 'font-lock-escape-face
+                       '( :inherit font-lock-type-face
+                          :weight bold))
   ;; Too many completions.
   (setq-local company-prefix 3)
   (add-hook 'post-command-hook #'tsx-tag-complete 0 t))
