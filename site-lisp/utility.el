@@ -518,7 +518,15 @@ for whole match."
 
 (defalias 'filter-lines #'keep-lines)
 
-
+(defun copy-epoch (arg)
+  "Copy current UNIX epoch to clipboard.
+If invoked with interactive ARG, use milliseconds."
+  (interactive "p")
+  (with-temp-buffer
+    (insert
+     (number-to-string
+      (* (if (eq arg 4) 1000 1) (floor (float-time (current-time))))))
+    (kill-ring-save (point-min) (point-max))))
 
 (provide 'utility)
 
