@@ -74,6 +74,22 @@
 (luna-on "Brown"
   (luna-safe-load (expand-file-name "brown-init.el" user-emacs-directory)))
 
+;;; Mac
+(luna-when-mac
+ (setq mac-option-modifier 'meta
+       mac-command-modifier 'super
+       mac-pass-command-to-system nil ; fix cmd h
+       mac-system-move-file-to-trash-use-finder t)
+ (global-set-key (kbd "s-c") #'kill-ring-save)
+ (global-set-key (kbd "s-v") #'yank)
+ ;; I sometimes hit this by accident.
+ (global-set-key (kbd "s-H") #'ignore)
+
+ (setq scroll-up-aggressively 0.01
+       scroll-down-aggressively 0.01
+       redisplay-skip-fontification-on-input t)
+ (setq mouse-wheel-flip-direction t))
+
 ;;; Linux
 
 (luna-on "blanche"
