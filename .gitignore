@@ -15,4 +15,5 @@
 !snippets/**/*
 !elpa
 !screenshot.png
+!brown-init.el
 .DS_Store
