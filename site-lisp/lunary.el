@@ -401,6 +401,7 @@ Sans as the CJK font."
 
 ;;; Splash screen
 
+;; REF: https://github.com/egstatsml/emacs_fancy_logos/tree/main
 (defun luna-splash-screen ()
   "Draw a splash screen buffer and return it."
   (with-current-buffer (get-buffer-create "*startup*")
