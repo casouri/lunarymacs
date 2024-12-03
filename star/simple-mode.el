@@ -29,6 +29,7 @@
  "C-M-b" #'web-mode-tag-previous
  "C-s-f" #'web-mode-tag-next
  "C-s-b" #'web-mode-tag-previous
+ "M-q" #'fill-paragraph
  :leader
  "ob" #'browse-url-of-file
  :---
@@ -90,6 +91,9 @@
   "\\.html?\\'"
   :hook (web-mode-hook . setup-web)
   :config
+  (set-face-attribute 'web-mode-html-tag-face nil
+                      :foreground nil
+                      :inherit 'font-lock-type-face)
   (setq web-mode-markup-indent-offset 2
         web-mode-auto-close-style 2)
   (defun setup-web ()
@@ -216,6 +220,25 @@
          (indent-for-tab-command)
          (forward-line -1)
          (indent-for-tab-command))))
+
+;; Astro
+;; (with-eval-after-load 'eglot
+;;   (add-to-list 'eglot-server-programs
+;;                '((astro-ts-mode)
+;;                  "astro-ls" "--stdio"
+;;                  :initializationOptions
+;;                  (:typescript
+;;                   (:tsdk "/Users/yuan/node/lib/node_modules/typescript/lib/")))))
+;; (load-package astro-ts-mode
+;;   :hook (astro-ts-mode-hook . setup-astro)
+;;   :config
+;;   (with-eval-after-load 'apheleia
+;;     (add-to-list 'apheleia-mode-alist '(astro-ts-mode . prettier)))
+;;   (defun setup-astro ()
+;;     "Setup astro mode."
+;;     (require 'apheleia)
+;;     (electric-quote-local-mode -1)
+;;     (apheleia-mode)))
 
 ;; Makefile
 (add-hook 'makefile-mode-hook

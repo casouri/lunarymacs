@@ -69,7 +69,7 @@
 
 (defun luna-dired-open-file-at-point ()
   (interactive)
-  (if-let ((file (dired-file-name-at-point)))
+  (if-let* ((file (dired-file-name-at-point)))
       (shell-command (format "open %s" file))
     (user-error "File not found at point")))
 

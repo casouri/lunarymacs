@@ -136,3 +136,12 @@
   (bug-reference-prog-mode)
   (treesit-font-lock-recompute-features '(emacs-devel))
   (setq c-ts-mode-emacs-sources-support nil))
+
+(defun run-treesit-tests (build)
+  "Run tree-sitter tests for BUILD."
+  (interactive (list (completing-read "Build: " '("emacs" "emacs-head") nil t)))
+  (let ((test-file
+         (expand-file-name "test/src/treesit-tests.el"
+                           (expand-file-name build "~"))))
+    (load test-file)
+    (ert "t")))
