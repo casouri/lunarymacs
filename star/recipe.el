@@ -7,6 +7,7 @@
         ;; Full clones.
         (expand-region . (:repo "casouri/expand-region.el"
                                 :option (:full-clone t)))
+        (expreg . (:repo "casouri/expreg" :option (:full-clone t)))
         (eldoc-box . (:repo "casouri/eldoc-box"
                             :option (:full-clone t)))
         (eglot-booster . (:repo "jdtsmith/eglot-booster"))
