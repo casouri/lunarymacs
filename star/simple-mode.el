@@ -89,15 +89,13 @@
   "\\.mustache\\'"
   "\\.djhtml\\'"
   "\\.html?\\'"
-  :hook (web-mode-hook . setup-web)
   :config
   (set-face-attribute 'web-mode-html-tag-face nil
                       :foreground nil
                       :inherit 'font-lock-type-face)
   (setq web-mode-markup-indent-offset 2
         web-mode-auto-close-style 2)
-  (defun setup-web ()
-    "Setup for ‘web-mode’."
+  (defsetup web-mode-hook ()
     ;; This way expreg can use tree-sitter for expansion.
     (ignore-errors (treesit-parser-create 'html))
     (emmet-mode)))
@@ -132,24 +130,21 @@
 (defalias 'make-executable 'shell-chmod)
 
 ;; Javascript/Typescript
-(setq-default js-indent-level 2)
-(add-hook 'tsx-ts-mode-hook #'setup-tsx)
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
-(add-to-list 'find-sibling-rules
-             `(,(rx (group (+ (not "/"))) ".tsx" eos)
-               "\\1.module.scss"))
-(add-to-list 'find-sibling-rules
-             `(,(rx (group (+ (not "/"))) ".module.scss" eos)
-               "\\1.tsx"))
 (with-eval-after-load 'tsx-ts-mode
+  (setq-default js-indent-level 2)
+  (add-to-list 'find-sibling-rules
+               `(,(rx (group (+ (not "/"))) ".tsx" eos)
+                 "\\1.module.scss"))
+  (add-to-list 'find-sibling-rules
+               `(,(rx (group (+ (not "/"))) ".module.scss" eos)
+                 "\\1.tsx"))
   (set-face-attribute 'typescript-ts-jsx-tag-face nil :inherit 'shadow)
   (set-face-attribute 'typescript-ts-jsx-attribute-face nil
                       :inherit 'font-lock-type-face))
-(add-hook 'tsx-ts-mode-hook #'setup-tsx)
 
-(defun setup-tsx ()
-  "Setup for ‘tsx-ts-mode’."
+(defsetup tsx-ts-mode-hook ()
   (let ((pred `(not ,(rx (or "," ";" "[" "]" "{" "}" "." "-" "=" "+" "*" "!" "^" "&" "|" "&&" "||")))))
     (dolist (lang '(typescript tsx jsx javascript))
       (push `(sexp ,pred) (alist-get lang treesit-thing-settings))))
@@ -247,10 +242,9 @@
 ;;     (apheleia-mode)))
 
 ;; Makefile
-(add-hook 'makefile-mode-hook
-          (lambda ()
-            (setq-local whitespace-style '(tab-mark))
-            (whitespace-mode)))
+(defsetup makefile-mode-hook ()
+  (setq-local whitespace-style '(tab-mark))
+  (whitespace-mode))
 
 ;; JSON
 (load-package flymake-json
@@ -286,27 +280,26 @@ Then jslint:
 
 (load-package racket-mode
   :mode "\\.rkt\\'"
-  :extern "racket-langserver"
-  :hook (racket-mode-hook . setup-racket))
-
-(defun setup-racket ()
-  "Setup racket."
-  nil)
+  :extern "racket-langserver")
 
 (luna-note-extern "racket-langserver"
   "raco pkg install racket-langserver")
 
 ;; C/C++
-(defun setup-c ()
-  "Setup for ‘c-mode’ and ‘c++-mode’."
+(defsetup (c-mode-hook c++-mode-hook) ()
   (setq-local company-transformers nil)
   (setq-local comment-multi-line t))
-(add-hook 'c-mode-hook #'setup-c)
-(add-hook 'c++-mode-hook #'setup-c)
+
+(defsetup (c-ts-mode-hook c++-ts-mode-hook) ()
+  (setq-local electric-quote-comment nil)
+  (setq-local electric-quote-string nil)
+  (indent-tabs-mode)
+  (bug-reference-prog-mode)
+  (treesit-font-lock-recompute-features '(emacs-devel))
+  (setq c-ts-mode-emacs-sources-support nil))
 
 ;; XML
-(defun setup-xml ()
-  "Setup hideshow for XML file."
+(defsetup (nxml-mode-hook sgml-mode-hook) ()
   (require 'hideshow)
   (add-to-list 'hs-special-modes-alist
                '(nxml-mode
@@ -315,10 +308,7 @@ Then jslint:
 
                  "<!--"
                  sgml-skip-tag-forward
-                 nil))
-  (hs-minor-mode))
-(add-hook 'nxml-mode-hook #'setup-xml)
-(add-hook 'sgml-mode-hook #'setup-xml)
+                 nil)))
 
 ;; Rust
 ;; (load-package rust-mode
@@ -340,7 +330,6 @@ Then jslint:
 
 (load-package rust-ts-mode
   :mode "\\.rs\\'"
-  :hook (rust-ts-mode-hook . setup-rust)
   :init
   (defvar rust-analyzer-config
     ;; https://rust-analyzer.github.io/manual.html#configuration
@@ -358,8 +347,7 @@ Then jslint:
         :imports (:granularity (:enforce t))))
     "Configuration for rust-analyzer as :initializationOption.")
   :config
-  (defun setup-rust ()
-    "Setup for ‘rust-ts-mode’."
+  (defsetup rust-ts-mode-hook ()
     (toggle-truncate-lines -1)
     (electric-quote-local-mode -1)
     (add-hook 'before-save-hook #'eglot-format-buffer 0 t)
@@ -376,12 +364,7 @@ Then jslint:
 
 ;; Go
 (load-package go-mode
-  :mode "\\.go$"
-  :hook (go-mode-hook . setup-go)
-  :config
-  (defun setup-go ()
-    "Setup for ‘go-mode’."
-    nil))
+  :mode "\\.go$")
 
 (load-package protobuf-mode :mode "\\.proto")
 
@@ -409,7 +392,6 @@ cp target/release/emacs-lsp-booster ~/bin")
 
 (load-package eglot
   ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
-  :hook (eglot-managed-mode-hook . setup-eglot)
   :config
   (setq-default read-process-output-max (* 1024 1024)
                 eglot-events-buffer-size 0
@@ -437,8 +419,7 @@ cp target/release/emacs-lsp-booster ~/bin")
                  `((tsx-ts-mode typescript-ts-mode js-ts-mode)
                    . ("typescript-language-server" "--stdio"))))
 
-  (defun setup-eglot ()
-    "Setup for eglot."
+  (defsetup eglot-managed-mode-hook ()
     ;; Show error message when hovering by point. (By default error
     ;; messages are only shown when hovering by cursor). Show flymake
     ;; diagnostics first.
@@ -492,3 +473,16 @@ cp target/release/emacs-lsp-booster ~/bin")
                (cons (rx "*xref*")
                      (cons 'display-buffer-in-side-window
                            '((side . bottom))))))
+;;; Config
+
+;;;; Tree-sitter
+
+(push '(css-mode . css-ts-mode) major-mode-remap-alist)
+(push '(python-mode . python-ts-mode) major-mode-remap-alist)
+(push '(javascript-mode . js-ts-mode) major-mode-remap-alist)
+(push '(c-mode . c-ts-mode) major-mode-remap-alist)
+(push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+(push '(toml-mode . toml-ts-mode) major-mode-remap-alist)
+(push '(tsx-mode . tsx-ts-mode) major-mode-remap-alist)
+(push '(typescript-mode . tsx-ts-mode) major-mode-remap-alist)
+(push '(javascript-mode . tsx-ts-mode) major-mode-remap-alist)

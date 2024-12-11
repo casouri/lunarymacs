@@ -106,37 +106,6 @@
 
 ;;; Emacs devel
 
-(require 'treesit)
-(push '(css-mode . css-ts-mode) major-mode-remap-alist)
-(push '(python-mode . python-ts-mode) major-mode-remap-alist)
-(push '(javascript-mode . js-ts-mode) major-mode-remap-alist)
-(push '(c-mode . c-ts-mode) major-mode-remap-alist)
-(push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
-(push '(toml-mode . toml-ts-mode) major-mode-remap-alist)
-(push '(tsx-mode . tsx-ts-mode) major-mode-remap-alist)
-(push '(typescript-mode . tsx-ts-mode) major-mode-remap-alist)
-(push '(javascript-mode . tsx-ts-mode) major-mode-remap-alist)
-
-;; (setq treesit--font-lock-verbose t)
-
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '((c-ts-mode c++-ts-mode) "ccls-clang-14"))
-  (add-to-list 'eglot-server-programs
-               '((js-ts-mode typescript-ts-mode tsx-ts-mode)
-                 "typescript-language-server" "--stdio")))
-
-(add-hook 'c-ts-mode-hook #'c-ts-setup)
-(add-hook 'css-ts-mode-hook 'ts-css-setup)
-
-(defun c-ts-setup ()
-  (setq-local electric-quote-comment nil)
-  (setq-local electric-quote-string nil)
-  (indent-tabs-mode)
-  (bug-reference-prog-mode)
-  (treesit-font-lock-recompute-features '(emacs-devel))
-  (setq c-ts-mode-emacs-sources-support nil))
-
 (defun run-treesit-tests (build)
   "Run tree-sitter tests for BUILD."
   (interactive (list (completing-read "Build: " '("emacs" "emacs-head") nil t)))

@@ -425,6 +425,36 @@ Sans as the CJK font."
     (setq-local cursor-type nil)
     (current-buffer)))
 
+;;; Hooks
+
+(defmacro luna-defsetup (hooks _args &rest body)
+  "Define hook functions comprised of BODY and add to HOOKS.
+
+HOOKS can be a single hook or a list of hooks (not quoted). The hook
+function’s name is setup-<HOOK sans \"hook\"> for each hook.
+
+ARGS should be an empty arg list; it’s included just so the macro has
+the same form as ‘defun’."
+  (declare (indent 2))
+  `(progn
+     ,@(mapcar
+        (lambda (hook)
+          (let ((fn-name (intern (string-trim-right
+                                  (format "setup-%s" hook) "hook")))
+                (docstring
+                 (format "Setup hook auto generated for ‘%s’ by ‘luna-defsetup’."
+                         hook)))
+            `(progn
+               (defun ,fn-name (&rest _)
+                 ,docstring
+                 ,@body)
+               ;; Probably don’t need to remove the hook, but whatever.
+               (remove-hook ',hook #',fn-name)
+               (add-hook ',hook #',fn-name 0))))
+        (if (consp hooks) hooks (list hooks)))))
+
+(defalias 'defsetup 'luna-defsetup)
+
 (provide 'lunary)
 
 ;;; lunary.el ends here
