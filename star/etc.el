@@ -113,7 +113,7 @@
  '(show-paren-mode nil nil nil "Since Emacs 28, show-paren mode is on by default, but it only highlights matching paren when point is on a paren, whereas highlight-parentheses-mode always highlights the matching paren.")
  '(split-height-threshold nil nil nil "Don’t split vertically.")
  '(split-width-threshold 150 nil nil "Do split horizontally")
- '(switch-to-buffer-preserve-window-point nil nil nil "Always display buffer’s at its current point please")
+ ;; '(switch-to-buffer-preserve-window-point nil nil nil "Always display buffer’s at its current point please")
  '(tab-always-indent 'complete)
  '(tab-width 4)
  '(use-dialog-box nil)
