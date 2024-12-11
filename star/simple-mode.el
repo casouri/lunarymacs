@@ -136,6 +136,12 @@
 (add-hook 'tsx-ts-mode-hook #'setup-tsx)
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
+(add-to-list 'find-sibling-rules
+             `(,(rx (group (+ (not "/"))) ".tsx" eos)
+               "\\1.module.scss"))
+(add-to-list 'find-sibling-rules
+             `(,(rx (group (+ (not "/"))) ".module.scss" eos)
+               "\\1.tsx"))
 (with-eval-after-load 'tsx-ts-mode
   (set-face-attribute 'typescript-ts-jsx-tag-face nil :inherit 'shadow)
   (set-face-attribute 'typescript-ts-jsx-attribute-face nil

@@ -14,6 +14,7 @@
  "C--"     #'expreg-contract
  "M-q"     #'ftable-fill
  "C-x C-d" #'luna-open-directory
+ "C-x C-j" #'find-sibling-file
 
  :leader
  "ha" #'hideshow-toggle-all
