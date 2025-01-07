@@ -143,6 +143,9 @@
   (set-face-attribute 'typescript-ts-jsx-tag-face nil :inherit 'shadow)
   (set-face-attribute 'typescript-ts-jsx-attribute-face nil
                       :inherit 'font-lock-type-face))
+(with-eval-after-load 'eglot
+  (eglot--code-action eglot-code-action-add-missing-imports "source.addMissingImports")
+  (eglot--code-action eglot-code-action-remove-unused-imports "source.removeUnusedImports"))
 
 (defsetup tsx-ts-mode-hook ()
   (let ((pred `(not ,(rx (or "," ";" "[" "]" "{" "}" "." "-" "=" "+" "*" "!" "^" "&" "|" "&&" "||")))))
@@ -163,7 +166,9 @@
                           :weight bold))
   ;; Too many completions.
   (setq-local company-prefix 3)
-  (add-hook 'post-command-hook #'tsx-tag-complete 0 t))
+  (add-hook 'post-command-hook #'tsx-tag-complete 0 t)
+  (setq-local eldoc-box-buffer-setup-function
+              #'eldoc-box-prettify-ts-errors-setup))
 
 (defun insert-console-log ()
   "Insert a console.log with first item in kill ring."
@@ -221,6 +226,14 @@
          (indent-for-tab-command)
          (forward-line -1)
          (indent-for-tab-command))))
+
+(defun tsx-organize-imports ()
+  "Remove unused imports and add referenced imports using eglot."
+  (interactive)
+  (ignore-errors
+    (eglot-code-action-add-missing-imports (point-min) (point-max)))
+  (ignore-errors
+    (eglot-code-action-remove-unused-imports (point-min) (point-max))))
 
 ;; Astro
 ;; (with-eval-after-load 'eglot
