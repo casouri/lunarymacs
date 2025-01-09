@@ -160,3 +160,10 @@
 ;;                       '((:eval (breadcrumb-project-crumbs))
 ;;                         (:eval (and imenu--index-alist
 ;;                                     (concat "  ◊  " (breadcrumb-imenu-crumbs)))))))
+
+(load-package ultra-scroll
+  :config
+  ;; Required by ultra-scroll.
+  (setq scroll-conservatively 101
+        scroll-margin 0)
+  (ultra-scroll-mode))
