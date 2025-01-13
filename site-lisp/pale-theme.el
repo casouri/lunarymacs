@@ -24,7 +24,10 @@
 (theme-util-set-faces 'pale
   (cl-flet ((darken #'theme-util-darken)
             (brighten #'theme-util-brighten)
-            (overlay #'theme-util-color-overlay))
+            (overlay #'theme-util-color-overlay)
+            (box-pad (lambda (width color)
+                       `( :line-width (,width . ,width)
+                          :color ,color))))
     (let* ((bg "#ffffff")
            (bg-tooltip "gray95")
            (bg-block "gray92")
@@ -192,9 +195,10 @@
         (magit-diff-file-heading-highlight (magit-heading-highlight))
         (magit-diff-file-heading-selection (magit-heading-selection))
 
-        (magit-diff-hunk-heading           (nil ,blue-fg nil nil nil italic))
-        (magit-diff-hunk-heading-highlight (magit-heading-highlight))
-        (magit-diff-hunk-heading-selection (magit-heading-selection))
+        (magit-diff-hunk-heading           (nil nil "#bde4fc")
+                                           (:box ,(box-pad 3 "#bde4fc")))
+        (magit-diff-hunk-heading-highlight (magit-diff-hunk-heading))
+        (magit-diff-hunk-heading-selection (magit-diff-hunk-heading))
         ;; selected hunk region
         (magit-diff-hunk-region            (region))
         ;; this also determines the hunk region boundary

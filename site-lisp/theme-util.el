@@ -132,9 +132,12 @@ COLOR’s are in the form of ”#RRGGBB”."
 
 (defun theme-util-color-str-to-list (color)
   "Convert COLOR in ”#RRGGBB” format to (R G B)."
-  (list (string-to-number (substring color 1 3) 16)
-        (string-to-number (substring color 3 5) 16)
-        (string-to-number (substring color 5 7) 16)))
+  (if (string-match-p (rx "#" (= 6 xdigit)) color)
+      (list (string-to-number (substring color 1 3) 16)
+            (string-to-number (substring color 3 5) 16)
+            (string-to-number (substring color 5 7) 16))
+    (mapcar (lambda (number) (floor (* number 256)))
+            (color-name-to-rgb color))))
 
 (defun theme-util-color-list-to-str (color)
   "Convert COLOR in (R G B) format to ”#RRGGBB”."
