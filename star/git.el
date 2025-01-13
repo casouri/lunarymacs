@@ -44,6 +44,11 @@
   (defalias 'github-link-commit 'git-link-commit)
   (defalias 'github-link-homepage 'git-link-hoempage))
 
+(load-package magit-delta
+  :hook (magit-mode-hook . magit-delta-mode))
+
+(luna-note-extern "delta" "port install delta")
+
 (defun pick-magit-status ()
   "Pick a currently open magit status buffer."
   (interactive)
