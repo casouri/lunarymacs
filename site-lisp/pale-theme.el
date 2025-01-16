@@ -204,6 +204,8 @@
         ;; this also determines the hunk region boundary
         (magit-diff-lines-heading          (nil ,bg ,err))
         (magit-diff-revision-summary       ,bold)
+        ;; Don’t inherit ‘magit-diff-hunk-heading’.
+        (magit-diff-conflict-heading       (nil))
 
         (magit-bisect-bad        (error))
         (magit-bisect-good       (success))
