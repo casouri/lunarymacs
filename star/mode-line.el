@@ -18,17 +18,6 @@
 
 ;;; Functions
 
-(defun luna-mode-line-with-padding (text)
-  "Return TEXT with padding on the left.
-The padding pushes TEXT to the right edge of the mode-line."
-  (if (and (>= emacs-major-version 29) (display-graphic-p))
-      (let* ((len (string-pixel-width text))
-             (space-prop
-              `(space :align-to (- (+ right right-margin) (,len))))
-             (padding (propertize "-" 'display space-prop)))
-        (concat padding text))
-    (concat " " text)))
-
 (defun luna-mode-line-coding-system ()
   "Display abnormal coding systems."
   (let ((coding (symbol-name buffer-file-coding-system)))
@@ -41,6 +30,7 @@ The padding pushes TEXT to the right edge of the mode-line."
 
 ;;; Config
 
+(setq mode-line-right-align-edge 'right-fringe)
 (setq-default mode-line-format
               (let* ((spaces
                       (propertize " " 'display '(space :width 1.2)))
@@ -73,8 +63,8 @@ The padding pushes TEXT to the right edge of the mode-line."
                              (propertize " " 'display '(raise -0.3)))
                      " ")
                   mode-line-misc-info
-                  (:eval (concat (luna-mode-line-with-padding ,percentage)
-                                 "%%"))
+                  mode-line-format-right-align
+                  (:eval (concat ,percentage "%%"))
                   ;; (:eval (concat ,spaces "(%l) " ,percentage "%%"))
                   )))
 
