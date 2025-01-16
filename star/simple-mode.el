@@ -147,6 +147,36 @@
   (eglot--code-action eglot-code-action-add-missing-imports "source.addMissingImports")
   (eglot--code-action eglot-code-action-remove-unused-imports "source.removeUnusedImports"))
 
+(with-eval-after-load 'compile
+  (add-to-list
+   'compilation-error-regexp-alist-alist
+   `(nextjs
+     . (,(rx bol (group-n 1 "./" (+ (not (any whitespace)))) "\n"
+             (group-n 2 (+ digit)) ":" (group-n 3 (+ digit)) "  "
+             (or (group-n 4"Error") (group-n 5 "Warning") (group-n 6 "Info")) ": "
+             (+? anychar) eol)
+
+        (lambda () (expand-file-name
+                    (match-string 1) (project-root (project-current))))
+        2 3 (5 . 6) 1
+        (4 'compilation-error)
+        (5 'compilation-warning)
+        (6 'compilation-info))))
+  (add-to-list 'compilation-error-regexp-alist 'nextjs)
+
+  (add-to-list
+   'compilation-error-regexp-alist-alist
+   `(nextjs2
+     . (,(rx bol (group-n 1 "./" (+ (not (any whitespace)))) ":"
+             (group-n 2 (+ digit)) ":" (group-n 3 (+ digit)) "\n"
+             "Type error: "
+             (+? anychar) eol)
+
+        (lambda () (expand-file-name
+                    (match-string 1) (project-root (project-current))))
+        2 3 2 1)))
+  (add-to-list 'compilation-error-regexp-alist 'nextjs2))
+
 (defsetup tsx-ts-mode-hook ()
   (let ((pred `(not ,(rx (or "," ";" "[" "]" "{" "}" "." "-" "=" "+" "*" "!" "^" "&" "|" "&&" "||")))))
     (dolist (lang '(typescript tsx jsx javascript))
@@ -167,8 +197,8 @@
   ;; Too many completions.
   (setq-local company-prefix 3)
   (add-hook 'post-command-hook #'tsx-tag-complete 0 t)
-  (setq-local eldoc-box-buffer-setup-function
-              #'eldoc-box-prettify-ts-errors-setup))
+  (add-hook 'eldoc-box-buffer-setup-hook
+            #'eldoc-box-prettify-ts-errors 0 t))
 
 (defun insert-console-log ()
   "Insert a console.log with first item in kill ring."
