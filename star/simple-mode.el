@@ -130,9 +130,10 @@
 (defalias 'make-executable 'shell-chmod)
 
 ;; Javascript/Typescript
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-mode))
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
-(with-eval-after-load 'tsx-ts-mode
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+(add-to-list 'major-mode-remap-alist '(typescript-ts-mode tsx-ts-mode))
+(with-eval-after-load 'typescript-ts-mode
   (setq-default js-indent-level 2)
   (add-to-list 'find-sibling-rules
                `(,(rx (group (+ (not "/"))) ".tsx" eos)
@@ -151,10 +152,13 @@
   (add-to-list
    'compilation-error-regexp-alist-alist
    `(nextjs
-     . (,(rx bol (group-n 1 "./" (+ (not (any whitespace)))) "\n"
+     . (,(rx bol
+             (or
+              (seq (group-n 1 (seq "./" (+ (not (any whitespace))))) "\n")
+              (group-n 1 ""))
              (group-n 2 (+ digit)) ":" (group-n 3 (+ digit)) "  "
              (or (group-n 4"Error") (group-n 5 "Warning") (group-n 6 "Info")) ": "
-             (+? anychar) eol)
+             (+? (not "\n")) eol)
 
         (lambda () (expand-file-name
                     (match-string 1) (project-root (project-current))))
@@ -198,7 +202,9 @@
   (setq-local company-prefix 3)
   (add-hook 'post-command-hook #'tsx-tag-complete 0 t)
   (add-hook 'eldoc-box-buffer-setup-hook
-            #'eldoc-box-prettify-ts-errors 0 t))
+            #'eldoc-box-prettify-ts-errors 0 t)
+  (define-abbrev local-abbrev-table "udf" "undefined")
+  (abbrev-mode))
 
 (defun insert-console-log ()
   "Insert a console.log with first item in kill ring."
