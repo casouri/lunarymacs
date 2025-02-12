@@ -84,6 +84,7 @@
  "C-c p" #'smerge-prev
  "C-c l" #'smerge-keep-lower
  "C-c u" #'smerge-keep-upper
+ "C-c a" #'smerge-keep-all
  
  :keymaps 'comint-mode-map
  "<up>" #'comint-previous-input
