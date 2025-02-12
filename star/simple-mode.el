@@ -132,7 +132,7 @@
 ;; Javascript/Typescript
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
-(add-to-list 'major-mode-remap-alist '(typescript-ts-mode tsx-ts-mode))
+(add-to-list 'major-mode-remap-alist '(typescript-ts-mode . tsx-ts-mode))
 (with-eval-after-load 'typescript-ts-mode
   (setq-default js-indent-level 2)
   (add-to-list 'find-sibling-rules
