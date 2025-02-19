@@ -45,7 +45,7 @@
   (defalias 'github-link-homepage 'git-link-hoempage))
 
 (load-package magit-delta
-  :hook (magit-mode-hook . magit-delta-mode))
+  :hook (magit-diff-mode-hook . magit-delta-mode))
 
 (luna-note-extern "delta" "port install delta")
 
