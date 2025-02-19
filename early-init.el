@@ -35,3 +35,16 @@
 ;; Have to enable menu bar on mac port, otherwise emacs lost focus.
 ;; (when (not (display-graphic-p))
 ;;   (menu-bar-mode -1))
+
+(defun tango-icons--tool-bar-image-advice (oldfn icon)
+  "Advice for ‘tool-bar--image-expression’.
+OLDFN is ‘tool-bar--image-expression’, ICON is the icon name. Look for
+the png version of ICON first, if not found, use OLDFN."
+  (or `(find-image ',(list (list :file (concat icon ".png"))))
+      (funcall oldfn icon)))
+
+(add-to-list 'image-load-path
+             (expand-file-name "icons" user-emacs-directory))
+
+(advice-add #'tool-bar--image-expression :around
+            #'tango-icons--tool-bar-image-advice)

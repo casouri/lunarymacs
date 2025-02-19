@@ -17,4 +17,6 @@
 !screenshot.png
 !brown-init.el
 !splash.svg
+!icons
+!icons/**/*
 .DS_Store
