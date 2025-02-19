@@ -442,9 +442,11 @@ cp target/release/emacs-lsp-booster ~/bin")
 (load-package eglot
   ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
   :config
+  (set-face-attribute 'eglot-code-action-indicator-face nil :height 90)
   (setq-default read-process-output-max (* 1024 1024)
                 eglot-events-buffer-size 0
-                eglot-events-buffer-config '(:size 0 :format full))
+                eglot-events-buffer-config '(:size 0 :format full)
+                eglot-code-action-indicator "⚡")
 
   ;; Otherwise eglot highlights symbols, which is annoying.
   (add-to-list 'eglot-ignored-server-capabilities
