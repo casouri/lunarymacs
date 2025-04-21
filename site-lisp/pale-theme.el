@@ -146,6 +146,8 @@
                               (:box (:line-width 1 :color ,blue-fg)))
         (tab-bar-tab-inactive (tab-bar ,fg-weak ,bg)
                               (:box (:line-width 1 :color "gray90")))
+        (tab-bar-tab-highlight (tab-bar nil ,bg)
+                               (:box (:line-width 2 :color ,blue-fg)))
         (tab-bar-tab-group-current  (tab-bar-tab nil nil nil bold))
         (tab-bar-tab-group-inactive (tab-bar-tab-inactive))
         (tab-bar-tab-ungrouped      (tab-bar-tab-inactive))
