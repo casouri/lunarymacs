@@ -23,4 +23,5 @@
         (ultra-scroll . (:repo "jdtsmith/ultra-scroll"))
         (stimmung-themes . (:repo "motform/stimmung-themes" :option (:full-clone t)))
         (haskell-ts-mode . (:http "https://codeberg.org/pranshu/haskell-ts-mode.git"))
-        (restclient . (:http "https://github.com/casouri/restclient.el.git"))))
+        (restclient . (:http "https://github.com/casouri/restclient.el.git"))
+        (copilot . (:repo "copilot-emacs/copilot.el"))))
