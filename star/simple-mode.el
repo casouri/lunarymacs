@@ -209,13 +209,15 @@
 (defun insert-console-log ()
   "Insert a console.log with first item in kill ring."
   (interactive)
-  (let ((text (or (current-kill 0 t) ""))
-        beg end)
+  (let* ((text (or (current-kill 0 t) ""))
+         (text-clipped (if (> (length text) 100)
+                           ""
+                         text))
+         beg end)
     (insert "console.log(")
     (setq beg (point))
-    (insert (if (> (length text) 100)
-                ""
-              text))
+    (unless (equal text-clipped "")
+      (insert (format "\"%s\", %s" text-clipped text-clipped)))
     (setq end (point))
     (insert ");")
     (unless (eq beg end)

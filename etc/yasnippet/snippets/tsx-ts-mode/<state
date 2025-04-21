@@ -2,4 +2,4 @@
 # name: <state
 # key: <state
 # --
-const [$1, $1] = useState($0);
+const [$1, $1] = React.useState($0);

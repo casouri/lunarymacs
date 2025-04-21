@@ -3,8 +3,8 @@
 # key: <component
 # --
 
-import { useState } from 'react';
-import { Button } from '@walmart-web/livingdesign-components';
+import React from 'react';
+import { Button } from '@livingdesign/react';
 import { Plus } from '@livingdesign/icons';
 
 
