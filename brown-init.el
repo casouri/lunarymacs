@@ -1,3 +1,5 @@
+;;  -*- lexical-binding: t; -*-
+
 ;;;; Font
 (when (display-graphic-p)
   (luna-enable-apple-emoji)
