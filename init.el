@@ -114,3 +114,4 @@
                            (expand-file-name build "~"))))
     (load test-file)
     (ert "t")))
+(put 'list-timers 'disabled nil)

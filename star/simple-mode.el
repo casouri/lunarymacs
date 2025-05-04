@@ -347,7 +347,7 @@ Then jslint:
   (indent-tabs-mode)
   (bug-reference-prog-mode)
   (treesit-font-lock-recompute-features '(emacs-devel))
-  (setq c-ts-mode-emacs-sources-support nil))
+  (setq c-ts-mode-emacs-sources-support t))
 
 ;; XML
 (defsetup (nxml-mode-hook sgml-mode-hook) ()
@@ -460,10 +460,11 @@ cp target/release/emacs-lsp-booster ~/bin")
   ;;  c-ts-mode to fontify some text on every keypress.
   (add-to-list 'eglot-ignored-server-capabilities
                :textDocument/hover)
+  (set-face-attribute 'eglot-code-action-indicator-face nil :height 0.5)
 
   (luna-on "Brown"
     (add-to-list 'eglot-server-programs
-                 '((c-mode c++-mode) . ("ccls-clang-14")))
+                 '((c-mode c++-mode) . ("ccls")))
     (add-to-list 'eglot-server-programs
                  `(rust-ts-mode . ("rust-analyzer"
                                    :initializationOptions
