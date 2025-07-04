@@ -98,7 +98,7 @@
  '(mouse-wheel-scroll-amount '(0.03))
  '(mouse-wheel-tilt-scroll t)
  '(ns-pop-up-frames nil nil nil "This way emacsclient doesn't open new frames.")
- '(outline-minor-mode-cycle t)
+ '(outline-minor-mode-cycle nil nil nil "We have S-i for cycling outline section, TAB might conflict with indenting.")
  '(package-archives '(("gnu" . "https://elpa.gnu.org/packages/") ("nongnu" . "https://elpa.nongnu.org/packages") ("melpa" . "http://melpa.org/packages/")))
  '(recentf-max-saved-items 500)
  '(ring-bell-function 'ignore)
