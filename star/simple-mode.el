@@ -24,6 +24,10 @@
  :keymaps 'lisp-interaction-mode-map
  "<S-return>" #'eval-print-sexp-at-point
  :---
+ :keymaps 'markdown-mode-map
+ "C-c c" #'insert-backticks
+ "C-c C" #'insert-backticksss
+ :---
  :keymaps 'web-mode-map
  "C-M-f" #'web-mode-tag-next
  "C-M-b" #'web-mode-tag-previous
@@ -49,7 +53,11 @@
 ;;; Package
 
 (load-package markdown-mode
-  :mode "\\.md$" "\\.markdown$" "\\.mk$")
+  :mode "\\.md$" "\\.markdown$" "\\.mk$"
+  :config
+  (defsetup markdown-mode-hook ()
+    (electric-quote-local-mode -1)
+    (eclectic-quote-minor-mode)))
 
 (load-package yaml-mode
   :mode "\\.yaml$")
@@ -130,16 +138,21 @@
 (defalias 'make-executable 'shell-chmod)
 
 ;; Javascript/Typescript
+(add-to-list 'auto-mode-alist '("\\.cjs\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.mjs\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 (add-to-list 'major-mode-remap-alist '(typescript-ts-mode . tsx-ts-mode))
+(add-to-list 'major-mode-remap-alist '(javascript-mode . tsx-ts-mode))
 (with-eval-after-load 'typescript-ts-mode
   (setq-default js-indent-level 2)
   (add-to-list 'find-sibling-rules
                `(,(rx (group (+ (not "/"))) ".tsx" eos)
-                 "\\1.module.scss"))
+                 "\\1.\\(module\\|mod\\).scss"))
   (add-to-list 'find-sibling-rules
-               `(,(rx (group (+ (not "/"))) ".module.scss" eos)
+               `(,(rx (group (+ (not "/")))
+                      (or ".module" ".mod")
+                      ".scss" eos)
                  "\\1.tsx"))
   (set-face-attribute 'typescript-ts-jsx-tag-face nil :inherit 'shadow)
   (set-face-attribute 'typescript-ts-jsx-attribute-face nil
@@ -203,6 +216,9 @@
   (add-hook 'post-command-hook #'tsx-tag-complete 0 t)
   (add-hook 'eldoc-box-buffer-setup-hook
             #'eldoc-box-prettify-ts-errors 0 t)
+  (flymake-eslint-enable)
+  (electric-quote-local-mode -1)
+  (eclectic-quote-minor-mode)
   (define-abbrev local-abbrev-table "udf" "undefined")
   (abbrev-mode))
 
