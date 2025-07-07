@@ -2,10 +2,6 @@
 # name: <useEffect
 # key: <useEffect
 # --
-useEffect(() => {
-    const subr = async () => {
-      $0
-    }
-
-    subr();
-  }, []);
+React.useEffect(() => {
+  $0
+}, []);

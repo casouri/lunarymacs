@@ -2,15 +2,17 @@
 # name: <story
 # key: <story
 # --
-import type { Meta } from '@storybook/react';
-import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 import $1 from './$1';
 
 const meta: Meta<typeof $1> = {
+  title: '$1',
   component: $1,
 };
-export default meta;
 
-export const Default = () => {
-  return null;
-}
+export default meta;
+type Story = StoryObj<typeof $1>;
+
+export const Default: Story = {
+  args: {},
+};
