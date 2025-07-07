@@ -489,7 +489,7 @@ SOURCE-WINDOW is set to the xidebar buffer’s source window."
   "Display BUFFER in a side window and setup the window."
   (let ((window (display-buffer-in-side-window
                  buffer '((side . left)
-                          (window-width . 30)))))
+                          (window-width . 20)))))
     (set-window-parameter window 'xidebar-window t)
     (set-window-parameter window 'no-delete-other-windows t)
     (set-window-dedicated-p window t)))
