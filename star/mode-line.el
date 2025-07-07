@@ -31,6 +31,7 @@
 ;;; Config
 
 (setq mode-line-right-align-edge 'right-fringe)
+(setq-default frame-title-format '(:eval default-directory))
 (setq-default mode-line-format
               (let* ((spaces
                       (propertize " " 'display '(space :width 1.2)))
