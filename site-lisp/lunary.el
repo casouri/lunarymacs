@@ -440,7 +440,7 @@ the same form as ‘defun’."
      ,@(mapcar
         (lambda (hook)
           (let ((fn-name (intern (string-trim-right
-                                  (format "setup-%s" hook) "hook")))
+                                  (format "setup-%s" hook) "-hook")))
                 (docstring
                  (format "Setup hook auto generated for ‘%s’ by ‘luna-defsetup’."
                          hook)))
