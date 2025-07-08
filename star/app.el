@@ -11,6 +11,7 @@
  "C-h f"   #'ghelp-describe-function
  "C-h v"   #'ghelp-describe-variable
  "C-h k"   #'ghelp-describe-key
+ "C-c RET" #'gptel-send
  :keymaps 'restclient-mode-map
  "C-c C-e" #'restclient-gql-builder)
 
@@ -144,3 +145,8 @@
 
 (load-package dwim-shell-command
   :config (require 'dwim-shell-commands))
+
+(load-package gptel)
+
+(load-package gptel-magit
+  :hook (magit-mode . gptel-magit-install))
