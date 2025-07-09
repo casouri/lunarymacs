@@ -220,6 +220,7 @@
   (electric-quote-local-mode -1)
   (eclectic-quote-minor-mode)
   (define-abbrev local-abbrev-table "udf" "undefined")
+  (rainbow-delimiters-mode -1)
   (abbrev-mode))
 
 (defun insert-console-log ()
