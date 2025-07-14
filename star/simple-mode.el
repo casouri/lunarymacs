@@ -56,6 +56,7 @@
   :mode "\\.md$" "\\.markdown$" "\\.mk$"
   :config
   (defsetup markdown-mode-hook ()
+    (face-remap-set-base 'default '(:inherit variable-pitch-text))
     (electric-quote-local-mode -1)
     (eclectic-quote-minor-mode)))
 

@@ -66,6 +66,9 @@
 
 (load-package flique :defer t)
 
+(load-package eclectic-quote
+  :commands eclectic-quote-minor-mode)
+
 (with-eval-after-load 'texinfo
   (defun texinfo-caps-to-vars ()
     "Transform NAME at point to @var{name}."
