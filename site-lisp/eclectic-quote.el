@@ -47,14 +47,22 @@ text-mode."
       (backward-delete-char 1)
       (insert "’"))
      ((and (looking-back (rx "\"") 1)
-           (looking-at (rx "\"") 1))
+           (looking-at (rx "\"") 1)
+           ;; If user inserted "", the previous
+           ;; ‘eclectic-quote--point-in-text-p’ guard always return
+           ;; non-nil, so we need to check if we’re actually in a text
+           ;; context.
+           (save-excursion
+             (backward-char)
+             (eclectic-quote--point-in-text-p)))
       (delete-region (1- (point)) (1+ (point)))
       (insert "“”")
       (goto-char (1- (point))))
      ((looking-back (rx "”\"") 2)
       (backward-delete-char 2)
       (insert "“”"))
-     ((looking-back (rx "\"") 1)
+     ((and (looking-back (rx "\"") 1)
+           (not (looking-at (rx "\"") 1)))
       (backward-delete-char 1)
       (insert "”")))))
 
@@ -70,6 +78,6 @@ typing \"\" inserts “”."
       (add-hook 'post-command-hook #'eclectic-quote--post-command 0 t)
     (remove-hook 'post-command-hook #'eclectic-quote--post-command t)))
 
-(provide 'eclectic-quote-mode)
+(provide 'eclectic-quote)
 
 ;;; eclectic-quote.el ends here
