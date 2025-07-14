@@ -4,16 +4,13 @@
 # --
 
 import React from 'react';
-import { Button } from '@livingdesign/react';
-import { Plus } from '@livingdesign/icons';
-
 
 type Props = {
 
 };
 
-const $1 = ({}: Props) => {
-    return ($0);
+const `(setq my-snippet--component-name (car (string-split (file-name-nondirectory (buffer-file-name)) "\\.")))` = ({}: Props) => {
+    return (null);
 }
 
-export default $1;
+export default `my-snippet--component-name`;

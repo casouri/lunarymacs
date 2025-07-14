@@ -3,16 +3,14 @@
 # key: <story
 # --
 import type { Meta, StoryObj } from '@storybook/react';
-import $1 from './$1';
+import `(setq my-snippet--component-name (car (string-split (file-name-nondirectory (buffer-file-name)) "\\.")))` from './`my-snippet--component-name`';
 
-const meta: Meta<typeof $1> = {
-  title: '$1',
-  component: $1,
-};
+type Story = StoryObj<typeof `my-snippet--component-name`>;
 
-export default meta;
-type Story = StoryObj<typeof $1>;
-
-export const Default: Story = {
+export const Primary: Story = {
   args: {},
 };
+
+export default {
+  component: `my-snippet--component-name`,
+} as Meta<typeof `my-snippet--component-name`>;
