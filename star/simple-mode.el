@@ -429,7 +429,8 @@ Then jslint:
                                  "impl_item"
                                  "mod_item")
                              eos)
-                   nil nil)))))
+                   nil nil)))
+    (ignore-errors (copilot-mode))))
 
 ;; Go
 (load-package go-mode
