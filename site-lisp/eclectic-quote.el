@@ -66,6 +66,7 @@ text-mode."
       (backward-delete-char 1)
       (insert "”")))))
 
+;;;###autoload
 (define-minor-mode eclectic-quote-minor-mode
   "An alternative ‘electric-quote-mode’ that frees the backtick.
 

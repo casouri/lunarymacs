@@ -45,6 +45,9 @@
 (load-package quanjiao
   :autoload-hook (text-mode-hook . quanjiao-mode))
 
+(load-package eclectic-quote
+  :commands eclectic-quote-minor-mode)
+
 (load-package xeft
   :commands xeft
   :config
