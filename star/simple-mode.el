@@ -422,7 +422,12 @@ Then jslint:
   (defsetup rust-ts-mode-hook ()
     (toggle-truncate-lines -1)
     (electric-quote-local-mode -1)
+    (eclectic-quote-minor-mode)
     (add-hook 'before-save-hook #'eglot-format-buffer 0 t)
+    (setq comment-start-skip (rx "/"
+                                 (or (+ "/") (+ "*"))
+                                 (* (or "/" "!" "*"))
+                                 (* whitespace)))
     (setq-local treesit-simple-imenu-settings
                 `(("Enum" "\\`enum_item\\'" nil nil)
                   ("Type" "\\`type_item\\'" nil nil)
@@ -522,10 +527,13 @@ cp target/release/emacs-lsp-booster ~/bin")
                       :foreground "darkgray")
   (setq eldoc-doc-buffer-separator
         (concat "\n"
-                (propertize "-" 'display '(space :align-to right)
-                            'face '(:strike-through t)
-                            'font-lock-face '(:strike-through t))
-                "\n")))
+                (propertize
+                 (concat
+                  (propertize "---" 'display " ")
+                  "\n")
+                 'face '(:strike-through t :extend t)
+                 'font-lock-face
+                 '(:strike-through t :extend t)))))
 
 (load-package apheleia
   :extern "prettier"
@@ -562,3 +570,4 @@ cp target/release/emacs-lsp-booster ~/bin")
 (push '(tsx-mode . tsx-ts-mode) major-mode-remap-alist)
 (push '(typescript-mode . tsx-ts-mode) major-mode-remap-alist)
 (push '(javascript-mode . tsx-ts-mode) major-mode-remap-alist)
+(setq-default treesit-sexp-thing 'treesit-node-named)
