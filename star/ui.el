@@ -95,6 +95,10 @@
             ("NEXT" . ,success))))
   (global-hl-todo-mode))
 
+(load-package happy-path
+  :commands happy-path-mode
+  :config (set-face-attribute 'happy-path-dim nil :inherit nil :foreground "#CCCCCC"))
+
 (load-package annotate
   :commands annotate-mode
   :config (setq annotate-annotation-position-policy :new-line))
