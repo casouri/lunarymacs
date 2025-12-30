@@ -12,52 +12,16 @@
 ;;     Renames current buffer and file it is visiting.
 ;; - ‘luna-sudo-edit’
 ;;     Edit currently visited file as root.
+;; - ‘luna-open-directory’
+;;     Open the current directory in dired.
 ;; - ‘luna-load-env’
 ;;     Load PATH and CPATH from a file.
 ;; - ‘luna-insert-special-symbol’
 ;;     Insert special symbol at point.
 ;; - ‘luna-make-accent-fn’
 ;;     Return a command that insert “COMBINDING NAME” unicode char.
-;; - ‘luna-autoinsert’
-;;     Autoinsert what auto-insert inserts.
-;; - ‘cheatsheet-display’
-;;     Display cheat sheet for this major mode.
-;; - ‘copy-change-log’
-;;     No docstring.
-;; - ‘unfill-region’
-;;     Remove newlines in the region from BEG to END.
-;; - ‘windows-newline’
-;;     Set file to use windows newline (\r\n).
-;; - ‘read-key-command’
-;;     Read key.
-;; - ‘gif-animate’
-;;     Animate Gif in buffer.
-;; - ‘copy-next-command-output’
-;;     Prefix command to add the output of the next command to kill-ring.
-;; - ‘uuid’
-;;     Insert an UUID.
-;; - ‘new-bin’
-;;     Create a new command with NAME under ~/bin.
-;; - ‘insert-function-summary’
-;;     Insert a summary of all the functions defined in this file.
-;; - ‘lineup’
-;;     Align columns by whitespace.
-;; - ‘switch-buffer-same-major-mode’
-;;     Switch buffer among those with the same major mode.
-;; - ‘open-in-finder’
-;;     Open ‘default-directory’ in Finder.
-;; - ‘open-in-iterm’
-;;     Open ‘default-directory’ iTerm.
-;; - ‘luna-rename-file’
-;;     Renames current buffer and file it is visiting.
-;; - ‘luna-sudo-edit’
-;;     Edit currently visited file as root.
-;; - ‘luna-load-env’
-;;     Load PATH and CPATH from a file.
-;; - ‘luna-insert-special-symbol’
-;;     Insert special symbol at point.
-;; - ‘luna-make-accent-fn’
-;;     Return a command that insert “COMBINDING NAME” unicode char.
+;; - ‘luna-insert-line-numbers’
+;;     Insert line numbers before each linne bewteen BEG and END.
 ;; - ‘luna-autoinsert’
 ;;     Autoinsert what auto-insert inserts.
 ;; - ‘cheatsheet-display’
@@ -81,11 +45,19 @@
 ;; - ‘insert-function-summary’
 ;;     Insert a summary of all the functions defined in this file.
 ;; - ‘lineup’
-;;     Align columns by whitespace.
+;;     Align columns by whitespace between START and END.
 ;; - ‘better-quit-window’
 ;;     Quit from current window.
 ;; - ‘regexp-count’
 ;;     Count the number of occurrences that matches REGEXP.
+;; - ‘regexp-collect’
+;;     Collect matches of REGEXP to kill-ring.
+;; - ‘insert-webpage-ref’
+;;     Insert a URL with its title.
+;; - ‘copy-epoch’
+;;     Copy current UNIX epoch to clipboard.
+;; - ‘hide-method-body’
+;;     Hide function bodies.
 
 (require 'lunary)
 (require 'luna-f)
@@ -528,6 +500,11 @@ If invoked with interactive ARG, use milliseconds."
      (number-to-string
       (* (if (eq arg 4) 1000 1) (floor (float-time (current-time))))))
     (kill-ring-save (point-min) (point-max))))
+
+(defun hide-method-body ()
+  "Hide function bodies."
+  (interactive "p")
+  (set-selective-display 5))
 
 (provide 'utility)
 
