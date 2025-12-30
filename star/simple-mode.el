@@ -457,16 +457,9 @@ Then jslint:
                    lisp-mode-hook)
                   . aggressive-indent-mode))
 
-(load-package eglot-booster
-  :extern "emacs-lsp-booster"
-  :after eglot
-  :config	(eglot-booster-mode))
-
-(luna-note-extern "emacs-lsp-booster"
-  "git clone https://github.com/blahgeek/emacs-lsp-booster.git
-cd emacs-lsp-booster/
-cargo build --release
-cp target/release/emacs-lsp-booster ~/bin")
+;; eglot-booster corrups the encoding with rust-analyzer with Emacs
+;; master. Plus, Emacs 30+ has builtin fast JSON decoding so the
+;; booster is not needed anymore.
 
 (load-package eglot
   ;; Note: setting `eldoc-echo-area-use-multiline-p' keeps eldoc slim.
@@ -483,6 +476,9 @@ cp target/release/emacs-lsp-booster ~/bin")
   ;; No thanks.
   (add-to-list 'eglot-ignored-server-capabilities
                :inlayHintProvider)
+  ;; Don’t really need it.
+  (add-to-list 'eglot-ignored-server-capabilities
+               :semanticTokensProvider)
   ;; In ‘c-ts-mode’, this feature calls eglot--hover-info, which calls
   ;;  c-ts-mode to fontify some text on every keypress.
   (add-to-list 'eglot-ignored-server-capabilities
