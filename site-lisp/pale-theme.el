@@ -337,7 +337,6 @@
         (selectrum-prescient-secondary-highlight (nil nil ,hl-normal))
 
         (consult-bookmark (consult-buffer))
-        (consult-file (consult-file))
 
         (erc-notice-face (nil ,red-fg)) ; Get rid of bold.
         (erc-timestamp-face (nil ,ok)) ; Use darker green.
