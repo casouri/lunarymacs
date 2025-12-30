@@ -5,7 +5,7 @@
   (luna-enable-apple-emoji)
   (luna-load-font 'default "Cascadia" 14)
   (luna-load-font 'fixed-pitch "Cascadia" 14)
-  (luna-load-font 'variable-pitch "Academica" 16)
+  (luna-load-font 'variable-pitch "aav_Boritina" 16)
   (luna-load-font 'fixed-pitch-serif "Cascadia" 14)
   (luna-load-font 'mode-line "Arial" 12 :weight 'regular :height 125)
   (with-eval-after-load 'shortdoc
@@ -29,3 +29,7 @@
 (add-to-list 'load-path "/opt/local/share/emacs/site-lisp")
 (setq source-directory (expand-file-name "~/emacs-head"))
 (setq xref-search-program 'ripgrep)
+
+
+(setq gptel-model 'claude-3.7-sonnet
+      gptel-backend (gptel-make-gh-copilot "Copilot"))
