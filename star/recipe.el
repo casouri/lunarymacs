@@ -12,6 +12,7 @@
                             :option (:full-clone t)))
         (eglot-booster . (:repo "jdtsmith/eglot-booster"))
         (isolate . (:repo "casouri/isolate" :option (:full-clone t)))
+        (happy-path . (:repo "casouri/happy-path" :option (:full-clone t)))
         (ftable . (:repo "casouri/ftable" :option (:full-clone t)))
         (ghelp . (:repo "casouri/ghelp" :option (:full-clone t)))
         (iscroll . (:repo "casouri/iscroll" :option (:full-clone t)))
