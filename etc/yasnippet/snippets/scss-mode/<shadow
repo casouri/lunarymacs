@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: <shadow
+# key: <shadow
+# --
+box-shadow: 0 0 12px var(--surface-300);
