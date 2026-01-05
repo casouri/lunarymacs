@@ -32,7 +32,8 @@
  "s-." #'winner-redo
 
  :leader
- "tr" #'tab-rename)
+ "tr" #'tab-rename
+ "fo" #'other-frame)
 
 ;;; Config
 

@@ -53,9 +53,17 @@
 ;;; Package
 
 (load-package markdown-mode
-  :mode "\\.md$" "\\.markdown$" "\\.mk$"
+  ;; :mode "\\.md$" "\\.markdown$" "\\.mk$"
   :config
   (defsetup markdown-mode-hook ()
+    (face-remap-set-base 'default '(:inherit variable-pitch-text))
+    (electric-quote-local-mode -1)
+    (eclectic-quote-minor-mode)))
+
+(load-package markdown-ts-mode
+  :mode "\\.md$" "\\.markdown$" "\\.mk$"
+  :config
+  (defsetup markdown-ts-mode-hook ()
     (face-remap-set-base 'default '(:inherit variable-pitch-text))
     (electric-quote-local-mode -1)
     (eclectic-quote-minor-mode)))
@@ -217,10 +225,10 @@
   (add-hook 'post-command-hook #'tsx-tag-complete 0 t)
   (add-hook 'eldoc-box-buffer-setup-hook
             #'eldoc-box-prettify-ts-errors 0 t)
-  (flymake-eslint-enable)
+  ;; (flymake-eslint-enable)
   ;; If eglot overrides flymake backends, this should add
   ;; flymake-eslint back.
-  (add-hook 'eglot-managed-mode-hook #'flymake-eslint-enable 0 t)
+  ;; (add-hook 'eglot-managed-mode-hook #'flymake-eslint-enable 0 t)
   (electric-quote-local-mode -1)
   (eclectic-quote-minor-mode)
   (define-abbrev local-abbrev-table "udf" "undefined")
