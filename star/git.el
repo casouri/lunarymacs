@@ -120,3 +120,67 @@
   (let ((branch (tabulated-list-get-id)))
     (quit-window)
     (magit-checkout branch)))
+
+;;; Find surrounding tags
+
+(defun git-commit-at-point ()
+  "Extract commit from current buffer context.
+Checks magit-buffer-revision, magit-buffer-range, diff-vc-revisions,
+and *VC-history* buffers."
+  (cond
+   ;; magit-revision-mode: single commit view
+   ((bound-and-true-p magit-buffer-revision)
+    magit-buffer-revision)
+   ;; magit-diff-mode: parse "abc..def" to get second commit
+   ((bound-and-true-p magit-buffer-range)
+    (when (string-match "\\.\\{2,3\\}\\(.+\\)" magit-buffer-range)
+      (match-string 1 magit-buffer-range)))
+   ;; vc diff buffers: take second element from list
+   ((bound-and-true-p diff-vc-revisions)
+    (cadr diff-vc-revisions))
+   ;; VC-history buffer: parse "commit HASH" from first line
+   ((string= (buffer-name) "*VC-history*")
+    (save-excursion
+      (goto-char (point-min))
+      (when (looking-at "commit \\([a-f0-9]+\\)")
+        (match-string 1))))))
+
+(defun git--tag-before (commit)
+  "Find the most recent tag before COMMIT."
+  (let ((output (shell-command-to-string
+                 (format "git describe --tags --abbrev=0 %s^ 2>/dev/null" commit))))
+    (let ((tag (string-trim output)))
+      (if (string-empty-p tag) nil tag))))
+
+(defun git--tag-after (commit)
+  "Find the first tag containing COMMIT."
+  (let ((output (shell-command-to-string
+                 (format "git describe --contains %s 2>/dev/null" commit))))
+    (let ((tag (string-trim output)))
+      (cond
+       ((string-empty-p tag) nil)
+       ;; Parse "tag~N" or "tag^N" format to extract just the tag
+       ((string-match "\\`\\([^~^]+\\)" tag)
+        (match-string 1 tag))
+       (t tag)))))
+
+(defun git-find-surrounding-tags (commit)
+  "Find version tags before and after COMMIT.
+When called interactively, defaults to the commit at point."
+  (interactive
+   (let ((default (git-commit-at-point)))
+     (list (read-string (if default
+                            (format "Commit (default %s): " default)
+                          "Commit: ")
+                        nil nil default))))
+  (unless (magit-toplevel)
+    (user-error "Not in a git repository"))
+  (when (or (null commit) (string-empty-p commit))
+    (user-error "No commit specified"))
+  (let ((before (git--tag-before commit))
+        (after (git--tag-after commit))
+        (short-commit (substring commit 0 (min 7 (length commit)))))
+    (message "Commit %s: before=%s, after=%s"
+             short-commit
+             (or before "none")
+             (or after "none"))))
