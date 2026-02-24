@@ -504,6 +504,12 @@ Then jslint:
                  `((tsx-ts-mode typescript-ts-mode js-ts-mode)
                    . ("typescript-language-server" "--stdio"))))
 
+  (luna-note-extern "typescript-language-server"
+    "brew install typescript-language-server")
+
+  (luna-note-extern "rust-analyzer"
+    "Comes with rustup")
+
   (defsetup eglot-managed-mode-hook ()
     ;; Show error message when hovering by point. (By default error
     ;; messages are only shown when hovering by cursor). Show flymake
