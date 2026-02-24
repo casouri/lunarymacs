@@ -142,7 +142,25 @@
 (add-hook 'Custom-mode-hook #'luna-customize-setup)
 
 (load-package vterm
-  :commands vterm)
+  :commands vterm
+  :init
+  ;; https://mocompute.codeberg.page/item/2024/2024-09-03-emacs-project-vterm.html
+  (defun my-project-shell ()
+    "Start an inferior shell in the current project's root directory.
+If a buffer already exists for running a shell in the project's root,
+switch to it.  Otherwise, create a new shell buffer.
+With \\[universal-argument] prefix arg, create a new inferior shell buffer even
+if one already exists."
+    (interactive)
+    (require 'comint)
+    (let* ((default-directory (project-root (project-current t)))
+           (default-project-shell-name (project-prefixed-buffer-name "shell"))
+           (shell-buffer (get-buffer default-project-shell-name)))
+      (if (and shell-buffer (not current-prefix-arg))
+          (if (comint-check-proc shell-buffer)
+              (pop-to-buffer shell-buffer (bound-and-true-p display-comint-buffer-action))
+            (vterm shell-buffer))
+        (vterm (generate-new-buffer-name default-project-shell-name))))))
 
 (load-package dwim-shell-command
   :config (require 'dwim-shell-commands))
