@@ -47,9 +47,11 @@
                   (:propertize "%[%b%]" face (:weight semi-bold))
                   (:eval (luna-mode-line-coding-system))
                   ,spaces
-                  ,(if (boundp 'minions-mode-line-modes)
-                       'minions-mode-line-modes
-                     'mode-line-modes)
+                  ,(cond ((boundp 'minions-mode-line-modes)
+                          'minions-mode-line-modes)
+                         ((fboundp 'minions--mode-line-minor-modes)
+                          '(:eval (minions--mode-line-minor-modes)))
+                         (t 'mode-line-modes))
                   ,spaces
                   (:eval (if (buffer-modified-p)
                              ,(if (display-graphic-p) "ΦAΦ" "OAO")
