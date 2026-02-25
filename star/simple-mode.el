@@ -450,7 +450,9 @@ Then jslint:
 
 ;; Go
 (load-package go-mode
-  :mode "\\.go$")
+  :mode "\\.go$"
+  ;; Make sure go-mode wins over go-ts-mode.
+  :init (add-to-list 'major-mode-remap-alist '(go-mode . go-mode)))
 
 (load-package protobuf-mode :mode "\\.proto")
 
