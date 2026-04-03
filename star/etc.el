@@ -130,6 +130,7 @@ Otherwise return nil."
  ;; '(switch-to-buffer-preserve-window-point nil nil nil "Always display buffer’s at its current point please")
  '(tab-always-indent 'complete)
  '(tab-width 4)
+ '(undo-limit 1600000)
  '(use-dialog-box nil)
  '(use-system-tooltips nil)
  '(user-full-name "Yuan Fu")
