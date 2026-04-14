@@ -359,6 +359,9 @@
         (debbugs-gnu-new (nil ,err))
         (debbugs-gnu-handled (nil ,ok))
         (debbugs-gnu-tagged (nil ,err))
+
+        (xref-file-header (magit-diff-file-heading))
+        ;; (xref-match)
         ))))
 
 (provide-theme 'pale)
