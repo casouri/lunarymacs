@@ -563,12 +563,14 @@ Then jslint:
     "Reverse the effect of prefix argument."
     (funcall old-fn (not no-quit)))
   (advice-add #'xref-goto-xref :around #'xref-goto-xref-advice)
+  (setq xref-history-storage #'xref-window-local-history)
 
   ;; Xref window at bottom.
   (add-to-list 'display-buffer-alist
                (cons (rx "*xref*")
                      (cons 'display-buffer-in-side-window
-                           '((side . bottom))))))
+                           '((side . bottom)
+                             (window-height . 30))))))
 ;;; Config
 
 ;;;; Tree-sitter
