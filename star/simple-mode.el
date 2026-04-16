@@ -3,6 +3,7 @@
 ;; Simple config for programming modes.
 
 (require 'utility)
+(require 'tsx-imenu)
 
 ;;; Key
 
@@ -233,7 +234,9 @@
   (eclectic-quote-minor-mode)
   (define-abbrev local-abbrev-table "udf" "undefined")
   (rainbow-delimiters-mode -1)
-  (abbrev-mode))
+  (abbrev-mode)
+  (setq-local treesit-simple-imenu-settings tsx-imenu-settings)
+  (treesit-major-mode-setup))
 
 (defun insert-console-log ()
   "Insert a console.log with first item in kill ring."
@@ -570,7 +573,7 @@ Then jslint:
                (cons (rx "*xref*")
                      (cons 'display-buffer-in-side-window
                            '((side . bottom)
-                             (window-height . 30))))))
+                             (max-window-height . 30))))))
 ;;; Config
 
 ;;;; Tree-sitter
