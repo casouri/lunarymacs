@@ -1,0 +1,9 @@
+# key: <doc
+# name: <doc
+# --
+/**
+ * ${1:Description of the function.}
+ *
+ * @param {${2:type}} ${3:param} - ${4:Description.}
+ * @returns {${5:type}} ${6:Description.}
+ */$0
