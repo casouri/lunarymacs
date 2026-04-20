@@ -41,7 +41,9 @@
  :keymaps 'eglot-mode-map
  "C-h C-h" #'eldoc-box-help-at-point
  :keymaps '(tsx-ts-mode-map typescript-ts-mode-map)
- "C-c C-l" #'insert-console-log)
+ "C-c C-l" #'insert-console-log
+ :keymaps '(go-ts-mode-map go-mode-map)
+ "C-c C-l" #'insert-fmt-printf)
 
 (defun eval-print-sexp-at-point ()
   "Evaluate top level sexp at point and print."
@@ -456,6 +458,24 @@ Then jslint:
   :mode "\\.go$"
   ;; Make sure go-mode wins over go-ts-mode.
   :init (add-to-list 'major-mode-remap-alist '(go-mode . go-mode)))
+
+(defun insert-fmt-printf ()
+  "Insert a console.log with first item in kill ring."
+  (interactive)
+  (let* ((text (or (current-kill 0 t) ""))
+         (text-clipped (if (> (length text) 100)
+                           ""
+                         text))
+         beg end)
+    (insert "fmt.Printf(")
+    (setq beg (point))
+    (unless (equal text-clipped "")
+      (insert (format "\"%s: %%v\\n\", %s" text-clipped text-clipped)))
+    (setq end (point))
+    (insert ");")
+    (unless (eq beg end)
+      (goto-char beg)
+      (push-mark end t t))))
 
 (load-package protobuf-mode :mode "\\.proto")
 
