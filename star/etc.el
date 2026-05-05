@@ -50,6 +50,18 @@
 
 (load-package exec-path-from-shell :defer)
 
+(defun luna-recentf-no-remote (file)
+  "Don’t keep remote files.
+
+If FILE is remote, return nil.
+If FILE is readable, return t.
+Otherwise return nil."
+  (cond
+   ((file-remote-p file) nil)
+   (t (file-readable-p file))))
+
+(setq recentf-keep '(luna-recentf-no-remote))
+
 ;;; Custom
 
 (custom-set-variables
