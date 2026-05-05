@@ -36,7 +36,8 @@
   :config
   (with-eval-after-load 'recentf
     (add-to-list 'recentf-exclude no-littering-var-directory)
-    (add-to-list 'recentf-exclude no-littering-etc-directory))
+    (add-to-list 'recentf-exclude no-littering-etc-directory)
+    (add-to-list 'recentf-keep #'file-remote-p))
   (setq auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
   (let ((backup-dir (expand-file-name "backup"
