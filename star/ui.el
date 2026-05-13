@@ -160,11 +160,14 @@
   (setq xidebar-file-icon-function
         #'xidebar-file-icon-vscode))
 
-;; (load-package breadcrumb
-;;   :init (setq-default frame-title-format
-;;                       '((:eval (breadcrumb-project-crumbs))
-;;                         (:eval (and imenu--index-alist
-;;                                     (concat "  ◊  " (breadcrumb-imenu-crumbs)))))))
+(load-package breadcrumb
+  :config
+  (setq bc-imenu-crumb-separator
+        (concat
+         (propertize " " 'display '(raise 0.3))
+         ">"
+         (propertize " " 'display '(raise -0.3))))
+  (breadcrumb-mode))
 
 (load-package ultra-scroll
   :config
