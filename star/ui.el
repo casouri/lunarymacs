@@ -162,7 +162,9 @@
 
 (load-package breadcrumb
   :config
-  (setq bc-imenu-crumb-separator
+  (setq bc-project-max-length 0.5
+        bc-imenu-max-length 0.4
+        bc-imenu-crumb-separator
         (concat
          (propertize " " 'display '(raise 0.3))
          ">"
