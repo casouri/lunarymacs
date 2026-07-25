@@ -318,6 +318,9 @@
         (org-time-grid         (nil ,hl-fg))
         (org-upcoming-deadline (nil ,err))
 
+        (markdown-ts-code-span (fixed-pitch nil ,bg-block))
+        (markdown-ts-delimiter (nil ,bg-block))
+
         (helpful-heading (info-title-3))
 
         (ghelp-entry-title (info-title-2))
