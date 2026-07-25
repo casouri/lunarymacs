@@ -6,11 +6,9 @@
 
 (load-package company-pollen :defer t)
 
-(load-package pollen-mode
-  :mode "\\.pm$"
+(load-package pollen-ts-mode
+  :mode "\\.\\(pm\\|pp\\)$"
   :config
-  ;; Set parent to text-mode so electric-quote-mode works.
-  (put 'pollen-mode 'derived-mode-parent 'text-mode)
   (add-hook 'pollen-mode-hook 'setup-pollen)
   (require 'company-pollen))
 
@@ -22,18 +20,10 @@
   (visual-line-mode)
   (setq-local indent-line-function
               #'pollen-indent-function)
-  (setq-local comment-start "◊; ")
-  (setq-local outline-regexp "◊\\(sub\\)?section{"
-              outline-minor-mode-cycle t
-              outline-minor-mode-highlight 'append)
   (variable-pitch-mode)
   (when (featurep 'highlight-parentheses)
     (highlight-parentheses-mode -1))
   (outline-minor-mode)
-  (font-lock-add-keywords
-   nil `((,(rx (seq "◊" (+ (not (any "[" "{" " " "," "."))))) 0 'fixed-pitch prepend)
-         (,(rx (or "[" "]" "{" "}")) 0 'fixed-pitch prepend))
-   'append)
   (jit-lock-register #'pollen-fontify-code))
 
 (defun pollen-indent-function ()
@@ -53,33 +43,6 @@
           (goto-char mark)
           (when (eq (point) (line-beginning-position))
             (skip-syntax-forward "-")))))))
-
-(defun pollen-fontify-code (start end)
-  "Fontify ◊code and ◊bcode with fixed-pitch."
-  (goto-char start)
-  (while (re-search-forward "◊b?code{" end t)
-    (unless (or (nth 3 (syntax-ppss))
-                (nth 4 (syntax-ppss)))
-      (let ((start (point))
-            (depth (car (syntax-ppss))))
-        (while (and (search-forward "}" nil t)
-                    ;; Skip "}" in strings.
-                    (or (nth 3 (syntax-ppss))
-                        ;; Skip "}" in comments.
-                        (nth 4 (syntax-ppss))
-                        ;; Skip nested "}". (syntax-ppss (1- (point)))
-                        ;; moves point back, so we use (point) rather
-                        ;; than (1- (point)).
-                        (not (eq (car (syntax-ppss (point)))
-                                 (1- depth))))))
-        (when (looking-back "}" 1)
-          (put-text-property start (1- (point))
-                             'font-lock-face 'fixed-pitch)
-          (put-text-property start (1- (point)) 'face 'fixed-pitch)
-          (put-text-property start (1- (point))
-                             'jit-lock-defer-multiline t)))))
-  `(jit-lock-bounds ,start . ,(point)))
-
 
 ;;; Notes
 
