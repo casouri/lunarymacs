@@ -138,7 +138,7 @@
   "Setup function for Customize."
   (buffer-face-set '(:family "SF Pro Text" :height 150))
   (setq truncate-lines t
-        line-spacing 0.2))
+        line-spacing (cons 0.1 0.1)))
 (add-hook 'Custom-mode-hook #'luna-customize-setup)
 
 (load-package vterm

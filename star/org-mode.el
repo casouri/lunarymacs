@@ -105,7 +105,7 @@ ARG is the numerical argument."
         ;; (require 'delicate-click)
         ;; (delicate-click-mode)
         (setq-local mouse-prefer-closest-glyph t)
-        (setq-local line-spacing 0.15)
+        (setq-local line-spacing (cons 0.1 0.1))
         (company-mode -1)
         (setq-local whitespace-style '(tab-mark))
         (whitespace-mode))
