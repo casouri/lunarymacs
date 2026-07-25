@@ -320,6 +320,7 @@
 
         (markdown-ts-code-span (fixed-pitch nil ,bg-block))
         (markdown-ts-delimiter (nil ,bg-block))
+        (markdown-ts-list-marker (fixed-pitch))
 
         (helpful-heading (info-title-3))
 
