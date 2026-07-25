@@ -180,7 +180,7 @@ When called interactively, defaults to the commit at point."
   (let ((before (git--tag-before commit))
         (after (git--tag-after commit))
         (short-commit (substring commit 0 (min 7 (length commit)))))
-    (message "Commit %s: before=%s, after=%s"
+    (message "Commit %s: after %s, before %s"
              short-commit
              (or before "none")
              (or after "none"))))

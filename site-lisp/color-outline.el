@@ -58,6 +58,7 @@
 (require 'cl-lib)
 (require 'subr-x)
 (require 'rx)
+(require 'info) ; For the info faces. Emacs doesn’t autoload info anymore.
 
 (defgroup color-outline
   '((color-outline-comment-char-alist custom-variable)
