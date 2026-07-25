@@ -66,8 +66,42 @@
 (load-package markdown-ts-mode
   :mode "\\.md$" "\\.markdown$" "\\.mk$"
   :config
+  (defun markdown-indent-list-marker (node override start end &rest _)
+    "Fontify list marker NODE and indent its item using display prop.
+OVERRIDE, START, and END are passed through to
+‘treesit-fontify-with-override’."
+    (let* ((raw-start (treesit-node-start node))
+           (bol (save-excursion
+                  (goto-char raw-start)
+                  (pos-bol)))
+           (raw-end (treesit-node-end node))
+           (node-start (save-excursion
+                         (goto-char raw-start)
+                         (skip-chars-forward " \t" raw-end)
+                         (point)))
+           (node-end (save-excursion
+                       (goto-char raw-end)
+                       (skip-chars-backward " \t" node-start)
+                       (point))))
+      (treesit-fontify-with-override bol raw-end
+                                     'markdown-ts-list-marker
+                                     override start end)
+      (put-text-property
+       node-start node-end 'display
+       (concat " " (buffer-substring-no-properties node-start node-end)))))
   (defsetup markdown-ts-mode-hook ()
     (face-remap-set-base 'default '(:inherit variable-pitch-text))
+    (setq-local line-spacing (cons 0.1 0.1))
+    (treesit-add-font-lock-rules
+     (treesit-font-lock-rules
+      :language 'markdown
+      :override t
+      :feature 'list-indent
+      '((list_item (list_marker_star) @markdown-indent-list-marker)
+        (list_item (list_marker_plus) @markdown-indent-list-marker)
+        (list_item (list_marker_minus) @markdown-indent-list-marker)
+        (list_item (list_marker_dot) @markdown-indent-list-marker)
+        (list_item (list_marker_parenthesis) @markdown-indent-list-marker))))
     (electric-quote-local-mode -1)
     (eclectic-quote-minor-mode)))
 
@@ -208,8 +242,8 @@
 
 (defsetup tsx-ts-mode-hook ()
   (let ((pred `(not ,(rx (or "," ";" "[" "]" "{" "}" "." "-" "=" "+" "*" "!" "^" "&" "|" "&&" "||")))))
-    (dolist (lang '(typescript tsx jsx javascript))
-      (push `(sexp ,pred) (alist-get lang treesit-thing-settings))))
+      (dolist (lang '(typescript tsx jsx javascript))
+        (push `(sexp ,pred) (alist-get lang treesit-thing-settings))))
   ;; typescript-language-server sens immense amounts of noise over the
   ;; wire, which leads to bad lagging.
   (setq-local eglot-events-buffer-size 0)
