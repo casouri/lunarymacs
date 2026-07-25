@@ -450,8 +450,7 @@ Then jslint:
                                  "impl_item"
                                  "mod_item")
                              eos)
-                   nil nil)))
-    (ignore-errors (copilot-mode))))
+                   nil nil)))))
 
 ;; Go
 (load-package go-mode
@@ -568,7 +567,8 @@ Then jslint:
                   "\n")
                  'face '(:strike-through t :extend t)
                  'font-lock-face
-                 '(:strike-through t :extend t)))))
+                 '(:strike-through t :extend t))))
+  (setq eldoc-box-clear-with-C-g t))
 
 (load-package apheleia
   :extern "prettier"
