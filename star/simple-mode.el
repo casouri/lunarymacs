@@ -83,12 +83,12 @@ OVERRIDE, START, and END are passed through to
                        (goto-char raw-end)
                        (skip-chars-backward " \t" node-start)
                        (point))))
+      ;; (put-text-property
+      ;;  node-start node-end 'display
+      ;;  (concat " " (buffer-substring-no-properties node-start node-end)))
       (treesit-fontify-with-override bol raw-end
                                      'markdown-ts-list-marker
-                                     override start end)
-      (put-text-property
-       node-start node-end 'display
-       (concat " " (buffer-substring-no-properties node-start node-end)))))
+                                     override start end)))
   (defsetup markdown-ts-mode-hook ()
     (face-remap-set-base 'default '(:inherit variable-pitch-text))
     (setq-local line-spacing (cons 0.1 0.1))
