@@ -534,7 +534,7 @@ Then jslint:
   (setq-default read-process-output-max (* 1024 1024)
                 eglot-events-buffer-size 0
                 eglot-events-buffer-config '(:size 0 :format full)
-                eglot-code-action-indicator "⚡")
+                eglot-code-action-indications nil)
 
   ;; Otherwise eglot highlights symbols, which is annoying.
   (add-to-list 'eglot-ignored-server-capabilities
