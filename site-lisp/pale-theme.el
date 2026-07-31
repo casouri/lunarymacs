@@ -46,7 +46,7 @@
            (blue-fg "#004f9b")
            (green-fg "#007345")
 
-           ;; Warning and error are brighter to catch attention.x
+           ;; Warning and error are brighter to catch attention.
            (warning "#DA7A48")
            (err     "#E04E49")
            (ok      "#489446")
@@ -363,6 +363,8 @@
         (debbugs-gnu-new (nil ,err))
         (debbugs-gnu-handled (nil ,ok))
         (debbugs-gnu-tagged (nil ,err))
+
+        (dired-broken-symlink (nil ,bg ,err))
 
         (xref-file-header (magit-diff-file-heading))
         ;; (xref-match)
