@@ -55,6 +55,26 @@
 (luna-note-extern "difftastic"
   "brew install difftastic")
 
+(load-package vdiff
+  :commands vdiff-vc
+  :config (setq vdiff-disable-folding t)
+  :init
+  (defun vdiff-vc ()
+    "Compare current file with committed version."
+    (interactive)
+    (if vdiff-mode
+        (vdiff-mode -1)
+      (let ((orig-buf (current-buffer))
+            file revision revision-buf)
+        (when (null (setq file (buffer-file-name)))
+          (user-error "No associated file for the current buffer"))
+        (when (null (setq revision (vc-working-revision file)))
+          (user-error "No working revision for the current file"))
+        (when (null (setq revision-buf (vc-find-revision-no-save file revision)))
+          (user-error "Couldn’t find last revision for the current file"))
+        (vdiff-buffers revision-buf (current-buffer) nil nil t t)
+        (select-window (get-buffer-window orig-buf))))))
+
 ;; (load-package magit-delta
 ;;   :hook (magit-diff-mode-hook . magit-delta-mode))
 
