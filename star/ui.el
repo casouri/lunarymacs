@@ -68,7 +68,16 @@
   (global-highlight-parentheses-mode))
 
 (load-package winner
-  :config (winner-mode))
+  :config
+  (winner-mode)
+  (defun luna-winner-keep-window-point (orig buf win)
+    "Keep the point restored from the window configuration."
+    (if (and win
+             (window-live-p win)
+             (eq (window-buffer win) buf))
+        (window-point win)
+      (funcall orig buf win)))
+  (advice-add 'winner-get-point :around #'luna-winner-keep-window-point))
 
 (load-package hl-todo
   :config
