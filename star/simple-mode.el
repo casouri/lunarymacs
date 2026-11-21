@@ -203,9 +203,6 @@ OVERRIDE, START, and END are passed through to
   (set-face-attribute 'typescript-ts-jsx-tag-face nil :inherit 'shadow)
   (set-face-attribute 'typescript-ts-jsx-attribute-face nil
                       :inherit 'font-lock-type-face))
-(with-eval-after-load 'eglot
-  (eglot--code-action eglot-code-action-add-missing-imports "source.addMissingImports")
-  (eglot--code-action eglot-code-action-remove-unused-imports "source.removeUnusedImports"))
 
 (with-eval-after-load 'compile
   (add-to-list
@@ -569,6 +566,7 @@ Then jslint:
     "Comes with rustup")
 
   (defsetup eglot-managed-mode-hook ()
+    (eglot-semantic-tokens-mode -1)
     ;; Show error message when hovering by point. (By default error
     ;; messages are only shown when hovering by cursor). Show flymake
     ;; diagnostics first.
